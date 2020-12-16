@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:id="@+id/menu_groupBase1">
+        <item
+            android:id="@+id/menu_navCourseImport"
+            android:icon="@drawable/ic_save_alt_24"
+            android:title="@string/course_import" />
+        <item
+            android:id="@+id/menu_navScheduleManage"
+            android:icon="@drawable/ic_table_24"
+            android:title="@string/schedule_manage" />
+        <item
+            android:id="@+id/menu_navCourseManage"
+            android:icon="@drawable/ic_edit_24"
+            android:title="@string/current_course_manage" />
+    </group>
+    <group android:id="@+id/menu_groupBase2">
+        <item
+            android:id="@+id/menu_navSettings"
+            android:icon="@drawable/ic_settings_24"
+            android:title="@string/settings" />
+        <item
+            android:id="@+id/menu_navExit"
+            android:icon="@drawable/ic_exit_24"
+            android:title="@string/exit" />
+    </group>
+</menu>

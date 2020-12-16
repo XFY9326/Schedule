@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.preference.PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="@string/theme">
+        <androidx.preference.ListPreference
+            app:defaultValue="FOLLOW_SYSTEM"
+            app:entries="@array/night_mode"
+            app:entryValues="@array/night_mode_values"
+            app:icon="@drawable/ic_night_mode_24"
+            app:key="nightModeType"
+            app:summary="@string/night_mode_sum"
+            app:title="@string/night_mode" />
+    </androidx.preference.PreferenceCategory>
+
+    <androidx.preference.PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="@string/others">
+        <androidx.preference.CheckBoxPreference
+            app:defaultValue="false"
+            app:icon="@drawable/ic_exit_24"
+            app:key="exitAppDirectly"
+            app:summary="@string/exit_app_directly_sum"
+            app:title="@string/exit_app_directly" />
+    </androidx.preference.PreferenceCategory>
+</androidx.preference.PreferenceScreen>

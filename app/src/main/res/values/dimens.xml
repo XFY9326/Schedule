@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="PxUsage">
+    <dimen name="schedule_header_month_text_size">12sp</dimen>
+    <dimen name="schedule_header_weekday_text_size">12sp</dimen>
+    <dimen name="schedule_header_month_date_text_size">10sp</dimen>
+    <dimen name="schedule_grid_cell_padding">4px</dimen>
+    <dimen name="schedule_grid_cell_radius">6dp</dimen>
+    <dimen name="schedule_course_cell_text_padding">4dp</dimen>
+    <dimen name="schedule_course_cell_text_size">13sp</dimen>
+    <dimen name="schedule_time_text_size">9sp</dimen>
+    <dimen name="schedule_time_divide_top_margin">1dp</dimen>
+    <dimen name="schedule_time_cell_course_num_text_size">17sp</dimen>
+    <dimen name="schedule_time_cell_vertical_padding">1dp</dimen>
+    <dimen name="schedule_grid_bottom_corner_screen_margin">30dp</dimen>
+    <dimen name="slider_thumb_radius_not_touched">4dp</dimen>
+    <dimen name="slider_thumb_radius_touched">12dp</dimen>
+    <dimen name="slider_tracker_height">18dp</dimen>
+    <dimen name="dialog_corner_radius">16dp</dimen>
+    <dimen name="collapse_tool_bar_height">180dp</dimen>
+    <dimen name="circle_number_button_elevation">2dp</dimen>
+    <dimen name="circle_number_button_size">35dp</dimen>
+    <dimen name="circle_number_button_margin">5dp</dimen>
+    <dimen name="full_screen_loading_dialog_loading_size">100dp</dimen>
+    <dimen name="full_screen_loading_dialog_button_margin_top">50dp</dimen>
+    <dimen name="bottom_button_height">30dp</dimen>
+    <dimen name="course_detail_dialog_bottom_button_height">28dp</dimen>
+
+    <!-- 修复MaterialDatePicker按钮位置不正确问题，未来可能会移除 -->
+    <dimen name="mtrl_calendar_header_toggle_margin_bottom">13dp</dimen>
+</resources>

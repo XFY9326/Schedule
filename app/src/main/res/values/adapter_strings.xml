@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- School Field -->
+    <string name="school_nanjing_audit_university">南京审计大学</string>
+
+    <!-- System Field -->
+    <string name="system_nau_sso">统一身份认证登陆系统</string>
+    <string name="system_nau_jwc_web">南京审计大学教务信息管理系统-网页端</string>
+
+    <!-- Author Field -->
+    <string name="adapter_author_xfy9326" translatable="false">XFY9326</string>
+
+    <!-- Option Field -->
+    <string name="adapter_option_this_term">本学期</string>
+    <string name="adapter_option_next_term">下学期</string>
+    <string name="adapter_option_undergraduate">本科生</string>
+    <string name="adapter_option_postgraduate">研究生</string>
+
+    <!-- Exception Field -->
+    <string name="adapter_exception_unknown_error">未知错误</string>
+    <string name="adapter_exception_login_user_id_error">用户名错误</string>
+    <string name="adapter_exception_login_user_password_error">密码错误</string>
+    <string name="adapter_exception_login_user_id_or_password_error">用户名或密码错误</string>
+    <string name="adapter_exception_login_server_error">登录服务器错误</string>
+    <string name="adapter_exception_login_account_error">账户错误</string>
+    <string name="adapter_exception_login_connection_error">网络连接错误</string>
+    <string name="adapter_exception_import_option_error">课程导入选项错误</string>
+    <string name="adapter_exception_import_option_get_error">课程选项加载错误</string>
+    <string name="adapter_exception_parse_error">课程分析时出现错误</string>
+    <string name="adapter_exception_parse_page_error">课程导入页面错误</string>
+    <string name="adapter_exception_parse_info_not_enough_error">课程信息不完整</string>
+    <string name="adapter_exception_captcha_download_error">验证码加载时出现错误</string>
+    <string name="adapter_exception_init_error">初始化错误</string>
+    <string name="adapter_exception_close_error">资源关闭错误</string>
+    <string name="adapter_exception_incomplete_course_info">课程信息不完整</string>
+
+    <!-- Other Field -->
+</resources>

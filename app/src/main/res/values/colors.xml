@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="ic_launcher_background">#09A7FF</color>
+
+    <color name="theme_color_primary">#03A9F4</color>
+    <color name="theme_color_primary_dark">#0288D1</color>
+    <color name="theme_color_accent">#448AFF</color>
+    <color name="theme_color_primary_text">#212121</color>
+    <color name="theme_color_secondary_text">#757575</color>
+    <color name="course_time_cell_text_color">#006064</color>
+
+    <color name="default_background">#FAFAFA</color>
+
+    <color name="course_cell_text_light">#FFFFFF</color>
+    <color name="course_cell_text_dark">#2E2E2E</color>
+    <color name="schedule_text_light">#FFFFFF</color>
+    <color name="schedule_text_dark">#2E2E2E</color>
+    <color name="course_cell_ripple">#1A000000</color>
+    <color name="course_time_cell_today">#B2EBF2</color>
+
+    <color name="anim_slider_tracker_active">#2196F3</color>
+    <color name="anim_slider_tracker_inactive">#CBE1F3</color>
+
+    <color name="dark_icon">#000000</color>
+    <color name="light_icon">#FFFFFF</color>
+    <color name="gray_icon">#858585</color>
+    <color name="dark_gray_icon">#6A6A6A</color>
+    <color name="light_blue_icon">#E8EAF6</color>
+    <color name="blue_icon">#64B5F6</color>
+    <color name="dark_blue_icon">#1A237E</color>
+    <color name="red_icon">#F44336</color>
+
+    <color name="red">#F44336</color>
+
+    <color name="light_tool_bar">#FFFFFF</color>
+
+    <color name="circle_num_button">#858585</color>
+    <color name="circle_num_button_checked">#2196F3</color>
+    <color name="circle_num_button_ripple">#65FFFFFF</color>
+
+    <color name="bottom_button_ripple">#99000000</color>
+
+    <color name="progress_bar_foreground">#2196F3</color>
+    <color name="progress_bar_background">#802196F3</color>
+
+    <color name="launch_screen_windows_background">#FFFFFF</color>
+</resources>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="theme_color_primary_text">#FFFFFF</color>
+    <color name="theme_color_secondary_text">#C7C7C7</color>
+    <color name="course_time_cell_text_color">#B2DFDB</color>
+
+    <color name="default_background">#303030</color>
+
+    <color name="course_time_cell_today">#006064</color>
+
+    <color name="course_cell_ripple">#1AFFFFFF</color>
+    <color name="launch_screen_windows_background">#121212</color>
+
+    <color name="dark_icon">#FFFFFF</color>
+    <color name="light_icon">#000000</color>
+    <color name="gray_icon">#C6C6C6</color>
+    <color name="dark_gray_icon">#B5B5B5</color>
+
+    <color name="light_tool_bar">#1565C0</color>
+</resources>

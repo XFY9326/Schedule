@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.preference.Preference
+        app:fragment="tool.xfy9326.schedule.ui.fragment.GeneralSettingsFragment"
+        app:icon="@drawable/ic_settings_24"
+        app:summary="@string/general_settings_sum"
+        app:title="@string/general_settings" />
+
+    <androidx.preference.Preference
+        app:fragment="tool.xfy9326.schedule.ui.fragment.ScheduleSettingsFragment"
+        app:icon="@drawable/ic_table_24"
+        app:summary="@string/schedule_settings_sum"
+        app:title="@string/schedule_settings" />
+
+    <androidx.preference.Preference
+        app:icon="@drawable/ic_about_24"
+        app:key="SETTINGS_ABOUT"
+        app:persistent="false"
+        app:title="@string/about" />
+</androidx.preference.PreferenceScreen>

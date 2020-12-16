@@ -1,0 +1,116 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <style name="AppTheme" parent="AppTheme.Base">
+        <item name="android:windowLightStatusBar" tools:ignore="NewApi">true</item>
+    </style>
+
+    <style name="AppTheme.LaunchScreen.Base" parent="Theme.MaterialComponents.DayNight.NoActionBar.Bridge">
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:navigationBarColor">@color/launch_screen_windows_background</item>
+        <item name="android:windowLayoutInDisplayCutoutMode" tools:ignore="NewApi">shortEdges</item>
+    </style>
+
+    <style name="AppTheme.LaunchScreen" parent="AppTheme.LaunchScreen.Base">
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+
+    <style name="AppTheme.Base" parent="Theme.MaterialComponents.DayNight.NoActionBar.Bridge">
+        <item name="colorPrimary">@color/theme_color_primary</item>
+        <item name="colorPrimaryDark">@color/theme_color_primary_dark</item>
+        <item name="colorAccent">@color/theme_color_accent</item>
+        <item name="android:textColorPrimary">@color/theme_color_primary_text</item>
+        <item name="android:textColorSecondary">@color/theme_color_secondary_text</item>
+        <item name="android:textColorTertiary">@color/theme_color_secondary_text</item>
+        <item name="popupTheme">@style/ThemeOverlay.AppCompat.DayNight</item>
+        <item name="actionOverflowMenuStyle">@style/AppTheme.OverflowMenuStyle</item>
+        <item name="android:windowContentTransitions">true</item>
+        <item name="android:windowAllowEnterTransitionOverlap">true</item>
+        <item name="android:windowAllowReturnTransitionOverlap">true</item>
+        <item name="android:windowFullscreen">false</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="snackbarStyle">@style/AppTheme.SnackBar</item>
+        <item name="android:dialogTheme">@style/AppTheme.MaterialDialog</item>
+        <item name="android:datePickerDialogTheme">@style/AppTheme.DateTimePickerDialog</item>
+        <item name="android:timePickerDialogTheme">@style/AppTheme.DateTimePickerDialog</item>
+        <item name="sliderStyle">@style/AppTheme.AnimateSlider</item>
+        <item name="materialAlertDialogTheme">@style/AppTheme.MaterialDialog</item>
+    </style>
+
+    <style name="AppTheme.SnackBar" parent="Widget.MaterialComponents.Snackbar">
+        <item name="animationMode">slide</item>
+    </style>
+
+    <style name="AppTheme.OverflowMenuStyle" parent="@style/Widget.MaterialComponents.PopupMenu.Overflow">
+        <item name="overlapAnchor">false</item>
+        <item name="android:dropDownWidth">wrap_content</item>
+        <item name="android:dropDownVerticalOffset">5dp</item>
+        <item name="android:dropDownHorizontalOffset">-2dp</item>
+    </style>
+
+    <style name="AppTheme.CardView" parent="Widget.MaterialComponents.CardView">
+        <item name="cardCornerRadius">10dp</item>
+        <item name="elevation">5dp</item>
+        <item name="cardPreventCornerOverlap">true</item>
+    </style>
+
+    <style name="AppTheme.CardView.SelectableItemBackground" parent="AppTheme.CardView">
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:background">?android:attr/selectableItemBackground</item>
+    </style>
+
+    <style name="AppTheme.SelectableItemBackground">
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:foreground">?android:attr/selectableItemBackground</item>
+    </style>
+
+    <style name="AppTheme.SelectableItemBackgroundBorderless">
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:foreground">?android:attr/selectableItemBackgroundBorderless</item>
+    </style>
+
+    <style name="AppTheme.MaterialDialog" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <item name="android:windowBackground">@drawable/background_dialog</item>
+        <item name="materialAlertDialogTitlePanelStyle">@style/AppTheme.MaterialDialogTitle</item>
+    </style>
+
+    <style name="AppTheme.MaterialDialogTitle" parent="MaterialAlertDialog.MaterialComponents.Title.Panel">
+        <item name="android:layout_marginBottom">5dp</item>
+    </style>
+
+    <style name="AppTheme.DateTimePickerDialog" parent="ThemeOverlay.MaterialComponents.Dialog">
+        <item name="android:windowBackground">@drawable/background_dialog</item>
+    </style>
+
+    <style name="AppTheme.TransparentBottomSheetDialog" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="android:backgroundDimAmount">0.2</item>
+        <item name="bottomSheetStyle">@style/AppTheme.TransparentBottomSheetStyle</item>
+    </style>
+
+    <style name="AppTheme.TransparentBottomSheetStyle" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+
+    <style name="AppTheme.AnimateSlider" parent="Widget.MaterialComponents.Slider">
+        <item name="tickColor">@android:color/transparent</item>
+        <item name="haloColor">@android:color/transparent</item>
+        <item name="trackColorActive">@color/anim_slider_tracker_active</item>
+        <item name="trackColorInactive">@color/anim_slider_tracker_inactive</item>
+        <item name="haloRadius">0dp</item>
+        <item name="thumbColor">@android:color/white</item>
+        <item name="thumbRadius">@dimen/slider_thumb_radius_not_touched</item>
+        <item name="trackHeight">@dimen/slider_tracker_height</item>
+    </style>
+
+    <style name="AppTheme.NightModeTransitionAnimation">
+        <item name="android:windowEnterAnimation">@android:anim/fade_in</item>
+        <item name="android:windowExitAnimation">@android:anim/fade_out</item>
+    </style>
+
+</resources>

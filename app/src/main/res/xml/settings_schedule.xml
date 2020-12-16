@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.preference.PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="@string/schedule_format_settings">
+
+        <androidx.preference.ListPreference
+            app:defaultValue="MONDAY"
+            app:entries="@array/first_day_of_week"
+            app:entryValues="@array/first_day_of_week_values"
+            app:iconSpaceReserved="false"
+            app:key="firstDayOfWeek"
+            app:summary="@string/first_day_of_week_sum"
+            app:title="@string/first_day_of_week" />
+
+        <androidx.preference.CheckBoxPreference
+            app:defaultValue="false"
+            app:iconSpaceReserved="false"
+            app:key="forceShowWeekendColumn"
+            app:summary="@string/force_show_weekend_sum"
+            app:title="@string/force_show_weekend" />
+
+        <androidx.preference.CheckBoxPreference
+            app:defaultValue="true"
+            app:iconSpaceReserved="false"
+            app:key="showNotThisWeekCourse"
+            app:summary="@string/show_not_this_week_course_sum"
+            app:title="@string/show_not_this_week_course" />
+
+        <androidx.preference.CheckBoxPreference
+            app:defaultValue="false"
+            app:iconSpaceReserved="false"
+            app:key="cornerScreenMargin"
+            app:summary="@string/corner_screen_adapter_sum"
+            app:title="@string/corner_screen_adapter" />
+
+    </androidx.preference.PreferenceCategory>
+</androidx.preference.PreferenceScreen>

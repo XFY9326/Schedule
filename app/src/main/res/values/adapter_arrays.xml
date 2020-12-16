@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="adapter_options_term">
+        <item>@string/adapter_option_this_term</item>
+        <item>@string/adapter_option_next_term</item>
+    </string-array>
+    <string-array name="adapter_options_grade">
+        <item>@string/adapter_option_undergraduate</item>
+        <item>@string/adapter_option_postgraduate</item>
+    </string-array>
+</resources>

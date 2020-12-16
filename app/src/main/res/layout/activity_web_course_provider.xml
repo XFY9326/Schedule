@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout_webCourseProvider"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include
+        android:id="@+id/toolBar_webCourseProvider"
+        layout="@layout/layout_toolbar_general" />
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:fitsSystemWindows="true"
+        android:orientation="vertical">
+
+        <ProgressBar
+            android:id="@+id/progressBar_webCourseProvider"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:max="100"
+            android:min="0"
+            android:progress="0"
+            android:progressDrawable="@drawable/background_progress_bar"
+            tools:ignore="UnusedAttribute" />
+
+        <WebView
+            android:id="@+id/webView_webCourseProvider"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:overScrollMode="never" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/button_webCourseProviderPanel"
+        android:layout_width="190dp"
+        android:layout_height="@dimen/bottom_button_height"
+        android:layout_gravity="bottom|center"
+        android:alpha="0.8"
+        android:background="@drawable/background_bottom_button"
+        android:elevation="5dp"
+        android:src="@drawable/ic_from_bottom_24" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="tool.xfy9326.schedule">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="http" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="https" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="weixin" />
+        </intent>
+    </queries>
+
+    <application
+        android:name=".App"
+        android:allowBackup="true"
+        android:fullBackupContent="@xml/backup_descriptor"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true">
+
+        <activity
+            android:name=".ui.activity.SplashActivity"
+            android:launchMode="singleTask"
+            android:theme="@style/AppTheme.LaunchScreen">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".ui.activity.ScheduleActivity"
+            android:launchMode="singleTask" />
+
+        <activity
+            android:name=".ui.activity.AppErrorActivity"
+            android:label="@string/app_crash"
+            android:launchMode="singleTask" />
+
+        <activity
+            android:name=".ui.activity.ScheduleManageActivity"
+            android:label="@string/schedule_manage" />
+
+        <activity
+            android:name=".ui.activity.ScheduleEditActivity"
+            android:label="@string/schedule_edit" />
+
+        <activity
+            android:name=".ui.activity.CourseImportActivity"
+            android:label="@string/course_import" />
+
+        <activity
+            android:name=".ui.activity.CourseManageActivity"
+            android:label="@string/course_manage" />
+
+        <activity
+            android:name=".ui.activity.CourseEditActivity"
+            android:label="@string/course_edit" />
+
+        <activity android:name=".ui.activity.NetworkCourseProviderActivity" />
+
+        <activity
+            android:name=".ui.activity.WebCourseProviderActivity"
+            android:label="@string/web_page_import_course" />
+
+        <activity
+            android:name=".ui.activity.FeedbackActivity"
+            android:label="@string/online_feedback" />
+
+        <activity
+            android:name=".ui.activity.SettingsActivity"
+            android:label="@string/settings" />
+
+        <activity
+            android:name=".ui.activity.AboutActivity"
+            android:label="@string/about" />
+
+    </application>
+
+</manifest>

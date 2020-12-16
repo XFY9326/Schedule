@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="AdvancedRecyclerView">
+        <attr name="empty_view" format="reference" />
+    </declare-styleable>
+    <declare-styleable name="AdvancedSwipeRefreshLayout">
+        <attr name="color_scheme" format="reference" />
+        <attr name="trigger_async_distance" format="integer" />
+    </declare-styleable>
+</resources>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/AppTheme.SelectableItemBackground"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingStart="15dp"
+    android:paddingTop="8dp"
+    android:paddingEnd="15dp"
+    android:paddingBottom="8dp">
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/textView_courseWeekNum"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawablePadding="12dp"
+        android:gravity="center_vertical"
+        android:textSize="13sp"
+        app:drawableStartCompat="@drawable/ic_week_20" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/textView_courseClassTime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:drawablePadding="12dp"
+        android:gravity="center_vertical"
+        android:textSize="13sp"
+        app:drawableStartCompat="@drawable/ic_time_20" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/textView_courseLocation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:drawablePadding="12dp"
+        android:gravity="center_vertical"
+        android:textSize="13sp"
+        app:drawableStartCompat="@drawable/ic_location_20" />
+
+</androidx.appcompat.widget.LinearLayoutCompat>

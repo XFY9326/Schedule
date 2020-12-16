@@ -1,0 +1,38 @@
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt">
+    <aapt:attr name="android:drawable">
+        <vector
+            android:name="ic_delete_32"
+            android:width="32dp"
+            android:height="32dp"
+            android:viewportWidth="24"
+            android:viewportHeight="24">
+            <group
+                android:name="ic_delete_anim_group"
+                android:pivotX="19"
+                android:pivotY="6">
+                <path
+                    android:name="ic_delete_top"
+                    android:fillColor="@android:color/white"
+                    android:pathData="M 19 4 L 15.5 4 L 14.5 3 L 9.5 3 L 8.5 4 L 5 4 L 5 6 L 19 6 L 19 4 Z" />
+            </group>
+            <path
+                android:name="ic_delete_bottom"
+                android:fillColor="@android:color/white"
+                android:pathData="M 6 19 C 6 20.1 6.9 21 8 21 L 16 21 C 17.1 21 18 20.1 18 19 L 18 7 L 6 7 L 6 19 Z" />
+        </vector>
+    </aapt:attr>
+    <target android:name="ic_delete_anim_group">
+        <aapt:attr name="android:animation">
+            <objectAnimator
+                android:duration="300"
+                android:interpolator="@android:interpolator/fast_out_slow_in"
+                android:propertyName="rotation"
+                android:repeatCount="1"
+                android:repeatMode="reverse"
+                android:valueFrom="0"
+                android:valueTo="16"
+                android:valueType="floatType" />
+        </aapt:attr>
+    </target>
+</animated-vector>

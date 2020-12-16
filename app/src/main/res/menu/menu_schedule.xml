@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/menu_scheduleControlPanel"
+        android:icon="@drawable/ic_tune_dark_24"
+        android:title="@string/schedule_control_bar"
+        app:showAsAction="always" />
+</menu>

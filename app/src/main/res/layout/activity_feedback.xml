@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/toolBar_feedback"
+        layout="@layout/layout_toolbar_general" />
+
+    <ProgressBar
+        android:id="@+id/progressBar_feedback"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:max="100"
+        android:min="0"
+        android:progress="0"
+        android:progressDrawable="@drawable/background_progress_bar"
+        tools:ignore="UnusedAttribute" />
+
+    <WebView
+        android:id="@+id/webView_feedback"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:overScrollMode="never" />
+
+</androidx.appcompat.widget.LinearLayoutCompat>
