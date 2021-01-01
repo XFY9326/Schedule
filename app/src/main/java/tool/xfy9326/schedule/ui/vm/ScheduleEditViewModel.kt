@@ -2,7 +2,6 @@ package tool.xfy9326.schedule.ui.vm
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
@@ -33,7 +32,7 @@ class ScheduleEditViewModel : AbstractViewModel() {
     val scheduleSaveFailed = MutableEventLiveData<EditError>()
 
     fun selectScheduleDate(isStart: Boolean, date: Date) {
-        viewModelScope.launch(Dispatchers.Default) {
+        viewModelScope.launch {
             selectScheduleDate.postEvent(Triple(isStart, date, ScheduleDataStore.firstDayOfWeekFlow.first()))
         }
     }
@@ -42,7 +41,7 @@ class ScheduleEditViewModel : AbstractViewModel() {
         isEdit = scheduleId != 0L
 
         if (!::editSchedule.isInitialized) {
-            viewModelScope.launch(Dispatchers.IO) {
+            viewModelScope.launch {
                 if (isEdit) {
                     ScheduleDBProvider.db.scheduleDAO.getSchedule(scheduleId).firstOrNull()?.let {
                         editSchedule = it
@@ -62,14 +61,14 @@ class ScheduleEditViewModel : AbstractViewModel() {
     fun hasDataChanged() = originalScheduleHashCode != editSchedule.hashCode()
 
     fun deleteSchedule(schedule: Schedule) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             ScheduleDBProvider.db.scheduleDAO.deleteSchedule(schedule)
         }
     }
 
     fun saveSchedule() {
         val cache = editSchedule
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             val errorMsg = validateSchedule(cache)
             if (errorMsg == null) {
                 val newId = if (isEdit) {

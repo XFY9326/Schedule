@@ -5,8 +5,8 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import tool.xfy9326.schedule.db.DBConst
+import tool.xfy9326.schedule.tools.MaterialColorHelper
 import tool.xfy9326.schedule.utils.CourseTimeUtils
-import tool.xfy9326.schedule.utils.MaterialColorHelper
 import java.util.*
 
 @Entity(

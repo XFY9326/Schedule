@@ -7,7 +7,8 @@
     <color name="theme_color_accent">#448AFF</color>
     <color name="theme_color_primary_text">#212121</color>
     <color name="theme_color_secondary_text">#757575</color>
-    <color name="course_time_cell_text_color">#006064</color>
+    <color name="course_time_cell_text">#006064</color>
+    <color name="schedule_tool_bar_tint">#000000</color>
 
     <color name="default_background">#FAFAFA</color>
 

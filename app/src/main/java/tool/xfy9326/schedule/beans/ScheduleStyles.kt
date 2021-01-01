@@ -18,8 +18,9 @@ data class ScheduleStyles(
     @Px
     private val courseCellTextSize: Float?,
     val cornerScreenMargin: Boolean,
+    val highlightShowTodayCell: Boolean,
 ) {
-    fun getTimeTextColor(context: Context) = timeTextColor ?: context.getColorCompat(R.color.course_time_cell_text_color)
+    fun getTimeTextColor(context: Context) = timeTextColor ?: context.getColorCompat(R.color.course_time_cell_text)
 
     fun getCourseCellTextSize(context: Context) = courseCellTextSize ?: context.resources.getDimension(R.dimen.schedule_course_cell_text_size)
 }

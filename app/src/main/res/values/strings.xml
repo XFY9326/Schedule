@@ -164,7 +164,8 @@
     <string name="night_mode_disabled">关闭夜间模式</string>
     <string name="night_mode_follow_system">跟随系统设置</string>
     <string name="theme">主题</string>
-    <string name="schedule_format_settings">课表显示格式</string>
+    <string name="schedule_format_settings">课表格式</string>
+    <string name="schedule_display">课表样式</string>
     <string name="force_show_weekend">强制显示周末课程列</string>
     <string name="force_show_weekend_sum">关闭后根据课程自动显示周末课程列</string>
     <string name="corner_screen_adapter">圆角屏幕适配</string>
@@ -174,6 +175,33 @@
     <string name="exit_app_directly">直接退出应用</string>
     <string name="exit_app_directly_sum">开启后将在返回桌面时直接退出应用</string>
     <string name="others">其他</string>
+    <string name="highlight_show_today_cell">高亮显示今日课程日期格</string>
+    <string name="highlight_show_today_cell_sum">关闭后将不会显示今日的课程日期格背景</string>
+    <string name="schedule_background">课表背景</string>
+    <string name="custom_schedule_background">自定义课表背景功能</string>
+    <string name="custom_schedule_background_sum">启用后将可以自定义课表背景</string>
+    <string name="select_schedule_background_image">选择图片作为课表背景</string>
+    <string name="select_schedule_background_image_sum">从相册或文件中选择图片作为课表背景</string>
+    <string name="schedule_background_scare_type">课表背景图片缩放方式</string>
+    <string name="schedule_background_scare_type_sum">设定不同的缩放方式以完美显示图片</string>
+    <string name="schedule_background_alpha">课表背景透明度</string>
+    <string name="schedule_background_alpha_sum">调整课表背景透明度</string>
+    <string name="schedule_background_quality">课表背景图片质量</string>
+    <string name="schedule_background_quality_sum">背景图片质量越高读取速度越慢\n注：设定后重新导入图片即可生效</string>
+    <string name="schedule_background_set_success">课表背景设置成功！</string>
+    <string name="schedule_background_set_failed">课表背景设置失败！</string>
+    <string name="schedule_background_set_cancel">已取消设置课表背景！</string>
+    <string name="image_select_failed">图片选择失败！</string>
+    <string name="custom_schedule_text_color">自定义课表文字颜色</string>
+    <string name="custom_schedule_text_color_sum">开启后可以自定义课表文字颜色</string>
+    <string name="tool_bar_tint_color">工具栏文字与图标颜色</string>
+    <string name="tool_bar_tint_color_sum">修改顶部工具栏文字与图标颜色</string>
+    <string name="time_text_color">课表时间文字颜色</string>
+    <string name="time_text_color_sum">修改课表内的时间文字颜色</string>
+
+    <string name="scare_type_fit_center">等比缩放，从中间开始填充满</string>
+    <string name="scare_type_center_crop">等比缩放直到完全填充</string>
+    <string name="scare_type_center_inside">等比缩放到能完整展示</string>
 
     <string name="monday">一</string>
     <string name="tuesday">二</string>

@@ -20,8 +20,8 @@ import tool.xfy9326.schedule.beans.ScheduleTime
 import tool.xfy9326.schedule.databinding.DialogCourseDetailBinding
 import tool.xfy9326.schedule.databinding.ItemCourseDetailTimeBinding
 import tool.xfy9326.schedule.kt.*
+import tool.xfy9326.schedule.tools.MaterialColorHelper
 import tool.xfy9326.schedule.ui.activity.CourseEditActivity
-import tool.xfy9326.schedule.utils.MaterialColorHelper
 import kotlin.properties.Delegates
 
 class CourseDetailDialog : DialogFragment() {

@@ -90,7 +90,7 @@ class ScheduleHeaderView(
                 layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
                 setPadding(predefine.courseCellTextPadding / 2)
 
-                if (isToday) {
+                if (styles.highlightShowTodayCell && isToday) {
                     background = ScheduleView.buildBackground(
                         predefine.courseTimeCellTodayColor,
                         predefine.courseCellRippleColor,

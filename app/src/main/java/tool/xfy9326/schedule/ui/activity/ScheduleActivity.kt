@@ -1,5 +1,7 @@
 package tool.xfy9326.schedule.ui.activity
 
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -7,10 +9,14 @@ import androidx.core.view.*
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.viewpager2.widget.ViewPager2
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.google.android.material.navigation.NavigationView
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.Day
+import tool.xfy9326.schedule.beans.ImageScareType
 import tool.xfy9326.schedule.beans.WeekNumType
+import tool.xfy9326.schedule.data.ScheduleDataStore
 import tool.xfy9326.schedule.databinding.ActivityScheduleBinding
 import tool.xfy9326.schedule.kt.getColorCompat
 import tool.xfy9326.schedule.kt.observeEvent
@@ -61,6 +67,8 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
                 moveTaskToBack(false)
             }
         }
+        viewModel.scheduleBackground.observe(this, ::onChangeScheduleBackground)
+        viewModel.toolBarTintColor.observe(this, ::setToolBarTintColor)
     }
 
     override fun onInitView(viewBinding: ActivityScheduleBinding, viewModel: ScheduleViewModel) {
@@ -81,6 +89,12 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_schedule, menu)
+        val tintColor = requireViewModel().toolBarTintColor.value
+        if (tintColor != null) {
+            menu?.iterator()?.forEach {
+                it.icon?.setTint(tintColor)
+            }
+        }
         return super.onCreateOptionsMenu(menu)
     }
 
@@ -112,6 +126,38 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
             }
         }
         return true
+    }
+
+    private fun onChangeScheduleBackground(bundle: ScheduleDataStore.ScheduleBackgroundBuildBundle?) {
+        requireViewBinding().imageViewScheduleBackground.apply {
+            if (bundle == null) {
+                isVisible = false
+                setImageDrawable(null)
+            } else {
+                isVisible = true
+                alpha = bundle.alpha
+                Glide.with(this).load(bundle.bitmap).apply {
+                    when (bundle.scareType) {
+                        ImageScareType.FIT_CENTER -> fitCenter()
+                        ImageScareType.CENTER_CROP -> centerCrop()
+                        ImageScareType.CENTER_INSIDE -> centerInside()
+                    }
+                }.transition(DrawableTransitionOptions.withCrossFade()).into(this)
+            }
+        }
+    }
+
+    private fun setToolBarTintColor(color: Int?) {
+        val tintColor = color ?: getColorCompat(R.color.schedule_tool_bar_tint)
+        requireViewBinding().apply {
+            textViewScheduleTodayDate.setTextColor(tintColor)
+            textViewScheduleNotCurrentWeek.setTextColor(tintColor)
+            textViewScheduleNowShowWeekNum.setTextColor(tintColor)
+            toolBarSchedule.navigationIcon?.colorFilter = PorterDuffColorFilter(tintColor, PorterDuff.Mode.SRC)
+            toolBarSchedule.menu.iterator().forEach {
+                it.icon?.setTint(tintColor)
+            }
+        }
     }
 
     private fun getCurrentShowWeekNum() = requireViewBinding().viewPagerSchedulePanel.currentItem + 1

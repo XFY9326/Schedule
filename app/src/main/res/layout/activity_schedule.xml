@@ -30,8 +30,7 @@
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/toolBar_schedule"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:navigationIconTint="@color/dark_icon">
+                android:layout_height="wrap_content">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/layout_scheduleDateInfoBar"
@@ -42,7 +41,7 @@
                         android:id="@+id/textView_scheduleTodayDate"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/theme_color_primary_text"
+                        android:textColor="@color/schedule_tool_bar_tint"
                         android:textSize="20sp"
                         android:textStyle="bold"
                         app:layout_constraintStart_toStartOf="parent"
@@ -53,6 +52,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:minEms="3"
+                        android:textColor="@color/schedule_tool_bar_tint"
                         android:textSize="13sp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/textView_scheduleTodayDate" />
@@ -61,6 +61,7 @@
                         android:id="@+id/textView_scheduleNotCurrentWeek"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:textColor="@color/schedule_tool_bar_tint"
                         android:textSize="13sp"
                         app:layout_constraintStart_toEndOf="@id/textView_scheduleNowShowWeekNum"
                         app:layout_constraintTop_toBottomOf="@id/textView_scheduleTodayDate" />
