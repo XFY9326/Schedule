@@ -2,7 +2,6 @@ package tool.xfy9326.schedule.ui.vm
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import tool.xfy9326.schedule.beans.Course
 import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
@@ -25,13 +24,13 @@ class CourseManageViewModel : AbstractViewModel() {
         }
 
     fun deleteCourse(course: Course) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             ScheduleDBProvider.db.scheduleDAO.deleteCourse(course)
         }
     }
 
     fun recoverCourse(course: Course) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             ScheduleDBProvider.db.scheduleDAO.putCourse(course.scheduleId, course)
             courseRecovered.notify()
         }

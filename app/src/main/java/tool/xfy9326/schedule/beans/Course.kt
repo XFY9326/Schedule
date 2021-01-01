@@ -3,7 +3,7 @@ package tool.xfy9326.schedule.beans
 import androidx.annotation.ColorInt
 import androidx.room.*
 import tool.xfy9326.schedule.db.DBConst
-import tool.xfy9326.schedule.utils.MaterialColorHelper
+import tool.xfy9326.schedule.tools.MaterialColorHelper
 import java.io.Serializable
 
 @Entity(

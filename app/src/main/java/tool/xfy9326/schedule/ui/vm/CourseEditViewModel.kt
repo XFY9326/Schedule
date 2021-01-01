@@ -2,7 +2,6 @@ package tool.xfy9326.schedule.ui.vm
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
@@ -52,7 +51,7 @@ class CourseEditViewModel : AbstractViewModel() {
     }
 
     fun editCourseTime(scheduleId: Long, courseTime: CourseTime? = null, position: Int? = null) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             ScheduleDBProvider.db.scheduleDAO.getSchedule(scheduleId).firstOrNull()?.let {
                 editCourseTime.postEvent(
                     // Deep copy course time
@@ -71,7 +70,7 @@ class CourseEditViewModel : AbstractViewModel() {
 
     fun saveCourse(scheduleId: Long) {
         val cache = editCourse
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             val errorMsg = validateCourse(scheduleId, cache)
             if (errorMsg == null) {
                 val newId = if (isEdit) {

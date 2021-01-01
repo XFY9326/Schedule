@@ -9,6 +9,7 @@ import tool.xfy9326.schedule.databinding.DialogEditTextBinding
 import tool.xfy9326.schedule.kt.getText
 import tool.xfy9326.schedule.kt.show
 import tool.xfy9326.schedule.kt.showShortToast
+import tool.xfy9326.schedule.tools.MaterialColorHelper
 
 object DialogUtils {
     fun showNewScheduleNameDialog(activity: AppCompatActivity, onConfirm: (String) -> Unit) {

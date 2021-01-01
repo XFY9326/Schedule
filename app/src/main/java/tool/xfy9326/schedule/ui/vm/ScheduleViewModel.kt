@@ -3,7 +3,6 @@ package tool.xfy9326.schedule.ui.vm
 import androidx.collection.SparseArrayCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -60,28 +59,30 @@ class ScheduleViewModel : AbstractViewModel() {
     val showCourseDetailDialog = MutableEventLiveData<Triple<Array<ScheduleTime>, Course, Long>>()
     val openCourseManageActivity = MutableEventLiveData<Long>()
     val exitAppDirectly = MutableEventLiveData<Boolean>()
+    val toolBarTintColor = ScheduleDataStore.toolBarTintColorFlow.asScopeLiveData(viewModelScope)
+    val scheduleBackground = ScheduleDataStore.scheduleBackgroundBuildBundleFlow.asScopeLiveData(viewModelScope)
     private val scheduleBuildBundleMap = SparseArrayCompat<LiveData<ScheduleBuildBundle>>()
 
     fun scrollToCurrentWeekNum() {
-        viewModelScope.launch(Dispatchers.Default) {
+        viewModelScope.launch {
             scrollToWeek.postEvent(weekNumInfoFlow.first().first)
         }
     }
 
     fun openCurrentScheduleCourseManageActivity() {
-        viewModelScope.launch(Dispatchers.Default) {
+        viewModelScope.launch {
             openCourseManageActivity.postEvent(currentScheduleId.first())
         }
     }
 
     fun showScheduleControlPanel() {
-        viewModelScope.launch(Dispatchers.Default) {
+        viewModelScope.launch {
             showScheduleControlPanel.postEvent(weekNumInfoFlow.first())
         }
     }
 
     fun notifyShowWeekChanged(weekNum: Int) {
-        viewModelScope.launch(Dispatchers.Default) {
+        viewModelScope.launch {
             showWeekChanged.postEvent(weekNum to WeekNumType.create(weekNum, weekNumInfoFlow.first().first))
         }
     }
@@ -105,7 +106,7 @@ class ScheduleViewModel : AbstractViewModel() {
     }
 
     fun showCourseDetailDialog(courseId: Long, timeId: Long) {
-        viewModelScope.launch(Dispatchers.Default) {
+        viewModelScope.launch {
             currentScheduleFlow.combine(ScheduleDBProvider.db.scheduleDAO.getScheduleCourse(courseId)) { schedule, course ->
                 if (course == null) {
                     null

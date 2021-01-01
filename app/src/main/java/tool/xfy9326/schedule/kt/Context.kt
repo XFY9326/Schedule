@@ -90,3 +90,13 @@ fun Context.tryStartActivity(intent: Intent, options: Bundle? = null, showToast:
     }
     return false
 }
+
+fun Fragment.tryStartActivityForResult(intent: Intent, requestCode: Int, options: Bundle? = null, showToast: Boolean = true): Boolean {
+    if (intent.resolveActivity(requireActivity().packageManager) != null) {
+        startActivityForResult(intent, requestCode, options)
+        return true
+    } else if (showToast) {
+        showShortToast(R.string.application_launch_failed)
+    }
+    return false
+}

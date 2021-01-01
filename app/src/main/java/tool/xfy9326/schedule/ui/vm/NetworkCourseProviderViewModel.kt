@@ -3,7 +3,6 @@ package tool.xfy9326.schedule.ui.vm
 import android.graphics.Bitmap
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
@@ -54,7 +53,7 @@ class NetworkCourseProviderViewModel : AbstractViewModel() {
 
     fun initLoginParams() {
         if (loginParamsLock.tryLock()) {
-            viewModelScope.launch(Dispatchers.Default) {
+            viewModelScope.launch {
                 try {
                     val provider = courseProvider
                     provider.init()
@@ -94,7 +93,7 @@ class NetworkCourseProviderViewModel : AbstractViewModel() {
 
     fun refreshCaptcha(importOption: Int) {
         if (captchaLock.tryLock()) {
-            viewModelScope.launch(Dispatchers.Default) {
+            viewModelScope.launch {
                 try {
                     val provider = courseProvider
 
@@ -125,7 +124,7 @@ class NetworkCourseProviderViewModel : AbstractViewModel() {
 
     fun importCourse(importParams: ImportParams, currentSchedule: Boolean, newScheduleName: String? = null) {
         if (isImportingCourses.compareAndSet(false, true)) {
-            viewModelScope.launch(Dispatchers.Default) {
+            viewModelScope.launch {
                 try {
                     val provider = courseProvider
 

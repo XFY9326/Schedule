@@ -2,7 +2,6 @@ package tool.xfy9326.schedule.ui.vm
 
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
@@ -45,7 +44,7 @@ class WebCourseProviderViewModel : AbstractViewModel() {
 
     fun validateHtmlPage(importParams: ImportParams, currentSchedule: Boolean) {
         if (validatePageLock.tryLock()) {
-            viewModelScope.launch(Dispatchers.Default) {
+            viewModelScope.launch {
                 try {
                     val pageInfo = courseProvider.validateCourseImportPage(
                         importParams.htmlContent,
@@ -72,7 +71,7 @@ class WebCourseProviderViewModel : AbstractViewModel() {
 
     fun importCourse(importParams: ImportParams, importOption: Int, currentSchedule: Boolean, newScheduleName: String?) {
         if (isImportingCourses.compareAndSet(false, true)) {
-            importCourseJob = viewModelScope.launch(Dispatchers.Default) {
+            importCourseJob = viewModelScope.launch {
                 try {
                     val scheduleTimes = courseParser.loadScheduleTimes(importOption)
                     val courses = courseParser.parseCourses(

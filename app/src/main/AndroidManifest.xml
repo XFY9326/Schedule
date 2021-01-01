@@ -17,6 +17,10 @@
             <action android:name="android.intent.action.VIEW" />
             <data android:scheme="weixin" />
         </intent>
+        <intent>
+            <action android:name="android.intent.action.GET_CONTENT" />
+            <data android:mimeType="image/*" />
+        </intent>
     </queries>
 
     <application

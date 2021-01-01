@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.preference.PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <androidx.preference.PreferenceCategory
         app:iconSpaceReserved="false"
         app:title="@string/schedule_format_settings">
@@ -35,4 +36,96 @@
             app:title="@string/corner_screen_adapter" />
 
     </androidx.preference.PreferenceCategory>
+
+    <androidx.preference.PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="@string/schedule_display">
+
+        <androidx.preference.CheckBoxPreference
+            app:defaultValue="true"
+            app:iconSpaceReserved="false"
+            app:key="highlightShowTodayCell"
+            app:summary="@string/highlight_show_today_cell_sum"
+            app:title="@string/highlight_show_today_cell" />
+
+        <androidx.preference.CheckBoxPreference
+            app:defaultValue="false"
+            app:iconSpaceReserved="false"
+            app:key="customScheduleTextColor"
+            app:summary="@string/custom_schedule_text_color_sum"
+            app:title="@string/custom_schedule_text_color" />
+
+        <com.jaredrummler.android.colorpicker.ColorPreferenceCompat
+            app:defaultValue="@color/schedule_tool_bar_tint"
+            app:dependency="customScheduleTextColor"
+            app:iconSpaceReserved="false"
+            app:key="toolBarTintColor"
+            app:summary="@string/tool_bar_tint_color_sum"
+            app:title="@string/tool_bar_tint_color" />
+
+        <com.jaredrummler.android.colorpicker.ColorPreferenceCompat
+            app:defaultValue="@color/course_time_cell_text"
+            app:dependency="customScheduleTextColor"
+            app:iconSpaceReserved="false"
+            app:key="timeTextColor"
+            app:summary="@string/time_text_color_sum"
+            app:title="@string/time_text_color" />
+
+    </androidx.preference.PreferenceCategory>
+
+    <androidx.preference.PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="@string/schedule_background">
+
+        <androidx.preference.CheckBoxPreference
+            app:defaultValue="false"
+            app:iconSpaceReserved="false"
+            app:key="enableScheduleBackground"
+            app:summary="@string/custom_schedule_background_sum"
+            app:title="@string/custom_schedule_background" />
+
+        <androidx.preference.Preference
+            app:dependency="enableScheduleBackground"
+            app:iconSpaceReserved="false"
+            app:key="selectScheduleBackgroundImage"
+            app:persistent="false"
+            app:summary="@string/select_schedule_background_image_sum"
+            app:title="@string/select_schedule_background_image" />
+
+        <androidx.preference.ListPreference
+            app:defaultValue="CENTER_CROP"
+            app:dependency="enableScheduleBackground"
+            app:entries="@array/scare_type"
+            app:entryValues="@array/scare_type_value"
+            app:iconSpaceReserved="false"
+            app:key="scheduleBackgroundScareType"
+            app:summary="@string/schedule_background_scare_type_sum"
+            app:title="@string/schedule_background_scare_type" />
+
+        <androidx.preference.SeekBarPreference
+            android:max="100"
+            app:defaultValue="100"
+            app:dependency="enableScheduleBackground"
+            app:iconSpaceReserved="false"
+            app:key="scheduleBackgroundImageAlpha"
+            app:min="0"
+            app:seekBarIncrement="1"
+            app:showSeekBarValue="true"
+            app:summary="@string/schedule_background_alpha_sum"
+            app:title="@string/schedule_background_alpha" />
+
+        <androidx.preference.SeekBarPreference
+            android:max="100"
+            app:defaultValue="60"
+            app:dependency="enableScheduleBackground"
+            app:iconSpaceReserved="false"
+            app:key="scheduleBackgroundImageQuality"
+            app:min="0"
+            app:seekBarIncrement="1"
+            app:showSeekBarValue="true"
+            app:summary="@string/schedule_background_quality_sum"
+            app:title="@string/schedule_background_quality" />
+
+    </androidx.preference.PreferenceCategory>
+
 </androidx.preference.PreferenceScreen>

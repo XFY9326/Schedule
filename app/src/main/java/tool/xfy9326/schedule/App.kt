@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import tool.xfy9326.schedule.data.AppSettingsDataStore
-import tool.xfy9326.schedule.utils.ExceptionHandler
+import tool.xfy9326.schedule.tools.ExceptionHandler
 
 class App : Application() {
     companion object {

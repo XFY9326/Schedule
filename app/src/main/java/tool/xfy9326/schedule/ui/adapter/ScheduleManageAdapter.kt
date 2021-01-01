@@ -9,10 +9,10 @@ import tool.xfy9326.schedule.beans.Schedule
 import tool.xfy9326.schedule.beans.ScheduleWrapper
 import tool.xfy9326.schedule.databinding.ItemScheduleBinding
 import tool.xfy9326.schedule.kt.getColorCompat
+import tool.xfy9326.schedule.tools.MaterialColorHelper
 import tool.xfy9326.schedule.ui.recyclerview.BaseDifferItemCallBack
 import tool.xfy9326.schedule.ui.recyclerview.ListViewBindingAdapter
 import tool.xfy9326.schedule.ui.viewholder.ViewBindingViewHolder
-import tool.xfy9326.schedule.utils.MaterialColorHelper
 
 class ScheduleManageAdapter :
     ListViewBindingAdapter<ScheduleWrapper, ItemScheduleBinding, ViewBindingViewHolder<ItemScheduleBinding>>(ScheduleDifferCallback()) {
