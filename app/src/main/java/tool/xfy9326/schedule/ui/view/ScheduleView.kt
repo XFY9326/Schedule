@@ -12,15 +12,17 @@ import androidx.annotation.ColorInt
 import androidx.annotation.Px
 import androidx.appcompat.widget.LinearLayoutCompat
 import tool.xfy9326.schedule.beans.CourseCell
-import tool.xfy9326.schedule.beans.ScheduleBuildBundle
 import tool.xfy9326.schedule.beans.SchedulePredefine
+import tool.xfy9326.schedule.beans.ScheduleStyles
+import tool.xfy9326.schedule.beans.ScheduleViewData
 import kotlin.math.floor
 import kotlin.math.max
 
 @SuppressLint("ViewConstructor")
 class ScheduleView(
     context: Context,
-    scheduleBuildBundle: ScheduleBuildBundle,
+    scheduleViewData: ScheduleViewData,
+    scheduleStyles: ScheduleStyles,
 ) : LinearLayoutCompat(context) {
     companion object {
         private const val MIN_SCHEDULE_COLUMN_COUNT = 6
@@ -35,8 +37,6 @@ class ScheduleView(
         }
     }
 
-    private val scheduleViewData = scheduleBuildBundle.viewData
-    private val scheduleStyles = scheduleBuildBundle.styles
     private val schedulePredefine = SchedulePredefine.load(context)
 
     private val showWeekend = scheduleStyles.forceShowWeekendColumn || scheduleViewData.hasWeekendCourse

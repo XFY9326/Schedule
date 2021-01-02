@@ -129,6 +129,14 @@
             app:summary="@string/schedule_background_scare_type_sum"
             app:title="@string/schedule_background_scare_type" />
 
+        <androidx.preference.CheckBoxPreference
+            app:defaultValue="true"
+            app:dependency="enableScheduleBackground"
+            app:iconSpaceReserved="false"
+            app:key="scheduleBackgroundFadeAnim"
+            app:summary="@string/schedule_background_fade_anim_sum"
+            app:title="@string/schedule_background_fade_anim" />
+
         <androidx.preference.SeekBarPreference
             android:max="100"
             app:defaultValue="100"

@@ -75,7 +75,7 @@ fun <T : Any> LiveData<T?>.filterNotNull(): LiveData<T> {
     return result
 }
 
-fun <X> LiveData<X>.distinctUntilChanged(scope: CoroutineScope): LiveData<X> {
+fun <X> LiveData<X>.distinctUntilChanged(scope: CoroutineScope): MediatorLiveData<X> {
     val outputLiveData = MediatorLiveData<X>()
     outputLiveData.addSource(this, object : Observer<X> {
         var mFirstTime = true

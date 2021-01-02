@@ -3,12 +3,9 @@ package tool.xfy9326.schedule.ui.activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.runBlocking
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.kt.showGlobalShortToast
 import tool.xfy9326.schedule.kt.startActivity
-import tool.xfy9326.schedule.ui.vm.ScheduleViewModel
 
 class SplashActivity : AppCompatActivity() {
     companion object {
@@ -25,15 +22,8 @@ class SplashActivity : AppCompatActivity() {
             validateAppError() -> startAppErrorActivity()
             else -> {
                 if (validateCrashRelaunch()) showGlobalShortToast(R.string.crash_relaunch_attention)
-                preload()
                 startMainActivity()
             }
-        }
-    }
-
-    private fun preload() {
-        runBlocking(Dispatchers.Default) {
-            ScheduleViewModel.preload()
         }
     }
 
