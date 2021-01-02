@@ -1,13 +1,9 @@
 package tool.xfy9326.schedule.ui.vm
 
-import androidx.collection.SparseArrayCompat
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import tool.xfy9326.schedule.beans.Course
-import tool.xfy9326.schedule.beans.ScheduleBuildBundle
 import tool.xfy9326.schedule.beans.ScheduleTime
 import tool.xfy9326.schedule.beans.WeekNumType
 import tool.xfy9326.schedule.data.AppDataStore
@@ -20,7 +16,6 @@ import tool.xfy9326.schedule.kt.combineTransform
 import tool.xfy9326.schedule.kt.postEvent
 import tool.xfy9326.schedule.ui.vm.base.AbstractViewModel
 import tool.xfy9326.schedule.utils.CalendarUtils
-import tool.xfy9326.schedule.utils.CourseManager
 import tool.xfy9326.schedule.utils.CourseTimeUtils
 import tool.xfy9326.schedule.utils.ScheduleManager
 
@@ -28,24 +23,21 @@ class ScheduleViewModel : AbstractViewModel() {
     companion object {
         private val currentScheduleId = AppDataStore.currentScheduleIdFlow
         private val currentScheduleFlow = ScheduleManager.getCurrentScheduleFlow()
-        private val scheduleBuildData = currentScheduleFlow.combine(ScheduleDataStore.scheduleStylesFlow) { schedule, styles ->
-            schedule to styles
-        }.combineTransform(
-            combineTransform = {
-                ScheduleDBProvider.db.scheduleDAO.getScheduleCourses(it.first.scheduleId)
-            },
-            transform = { pair, courses ->
-                Triple(pair.first, courses, pair.second)
-            }
-        ).shareIn(GlobalScope, SharingStarted.Eagerly, 1)
         val weekNumInfoFlow = currentScheduleFlow.combine(ScheduleDataStore.firstDayOfWeekFlow) { schedule, firstDayOfWeek ->
             CourseTimeUtils.getWeekNum(schedule, firstDayOfWeek) to schedule.maxWeekNum
         }
-
-        suspend fun preload() {
-            scheduleBuildData.firstOrNull()
-        }
     }
+
+    val scheduleBuildData = currentScheduleFlow.combine(ScheduleDataStore.scheduleStylesFlow) { schedule, styles ->
+        schedule to styles
+    }.combineTransform(
+        combineTransform = {
+            ScheduleDBProvider.db.scheduleDAO.getScheduleCourses(it.first.scheduleId)
+        },
+        transform = { pair, courses ->
+            Triple(pair.first, courses, pair.second)
+        }
+    ).shareIn(viewModelScope, SharingStarted.Eagerly, 1).asScopeLiveData(viewModelScope)
 
     var currentScrollPosition: Int? = null
 
@@ -62,7 +54,6 @@ class ScheduleViewModel : AbstractViewModel() {
     val toolBarTintColor = ScheduleDataStore.toolBarTintColorFlow.asScopeLiveData(viewModelScope)
     val useLightColorStatusBarColor = ScheduleDataStore.useLightColorStatusBarColorFlow.asScopeLiveData(viewModelScope)
     val scheduleBackground = ScheduleDataStore.scheduleBackgroundBuildBundleFlow.asScopeLiveData(viewModelScope)
-    private val scheduleBuildBundleMap = SparseArrayCompat<LiveData<ScheduleBuildBundle>>()
 
     fun scrollToCurrentWeekNum() {
         viewModelScope.launch {
@@ -85,18 +76,6 @@ class ScheduleViewModel : AbstractViewModel() {
     fun notifyShowWeekChanged(weekNum: Int) {
         viewModelScope.launch {
             showWeekChanged.postEvent(weekNum to WeekNumType.create(weekNum, weekNumInfoFlow.first().first))
-        }
-    }
-
-    fun getScheduleBuildBundleLiveData(weekNum: Int): LiveData<ScheduleBuildBundle> {
-        return if (scheduleBuildBundleMap.containsKey(weekNum)) {
-            scheduleBuildBundleMap[weekNum]!!
-        } else {
-            scheduleBuildData.map {
-                ScheduleBuildBundle(CourseManager.getScheduleViewDataByWeek(weekNum, it.first, it.second, it.third.showNotThisWeekCourse), it.third)
-            }.asScopeLiveData(viewModelScope).also {
-                scheduleBuildBundleMap.put(weekNum, it)
-            }
         }
     }
 

@@ -10,13 +10,13 @@ import android.widget.FrameLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import tool.xfy9326.schedule.beans.CourseCell
-import tool.xfy9326.schedule.beans.ScheduleBuildBundle
 import tool.xfy9326.schedule.kt.buildBundle
+import tool.xfy9326.schedule.tools.JobQueue
 import tool.xfy9326.schedule.ui.view.ScheduleView
 import tool.xfy9326.schedule.ui.vm.ScheduleViewModel
+import tool.xfy9326.schedule.utils.CourseManager
 import kotlin.properties.Delegates
 
 class TableFragment : Fragment() {
@@ -30,6 +30,7 @@ class TableFragment : Fragment() {
         }
     }
 
+    private val viewCreatedJobQueue = JobQueue(lifecycleScope.coroutineContext)
     private var weekNum by Delegates.notNull<Int>()
     private lateinit var viewModel: ScheduleViewModel
 
@@ -37,7 +38,17 @@ class TableFragment : Fragment() {
         super.onAttach(context)
         weekNum = requireArguments().getInt(ARGUMENT_WEEK_NUM)
         viewModel = ViewModelProvider(requireActivity())[ScheduleViewModel::class.java]
-        viewModel.getScheduleBuildBundleLiveData(weekNum).observe(this, ::onBuildView)
+
+        viewModel.scheduleBuildData.observe(this) {
+            lifecycleScope.launch(Dispatchers.Default) {
+                val courses = CourseManager.getScheduleViewDataByWeek(weekNum, it.first, it.second, it.third.showNotThisWeekCourse)
+                val scheduleView = ScheduleView(requireContext(), courses, it.third)
+                scheduleView.setOnCourseClickListener(this@TableFragment::onCourseCellClick)
+                viewCreatedJobQueue.submit {
+                    updateScheduleView(scheduleView)
+                }
+            }
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -49,16 +60,20 @@ class TableFragment : Fragment() {
         }
     }
 
-    private fun onBuildView(bundle: ScheduleBuildBundle) {
-        lifecycleScope.launch(Dispatchers.Default) {
-            val scheduleView = ScheduleView(requireContext(), bundle)
-            scheduleView.setOnCourseClickListener(this@TableFragment::onCourseCellClick)
-            lifecycleScope.launchWhenStarted {
-                (requireView() as ViewGroup).apply {
-                    if (childCount > 0) removeAllViewsInLayout()
-                    addView(scheduleView)
-                }
-            }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewCreatedJobQueue.allowRunning()
+    }
+
+    override fun onDestroyView() {
+        viewCreatedJobQueue.cancelAll()
+        super.onDestroyView()
+    }
+
+    private suspend fun updateScheduleView(scheduleView: ScheduleView) = withContext(Dispatchers.Main) {
+        (requireView() as ViewGroup).apply {
+            if (childCount > 0) removeAllViewsInLayout()
+            addView(scheduleView)
         }
     }
 

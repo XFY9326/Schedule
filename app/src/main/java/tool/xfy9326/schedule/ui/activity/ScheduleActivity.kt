@@ -135,18 +135,18 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
     private fun onChangeScheduleBackground(bundle: ScheduleDataStore.ScheduleBackgroundBuildBundle?) {
         requireViewBinding().imageViewScheduleBackground.apply {
             if (bundle == null) {
-                isVisible = false
                 setImageDrawable(null)
             } else {
-                isVisible = true
                 alpha = bundle.alpha
-                Glide.with(this).load(bundle.bitmap).apply {
+                Glide.with(this).load(bundle.file).apply {
                     when (bundle.scareType) {
                         ImageScareType.FIT_CENTER -> fitCenter()
                         ImageScareType.CENTER_CROP -> centerCrop()
                         ImageScareType.CENTER_INSIDE -> centerInside()
                     }
-                }.transition(DrawableTransitionOptions.withCrossFade()).into(this)
+                }.apply {
+                    if (bundle.fadeAnim) transition(DrawableTransitionOptions.withCrossFade())
+                }.into(this)
             }
         }
     }

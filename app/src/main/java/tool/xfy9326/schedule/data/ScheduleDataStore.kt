@@ -1,6 +1,5 @@
 package tool.xfy9326.schedule.data
 
-import android.graphics.Bitmap
 import androidx.datastore.preferences.core.remove
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
@@ -8,10 +7,10 @@ import tool.xfy9326.schedule.beans.ImageScareType
 import tool.xfy9326.schedule.beans.ScheduleStyles
 import tool.xfy9326.schedule.beans.WeekDay
 import tool.xfy9326.schedule.data.base.AbstractDataStore
-import tool.xfy9326.schedule.io.ImageIO
 import tool.xfy9326.schedule.kt.asParentOf
 import tool.xfy9326.schedule.kt.tryEnumValueOf
 import tool.xfy9326.schedule.utils.DirUtils
+import java.io.File
 
 object ScheduleDataStore : AbstractDataStore("ScheduleSettings") {
     private val firstDayOfWeek by preferencesKey<String>()
@@ -30,6 +29,7 @@ object ScheduleDataStore : AbstractDataStore("ScheduleSettings") {
     private val enableScheduleBackground by preferencesKey<Boolean>()
     private val scheduleBackgroundScareType by preferencesKey<String>()
     private val useLightColorStatusBarColor by preferencesKey<Boolean>()
+    private val scheduleBackgroundFadeAnim by preferencesKey<Boolean>()
 
     val firstDayOfWeekFlow = read {
         tryEnumValueOf(it[firstDayOfWeek]) ?: WeekDay.MONDAY
@@ -88,12 +88,7 @@ object ScheduleDataStore : AbstractDataStore("ScheduleSettings") {
         if (it != null) {
             val file = DirUtils.PictureAppDir.asParentOf(it.second)
             if (file.isFile) {
-                val bitmap = ImageIO.readImage(file)
-                if (bitmap != null) {
-                    it.first to bitmap
-                } else {
-                    null
-                }
+                it.first to file
             } else {
                 setScheduleBackgroundImage(null)
                 null
@@ -104,9 +99,10 @@ object ScheduleDataStore : AbstractDataStore("ScheduleSettings") {
     }.map {
         if (it != null) {
             ScheduleBackgroundBuildBundle(
-                bitmap = it.second,
+                file = it.second,
                 scareType = tryEnumValueOf<ImageScareType>(it.first[scheduleBackgroundScareType]) ?: ImageScareType.CENTER_CROP,
-                alpha = (it.first[scheduleBackgroundImageAlpha] ?: 100) / 100f
+                alpha = (it.first[scheduleBackgroundImageAlpha] ?: 100) / 100f,
+                fadeAnim = it.first[scheduleBackgroundFadeAnim] ?: true
             )
         } else {
             null
@@ -114,8 +110,9 @@ object ScheduleDataStore : AbstractDataStore("ScheduleSettings") {
     }.conflate()
 
     data class ScheduleBackgroundBuildBundle(
-        val bitmap: Bitmap,
+        val file: File,
         val scareType: ImageScareType,
         val alpha: Float,
+        val fadeAnim: Boolean,
     )
 }

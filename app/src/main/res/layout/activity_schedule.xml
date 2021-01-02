@@ -16,8 +16,7 @@
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/imageView_scheduleBackground"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="gone" />
+            android:layout_height="match_parent" />
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/layout_scheduleToolBar"

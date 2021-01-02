@@ -36,7 +36,8 @@ class CourseManageActivity : ViewModelActivity<CourseManageViewModel, ActivityCo
     }
 
     override fun onBindLiveData(viewBinding: ActivityCourseManageBinding, viewModel: CourseManageViewModel) {
-        viewModel.requestDBCourses(currentEditCourseScheduleId).observe(this) {
+        viewModel.requestDBCourses(currentEditCourseScheduleId)
+        viewModel.coursesLivaData.observe(this) {
             courseManageAdapter.submitList(it.toList())
             viewBinding.recyclerViewCourseManageList.setOnlyOneAdapter(courseManageAdapter)
         }

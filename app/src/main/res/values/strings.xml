@@ -204,6 +204,8 @@
     <string name="schedule_view_alpha_sum">调整课表透明度</string>
     <string name="course_cell_text_size">课程格文字大小</string>
     <string name="course_cell_text_size_sum">调整课程格显示的文字大小</string>
+    <string name="schedule_background_fade_anim">课表背景渐入动画</string>
+    <string name="schedule_background_fade_anim_sum">关闭后加载课表背景将不会使用动画效果</string>
 
     <string name="scare_type_fit_center">等比缩放，从中间开始填充满</string>
     <string name="scare_type_center_crop">等比缩放直到完全填充</string>
