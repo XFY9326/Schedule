@@ -8,10 +8,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.preference.Preference
 import androidx.preference.PreferenceDataStore
 import com.jaredrummler.android.colorpicker.ColorPreferenceCompat
-import kotlinx.coroutines.flow.firstOrNull
-import kotlinx.coroutines.runBlocking
+import tool.xfy9326.schedule.App
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.data.ScheduleDataStore
+import tool.xfy9326.schedule.data.base.DataStorePreferenceAdapter
 import tool.xfy9326.schedule.kt.getColorCompat
 import tool.xfy9326.schedule.kt.observeEvent
 import tool.xfy9326.schedule.kt.showShortSnackBar
@@ -30,27 +30,23 @@ class ScheduleSettingsFragment : AbstractSettingsFragment() {
 
     override val titleName: Int = R.string.schedule_settings
     override val preferenceResId: Int = R.xml.settings_schedule
-    override val preferenceDataStore: PreferenceDataStore = ScheduleDataStore.getPreferenceDataStore(lifecycleScope)
+    override val preferenceDataStore: PreferenceDataStore = object : DataStorePreferenceAdapter(ScheduleDataStore.dataStore, lifecycleScope) {
+        override fun getInt(key: String, defValue: Int): Int {
+            when (key) {
+                ScheduleDataStore.toolBarTintColor.name -> return super.getInt(key, App.instance.getColorCompat(R.color.schedule_tool_bar_tint))
+                ScheduleDataStore.timeTextColor.name -> return super.getInt(key, App.instance.getColorCompat(R.color.course_time_cell_text))
+            }
+            return super.getInt(key, defValue)
+        }
+    }
 
     override fun onPrefInit(savedInstanceState: Bundle?) {
         findPreference<Preference>(KEY_SELECT_SCHEDULE_BACKGROUND_IMAGE)?.setOnPreferenceClickListener {
             tryStartActivityForResult(IntentUtils.getSelectImageFromDocumentIntent(), REQUEST_CODE_SELECT_SCHEDULE_BACKGROUND_IMAGE)
             false
         }
-        findPreference<ColorPreferenceCompat>(ScheduleDataStore.toolBarTintColor.name)?.apply {
-            presets = MaterialColorHelper.all()
-            runBlocking {
-                setDefaultValue(ScheduleDataStore.toolBarTintColorFlow.firstOrNull()
-                    ?: requireContext().getColorCompat(R.color.schedule_tool_bar_tint))
-            }
-        }
-        findPreference<ColorPreferenceCompat>(ScheduleDataStore.timeTextColor.name)?.apply {
-            presets = MaterialColorHelper.all()
-            runBlocking {
-                setDefaultValue(ScheduleDataStore.timeTextColorFlow.firstOrNull()
-                    ?: requireContext().getColorCompat(R.color.course_time_cell_text))
-            }
-        }
+        findPreference<ColorPreferenceCompat>(ScheduleDataStore.toolBarTintColor.name)?.presets = MaterialColorHelper.all()
+        findPreference<ColorPreferenceCompat>(ScheduleDataStore.timeTextColor.name)?.presets = MaterialColorHelper.all()
     }
 
     override fun onAttach(context: Context) {

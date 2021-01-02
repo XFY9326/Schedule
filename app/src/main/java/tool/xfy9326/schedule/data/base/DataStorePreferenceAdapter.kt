@@ -6,7 +6,7 @@ import androidx.preference.PreferenceDataStore
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 
-class DataStorePreferenceAdapter(private val dataStore: DataStore<Preferences>, scope: CoroutineScope) : PreferenceDataStore() {
+open class DataStorePreferenceAdapter(private val dataStore: DataStore<Preferences>, scope: CoroutineScope) : PreferenceDataStore() {
     private val prefScope = CoroutineScope(scope.coroutineContext + SupervisorJob() + Dispatchers.IO)
 
     private val dsData = dataStore.data.shareIn(prefScope, SharingStarted.Eagerly, 1)
