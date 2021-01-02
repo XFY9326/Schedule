@@ -16,7 +16,7 @@ import tool.xfy9326.schedule.App
 import kotlin.properties.ReadOnlyProperty
 
 abstract class AbstractDataStore(val name: String) {
-    private val dataStore = App.instance.createDataStore(name)
+    val dataStore = App.instance.createDataStore(name)
     protected val readOnlyFlow = dataStore.data.shareIn(GlobalScope, SharingStarted.Eagerly, 1)
 
     fun getPreferenceDataStore(scope: CoroutineScope) = DataStorePreferenceAdapter(dataStore, scope)
