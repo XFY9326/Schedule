@@ -8,13 +8,16 @@ import android.graphics.drawable.*
 import android.os.Build
 import android.text.Editable
 import android.util.TypedValue
+import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
+import androidx.annotation.ColorInt
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.children
+import androidx.core.view.iterator
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.vectordrawable.graphics.drawable.Animatable2Compat
@@ -119,5 +122,15 @@ fun Window.enableLightStatusBar(enabled: Boolean) {
         decorView.systemUiVisibility or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
     } else {
         decorView.systemUiVisibility and View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR.inv()
+    }
+}
+
+fun Menu.setIconTint(@ColorInt colorTint: Int?) {
+    iterator().forEach {
+        if (colorTint == null) {
+            it.icon?.setTintList(null)
+        } else {
+            it.icon?.setTint(colorTint)
+        }
     }
 }

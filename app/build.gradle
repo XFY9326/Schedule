@@ -4,14 +4,21 @@ plugins {
     id 'kotlin-kapt'
 }
 
+rootProject.ext {
+    applicationId = 'tool.xfy9326.schedule'
+    minSdkVersion = 23
+    targetSDKVersion = 30
+    buildToolsVersion = "30.0.2"
+}
+
 android {
-    compileSdkVersion 30
-    buildToolsVersion "30.0.2"
+    compileSdkVersion rootProject.ext.targetSDKVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
-        applicationId "tool.xfy9326.schedule"
-        minSdkVersion 23
-        targetSdkVersion 30
+        applicationId rootProject.ext.applicationId
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSDKVersion
         versionCode 1
         versionName "1.0"
 
@@ -37,6 +44,7 @@ android {
             minifyEnabled false
             versionNameSuffix '-debug'
             applicationIdSuffix '.debug'
+            manifestPlaceholders = ['ApplicationId': "${applicationId}${applicationIdSuffix}"]
         }
         beta {
             zipAlignEnabled true
@@ -46,6 +54,7 @@ android {
             versionNameSuffix '-beta'
             applicationIdSuffix '.beta'
             signingConfig signingConfigs.debug
+            manifestPlaceholders = ['ApplicationId': "${applicationId}${applicationIdSuffix}"]
         }
         release {
             zipAlignEnabled true
@@ -58,6 +67,7 @@ android {
                 exclude 'META-INF/README.md'
                 exclude 'okhttp3/internal/publicsuffix/NOTICE'
             }
+            manifestPlaceholders = ['ApplicationId': "${applicationId}"]
         }
     }
 

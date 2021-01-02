@@ -67,12 +67,12 @@ class ScheduleView(
     )
 
     init {
+        orientation = VERTICAL
+        layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
+
         ScheduleScrollView(context, scheduleGridView).also {
             addViewInLayout(it, -1, it.layoutParams, true)
         }
-
-        orientation = VERTICAL
-        layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
 
         requestLayout()
     }

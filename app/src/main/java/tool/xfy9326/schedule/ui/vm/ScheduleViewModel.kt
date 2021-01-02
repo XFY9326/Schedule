@@ -1,5 +1,7 @@
 package tool.xfy9326.schedule.ui.vm
 
+import android.content.Context
+import android.net.Uri
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -14,8 +16,10 @@ import tool.xfy9326.schedule.kt.MutableEventLiveData
 import tool.xfy9326.schedule.kt.asScopeLiveData
 import tool.xfy9326.schedule.kt.combineTransform
 import tool.xfy9326.schedule.kt.postEvent
+import tool.xfy9326.schedule.tools.ImageHelper
 import tool.xfy9326.schedule.ui.vm.base.AbstractViewModel
 import tool.xfy9326.schedule.utils.CalendarUtils
+import tool.xfy9326.schedule.utils.CourseManager
 import tool.xfy9326.schedule.utils.CourseTimeUtils
 import tool.xfy9326.schedule.utils.ScheduleManager
 
@@ -54,6 +58,7 @@ class ScheduleViewModel : AbstractViewModel() {
     val toolBarTintColor = ScheduleDataStore.toolBarTintColorFlow.asScopeLiveData(viewModelScope)
     val useLightColorStatusBarColor = ScheduleDataStore.useLightColorStatusBarColorFlow.asScopeLiveData(viewModelScope)
     val scheduleBackground = ScheduleDataStore.scheduleBackgroundBuildBundleFlow.asScopeLiveData(viewModelScope)
+    val scheduleShared = MutableEventLiveData<Uri?>()
 
     fun scrollToCurrentWeekNum() {
         viewModelScope.launch {
@@ -82,6 +87,29 @@ class ScheduleViewModel : AbstractViewModel() {
     fun exitAppDirectly() {
         viewModelScope.launch {
             exitAppDirectly.postEvent(AppSettingsDataStore.exitAppDirectlyFlow.first())
+        }
+    }
+
+    fun shareScheduleImage(context: Context, weekNum: Int) {
+        viewModelScope.launch {
+            val scheduleId = currentScheduleId.first()
+            val targetWidth = context.resources.displayMetrics.widthPixels
+            val bitmap = CourseManager.generateScheduleImageByWeekNum(context, scheduleId, weekNum, targetWidth)
+            if (bitmap != null) {
+                val uri = if (AppSettingsDataStore.saveImageWhileSharingFlow.first()) {
+                    ImageHelper.outputImageToAlbum(context, bitmap)
+                } else {
+                    ImageHelper.createShareCacheImage(context, bitmap)
+                }
+
+                if (uri != null) {
+                    scheduleShared.postEvent(uri)
+                } else {
+                    scheduleShared.postEvent(null)
+                }
+            } else {
+                scheduleShared.postEvent(null)
+            }
         }
     }
 
