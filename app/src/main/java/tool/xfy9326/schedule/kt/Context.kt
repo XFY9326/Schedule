@@ -10,10 +10,7 @@ import android.os.Bundle
 import android.os.IBinder
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
-import androidx.annotation.ArrayRes
-import androidx.annotation.ColorRes
-import androidx.annotation.DrawableRes
-import androidx.annotation.StringRes
+import androidx.annotation.*
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 import androidx.fragment.app.Fragment
@@ -99,4 +96,15 @@ fun Fragment.tryStartActivityForResult(intent: Intent, requestCode: Int, options
         showShortToast(R.string.application_launch_failed)
     }
     return false
+}
+
+@ColorInt
+fun Context.getDefaultBackgroundColor(): Int {
+    theme.obtainStyledAttributes(IntArray(1) {
+        android.R.attr.colorBackground
+    }).let { array ->
+        return array.getColor(0, getColorCompat(R.color.default_background)).also {
+            array.recycle()
+        }
+    }
 }

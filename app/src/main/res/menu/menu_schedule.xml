@@ -2,6 +2,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/menu_scheduleShare"
+        android:icon="@drawable/ic_share_24"
+        android:title="@string/share_schedule"
+        app:showAsAction="ifRoom" />
+
+    <item
         android:id="@+id/menu_scheduleControlPanel"
         android:icon="@drawable/ic_tune_dark_24"
         android:title="@string/schedule_control_bar"

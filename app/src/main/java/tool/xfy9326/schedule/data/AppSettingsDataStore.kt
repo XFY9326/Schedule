@@ -6,6 +6,7 @@ import tool.xfy9326.schedule.kt.tryEnumValueOf
 
 object AppSettingsDataStore : AbstractDataStore("Settings") {
     val nightModeType by preferencesKey<String>()
+    private val saveImageWhileSharing by preferencesKey<Boolean>()
     private val exitAppDirectly by preferencesKey<Boolean>()
 
     val nightModeTypeFlow = read {
@@ -14,5 +15,9 @@ object AppSettingsDataStore : AbstractDataStore("Settings") {
 
     val exitAppDirectlyFlow = read {
         it[exitAppDirectly] ?: false
+    }
+
+    val saveImageWhileSharingFlow = read {
+        it[saveImageWhileSharing] ?: false
     }
 }

@@ -18,15 +18,13 @@ import tool.xfy9326.schedule.beans.ImageScareType
 import tool.xfy9326.schedule.beans.WeekNumType
 import tool.xfy9326.schedule.data.ScheduleDataStore
 import tool.xfy9326.schedule.databinding.ActivityScheduleBinding
-import tool.xfy9326.schedule.kt.enableLightStatusBar
-import tool.xfy9326.schedule.kt.getColorCompat
-import tool.xfy9326.schedule.kt.observeEvent
-import tool.xfy9326.schedule.kt.startActivity
+import tool.xfy9326.schedule.kt.*
 import tool.xfy9326.schedule.ui.activity.base.ViewModelActivity
 import tool.xfy9326.schedule.ui.adapter.ScheduleViewPagerAdapter
 import tool.xfy9326.schedule.ui.dialog.CourseDetailDialog
 import tool.xfy9326.schedule.ui.dialog.ScheduleControlPanel
 import tool.xfy9326.schedule.ui.vm.ScheduleViewModel
+import tool.xfy9326.schedule.utils.IntentUtils
 
 class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBinding>(), NavigationView.OnNavigationItemSelectedListener {
     private var scheduleViewPagerAdapter: ScheduleViewPagerAdapter? = null
@@ -73,6 +71,13 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
         viewModel.useLightColorStatusBarColor.observe(this) {
             window.enableLightStatusBar(!it)
         }
+        viewModel.scheduleShared.observeEvent(this) {
+            if (it == null) {
+                viewBinding.layoutSchedule.showShortSnackBar(R.string.generate_share_schedule_failed)
+            } else {
+                startActivity(IntentUtils.getShareImageIntent(this, it))
+            }
+        }
     }
 
     override fun onInitView(viewBinding: ActivityScheduleBinding, viewModel: ScheduleViewModel) {
@@ -93,18 +98,19 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_schedule, menu)
-        val tintColor = requireViewModel().toolBarTintColor.value
-        if (tintColor != null) {
-            menu?.iterator()?.forEach {
-                it.icon?.setTint(tintColor)
-            }
+        requireViewModel().toolBarTintColor.value?.let {
+            menu?.setIconTint(it)
         }
         return super.onCreateOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.menu_scheduleControlPanel) {
-            requireViewModel().showScheduleControlPanel()
+        when (item.itemId) {
+            R.id.menu_scheduleControlPanel -> requireViewModel().showScheduleControlPanel()
+            R.id.menu_scheduleShare -> {
+                requireViewBinding().layoutSchedule.showShortSnackBar(R.string.generating_share_schedule)
+                requireViewModel().shareScheduleImage(this, getCurrentShowWeekNum())
+            }
         }
         return super.onOptionsItemSelected(item)
     }
@@ -158,9 +164,7 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
             textViewScheduleNotCurrentWeek.setTextColor(tintColor)
             textViewScheduleNowShowWeekNum.setTextColor(tintColor)
             toolBarSchedule.navigationIcon?.colorFilter = PorterDuffColorFilter(tintColor, PorterDuff.Mode.SRC)
-            toolBarSchedule.menu.iterator().forEach {
-                it.icon?.setTint(tintColor)
-            }
+            toolBarSchedule.menu.setIconTint(tintColor)
         }
     }
 

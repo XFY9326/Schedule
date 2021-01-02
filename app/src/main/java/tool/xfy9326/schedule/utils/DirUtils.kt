@@ -8,8 +8,7 @@ import java.io.File
 
 object DirUtils {
     private const val DIR_EXTERNAL = "External"
-    private const val DIR_CACHE = "Cache"
-    private const val DIR_SHARE = "Share"
+    private const val DIR_SHARE = "SharedFiles"
     private const val DIR_LOG = "Log"
     private const val DIR_PICTURE_APP = "App"
     const val DIR_SCHEDULE = "Schedule"
@@ -23,11 +22,8 @@ object DirUtils {
     val PictureAppDir
         get() = getExternalFilesDir(Environment.DIRECTORY_PICTURES, DIR_PICTURE_APP)
 
-    private val ExternalCacheDir
-        get() = getSafeExternalDir(ContextCompat.getExternalCacheDirs(App.instance).filterNotNull(), DIR_CACHE)
-
-    val ShareDir
-        get() = ExternalCacheDir.asParentOf(DIR_SHARE)
+    val SharedFileDir
+        get() = getSafeSharedFileDir()
 
     private fun getInternalFilesDir(vararg subDir: String): File =
         if (subDir.isEmpty()) {
@@ -38,14 +34,21 @@ object DirUtils {
 
     private fun getExternalFilesDir(vararg subDir: String): File {
         val joinedSubDir = subDir.joinToString(File.separator)
-        val dirList = ContextCompat.getExternalFilesDirs(App.instance, joinedSubDir).filterNotNull()
+        val dirList = ContextCompat.getExternalFilesDirs(App.instance, joinedSubDir)
         return getSafeExternalDir(dirList, joinedSubDir)
     }
 
-    private fun getSafeExternalDir(dirList: List<File>, subDir: String) =
-        if (dirList.isEmpty()) {
+    private fun getSafeExternalDir(dirList: Array<File?>, subDir: String): File {
+        val dirs = dirList.filterNotNull()
+        return if (dirs.isEmpty()) {
             getInternalFilesDir(DIR_EXTERNAL, subDir)
         } else {
-            dirList.first()
+            dirs.first()
         }
+    }
+
+    private fun getSafeSharedFileDir(): File {
+        val cacheDir = ContextCompat.getExternalCacheDirs(App.instance).filterNotNull().firstOrNull() ?: App.instance.cacheDir
+        return cacheDir.asParentOf(DIR_SHARE)
+    }
 }
