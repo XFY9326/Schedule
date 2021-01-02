@@ -8,12 +8,16 @@ import androidx.lifecycle.lifecycleScope
 import androidx.preference.Preference
 import androidx.preference.PreferenceDataStore
 import com.jaredrummler.android.colorpicker.ColorPreferenceCompat
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.runBlocking
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.data.ScheduleDataStore
+import tool.xfy9326.schedule.kt.getColorCompat
 import tool.xfy9326.schedule.kt.observeEvent
 import tool.xfy9326.schedule.kt.showShortSnackBar
 import tool.xfy9326.schedule.kt.tryStartActivityForResult
 import tool.xfy9326.schedule.tools.MaterialColorHelper
+import tool.xfy9326.schedule.ui.dialog.FullScreenLoadingDialog
 import tool.xfy9326.schedule.ui.fragment.base.AbstractSettingsFragment
 import tool.xfy9326.schedule.utils.IntentUtils
 
@@ -35,15 +39,24 @@ class ScheduleSettingsFragment : AbstractSettingsFragment() {
         }
         findPreference<ColorPreferenceCompat>(ScheduleDataStore.toolBarTintColor.name)?.apply {
             presets = MaterialColorHelper.all()
+            runBlocking {
+                setDefaultValue(ScheduleDataStore.toolBarTintColorFlow.firstOrNull()
+                    ?: requireContext().getColorCompat(R.color.schedule_tool_bar_tint))
+            }
         }
         findPreference<ColorPreferenceCompat>(ScheduleDataStore.timeTextColor.name)?.apply {
             presets = MaterialColorHelper.all()
+            runBlocking {
+                setDefaultValue(ScheduleDataStore.timeTextColorFlow.firstOrNull()
+                    ?: requireContext().getColorCompat(R.color.course_time_cell_text))
+            }
         }
     }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
         requireSettingsViewModel()?.importScheduleImage?.observeEvent(this) {
+            FullScreenLoadingDialog.closeDialog(childFragmentManager)
             requireRootLayout()?.showShortSnackBar(
                 if (it) {
                     R.string.schedule_background_set_success
@@ -61,6 +74,7 @@ class ScheduleSettingsFragment : AbstractSettingsFragment() {
                 if (uri == null) {
                     requireRootLayout()?.showShortSnackBar(R.string.image_select_failed)
                 } else {
+                    FullScreenLoadingDialog.showDialog(childFragmentManager, false)
                     requireSettingsViewModel()?.importScheduleImage(uri)
                 }
             } else {

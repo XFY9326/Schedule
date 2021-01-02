@@ -8,7 +8,9 @@ import android.graphics.drawable.*
 import android.os.Build
 import android.text.Editable
 import android.util.TypedValue
+import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
 import androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -107,5 +109,15 @@ fun Editable?.getText(): String? {
         null
     } else {
         str
+    }
+}
+
+// New api setSystemBarsBehavior() is not stable even in Android R
+@Suppress("DEPRECATION")
+fun Window.enableLightStatusBar(enabled: Boolean) {
+    decorView.systemUiVisibility = if (enabled) {
+        decorView.systemUiVisibility or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+    } else {
+        decorView.systemUiVisibility and View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR.inv()
     }
 }

@@ -9,14 +9,20 @@ import androidx.fragment.app.FragmentManager
 import androidx.transition.Fade
 import com.google.android.material.button.MaterialButton
 import tool.xfy9326.schedule.R
+import tool.xfy9326.schedule.kt.buildBundle
 import tool.xfy9326.schedule.kt.getDrawableCompat
 
 class FullScreenLoadingDialog : DialogFragment() {
     companion object {
         private val FRAGMENT_TAG = FullScreenLoadingDialog::class.simpleName
+        private const val EXTRA_SHOW_CANCEL_BUTTON = "SHOW_CANCEL_BUTTON"
 
-        fun showDialog(fragmentManager: FragmentManager) {
-            FullScreenLoadingDialog().show(fragmentManager, FRAGMENT_TAG)
+        fun showDialog(fragmentManager: FragmentManager, showCancel: Boolean = true) {
+            FullScreenLoadingDialog().apply {
+                arguments = buildBundle {
+                    putBoolean(EXTRA_SHOW_CANCEL_BUTTON, showCancel)
+                }
+            }.show(fragmentManager, FRAGMENT_TAG)
         }
 
         fun closeDialog(fragmentManager: FragmentManager) {
@@ -47,24 +53,26 @@ class FullScreenLoadingDialog : DialogFragment() {
                 layoutParams = LinearLayoutCompat.LayoutParams(size, size)
                 isIndeterminate = true
             })
-            addView(MaterialButton(requireContext()).apply {
-                val marginTop = resources.getDimensionPixelOffset(R.dimen.full_screen_loading_dialog_button_margin_top)
-                layoutParams = LinearLayoutCompat.LayoutParams(
-                    LinearLayoutCompat.LayoutParams.WRAP_CONTENT,
-                    LinearLayoutCompat.LayoutParams.WRAP_CONTENT
-                ).apply {
-                    setMargins(0, marginTop, 0, 0)
-                }
-                setText(android.R.string.cancel)
-                setOnClickListener {
-                    val owner = requireContext()
-                    if (owner is OnRequestCancelListener) {
-                        if (owner.onFullScreenLoadingDialogRequestCancel()) {
-                            dismiss()
+            if (requireArguments().getBoolean(EXTRA_SHOW_CANCEL_BUTTON)) {
+                addView(MaterialButton(requireContext()).apply {
+                    val marginTop = resources.getDimensionPixelOffset(R.dimen.full_screen_loading_dialog_button_margin_top)
+                    layoutParams = LinearLayoutCompat.LayoutParams(
+                        LinearLayoutCompat.LayoutParams.WRAP_CONTENT,
+                        LinearLayoutCompat.LayoutParams.WRAP_CONTENT
+                    ).apply {
+                        setMargins(0, marginTop, 0, 0)
+                    }
+                    setText(android.R.string.cancel)
+                    setOnClickListener {
+                        val owner = requireContext()
+                        if (owner is OnRequestCancelListener) {
+                            if (owner.onFullScreenLoadingDialogRequestCancel()) {
+                                dismiss()
+                            }
                         }
                     }
-                }
-            })
+                })
+            }
         }
     }
 

@@ -15,13 +15,13 @@ import tool.xfy9326.schedule.utils.DirUtils
 
 object ScheduleDataStore : AbstractDataStore("ScheduleSettings") {
     private val firstDayOfWeek by preferencesKey<String>()
-    private val viewAlpha by preferencesKey<Float>()
+    private val scheduleViewAlpha by preferencesKey<Int>()
     private val forceShowWeekendColumn by preferencesKey<Boolean>()
     private val showNotThisWeekCourse by preferencesKey<Boolean>()
     private val customScheduleTextColor by preferencesKey<Boolean>()
     val timeTextColor by preferencesKey<Int>()
     val toolBarTintColor by preferencesKey<Int>()
-    private val courseCellTextSize by preferencesKey<Float>()
+    private val courseCellTextSize by preferencesKey<Int>()
     private val cornerScreenMargin by preferencesKey<Boolean>()
     private val highlightShowTodayCell by preferencesKey<Boolean>()
     private val scheduleBackgroundImage by preferencesKey<String>()
@@ -29,6 +29,7 @@ object ScheduleDataStore : AbstractDataStore("ScheduleSettings") {
     private val scheduleBackgroundImageAlpha by preferencesKey<Int>()
     private val enableScheduleBackground by preferencesKey<Boolean>()
     private val scheduleBackgroundScareType by preferencesKey<String>()
+    private val useLightColorStatusBarColor by preferencesKey<Boolean>()
 
     val firstDayOfWeekFlow = read {
         tryEnumValueOf(it[firstDayOfWeek]) ?: WeekDay.MONDAY
@@ -37,11 +38,11 @@ object ScheduleDataStore : AbstractDataStore("ScheduleSettings") {
     val scheduleStylesFlow = readOnlyFlow.combine(firstDayOfWeekFlow) { pref, weekday ->
         ScheduleStyles(
             firstDayOfWeek = weekday,
-            viewAlpha = pref[viewAlpha] ?: 1f,
+            viewAlpha = pref[scheduleViewAlpha] ?: 100,
             forceShowWeekendColumn = pref[forceShowWeekendColumn] ?: false,
             showNotThisWeekCourse = pref[showNotThisWeekCourse] ?: true,
             timeTextColor = if (pref[customScheduleTextColor] == true) pref[timeTextColor] else null,
-            courseCellTextSize = pref[courseCellTextSize],
+            courseCellTextSize = pref[courseCellTextSize] ?: 3,
             cornerScreenMargin = pref[cornerScreenMargin] ?: false,
             highlightShowTodayCell = pref[highlightShowTodayCell] ?: true
         )
@@ -55,12 +56,24 @@ object ScheduleDataStore : AbstractDataStore("ScheduleSettings") {
         }
     }
 
+    val useLightColorStatusBarColorFlow = read {
+        it[useLightColorStatusBarColor] ?: false
+    }
+
+    val timeTextColorFlow = read {
+        if (it[customScheduleTextColor] == true) it[timeTextColor] else null
+    }
+
     val toolBarTintColorFlow = read {
         if (it[customScheduleTextColor] == true) it[toolBarTintColor] else null
     }
 
     val scheduleBackgroundImageQualityFlow = read {
         it[scheduleBackgroundImageQuality] ?: 60
+    }
+
+    val scheduleBackgroundImageFlow = read {
+        it[scheduleBackgroundImage]
     }
 
     val scheduleBackgroundBuildBundleFlow = read {

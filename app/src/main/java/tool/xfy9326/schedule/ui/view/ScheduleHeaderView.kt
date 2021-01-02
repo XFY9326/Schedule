@@ -49,7 +49,7 @@ class ScheduleHeaderView(
     private var courseColumnWidth: Int = 0
 
     init {
-        alpha = styles.viewAlpha
+        alpha = styles.scheduleViewAlpha
         layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
     }
 
