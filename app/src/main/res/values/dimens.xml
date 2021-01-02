@@ -6,7 +6,7 @@
     <dimen name="schedule_grid_cell_padding">4px</dimen>
     <dimen name="schedule_grid_cell_radius">6dp</dimen>
     <dimen name="schedule_course_cell_text_padding">4dp</dimen>
-    <dimen name="schedule_course_cell_text_size">13sp</dimen>
+    <dimen name="schedule_course_cell_text_size_offset">10sp</dimen>
     <dimen name="schedule_time_text_size">9sp</dimen>
     <dimen name="schedule_time_divide_top_margin">1dp</dimen>
     <dimen name="schedule_time_cell_course_num_text_size">17sp</dimen>

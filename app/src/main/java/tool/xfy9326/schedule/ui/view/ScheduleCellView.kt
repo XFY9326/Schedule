@@ -76,7 +76,7 @@ class ScheduleCellView : LinearLayoutCompat {
     }
 
     private fun initStyle() {
-        alpha = styles.viewAlpha
+        alpha = styles.scheduleViewAlpha
         orientation = VERTICAL
         setPadding(predefine.gridCellPadding)
         layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)

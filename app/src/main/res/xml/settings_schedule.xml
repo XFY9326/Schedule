@@ -48,6 +48,35 @@
             app:summary="@string/highlight_show_today_cell_sum"
             app:title="@string/highlight_show_today_cell" />
 
+        <androidx.preference.SeekBarPreference
+            android:max="100"
+            app:defaultValue="100"
+            app:iconSpaceReserved="false"
+            app:key="scheduleViewAlpha"
+            app:min="0"
+            app:seekBarIncrement="1"
+            app:showSeekBarValue="true"
+            app:summary="@string/schedule_view_alpha_sum"
+            app:title="@string/schedule_view_alpha" />
+
+        <androidx.preference.SeekBarPreference
+            android:max="10"
+            app:defaultValue="3"
+            app:iconSpaceReserved="false"
+            app:key="courseCellTextSize"
+            app:min="0"
+            app:seekBarIncrement="1"
+            app:showSeekBarValue="true"
+            app:summary="@string/course_cell_text_size_sum"
+            app:title="@string/course_cell_text_size" />
+
+        <androidx.preference.CheckBoxPreference
+            app:defaultValue="false"
+            app:iconSpaceReserved="false"
+            app:key="useLightColorStatusBarColor"
+            app:summary="@string/use_light_color_status_bar_color_sum"
+            app:title="@string/use_light_color_status_bar_color" />
+
         <androidx.preference.CheckBoxPreference
             app:defaultValue="false"
             app:iconSpaceReserved="false"
@@ -56,7 +85,6 @@
             app:title="@string/custom_schedule_text_color" />
 
         <com.jaredrummler.android.colorpicker.ColorPreferenceCompat
-            app:defaultValue="@color/schedule_tool_bar_tint"
             app:dependency="customScheduleTextColor"
             app:iconSpaceReserved="false"
             app:key="toolBarTintColor"
@@ -64,7 +92,6 @@
             app:title="@string/tool_bar_tint_color" />
 
         <com.jaredrummler.android.colorpicker.ColorPreferenceCompat
-            app:defaultValue="@color/course_time_cell_text"
             app:dependency="customScheduleTextColor"
             app:iconSpaceReserved="false"
             app:key="timeTextColor"

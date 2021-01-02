@@ -60,6 +60,7 @@ class ScheduleViewModel : AbstractViewModel() {
     val openCourseManageActivity = MutableEventLiveData<Long>()
     val exitAppDirectly = MutableEventLiveData<Boolean>()
     val toolBarTintColor = ScheduleDataStore.toolBarTintColorFlow.asScopeLiveData(viewModelScope)
+    val useLightColorStatusBarColor = ScheduleDataStore.useLightColorStatusBarColorFlow.asScopeLiveData(viewModelScope)
     val scheduleBackground = ScheduleDataStore.scheduleBackgroundBuildBundleFlow.asScopeLiveData(viewModelScope)
     private val scheduleBuildBundleMap = SparseArrayCompat<LiveData<ScheduleBuildBundle>>()
 

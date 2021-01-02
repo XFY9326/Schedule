@@ -5,12 +5,14 @@ import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.databinding.DialogScheduleControlPanelBinding
 import tool.xfy9326.schedule.kt.buildBundle
+import tool.xfy9326.schedule.kt.enableLightStatusBar
 import tool.xfy9326.schedule.kt.postEvent
 import tool.xfy9326.schedule.ui.vm.ScheduleViewModel
 
@@ -36,6 +38,11 @@ class ScheduleControlPanel : BottomSheetDialogFragment() {
     override fun onAttach(context: Context) {
         super.onAttach(context)
         viewModel = ViewModelProvider(requireActivity())[ScheduleViewModel::class.java]
+        viewModel.useLightColorStatusBarColor.observe(this) {
+            lifecycleScope.launchWhenStarted {
+                dialog?.window?.enableLightStatusBar(!it)
+            }
+        }
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {

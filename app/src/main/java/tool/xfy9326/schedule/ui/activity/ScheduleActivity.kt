@@ -18,6 +18,7 @@ import tool.xfy9326.schedule.beans.ImageScareType
 import tool.xfy9326.schedule.beans.WeekNumType
 import tool.xfy9326.schedule.data.ScheduleDataStore
 import tool.xfy9326.schedule.databinding.ActivityScheduleBinding
+import tool.xfy9326.schedule.kt.enableLightStatusBar
 import tool.xfy9326.schedule.kt.getColorCompat
 import tool.xfy9326.schedule.kt.observeEvent
 import tool.xfy9326.schedule.kt.startActivity
@@ -69,6 +70,9 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
         }
         viewModel.scheduleBackground.observe(this, ::onChangeScheduleBackground)
         viewModel.toolBarTintColor.observe(this, ::setToolBarTintColor)
+        viewModel.useLightColorStatusBarColor.observe(this) {
+            window.enableLightStatusBar(!it)
+        }
     }
 
     override fun onInitView(viewBinding: ActivityScheduleBinding, viewModel: ScheduleViewModel) {
