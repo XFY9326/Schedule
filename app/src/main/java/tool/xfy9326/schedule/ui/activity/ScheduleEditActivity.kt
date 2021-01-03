@@ -69,17 +69,16 @@ class ScheduleEditActivity : ViewModelActivity<ScheduleEditViewModel, ActivitySc
         viewBinding.recyclerViewScheduleTimeList.itemAnimator = null
         scheduleTimeAdapter.setOnScheduleTimeEditListener(::selectScheduleTime)
 
+        viewBinding.checkBoxScheduleTimeCourseTimeSame.isChecked = viewModel.scheduleTimeCourseTimeSame
+        viewBinding.sliderScheduleCourseCostTime.value = viewModel.courseCostTime.toFloat()
+        viewBinding.sliderScheduleBreakCostTime.value = viewModel.breakCostTime.toFloat()
+
         viewBinding.buttonScheduleStartDateEdit.setOnClickListener {
             viewModel.selectScheduleDate(true, viewModel.editSchedule.startDate)
         }
         viewBinding.buttonScheduleEndDateEdit.setOnClickListener {
             viewModel.selectScheduleDate(false, viewModel.editSchedule.endDate)
         }
-
-        viewBinding.checkBoxScheduleTimeCourseTimeSame.isChecked = viewModel.scheduleTimeCourseTimeSame
-        viewBinding.sliderScheduleCourseCostTime.value = viewModel.courseCostTime.toFloat()
-        viewBinding.sliderScheduleBreakCostTime.value = viewModel.breakCostTime.toFloat()
-
         viewBinding.sliderScheduleCourseCostTime.setOnSlideValueSetListener {
             updateCourseCostTime(it.toInt(), false)
         }
@@ -173,13 +172,11 @@ class ScheduleEditActivity : ViewModelActivity<ScheduleEditViewModel, ActivitySc
             scheduleTimeAdapter.submitList(schedule.times.toList())
 
             editTextScheduleName.setText(schedule.name)
+            sliderScheduleTimeNum.value = schedule.times.size.toFloat()
 
             updateScheduleDate(true, schedule.startDate, false)
             updateScheduleDate(false, schedule.endDate, false)
-
             updateScheduleColor(schedule.color)
-
-            sliderScheduleTimeNum.value = schedule.times.size.toFloat()
 
             requireViewModel().apply {
                 updateCourseCostTime(courseCostTime, true)

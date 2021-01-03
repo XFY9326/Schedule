@@ -9,7 +9,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.withContext
-import tool.xfy9326.schedule.App
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.*
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
@@ -94,8 +93,8 @@ object CourseManager {
         return foundConflicts
     }
 
-    fun createNewCourse(scheduleId: Long) =
-        Course(0, scheduleId, App.instance.getString(R.string.new_course), null, MaterialColorHelper.random(), listOf(createNewCourseTime()))
+    fun createNewCourse(context: Context, scheduleId: Long) =
+        Course(0, scheduleId, context.getString(R.string.new_course), null, MaterialColorHelper.random(), listOf(createNewCourseTime()))
 
     fun createNewCourseTime(maxWeekNum: Int = 0) =
         CourseTime(if (maxWeekNum <= 0) {

@@ -11,7 +11,9 @@ object AppDataStore : AbstractDataStore("App") {
         if (it.contains(currentScheduleId)) {
             it[currentScheduleId]
         } else {
-            setCurrentScheduleId(ScheduleDBProvider.db.scheduleDAO.initDefaultSchedule())
+            ScheduleDBProvider.db.scheduleDAO.tryInitDefaultSchedule()?.let { id ->
+                setCurrentScheduleId(id)
+            }
             null
         }
     }.filterNotNull()

@@ -69,7 +69,9 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
         viewModel.scheduleBackground.observe(this, ::onChangeScheduleBackground)
         viewModel.toolBarTintColor.observe(this, ::setToolBarTintColor)
         viewModel.useLightColorStatusBarColor.observe(this) {
-            window.enableLightStatusBar(!it)
+            // Light status bar in Android Window means status bar that used in light background, so the status bar color is black.
+            // For default, it's true in app theme.
+            window.enableLightStatusBar(!it && !isUsingNightMode())
         }
         viewModel.scheduleShared.observeEvent(this) {
             if (it == null) {
