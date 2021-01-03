@@ -208,7 +208,7 @@
     <string name="schedule_background_fade_anim_sum">关闭后加载课表背景将不会使用动画效果</string>
     <string name="share_image">分享图片</string>
     <string name="share_schedule">分享课表</string>
-    <string name="generating_share_schedule">正在生成课表图片中。。。</string>
+    <string name="generating_share_schedule">正在生成课表图片中</string>
     <string name="generate_share_schedule_failed">课表图片生成失败！</string>
     <string name="save_image_while_sharing">分享课表图片时保存图片到相册</string>
     <string name="save_image_while_sharing_sum">开启后将会在分享课表图片时保存图片到相册</string>

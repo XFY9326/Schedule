@@ -52,7 +52,13 @@ abstract class ScheduleDAO {
         }
     }
 
-    suspend fun initDefaultSchedule() = putSchedule(ScheduleManager.createDefaultSchedule())
+    @Transaction
+    open suspend fun tryInitDefaultSchedule() =
+        if (getScheduleCount() == 0L) {
+            putSchedule(ScheduleManager.createDefaultSchedule())
+        } else {
+            null
+        }
 
     @Transaction
     open suspend fun putCourse(scheduleId: Long, course: Course): Long {
@@ -122,4 +128,8 @@ abstract class ScheduleDAO {
 
     @Query("select * from ${DBConst.TABLE_SCHEDULE} where ${DBConst.COLUMN_SCHEDULE_ID}=:scheduleId")
     abstract fun getSchedule(scheduleId: Long): Flow<Schedule?>
+
+
+    @Query("select count(*) from ${DBConst.TABLE_SCHEDULE}")
+    abstract suspend fun getScheduleCount(): Long
 }

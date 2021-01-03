@@ -8,7 +8,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.preference.Preference
 import androidx.preference.PreferenceDataStore
 import com.jaredrummler.android.colorpicker.ColorPreferenceCompat
-import tool.xfy9326.schedule.App
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.data.ScheduleDataStore
 import tool.xfy9326.schedule.data.base.DataStorePreferenceAdapter
@@ -33,8 +32,8 @@ class ScheduleSettingsFragment : AbstractSettingsFragment() {
     override val preferenceDataStore: PreferenceDataStore = object : DataStorePreferenceAdapter(ScheduleDataStore.dataStore, lifecycleScope) {
         override fun getInt(key: String, defValue: Int): Int {
             when (key) {
-                ScheduleDataStore.toolBarTintColor.name -> return super.getInt(key, App.instance.getColorCompat(R.color.schedule_tool_bar_tint))
-                ScheduleDataStore.timeTextColor.name -> return super.getInt(key, App.instance.getColorCompat(R.color.course_time_cell_text))
+                ScheduleDataStore.toolBarTintColor.name -> return super.getInt(key, requireContext().getColorCompat(R.color.schedule_tool_bar_tint))
+                ScheduleDataStore.timeTextColor.name -> return super.getInt(key, requireContext().getColorCompat(R.color.course_time_cell_text))
             }
             return super.getInt(key, defValue)
         }

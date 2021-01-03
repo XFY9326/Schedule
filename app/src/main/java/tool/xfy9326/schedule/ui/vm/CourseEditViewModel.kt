@@ -1,5 +1,6 @@
 package tool.xfy9326.schedule.ui.vm
 
+import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.first
@@ -29,7 +30,7 @@ class CourseEditViewModel : AbstractViewModel() {
     val courseSaveComplete = MutableEventLiveData<Long>()
     val editCourseTime = MutableEventLiveData<CourseTimeEditDialog.EditBundle>()
 
-    fun requestDBCourse(scheduleId: Long, courseId: Long) {
+    fun requestDBCourse(context: Context, scheduleId: Long, courseId: Long) {
         isEdit = courseId != 0L
 
         if (!::editCourse.isInitialized) {
@@ -40,7 +41,7 @@ class CourseEditViewModel : AbstractViewModel() {
                         courseData.postValue(it)
                     }
                 } else {
-                    editCourse = CourseManager.createNewCourse(scheduleId)
+                    editCourse = CourseManager.createNewCourse(context, scheduleId)
                     courseData.postValue(editCourse)
                 }
                 originalCourseHashCode = editCourse.hashCode()

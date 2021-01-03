@@ -5,6 +5,7 @@ import android.net.Uri
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
 import tool.xfy9326.schedule.beans.Course
 import tool.xfy9326.schedule.beans.ScheduleTime
 import tool.xfy9326.schedule.beans.WeekNumType
@@ -59,6 +60,7 @@ class ScheduleViewModel : AbstractViewModel() {
     val useLightColorStatusBarColor = ScheduleDataStore.useLightColorStatusBarColorFlow.asScopeLiveData(viewModelScope)
     val scheduleBackground = ScheduleDataStore.scheduleBackgroundBuildBundleFlow.asScopeLiveData(viewModelScope)
     val scheduleShared = MutableEventLiveData<Uri?>()
+    val scheduleSharedMutex = Mutex()
 
     fun scrollToCurrentWeekNum() {
         viewModelScope.launch {
@@ -91,24 +93,30 @@ class ScheduleViewModel : AbstractViewModel() {
     }
 
     fun shareScheduleImage(context: Context, weekNum: Int) {
-        viewModelScope.launch {
-            val scheduleId = currentScheduleId.first()
-            val targetWidth = context.resources.displayMetrics.widthPixels
-            val bitmap = CourseManager.generateScheduleImageByWeekNum(context, scheduleId, weekNum, targetWidth)
-            if (bitmap != null) {
-                val uri = if (AppSettingsDataStore.saveImageWhileSharingFlow.first()) {
-                    ImageHelper.outputImageToAlbum(context, bitmap)
-                } else {
-                    ImageHelper.createShareCacheImage(context, bitmap)
-                }
+        if (scheduleSharedMutex.tryLock()) {
+            viewModelScope.launch {
+                try {
+                    val scheduleId = currentScheduleId.first()
+                    val targetWidth = context.resources.displayMetrics.widthPixels
+                    val bitmap = CourseManager.generateScheduleImageByWeekNum(context, scheduleId, weekNum, targetWidth)
+                    if (bitmap != null) {
+                        val uri = if (AppSettingsDataStore.saveImageWhileSharingFlow.first()) {
+                            ImageHelper.outputImageToAlbum(context, bitmap)
+                        } else {
+                            ImageHelper.createShareCacheImage(context, bitmap)
+                        }
 
-                if (uri != null) {
-                    scheduleShared.postEvent(uri)
-                } else {
-                    scheduleShared.postEvent(null)
+                        if (uri != null) {
+                            scheduleShared.postEvent(uri)
+                        } else {
+                            scheduleShared.postEvent(null)
+                        }
+                    } else {
+                        scheduleShared.postEvent(null)
+                    }
+                } finally {
+                    scheduleSharedMutex.unlock()
                 }
-            } else {
-                scheduleShared.postEvent(null)
             }
         }
     }
