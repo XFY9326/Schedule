@@ -50,6 +50,20 @@ class CourseEditActivity : ViewModelActivity<CourseEditViewModel, ActivityCourse
         viewModel.courseSaveFailed.observeEvent(this) {
             viewBinding.layoutCourseEdit.showShortSnackBar(it.getText(this))
         }
+        viewModel.copyToOtherSchedule.observeEvent(this) {
+            if (it == null) {
+                viewBinding.layoutCourseEdit.showShortSnackBar(R.string.course_copy_success)
+            } else {
+                viewBinding.layoutCourseEdit.showShortSnackBar(R.string.course_copy_failed, it.getText(this))
+            }
+        }
+        viewModel.loadAllSchedules.observeEvent(this) {
+            if (it.isEmpty()) {
+                viewBinding.layoutCourseEdit.showShortSnackBar(R.string.empty_schedule_list)
+            } else {
+                DialogUtils.showScheduleSelectDialog(this, R.string.copy_to_other_schedule, it, viewModel::copyToOtherSchedule)
+            }
+        }
         viewModel.editCourseTime.observeEvent(this) {
             CourseTimeEditDialog.showDialog(supportFragmentManager, it)
         }
@@ -83,15 +97,18 @@ class CourseEditActivity : ViewModelActivity<CourseEditViewModel, ActivityCourse
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.menu_courseEditSave) {
-            requireViewModel().apply {
-                requireViewBinding().layoutCourseEdit.apply {
-                    clearFocus()
-                    hideKeyboard(windowToken)
+        when (item.itemId) {
+            R.id.menu_courseEditSave -> {
+                requireViewModel().apply {
+                    requireViewBinding().layoutCourseEdit.apply {
+                        clearFocus()
+                        hideKeyboard(windowToken)
+                    }
+                    updateTextData()
+                    saveCourse(currentEditScheduleId)
                 }
-                updateTextData()
-                saveCourse(currentEditScheduleId)
             }
+            R.id.menu_courseEditCopy -> requireViewModel().loadAllSchedules(currentEditScheduleId)
         }
         return super.onOptionsItemSelected(item)
     }

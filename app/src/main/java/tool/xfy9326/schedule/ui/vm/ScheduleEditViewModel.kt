@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import tool.xfy9326.schedule.beans.EditError
 import tool.xfy9326.schedule.beans.Schedule
+import tool.xfy9326.schedule.beans.ScheduleTime
 import tool.xfy9326.schedule.beans.WeekDay
 import tool.xfy9326.schedule.data.ScheduleDataStore
 import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
@@ -30,6 +31,8 @@ class ScheduleEditViewModel : AbstractViewModel() {
     val scheduleData = MutableLiveData<Schedule>()
     val selectScheduleDate = MutableEventLiveData<Triple<Boolean, Date, WeekDay>>()
     val scheduleSaveFailed = MutableEventLiveData<EditError>()
+    val loadAllSchedules = MutableEventLiveData<List<Schedule.Min>>()
+    val importScheduleTimes = MutableEventLiveData<Array<ScheduleTime>?>()
 
     fun selectScheduleDate(isStart: Boolean, date: Date) {
         viewModelScope.launch {
@@ -85,6 +88,24 @@ class ScheduleEditViewModel : AbstractViewModel() {
             } else {
                 scheduleSaveFailed.postEvent(errorMsg)
             }
+        }
+    }
+
+    fun loadAllSchedules() {
+        viewModelScope.launch {
+            var schedules = ScheduleDBProvider.db.scheduleDAO.getScheduleMin().first()
+            if (isEdit) {
+                schedules = schedules.filter {
+                    it.scheduleId != editSchedule.scheduleId
+                }
+            }
+            loadAllSchedules.postEvent(schedules)
+        }
+    }
+
+    fun importScheduleTimes(scheduleId: Long) {
+        viewModelScope.launch {
+            importScheduleTimes.postEvent(ScheduleDBProvider.db.scheduleDAO.getSchedule(scheduleId).firstOrNull()?.times)
         }
     }
 

@@ -212,6 +212,13 @@
     <string name="generate_share_schedule_failed">课表图片生成失败！</string>
     <string name="save_image_while_sharing">分享课表图片时保存图片到相册</string>
     <string name="save_image_while_sharing_sum">开启后将会在分享课表图片时保存图片到相册</string>
+    <string name="copy_to_other_schedule">复制到其他课表</string>
+    <string name="import_times_from_other_schedule">从其他课表导入课表时间</string>
+    <string name="schedule_time_import_failed">课表时间导入失败！</string>
+    <string name="schedule_time_import_success">课表时间导入成功！</string>
+    <string name="course_copy_failed">课程复制失败！\n%1$s</string>
+    <string name="course_copy_success">课程已成功复制到另一课表！</string>
+    <string name="empty_schedule_list">没有可选的课表！</string>
 
     <string name="scare_type_fit_center">等比缩放，从中间开始填充满</string>
     <string name="scare_type_center_crop">等比缩放直到完全填充</string>

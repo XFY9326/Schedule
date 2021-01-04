@@ -35,4 +35,12 @@ data class Course(
 
     constructor(name: String, teacher: String?, times: List<CourseTime>) :
             this(DBConst.DEFAULT_ID, DBConst.DEFAULT_ID, name, teacher, MaterialColorHelper.random(), times)
+
+    fun clone(scheduleId: Long): Course {
+        val timesList = ArrayList<CourseTime>(times.size)
+        times.forEach {
+            timesList.add(it.copy(timeId = DBConst.DEFAULT_ID, courseId = DBConst.DEFAULT_ID, classTime = it.classTime.copy()))
+        }
+        return copy(scheduleId = scheduleId, courseId = DBConst.DEFAULT_ID, times = timesList)
+    }
 }

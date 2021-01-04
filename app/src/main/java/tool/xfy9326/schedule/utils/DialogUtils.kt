@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.jaredrummler.android.colorpicker.ColorPickerDialog
 import tool.xfy9326.schedule.R
+import tool.xfy9326.schedule.beans.Schedule
 import tool.xfy9326.schedule.databinding.DialogEditTextBinding
 import tool.xfy9326.schedule.kt.getText
 import tool.xfy9326.schedule.kt.show
@@ -32,6 +33,16 @@ object DialogUtils {
             setNegativeButton(android.R.string.cancel) { _, _ ->
                 dialogViewBinding.editTextDialogText.clearFocus()
             }
+        }.show(activity)
+    }
+
+    fun showScheduleSelectDialog(activity: AppCompatActivity, @StringRes titleId: Int, schedules: List<Schedule.Min>, onSelect: (Long) -> Unit) {
+        MaterialAlertDialogBuilder(activity).apply {
+            setTitle(titleId)
+            setItems(schedules.map { it.name }.toTypedArray()) { _, index ->
+                onSelect(schedules[index].scheduleId)
+            }
+            setNegativeButton(android.R.string.cancel, null)
         }.show(activity)
     }
 
