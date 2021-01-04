@@ -7,7 +7,7 @@
 
     <color name="default_background">#303030</color>
 
-    <color name="course_time_cell_today">#006064</color>
+    <color name="course_time_today_highlight">#006064</color>
 
     <color name="course_cell_ripple">#1AFFFFFF</color>
     <color name="launch_screen_windows_background">#121212</color>

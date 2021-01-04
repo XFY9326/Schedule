@@ -192,8 +192,8 @@
     <string name="schedule_background_set_failed">课表背景设置失败！</string>
     <string name="schedule_background_set_cancel">已取消设置课表背景！</string>
     <string name="image_select_failed">图片选择失败！</string>
-    <string name="custom_schedule_text_color">自定义课表文字颜色</string>
-    <string name="custom_schedule_text_color_sum">开启后可以自定义课表文字颜色</string>
+    <string name="custom_schedule_text_color">自定义课表文字与图标颜色</string>
+    <string name="custom_schedule_text_color_sum">开启后可以自定义课表文字与图标颜色</string>
     <string name="tool_bar_tint_color">工具栏文字与图标颜色</string>
     <string name="tool_bar_tint_color_sum">修改顶部工具栏文字与图标颜色</string>
     <string name="time_text_color">课表时间文字颜色</string>
@@ -219,6 +219,21 @@
     <string name="course_copy_failed">课程复制失败！\n%1$s</string>
     <string name="course_copy_success">课程已成功复制到另一课表！</string>
     <string name="empty_schedule_list">没有可选的课表！</string>
+    <string name="show_schedule_times">显示课程时间</string>
+    <string name="show_schedule_times_sum">在课程时间列里显示课程时间</string>
+    <string name="horizontal_course_cell_text">水平居中课程格文字</string>
+    <string name="horizontal_course_cell_text_sum">横向居中显示课程格内的文字</string>
+    <string name="vertical_course_cell_text">竖直居中课程格文字</string>
+    <string name="vertical_course_cell_text_sum">竖向居中显示课程格内的文字</string>
+    <string name="highlight_show_today_cell_color">今日课程日期格高亮显示颜色</string>
+    <string name="highlight_show_today_cell_color_sum">修改今日课程日期格的高亮显示颜色</string>
+    <string name="schedule_color">课表颜色</string>
+    <string name="not_this_week_course_show_style">非本周课程显示样式</string>
+    <string name="not_this_week_course_show_style_sum">修改非本周课程的特殊显示样式</string>
+    <string name="show_not_this_week_text">显示\'[非本周]\'文字</string>
+    <string name="use_transparent_background">使用半透明背景颜色</string>
+    <string name="not_this_week">[非本周]</string>
+    <string name="keep_at_least_one_show_style">请至少保持一种显示方式！</string>
 
     <string name="scare_type_fit_center">等比缩放，从中间开始填充满</string>
     <string name="scare_type_center_crop">等比缩放直到完全填充</string>

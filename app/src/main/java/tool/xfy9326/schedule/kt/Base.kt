@@ -57,6 +57,18 @@ inline fun <reified E : Enum<E>> tryEnumValueOf(name: String?): E? {
     }
 }
 
+inline fun <reified E : Enum<E>> tryEnumValueOf(names: Set<String>?): Set<E>? {
+    return if (names == null) {
+        null
+    } else {
+        HashSet<E>(names.size).apply {
+            names.forEach {
+                tryEnumValueOf<E>(it)?.let(::add)
+            }
+        }
+    }
+}
+
 inline fun <E, I : Iterator<E>> I.iterate(action: I.(E) -> Unit) {
     while (hasNext()) action.invoke(this, next())
 }

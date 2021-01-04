@@ -18,10 +18,18 @@ data class ScheduleStyles(
     private val courseCellTextSize: Int,
     val cornerScreenMargin: Boolean,
     val highlightShowTodayCell: Boolean,
+    @ColorInt
+    private val highlightShowTodayCellColor: Int?,
+    val showScheduleTimes: Boolean,
+    val horizontalCourseCellText: Boolean,
+    val verticalCourseCellText: Boolean,
+    val notThisWeekCourseShowStyle: Set<NotThisWeekCourseShowStyle>,
 ) {
     val scheduleViewAlpha = viewAlpha / 100f
 
     fun getTimeTextColor(context: Context) = timeTextColor ?: context.getColorCompat(R.color.course_time_cell_text)
+
+    fun getHighlightShowTodayCellColor(context: Context) = highlightShowTodayCellColor ?: context.getColorCompat(R.color.course_time_today_highlight)
 
     fun getCourseCellTextSize(context: Context): Float =
         courseCellTextSize.spToPx() + context.resources.getDimension(R.dimen.schedule_course_cell_text_size_offset)

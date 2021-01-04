@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     style="@style/AppTheme.SelectableItemBackground"
     android:layout_width="match_parent"
-    android:layout_height="150dp"
+    android:layout_height="170dp"
     android:background="@color/theme_color_primary">
 
     <com.google.android.material.textview.MaterialTextView

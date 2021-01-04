@@ -3,6 +3,9 @@ package tool.xfy9326.schedule.ui.view
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Typeface
+import android.text.Spannable
+import android.text.SpannableStringBuilder
+import android.text.style.StyleSpan
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.ViewGroup
@@ -91,7 +94,14 @@ class ScheduleCellView : LinearLayoutCompat {
                     append(context.getString(R.string.course_cell_text, courseCell.courseName, courseCell.courseLocation))
                 }
             }
-            text = showText
+            text = if (!courseCell.isThisWeekCourse && NotThisWeekCourseShowStyle.SHOW_NOT_THIS_WEEK_TEXT in styles.notThisWeekCourseShowStyle) {
+                val notThisWeekText = context.getString(R.string.not_this_week)
+                SpannableStringBuilder(notThisWeekText + showText).apply {
+                    setSpan(StyleSpan(Typeface.BOLD), 0, notThisWeekText.length, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+                }
+            } else {
+                showText
+            }
             layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
             background = ScheduleView.buildBackground(courseCell.cellColor, predefine.courseCellRippleColor, predefine.courseCellBackgroundRadius)
 
@@ -106,8 +116,18 @@ class ScheduleCellView : LinearLayoutCompat {
                 }
             )
 
-            if (!courseCell.isThisWeekCourse) {
+            if (!courseCell.isThisWeekCourse && NotThisWeekCourseShowStyle.USE_TRANSPARENT_BACKGROUND in styles.notThisWeekCourseShowStyle) {
                 alpha = predefine.notThisWeekCourseCellAlpha
+            }
+
+            gravity = if (styles.horizontalCourseCellText && styles.verticalCourseCellText) {
+                Gravity.CENTER
+            } else if (styles.verticalCourseCellText) {
+                Gravity.CENTER_VERTICAL
+            } else if (styles.horizontalCourseCellText) {
+                Gravity.CENTER_HORIZONTAL
+            } else {
+                Gravity.TOP or Gravity.START
             }
 
             isClickable = true
@@ -123,7 +143,6 @@ class ScheduleCellView : LinearLayoutCompat {
 
     private fun initAsScheduleTimeCell(index: Int, scheduleTime: ScheduleTime) {
         val courseTimeNumText = (index + 1).toString()
-        val courseTimeText = scheduleTime.startTimeStr + NEW_LINE + scheduleTime.endTimeStr
         val timeTextColor = styles.getTimeTextColor(context)
 
         gravity = Gravity.CENTER
@@ -141,19 +160,23 @@ class ScheduleCellView : LinearLayoutCompat {
         }.also {
             addViewInLayout(it, -1, it.layoutParams, true)
         }
-        TextView(context).apply {
-            text = courseTimeText
-            setTextSize(TypedValue.COMPLEX_UNIT_PX, predefine.timeCellScheduleTimeTextSize)
-            setTextColor(timeTextColor)
-            setPadding(0, predefine.timeCellTimeDivideTopMargin, 0, 0)
 
-            gravity = Gravity.CENTER
+        if (styles.showScheduleTimes) {
+            val courseTimeText = scheduleTime.startTimeStr + NEW_LINE + scheduleTime.endTimeStr
+            TextView(context).apply {
+                text = courseTimeText
+                setTextSize(TypedValue.COMPLEX_UNIT_PX, predefine.timeCellScheduleTimeTextSize)
+                setTextColor(timeTextColor)
+                setPadding(0, predefine.timeCellTimeDivideTopMargin, 0, 0)
 
-            layoutParams = LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply {
-                setMargins(0, predefine.timeCellTimeDivideTopMargin, 0, 0)
+                gravity = Gravity.CENTER
+
+                layoutParams = LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply {
+                    setMargins(0, predefine.timeCellTimeDivideTopMargin, 0, 0)
+                }
+            }.also {
+                addViewInLayout(it, -1, it.layoutParams, true)
             }
-        }.also {
-            addViewInLayout(it, -1, it.layoutParams, true)
         }
     }
 }
