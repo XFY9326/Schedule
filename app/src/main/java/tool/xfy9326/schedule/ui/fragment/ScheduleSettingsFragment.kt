@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.lifecycle.lifecycleScope
+import androidx.preference.MultiSelectListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceDataStore
 import com.jaredrummler.android.colorpicker.ColorPreferenceCompat
@@ -32,8 +33,12 @@ class ScheduleSettingsFragment : AbstractSettingsFragment() {
     override val preferenceDataStore: PreferenceDataStore = object : DataStorePreferenceAdapter(ScheduleDataStore.dataStore, lifecycleScope) {
         override fun getInt(key: String, defValue: Int): Int {
             when (key) {
-                ScheduleDataStore.toolBarTintColor.name -> return super.getInt(key, requireContext().getColorCompat(R.color.schedule_tool_bar_tint))
-                ScheduleDataStore.timeTextColor.name -> return super.getInt(key, requireContext().getColorCompat(R.color.course_time_cell_text))
+                ScheduleDataStore.toolBarTintColor.name ->
+                    return super.getInt(key, requireContext().getColorCompat(R.color.schedule_tool_bar_tint))
+                ScheduleDataStore.timeTextColor.name ->
+                    return super.getInt(key, requireContext().getColorCompat(R.color.course_time_cell_text))
+                ScheduleDataStore.highlightShowTodayCellColor.name ->
+                    return super.getInt(key, requireContext().getColorCompat(R.color.course_time_today_highlight))
             }
             return super.getInt(key, defValue)
         }
@@ -43,6 +48,15 @@ class ScheduleSettingsFragment : AbstractSettingsFragment() {
         findPreference<Preference>(KEY_SELECT_SCHEDULE_BACKGROUND_IMAGE)?.setOnPreferenceClickListener {
             tryStartActivityForResult(IntentUtils.getSelectImageFromDocumentIntent(), REQUEST_CODE_SELECT_SCHEDULE_BACKGROUND_IMAGE)
             false
+        }
+        findPreference<MultiSelectListPreference>(ScheduleDataStore.notThisWeekCourseShowStyle.name)?.setOnPreferenceChangeListener { _, newValue ->
+            newValue as Set<*>
+            if (newValue.isEmpty()) {
+                requireRootLayout()?.showShortSnackBar(R.string.keep_at_least_one_show_style)
+                false
+            } else {
+                true
+            }
         }
         findPreference<ColorPreferenceCompat>(ScheduleDataStore.toolBarTintColor.name)?.presets = MaterialColorHelper.all()
         findPreference<ColorPreferenceCompat>(ScheduleDataStore.timeTextColor.name)?.presets = MaterialColorHelper.all()

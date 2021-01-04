@@ -46,4 +46,19 @@
         <item>CENTER_CROP</item>
         <item>CENTER_INSIDE</item>
     </string-array>
+
+    <!-- NotThisWeekCourseShowStyle -->
+    <string-array name="not_this_week_course_show_style">
+        <item>@string/show_not_this_week_text</item>
+        <item>@string/use_transparent_background</item>
+    </string-array>
+
+    <string-array name="not_this_week_course_show_style_value">
+        <item>SHOW_NOT_THIS_WEEK_TEXT</item>
+        <item>USE_TRANSPARENT_BACKGROUND</item>
+    </string-array>
+
+    <string-array name="not_this_week_course_show_style_value_default">
+        <item>USE_TRANSPARENT_BACKGROUND</item>
+    </string-array>
 </resources>

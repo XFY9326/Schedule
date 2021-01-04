@@ -28,6 +28,16 @@
             app:summary="@string/show_not_this_week_course_sum"
             app:title="@string/show_not_this_week_course" />
 
+        <androidx.preference.MultiSelectListPreference
+            app:defaultValue="@array/not_this_week_course_show_style_value_default"
+            app:dependency="showNotThisWeekCourse"
+            app:entries="@array/not_this_week_course_show_style"
+            app:entryValues="@array/not_this_week_course_show_style_value"
+            app:iconSpaceReserved="false"
+            app:key="notThisWeekCourseShowStyle"
+            app:summary="@string/not_this_week_course_show_style_sum"
+            app:title="@string/not_this_week_course_show_style" />
+
         <androidx.preference.CheckBoxPreference
             app:defaultValue="false"
             app:iconSpaceReserved="false"
@@ -47,6 +57,27 @@
             app:key="highlightShowTodayCell"
             app:summary="@string/highlight_show_today_cell_sum"
             app:title="@string/highlight_show_today_cell" />
+
+        <androidx.preference.CheckBoxPreference
+            app:defaultValue="true"
+            app:iconSpaceReserved="false"
+            app:key="showScheduleTimes"
+            app:summary="@string/show_schedule_times_sum"
+            app:title="@string/show_schedule_times" />
+
+        <androidx.preference.CheckBoxPreference
+            app:defaultValue="false"
+            app:iconSpaceReserved="false"
+            app:key="horizontalCourseCellText"
+            app:summary="@string/horizontal_course_cell_text_sum"
+            app:title="@string/horizontal_course_cell_text" />
+
+        <androidx.preference.CheckBoxPreference
+            app:defaultValue="false"
+            app:iconSpaceReserved="false"
+            app:key="verticalCourseCellText"
+            app:summary="@string/vertical_course_cell_text_sum"
+            app:title="@string/vertical_course_cell_text" />
 
         <androidx.preference.SeekBarPreference
             android:max="100"
@@ -69,6 +100,12 @@
             app:showSeekBarValue="true"
             app:summary="@string/course_cell_text_size_sum"
             app:title="@string/course_cell_text_size" />
+
+    </androidx.preference.PreferenceCategory>
+
+    <androidx.preference.PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="@string/schedule_color">
 
         <androidx.preference.CheckBoxPreference
             app:defaultValue="false"
@@ -97,6 +134,13 @@
             app:key="timeTextColor"
             app:summary="@string/time_text_color_sum"
             app:title="@string/time_text_color" />
+
+        <com.jaredrummler.android.colorpicker.ColorPreferenceCompat
+            app:dependency="customScheduleTextColor"
+            app:iconSpaceReserved="false"
+            app:key="highlightShowTodayCellColor"
+            app:summary="@string/highlight_show_today_cell_color_sum"
+            app:title="@string/highlight_show_today_cell_color" />
 
     </androidx.preference.PreferenceCategory>
 

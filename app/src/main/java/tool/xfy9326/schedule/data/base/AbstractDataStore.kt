@@ -29,4 +29,7 @@ abstract class AbstractDataStore(val name: String) {
 
     protected inline fun <reified T : Any> preferencesKey() =
         ReadOnlyProperty<Any, Preferences.Key<T>> { _, property -> androidx.datastore.preferences.core.preferencesKey(property.name) }
+
+    protected inline fun <reified T : Any> preferencesSetKey() =
+        ReadOnlyProperty<Any, Preferences.Key<Set<T>>> { _, property -> androidx.datastore.preferences.core.preferencesSetKey(property.name) }
 }

@@ -4,6 +4,7 @@ import androidx.datastore.preferences.core.remove
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import tool.xfy9326.schedule.beans.ImageScareType
+import tool.xfy9326.schedule.beans.NotThisWeekCourseShowStyle
 import tool.xfy9326.schedule.beans.ScheduleStyles
 import tool.xfy9326.schedule.beans.WeekDay
 import tool.xfy9326.schedule.data.base.AbstractDataStore
@@ -23,6 +24,7 @@ object ScheduleDataStore : AbstractDataStore("ScheduleSettings") {
     private val courseCellTextSize by preferencesKey<Int>()
     private val cornerScreenMargin by preferencesKey<Boolean>()
     private val highlightShowTodayCell by preferencesKey<Boolean>()
+    val highlightShowTodayCellColor by preferencesKey<Int>()
     private val scheduleBackgroundImage by preferencesKey<String>()
     private val scheduleBackgroundImageQuality by preferencesKey<Int>()
     private val scheduleBackgroundImageAlpha by preferencesKey<Int>()
@@ -30,6 +32,10 @@ object ScheduleDataStore : AbstractDataStore("ScheduleSettings") {
     private val scheduleBackgroundScareType by preferencesKey<String>()
     private val useLightColorStatusBarColor by preferencesKey<Boolean>()
     private val scheduleBackgroundFadeAnim by preferencesKey<Boolean>()
+    private val showScheduleTimes by preferencesKey<Boolean>()
+    private val horizontalCourseCellText by preferencesKey<Boolean>()
+    private val verticalCourseCellText by preferencesKey<Boolean>()
+    val notThisWeekCourseShowStyle by preferencesSetKey<String>()
 
     val firstDayOfWeekFlow = read {
         tryEnumValueOf(it[firstDayOfWeek]) ?: WeekDay.MONDAY
@@ -44,7 +50,13 @@ object ScheduleDataStore : AbstractDataStore("ScheduleSettings") {
             timeTextColor = if (pref[customScheduleTextColor] == true) pref[timeTextColor] else null,
             courseCellTextSize = pref[courseCellTextSize] ?: 3,
             cornerScreenMargin = pref[cornerScreenMargin] ?: false,
-            highlightShowTodayCell = pref[highlightShowTodayCell] ?: true
+            highlightShowTodayCell = pref[highlightShowTodayCell] ?: true,
+            highlightShowTodayCellColor = if (pref[customScheduleTextColor] == true) pref[highlightShowTodayCellColor] else null,
+            showScheduleTimes = pref[showScheduleTimes] ?: true,
+            horizontalCourseCellText = pref[horizontalCourseCellText] ?: false,
+            verticalCourseCellText = pref[verticalCourseCellText] ?: false,
+            notThisWeekCourseShowStyle = tryEnumValueOf(pref[notThisWeekCourseShowStyle])
+                ?: setOf(NotThisWeekCourseShowStyle.USE_TRANSPARENT_BACKGROUND)
         )
     }.distinctUntilChanged()
 
@@ -58,10 +70,6 @@ object ScheduleDataStore : AbstractDataStore("ScheduleSettings") {
 
     val useLightColorStatusBarColorFlow = read {
         it[useLightColorStatusBarColor] ?: false
-    }
-
-    val timeTextColorFlow = read {
-        if (it[customScheduleTextColor] == true) it[timeTextColor] else null
     }
 
     val toolBarTintColorFlow = read {

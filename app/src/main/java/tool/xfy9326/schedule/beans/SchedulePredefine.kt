@@ -38,8 +38,6 @@ class SchedulePredefine(
     val notThisWeekCourseCellAlpha: Float,
     @ColorInt
     val courseCellRippleColor: Int,
-    @ColorInt
-    val courseTimeCellTodayColor: Int,
 ) {
     companion object {
         fun load(context: Context) = context.let {
@@ -58,8 +56,7 @@ class SchedulePredefine(
                 courseCellTextColorLight = context.getColorCompat(R.color.course_cell_text_light),
                 courseCellTextColorDark = context.getColorCompat(R.color.course_cell_text_dark),
                 notThisWeekCourseCellAlpha = 0.5f,
-                courseCellRippleColor = context.getColorCompat(R.color.course_cell_ripple),
-                courseTimeCellTodayColor = context.getColorCompat(R.color.course_time_cell_today)
+                courseCellRippleColor = context.getColorCompat(R.color.course_cell_ripple)
             )
         }
     }

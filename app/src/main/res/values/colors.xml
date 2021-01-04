@@ -17,7 +17,7 @@
     <color name="schedule_text_light">#FFFFFF</color>
     <color name="schedule_text_dark">#2E2E2E</color>
     <color name="course_cell_ripple">#1A000000</color>
-    <color name="course_time_cell_today">#B2EBF2</color>
+    <color name="course_time_today_highlight">#B2EBF2</color>
 
     <color name="anim_slider_tracker_active">#2196F3</color>
     <color name="anim_slider_tracker_inactive">#CBE1F3</color>

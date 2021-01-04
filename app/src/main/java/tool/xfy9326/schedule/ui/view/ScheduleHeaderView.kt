@@ -75,7 +75,6 @@ class ScheduleHeaderView(
             })
         }
 
-
     private fun buildDayView(day: Day) =
         LinearLayoutCompat(context).apply {
             layoutParams = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT)
@@ -92,7 +91,7 @@ class ScheduleHeaderView(
 
                 if (styles.highlightShowTodayCell && isToday) {
                     background = ScheduleView.buildBackground(
-                        predefine.courseTimeCellTodayColor,
+                        styles.getHighlightShowTodayCellColor(context),
                         predefine.courseCellRippleColor,
                         predefine.courseCellBackgroundRadius
                     )

@@ -36,7 +36,7 @@ object ScheduleManager {
             val startDate: Date
             val endDate: Date
 
-            val currentYear = get(Calendar.YEAR)
+            var currentYear = get(Calendar.YEAR)
             val currentMonth = get(Calendar.MONTH)
             if (currentMonth < Calendar.SEPTEMBER && currentMonth > Calendar.JANUARY) {
                 set(Calendar.MONTH, Calendar.FEBRUARY)
@@ -47,6 +47,10 @@ object ScheduleManager {
                 set(Calendar.DATE, 30)
                 endDate = time
             } else {
+                if (currentMonth <= Calendar.JANUARY) {
+                    currentYear--
+                }
+                set(Calendar.YEAR, currentYear)
                 set(Calendar.MONTH, Calendar.SEPTEMBER)
                 set(Calendar.DATE, 1)
                 startDate = time
