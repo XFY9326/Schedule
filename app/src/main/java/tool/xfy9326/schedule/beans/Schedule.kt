@@ -57,5 +57,11 @@ data class Schedule(
         return result
     }
 
-
+    data class Min(
+        @ColumnInfo(name = DBConst.COLUMN_SCHEDULE_ID)
+        val scheduleId: Long,
+        val name: String,
+    ) {
+        override fun toString() = name
+    }
 }

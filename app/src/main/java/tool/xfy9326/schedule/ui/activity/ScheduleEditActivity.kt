@@ -63,6 +63,22 @@ class ScheduleEditActivity : ViewModelActivity<ScheduleEditViewModel, ActivitySc
         viewModel.scheduleSaveFailed.observeEvent(this) {
             viewBinding.layoutScheduleEdit.showShortSnackBar(it.getText(this))
         }
+        viewModel.loadAllSchedules.observeEvent(this) {
+            if (it.isEmpty()) {
+                viewBinding.layoutScheduleEdit.showShortSnackBar(R.string.empty_schedule_list)
+            } else {
+                DialogUtils.showScheduleSelectDialog(this, R.string.import_times_from_other_schedule, it, viewModel::importScheduleTimes)
+            }
+        }
+        viewModel.importScheduleTimes.observeEvent(this) {
+            if (it == null) {
+                viewBinding.layoutScheduleEdit.showShortSnackBar(R.string.schedule_time_import_failed)
+            } else {
+                viewModel.editSchedule.times = it
+                scheduleTimeAdapter.submitList(it.toList())
+                viewBinding.layoutScheduleEdit.showShortSnackBar(R.string.schedule_time_import_success)
+            }
+        }
     }
 
     override fun onInitView(viewBinding: ActivityScheduleEditBinding, viewModel: ScheduleEditViewModel) {
@@ -138,6 +154,7 @@ class ScheduleEditActivity : ViewModelActivity<ScheduleEditViewModel, ActivitySc
                 saveSchedule()
             }
             R.id.menu_scheduleEditDelete -> deleteScheduleAttention()
+            R.id.menu_scheduleEditImport -> requireViewModel().loadAllSchedules()
         }
         return super.onOptionsItemSelected(item)
     }

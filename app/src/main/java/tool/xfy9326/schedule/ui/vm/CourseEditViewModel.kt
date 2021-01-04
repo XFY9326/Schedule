@@ -9,6 +9,7 @@ import kotlinx.coroutines.launch
 import tool.xfy9326.schedule.beans.Course
 import tool.xfy9326.schedule.beans.CourseTime
 import tool.xfy9326.schedule.beans.EditError
+import tool.xfy9326.schedule.beans.Schedule
 import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
 import tool.xfy9326.schedule.kt.MutableEventLiveData
 import tool.xfy9326.schedule.kt.forEachTwo
@@ -29,6 +30,8 @@ class CourseEditViewModel : AbstractViewModel() {
     val courseSaveFailed = MutableEventLiveData<EditError>()
     val courseSaveComplete = MutableEventLiveData<Long>()
     val editCourseTime = MutableEventLiveData<CourseTimeEditDialog.EditBundle>()
+    val loadAllSchedules = MutableEventLiveData<List<Schedule.Min>>()
+    val copyToOtherSchedule = MutableEventLiveData<EditError?>()
 
     fun requestDBCourse(context: Context, scheduleId: Long, courseId: Long) {
         isEdit = courseId != 0L
@@ -63,6 +66,27 @@ class CourseEditViewModel : AbstractViewModel() {
                         position
                     )
                 )
+            }
+        }
+    }
+
+    fun loadAllSchedules(currentScheduleId: Long) {
+        viewModelScope.launch {
+            loadAllSchedules.postEvent(ScheduleDBProvider.db.scheduleDAO.getScheduleMin().first().filter {
+                it.scheduleId != currentScheduleId
+            })
+        }
+    }
+
+    fun copyToOtherSchedule(scheduleId: Long) {
+        viewModelScope.launch {
+            val cache = editCourse.clone(scheduleId)
+            val errorMsg = validateCourse(scheduleId, cache)
+            if (errorMsg == null) {
+                ScheduleDBProvider.db.scheduleDAO.putCourse(scheduleId, cache)
+                copyToOtherSchedule.postEvent(null)
+            } else {
+                copyToOtherSchedule.postEvent(errorMsg)
             }
         }
     }

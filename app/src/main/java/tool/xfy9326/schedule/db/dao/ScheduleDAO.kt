@@ -129,6 +129,9 @@ abstract class ScheduleDAO {
     @Query("select * from ${DBConst.TABLE_SCHEDULE} where ${DBConst.COLUMN_SCHEDULE_ID}=:scheduleId")
     abstract fun getSchedule(scheduleId: Long): Flow<Schedule?>
 
+    @Query("select ${DBConst.COLUMN_SCHEDULE_ID}, ${DBConst.COLUMN_SCHEDULE_NAME} from ${DBConst.TABLE_SCHEDULE}")
+    abstract fun getScheduleMin(): Flow<List<Schedule.Min>>
+
 
     @Query("select count(*) from ${DBConst.TABLE_SCHEDULE}")
     abstract suspend fun getScheduleCount(): Long
