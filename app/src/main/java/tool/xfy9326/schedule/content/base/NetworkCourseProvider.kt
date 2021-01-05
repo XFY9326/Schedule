@@ -12,7 +12,7 @@ import tool.xfy9326.schedule.content.utils.CourseAdapterUtils
  *
  * @constructor Create empty Network course provider
  */
-abstract class NetworkCourseProvider : ICourseProvider {
+abstract class NetworkCourseProvider : BaseCourseProvider() {
     private var httpClient: HttpClient? = null
 
     suspend fun init() {

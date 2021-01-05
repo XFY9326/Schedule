@@ -7,14 +7,19 @@ package tool.xfy9326.schedule.content.base
  *
  * @constructor Create empty Web course provider
  */
-abstract class WebCourseProvider : ICourseProvider {
-    /**
-     * Init page url
-     */
-    abstract val initPageUrl: String
+abstract class WebCourseProvider : BaseCourseProvider() {
+    val initPageUrl: String
+        get() = onLoadInitPage()
 
     fun validateCourseImportPage(htmlContent: String, iframeContent: Array<String>, frameContent: Array<String>) =
         onValidateCourseImportPage(htmlContent, iframeContent, frameContent)
+
+    /**
+     * Load init page
+     *
+     * @return Init page url
+     */
+    protected abstract fun onLoadInitPage(): String
 
     /**
      * On validate course import page

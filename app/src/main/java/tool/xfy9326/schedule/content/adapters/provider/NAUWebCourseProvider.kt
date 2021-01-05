@@ -9,7 +9,7 @@ class NAUWebCourseProvider : WebCourseProvider() {
         private const val COURSE_TEXT_2 = "MyCourseScheduleTableNext.aspx"
     }
 
-    override val initPageUrl: String = "http://my.nau.edu.cn"
+    override fun onLoadInitPage(): String = "http://my.nau.edu.cn"
 
     override fun onValidateCourseImportPage(htmlContent: String, iframeContent: Array<String>, frameContent: Array<String>): PageInfo {
         if (COURSE_TEXT_1 in htmlContent) {
