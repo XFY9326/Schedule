@@ -5,9 +5,19 @@ package tool.xfy9326.schedule.content.utils
 import android.content.Context
 import tool.xfy9326.schedule.R
 
+/**
+ * Course adapter exception
+ *
+ * @constructor Create empty Course adapter exception
+ */
 class CourseAdapterException : Exception {
     private val errorType: ErrorType
 
+    /**
+     * Error type
+     *
+     * @constructor Create empty Error type
+     */
     enum class ErrorType {
         IMPORT_SELECT_OPTION_ERROR,
         IMPORT_OPTION_GET_ERROR,
@@ -26,10 +36,27 @@ class CourseAdapterException : Exception {
         INCOMPLETE_COURSE_INFO_ERROR,
         CUSTOM_ERROR;
 
+        /**
+         * Throw exception
+         *
+         * @param cause Exception cause
+         */
         fun report(cause: Throwable? = null): Nothing = throw make(cause)
 
+        /**
+         * Throw exception
+         *
+         * @param msg Exception msg
+         * @param cause Exception cause
+         */
         fun report(msg: String, cause: Throwable? = null): Nothing = throw make(msg, cause)
 
+
+        /**
+         * Make exception
+         *
+         * @param cause Exception cause
+         */
         fun make(cause: Throwable? = null) =
             if (cause == null) {
                 CourseAdapterException(this)
@@ -37,6 +64,12 @@ class CourseAdapterException : Exception {
                 CourseAdapterException(this, cause)
             }
 
+        /**
+         * Make exception
+         *
+         * @param msg Exception msg
+         * @param cause Exception cause
+         */
         fun make(msg: String, cause: Throwable? = null) =
             if (cause == null) {
                 CourseAdapterException(msg)

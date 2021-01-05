@@ -37,7 +37,7 @@ object CourseImportUtils {
                     onInvalidParser()
                 }
             }
-            config.validateProviderType(ICourseProvider::class) -> onInterfaceProviderError()
+            config.validateProviderType(BaseCourseProvider::class) -> onInterfaceProviderError()
             else -> onUnknownProviderError()
         }
         return null

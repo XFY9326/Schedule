@@ -8,6 +8,11 @@ import io.ktor.client.features.*
 import io.ktor.client.features.cookies.*
 
 object CourseAdapterUtils {
+
+    /**
+     * Get default http client
+     * For HttpRedirect, fix Http 302 Post Error
+     */
     fun getDefaultHttpClient() = HttpClient(Android) {
         install(HttpCookies)
         install(HttpRedirect) {

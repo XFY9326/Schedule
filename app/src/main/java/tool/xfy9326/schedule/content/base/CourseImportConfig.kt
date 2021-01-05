@@ -14,15 +14,16 @@ import kotlin.reflect.KClass
  *
  * @param T1 CourseProvider
  * @param T2 CourseParser
- * @property schoolName School name res id
- * @property authorName Author name res id
- * @property systemName System name res id
- * @property importOptions Import option res id (Useless for WebCourseProvider)
+ * @property schoolName School name string res id
+ * @property authorName Author name string res id
+ * @property systemName System name string res id
+ * @property importOptions Import option string array res id (Useless for WebCourseProvider)
  * @property providerClass CourseProvider java class
  * @property parserClass CourseParser java class
+ * @property providerParams Provider params
  * @constructor Create empty Course import config
  */
-abstract class CourseImportConfig<T1 : ICourseProvider, T2 : ICourseParser>(
+abstract class CourseImportConfig<T1 : BaseCourseProvider, T2 : ICourseParser>(
     @StringRes
     val schoolName: Int,
     @StringRes
@@ -33,6 +34,7 @@ abstract class CourseImportConfig<T1 : ICourseProvider, T2 : ICourseParser>(
     val importOptions: Int? = null,
     val providerClass: Class<T1>,
     val parserClass: Class<T2>,
+    val providerParams: Array<Any?> = emptyArray(),
 ) : Serializable {
     companion object {
         private fun getPinyin(str: String): String =
@@ -49,11 +51,13 @@ abstract class CourseImportConfig<T1 : ICourseProvider, T2 : ICourseParser>(
     private var systemNameTextCache: String? = null
     private var systemNameWordsCache: String? = null
 
-    fun newProvider(): T1 = providerClass.newInstance()
+    fun newProvider(): T1 = providerClass.newInstance().apply {
+        initParams(providerParams.copyOf())
+    }
 
     fun newParser(): T2 = parserClass.newInstance()
 
-    fun <T : ICourseProvider> validateProviderType(clazz: KClass<T>) = clazz.java.isAssignableFrom(providerClass)
+    fun <T : BaseCourseProvider> validateProviderType(clazz: KClass<T>) = clazz.java.isAssignableFrom(providerClass)
 
     fun <T : ICourseParser> validateParserType(clazz: KClass<T>) = clazz.java.isAssignableFrom(parserClass)
 
