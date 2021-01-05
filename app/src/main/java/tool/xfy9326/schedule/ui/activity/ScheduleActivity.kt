@@ -2,22 +2,32 @@ package tool.xfy9326.schedule.ui.activity
 
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
-import android.view.Menu
-import android.view.MenuItem
+import android.view.*
+import android.view.animation.AccelerateInterpolator
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.animation.doOnEnd
+import androidx.core.graphics.drawable.toDrawable
 import androidx.core.view.*
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
+import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.google.android.material.navigation.NavigationView
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.Day
 import tool.xfy9326.schedule.beans.ImageScareType
+import tool.xfy9326.schedule.beans.NightMode
 import tool.xfy9326.schedule.beans.WeekNumType
+import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.data.ScheduleDataStore
 import tool.xfy9326.schedule.databinding.ActivityScheduleBinding
+import tool.xfy9326.schedule.databinding.LayoutNavHeaderBinding
 import tool.xfy9326.schedule.kt.*
 import tool.xfy9326.schedule.ui.activity.base.ViewModelActivity
 import tool.xfy9326.schedule.ui.adapter.ScheduleViewPagerAdapter
@@ -25,8 +35,17 @@ import tool.xfy9326.schedule.ui.dialog.CourseDetailDialog
 import tool.xfy9326.schedule.ui.dialog.ScheduleControlPanel
 import tool.xfy9326.schedule.ui.vm.ScheduleViewModel
 import tool.xfy9326.schedule.utils.IntentUtils
+import kotlin.math.max
+import kotlin.math.sqrt
 
 class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBinding>(), NavigationView.OnNavigationItemSelectedListener {
+    companion object {
+        private const val EXTRA_ANIMATE_NIGHT_MODE_CHANGED_BUNDLE = "ANIMATE_NIGHT_MODE_CHANGED_BUNDLE"
+        private const val EXTRA_START_X = "START_X"
+        private const val EXTRA_START_Y = "START_Y"
+        private const val EXTRA_FINAL_RADIUS = "FINAL_RADIUS"
+    }
+
     private var scheduleViewPagerAdapter: ScheduleViewPagerAdapter? = null
 
     override fun onCreateViewModel(owner: ViewModelStoreOwner): ScheduleViewModel = ViewModelProvider(owner)[ScheduleViewModel::class.java]
@@ -36,6 +55,11 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
     override fun onPrepare(viewBinding: ActivityScheduleBinding, viewModel: ScheduleViewModel) {
         setSupportActionBar(viewBinding.toolBarSchedule)
         viewBinding.viewPagerSchedulePanel.offscreenPageLimit = 1
+
+        intent?.getBundleExtra(EXTRA_ANIMATE_NIGHT_MODE_CHANGED_BUNDLE)?.let {
+            intent.removeExtra(EXTRA_ANIMATE_NIGHT_MODE_CHANGED_BUNDLE)
+            animateNightModeChanged(it.getFloat(EXTRA_START_X), it.getFloat(EXTRA_START_Y), it.getFloat(EXTRA_FINAL_RADIUS))
+        }
     }
 
     override fun onBindLiveData(viewBinding: ActivityScheduleBinding, viewModel: ScheduleViewModel) {
@@ -200,6 +224,26 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
         viewBinding.navSchedule.apply {
             setNavigationItemSelectedListener(this@ScheduleActivity)
             getChildAt(0)?.isVerticalScrollBarEnabled = false
+            LayoutNavHeaderBinding.bind(getHeaderView(0)).buttonNightModeChange.setOnClickListener {
+                if (requireViewModel().nightModeChanging.compareAndSet(false, true)) {
+                    lifecycleScope.launch(Dispatchers.Default) {
+                        prepareAnimateNightModeChanged(it)
+                        val manuallyChangeNightMode = AppSettingsDataStore.nightModeTypeFlow.first() == NightMode.FOLLOW_SYSTEM
+                        val newMode = if (isUsingNightMode()) {
+                            NightMode.DISABLED
+                        } else {
+                            NightMode.ENABLED
+                        }.also {
+                            AppSettingsDataStore.setNightModeType(it)
+                        }.modeInt
+                        launch(Dispatchers.Main.immediate) {
+                            if (manuallyChangeNightMode) showShortToast(R.string.manually_change_night_mode)
+                            window.setWindowAnimations(R.style.AppTheme_NightModeTransitionAnimation)
+                            AppCompatDelegate.setDefaultNightMode(newMode)
+                        }
+                    }
+                }
+            }
         }
 
         ActionBarDrawerToggle(this, viewBinding.drawerSchedule, viewBinding.toolBarSchedule, R.string.open_drawer, R.string.close_drawer).apply {
@@ -207,6 +251,57 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
             isDrawerIndicatorEnabled = true
             syncState()
             viewBinding.drawerSchedule.addDrawerListener(this)
+        }
+    }
+
+    private fun prepareAnimateNightModeChanged(animCenterView: View) {
+        requireViewBinding().apply {
+            val startX = animCenterView.x + animCenterView.measuredWidth / 2f
+            val startY = animCenterView.y + animCenterView.measuredHeight / 2f
+            val viewWidth = layoutScheduleRoot.measuredWidth
+            val viewHeight = layoutScheduleRoot.measuredHeight
+
+            requireViewModel().nightModeChangeOldSurface = window.decorView.drawToBitmap()
+
+            val finalRadius =
+                max(sqrt((viewWidth - startX) * (viewWidth - startX) + (viewHeight - startY) * (viewHeight - startY)),
+                    sqrt(startX * startX + (viewHeight - startY) * (viewHeight - startY)))
+
+            intent.putExtra(EXTRA_ANIMATE_NIGHT_MODE_CHANGED_BUNDLE, buildBundle {
+                putFloat(EXTRA_START_X, startX)
+                putFloat(EXTRA_START_Y, startY)
+                putFloat(EXTRA_FINAL_RADIUS, finalRadius)
+            })
+        }
+    }
+
+    private fun animateNightModeChanged(startX: Float, startY: Float, finalRadius: Float) {
+        requireViewModel().nightModeChangeOldSurface?.let { oldSurface ->
+            requireViewModel().nightModeChangeOldSurface = null
+
+            requireViewBinding().apply {
+                imageViewNightModeChangeMask.setImageBitmap(oldSurface)
+                imageViewNightModeChangeMask.isVisible = true
+                drawerSchedule.isVisible = false
+
+                layoutScheduleRoot.postOnAnimation {
+                    ViewAnimationUtils.createCircularReveal(drawerSchedule, startX.toInt(), startY.toInt(), 0f, finalRadius).apply {
+                        duration = resources.getInteger(android.R.integer.config_mediumAnimTime).toLong()
+                        interpolator = AccelerateInterpolator()
+
+                        doOnEnd {
+                            imageViewNightModeChangeMask.isVisible = false
+                            drawerSchedule.background = null
+                            imageViewNightModeChangeMask.setImageDrawable(null)
+                            oldSurface.recycle()
+                            requireViewModel().nightModeChanging.set(false)
+                        }
+
+                        drawerSchedule.background = getDefaultBackgroundColor().toDrawable()
+                        drawerSchedule.isVisible = true
+                    }.start()
+                }
+            }
         }
     }
 

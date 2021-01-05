@@ -9,6 +9,10 @@ object AppSettingsDataStore : AbstractDataStore("Settings") {
     private val saveImageWhileSharing by preferencesKey<Boolean>()
     private val exitAppDirectly by preferencesKey<Boolean>()
 
+    suspend fun setNightModeType(nightMode: NightMode) = edit {
+        it[nightModeType] = nightMode.name
+    }
+
     val nightModeTypeFlow = read {
         tryEnumValueOf(it[nightModeType]) ?: NightMode.FOLLOW_SYSTEM
     }
