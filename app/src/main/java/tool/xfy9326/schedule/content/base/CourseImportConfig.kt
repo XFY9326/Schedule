@@ -9,6 +9,19 @@ import com.github.promeg.pinyinhelper.Pinyin
 import java.io.Serializable
 import kotlin.reflect.KClass
 
+/**
+ * Course import config
+ *
+ * @param T1 CourseProvider
+ * @param T2 CourseParser
+ * @property schoolName School name res id
+ * @property authorName Author name res id
+ * @property systemName System name res id
+ * @property importOptions Import option res id (Useless for WebCourseProvider)
+ * @property providerClass CourseProvider java class
+ * @property parserClass CourseParser java class
+ * @constructor Create empty Course import config
+ */
 abstract class CourseImportConfig<T1 : ICourseProvider, T2 : ICourseParser>(
     @StringRes
     val schoolName: Int,
