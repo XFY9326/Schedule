@@ -70,7 +70,8 @@ inline fun Context.getStringArray(@ArrayRes id: Int): Array<String> = resources.
 
 inline fun Context.getIntArray(@ArrayRes id: Int): IntArray = resources.getIntArray(id)
 
-fun Context.isUsingNightMode() = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
+fun Context.isUsingNightMode(mode: Int = resources.configuration.uiMode) =
+    mode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
 
 fun Context.hideKeyboard(windowToken: IBinder) {
     getSystemService<InputMethodManager>()?.apply {

@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="theme_color_primary">#0489C6</color>
+    <color name="theme_color_primary_dark">#0269A2</color>
     <color name="theme_color_primary_text">#FFFFFF</color>
     <color name="theme_color_secondary_text">#C7C7C7</color>
     <color name="course_time_cell_text">#E0F2F1</color>

@@ -1,6 +1,7 @@
 package tool.xfy9326.schedule.ui.vm
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.net.Uri
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.*
@@ -23,6 +24,7 @@ import tool.xfy9326.schedule.utils.CalendarUtils
 import tool.xfy9326.schedule.utils.CourseManager
 import tool.xfy9326.schedule.utils.CourseTimeUtils
 import tool.xfy9326.schedule.utils.ScheduleManager
+import java.util.concurrent.atomic.AtomicBoolean
 
 class ScheduleViewModel : AbstractViewModel() {
     companion object {
@@ -60,7 +62,11 @@ class ScheduleViewModel : AbstractViewModel() {
     val useLightColorStatusBarColor = ScheduleDataStore.useLightColorStatusBarColorFlow.asScopeLiveData(viewModelScope)
     val scheduleBackground = ScheduleDataStore.scheduleBackgroundBuildBundleFlow.asScopeLiveData(viewModelScope)
     val scheduleShared = MutableEventLiveData<Uri?>()
-    val scheduleSharedMutex = Mutex()
+
+    var nightModeChangeOldSurface: Bitmap? = null
+    val nightModeChanging = AtomicBoolean(false)
+
+    private val scheduleSharedMutex = Mutex()
 
     fun scrollToCurrentWeekNum() {
         viewModelScope.launch {
