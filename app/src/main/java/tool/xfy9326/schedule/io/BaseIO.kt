@@ -6,10 +6,10 @@ import kotlinx.coroutines.withContext
 import java.io.File
 
 object BaseIO {
-    suspend fun deleteFile(file: File) = withContext(Dispatchers.IO) {
+    suspend fun File.deleteFile() = withContext(Dispatchers.IO) {
         when {
-            file.isFile -> file.delete()
-            file.isDirectory -> file.deleteRecursively()
+            isFile -> delete()
+            isDirectory -> deleteRecursively()
             else -> true
         }
     }

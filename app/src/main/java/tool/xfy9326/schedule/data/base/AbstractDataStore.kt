@@ -4,6 +4,7 @@ package tool.xfy9326.schedule.data.base
 
 import androidx.datastore.preferences.core.MutablePreferences
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.clear
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.createDataStore
 import kotlinx.coroutines.CoroutineScope
@@ -26,6 +27,10 @@ abstract class AbstractDataStore(val name: String) {
     suspend fun edit(transform: suspend (MutablePreferences) -> Unit) = dataStore.edit(transform)
 
     suspend fun updateData(transform: suspend (Preferences) -> Preferences) = dataStore.updateData(transform)
+
+    suspend fun clear() = edit {
+        it.clear()
+    }
 
     protected inline fun <reified T : Any> preferencesKey() =
         ReadOnlyProperty<Any, Preferences.Key<T>> { _, property -> androidx.datastore.preferences.core.preferencesKey(property.name) }

@@ -172,7 +172,7 @@
     <string name="corner_screen_adapter_sum">开启后将会在课程表底部预留滑动空间</string>
     <string name="show_not_this_week_course">显示非本周课程</string>
     <string name="show_not_this_week_course_sum">关闭后将不会显示非本周课程</string>
-    <string name="exit_app_directly">直接退出应用</string>
+    <string name="exit_app_directly">返回桌面时直接退出应用</string>
     <string name="exit_app_directly_sum">开启后将在返回桌面时直接退出应用</string>
     <string name="others">其他</string>
     <string name="schedule_and_courses">课表与课程</string>
@@ -236,6 +236,18 @@
     <string name="not_this_week">[非本周]</string>
     <string name="keep_at_least_one_show_style">请至少保持一种显示方式！</string>
     <string name="manually_change_night_mode">已关闭自动切换夜间模式</string>
+    <string name="data_settings">数据</string>
+    <string name="data_settings_sum">应用数据的存储管理</string>
+    <string name="data_manage">数据管理</string>
+    <string name="cache_settings">缓存设置</string>
+    <string name="restore_settings">重置应用设置为默认设置</string>
+    <string name="restore_settings_success">应用设置重置成功！</string>
+    <string name="restore_settings_msg">是否要将应用设置重置为默认设置？\n注意，该操作不可逆！</string>
+    <string name="keep_web_browser_cache">保留课程导入浏览器缓存与Cookies</string>
+    <string name="keep_web_browser_cache_sum">开启后将不会自动清空浏览器缓存与Cookies\n注：开启后可能会导致信息安全问题</string>
+    <string name="clear_cache">清空应用缓存</string>
+    <string name="clear_cache_msg">是否要清空应用缓存？</string>
+    <string name="clear_cache_success">应用缓存清空成功！</string>
 
     <string name="scare_type_fit_center">等比缩放，从中间开始填充满</string>
     <string name="scare_type_center_crop">等比缩放直到完全填充</string>
