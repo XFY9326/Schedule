@@ -6,6 +6,12 @@ import io.ktor.client.*
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
 import tool.xfy9326.schedule.content.utils.CourseAdapterUtils
 
+/**
+ * Network course provider
+ * All methods might be called not only once. It's not recommended to define and use global varieties.
+ *
+ * @constructor Create empty Network course provider
+ */
 abstract class NetworkCourseProvider : ICourseProvider {
     private var httpClient: HttpClient? = null
 
@@ -38,13 +44,44 @@ abstract class NetworkCourseProvider : ICourseProvider {
         }
     }
 
+    /**
+     * Load import options
+     * If you have already set importOptions in CourseImportConfig, this would be useless
+     *
+     * @param httpClient Ktor HttpClient
+     * @return
+     */
     protected open suspend fun onLoadImportOptions(httpClient: HttpClient): Array<String>? = null
 
+    /**
+     * Prepare client
+     *
+     * @return
+     */
     protected open suspend fun onPrepareClient(): HttpClient = CourseAdapterUtils.getDefaultHttpClient()
 
+    /**
+     * Load schedule times html
+     *
+     * @param httpClient Ktor HttpClient
+     * @param importOption Import option, Default: 0
+     * @return
+     */
     protected open suspend fun onLoadScheduleTimesHtml(httpClient: HttpClient, importOption: Int): String? = null
 
+    /**
+     * Load courses html
+     *
+     * @param httpClient Ktor HttpClient
+     * @param importOption Import option, Default: 0
+     * @return
+     */
     protected abstract suspend fun onLoadCoursesHtml(httpClient: HttpClient, importOption: Int): String
 
+    /**
+     * Clear connection
+     *
+     * @param httpClient Ktor HttpClient
+     */
     protected open suspend fun onClearConnection(httpClient: HttpClient) {}
 }

@@ -9,7 +9,6 @@ class NAUWebImportConfig : CourseImportConfig<NAUWebCourseProvider, NAUCourseWeb
     schoolName = R.string.school_nanjing_audit_university,
     authorName = R.string.adapter_author_xfy9326,
     systemName = R.string.system_nau_jwc_web,
-    importOptions = R.array.adapter_options_term,
     providerClass = NAUWebCourseProvider::class.java,
     parserClass = NAUCourseWebParser::class.java
 )
