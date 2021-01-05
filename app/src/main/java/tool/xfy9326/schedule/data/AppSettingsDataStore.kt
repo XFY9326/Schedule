@@ -8,9 +8,14 @@ object AppSettingsDataStore : AbstractDataStore("Settings") {
     val nightModeType by preferencesKey<String>()
     private val saveImageWhileSharing by preferencesKey<Boolean>()
     private val exitAppDirectly by preferencesKey<Boolean>()
+    val keepWebProviderCache by preferencesKey<Boolean>()
 
     suspend fun setNightModeType(nightMode: NightMode) = edit {
         it[nightModeType] = nightMode.name
+    }
+
+    val keepWebProviderCacheFlow = read {
+        it[keepWebProviderCache] ?: false
     }
 
     val nightModeTypeFlow = read {
