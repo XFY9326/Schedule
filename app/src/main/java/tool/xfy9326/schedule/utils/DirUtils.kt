@@ -29,7 +29,7 @@ object DirUtils {
         if (subDir.isEmpty()) {
             App.instance.filesDir
         } else {
-            File(App.instance.filesDir, subDir.joinToString(File.separator))
+            App.instance.filesDir.asParentOf(subDir.joinToString(File.separator))
         }
 
     private fun getExternalFilesDir(vararg subDir: String): File {

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.preference.PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="@string/log_manage">
+
+        <androidx.preference.Preference
+            app:iconSpaceReserved="false"
+            app:key="readDebugLogs"
+            app:persistent="false"
+            app:title="@string/read_debug_logs" />
+
+        <androidx.preference.Preference
+            app:iconSpaceReserved="false"
+            app:key="outputDebugLogs"
+            app:persistent="false"
+            app:title="@string/output_debug_logs" />
+
+        <androidx.preference.SeekBarPreference
+            android:max="20"
+            app:defaultValue="5"
+            app:iconSpaceReserved="false"
+            app:key="debugLogsMaxStoreAmount"
+            app:min="1"
+            app:seekBarIncrement="1"
+            app:showSeekBarValue="true"
+            app:summary="@string/debug_logs_max_amount_sum"
+            app:title="@string/debug_logs_max_amount" />
+
+    </androidx.preference.PreferenceCategory>
+
+    <androidx.preference.PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="@string/others">
+
+        <androidx.preference.Preference
+            app:iconSpaceReserved="false"
+            app:key="clearDebugLogs"
+            app:persistent="false"
+            app:title="@string/clear_debug_logs" />
+
+        <androidx.preference.CheckBoxPreference
+            app:defaultValue="true"
+            app:iconSpaceReserved="false"
+            app:key="handleException"
+            app:summary="@string/handle_exception_sum"
+            app:title="@string/handle_exception" />
+
+    </androidx.preference.PreferenceCategory>
+
+</androidx.preference.PreferenceScreen>

@@ -9,9 +9,15 @@ object AppSettingsDataStore : AbstractDataStore("Settings") {
     private val saveImageWhileSharing by preferencesKey<Boolean>()
     private val exitAppDirectly by preferencesKey<Boolean>()
     val keepWebProviderCache by preferencesKey<Boolean>()
+    private val debugLogsMaxStoreAmount by preferencesKey<Int>()
+    private val handleException by preferencesKey<Boolean>()
 
     suspend fun setNightModeType(nightMode: NightMode) = edit {
         it[nightModeType] = nightMode.name
+    }
+
+    val handleExceptionFlow = read {
+        it[handleException] ?: true
     }
 
     val keepWebProviderCacheFlow = read {
@@ -28,5 +34,9 @@ object AppSettingsDataStore : AbstractDataStore("Settings") {
 
     val saveImageWhileSharingFlow = read {
         it[saveImageWhileSharing] ?: false
+    }
+
+    val debugLogsMaxStoreAmountFlow = read {
+        it[debugLogsMaxStoreAmount] ?: 5
     }
 }

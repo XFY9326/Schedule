@@ -2,10 +2,12 @@ package tool.xfy9326.schedule.tools
 
 import android.os.Build
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import tool.xfy9326.schedule.App
 import tool.xfy9326.schedule.BuildConfig
+import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.io.TextIO
 import tool.xfy9326.schedule.kt.appErrorRelaunch
 import tool.xfy9326.schedule.kt.crashRelaunch
@@ -15,7 +17,6 @@ import java.util.*
 
 object ExceptionHandler : Thread.UncaughtExceptionHandler {
     private const val CRASH_RELAUNCH_PERIOD_MILLS = 5000L
-    private const val CRASH_CLEAN_SIZE = 5
     private const val CRASH_LOG_FILE_EXTENSION = "log"
     private const val CRASH_LOG_FILE_PREFIX = "Crash"
     private const val CRASH_LOG_FILE_CONNECT_SYMBOL = "_"
@@ -29,14 +30,24 @@ object ExceptionHandler : Thread.UncaughtExceptionHandler {
         Thread.setDefaultUncaughtExceptionHandler(this)
     }
 
-    private suspend fun runCrashLogCleaner() = withContext(Dispatchers.IO) {
+    suspend fun getAllDebugLogs() = withContext(Dispatchers.IO) {
+        return@withContext DirUtils.LogDir.listFiles { _, name ->
+            name.startsWith(CRASH_LOG_FILE_PREFIX) && name.endsWith(CRASH_LOG_FILE_EXTENSION)
+        }?.sortedBy {
+            it.lastModified()
+        }?.map {
+            it.name
+        }?.toTypedArray() ?: emptyArray()
+    }
+
+    private suspend fun runCrashLogCleaner(cleanSize: Int) = withContext(Dispatchers.IO) {
         val files = DirUtils.LogDir.listFiles { _, name ->
             name.startsWith(CRASH_LOG_FILE_PREFIX) && name.endsWith(CRASH_LOG_FILE_EXTENSION)
         }
-        if (files != null && files.size - 1 > CRASH_CLEAN_SIZE + 1) {
+        if (files != null && files.size - 1 > cleanSize + 1) {
             files.sortedBy {
                 it.lastModified()
-            }.take(files.size - CRASH_CLEAN_SIZE).forEach {
+            }.take(files.size - cleanSize).forEach {
                 it.delete()
             }
         }
@@ -46,16 +57,17 @@ object ExceptionHandler : Thread.UncaughtExceptionHandler {
         try {
             val crashFileName = getNewCrashFileName()
 
-            val isAppErrorCrash = runBlocking {
+            runBlocking {
                 saveCrashDetail(crashFileName, e)
-                runCrashLogCleaner()
-                isAppErrorCrash()
-            }
+                runCrashLogCleaner(AppSettingsDataStore.debugLogsMaxStoreAmountFlow.first())
 
-            if (isAppErrorCrash) {
-                App.instance.appErrorRelaunch(crashFileName)
-            } else {
-                App.instance.crashRelaunch()
+                if (AppSettingsDataStore.handleExceptionFlow.first()) {
+                    if (isAppErrorCrash()) {
+                        App.instance.appErrorRelaunch(crashFileName)
+                    } else {
+                        App.instance.crashRelaunch()
+                    }
+                }
             }
         } finally {
             defaultExceptionHandler?.uncaughtException(t, e)

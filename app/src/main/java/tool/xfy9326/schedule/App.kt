@@ -16,7 +16,7 @@ class App : Application() {
         super.onCreate()
         instance = this
 
-        if (!BuildConfig.DEBUG) ExceptionHandler.init()
+        ExceptionHandler.init()
 
         runBlocking {
             val nightMode = AppSettingsDataStore.nightModeTypeFlow.first()

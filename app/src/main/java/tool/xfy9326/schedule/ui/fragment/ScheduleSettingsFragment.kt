@@ -54,7 +54,7 @@ class ScheduleSettingsFragment : AbstractSettingsFragment() {
         findPreference<MultiSelectListPreference>(ScheduleDataStore.notThisWeekCourseShowStyle.name)?.setOnPreferenceChangeListener { _, newValue ->
             newValue as Set<*>
             if (newValue.isEmpty()) {
-                requireRootLayout()?.showShortSnackBar(R.string.keep_at_least_one_show_style)
+                requireRootLayout()?.showShortSnackBar(R.string.keep_at_least_one_style)
                 false
             } else {
                 true

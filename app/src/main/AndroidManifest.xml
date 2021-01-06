@@ -21,6 +21,14 @@
             <action android:name="android.intent.action.GET_CONTENT" />
             <data android:mimeType="image/*" />
         </intent>
+        <intent>
+            <action android:name="android.intent.action.SEND" />
+            <data android:mimeType="image/*" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.SEND" />
+            <data android:mimeType="text/*" />
+        </intent>
     </queries>
 
     <application
