@@ -60,6 +60,7 @@ class WebCourseProviderActivity : ViewModelActivity<WebCourseProviderViewModel, 
                 window.$HTML_PRINT_JAVASCRIPT_INTERFACE_NAME.$HTML_PRINT_JAVASCRIPT_METHOD_NAME(htmlContent, iframeList, frameList, currentSchedule);
             """
     }
+    private val loadingDialogController = FullScreenLoadingDialog.createControllerInstance(this)
 
     override fun onPrepare(viewBinding: ActivityWebCourseProviderBinding, viewModel: WebCourseProviderViewModel) {
         setSupportActionBar(viewBinding.toolBarWebCourseProvider.toolBarGeneral)
@@ -83,7 +84,7 @@ class WebCourseProviderActivity : ViewModelActivity<WebCourseProviderViewModel, 
             }
         }
         viewModel.courseImportFinish.observeEvent(this) {
-            FullScreenLoadingDialog.closeDialog(supportFragmentManager)
+            loadingDialogController.hide()
             if (it.first) {
                 afterSaveCourse(it.second)
             }
@@ -176,7 +177,7 @@ class WebCourseProviderActivity : ViewModelActivity<WebCourseProviderViewModel, 
     override fun onFullScreenLoadingDialogRequestCancel(): Boolean {
         DialogUtils.showCancelScheduleImportDialog(this) {
             requireViewModel().finishImport()
-            FullScreenLoadingDialog.closeDialog(supportFragmentManager)
+            loadingDialogController.hide()
         }
         return false
     }
@@ -236,12 +237,12 @@ class WebCourseProviderActivity : ViewModelActivity<WebCourseProviderViewModel, 
     private fun onValidatePageSuccess(importParams: WebCourseProviderViewModel.ImportParams, importOption: Int, currentSchedule: Boolean) {
         if (currentSchedule) {
             DialogUtils.showOverwriteScheduleAttentionDialog(this@WebCourseProviderActivity) {
-                FullScreenLoadingDialog.showDialog(supportFragmentManager)
+                loadingDialogController.show()
                 requireViewModel().importCourse(importParams, importOption, currentSchedule, null)
             }
         } else {
             DialogUtils.showNewScheduleNameDialog(this@WebCourseProviderActivity) {
-                FullScreenLoadingDialog.showDialog(supportFragmentManager)
+                loadingDialogController.show()
                 requireViewModel().importCourse(importParams, importOption, currentSchedule, it)
             }
         }

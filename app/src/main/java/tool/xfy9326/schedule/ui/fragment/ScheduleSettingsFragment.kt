@@ -28,6 +28,8 @@ class ScheduleSettingsFragment : AbstractSettingsFragment() {
         private const val REQUEST_CODE_SELECT_SCHEDULE_BACKGROUND_IMAGE = 1
     }
 
+    private lateinit var loadingDialogController: FullScreenLoadingDialog.Controller
+
     override val titleName: Int = R.string.schedule_settings
     override val preferenceResId: Int = R.xml.settings_schedule
     override val preferenceDataStore: PreferenceDataStore = object : DataStorePreferenceAdapter(ScheduleDataStore.dataStore, lifecycleScope) {
@@ -64,8 +66,9 @@ class ScheduleSettingsFragment : AbstractSettingsFragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
+        loadingDialogController = FullScreenLoadingDialog.createControllerInstance(this)
         requireSettingsViewModel()?.importScheduleImage?.observeEvent(this) {
-            FullScreenLoadingDialog.closeDialog(childFragmentManager)
+            loadingDialogController.hide()
             requireRootLayout()?.showShortSnackBar(
                 if (it) {
                     R.string.schedule_background_set_success
@@ -83,7 +86,7 @@ class ScheduleSettingsFragment : AbstractSettingsFragment() {
                 if (uri == null) {
                     requireRootLayout()?.showShortSnackBar(R.string.image_select_failed)
                 } else {
-                    FullScreenLoadingDialog.showDialog(childFragmentManager, false)
+                    loadingDialogController.show(false)
                     requireSettingsViewModel()?.importScheduleImage(uri)
                 }
             } else {

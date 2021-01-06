@@ -4,8 +4,10 @@ import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.view.*
 import android.view.animation.AccelerateInterpolator
+import androidx.annotation.DrawableRes
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.appcompat.widget.AppCompatImageButton
 import androidx.core.animation.doOnEnd
 import androidx.core.graphics.drawable.toDrawable
 import androidx.core.view.*
@@ -41,6 +43,7 @@ import kotlin.math.sqrt
 class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBinding>(), NavigationView.OnNavigationItemSelectedListener {
     companion object {
         private const val EXTRA_ANIMATE_NIGHT_MODE_CHANGED_BUNDLE = "ANIMATE_NIGHT_MODE_CHANGED_BUNDLE"
+        private const val EXTRA_SET_NIGHT_MODE = "SET_NIGHT_MODE"
         private const val EXTRA_START_X = "START_X"
         private const val EXTRA_START_Y = "START_Y"
         private const val EXTRA_FINAL_RADIUS = "FINAL_RADIUS"
@@ -56,10 +59,7 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
         setSupportActionBar(viewBinding.toolBarSchedule)
         viewBinding.viewPagerSchedulePanel.offscreenPageLimit = 1
 
-        intent?.getBundleExtra(EXTRA_ANIMATE_NIGHT_MODE_CHANGED_BUNDLE)?.let {
-            intent.removeExtra(EXTRA_ANIMATE_NIGHT_MODE_CHANGED_BUNDLE)
-            animateNightModeChanged(it.getFloat(EXTRA_START_X), it.getFloat(EXTRA_START_Y), it.getFloat(EXTRA_FINAL_RADIUS))
-        }
+        checkNightModeChangedAnimation()
     }
 
     override fun onBindLiveData(viewBinding: ActivityScheduleBinding, viewModel: ScheduleViewModel) {
@@ -227,11 +227,12 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
             LayoutNavHeaderBinding.bind(getHeaderView(0)).buttonNightModeChange.setOnClickListener {
                 if (requireViewModel().nightModeChanging.compareAndSet(false, true)) {
                     lifecycleScope.launch(Dispatchers.Default) {
-                        prepareAnimateNightModeChanged(it)
                         val manuallyChangeNightMode = AppSettingsDataStore.nightModeTypeFlow.first() == NightMode.FOLLOW_SYSTEM
                         val newMode = if (isUsingNightMode()) {
+                            prepareAnimateNightModeChanged(it, false)
                             NightMode.DISABLED
                         } else {
+                            prepareAnimateNightModeChanged(it, true)
                             NightMode.ENABLED
                         }.also {
                             AppSettingsDataStore.setNightModeType(it)
@@ -254,7 +255,7 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
         }
     }
 
-    private fun prepareAnimateNightModeChanged(animCenterView: View) {
+    private fun prepareAnimateNightModeChanged(animCenterView: View, setNightMode: Boolean) {
         requireViewBinding().apply {
             val startX = animCenterView.x + animCenterView.measuredWidth / 2f
             val startY = animCenterView.y + animCenterView.measuredHeight / 2f
@@ -271,11 +272,29 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
                 putFloat(EXTRA_START_X, startX)
                 putFloat(EXTRA_START_Y, startY)
                 putFloat(EXTRA_FINAL_RADIUS, finalRadius)
+                putBoolean(EXTRA_SET_NIGHT_MODE, setNightMode)
             })
         }
     }
 
-    private fun animateNightModeChanged(startX: Float, startY: Float, finalRadius: Float) {
+    private fun checkNightModeChangedAnimation() {
+        val animationParams = intent?.getBundleExtra(EXTRA_ANIMATE_NIGHT_MODE_CHANGED_BUNDLE)
+        val nightModeChangeButton = LayoutNavHeaderBinding.bind(requireViewBinding().navSchedule.getHeaderView(0)).buttonNightModeChange
+        if (animationParams != null) {
+            intent.removeExtra(EXTRA_ANIMATE_NIGHT_MODE_CHANGED_BUNDLE)
+            animateNightModeChanged(
+                nightModeChangeButton,
+                animationParams.getFloat(EXTRA_START_X),
+                animationParams.getFloat(EXTRA_START_Y),
+                animationParams.getFloat(EXTRA_FINAL_RADIUS),
+                animationParams.getBoolean(EXTRA_SET_NIGHT_MODE)
+            )
+        } else {
+            nightModeChangeButton.setImageResource(getNightModeIcon(isUsingNightMode()))
+        }
+    }
+
+    private fun animateNightModeChanged(button: AppCompatImageButton, startX: Float, startY: Float, finalRadius: Float, setNightMode: Boolean) {
         requireViewModel().nightModeChangeOldSurface?.let { oldSurface ->
             requireViewModel().nightModeChangeOldSurface = null
 
@@ -283,10 +302,19 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
                 imageViewNightModeChangeMask.setImageBitmap(oldSurface)
                 imageViewNightModeChangeMask.isVisible = true
                 drawerSchedule.isVisible = false
+                // Original button image
+                button.setImageResource(getNightModeIcon(!setNightMode))
+
+                val animationDuration = resources.getInteger(android.R.integer.config_mediumAnimTime).toLong()
 
                 layoutScheduleRoot.postOnAnimation {
+                    button.animate().scaleX(0f).scaleY(0f).setDuration(animationDuration / 2).withEndAction {
+                        button.setImageResource(getNightModeIcon(setNightMode))
+                        button.animate().scaleX(1f).scaleY(1f).setDuration(animationDuration / 2).start()
+                    }.start()
+
                     ViewAnimationUtils.createCircularReveal(drawerSchedule, startX.toInt(), startY.toInt(), 0f, finalRadius).apply {
-                        duration = resources.getInteger(android.R.integer.config_mediumAnimTime).toLong()
+                        duration = animationDuration
                         interpolator = AccelerateInterpolator()
 
                         doOnEnd {
@@ -304,6 +332,14 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
             }
         }
     }
+
+    @DrawableRes
+    private fun getNightModeIcon(nightMode: Boolean) =
+        if (nightMode) {
+            R.drawable.ic_day_24
+        } else {
+            R.drawable.ic_dark_mode_24
+        }
 
     private fun scrollToWeek(weekNum: Int) {
         requireViewBinding().viewPagerSchedulePanel.currentItem = weekNum - 1

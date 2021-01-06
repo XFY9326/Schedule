@@ -8,7 +8,7 @@
             app:defaultValue="FOLLOW_SYSTEM"
             app:entries="@array/night_mode"
             app:entryValues="@array/night_mode_values"
-            app:icon="@drawable/ic_night_mode_24"
+            app:icon="@drawable/ic_dark_mode_24"
             app:key="nightModeType"
             app:summary="@string/night_mode_sum"
             app:title="@string/night_mode" />
