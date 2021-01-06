@@ -9,6 +9,7 @@
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
         <item name="android:navigationBarColor">@color/launch_screen_windows_background</item>
         <item name="android:windowLayoutInDisplayCutoutMode" tools:ignore="NewApi">shortEdges</item>
+        <item name="android:forceDarkAllowed" tools:ignore="NewApi">true</item>
     </style>
 
     <style name="AppTheme.LaunchScreen" parent="AppTheme.LaunchScreen.Base">
@@ -39,6 +40,7 @@
         <item name="android:timePickerDialogTheme">@style/AppTheme.DateTimePickerDialog</item>
         <item name="sliderStyle">@style/AppTheme.AnimateSlider</item>
         <item name="materialAlertDialogTheme">@style/AppTheme.MaterialDialog</item>
+        <item name="android:forceDarkAllowed" tools:ignore="NewApi">false</item>
     </style>
 
     <style name="AppTheme.SnackBar" parent="Widget.MaterialComponents.Snackbar">
