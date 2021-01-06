@@ -137,19 +137,14 @@
     <string name="version_title">版本</string>
     <string name="version">v%1$s (%2$d)</string>
     <string name="open_source_website">开源网址</string>
-    <string name="open_source_website_url" translatable="false">https://github.com/XFY9326/Schedule</string>
     <string name="license">协议</string>
     <string name="eula_license">使用协议</string>
     <string name="open_source_license">开源协议</string>
     <string name="developer">开发者</string>
     <string name="author_title">作者</string>
-    <string name="author" translatable="false">逸雪飞扬 (XFY9326)</string>
     <string name="online_feedback">在线反馈</string>
     <string name="online_feedback_sum">反馈服务由腾讯兔小巢提供</string>
-    <string name="qq_group_title">QQ反馈群</string>
-    <string name="qq_group">123456789</string>
     <string name="email_title">邮箱</string>
-    <string name="email" translatable="false">xfy9326@126.com</string>
     <string name="application_launch_failed">应用调起失败！</string>
     <string name="about">关于</string>
     <string name="schedule_settings">课程表</string>
@@ -234,7 +229,7 @@
     <string name="show_not_this_week_text">显示\'[非本周]\'文字</string>
     <string name="use_transparent_background">使用半透明背景颜色</string>
     <string name="not_this_week">[非本周]</string>
-    <string name="keep_at_least_one_show_style">请至少保持一种显示方式！</string>
+    <string name="keep_at_least_one_style">请至少保持一种显示方式！</string>
     <string name="manually_change_night_mode">已关闭自动切换夜间模式</string>
     <string name="data_settings">数据</string>
     <string name="data_settings_sum">应用数据的存储管理</string>
@@ -248,6 +243,19 @@
     <string name="clear_cache">清空应用缓存</string>
     <string name="clear_cache_msg">是否要清空应用缓存？</string>
     <string name="clear_cache_success">应用缓存清空成功！</string>
+    <string name="debug_settings">调试</string>
+    <string name="debug_settings_sum">应用错误调试与日志管理</string>
+    <string name="log_manage">日志管理</string>
+    <string name="clear_debug_logs">清空错误日志</string>
+    <string name="clear_debug_logs_msg">是否要清空所有错误日志？</string>
+    <string name="clear_debug_logs_success">错误日志清空完成！</string>
+    <string name="read_debug_logs">查看错误日志</string>
+    <string name="output_debug_logs">导出错误日志</string>
+    <string name="debug_logs_max_amount">错误日志最大保存数量</string>
+    <string name="debug_logs_max_amount_sum">调整错误日志最大保存数量，默认：5</string>
+    <string name="no_debug_logs">暂无错误日志！</string>
+    <string name="handle_exception">自动处理应用崩溃</string>
+    <string name="handle_exception_sum">关闭后将不会自动重启或显示崩溃处理界面\n注：该功能强烈建议普通用户开启！</string>
 
     <string name="scare_type_fit_center">等比缩放，从中间开始填充满</string>
     <string name="scare_type_center_crop">等比缩放直到完全填充</string>
@@ -265,4 +273,7 @@
     <string name="first_day_of_week_sunday">星期日</string>
 
     <string name="time_period" translatable="false">~</string>
+    <string name="author" translatable="false">逸雪飞扬 (XFY9326)</string>
+    <string name="email" translatable="false">xfy9326@126.com</string>
+    <string name="open_source_website_url" translatable="false">https://github.com/XFY9326/Schedule</string>
 </resources>
