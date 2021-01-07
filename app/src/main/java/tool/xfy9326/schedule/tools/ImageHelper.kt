@@ -17,11 +17,6 @@ import java.io.File
 import java.util.*
 
 object ImageHelper {
-    const val MIME_IMAGE = "image/*"
-    private const val MIME_IMAGE_PNG = "image/png"
-    private const val MIME_IMAGE_WEBP = "image/webp"
-    private const val MIME_IMAGE_JPEG = "image/jpeg"
-
     private const val IMAGE_PNG = "png"
     private const val IMAGE_JPEG = "jpeg"
     private const val IMAGE_WEBP = "webp"
@@ -137,9 +132,9 @@ object ImageHelper {
 
     private fun getMimeTypeByBitmapCompressFormat(compressFormat: Bitmap.CompressFormat) =
         when {
-            compressFormat == Bitmap.CompressFormat.JPEG -> MIME_IMAGE_JPEG
-            compressFormat == Bitmap.CompressFormat.PNG -> MIME_IMAGE_PNG
-            isWEBP(compressFormat) -> MIME_IMAGE_WEBP
+            compressFormat == Bitmap.CompressFormat.JPEG -> MIMEConst.MIME_IMAGE_JPEG
+            compressFormat == Bitmap.CompressFormat.PNG -> MIMEConst.MIME_IMAGE_PNG
+            isWEBP(compressFormat) -> MIMEConst.MIME_IMAGE_WEBP
             else -> error("Unknown bitmap compress format! $compressFormat")
         }
 }

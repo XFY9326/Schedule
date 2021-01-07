@@ -1,6 +1,7 @@
 package tool.xfy9326.schedule.ui.adapter
 
 import android.content.res.ColorStateList
+import android.view.HapticFeedbackConstants
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.isVisible
@@ -46,6 +47,7 @@ class ScheduleManageAdapter :
 
         holder.viewBinding.cardViewSchedule.setOnLongClickListener {
             onScheduleOperateListener?.invoke(element, ScheduleOperation.SET_AS_CURRENT)
+            it.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
             true
         }
         holder.viewBinding.cardViewSchedule.setOnClickListener {

@@ -40,10 +40,10 @@ class AnimateSlider @JvmOverloads constructor(
     override fun onStopTrackingTouch(slider: Slider) {
         val currentValue = value
         if (initValue != currentValue) {
+            performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
             initValue = currentValue
             listener?.invoke(currentValue)
         }
-        performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
     }
 
     private fun animateSlideThumb(isTouched: Boolean) {
