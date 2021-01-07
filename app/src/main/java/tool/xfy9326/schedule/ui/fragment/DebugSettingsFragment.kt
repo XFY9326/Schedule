@@ -1,6 +1,8 @@
 package tool.xfy9326.schedule.ui.fragment
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.annotation.StringRes
 import androidx.lifecycle.lifecycleScope
@@ -22,6 +24,8 @@ class DebugSettingsFragment : AbstractSettingsFragment() {
         private const val KEY_READ_DEBUG_LOGS = "readDebugLogs"
         private const val KEY_OUTPUT_DEBUG_LOGS = "outputDebugLogs"
         private const val KEY_CLEAR_DEBUG_LOGS = "clearDebugLogs"
+
+        private const val REQUEST_CODE_CREATE_LOG_DOCUMENT = 1
     }
 
     override val titleName: Int = R.string.debug_settings
@@ -53,19 +57,48 @@ class DebugSettingsFragment : AbstractSettingsFragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        requireSettingsViewModel()?.readDebugLogs?.observeEvent(this) {
-            showDebugLogsSelectDialog(it, R.string.read_debug_logs) { log ->
-                requireSettingsViewModel()?.showDebugLog(log)
+        requireSettingsViewModel()?.apply {
+            readDebugLogs.observeEvent(this@DebugSettingsFragment) {
+                showDebugLogsSelectDialog(it, R.string.read_debug_logs) { log ->
+                    showDebugLog(log)
+                }
+            }
+            outputDebugLogs.observeEvent(this@DebugSettingsFragment) {
+                showDebugLogsSelectDialog(it, R.string.output_debug_logs) { log ->
+                    waitCreateLogFileName.write(log)
+                    startActivityForResult(IntentUtils.getCreateNewDocumentIntent(log), REQUEST_CODE_CREATE_LOG_DOCUMENT)
+                }
+            }
+            showDebugLog.observeEvent(this@DebugSettingsFragment) {
+                CrashViewDialog.showDialog(childFragmentManager, it)
+            }
+            outputLogFileToUriResult.observeEvent(this@DebugSettingsFragment) {
+                requireRootLayout()?.showShortSnackBar(
+                    if (it) {
+                        R.string.output_file_success
+                    } else {
+                        R.string.output_file_failed
+                    }
+                )
             }
         }
-        requireSettingsViewModel()?.outputDebugLogs?.observeEvent(this) {
-            showDebugLogsSelectDialog(it, R.string.output_debug_logs) { log ->
-                requireContext().startActivity(IntentUtils.getShareLogIntent(requireContext(), log))
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == REQUEST_CODE_CREATE_LOG_DOCUMENT) {
+            if (resultCode == Activity.RESULT_OK) {
+                val outputUri = data?.data
+                if (outputUri != null) {
+                    requireSettingsViewModel()?.outputLogFileToUri(requireContext(), outputUri)
+                } else {
+                    requireRootLayout()?.showShortSnackBar(R.string.output_file_failed)
+                }
+            } else {
+                requireSettingsViewModel()?.waitCreateLogFileName?.consume()
+                requireRootLayout()?.showShortSnackBar(R.string.output_file_cancel)
             }
         }
-        requireSettingsViewModel()?.showDebugLog?.observeEvent(this) {
-            CrashViewDialog.showDialog(childFragmentManager, it)
-        }
+        super.onActivityResult(requestCode, resultCode, data)
     }
 
     private fun showDebugLogsSelectDialog(logs: Array<String>, @StringRes titleId: Int, onSelect: (String) -> Unit) {

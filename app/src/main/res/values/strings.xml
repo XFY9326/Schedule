@@ -256,6 +256,9 @@
     <string name="no_debug_logs">暂无错误日志！</string>
     <string name="handle_exception">自动处理应用崩溃</string>
     <string name="handle_exception_sum">关闭后将不会自动重启或显示崩溃处理界面\n注：该功能强烈建议普通用户开启！</string>
+    <string name="output_file_cancel">已取消导出文件！</string>
+    <string name="output_file_success">已成功导出文件！</string>
+    <string name="output_file_failed">导出文件失败！</string>
 
     <string name="scare_type_fit_center">等比缩放，从中间开始填充满</string>
     <string name="scare_type_center_crop">等比缩放直到完全填充</string>

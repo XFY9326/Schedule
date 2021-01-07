@@ -226,6 +226,7 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
             getChildAt(0)?.isVerticalScrollBarEnabled = false
             LayoutNavHeaderBinding.bind(getHeaderView(0)).buttonNightModeChange.setOnClickListener {
                 if (requireViewModel().nightModeChanging.compareAndSet(false, true)) {
+                    it.performHapticFeedback(HapticFeedbackConstants.CONTEXT_CLICK)
                     lifecycleScope.launch(Dispatchers.Default) {
                         val manuallyChangeNightMode = AppSettingsDataStore.nightModeTypeFlow.first() == NightMode.FOLLOW_SYSTEM
                         val newMode = if (isUsingNightMode()) {
