@@ -100,7 +100,7 @@ object CourseManager {
         CourseTime(if (maxWeekNum <= 0) {
             BooleanArray(0)
         } else {
-            BooleanArray(maxWeekNum) { true }
+            BooleanArray(maxWeekNum) { false }
         }, WeekDay.MONDAY, 1, 1, null)
 
     suspend fun generateScheduleImageByWeekNum(context: Context, scheduleId: Long, weekNum: Int, @Px targetWidth: Int) =

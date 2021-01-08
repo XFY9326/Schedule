@@ -3,7 +3,7 @@ package tool.xfy9326.schedule.ui.activity
 import androidx.recyclerview.widget.DividerItemDecoration
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.content.base.CourseImportConfig
-import tool.xfy9326.schedule.databinding.ActivityCourseImportBinding
+import tool.xfy9326.schedule.databinding.ActivityOnlineCourseImportBinding
 import tool.xfy9326.schedule.kt.showShortSnackBar
 import tool.xfy9326.schedule.kt.startActivity
 import tool.xfy9326.schedule.ui.activity.base.ViewModelActivity
@@ -12,10 +12,10 @@ import tool.xfy9326.schedule.ui.recyclerview.AdvancedDividerItemDecoration
 import tool.xfy9326.schedule.ui.vm.CourseImportViewModel
 import tool.xfy9326.schedule.utils.CourseImportUtils
 
-class CourseImportActivity : ViewModelActivity<CourseImportViewModel, ActivityCourseImportBinding>() {
+class OnlineCourseImportActivity : ViewModelActivity<CourseImportViewModel, ActivityOnlineCourseImportBinding>() {
     private lateinit var courseImportAdapter: CourseImportAdapter
 
-    override fun onPrepare(viewBinding: ActivityCourseImportBinding, viewModel: CourseImportViewModel) {
+    override fun onPrepare(viewBinding: ActivityOnlineCourseImportBinding, viewModel: CourseImportViewModel) {
         setSupportActionBar(viewBinding.toolBarCourseImport)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
@@ -23,11 +23,11 @@ class CourseImportActivity : ViewModelActivity<CourseImportViewModel, ActivityCo
         courseImportAdapter = CourseImportAdapter()
     }
 
-    override fun onBindLiveData(viewBinding: ActivityCourseImportBinding, viewModel: CourseImportViewModel) {
+    override fun onBindLiveData(viewBinding: ActivityOnlineCourseImportBinding, viewModel: CourseImportViewModel) {
         viewModel.courseMetas.observe(this, courseImportAdapter::updateList)
     }
 
-    override fun onInitView(viewBinding: ActivityCourseImportBinding, viewModel: CourseImportViewModel) {
+    override fun onInitView(viewBinding: ActivityOnlineCourseImportBinding, viewModel: CourseImportViewModel) {
         courseImportAdapter.setOnCourseImportItemClickListener(::onCourseImport)
         viewBinding.recyclerViewCourseImportList.adapter = courseImportAdapter
         viewBinding.recyclerViewCourseImportList.addItemDecoration(AdvancedDividerItemDecoration(this, DividerItemDecoration.VERTICAL))

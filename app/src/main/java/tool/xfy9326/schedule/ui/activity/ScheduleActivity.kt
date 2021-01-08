@@ -1,5 +1,7 @@
 package tool.xfy9326.schedule.ui.activity
 
+import android.app.Activity
+import android.content.Intent
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.view.*
@@ -31,11 +33,13 @@ import tool.xfy9326.schedule.data.ScheduleDataStore
 import tool.xfy9326.schedule.databinding.ActivityScheduleBinding
 import tool.xfy9326.schedule.databinding.LayoutNavHeaderBinding
 import tool.xfy9326.schedule.kt.*
+import tool.xfy9326.schedule.tools.ScheduleCalendarHelper
 import tool.xfy9326.schedule.ui.activity.base.ViewModelActivity
 import tool.xfy9326.schedule.ui.adapter.ScheduleViewPagerAdapter
 import tool.xfy9326.schedule.ui.dialog.CourseDetailDialog
 import tool.xfy9326.schedule.ui.dialog.ScheduleControlPanel
 import tool.xfy9326.schedule.ui.vm.ScheduleViewModel
+import tool.xfy9326.schedule.utils.DialogUtils
 import tool.xfy9326.schedule.utils.IntentUtils
 import kotlin.math.max
 import kotlin.math.sqrt
@@ -47,6 +51,8 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
         private const val EXTRA_START_X = "START_X"
         private const val EXTRA_START_Y = "START_Y"
         private const val EXTRA_FINAL_RADIUS = "FINAL_RADIUS"
+
+        private const val REQUEST_CODE_EXPORT_ICS_FILE = 1
     }
 
     private var scheduleViewPagerAdapter: ScheduleViewPagerAdapter? = null
@@ -89,6 +95,18 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
             } else {
                 moveTaskToBack(false)
             }
+        }
+        viewModel.selectScheduleForExportingICS.observeEvent(this) {
+            DialogUtils.showScheduleSelectDialog(this, R.string.export_to_ics, it) { name, id ->
+                viewModel.waitExportScheduleId.write(id)
+                startActivityForResult(
+                    IntentUtils.getCreateNewDocumentIntent(ScheduleCalendarHelper.createICSFileName(name)),
+                    REQUEST_CODE_EXPORT_ICS_FILE
+                )
+            }
+        }
+        viewModel.iceExportStatus.observeEvent(this) {
+            viewBinding.layoutSchedule.showShortSnackBar(if (it) R.string.output_file_success else R.string.output_file_failed)
         }
         viewModel.scheduleBackground.observe(this, ::onChangeScheduleBackground)
         viewModel.toolBarTintColor.observe(this, ::setToolBarTintColor)
@@ -141,13 +159,31 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
         return super.onOptionsItemSelected(item)
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == REQUEST_CODE_EXPORT_ICS_FILE) {
+            if (resultCode == Activity.RESULT_OK) {
+                val outputUri = data?.data
+                if (outputUri != null) {
+                    requireViewModel().exportICS(this, outputUri)
+                } else {
+                    requireViewBinding().layoutSchedule.showShortSnackBar(R.string.output_file_failed)
+                }
+            } else {
+                requireViewModel().waitExportScheduleId.consume()
+                requireViewBinding().layoutSchedule.showShortSnackBar(R.string.output_file_cancel)
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data)
+    }
+
     override fun onBackPressed() {
         requireViewModel().exitAppDirectly()
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.menu_navCourseImport -> startActivity<CourseImportActivity>()
+            R.id.menu_navCourseImport -> startActivity<OnlineCourseImportActivity>()
+            R.id.menu_navCourseExportICS -> requireViewModel().selectScheduleForExportingICS()
             R.id.menu_navScheduleManage -> startActivity<ScheduleManageActivity>()
             R.id.menu_navCourseManage -> requireViewModel().openCurrentScheduleCourseManageActivity()
             R.id.menu_navSettings -> startActivity<SettingsActivity>()
@@ -235,8 +271,8 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
                         } else {
                             prepareAnimateNightModeChanged(it, true)
                             NightMode.ENABLED
-                        }.also {
-                            AppSettingsDataStore.setNightModeType(it)
+                        }.also { mode ->
+                            AppSettingsDataStore.setNightModeType(mode)
                         }.modeInt
                         launch(Dispatchers.Main.immediate) {
                             if (manuallyChangeNightMode) showShortToast(R.string.manually_change_night_mode)

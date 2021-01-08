@@ -2,8 +2,6 @@ package tool.xfy9326.schedule.beans
 
 import androidx.room.*
 import tool.xfy9326.schedule.db.DBConst
-import tool.xfy9326.schedule.kt.isEven
-import tool.xfy9326.schedule.kt.isOdd
 import java.io.Serializable
 import kotlin.math.min
 
@@ -33,10 +31,8 @@ data class CourseTime(
     var classTime: ClassTime,
     var location: String?,
 ) : Serializable {
-    companion object {
-        private const val WEEK_NUM_CONNECT_SYMBOL = ", "
-        private const val WEEK_NUM_PERIOD_SYMBOL = "-"
-    }
+    val weekNumPattern: WeekNumPattern
+        get() = WeekNumPattern(weekNum)
 
     constructor(weekNum: BooleanArray, weekDay: WeekDay, classStartTime: Int, classDuration: Int, location: String? = null) :
             this(DBConst.DEFAULT_ID, DBConst.DEFAULT_ID, weekNum, ClassTime(weekDay, classStartTime, classDuration), location)
@@ -83,87 +79,5 @@ data class CourseTime(
         result = 31 * result + classTime.hashCode()
         result = 31 * result + (location?.hashCode() ?: 0)
         return result
-    }
-
-    private fun getSpecialWeekModeDescription(startIndex: Int): Pair<Boolean, String>? {
-        // Index count from 0, but course num start from 1
-        val oddWeekMode = startIndex.isEven()
-        var hasError = false
-        var hasFinish = false
-        var finishNum = startIndex
-        var j = startIndex
-        while (j < weekNum.size) {
-            if (oddWeekMode && j.isEven() || !oddWeekMode && j.isOdd()) {
-                if (weekNum[j]) {
-                    if (hasFinish) {
-                        hasError = true
-                        break
-                    }
-                } else if (!hasFinish) {
-                    hasFinish = true
-                    finishNum = j + 1
-                }
-            } else if (weekNum[j]) {
-                hasError = true
-                break
-            }
-            j++
-        }
-        if (!hasError) {
-            if (!hasFinish) finishNum = j
-            if (startIndex != finishNum - 1) {
-                return oddWeekMode to "${startIndex + 1}$WEEK_NUM_PERIOD_SYMBOL$finishNum"
-            }
-        }
-        return null
-    }
-
-    fun weekNumDescription(): WeekNumDescription {
-        var specialWeekMode = true
-        var oddWeekMode = true
-        val content = buildString {
-            var i = 0
-            var j: Int
-            while (i < weekNum.size) {
-                if (weekNum[i]) {
-                    if (specialWeekMode) {
-                        val testResult = getSpecialWeekModeDescription(i)
-                        if (testResult == null) {
-                            specialWeekMode = false
-                        } else {
-                            oddWeekMode = testResult.first
-                            append(testResult.second)
-                            break
-                        }
-                    }
-
-                    j = i + 1
-                    while (j < weekNum.size) {
-                        if (!weekNum[j]) break
-                        j++
-                    }
-                    if (i == j - 1) {
-                        append(i + 1)
-                    } else {
-                        append(i + 1)
-                        append(WEEK_NUM_PERIOD_SYMBOL)
-                        append(j)
-                    }
-                    if (j < weekNum.size - 1) append(WEEK_NUM_CONNECT_SYMBOL)
-                    i = j
-                } else {
-                    i++
-                }
-            }
-        }
-        return if (specialWeekMode) {
-            if (oddWeekMode) {
-                WeekNumDescription(content, WeekMode.ODD_WEEKS_ONLY)
-            } else {
-                WeekNumDescription(content, WeekMode.EVEN_WEEKS_ONLY)
-            }
-        } else {
-            WeekNumDescription(content, WeekMode.ANY_WEEKS)
-        }
     }
 }

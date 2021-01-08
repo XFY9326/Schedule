@@ -36,11 +36,16 @@ object DialogUtils {
         }.show(activity)
     }
 
-    fun showScheduleSelectDialog(activity: AppCompatActivity, @StringRes titleId: Int, schedules: List<Schedule.Min>, onSelect: (Long) -> Unit) {
+    fun showScheduleSelectDialog(
+        activity: AppCompatActivity,
+        @StringRes titleId: Int,
+        schedules: List<Schedule.Min>,
+        onSelect: (name: String, id: Long) -> Unit,
+    ) {
         MaterialAlertDialogBuilder(activity).apply {
             setTitle(titleId)
             setItems(schedules.map { it.name }.toTypedArray()) { _, index ->
-                onSelect(schedules[index].scheduleId)
+                onSelect(schedules[index].name, schedules[index].scheduleId)
             }
             setNegativeButton(android.R.string.cancel, null)
         }.show(activity)

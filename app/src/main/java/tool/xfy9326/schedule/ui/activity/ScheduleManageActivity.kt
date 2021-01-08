@@ -8,6 +8,7 @@ import tool.xfy9326.schedule.kt.showShortSnackBar
 import tool.xfy9326.schedule.kt.startActivity
 import tool.xfy9326.schedule.ui.activity.base.ViewModelActivity
 import tool.xfy9326.schedule.ui.adapter.ScheduleManageAdapter
+import tool.xfy9326.schedule.ui.adapter.ScheduleManageAdapter.ScheduleOperation.*
 import tool.xfy9326.schedule.ui.vm.ScheduleManageViewModel
 
 class ScheduleManageActivity : ViewModelActivity<ScheduleManageViewModel, ActivityScheduleManageBinding>() {
@@ -39,14 +40,14 @@ class ScheduleManageActivity : ViewModelActivity<ScheduleManageViewModel, Activi
 
     private fun onScheduleOperate(scheduleWrapper: ScheduleWrapper, operation: ScheduleManageAdapter.ScheduleOperation) {
         when (operation) {
-            ScheduleManageAdapter.ScheduleOperation.COURSE_EDIT -> startActivity<CourseManageActivity> {
+            COURSE_EDIT -> startActivity<CourseManageActivity> {
                 putExtra(CourseManageActivity.EXTRA_SCHEDULE_ID, scheduleWrapper.schedule.scheduleId)
             }
-            ScheduleManageAdapter.ScheduleOperation.EDIT -> startActivity<ScheduleEditActivity> {
+            EDIT -> startActivity<ScheduleEditActivity> {
                 putExtra(ScheduleEditActivity.INTENT_EXTRA_SCHEDULE_ID, scheduleWrapper.schedule.scheduleId)
                 putExtra(ScheduleEditActivity.INTENT_EXTRA_IS_CURRENT_SCHEDULE, scheduleWrapper.inUsing)
             }
-            ScheduleManageAdapter.ScheduleOperation.SET_AS_CURRENT -> {
+            SET_AS_CURRENT -> {
                 if (scheduleWrapper.inUsing) {
                     requireViewBinding().layoutScheduleManage.showShortSnackBar(R.string.schedule_has_set_as_current)
                 } else {

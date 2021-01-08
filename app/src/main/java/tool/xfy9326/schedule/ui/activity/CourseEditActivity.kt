@@ -61,7 +61,9 @@ class CourseEditActivity : ViewModelActivity<CourseEditViewModel, ActivityCourse
             if (it.isEmpty()) {
                 viewBinding.layoutCourseEdit.showShortSnackBar(R.string.empty_schedule_list)
             } else {
-                DialogUtils.showScheduleSelectDialog(this, R.string.copy_to_other_schedule, it, viewModel::copyToOtherSchedule)
+                DialogUtils.showScheduleSelectDialog(this, R.string.copy_to_other_schedule, it) { _, id ->
+                    viewModel.copyToOtherSchedule(id)
+                }
             }
         }
         viewModel.editCourseTime.observeEvent(this) {

@@ -8,5 +8,5 @@ object MIMEConst {
     const val MIME_IMAGE_WEBP = "image/webp"
     const val MIME_IMAGE_JPEG = "image/jpeg"
 
-    const val MIME_TEXT_PLAIN = "text/plain"
+    const val MIME_TEXT_CALENDAR = "text/calendar"
 }

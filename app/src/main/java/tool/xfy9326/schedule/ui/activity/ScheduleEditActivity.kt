@@ -67,7 +67,9 @@ class ScheduleEditActivity : ViewModelActivity<ScheduleEditViewModel, ActivitySc
             if (it.isEmpty()) {
                 viewBinding.layoutScheduleEdit.showShortSnackBar(R.string.empty_schedule_list)
             } else {
-                DialogUtils.showScheduleSelectDialog(this, R.string.import_times_from_other_schedule, it, viewModel::importScheduleTimes)
+                DialogUtils.showScheduleSelectDialog(this, R.string.import_times_from_other_schedule, it) { _, id ->
+                    viewModel.importScheduleTimes(id)
+                }
             }
         }
         viewModel.importScheduleTimes.observeEvent(this) {

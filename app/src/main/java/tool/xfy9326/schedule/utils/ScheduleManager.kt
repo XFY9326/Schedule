@@ -11,6 +11,7 @@ import tool.xfy9326.schedule.data.AppDataStore
 import tool.xfy9326.schedule.data.ScheduleDataStore
 import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
 import tool.xfy9326.schedule.kt.combine
+import tool.xfy9326.schedule.kt.intersect
 import java.util.*
 
 object ScheduleManager {
@@ -63,6 +64,27 @@ object ScheduleManager {
 
             return startDate to endDate
         }
+    }
+
+    fun validateScheduleTime(times: Array<ScheduleTime>): Boolean {
+        for (i1 in times.indices) {
+            val time1 = times[i1]
+
+            if (time1.startHour >= time1.endHour && time1.startMinute >= time1.endMinute) {
+                return false
+            }
+
+            for (i2 in (i1 + 1)..times.lastIndex) {
+                val time2 = times[i2]
+                if (time1 intersect time2) {
+                    return false
+                }
+                if (time1.endHour >= time2.startHour && time1.endMinute >= time2.startMinute) {
+                    return false
+                }
+            }
+        }
+        return true
     }
 
     fun createDefaultSchedule() = getDefaultTermDate().let {

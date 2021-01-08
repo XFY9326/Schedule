@@ -24,6 +24,14 @@ object CalendarUtils {
             Day(it.get(Calendar.MONTH) + 1, it.get(Calendar.DATE), it.getWeekDay())
         }
 
+    fun getLastTimeOfDay(date: Date): Date =
+        getCalendar(date).apply {
+            set(Calendar.HOUR_OF_DAY, 23)
+            set(Calendar.MINUTE, 59)
+            set(Calendar.SECOND, 59)
+            set(Calendar.MILLISECOND, 999)
+        }.time
+
     fun getFirstDateInThisWeek(date: Date, firstDayOfWeek: WeekDay): Date =
         getCalendar(date, firstDayOfWeek, true).apply {
             add(Calendar.DATE, 1 - getWeekDay().value(firstDayOfWeek))

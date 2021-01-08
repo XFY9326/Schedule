@@ -155,10 +155,13 @@ class CourseDetailDialog : DialogFragment() {
 
     private fun getCourseTimeView(courseTime: CourseTime) =
         ItemCourseDetailTimeBinding.inflate(layoutInflater).apply {
-            textViewCourseWeekNum.text = getString(
-                R.string.course_detail_week_num,
-                courseTime.weekNumDescription().getText(requireContext())
-            )
+            val weekNumText = courseTime.weekNumPattern.getText(requireContext())
+            textViewCourseWeekNum.text =
+                if (weekNumText.isEmpty()) {
+                    getString(R.string.course_detail_week_num_simple, getString(R.string.undefined))
+                } else {
+                    getString(R.string.course_detail_week_num, weekNumText)
+                }
             textViewCourseClassTime.text = getString(
                 R.string.course_detail_class_time,
                 getString(R.string.weekday, weekDayStrArr[courseTime.classTime.weekDay.ordinal]),
