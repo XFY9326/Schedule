@@ -140,6 +140,12 @@ dependencies {
     implementation 'com.github.promeg:tinypinyin:2.0.3'
     implementation 'com.github.promeg:tinypinyin-lexicons-android-cncity:2.0.3'
 
+    // iCalendar
+    implementation('net.sf.biweekly:biweekly:0.6.5') {
+        exclude module: 'jackson-core'
+        exclude group: 'com.fasterxml.jackson.core'
+    }
+
     // Test
     testImplementation 'junit:junit:4.13.1'
     testImplementation "androidx.room:room-testing:$androidx_room_version"

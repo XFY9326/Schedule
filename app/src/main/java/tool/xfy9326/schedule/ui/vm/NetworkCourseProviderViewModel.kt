@@ -139,6 +139,13 @@ class NetworkCourseProviderViewModel : AbstractViewModel() {
                     val scheduleTimes = courseParser.parseScheduleTimes(importParams.importOption, scheduleTimesHtml)
                     val courses = courseParser.parseCourses(importParams.importOption, coursesHtml)
 
+                    val scheduleTimeValid = ScheduleManager.validateScheduleTime(scheduleTimes)
+                    if (!scheduleTimeValid) {
+                        courseImportFinish.postEvent(false to false)
+                        providerError.postEvent(CourseAdapterException.ErrorType.SCHEDULE_TIMES_ERROR.make())
+                        return@launch
+                    }
+
                     val hasConflicts = CourseManager.solveConflicts(scheduleTimes, courses)
 
                     if (currentSchedule) {

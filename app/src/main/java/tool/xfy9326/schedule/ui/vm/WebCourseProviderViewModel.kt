@@ -81,6 +81,13 @@ class WebCourseProviderViewModel : AbstractViewModel() {
                         importParams.frameContent
                     )
 
+                    val scheduleTimeValid = ScheduleManager.validateScheduleTime(scheduleTimes)
+                    if (!scheduleTimeValid) {
+                        courseImportFinish.postEvent(false to false)
+                        providerError.postEvent(CourseAdapterException.ErrorType.SCHEDULE_TIMES_ERROR.make())
+                        return@launch
+                    }
+
                     val hasConflicts = CourseManager.solveConflicts(scheduleTimes, courses)
 
                     if (currentSchedule) {

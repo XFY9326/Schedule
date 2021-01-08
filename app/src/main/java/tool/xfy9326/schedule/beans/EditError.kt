@@ -16,6 +16,8 @@ class EditError private constructor(
         SCHEDULE_DATE_ERROR,
         SCHEDULE_MAX_WEEK_NUM_ERROR,
         SCHEDULE_TIME_CONFLICT_ERROR,
+        SCHEDULE_TIME_NOT_IN_ONE_DAY_ERROR,
+        SCHEDULE_TIME_START_END_ERROR,
         SCHEDULE_COURSE_NUM_ERROR,
         SCHEDULE_COURSE_WEEK_NUM_ERROR,
         COURSE_TIME_LIST_EMPTY,
@@ -33,6 +35,8 @@ class EditError private constructor(
                 Type.SCHEDULE_DATE_ERROR -> R.string.start_date_larger_than_end_date_error
                 Type.SCHEDULE_MAX_WEEK_NUM_ERROR -> R.string.max_week_num_error
                 Type.SCHEDULE_TIME_CONFLICT_ERROR -> R.string.schedule_time_conflict_error
+                Type.SCHEDULE_TIME_NOT_IN_ONE_DAY_ERROR -> R.string.schedule_time_not_in_one_day_error
+                Type.SCHEDULE_TIME_START_END_ERROR -> R.string.schedule_time_start_end_error
                 Type.SCHEDULE_COURSE_NUM_ERROR -> R.string.course_num_error
                 Type.SCHEDULE_COURSE_WEEK_NUM_ERROR -> R.string.course_week_num_error
                 Type.COURSE_TIME_LIST_EMPTY -> R.string.course_time_empty

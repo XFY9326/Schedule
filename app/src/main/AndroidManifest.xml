@@ -69,8 +69,8 @@
             android:label="@string/schedule_edit" />
 
         <activity
-            android:name=".ui.activity.CourseImportActivity"
-            android:label="@string/course_import" />
+            android:name=".ui.activity.OnlineCourseImportActivity"
+            android:label="@string/online_course_import" />
 
         <activity
             android:name=".ui.activity.CourseManageActivity"

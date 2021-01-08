@@ -34,6 +34,7 @@ class CourseAdapterException : Exception {
         CLOSE_ERROR,
         MAX_COURSE_NUM_ERROR,
         INCOMPLETE_COURSE_INFO_ERROR,
+        SCHEDULE_TIMES_ERROR,
         CUSTOM_ERROR;
 
         /**
@@ -99,6 +100,7 @@ class CourseAdapterException : Exception {
                     ErrorType.CLOSE_ERROR -> R.string.adapter_exception_close_error
                     ErrorType.MAX_COURSE_NUM_ERROR -> R.string.max_course_num_error
                     ErrorType.INCOMPLETE_COURSE_INFO_ERROR -> R.string.adapter_exception_incomplete_course_info
+                    ErrorType.SCHEDULE_TIMES_ERROR -> R.string.schedule_time_error
                     ErrorType.CUSTOM_ERROR -> error("Invalid course adapter error type!")
                 }
             )

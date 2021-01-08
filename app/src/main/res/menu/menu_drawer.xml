@@ -4,21 +4,31 @@
         <item android:title="@string/schedule_and_courses">
             <menu>
                 <item
-                    android:id="@+id/menu_navCourseImport"
-                    android:icon="@drawable/ic_save_alt_24"
-                    android:title="@string/course_import" />
-                <item
                     android:id="@+id/menu_navScheduleManage"
                     android:icon="@drawable/ic_table_24"
                     android:title="@string/schedule_manage" />
                 <item
                     android:id="@+id/menu_navCourseManage"
                     android:icon="@drawable/ic_edit_24"
-                    android:title="@string/current_course_manage" />
+                    android:title="@string/course_manage" />
             </menu>
         </item>
     </group>
     <group android:id="@+id/menu_group2">
+        <item android:title="@string/import_and_export">
+            <menu>
+                <item
+                    android:id="@+id/menu_navCourseImport"
+                    android:icon="@drawable/ic_online_24"
+                    android:title="@string/online_course_import" />
+                <item
+                    android:id="@+id/menu_navCourseExportICS"
+                    android:icon="@drawable/ic_calendar_24"
+                    android:title="@string/export_to_ics" />
+            </menu>
+        </item>
+    </group>
+    <group android:id="@+id/menu_group3">
         <item android:title="@string/others">
             <menu>
                 <item

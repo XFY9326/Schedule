@@ -28,6 +28,7 @@
     <string name="in_vacation">放假中</string>
     <string name="weekday">周%1$s</string>
     <string name="course_detail_week_num">周数：第%1$s周</string>
+    <string name="course_detail_week_num_simple">周数：%1$s</string>
     <string name="course_detail_class_time">时间：%1$s 第%2$s节\u3000%3$s</string>
     <string name="course_detail_class_time_simple">时间：%1$s 第%2$s节</string>
     <string name="course_detail_location">地点：%1$s</string>
@@ -35,7 +36,6 @@
     <string name="close_drawer">关闭侧边栏</string>
     <string name="schedule_manage">课表管理</string>
     <string name="course_manage">课程管理</string>
-    <string name="current_course_manage">当前课程管理</string>
     <string name="exit">退出</string>
     <string name="settings">设置</string>
     <string name="add_schedule">添加课表</string>
@@ -74,7 +74,10 @@
     <string name="max_week_num_error">最大周数必须大于一周！</string>
     <string name="course_num_error">课表中\"%1$s\"超过当前最大课程节数！</string>
     <string name="course_week_num_error">课表中\"%1$s\"周数大于当前最大周数！</string>
+    <string name="schedule_time_error">课表时间存在错误！</string>
     <string name="schedule_time_conflict_error">第%1$d节课与第%2$d节课时间存在冲突！</string>
+    <string name="schedule_time_not_in_one_day_error">所有课程时间必须在一天之内！</string>
+    <string name="schedule_time_start_end_error">第%1$d节课开始时间必须小于结束时间！</string>
     <string name="schedule_name_empty_error">课表名称为空！</string>
     <string name="ask_whether_exit_without_save">是否放弃更改并退出？</string>
     <string name="add_course">添加课程</string>
@@ -88,7 +91,7 @@
     <string name="course_name">课程名称</string>
     <string name="teacher_name">教师名称（可选）</string>
     <string name="class_location">课程地点（可选）</string>
-    <string name="not_set">未设定</string>
+    <string name="undefined">未设定</string>
     <string name="course_time_delete_success">课程时间删除成功！</string>
     <string name="set_all_odd_week">单周</string>
     <string name="set_all_even_week">双周</string>
@@ -98,7 +101,7 @@
     <string name="course_name_empty">课程名称不能为空！</string>
     <string name="course_time_inner_conflict">课程第%1$d个与第%2$d个时间段存在冲突！</string>
     <string name="course_time_others_conflict">课程第%1$d个时间段与\"%2$s\"存在冲突！</string>
-    <string name="course_import">课程导入</string>
+    <string name="online_course_import">在线课程导入</string>
     <string name="interface_provider_error">该课程提供器接口不可用！</string>
     <string name="unknown_provider_error">未知课程提供器接口！</string>
     <string name="invalid_parser_error">不支持的课程解析器接口！</string>
@@ -259,6 +262,9 @@
     <string name="output_file_cancel">已取消导出文件！</string>
     <string name="output_file_success">已成功导出文件！</string>
     <string name="output_file_failed">导出文件失败！</string>
+    <string name="ics_description_teacher">教师名称：%1$s</string>
+    <string name="import_and_export">导入与导出</string>
+    <string name="export_to_ics">导出为ICS文件</string>
 
     <string name="scare_type_fit_center">等比缩放，从中间开始填充满</string>
     <string name="scare_type_center_crop">等比缩放直到完全填充</string>

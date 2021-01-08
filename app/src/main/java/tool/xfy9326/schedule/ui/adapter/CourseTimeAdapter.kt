@@ -21,11 +21,13 @@ class CourseTimeAdapter : ListViewBindingAdapter<CourseTime, ItemCourseTimeBindi
         if (!::weekDayStrArr.isInitialized) {
             weekDayStrArr = holder.viewContext.getStringArray(R.array.weekday)
         }
+        val weekNumText = element.weekNumPattern.getText(holder.viewContext)
         holder.viewBinding.textViewCourseWeekNum.text =
-            holder.viewContext.getString(
-                R.string.course_detail_week_num,
-                element.weekNumDescription().getText(holder.viewContext)
-            )
+            if (weekNumText.isEmpty()) {
+                holder.viewContext.getString(R.string.course_detail_week_num_simple, holder.viewContext.getString(R.string.undefined))
+            } else {
+                holder.viewContext.getString(R.string.course_detail_week_num, weekNumText)
+            }
         holder.viewBinding.textViewCourseClassTime.text =
             holder.viewContext.getString(
                 R.string.course_detail_class_time_simple,
@@ -35,7 +37,7 @@ class CourseTimeAdapter : ListViewBindingAdapter<CourseTime, ItemCourseTimeBindi
         holder.viewBinding.textViewCourseLocation.text =
             holder.viewContext.getString(
                 R.string.course_detail_location,
-                element.location ?: holder.viewContext.getString(R.string.not_set)
+                element.location ?: holder.viewContext.getString(R.string.undefined)
             )
         holder.viewBinding.cardViewCourseTime.setOnClickListener {
             onCourseTimeEditListener?.invoke(holder.adapterPosition, element)

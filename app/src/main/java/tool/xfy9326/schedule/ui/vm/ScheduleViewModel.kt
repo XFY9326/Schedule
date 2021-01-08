@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import tool.xfy9326.schedule.beans.Course
+import tool.xfy9326.schedule.beans.Schedule
 import tool.xfy9326.schedule.beans.ScheduleTime
 import tool.xfy9326.schedule.beans.WeekNumType
 import tool.xfy9326.schedule.data.AppDataStore
@@ -18,7 +19,9 @@ import tool.xfy9326.schedule.kt.MutableEventLiveData
 import tool.xfy9326.schedule.kt.asScopeLiveData
 import tool.xfy9326.schedule.kt.combineTransform
 import tool.xfy9326.schedule.kt.postEvent
+import tool.xfy9326.schedule.tools.DisposableValue
 import tool.xfy9326.schedule.tools.ImageHelper
+import tool.xfy9326.schedule.tools.ScheduleCalendarHelper
 import tool.xfy9326.schedule.ui.vm.base.AbstractViewModel
 import tool.xfy9326.schedule.utils.CalendarUtils
 import tool.xfy9326.schedule.utils.CourseManager
@@ -62,9 +65,12 @@ class ScheduleViewModel : AbstractViewModel() {
     val useLightColorStatusBarColor = ScheduleDataStore.useLightColorStatusBarColorFlow.asScopeLiveData(viewModelScope)
     val scheduleBackground = ScheduleDataStore.scheduleBackgroundBuildBundleFlow.asScopeLiveData(viewModelScope)
     val scheduleShared = MutableEventLiveData<Uri?>()
+    val selectScheduleForExportingICS = MutableEventLiveData<List<Schedule.Min>>()
+    val iceExportStatus = MutableEventLiveData<Boolean>()
 
     var nightModeChangeOldSurface: Bitmap? = null
     val nightModeChanging = AtomicBoolean(false)
+    val waitExportScheduleId = DisposableValue<Long>()
 
     private val scheduleSharedMutex = Mutex()
 
@@ -95,6 +101,30 @@ class ScheduleViewModel : AbstractViewModel() {
     fun exitAppDirectly() {
         viewModelScope.launch {
             exitAppDirectly.postEvent(AppSettingsDataStore.exitAppDirectlyFlow.first())
+        }
+    }
+
+    fun selectScheduleForExportingICS() {
+        viewModelScope.launch {
+            selectScheduleForExportingICS.postEvent(ScheduleDBProvider.db.scheduleDAO.getScheduleMin().first())
+        }
+    }
+
+    fun exportICS(context: Context, outputUri: Uri) {
+        viewModelScope.launch {
+            val scheduleId = waitExportScheduleId.read()
+            if (scheduleId != null) {
+                val schedule = ScheduleDBProvider.db.scheduleDAO.getSchedule(scheduleId).first()
+                if (schedule != null) {
+                    val courses = ScheduleDBProvider.db.scheduleDAO.getScheduleCourses(scheduleId).first()
+                    val firstDayOfWeek = ScheduleDataStore.firstDayOfWeekFlow.first()
+                    iceExportStatus.postEvent(ScheduleCalendarHelper(schedule, courses, firstDayOfWeek).dumpICS(context, outputUri))
+                } else {
+                    iceExportStatus.postEvent(false)
+                }
+            } else {
+                iceExportStatus.postEvent(false)
+            }
         }
     }
 
