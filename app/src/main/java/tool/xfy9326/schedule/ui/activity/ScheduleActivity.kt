@@ -33,6 +33,7 @@ import tool.xfy9326.schedule.data.ScheduleDataStore
 import tool.xfy9326.schedule.databinding.ActivityScheduleBinding
 import tool.xfy9326.schedule.databinding.LayoutNavHeaderBinding
 import tool.xfy9326.schedule.kt.*
+import tool.xfy9326.schedule.tools.MIMEConst
 import tool.xfy9326.schedule.tools.ScheduleCalendarHelper
 import tool.xfy9326.schedule.ui.activity.base.ViewModelActivity
 import tool.xfy9326.schedule.ui.adapter.ScheduleViewPagerAdapter
@@ -100,7 +101,7 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
             DialogUtils.showScheduleSelectDialog(this, R.string.export_to_ics, it) { name, id ->
                 viewModel.waitExportScheduleId.write(id)
                 startActivityForResult(
-                    IntentUtils.getCreateNewDocumentIntent(ScheduleCalendarHelper.createICSFileName(name)),
+                    IntentUtils.getCreateNewDocumentIntent(ScheduleCalendarHelper.createICSFileName(name), MIMEConst.MIME_TEXT_CALENDAR),
                     REQUEST_CODE_EXPORT_ICS_FILE
                 )
             }

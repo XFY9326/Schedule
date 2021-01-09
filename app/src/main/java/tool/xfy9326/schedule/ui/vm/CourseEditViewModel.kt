@@ -17,8 +17,7 @@ import tool.xfy9326.schedule.ui.vm.base.AbstractViewModel
 import tool.xfy9326.schedule.utils.CourseManager
 
 class CourseEditViewModel : AbstractViewModel() {
-    var isEdit = false
-        private set
+    private var isEdit = false
     private var originalCourseHashCode: Int? = null
     lateinit var editCourse: Course
         private set

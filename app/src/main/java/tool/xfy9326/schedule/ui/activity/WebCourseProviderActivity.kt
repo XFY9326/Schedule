@@ -60,6 +60,7 @@ class WebCourseProviderActivity : ViewModelActivity<WebCourseProviderViewModel, 
                 window.$HTML_PRINT_JAVASCRIPT_INTERFACE_NAME.$HTML_PRINT_JAVASCRIPT_METHOD_NAME(htmlContent, iframeList, frameList, currentSchedule);
             """
     }
+
     private val loadingDialogController = FullScreenLoadingDialog.createControllerInstance(this)
 
     override fun onPrepare(viewBinding: ActivityWebCourseProviderBinding, viewModel: WebCourseProviderViewModel) {

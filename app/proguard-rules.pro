@@ -23,17 +23,20 @@
 
 -optimizationpasses 5
 -allowaccessmodification
--optimizations !code/simplification/arithmetic,!code/simplification/cast,!field/*,!class/merging/*
 
 -repackageclasses pkg
--keepattributes SourceFile,LineNumberTable,*Annotation*,InnerClasses,Signature
+-keepattributes SourceFile,LineNumberTable
+-keepattributes *Annotation*,InnerClasses
+-keepattributes Signature
 
+# App
 -keep public class * extends tool.xfy9326.schedule.ui.fragment.base.AbstractSettingsFragment
 
 -keepclassmembers class * extends androidx.viewbinding.ViewBinding{
     public inflate(...);
 }
 
+# Glide
 -keep public class * implements com.bumptech.glide.module.GlideModule
 -keep class * extends com.bumptech.glide.module.AppGlideModule {
     <init>(...);
@@ -45,3 +48,6 @@
 -keep class com.bumptech.glide.load.data.ParcelFileDescriptorRewinder$InternalRewinder {
     *** rewind();
 }
+
+# biweekly
+-keep class biweekly.Biweekly

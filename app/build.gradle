@@ -24,6 +24,16 @@ android {
 
         resConfigs 'zh', 'en'
 
+        packagingOptions {
+            exclude 'LICENSES'
+            exclude 'META-INF/*.version'
+            exclude 'main/java/androidx/datastore/preferences/PreferencesProto.java'
+            exclude 'DebugProbesKt.bin'
+            exclude 'META-INF/CHANGES'
+            exclude 'META-INF/README.md'
+            exclude 'okhttp3/internal/publicsuffix/NOTICE'
+        }
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         javaCompileOptions {
@@ -46,28 +56,16 @@ android {
             versionNameSuffix '-debug'
             applicationIdSuffix '.debug'
             manifestPlaceholders = ['ApplicationId': "${applicationId}${applicationIdSuffix}"]
-        }
-        beta {
-            zipAlignEnabled true
-            minifyEnabled true
-            shrinkResources true
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            versionNameSuffix '-beta'
-            applicationIdSuffix '.beta'
-            signingConfig signingConfigs.debug
-            manifestPlaceholders = ['ApplicationId': "${applicationId}${applicationIdSuffix}"]
+//            zipAlignEnabled true
+//            minifyEnabled true
+//            shrinkResources true
+//            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         release {
             zipAlignEnabled true
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            packagingOptions {
-                exclude 'DebugProbesKt.bin'
-                exclude 'META-INF/CHANGES'
-                exclude 'META-INF/README.md'
-                exclude 'okhttp3/internal/publicsuffix/NOTICE'
-            }
             manifestPlaceholders = ['ApplicationId': "${applicationId}"]
         }
     }
@@ -90,8 +88,6 @@ dependencies {
     ext.androidx_appcompat_version = '1.2.0'
     ext.androidx_lifecycle_version = '2.2.0'
     ext.androidx_room_version = '2.2.6'
-
-    // implementation fileTree(dir: "libs", include: ["*.jar", "*.aar"])
 
     // Kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
@@ -128,7 +124,7 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.11.0'
 
     // Ktor
-    implementation 'io.ktor:ktor-client-android:1.4.3'
+    implementation 'io.ktor:ktor-client-android:1.5.0'
 
     // Jsoup
     implementation 'org.jsoup:jsoup:1.13.1'
