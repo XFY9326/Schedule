@@ -3,9 +3,17 @@ package tool.xfy9326.schedule.ui.activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import tool.xfy9326.schedule.R
+import tool.xfy9326.schedule.data.AppDataStore
+import tool.xfy9326.schedule.io.TextIO
 import tool.xfy9326.schedule.kt.showGlobalShortToast
 import tool.xfy9326.schedule.kt.startActivity
+import tool.xfy9326.schedule.utils.DialogUtils
+import tool.xfy9326.schedule.utils.DirUtils
 
 class SplashActivity : AppCompatActivity() {
     companion object {
@@ -20,10 +28,7 @@ class SplashActivity : AppCompatActivity() {
         when {
             validateFirstLaunch() -> finish()
             validateAppError() -> startAppErrorActivity()
-            else -> {
-                if (validateCrashRelaunch()) showGlobalShortToast(R.string.crash_relaunch_attention)
-                startMainActivity()
-            }
+            else -> standardLaunch()
         }
     }
 
@@ -35,6 +40,30 @@ class SplashActivity : AppCompatActivity() {
 
     private fun validateCrashRelaunch() =
         intent.getBooleanExtra(INTENT_EXTRA_CRASH_RELAUNCH, false)
+
+    private fun standardLaunch() {
+        if (validateCrashRelaunch()) showGlobalShortToast(R.string.crash_relaunch_attention)
+        lifecycleScope.launch {
+            if (AppDataStore.acceptEULAFlow.first()) {
+                startMainActivity()
+            } else {
+                showEULA(TextIO.readAssetFileAsText(this@SplashActivity, DirUtils.ASSETS_EULA_FILE)!!)
+            }
+        }
+    }
+
+    private fun showEULA(eula: String) {
+        DialogUtils.showEULADialog(this@SplashActivity, eula, false) {
+            if (it) {
+                runBlocking {
+                    AppDataStore.setAcceptEULA(true)
+                    startMainActivity()
+                }
+            } else {
+                finishAndRemoveTask()
+            }
+        }
+    }
 
     private fun startMainActivity() {
         startActivity<ScheduleActivity>()
