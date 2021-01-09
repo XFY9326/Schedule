@@ -4,7 +4,7 @@ package tool.xfy9326.schedule.kt
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.asLiveData
-import kotlinx.coroutines.CoroutineScope
+import androidx.lifecycle.distinctUntilChanged
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -34,5 +34,5 @@ fun <T1, T2, R> Flow<T1>.combineTransform(combineTransform: suspend (T1) -> Flow
         }
     }
 
-fun <T> Flow<T>.asScopeLiveData(scope: CoroutineScope): LiveData<T> =
-    asLiveData(scope.coroutineContext).distinctUntilChanged(scope)
+fun <T> Flow<T>.asDistinctLiveData(): LiveData<T> =
+    asLiveData().distinctUntilChanged()

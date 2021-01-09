@@ -3,11 +3,6 @@
 package tool.xfy9326.schedule.kt
 
 import androidx.lifecycle.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
 import tool.xfy9326.schedule.tools.livedata.Event
 import tool.xfy9326.schedule.tools.livedata.EventObserver
 import tool.xfy9326.schedule.tools.livedata.Notify
@@ -73,24 +68,4 @@ fun <T : Any> LiveData<T?>.filterNotNull(): LiveData<T> {
         if (x != null) result.value = x
     }
     return result
-}
-
-fun <X> LiveData<X>.distinctUntilChanged(scope: CoroutineScope): MediatorLiveData<X> {
-    val outputLiveData = MediatorLiveData<X>()
-    outputLiveData.addSource(this, object : Observer<X> {
-        var mFirstTime = true
-        var valueLock = Mutex()
-        override fun onChanged(currentValue: X) {
-            scope.launch(Dispatchers.Default) {
-                valueLock.withLock {
-                    val previousValue = outputLiveData.value
-                    if (mFirstTime || previousValue == null && currentValue != null || previousValue != null && previousValue != currentValue) {
-                        mFirstTime = false
-                        outputLiveData.postValue(currentValue)
-                    }
-                }
-            }
-        }
-    })
-    return outputLiveData
 }

@@ -7,7 +7,7 @@ import tool.xfy9326.schedule.beans.Course
 import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
 import tool.xfy9326.schedule.kt.MutableNotifyLiveData
 import tool.xfy9326.schedule.kt.addAsSource
-import tool.xfy9326.schedule.kt.asScopeLiveData
+import tool.xfy9326.schedule.kt.asDistinctLiveData
 import tool.xfy9326.schedule.kt.notify
 import tool.xfy9326.schedule.ui.vm.base.AbstractViewModel
 
@@ -19,7 +19,7 @@ class CourseManageViewModel : AbstractViewModel() {
     fun requestDBCourses(scheduleId: Long) {
         if (!hasCourseInit) {
             hasCourseInit = true
-            ScheduleDBProvider.db.scheduleDAO.getScheduleCourses(scheduleId).asScopeLiveData(viewModelScope).addAsSource(coursesLivaData)
+            ScheduleDBProvider.db.scheduleDAO.getScheduleCourses(scheduleId).asDistinctLiveData().addAsSource(coursesLivaData)
         }
     }
 

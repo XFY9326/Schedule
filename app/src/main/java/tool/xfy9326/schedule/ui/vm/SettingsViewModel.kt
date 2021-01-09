@@ -16,6 +16,7 @@ import tool.xfy9326.schedule.io.TextIO
 import tool.xfy9326.schedule.kt.MutableEventLiveData
 import tool.xfy9326.schedule.kt.asParentOf
 import tool.xfy9326.schedule.kt.postEvent
+import tool.xfy9326.schedule.kt.weak
 import tool.xfy9326.schedule.tools.DisposableValue
 import tool.xfy9326.schedule.tools.ExceptionHandler
 import tool.xfy9326.schedule.tools.ImageHelper
@@ -48,10 +49,13 @@ class SettingsViewModel : AbstractViewModel() {
     }
 
     fun outputLogFileToUri(context: Context, outputUri: Uri) {
+        val weakContext = context.weak()
         viewModelScope.launch {
             val logName = waitCreateLogFileName.read()
             if (logName != null) {
-                outputLogFileToUriResult.postEvent(BaseIO.writeFileToUri(context, outputUri, DirUtils.LogDir.asParentOf(logName)))
+                weakContext.get()?.let {
+                    outputLogFileToUriResult.postEvent(BaseIO.writeFileToUri(it, outputUri, DirUtils.LogDir.asParentOf(logName)))
+                }
             } else {
                 outputLogFileToUriResult.postEvent(false)
             }
@@ -79,11 +83,14 @@ class SettingsViewModel : AbstractViewModel() {
     }
 
     fun clearCache(context: Context) {
+        val weakContext = context.weak()
         viewModelScope.launch {
-            context.cacheDir?.deleteFile()
-            ContextCompat.getCodeCacheDir(context)?.deleteFile()
-            ContextCompat.getExternalCacheDirs(context).forEach {
-                it?.deleteFile()
+            weakContext.get()?.let { context ->
+                context.cacheDir?.deleteFile()
+                ContextCompat.getCodeCacheDir(context)?.deleteFile()
+                ContextCompat.getExternalCacheDirs(context).forEach {
+                    it?.deleteFile()
+                }
             }
         }
     }
