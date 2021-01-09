@@ -83,13 +83,18 @@ object DialogUtils {
         }.show(activity)
     }
 
-    fun showEULADialog(activity: AppCompatActivity, content: String, cancelable: Boolean = true, onConfirm: () -> Unit = {}) {
+    fun showEULADialog(activity: AppCompatActivity, content: String, cancelable: Boolean = true, onOperate: (agree: Boolean) -> Unit = {}) {
         MaterialAlertDialogBuilder(activity).apply {
             setTitle(R.string.eula_license)
             setMessage(content)
             setCancelable(cancelable)
-            setPositiveButton(android.R.string.ok) { _, _ ->
-                onConfirm()
+            if (!cancelable) {
+                setPositiveButton(R.string.agree) { _, _ ->
+                    onOperate(true)
+                }
+                setNegativeButton(R.string.disagree) { _, _ ->
+                    onOperate(false)
+                }
             }
         }.show(activity)
     }
@@ -98,7 +103,6 @@ object DialogUtils {
         MaterialAlertDialogBuilder(activity).apply {
             setTitle(R.string.open_source_license)
             setMessage(content)
-            setPositiveButton(android.R.string.ok, null)
         }.show(activity)
     }
 }

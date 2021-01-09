@@ -265,6 +265,8 @@
     <string name="ics_description_teacher">教师名称：%1$s</string>
     <string name="import_and_export">导入与导出</string>
     <string name="export_to_ics">导出为ICS文件</string>
+    <string name="agree">同意</string>
+    <string name="disagree">不同意</string>
 
     <string name="scare_type_fit_center">等比缩放，从中间开始填充满</string>
     <string name="scare_type_center_crop">等比缩放直到完全填充</string>
