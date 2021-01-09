@@ -2,7 +2,7 @@
 Schedule Android App
 
 ### Features:  
-- View drived by data
+- Data driven view
 - Allow add custom course and schedule adapter
 - Draw schedule by custom view
 - Powered by Android Jetpack

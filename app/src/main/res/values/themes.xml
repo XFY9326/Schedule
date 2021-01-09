@@ -13,7 +13,8 @@
     </style>
 
     <style name="AppTheme.LaunchScreen" parent="AppTheme.LaunchScreen.Base">
-        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowBackground">@drawable/background_launch_screen</item>
+        <item name="android:windowLightStatusBar" tools:ignore="NewApi">true</item>
     </style>
 
     <style name="AppTheme.Base" parent="Theme.MaterialComponents.DayNight.NoActionBar.Bridge">

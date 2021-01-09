@@ -10,7 +10,7 @@ import java.io.File
 import java.io.InputStream
 import java.io.OutputStream
 
-@Suppress("BlockingMethodInNonBlockingContext", "MemberVisibilityCanBePrivate")
+@Suppress("BlockingMethodInNonBlockingContext", "MemberVisibilityCanBePrivate", "unused")
 object ImageIO {
     private const val DEFAULT_BITMAP_SAVE_QUALITY = 100
 

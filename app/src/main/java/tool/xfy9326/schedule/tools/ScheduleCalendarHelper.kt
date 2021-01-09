@@ -27,7 +27,7 @@ class ScheduleCalendarHelper constructor(schedule: Schedule, private val courses
         private const val CAL_ID = "Schedule"
         private const val PRODID = "-//Produced By: $CAL_ID//App Version: ${BuildConfig.VERSION_CODE}"
 
-        fun createICSFileName(scheduleName: String) = "$CAL_ID-$scheduleName.ics"
+        fun createICSFileName(scheduleName: String) = "$CAL_ID-$scheduleName"
     }
 
     private val scheduleStartTime = schedule.startDate
