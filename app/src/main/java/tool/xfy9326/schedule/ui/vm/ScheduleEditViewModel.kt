@@ -130,7 +130,7 @@ class ScheduleEditViewModel : AbstractViewModel() {
             val time1 = schedule.times[i1]
 
             if (time1.startHour >= time1.endHour && time1.startMinute >= time1.endMinute) {
-                return EditError.Type.SCHEDULE_TIME_START_END_ERROR.make(i1)
+                return EditError.Type.SCHEDULE_TIME_START_END_ERROR.make(i1 + 1)
             }
 
             for (i2 in (i1 + 1)..schedule.times.lastIndex) {
