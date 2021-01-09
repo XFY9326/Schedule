@@ -11,10 +11,7 @@ import tool.xfy9326.schedule.beans.CourseTime
 import tool.xfy9326.schedule.beans.EditError
 import tool.xfy9326.schedule.beans.Schedule
 import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
-import tool.xfy9326.schedule.kt.MutableEventLiveData
-import tool.xfy9326.schedule.kt.forEachTwo
-import tool.xfy9326.schedule.kt.intersect
-import tool.xfy9326.schedule.kt.postEvent
+import tool.xfy9326.schedule.kt.*
 import tool.xfy9326.schedule.ui.dialog.CourseTimeEditDialog
 import tool.xfy9326.schedule.ui.vm.base.AbstractViewModel
 import tool.xfy9326.schedule.utils.CourseManager
@@ -34,6 +31,7 @@ class CourseEditViewModel : AbstractViewModel() {
     val copyToOtherSchedule = MutableEventLiveData<EditError?>()
 
     fun requestDBCourse(context: Context, scheduleId: Long, courseId: Long) {
+        val weakContext = context.weak()
         isEdit = courseId != 0L
 
         if (!::editCourse.isInitialized) {
@@ -44,8 +42,10 @@ class CourseEditViewModel : AbstractViewModel() {
                         courseData.postValue(it)
                     }
                 } else {
-                    editCourse = CourseManager.createNewCourse(context, scheduleId)
-                    courseData.postValue(editCourse)
+                    weakContext.get()?.let {
+                        editCourse = CourseManager.createNewCourse(it, scheduleId)
+                        courseData.postValue(editCourse)
+                    }
                 }
                 originalCourseHashCode = editCourse.hashCode()
             }

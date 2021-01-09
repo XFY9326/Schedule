@@ -10,18 +10,17 @@ data class ScheduleViewData(
     val weekNum: Int,
     val times: Array<ScheduleTime>,
     val cells: Array<CourseCell>,
+    val styles: ScheduleStyles,
 ) {
     val hasWeekendCourse
         get() = CourseManager.hasWeekendCourse(cells)
 
-    constructor(weekNum: Int, schedule: Schedule, cells: Array<CourseCell>) :
-            this(schedule.scheduleId, schedule.startDate, schedule.endDate, weekNum, schedule.times, cells)
+    constructor(weekNum: Int, schedule: Schedule, cells: Array<CourseCell>, styles: ScheduleStyles) :
+            this(schedule.scheduleId, schedule.startDate, schedule.endDate, weekNum, schedule.times, cells, styles)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
-        if (javaClass != other?.javaClass) return false
-
-        other as ScheduleViewData
+        if (other !is ScheduleViewData) return false
 
         if (scheduleId != other.scheduleId) return false
         if (startDate != other.startDate) return false
@@ -29,6 +28,7 @@ data class ScheduleViewData(
         if (weekNum != other.weekNum) return false
         if (!times.contentEquals(other.times)) return false
         if (!cells.contentEquals(other.cells)) return false
+        if (styles != other.styles) return false
 
         return true
     }
@@ -40,6 +40,7 @@ data class ScheduleViewData(
         result = 31 * result + weekNum
         result = 31 * result + times.contentHashCode()
         result = 31 * result + cells.contentHashCode()
+        result = 31 * result + styles.hashCode()
         return result
     }
 }

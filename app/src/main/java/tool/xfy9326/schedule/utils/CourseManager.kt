@@ -20,8 +20,9 @@ import tool.xfy9326.schedule.ui.view.ScheduleView
 import kotlin.math.max
 
 object CourseManager {
-    fun getScheduleViewDataByWeek(weekNum: Int, schedule: Schedule, courses: Array<Course>, showNotThisWeekCourse: Boolean): ScheduleViewData {
+    fun getScheduleViewDataByWeek(weekNum: Int, schedule: Schedule, courses: Array<Course>, scheduleStyles: ScheduleStyles): ScheduleViewData {
         val result = ArrayList<CourseCell>()
+        val showNotThisWeekCourse = scheduleStyles.showNotThisWeekCourse
 
         courses.iterateAll { course, courseTime ->
             val isThisWeekCourse = courseTime.hasThisWeekCourse(weekNum)
@@ -51,7 +52,7 @@ object CourseManager {
             }
         }
 
-        return ScheduleViewData(weekNum, schedule, result.toTypedArray())
+        return ScheduleViewData(weekNum, schedule, result.toTypedArray(), scheduleStyles)
     }
 
     fun getMaxWeekNum(courses: Array<Course>): Int {
@@ -114,8 +115,7 @@ object CourseManager {
             ) ?: return@withContext null
 
             val backgroundColor = context.getDefaultBackgroundColor()
-            val scheduleViewData = getScheduleViewDataByWeek(weekNum, schedule, courses, styles.showNotThisWeekCourse)
-            val scheduleView = ScheduleView(context, scheduleViewData, styles)
+            val scheduleView = ScheduleView(context, getScheduleViewDataByWeek(weekNum, schedule, courses, styles))
 
             val widthSpec = View.MeasureSpec.makeMeasureSpec(targetWidth, View.MeasureSpec.AT_MOST)
             val heightSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
