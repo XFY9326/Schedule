@@ -39,6 +39,7 @@ class WeekNumPattern(private val weekNum: BooleanArray) {
 
         /**
          * Spaced week number array
+         * timePeriodArray.size = amount
          *
          * @constructor Create SPACED
          */
@@ -59,6 +60,34 @@ class WeekNumPattern(private val weekNum: BooleanArray) {
         val length = end - start + 1
     }
 
+    companion object {
+        private fun parseTimePeriodArray(weekNum: BooleanArray): Array<TimePeriod> {
+            val result = ArrayList<TimePeriod>()
+            var i = 0
+            while (i < weekNum.size) {
+                if (weekNum[i]) {
+                    var j = i + 1
+                    while (j < weekNum.size && weekNum[j]) {
+                        j++
+                    }
+                    j--
+                    result.add(TimePeriod(i, j))
+                    i += j - i
+                }
+                i++
+            }
+            return result.toTypedArray()
+        }
+
+        private fun parseSpacedTimePeriodArray(start: Int, end: Int, interval: Int): Array<TimePeriod> {
+            val result = ArrayList<TimePeriod>(((end - start) / (interval + 1)) + 1)
+            for (i in start..end step interval) {
+                result.add(TimePeriod(i))
+            }
+            return result.toTypedArray()
+        }
+    }
+
     val type: PatternType
     val start: Int
     val end: Int
@@ -69,7 +98,8 @@ class WeekNumPattern(private val weekNum: BooleanArray) {
             EMPTY -> emptyArray()
             SINGLE -> arrayOf(TimePeriod(start))
             SERIAL -> arrayOf(TimePeriod(start, end))
-            MESSY, SPACED -> parseTimePeriodArray(weekNum)
+            SPACED -> parseSpacedTimePeriodArray(start, end, interval)
+            MESSY -> parseTimePeriodArray(weekNum)
         }
 
     init {
@@ -138,24 +168,6 @@ class WeekNumPattern(private val weekNum: BooleanArray) {
                 SPACED
             }
         }
-    }
-
-    private fun parseTimePeriodArray(weekNum: BooleanArray): Array<TimePeriod> {
-        val result = ArrayList<TimePeriod>()
-        var i = 0
-        while (i < weekNum.size) {
-            if (weekNum[i]) {
-                var j = i + 1
-                while (j < weekNum.size && weekNum[j]) {
-                    j++
-                }
-                j--
-                result.add(TimePeriod(i, j))
-                i += j - i
-            }
-            i++
-        }
-        return result.toTypedArray()
     }
 
     fun getText(context: Context) =
