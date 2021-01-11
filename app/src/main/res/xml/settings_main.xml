@@ -22,6 +22,13 @@
         app:title="@string/schedule_settings" />
 
     <androidx.preference.Preference
+        app:fragment="tool.xfy9326.schedule.ui.fragment.CalendarSyncSettingsFragment"
+        app:icon="@drawable/ic_sync_24"
+        app:persistent="false"
+        app:summary="@string/calendar_sync_settings_sum"
+        app:title="@string/calendar_sync_settings" />
+
+    <androidx.preference.Preference
         app:fragment="tool.xfy9326.schedule.ui.fragment.DebugSettingsFragment"
         app:icon="@drawable/ic_debug_24"
         app:persistent="false"

@@ -2,6 +2,7 @@
   <dictionary name="xfy9326">
     <words>
       <w>aspx</w>
+      <w>byday</w>
       <w>calscale</w>
       <w>cardview</w>
       <w>derivate</w>
@@ -16,6 +17,7 @@
       <w>vcalendar</w>
       <w>vevent</w>
       <w>weixin</w>
+      <w>wkst</w>
     </words>
   </dictionary>
 </component>

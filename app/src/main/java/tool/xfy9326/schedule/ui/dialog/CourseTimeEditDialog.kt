@@ -88,11 +88,8 @@ class CourseTimeEditDialog : DialogFragment() {
             buttonCourseTimeEditConfirm.setOnClickListener {
                 requireContext().hideKeyboard(root.windowToken)
                 updateEditData()
-                val context = requireContext()
-                if (context is OnCourseTimeEditListener) {
-                    val position = requireArguments().getInt(EXTRA_EDIT_POSITION, -1)
-                    context.onCourseTimeEditComplete(editCourseTime, if (position < 0) null else position)
-                }
+                val position = requireArguments().getInt(EXTRA_EDIT_POSITION, -1)
+                requireOwner<OnCourseTimeEditListener>()?.onCourseTimeEditComplete(editCourseTime, if (position < 0) null else position)
                 dismiss()
             }
 

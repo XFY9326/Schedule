@@ -6,6 +6,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import tool.xfy9326.schedule.R
+import tool.xfy9326.schedule.kt.requireOwner
 
 class ImportCourseConflictDialog : DialogFragment(), DialogInterface.OnClickListener {
     companion object {
@@ -31,8 +32,7 @@ class ImportCourseConflictDialog : DialogFragment(), DialogInterface.OnClickList
     }
 
     override fun onClick(dialog: DialogInterface?, which: Int) {
-        val owner = requireContext()
-        if (owner is OnConfirmImportCourseConflictListener) owner.onConfirmImportCourseConflict()
+        requireOwner<OnConfirmImportCourseConflictListener>()?.onConfirmImportCourseConflict()
     }
 
     interface OnConfirmImportCourseConflictListener {

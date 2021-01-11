@@ -6,12 +6,12 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.annotation.StringRes
 import androidx.lifecycle.lifecycleScope
-import androidx.preference.Preference
 import androidx.preference.PreferenceDataStore
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.kt.observeEvent
+import tool.xfy9326.schedule.kt.setOnPrefClickListener
 import tool.xfy9326.schedule.kt.show
 import tool.xfy9326.schedule.kt.showShortSnackBar
 import tool.xfy9326.schedule.ui.dialog.CrashViewDialog
@@ -33,15 +33,13 @@ class DebugSettingsFragment : AbstractSettingsFragment() {
     override val preferenceDataStore: PreferenceDataStore = AppSettingsDataStore.getPreferenceDataStore(lifecycleScope)
 
     override fun onPrefInit(savedInstanceState: Bundle?) {
-        findPreference<Preference>(KEY_READ_DEBUG_LOGS)?.setOnPreferenceClickListener {
+        setOnPrefClickListener(KEY_READ_DEBUG_LOGS) {
             requireSettingsViewModel()?.readDebugLogs()
-            false
         }
-        findPreference<Preference>(KEY_OUTPUT_DEBUG_LOGS)?.setOnPreferenceClickListener {
+        setOnPrefClickListener(KEY_OUTPUT_DEBUG_LOGS) {
             requireSettingsViewModel()?.outputDebugLogs()
-            false
         }
-        findPreference<Preference>(KEY_CLEAR_DEBUG_LOGS)?.setOnPreferenceClickListener {
+        setOnPrefClickListener(KEY_CLEAR_DEBUG_LOGS) {
             MaterialAlertDialogBuilder(requireContext()).apply {
                 setTitle(R.string.clear_debug_logs)
                 setMessage(R.string.clear_debug_logs_msg)
@@ -51,7 +49,6 @@ class DebugSettingsFragment : AbstractSettingsFragment() {
                 }
                 setNegativeButton(android.R.string.cancel, null)
             }.show(viewLifecycleOwner)
-            false
         }
     }
 

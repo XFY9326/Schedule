@@ -1,8 +1,6 @@
 package tool.xfy9326.schedule.utils
 
-import tool.xfy9326.schedule.beans.Day
-import tool.xfy9326.schedule.beans.Schedule
-import tool.xfy9326.schedule.beans.WeekDay
+import tool.xfy9326.schedule.beans.*
 import tool.xfy9326.schedule.kt.getWeekDay
 import java.util.*
 import kotlin.math.ceil
@@ -45,4 +43,47 @@ object CourseTimeUtils {
         CalendarUtils.getFirstDateInThisWeek(startDate, firstDayOfWeek).apply {
             if (weekNum > 0) time += 7 * 24 * 60 * 60 * 1000 * weekNum - 24 * 60 * 60 * 1000
         }
+
+    fun getCourseFirstAvailableTime(
+        scheduleCalculateTimes: ScheduleCalculateTimes,
+        start: Int,
+        end: Int = start,
+        interval: Int = 1,
+        classTime: ClassTime,
+    ): Pair<Date, Date>? {
+        for (i in start..end step interval) {
+            val temp = getRealClassTime(scheduleCalculateTimes, i, classTime)
+            if (temp != null) return temp
+        }
+        return null
+    }
+
+    private fun getRealClassTime(
+        scheduleCalculateTimes: ScheduleCalculateTimes,
+        weekNum: Int,
+        classTime: ClassTime,
+    ): Pair<Date, Date>? {
+        CalendarUtils.getCalendar(
+            date = scheduleCalculateTimes.weekCountBeginning,
+            firstDayOfWeek = scheduleCalculateTimes.firstDayOfWeek,
+            clearToDate = true
+        ).apply {
+            val dayOffset = (weekNum - 1) * 7 + classTime.weekDay.value(scheduleCalculateTimes.firstDayOfWeek) - 1
+            if (dayOffset != 0) add(Calendar.DATE, dayOffset)
+
+            val start = scheduleCalculateTimes.times[classTime.classStartTime - 1]
+            set(Calendar.HOUR_OF_DAY, start.startHour)
+            set(Calendar.MINUTE, start.startMinute)
+            val startTime = time
+
+            val end = scheduleCalculateTimes.times[classTime.classEndTime - 1]
+            set(Calendar.HOUR_OF_DAY, end.endHour)
+            set(Calendar.MINUTE, end.endMinute)
+            val endTime = time
+
+            if (startTime < scheduleCalculateTimes.actualStartTime || endTime > scheduleCalculateTimes.actualEndTime) return null
+
+            return startTime to time
+        }
+    }
 }

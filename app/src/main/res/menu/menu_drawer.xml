@@ -23,7 +23,7 @@
                     android:title="@string/online_course_import" />
                 <item
                     android:id="@+id/menu_navCourseExportICS"
-                    android:icon="@drawable/ic_calendar_24"
+                    android:icon="@drawable/ic_ics_24"
                     android:title="@string/export_to_ics" />
             </menu>
         </item>
@@ -31,6 +31,10 @@
     <group android:id="@+id/menu_group3">
         <item android:title="@string/others">
             <menu>
+                <item
+                    android:id="@+id/menu_navSyncToCalendar"
+                    android:icon="@drawable/ic_sync_24"
+                    android:title="@string/sync_to_calendar" />
                 <item
                     android:id="@+id/menu_navSettings"
                     android:icon="@drawable/ic_settings_24"

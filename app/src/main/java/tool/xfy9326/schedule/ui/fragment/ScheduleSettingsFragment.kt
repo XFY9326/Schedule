@@ -6,16 +6,12 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.MultiSelectListPreference
-import androidx.preference.Preference
 import androidx.preference.PreferenceDataStore
 import com.jaredrummler.android.colorpicker.ColorPreferenceCompat
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.data.ScheduleDataStore
 import tool.xfy9326.schedule.data.base.DataStorePreferenceAdapter
-import tool.xfy9326.schedule.kt.getColorCompat
-import tool.xfy9326.schedule.kt.observeEvent
-import tool.xfy9326.schedule.kt.showShortSnackBar
-import tool.xfy9326.schedule.kt.tryStartActivityForResult
+import tool.xfy9326.schedule.kt.*
 import tool.xfy9326.schedule.tools.MaterialColorHelper
 import tool.xfy9326.schedule.ui.dialog.FullScreenLoadingDialog
 import tool.xfy9326.schedule.ui.fragment.base.AbstractSettingsFragment
@@ -47,9 +43,8 @@ class ScheduleSettingsFragment : AbstractSettingsFragment() {
     }
 
     override fun onPrefInit(savedInstanceState: Bundle?) {
-        findPreference<Preference>(KEY_SELECT_SCHEDULE_BACKGROUND_IMAGE)?.setOnPreferenceClickListener {
+        setOnPrefClickListener(KEY_SELECT_SCHEDULE_BACKGROUND_IMAGE) {
             tryStartActivityForResult(IntentUtils.getSelectImageFromDocumentIntent(), REQUEST_CODE_SELECT_SCHEDULE_BACKGROUND_IMAGE)
-            false
         }
         findPreference<MultiSelectListPreference>(ScheduleDataStore.notThisWeekCourseShowStyle.name)?.setOnPreferenceChangeListener { _, newValue ->
             newValue as Set<*>

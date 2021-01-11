@@ -34,7 +34,6 @@ import tool.xfy9326.schedule.databinding.ActivityScheduleBinding
 import tool.xfy9326.schedule.databinding.LayoutNavHeaderBinding
 import tool.xfy9326.schedule.kt.*
 import tool.xfy9326.schedule.tools.MIMEConst
-import tool.xfy9326.schedule.tools.ScheduleCalendarHelper
 import tool.xfy9326.schedule.ui.activity.base.ViewModelActivity
 import tool.xfy9326.schedule.ui.adapter.ScheduleViewPagerAdapter
 import tool.xfy9326.schedule.ui.dialog.CourseDetailDialog
@@ -42,6 +41,8 @@ import tool.xfy9326.schedule.ui.dialog.ScheduleControlPanel
 import tool.xfy9326.schedule.ui.vm.ScheduleViewModel
 import tool.xfy9326.schedule.utils.DialogUtils
 import tool.xfy9326.schedule.utils.IntentUtils
+import tool.xfy9326.schedule.utils.PermissionUtils
+import tool.xfy9326.schedule.utils.ScheduleICSHelper
 import kotlin.math.max
 import kotlin.math.sqrt
 
@@ -54,6 +55,7 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
         private const val EXTRA_FINAL_RADIUS = "FINAL_RADIUS"
 
         private const val REQUEST_CODE_EXPORT_ICS_FILE = 1
+        private const val REQUEST_CODE_CALENDAR_PERMISSION = 2
     }
 
     private var scheduleViewPagerAdapter: ScheduleViewPagerAdapter? = null
@@ -101,13 +103,24 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
             DialogUtils.showScheduleSelectDialog(this, R.string.export_to_ics, it) { name, id ->
                 viewModel.waitExportScheduleId.write(id)
                 startActivityForResult(
-                    IntentUtils.getCreateNewDocumentIntent(ScheduleCalendarHelper.createICSFileName(name), MIMEConst.MIME_TEXT_CALENDAR),
+                    IntentUtils.getCreateNewDocumentIntent(ScheduleICSHelper.createICSFileName(name), MIMEConst.MIME_TEXT_CALENDAR),
                     REQUEST_CODE_EXPORT_ICS_FILE
                 )
             }
         }
         viewModel.iceExportStatus.observeEvent(this) {
             viewBinding.layoutSchedule.showShortSnackBar(if (it) R.string.output_file_success else R.string.output_file_failed)
+        }
+        viewModel.syncToCalendarStatus.observeEvent(this) {
+            if (it.success) {
+                if (it.failedAmount == 0) {
+                    viewBinding.layoutSchedule.showShortSnackBar(R.string.calendar_sync_success)
+                } else {
+                    viewBinding.layoutSchedule.showShortSnackBar(R.string.calendar_sync_failed, it.total, it.failedAmount)
+                }
+            } else {
+                viewBinding.layoutSchedule.showShortSnackBar(R.string.calendar_sync_error)
+            }
         }
         viewModel.scheduleBackground.observe(this, ::onChangeScheduleBackground)
         viewModel.toolBarTintColor.observe(this, ::setToolBarTintColor)
@@ -181,10 +194,26 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
         requireViewModel().exitAppDirectly()
     }
 
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        if (requestCode == REQUEST_CODE_CALENDAR_PERMISSION) {
+            if (PermissionUtils.checkGrantResults(grantResults)) {
+                requireViewModel().syncToCalendar(this)
+            } else {
+                requireViewBinding().layoutSchedule.showShortSnackBar(R.string.calendar_permission_get_failed)
+            }
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    }
+
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.menu_navCourseImport -> startActivity<OnlineCourseImportActivity>()
             R.id.menu_navCourseExportICS -> requireViewModel().selectScheduleForExportingICS()
+            R.id.menu_navSyncToCalendar -> lifecycleScope.launch {
+                if (PermissionUtils.checkCalendarPermission(this@ScheduleActivity, REQUEST_CODE_CALENDAR_PERMISSION)) {
+                    requireViewModel().syncToCalendar(this@ScheduleActivity)
+                }
+            }
             R.id.menu_navScheduleManage -> startActivity<ScheduleManageActivity>()
             R.id.menu_navCourseManage -> requireViewModel().openCurrentScheduleCourseManageActivity()
             R.id.menu_navSettings -> startActivity<SettingsActivity>()

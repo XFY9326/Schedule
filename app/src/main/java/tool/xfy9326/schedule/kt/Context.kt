@@ -13,6 +13,7 @@ import android.widget.Toast
 import androidx.annotation.*
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import tool.xfy9326.schedule.App
 import tool.xfy9326.schedule.R
@@ -110,5 +111,8 @@ fun Context.getDefaultBackgroundColor(): Int {
         }
     }
 }
+
+@Suppress("UNCHECKED_CAST")
+fun <T> DialogFragment.requireOwner() = (parentFragment ?: requireActivity()) as? T
 
 inline fun Context.weak() = WeakReference(this)

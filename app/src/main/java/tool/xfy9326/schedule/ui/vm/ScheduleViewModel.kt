@@ -8,10 +8,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
-import tool.xfy9326.schedule.beans.Course
-import tool.xfy9326.schedule.beans.Schedule
-import tool.xfy9326.schedule.beans.ScheduleTime
-import tool.xfy9326.schedule.beans.WeekNumType
+import tool.xfy9326.schedule.beans.*
 import tool.xfy9326.schedule.data.AppDataStore
 import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.data.ScheduleDataStore
@@ -19,12 +16,8 @@ import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
 import tool.xfy9326.schedule.kt.*
 import tool.xfy9326.schedule.tools.DisposableValue
 import tool.xfy9326.schedule.tools.ImageHelper
-import tool.xfy9326.schedule.tools.ScheduleCalendarHelper
 import tool.xfy9326.schedule.ui.vm.base.AbstractViewModel
-import tool.xfy9326.schedule.utils.CalendarUtils
-import tool.xfy9326.schedule.utils.CourseManager
-import tool.xfy9326.schedule.utils.CourseTimeUtils
-import tool.xfy9326.schedule.utils.ScheduleManager
+import tool.xfy9326.schedule.utils.*
 import java.util.concurrent.atomic.AtomicBoolean
 
 class ScheduleViewModel : AbstractViewModel() {
@@ -65,6 +58,7 @@ class ScheduleViewModel : AbstractViewModel() {
     val scheduleShared = MutableEventLiveData<Uri?>()
     val selectScheduleForExportingICS = MutableEventLiveData<List<Schedule.Min>>()
     val iceExportStatus = MutableEventLiveData<Boolean>()
+    val syncToCalendarStatus = MutableEventLiveData<ScheduleSync.Result>()
 
     var nightModeChangeOldSurface: Bitmap? = null
     val nightModeChanging = AtomicBoolean(false)
@@ -108,6 +102,15 @@ class ScheduleViewModel : AbstractViewModel() {
         }
     }
 
+    fun syncToCalendar(context: Context) {
+        val weakContext = context.weak()
+        viewModelScope.launch {
+            weakContext.get()?.let {
+                ScheduleSyncHelper.syncCalendar(it)?.let(syncToCalendarStatus::postEvent)
+            }
+        }
+    }
+
     fun exportICS(context: Context, outputUri: Uri) {
         val weakContext = context.weak()
         viewModelScope.launch {
@@ -118,7 +121,7 @@ class ScheduleViewModel : AbstractViewModel() {
                     val courses = ScheduleDBProvider.db.scheduleDAO.getScheduleCourses(scheduleId).first()
                     val firstDayOfWeek = ScheduleDataStore.firstDayOfWeekFlow.first()
                     weakContext.get()?.let {
-                        iceExportStatus.postEvent(ScheduleCalendarHelper(schedule, courses, firstDayOfWeek).dumpICS(it, outputUri))
+                        iceExportStatus.postEvent(ScheduleICSHelper(schedule, courses, firstDayOfWeek).dumpICS(it, outputUri))
                     }
                 } else {
                     iceExportStatus.postEvent(false)

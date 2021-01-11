@@ -6,6 +6,7 @@ import android.widget.TimePicker
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import tool.xfy9326.schedule.kt.buildBundle
+import tool.xfy9326.schedule.kt.requireOwner
 
 class TimePickerDialog : DialogFragment(), TimePickerDialog.OnTimeSetListener {
     companion object {
@@ -36,8 +37,7 @@ class TimePickerDialog : DialogFragment(), TimePickerDialog.OnTimeSetListener {
         )
 
     override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
-        val owner = requireContext()
-        if (owner is OnTimeSetListener) owner.onTimeSet(requireArguments().getString(EXTRA_TAG), hourOfDay, minute)
+        requireOwner<OnTimeSetListener>()?.onTimeSet(requireArguments().getString(EXTRA_TAG), hourOfDay, minute)
     }
 
     interface OnTimeSetListener {
