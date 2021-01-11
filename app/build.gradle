@@ -55,7 +55,6 @@ android {
             minifyEnabled false
             versionNameSuffix '-debug'
             applicationIdSuffix '.debug'
-            manifestPlaceholders = ['ApplicationId': "${applicationId}${applicationIdSuffix}"]
 //            zipAlignEnabled true
 //            minifyEnabled true
 //            shrinkResources true
@@ -66,7 +65,6 @@ android {
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            manifestPlaceholders = ['ApplicationId': "${applicationId}"]
         }
     }
 

@@ -3,11 +3,11 @@ package tool.xfy9326.schedule.ui.fragment
 import android.os.Bundle
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.CheckBoxPreference
-import androidx.preference.Preference
 import androidx.preference.PreferenceDataStore
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.data.AppSettingsDataStore
+import tool.xfy9326.schedule.kt.setOnPrefClickListener
 import tool.xfy9326.schedule.kt.show
 import tool.xfy9326.schedule.kt.showShortSnackBar
 import tool.xfy9326.schedule.ui.fragment.base.AbstractSettingsFragment
@@ -24,7 +24,7 @@ class DataSettingsFragment : AbstractSettingsFragment() {
     override val preferenceDataStore: PreferenceDataStore = AppSettingsDataStore.getPreferenceDataStore(lifecycleScope)
 
     override fun onPrefInit(savedInstanceState: Bundle?) {
-        findPreference<Preference>(KEY_CLEAR_CACHE)?.setOnPreferenceClickListener {
+        setOnPrefClickListener(KEY_CLEAR_CACHE) {
             MaterialAlertDialogBuilder(requireContext()).apply {
                 setTitle(R.string.clear_cache)
                 setMessage(R.string.clear_cache_msg)
@@ -34,9 +34,8 @@ class DataSettingsFragment : AbstractSettingsFragment() {
                 }
                 setNegativeButton(android.R.string.cancel, null)
             }.show(viewLifecycleOwner)
-            false
         }
-        findPreference<Preference>(KEY_RESTORE_SETTINGS)?.setOnPreferenceClickListener {
+        setOnPrefClickListener(KEY_RESTORE_SETTINGS) {
             MaterialAlertDialogBuilder(requireContext()).apply {
                 setTitle(R.string.restore_settings)
                 setMessage(R.string.restore_settings_msg)
@@ -45,7 +44,6 @@ class DataSettingsFragment : AbstractSettingsFragment() {
                 }
                 setNegativeButton(android.R.string.cancel, null)
             }.show(viewLifecycleOwner)
-            false
         }
     }
 

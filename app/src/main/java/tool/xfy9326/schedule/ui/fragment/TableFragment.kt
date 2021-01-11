@@ -40,6 +40,7 @@ class TableFragment : Fragment() {
         super.onAttach(context)
         weekNum = requireArguments().getInt(ARGUMENT_WEEK_NUM)
 
+        viewModel.scheduleBuildData.removeObserver(::onGetScheduleBuildData)
         viewModel.scheduleBuildData.observeForever(::onGetScheduleBuildData)
     }
 
@@ -53,12 +54,14 @@ class TableFragment : Fragment() {
     }
 
     private fun onGetScheduleBuildData(data: Triple<Schedule, Array<Course>, ScheduleStyles>) {
-        lifecycleScope.launch(Dispatchers.Default) {
-            val scheduleData = CourseManager.getScheduleViewDataByWeek(weekNum, data.first, data.second, data.third)
-            val scheduleView = ScheduleView(requireContext(), scheduleData)
-            scheduleView.setOnCourseClickListener(this@TableFragment::onCourseCellClick)
-            lifecycleScope.launchWhenStarted {
-                updateScheduleView(scheduleView)
+        context?.let {
+            lifecycleScope.launch(Dispatchers.Default) {
+                val scheduleData = CourseManager.getScheduleViewDataByWeek(weekNum, data.first, data.second, data.third)
+                val scheduleView = ScheduleView(it, scheduleData)
+                scheduleView.setOnCourseClickListener(this@TableFragment::onCourseCellClick)
+                lifecycleScope.launchWhenStarted {
+                    updateScheduleView(scheduleView)
+                }
             }
         }
     }

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.preference.Preference
+        app:iconSpaceReserved="false"
+        app:key="syncCalendarAttention"
+        app:persistent="false"
+        app:summary="@string/sync_calendar_attention" />
+
+    <androidx.preference.PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="@string/sync_operation">
+
+        <androidx.preference.Preference
+            app:icon="@drawable/ic_sync_24"
+            app:key="syncToCalendar"
+            app:persistent="false"
+            app:title="@string/sync_to_calendar" />
+
+        <androidx.preference.Preference
+            app:icon="@drawable/ic_delete_sweep_24"
+            app:key="clearCalendar"
+            app:persistent="false"
+            app:summary="@string/clear_calendar_sum"
+            app:title="@string/clear_calendar" />
+
+        <androidx.preference.Preference
+            app:icon="@drawable/ic_clear_24"
+            app:key="clearSyncSettings"
+            app:persistent="false"
+            app:summary="@string/clear_calendar_settings_sum"
+            app:title="@string/clear_calendar_settings" />
+
+    </androidx.preference.PreferenceCategory>
+
+    <androidx.preference.PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="@string/sync_settings">
+
+        <androidx.preference.CheckBoxPreference
+            app:defaultValue="true"
+            app:iconSpaceReserved="false"
+            app:key="calendarSyncScheduleDefault"
+            app:summary="@string/calendar_sync_schedule_sum"
+            app:title="@string/calendar_sync_schedule" />
+
+        <androidx.preference.Preference
+            app:iconSpaceReserved="false"
+            app:key="calendarSyncList"
+            app:persistent="false"
+            app:summary="@string/calendar_sync_schedule_default_sum"
+            app:title="@string/calendar_sync_schedule_list" />
+
+        <androidx.preference.CheckBoxPreference
+            app:defaultValue="true"
+            app:iconSpaceReserved="false"
+            app:key="calendarSyncScheduleDefaultVisibleDefault"
+            app:summary="@string/calendar_sync_schedule_default_visible_sum"
+            app:title="@string/calendar_sync_schedule_default_visible" />
+
+        <androidx.preference.Preference
+            app:iconSpaceReserved="false"
+            app:key="calendarVisibleList"
+            app:persistent="false"
+            app:summary="@string/calendar_sync_schedule_default_sum"
+            app:title="@string/calendar_sync_schedule_default_visible_list" />
+
+        <androidx.preference.CheckBoxPreference
+            app:defaultValue="false"
+            app:iconSpaceReserved="false"
+            app:key="calendarSyncScheduleEditableDefault"
+            app:summary="@string/calendar_sync_schedule_editable_sum"
+            app:title="@string/calendar_sync_schedule_editable" />
+
+        <androidx.preference.Preference
+            app:iconSpaceReserved="false"
+            app:key="calendarEditableList"
+            app:persistent="false"
+            app:summary="@string/calendar_sync_schedule_default_sum"
+            app:title="@string/calendar_sync_schedule_editable_list" />
+
+        <androidx.preference.CheckBoxPreference
+            app:defaultValue="false"
+            app:iconSpaceReserved="false"
+            app:key="calendarSyncAddReminderDefault"
+            app:summary="@string/add_calendar_reminder_sum"
+            app:title="@string/add_calendar_reminder" />
+
+        <androidx.preference.Preference
+            app:iconSpaceReserved="false"
+            app:key="calendarSyncAddReminderList"
+            app:persistent="false"
+            app:summary="@string/calendar_sync_schedule_default_sum"
+            app:title="@string/add_calendar_reminder_list" />
+
+        <androidx.preference.SeekBarPreference
+            android:max="60"
+            app:defaultValue="10"
+            app:iconSpaceReserved="false"
+            app:key="calendarSyncReminderMinutes"
+            app:min="0"
+            app:seekBarIncrement="1"
+            app:showSeekBarValue="true"
+            app:summary="@string/calendar_reminder_minutes_sum"
+            app:title="@string/calendar_reminder_minutes" />
+
+    </androidx.preference.PreferenceCategory>
+
+</androidx.preference.PreferenceScreen>

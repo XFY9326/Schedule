@@ -3,6 +3,8 @@
     package="tool.xfy9326.schedule">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_CALENDAR" />
+    <uses-permission android:name="android.permission.WRITE_CALENDAR" />
 
     <queries>
         <intent>
@@ -100,7 +102,7 @@
 
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="${ApplicationId}.file.provider"
+            android:authorities="tool.xfy9326.schedule.file.provider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data

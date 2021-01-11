@@ -1,6 +1,7 @@
 package tool.xfy9326.schedule.data
 
 import tool.xfy9326.schedule.beans.NightMode
+import tool.xfy9326.schedule.beans.ScheduleSync
 import tool.xfy9326.schedule.data.base.AbstractDataStore
 import tool.xfy9326.schedule.kt.tryEnumValueOf
 
@@ -11,9 +12,28 @@ object AppSettingsDataStore : AbstractDataStore("Settings") {
     val keepWebProviderCache by preferencesKey<Boolean>()
     private val debugLogsMaxStoreAmount by preferencesKey<Int>()
     private val handleException by preferencesKey<Boolean>()
+    private val calendarSyncScheduleDefault by preferencesKey<Boolean>()
+    private val calendarSyncScheduleEditableDefault by preferencesKey<Boolean>()
+    private val calendarSyncScheduleDefaultVisibleDefault by preferencesKey<Boolean>()
+    private val calendarSyncAddReminderDefault by preferencesKey<Boolean>()
+    private val calendarSyncReminderMinutes by preferencesKey<Int>()
 
     suspend fun setNightModeType(nightMode: NightMode) = edit {
         it[nightModeType] = nightMode.name
+    }
+
+    fun getDefaultScheduleSyncFlow(scheduleId: Long) = read {
+        ScheduleSync(
+            scheduleId,
+            it[calendarSyncScheduleDefault] ?: true,
+            it[calendarSyncScheduleDefaultVisibleDefault] ?: true,
+            it[calendarSyncScheduleEditableDefault] ?: false,
+            it[calendarSyncAddReminderDefault] ?: false
+        )
+    }
+
+    val calendarSyncReminderMinutesFlow = read {
+        it[calendarSyncReminderMinutes] ?: 10
     }
 
     val handleExceptionFlow = read {

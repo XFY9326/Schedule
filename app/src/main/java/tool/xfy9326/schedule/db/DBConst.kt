@@ -6,6 +6,7 @@ object DBConst {
     const val TABLE_SCHEDULE = "Schedule"
     const val TABLE_COURSE = "Course"
     const val TABLE_COURSE_TIME = "CourseTime"
+    const val TABLE_SCHEDULE_SYNC = "ScheduleSync"
 
     const val COLUMN_SCHEDULE_ID = "scheduleId"
     const val COLUMN_SCHEDULE_NAME = "name"
@@ -15,4 +16,5 @@ object DBConst {
     const val COLUMN_CLASS_START_TIME = "classStartTime"
     const val COLUMN_CLASS_DURATION = "classDuration"
     const val COLUMN_WEEK_NUM = "weekNum"
+    const val COLUMN_SYNC_ID = "syncId"
 }

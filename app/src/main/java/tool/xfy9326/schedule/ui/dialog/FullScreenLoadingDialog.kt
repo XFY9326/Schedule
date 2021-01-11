@@ -15,6 +15,7 @@ import kotlinx.coroutines.*
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.kt.buildBundle
 import tool.xfy9326.schedule.kt.getDrawableCompat
+import tool.xfy9326.schedule.kt.requireOwner
 
 class FullScreenLoadingDialog : DialogFragment() {
     companion object {
@@ -62,11 +63,8 @@ class FullScreenLoadingDialog : DialogFragment() {
                     }
                     setText(android.R.string.cancel)
                     setOnClickListener {
-                        val owner = requireContext()
-                        if (owner is OnRequestCancelListener) {
-                            if (owner.onFullScreenLoadingDialogRequestCancel()) {
-                                dismiss()
-                            }
+                        if (requireOwner<OnRequestCancelListener>()?.onFullScreenLoadingDialogRequestCancel() == true) {
+                            dismiss()
                         }
                     }
                 })

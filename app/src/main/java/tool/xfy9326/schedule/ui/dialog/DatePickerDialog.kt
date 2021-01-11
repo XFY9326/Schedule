@@ -7,6 +7,7 @@ import android.widget.DatePicker
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import tool.xfy9326.schedule.kt.buildBundle
+import tool.xfy9326.schedule.kt.requireOwner
 import tool.xfy9326.schedule.utils.CalendarUtils
 import java.util.*
 
@@ -50,8 +51,7 @@ class DatePickerDialog : DialogFragment(), DatePickerDialog.OnDateSetListener {
     }
 
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
-        val owner = requireContext()
-        if (owner is OnDateSetListener) owner.onDateSet(requireArguments().getString(EXTRA_TAG), getDate(year, month, dayOfMonth))
+        requireOwner<OnDateSetListener>()?.onDateSet(requireArguments().getString(EXTRA_TAG), getDate(year, month, dayOfMonth))
     }
 
     interface OnDateSetListener {

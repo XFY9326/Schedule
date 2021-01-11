@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "dcf4632f369fc161110ae8faead7b714",
+    "identityHash": "85263ed30b71dadca00cded5270d7b9a",
     "entities": [
       {
         "tableName": "Schedule",
@@ -213,12 +213,83 @@
             ]
           }
         ]
+      },
+      {
+        "tableName": "ScheduleSync",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`syncId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `scheduleId` INTEGER NOT NULL, `syncable` INTEGER NOT NULL, `defaultVisible` INTEGER NOT NULL, `editable` INTEGER NOT NULL, `addReminder` INTEGER NOT NULL, FOREIGN KEY(`scheduleId`) REFERENCES `Schedule`(`scheduleId`) ON UPDATE CASCADE ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "syncId",
+            "columnName": "syncId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "scheduleId",
+            "columnName": "scheduleId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "syncable",
+            "columnName": "syncable",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "defaultVisible",
+            "columnName": "defaultVisible",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "editable",
+            "columnName": "editable",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "addReminder",
+            "columnName": "addReminder",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "syncId"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [
+          {
+            "name": "index_ScheduleSync_scheduleId",
+            "unique": false,
+            "columnNames": [
+              "scheduleId"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_ScheduleSync_scheduleId` ON `${TABLE_NAME}` (`scheduleId`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "Schedule",
+            "onDelete": "CASCADE",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "scheduleId"
+            ],
+            "referencedColumns": [
+              "scheduleId"
+            ]
+          }
+        ]
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'dcf4632f369fc161110ae8faead7b714')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '85263ed30b71dadca00cded5270d7b9a')"
     ]
   }
 }

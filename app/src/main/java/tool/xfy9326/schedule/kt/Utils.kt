@@ -6,7 +6,9 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import androidx.preference.Preference
 import tool.xfy9326.schedule.beans.*
+import tool.xfy9326.schedule.ui.fragment.base.AbstractSettingsFragment
 import java.util.*
 import kotlin.math.min
 
@@ -49,4 +51,11 @@ infix fun ScheduleTime.intersect(scheduleTime: ScheduleTime): Boolean {
     }
 
     return start1 <= end2 && end1 >= start2
+}
+
+fun AbstractSettingsFragment.setOnPrefClickListener(key: String, action: (Preference) -> Unit) {
+    findPreference<Preference>(key)?.setOnPreferenceClickListener {
+        action(it)
+        false
+    }
 }

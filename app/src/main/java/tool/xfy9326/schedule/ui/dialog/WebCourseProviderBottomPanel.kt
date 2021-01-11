@@ -10,6 +10,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.databinding.DialogWebCourseProviderBottomPanelBinding
 import tool.xfy9326.schedule.kt.buildBundle
+import tool.xfy9326.schedule.kt.requireOwner
 
 class WebCourseProviderBottomPanel : BottomSheetDialogFragment() {
     companion object {
@@ -36,13 +37,11 @@ class WebCourseProviderBottomPanel : BottomSheetDialogFragment() {
 
             binding.textViewCourseAdapterAuthor.text = getString(R.string.adapter_author, authorName)
             binding.buttonImportCourseToNewSchedule.setOnClickListener {
-                val owner = requireContext()
-                if (owner is OnWebCourseProviderBottomPanelOperateListener) owner.onImportCourseToNewSchedule()
+                requireOwner<OnWebCourseProviderBottomPanelOperateListener>()?.onImportCourseToNewSchedule()
                 dismiss()
             }
             binding.buttonImportCourseToCurrentSchedule.setOnClickListener {
-                val owner = requireContext()
-                if (owner is OnWebCourseProviderBottomPanelOperateListener) owner.onImportCourseToCurrentSchedule()
+                requireOwner<OnWebCourseProviderBottomPanelOperateListener>()?.onImportCourseToCurrentSchedule()
                 dismiss()
             }
 
@@ -57,8 +56,7 @@ class WebCourseProviderBottomPanel : BottomSheetDialogFragment() {
 
     override fun onDismiss(dialog: DialogInterface) {
         super.onDismiss(dialog)
-        val owner = requireContext()
-        if (owner is OnWebCourseProviderBottomPanelOperateListener) owner.onWebCourseProviderBottomPanelDismiss()
+        requireOwner<OnWebCourseProviderBottomPanelOperateListener>()?.onWebCourseProviderBottomPanelDismiss()
     }
 
     interface OnWebCourseProviderBottomPanelOperateListener {
