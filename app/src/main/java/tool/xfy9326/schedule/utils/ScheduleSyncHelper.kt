@@ -19,7 +19,7 @@ import tool.xfy9326.schedule.kt.iterateAll
 import java.util.*
 
 object ScheduleSyncHelper {
-    private const val SYNC_ACCOUNT_NAME = "Schedule"
+    private const val SYNC_ACCOUNT_NAME = "PureSchedule"
     private const val SYNC_ACCOUNT_TYPE = CalendarContract.ACCOUNT_TYPE_LOCAL
 
     private const val CALENDAR_ID_SELECTION = "${CalendarContract.Calendars._ID}=?"
