@@ -31,8 +31,6 @@ data class CourseTime(
     var classTime: ClassTime,
     var location: String?,
 ) : Serializable {
-    val weekNumPattern: WeekNumPattern
-        get() = WeekNumPattern(weekNum)
 
     constructor(weekNum: BooleanArray, weekDay: WeekDay, classStartTime: Int, classDuration: Int, location: String? = null) :
             this(DBConst.DEFAULT_ID, DBConst.DEFAULT_ID, weekNum, ClassTime(weekDay, classStartTime, classDuration), location)

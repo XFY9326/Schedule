@@ -17,6 +17,7 @@ import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.Course
 import tool.xfy9326.schedule.beans.CourseTime
 import tool.xfy9326.schedule.beans.ScheduleTime
+import tool.xfy9326.schedule.beans.WeekNumPattern
 import tool.xfy9326.schedule.databinding.DialogCourseDetailBinding
 import tool.xfy9326.schedule.databinding.ItemCourseDetailTimeBinding
 import tool.xfy9326.schedule.kt.*
@@ -155,7 +156,7 @@ class CourseDetailDialog : DialogFragment() {
 
     private fun getCourseTimeView(courseTime: CourseTime) =
         ItemCourseDetailTimeBinding.inflate(layoutInflater).apply {
-            val weekNumText = courseTime.weekNumPattern.getText(requireContext())
+            val weekNumText = WeekNumPattern(courseTime.weekNum).getText(requireContext())
             textViewCourseWeekNum.text =
                 if (weekNumText.isEmpty()) {
                     getString(R.string.course_detail_week_num_simple, getString(R.string.undefined))

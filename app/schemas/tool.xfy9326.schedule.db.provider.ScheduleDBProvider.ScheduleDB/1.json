@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "85263ed30b71dadca00cded5270d7b9a",
+    "identityHash": "ebc7c54fccc209f704df5eb26037fb93",
     "entities": [
       {
         "tableName": "Schedule",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`scheduleId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `startDate` INTEGER NOT NULL, `endDate` INTEGER NOT NULL, `maxWeekNum` INTEGER NOT NULL, `times` TEXT NOT NULL, `color` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`scheduleId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `startDate` INTEGER NOT NULL, `endDate` INTEGER NOT NULL, `times` TEXT NOT NULL, `color` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "scheduleId",
@@ -29,12 +29,6 @@
           {
             "fieldPath": "endDate",
             "columnName": "endDate",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "maxWeekNum",
-            "columnName": "maxWeekNum",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -289,7 +283,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '85263ed30b71dadca00cded5270d7b9a')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'ebc7c54fccc209f704df5eb26037fb93')"
     ]
   }
 }

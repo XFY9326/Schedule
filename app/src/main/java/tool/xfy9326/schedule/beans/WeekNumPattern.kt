@@ -2,10 +2,16 @@ package tool.xfy9326.schedule.beans
 
 import android.content.Context
 import tool.xfy9326.schedule.R
-import tool.xfy9326.schedule.beans.WeekNumPattern.PatternType.*
+import tool.xfy9326.schedule.beans.WeekNumPattern.PatternType.EMPTY
+import tool.xfy9326.schedule.beans.WeekNumPattern.PatternType.SERIAL
 import tool.xfy9326.schedule.kt.isEven
+import tool.xfy9326.schedule.utils.CalendarUtils
 
-class WeekNumPattern(private val weekNum: BooleanArray) {
+class WeekNumPattern(weekNum: BooleanArray) {
+
+    constructor(courseTime: CourseTime, scheduleCalculateTimes: ScheduleCalculateTimes) :
+            this(fixWeekNumBySchedule(courseTime, scheduleCalculateTimes))
+
     enum class PatternType {
         /**
          * Empty week number array
@@ -61,6 +67,21 @@ class WeekNumPattern(private val weekNum: BooleanArray) {
     }
 
     companion object {
+        private fun fixWeekNumBySchedule(courseTime: CourseTime, scheduleCalculateTimes: ScheduleCalculateTimes): BooleanArray {
+            val tempWeekNum = courseTime.weekNum
+            val maxWeekNum = scheduleCalculateTimes.maxWeekNum
+            val weekStart = scheduleCalculateTimes.firstDayOfWeek
+
+            if (tempWeekNum.first()) {
+                val startWeekDay = CalendarUtils.getWeekDay(scheduleCalculateTimes.actualStartTime)
+                tempWeekNum[0] = startWeekDay.value(weekStart) <= courseTime.classTime.weekDay.value(weekStart)
+            } else if (tempWeekNum.size == maxWeekNum && tempWeekNum.last()) {
+                val endWeekDay = CalendarUtils.getWeekDay(scheduleCalculateTimes.actualEndTime)
+                tempWeekNum[tempWeekNum.lastIndex] = endWeekDay.value(weekStart) >= courseTime.classTime.weekDay.value(weekStart)
+            }
+            return tempWeekNum
+        }
+
         private fun parseTimePeriodArray(weekNum: BooleanArray): Array<TimePeriod> {
             val result = ArrayList<TimePeriod>()
             var i = 0
@@ -94,13 +115,6 @@ class WeekNumPattern(private val weekNum: BooleanArray) {
     val interval: Int
     val amount: Int
     val timePeriodArray: Array<TimePeriod>
-        get() = when (type) {
-            EMPTY -> emptyArray()
-            SINGLE -> arrayOf(TimePeriod(start))
-            SERIAL -> arrayOf(TimePeriod(start, end))
-            SPACED -> parseSpacedTimePeriodArray(start, end, interval)
-            MESSY -> parseTimePeriodArray(weekNum)
-        }
 
     init {
         var startIndex = 0
@@ -137,13 +151,15 @@ class WeekNumPattern(private val weekNum: BooleanArray) {
                 end = -1
                 interval = -1
                 amount = -1
-                MESSY
+                timePeriodArray = parseTimePeriodArray(weekNum)
+                PatternType.MESSY
             }
             !metFirst -> {
                 start = -1
                 end = -1
                 interval = -1
                 amount = 0
+                timePeriodArray = emptyArray()
                 EMPTY
             }
             startIndex == endIndex && !setInterval -> {
@@ -151,13 +167,15 @@ class WeekNumPattern(private val weekNum: BooleanArray) {
                 end = startIndex
                 interval = -1
                 amount = 1
-                SINGLE
+                timePeriodArray = arrayOf(TimePeriod(start))
+                PatternType.SINGLE
             }
             indexInterval == 1 -> {
                 start = startIndex
                 end = endIndex
                 interval = 1
                 amount = endIndex - startIndex + 1
+                timePeriodArray = arrayOf(TimePeriod(start, end))
                 SERIAL
             }
             else -> {
@@ -165,7 +183,8 @@ class WeekNumPattern(private val weekNum: BooleanArray) {
                 end = endIndex
                 interval = indexInterval
                 amount = ((endIndex - startIndex) / (indexInterval + 1)) + 1
-                SPACED
+                timePeriodArray = parseSpacedTimePeriodArray(start, end, interval)
+                PatternType.SPACED
             }
         }
     }
@@ -173,9 +192,9 @@ class WeekNumPattern(private val weekNum: BooleanArray) {
     fun getText(context: Context) =
         when {
             type == EMPTY -> ""
-            type == SINGLE -> (start + 1).toString()
+            type == PatternType.SINGLE -> (start + 1).toString()
             type == SERIAL -> "${start + 1}-${end + 1}"
-            type == SPACED && interval == 2 -> context.getString(
+            type == PatternType.SPACED && interval == 2 -> context.getString(
                 // Index count from 0
                 if (start.isEven()) {
                     R.string.odd_week_description

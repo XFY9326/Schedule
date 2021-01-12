@@ -116,12 +116,12 @@ object ScheduleManager {
     private suspend fun applyNewSettingsToSchedule(schedule: Schedule, scheduleTimes: Array<ScheduleTime>, courses: Array<Course>): Schedule {
         val firstDayOfWeek = ScheduleDataStore.firstDayOfWeekFlow.first()
         val maxWeekNum = CourseManager.getMaxWeekNum(courses)
+        val scheduleMaxWeekNum = CourseTimeUtils.getMaxWeekNum(schedule.startDate, schedule.endDate, firstDayOfWeek)
 
         return schedule.apply {
             times = scheduleTimes
-            if (maxWeekNum > this.maxWeekNum) {
+            if (maxWeekNum > scheduleMaxWeekNum) {
                 endDate = CourseTimeUtils.getTermEndDate(startDate, firstDayOfWeek, maxWeekNum)
-                this.maxWeekNum = maxWeekNum
             }
         }
     }

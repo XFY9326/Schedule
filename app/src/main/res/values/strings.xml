@@ -72,8 +72,8 @@
     <string name="course_cost_time_same_mode_warning">上课时间相等模式开启时只能编辑课程开始时间！</string>
     <string name="start_date_larger_than_end_date_error">开始日期大于结束日期！</string>
     <string name="max_week_num_error">最大周数必须大于一周！</string>
-    <string name="course_num_error">课表中\"%1$s\"超过当前最大课程节数！</string>
-    <string name="course_week_num_error">课表中\"%1$s\"周数大于当前最大周数！</string>
+    <string name="course_num_error">课程\"%1$s\"超过课表最大课程节数！</string>
+    <string name="course_week_num_error">课程\"%1$s\"周数超过课表最大周数！</string>
     <string name="schedule_time_error">课表时间存在错误！</string>
     <string name="schedule_time_conflict_error">第%1$d节课与第%2$d节课时间存在冲突！</string>
     <string name="schedule_time_not_in_one_day_error">所有课程时间必须在一天之内！</string>
@@ -155,7 +155,7 @@
     <string name="general_settings">通用</string>
     <string name="general_settings_sum">基础的通用应用设置</string>
     <string name="first_day_of_week">每周的第一天</string>
-    <string name="first_day_of_week_sum">设定每周的第一天将会改变课表时间计算</string>
+    <string name="first_day_of_week_sum">改变课表周数计算与显示方式（不建议随意修改）</string>
     <string name="night_mode">夜间模式</string>
     <string name="night_mode_sum">使用暗色的夜间显示模式</string>
     <string name="night_mode_enabled">开启夜间模式</string>
@@ -297,7 +297,7 @@
     <string name="add_calendar_reminder_list">设置同步后在日历中添加课程提醒的课表</string>
     <string name="calendar_reminder_minutes">提前提醒时间设定（单位：分钟）</string>
     <string name="calendar_reminder_minutes_sum">注：在日历中可以进行更加详细的设定</string>
-    <string name="clear_calendar_settings">清空日历同步设置数据</string>
+    <string name="clear_calendar_settings">清空课表同步设置数据</string>
     <string name="clear_calendar_settings_sum">清空为每个课表设定的日历同步设置数据</string>
     <string name="clear_calendar_settings_msg">是否清空课表的日历同步设置的数据？</string>
     <string name="clear_calendar_settings_success">所有课表的日历同步设置数据清空成功！</string>

@@ -10,11 +10,13 @@ import tool.xfy9326.schedule.beans.Course
 import tool.xfy9326.schedule.beans.CourseTime
 import tool.xfy9326.schedule.beans.EditError
 import tool.xfy9326.schedule.beans.Schedule
+import tool.xfy9326.schedule.data.ScheduleDataStore
 import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
 import tool.xfy9326.schedule.kt.*
 import tool.xfy9326.schedule.ui.dialog.CourseTimeEditDialog
 import tool.xfy9326.schedule.ui.vm.base.AbstractViewModel
 import tool.xfy9326.schedule.utils.CourseManager
+import tool.xfy9326.schedule.utils.CourseTimeUtils
 
 class CourseEditViewModel : AbstractViewModel() {
     private var isEdit = false
@@ -59,7 +61,7 @@ class CourseEditViewModel : AbstractViewModel() {
                 editCourseTime.postEvent(
                     // Deep copy course time
                     CourseTimeEditDialog.EditBundle(
-                        it.maxWeekNum,
+                        CourseTimeUtils.getMaxWeekNum(it.startDate, it.endDate, ScheduleDataStore.firstDayOfWeekFlow.first()),
                         it.times.size,
                         courseTime?.copy(classTime = courseTime.classTime.copy()),
                         position

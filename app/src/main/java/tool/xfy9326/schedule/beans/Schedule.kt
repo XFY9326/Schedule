@@ -6,7 +6,6 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import tool.xfy9326.schedule.db.DBConst
 import tool.xfy9326.schedule.tools.MaterialColorHelper
-import tool.xfy9326.schedule.utils.CourseTimeUtils
 import java.util.*
 
 @Entity(
@@ -19,17 +18,12 @@ data class Schedule(
     var name: String,
     var startDate: Date,
     var endDate: Date,
-    var maxWeekNum: Int,
     var times: Array<ScheduleTime>,
     @ColorInt
     var color: Int,
 ) {
     constructor(name: String, startDate: Date, endDate: Date, times: Array<ScheduleTime>) :
-            this(DBConst.DEFAULT_ID, name, startDate, endDate, CourseTimeUtils.getMaxWeekNum(startDate, endDate), times, MaterialColorHelper.random())
-
-    fun refreshMaxWeekNum() {
-        maxWeekNum = CourseTimeUtils.getMaxWeekNum(startDate, this.endDate)
-    }
+            this(DBConst.DEFAULT_ID, name, startDate, endDate, times, MaterialColorHelper.random())
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
