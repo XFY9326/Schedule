@@ -23,9 +23,13 @@ object CourseManager {
     fun getScheduleViewDataByWeek(weekNum: Int, schedule: Schedule, courses: Array<Course>, scheduleStyles: ScheduleStyles): ScheduleViewData {
         val result = ArrayList<CourseCell>()
         val showNotThisWeekCourse = scheduleStyles.showNotThisWeekCourse
+        val maxWeekNum = CourseTimeUtils.getMaxWeekNum(schedule.startDate, schedule.endDate, scheduleStyles.firstDayOfWeek)
+        val startWeekDay = CalendarUtils.getWeekDay(schedule.startDate)
+        val endWeekDay = CalendarUtils.getWeekDay(schedule.endDate)
 
         courses.iterateAll { course, courseTime ->
-            val isThisWeekCourse = courseTime.hasThisWeekCourse(weekNum)
+            val isThisWeekCourse =
+                hasThisWeekCourseBySchedule(courseTime, weekNum, maxWeekNum, startWeekDay, endWeekDay, scheduleStyles.firstDayOfWeek)
             if (isThisWeekCourse || showNotThisWeekCourse) {
                 val intersectCells = result.filter {
                     it.classTime intersect courseTime.classTime
@@ -54,6 +58,24 @@ object CourseManager {
 
         return ScheduleViewData(weekNum, schedule, result.toTypedArray(), scheduleStyles)
     }
+
+    private fun hasThisWeekCourseBySchedule(
+        courseTime: CourseTime,
+        weekNum: Int,
+        maxWeekNum: Int,
+        startWeekDay: WeekDay,
+        endWeekDay: WeekDay,
+        firstDayOfWeek: WeekDay,
+    ) =
+        if (courseTime.hasThisWeekCourse(weekNum)) {
+            when (weekNum) {
+                1 -> startWeekDay.value(firstDayOfWeek) <= courseTime.classTime.weekDay.value(firstDayOfWeek)
+                maxWeekNum -> endWeekDay.value(firstDayOfWeek) >= courseTime.classTime.weekDay.value(firstDayOfWeek)
+                else -> true
+            }
+        } else {
+            false
+        }
 
     fun getMaxWeekNum(courses: Array<Course>): Int {
         var defaultValue = 1

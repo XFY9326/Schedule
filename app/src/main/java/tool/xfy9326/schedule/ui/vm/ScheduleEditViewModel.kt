@@ -16,6 +16,7 @@ import tool.xfy9326.schedule.kt.intersect
 import tool.xfy9326.schedule.kt.iterateAll
 import tool.xfy9326.schedule.kt.postEvent
 import tool.xfy9326.schedule.ui.vm.base.AbstractViewModel
+import tool.xfy9326.schedule.utils.CourseTimeUtils
 import tool.xfy9326.schedule.utils.ScheduleManager
 import java.util.*
 
@@ -117,7 +118,7 @@ class ScheduleEditViewModel : AbstractViewModel() {
             return EditError.Type.SCHEDULE_NAME_EMPTY.make()
         }
 
-        val maxWeekNum = schedule.maxWeekNum
+        val maxWeekNum = CourseTimeUtils.getMaxWeekNum(schedule.startDate, schedule.endDate, ScheduleDataStore.firstDayOfWeekFlow.first())
 
         if (schedule.startDate >= schedule.endDate) {
             return EditError.Type.SCHEDULE_DATE_ERROR.make()
@@ -151,7 +152,7 @@ class ScheduleEditViewModel : AbstractViewModel() {
                 return EditError.Type.SCHEDULE_COURSE_NUM_ERROR.make(course.name)
             }
             if (courseTime.weekNum.size > maxWeekNum) {
-                return EditError.Type.SCHEDULE_MAX_WEEK_NUM_ERROR.make(course.name)
+                return EditError.Type.SCHEDULE_COURSE_WEEK_NUM_ERROR.make(course.name)
             }
         }
         return null

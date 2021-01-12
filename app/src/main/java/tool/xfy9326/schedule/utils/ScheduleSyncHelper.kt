@@ -164,18 +164,15 @@ object ScheduleSyncHelper {
         sync: ScheduleSync,
         reminderMinutes: Int,
     ): Boolean {
-        val weekNumPattern = courseTime.weekNumPattern
+        val weekNumPattern = WeekNumPattern(courseTime, scheduleCalculateTimes)
         if (weekNumPattern.type == WeekNumPattern.PatternType.SINGLE) {
-            CourseTimeUtils.getCourseFirstAvailableTime(scheduleCalculateTimes, weekNumPattern.start, classTime = courseTime.classTime)?.let { time ->
+            CourseTimeUtils.getRealClassTime(scheduleCalculateTimes, weekNumPattern.start + 1, courseTime.classTime).let { time ->
                 if (!insertEvent(contentResolver, sync, reminderMinutes, ContentValues().apply {
                         addBasicInfoToCalendarEvent(this, calId, time, course, courseTime)
                     })) return false
             }
         } else if (weekNumPattern.type == WeekNumPattern.PatternType.SPACED || weekNumPattern.type == WeekNumPattern.PatternType.SERIAL) {
-            CourseTimeUtils.getCourseFirstAvailableTime(
-                scheduleCalculateTimes,
-                weekNumPattern.start, weekNumPattern.end, weekNumPattern.interval, classTime = courseTime.classTime
-            )?.let { time ->
+            CourseTimeUtils.getRealClassTime(scheduleCalculateTimes, weekNumPattern.start + 1, courseTime.classTime).let { time ->
                 if (!insertEvent(contentResolver, sync, reminderMinutes, ContentValues().apply {
                         put(
                             CalendarContract.Events.RRULE,
@@ -189,10 +186,7 @@ object ScheduleSyncHelper {
             }
         } else if (weekNumPattern.type == WeekNumPattern.PatternType.MESSY) {
             for (period in weekNumPattern.timePeriodArray) {
-                CourseTimeUtils.getCourseFirstAvailableTime(
-                    scheduleCalculateTimes,
-                    period.start, period.end, classTime = courseTime.classTime
-                )?.let { time ->
+                CourseTimeUtils.getRealClassTime(scheduleCalculateTimes, period.start + 1, courseTime.classTime).let { time ->
                     if (!insertEvent(contentResolver, sync, reminderMinutes, ContentValues().apply {
                             if (period.length > 1) {
                                 put(

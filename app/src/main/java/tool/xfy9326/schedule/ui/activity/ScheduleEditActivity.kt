@@ -180,10 +180,7 @@ class ScheduleEditActivity : ViewModelActivity<ScheduleEditViewModel, ActivitySc
     }
 
     private fun updateTextData() {
-        requireViewModel().apply {
-            editSchedule.name = requireViewBinding().editTextScheduleName.text.toString()
-            editSchedule.refreshMaxWeekNum()
-        }
+        requireViewModel().editSchedule.name = requireViewBinding().editTextScheduleName.text.toString()
     }
 
     private fun applyScheduleToView(schedule: Schedule) {

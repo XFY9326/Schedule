@@ -24,6 +24,8 @@ object CalendarUtils {
             Day(it.get(Calendar.MONTH) + 1, it.get(Calendar.DATE), it.getWeekDay())
         }
 
+    fun getWeekDay(date: Date) = getCalendar(date).getWeekDay()
+
     fun getLastTimeOfDay(date: Date): Date =
         getCalendar(date).apply {
             set(Calendar.HOUR_OF_DAY, 23)

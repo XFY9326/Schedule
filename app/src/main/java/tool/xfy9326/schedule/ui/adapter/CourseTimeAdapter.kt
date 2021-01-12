@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.CourseTime
+import tool.xfy9326.schedule.beans.WeekNumPattern
 import tool.xfy9326.schedule.databinding.ItemCourseTimeBinding
 import tool.xfy9326.schedule.kt.getStringArray
 import tool.xfy9326.schedule.ui.recyclerview.ListViewBindingAdapter
@@ -21,7 +22,7 @@ class CourseTimeAdapter : ListViewBindingAdapter<CourseTime, ItemCourseTimeBindi
         if (!::weekDayStrArr.isInitialized) {
             weekDayStrArr = holder.viewContext.getStringArray(R.array.weekday)
         }
-        val weekNumText = element.weekNumPattern.getText(holder.viewContext)
+        val weekNumText = WeekNumPattern(element.weekNum).getText(holder.viewContext)
         holder.viewBinding.textViewCourseWeekNum.text =
             if (weekNumText.isEmpty()) {
                 holder.viewContext.getString(R.string.course_detail_week_num_simple, holder.viewContext.getString(R.string.undefined))

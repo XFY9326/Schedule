@@ -73,20 +73,15 @@ class ScheduleICSHelper constructor(schedule: Schedule, private val courses: Arr
     }
 
     private fun createCourseTimeVEvent(iCal: ICalendar, course: Course, courseTime: CourseTime) {
-        val weekNumPattern = courseTime.weekNumPattern
+        val weekNumPattern = WeekNumPattern(courseTime, scheduleCalculateTimes)
         if (weekNumPattern.type == SINGLE) {
-            getCourseFirstAvailableTime(weekNumPattern.start, classTime = courseTime.classTime)?.let { time ->
+            CourseTimeUtils.getRealClassTime(scheduleCalculateTimes, weekNumPattern.start + 1, courseTime.classTime).let { time ->
                 iCal.addEvent(VEvent().apply {
                     addBasicInfoToVEvent(this, time, course, courseTime)
                 })
             }
         } else if (weekNumPattern.type == SPACED || weekNumPattern.type == SERIAL) {
-            getCourseFirstAvailableTime(
-                weekNumPattern.start,
-                weekNumPattern.end,
-                weekNumPattern.interval,
-                classTime = courseTime.classTime
-            )?.let { time ->
+            CourseTimeUtils.getRealClassTime(scheduleCalculateTimes, weekNumPattern.start + 1, classTime = courseTime.classTime).let { time ->
                 iCal.addEvent(VEvent().apply {
                     setRecurrenceRule(createWeeklyRRULE(weekNumPattern.interval, weekNumPattern.amount, courseTime.classTime.weekDay, firstDayOfWeek))
                     addBasicInfoToVEvent(this, time, course, courseTime)
@@ -94,7 +89,7 @@ class ScheduleICSHelper constructor(schedule: Schedule, private val courses: Arr
             }
         } else if (weekNumPattern.type == MESSY) {
             for (period in weekNumPattern.timePeriodArray) {
-                getCourseFirstAvailableTime(period.start, period.end, classTime = courseTime.classTime)?.let { time ->
+                CourseTimeUtils.getRealClassTime(scheduleCalculateTimes, period.start + 1, courseTime.classTime).let { time ->
                     iCal.addEvent(VEvent().apply {
                         if (period.length > 1) {
                             setRecurrenceRule(createWeeklyRRULE(1, period.length, courseTime.classTime.weekDay, firstDayOfWeek))
@@ -120,7 +115,4 @@ class ScheduleICSHelper constructor(schedule: Schedule, private val courses: Arr
             setDateEnd(time.second)
         }
     }
-
-    private fun getCourseFirstAvailableTime(start: Int, end: Int = start, interval: Int = 1, classTime: ClassTime) =
-        CourseTimeUtils.getCourseFirstAvailableTime(scheduleCalculateTimes, start, end, interval, classTime)
 }

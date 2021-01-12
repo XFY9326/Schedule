@@ -4,6 +4,7 @@ import android.content.Context
 import android.net.Uri
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
@@ -110,7 +111,7 @@ class SettingsViewModel : AbstractViewModel() {
 
     fun syncToCalendar(context: Context) {
         val weakContext = context.weak()
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.Default) {
             weakContext.get()?.let {
                 ScheduleSyncHelper.syncCalendar(it)?.let(syncToCalendarStatus::postEvent)
             }

@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -25,7 +26,9 @@ class ScheduleViewModel : AbstractViewModel() {
         private val currentScheduleId = AppDataStore.currentScheduleIdFlow
         private val currentScheduleFlow = ScheduleManager.getCurrentScheduleFlow()
         private val weekNumInfoFlow = currentScheduleFlow.combine(ScheduleDataStore.firstDayOfWeekFlow) { schedule, firstDayOfWeek ->
-            CourseTimeUtils.getWeekNum(schedule, firstDayOfWeek) to schedule.maxWeekNum
+            CourseTimeUtils.getWeekNum(schedule, firstDayOfWeek) to CourseTimeUtils.getMaxWeekNum(schedule.startDate,
+                schedule.endDate,
+                firstDayOfWeek)
         }
     }
 
@@ -104,7 +107,7 @@ class ScheduleViewModel : AbstractViewModel() {
 
     fun syncToCalendar(context: Context) {
         val weakContext = context.weak()
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.Default) {
             weakContext.get()?.let {
                 ScheduleSyncHelper.syncCalendar(it)?.let(syncToCalendarStatus::postEvent)
             }
