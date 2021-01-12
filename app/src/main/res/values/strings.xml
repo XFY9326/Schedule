@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">课程表</string>
+    <string name="app_name">Pure课程表</string>
     <string name="app_description">简单的开源课程表APP</string>
     <string name="crash_relaunch_attention">应用运行时出现错误</string>
     <string name="default_schedule_name">默认课表</string>

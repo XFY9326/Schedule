@@ -23,7 +23,7 @@ import java.util.*
 
 class ScheduleICSHelper constructor(schedule: Schedule, private val courses: Array<Course>, private val firstDayOfWeek: WeekDay) {
     companion object {
-        private const val CAL_ID = "Schedule"
+        private const val CAL_ID = "PureSchedule"
         private const val PRODID = "-//Produced By: $CAL_ID//App Version: ${BuildConfig.VERSION_CODE}"
 
         fun createICSFileName(scheduleName: String) = "$CAL_ID-$scheduleName"
