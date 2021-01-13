@@ -92,7 +92,7 @@
 
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="tool.xfy9326.schedule.file.provider"
+            android:authorities="${ApplicationId}.file.provider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
