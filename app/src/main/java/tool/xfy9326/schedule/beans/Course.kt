@@ -30,11 +30,11 @@ data class Course(
     var times: List<CourseTime>,
 ) : Serializable {
 
-    constructor(courseId: Long, scheduleId: Long, name: String, teacher: String?, color: Int) :
+    constructor(courseId: Long, scheduleId: Long, name: String, teacher: String?, color: Int = MaterialColorHelper.random()) :
             this(courseId, scheduleId, name, teacher, color, emptyList())
 
-    constructor(name: String, teacher: String?, times: List<CourseTime>) :
-            this(DBConst.DEFAULT_ID, DBConst.DEFAULT_ID, name, teacher, MaterialColorHelper.random(), times)
+    constructor(name: String, teacher: String?, times: List<CourseTime>, color: Int = MaterialColorHelper.random()) :
+            this(DBConst.DEFAULT_ID, DBConst.DEFAULT_ID, name, teacher, color, times)
 
     fun clone(scheduleId: Long): Course {
         val timesList = ArrayList<CourseTime>(times.size)

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.preference.PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="@string/backup">
+
+        <androidx.preference.Preference
+            app:iconSpaceReserved="false"
+            app:persistent="false"
+            app:summary="@string/backup_schedule_attention" />
+
+        <androidx.preference.Preference
+            app:iconSpaceReserved="false"
+            app:key="backupSchedule"
+            app:persistent="false"
+            app:summary="@string/backup_schedule_sum"
+            app:title="@string/backup_schedule" />
+
+    </androidx.preference.PreferenceCategory>
+
+    <androidx.preference.PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="@string/restore">
+
+        <androidx.preference.Preference
+            app:iconSpaceReserved="false"
+            app:persistent="false"
+            app:summary="@string/restore_schedule_attention" />
+
+        <androidx.preference.Preference
+            app:iconSpaceReserved="false"
+            app:key="restoreSchedule"
+            app:persistent="false"
+            app:summary="@string/restore_schedule_sum"
+            app:title="@string/restore_schedule" />
+
+    </androidx.preference.PreferenceCategory>
+
+</androidx.preference.PreferenceScreen>

@@ -5,6 +5,7 @@ import kotlinx.coroutines.flow.first
 import tool.xfy9326.schedule.App
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.Course
+import tool.xfy9326.schedule.beans.EditError
 import tool.xfy9326.schedule.beans.Schedule
 import tool.xfy9326.schedule.beans.ScheduleTime
 import tool.xfy9326.schedule.data.AppDataStore
@@ -12,6 +13,7 @@ import tool.xfy9326.schedule.data.ScheduleDataStore
 import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
 import tool.xfy9326.schedule.kt.combine
 import tool.xfy9326.schedule.kt.intersect
+import tool.xfy9326.schedule.kt.iterateAll
 import java.util.*
 
 object ScheduleManager {
@@ -101,28 +103,81 @@ object ScheduleManager {
         }
 
     suspend fun saveCurrentSchedule(scheduleTimes: Array<ScheduleTime>, courses: Array<Course>) {
-        val schedule = applyNewSettingsToSchedule(getCurrentScheduleFlow().first(), scheduleTimes, courses)
+        val schedule = getCurrentScheduleFlow().first().also {
+            it.times = scheduleTimes
+            adjustScheduleDateByCourses(it, courses)
+        }
         ScheduleDBProvider.db.scheduleDAO.updateScheduleCourses(schedule, courses)
     }
 
     suspend fun saveNewSchedule(newScheduleName: String?, scheduleTimes: Array<ScheduleTime>, courses: Array<Course>) {
-        val schedule = applyNewSettingsToSchedule(createNewSchedule(), scheduleTimes, courses)
+        val schedule = createNewSchedule().also {
+            it.times = scheduleTimes
+            adjustScheduleDateByCourses(it, courses)
+        }
         if (newScheduleName != null) {
             schedule.name = newScheduleName
         }
         ScheduleDBProvider.db.scheduleDAO.putNewScheduleCourses(schedule, courses)
     }
 
-    private suspend fun applyNewSettingsToSchedule(schedule: Schedule, scheduleTimes: Array<ScheduleTime>, courses: Array<Course>): Schedule {
+    suspend fun saveNewSchedule(schedule: Schedule, courses: Array<Course>) {
+        adjustScheduleDateByCourses(schedule, courses)
+        ScheduleDBProvider.db.scheduleDAO.putNewScheduleCourses(schedule, courses)
+    }
+
+    private suspend fun adjustScheduleDateByCourses(schedule: Schedule, courses: Array<Course>) {
         val firstDayOfWeek = ScheduleDataStore.firstDayOfWeekFlow.first()
         val maxWeekNum = CourseManager.getMaxWeekNum(courses)
         val scheduleMaxWeekNum = CourseTimeUtils.getMaxWeekNum(schedule.startDate, schedule.endDate, firstDayOfWeek)
 
-        return schedule.apply {
-            times = scheduleTimes
+        schedule.apply {
             if (maxWeekNum > scheduleMaxWeekNum) {
                 endDate = CourseTimeUtils.getTermEndDate(startDate, firstDayOfWeek, maxWeekNum)
             }
         }
+    }
+
+    suspend fun validateSchedule(schedule: Schedule, scheduleCourses: Array<Course>): EditError? {
+        if (schedule.name.isBlank() || schedule.name.isEmpty()) {
+            return EditError.Type.SCHEDULE_NAME_EMPTY.make()
+        }
+
+        val maxWeekNum = CourseTimeUtils.getMaxWeekNum(schedule.startDate, schedule.endDate, ScheduleDataStore.firstDayOfWeekFlow.first())
+
+        if (schedule.startDate >= schedule.endDate) {
+            return EditError.Type.SCHEDULE_DATE_ERROR.make()
+        }
+        if (maxWeekNum <= 0) {
+            return EditError.Type.SCHEDULE_MAX_WEEK_NUM_ERROR.make()
+        }
+
+        for (i1 in schedule.times.indices) {
+            val time1 = schedule.times[i1]
+
+            if (time1.startHour >= time1.endHour && time1.startMinute >= time1.endMinute) {
+                return EditError.Type.SCHEDULE_TIME_START_END_ERROR.make(i1 + 1)
+            }
+
+            for (i2 in (i1 + 1)..schedule.times.lastIndex) {
+                val time2 = schedule.times[i2]
+                if (time1 intersect time2) {
+                    return EditError.Type.SCHEDULE_TIME_CONFLICT_ERROR.make(i1 + 1, i2 + 1)
+                }
+                if (time1.endHour >= time2.startHour && time1.endMinute >= time2.startMinute) {
+                    return EditError.Type.SCHEDULE_TIME_NOT_IN_ONE_DAY_ERROR.make()
+                }
+            }
+        }
+
+        scheduleCourses.iterateAll { course, courseTime ->
+            if (courseTime.classTime.classEndTime > schedule.times.size) {
+                return EditError.Type.SCHEDULE_COURSE_NUM_ERROR.make(course.name)
+            }
+            if (courseTime.weekNum.size > maxWeekNum) {
+                return EditError.Type.SCHEDULE_COURSE_WEEK_NUM_ERROR.make(course.name)
+            }
+        }
+        return null
     }
 }

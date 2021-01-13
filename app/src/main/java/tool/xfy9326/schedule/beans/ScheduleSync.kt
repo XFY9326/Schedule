@@ -30,9 +30,4 @@ data class ScheduleSync(
     constructor(scheduleId: Long, syncable: Boolean, defaultVisible: Boolean, editable: Boolean, addReminder: Boolean) :
             this(DBConst.DEFAULT_ID, scheduleId, syncable, defaultVisible, editable, addReminder)
 
-    data class Result(
-        val success: Boolean,
-        val total: Int = 0,
-        val failedAmount: Int = 0,
-    )
 }

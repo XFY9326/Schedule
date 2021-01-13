@@ -102,8 +102,8 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
         viewModel.selectScheduleForExportingICS.observeEvent(this) {
             DialogUtils.showScheduleSelectDialog(this, R.string.export_to_ics, it) { name, id ->
                 viewModel.waitExportScheduleId.write(id)
-                startActivityForResult(
-                    IntentUtils.getCreateNewDocumentIntent(ScheduleICSHelper.createICSFileName(name), MIMEConst.MIME_TEXT_CALENDAR),
+                tryStartActivityForResult(
+                    IntentUtils.getCreateNewDocumentIntent(ScheduleICSHelper.createICSFileName(this, name), MIMEConst.MIME_TEXT_CALENDAR),
                     REQUEST_CODE_EXPORT_ICS_FILE
                 )
             }
@@ -180,7 +180,7 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
                 if (outputUri != null) {
                     requireViewModel().exportICS(this, outputUri)
                 } else {
-                    requireViewBinding().layoutSchedule.showShortSnackBar(R.string.output_file_failed)
+                    requireViewBinding().layoutSchedule.showShortSnackBar(R.string.output_file_create_failed)
                 }
             } else {
                 requireViewModel().waitExportScheduleId.consume()

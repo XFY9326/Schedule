@@ -1,6 +1,7 @@
 package tool.xfy9326.schedule.io
 
 import android.content.Context
+import android.net.Uri
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
@@ -43,4 +44,30 @@ object TextIO {
         }
         return@withContext defaultText
     }
+
+    @Suppress("BlockingMethodInNonBlockingContext")
+    suspend fun writeText(text: String, context: Context, outputUri: Uri, charset: Charset = Charsets.UTF_8) = withContext(Dispatchers.IO) {
+        try {
+            context.contentResolver.openOutputStream(outputUri)?.bufferedWriter(charset)?.use {
+                it.write(text)
+            }
+            return@withContext true
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return@withContext false
+    }
+
+    @Suppress("BlockingMethodInNonBlockingContext")
+    suspend fun readText(context: Context, outputUri: Uri, defaultText: String? = null, charset: Charset = Charsets.UTF_8) =
+        withContext(Dispatchers.IO) {
+            try {
+                context.contentResolver.openInputStream(outputUri)?.bufferedReader(charset)?.use {
+                    return@withContext it.readText()
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+            return@withContext defaultText
+        }
 }

@@ -126,6 +126,32 @@ object CourseManager {
             BooleanArray(maxWeekNum) { false }
         }, WeekDay.MONDAY, 1, 1, null)
 
+    fun validateCourse(course: Course, otherCourses: Array<Course>): EditError? {
+        if (course.name.isBlank() || course.name.isEmpty()) {
+            return EditError.Type.COURSE_NAME_EMPTY.make()
+        }
+
+        if (course.times.isEmpty()) {
+            EditError.Type.COURSE_TIME_LIST_EMPTY.make()
+        }
+
+        course.times.forEachTwo { i1, courseTime1, i2, courseTime2 ->
+            if (courseTime1 intersect courseTime2) return EditError.Type.COURSE_TIME_INNER_CONFLICT_ERROR.make(i1 + 1, i2 + 1)
+        }
+
+        for (others in otherCourses) {
+            for (time in others.times) {
+                for ((i, courseTime) in course.times.withIndex()) {
+                    if (courseTime intersect time) {
+                        return EditError.Type.COURSE_TIME_OTHERS_CONFLICT_ERROR.make(i + 1, others.name)
+                    }
+                }
+            }
+        }
+
+        return null
+    }
+
     suspend fun generateScheduleImageByWeekNum(context: Context, scheduleId: Long, weekNum: Int, @Px targetWidth: Int) =
         withContext(Dispatchers.Default) {
             val schedule = ScheduleDBProvider.db.scheduleDAO.getSchedule(scheduleId).firstOrNull() ?: return@withContext null

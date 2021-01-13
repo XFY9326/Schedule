@@ -16,7 +16,6 @@ import tool.xfy9326.schedule.App
 import tool.xfy9326.schedule.BuildConfig
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.*
-import tool.xfy9326.schedule.beans.WeekDay.*
 import tool.xfy9326.schedule.beans.WeekNumPattern.PatternType.*
 import tool.xfy9326.schedule.kt.iterateAll
 import java.util.*
@@ -26,26 +25,15 @@ class ScheduleICSHelper constructor(schedule: Schedule, private val courses: Arr
         private const val CAL_ID = "PureSchedule"
         private const val PRODID = "-//Produced By: $CAL_ID//App Version: ${BuildConfig.VERSION_CODE}"
 
-        fun createICSFileName(scheduleName: String) = "$CAL_ID-$scheduleName"
+        fun createICSFileName(context: Context, scheduleName: String) = "${context.getString(R.string.app_name)}-$scheduleName"
 
         private fun createWeeklyRRULE(interval: Int, count: Int, weekDay: WeekDay, firstDayOfWeek: WeekDay) =
             Recurrence.Builder(Frequency.WEEKLY).apply {
                 interval(interval)
                 count(count)
-                byDay(getDayOfWeek(weekDay))
-                workweekStarts(getDayOfWeek(firstDayOfWeek))
+                byDay(DayOfWeek.valueOfAbbr(weekDay.shortName))
+                workweekStarts(DayOfWeek.valueOfAbbr(firstDayOfWeek.shortName))
             }.build()
-
-        private fun getDayOfWeek(weekDay: WeekDay) =
-            when (weekDay) {
-                MONDAY -> DayOfWeek.MONDAY
-                TUESDAY -> DayOfWeek.TUESDAY
-                WEDNESDAY -> DayOfWeek.WEDNESDAY
-                THURSDAY -> DayOfWeek.THURSDAY
-                FRIDAY -> DayOfWeek.FRIDAY
-                SATURDAY -> DayOfWeek.SATURDAY
-                SUNDAY -> DayOfWeek.SUNDAY
-            }
     }
 
     private val scheduleCalculateTimes = ScheduleCalculateTimes(schedule, firstDayOfWeek)

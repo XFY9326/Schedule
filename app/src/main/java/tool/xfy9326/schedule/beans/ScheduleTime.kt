@@ -44,6 +44,18 @@ data class ScheduleTime(
                 return get(Calendar.HOUR_OF_DAY) to get(Calendar.MINUTE)
             }
         }
+
+        fun fromTimeStr(startTimeStr: String, endTimeStr: String): ScheduleTime {
+            val start = parseTimeStr(startTimeStr)
+            val end = parseTimeStr(endTimeStr)
+            return ScheduleTime(start.first, start.second, end.first, end.second)
+        }
+
+        private fun parseTimeStr(str: String): Pair<Int, Int> {
+            require(HOUR_MINUTE_DIVIDE in str) { "Time str format error!" }
+            val num = str.split(HOUR_MINUTE_DIVIDE)
+            return num[0].toInt() to num[1].toInt()
+        }
     }
 
     fun setDuration(minute: Int) {

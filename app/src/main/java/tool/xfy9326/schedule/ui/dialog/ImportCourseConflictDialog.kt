@@ -6,14 +6,21 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import tool.xfy9326.schedule.R
+import tool.xfy9326.schedule.kt.buildBundle
 import tool.xfy9326.schedule.kt.requireOwner
+import java.io.Serializable
 
 class ImportCourseConflictDialog : DialogFragment(), DialogInterface.OnClickListener {
     companion object {
         private val DIALOG_TAG = ImportCourseConflictDialog::class.simpleName
+        private const val EXTRA_PASSED_VALUE = "EXTRA_PASSED_VALUE"
 
-        fun showDialog(fragmentManager: FragmentManager) {
-            ImportCourseConflictDialog().show(fragmentManager, DIALOG_TAG)
+        fun showDialog(fragmentManager: FragmentManager, passedValue: Serializable? = null) {
+            ImportCourseConflictDialog().apply {
+                arguments = buildBundle {
+                    putSerializable(EXTRA_PASSED_VALUE, passedValue)
+                }
+            }.show(fragmentManager, DIALOG_TAG)
         }
     }
 
@@ -32,10 +39,12 @@ class ImportCourseConflictDialog : DialogFragment(), DialogInterface.OnClickList
     }
 
     override fun onClick(dialog: DialogInterface?, which: Int) {
-        requireOwner<OnConfirmImportCourseConflictListener>()?.onConfirmImportCourseConflict()
+        requireOwner<OnConfirmImportCourseConflictListener>()?.onConfirmImportCourseConflict(
+            requireArguments().getSerializable(EXTRA_PASSED_VALUE)
+        )
     }
 
     interface OnConfirmImportCourseConflictListener {
-        fun onConfirmImportCourseConflict()
+        fun onConfirmImportCourseConflict(value: Serializable?)
     }
 }

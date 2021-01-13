@@ -10,10 +10,7 @@ import androidx.preference.PreferenceDataStore
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.data.AppSettingsDataStore
-import tool.xfy9326.schedule.kt.observeEvent
-import tool.xfy9326.schedule.kt.setOnPrefClickListener
-import tool.xfy9326.schedule.kt.show
-import tool.xfy9326.schedule.kt.showShortSnackBar
+import tool.xfy9326.schedule.kt.*
 import tool.xfy9326.schedule.ui.dialog.CrashViewDialog
 import tool.xfy9326.schedule.ui.fragment.base.AbstractSettingsFragment
 import tool.xfy9326.schedule.utils.IntentUtils
@@ -63,7 +60,7 @@ class DebugSettingsFragment : AbstractSettingsFragment() {
             outputDebugLogs.observeEvent(this@DebugSettingsFragment) {
                 showDebugLogsSelectDialog(it, R.string.output_debug_logs) { log ->
                     waitCreateLogFileName.write(log)
-                    startActivityForResult(IntentUtils.getCreateNewDocumentIntent(log), REQUEST_CODE_CREATE_LOG_DOCUMENT)
+                    tryStartActivityForResult(IntentUtils.getCreateNewDocumentIntent(log), REQUEST_CODE_CREATE_LOG_DOCUMENT)
                 }
             }
             showDebugLog.observeEvent(this@DebugSettingsFragment) {
@@ -88,7 +85,7 @@ class DebugSettingsFragment : AbstractSettingsFragment() {
                 if (outputUri != null) {
                     requireSettingsViewModel()?.outputLogFileToUri(requireContext(), outputUri)
                 } else {
-                    requireRootLayout()?.showShortSnackBar(R.string.output_file_failed)
+                    requireRootLayout()?.showShortSnackBar(R.string.output_file_create_failed)
                 }
             } else {
                 requireSettingsViewModel()?.waitCreateLogFileName?.consume()

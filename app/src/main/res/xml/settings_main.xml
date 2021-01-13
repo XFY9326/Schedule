@@ -29,6 +29,13 @@
         app:title="@string/calendar_sync_settings" />
 
     <androidx.preference.Preference
+        app:fragment="tool.xfy9326.schedule.ui.fragment.BackupRestoreSettingsFragment"
+        app:icon="@drawable/ic_backup_restore_24"
+        app:persistent="false"
+        app:summary="@string/backup_and_restore_sum"
+        app:title="@string/backup_and_restore" />
+
+    <androidx.preference.Preference
         app:icon="@drawable/ic_feedback_24"
         app:key="feedback"
         app:persistent="false"

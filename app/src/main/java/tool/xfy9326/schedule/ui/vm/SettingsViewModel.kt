@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import tool.xfy9326.schedule.App
+import tool.xfy9326.schedule.beans.BatchResult
 import tool.xfy9326.schedule.beans.Schedule
 import tool.xfy9326.schedule.beans.ScheduleSync
 import tool.xfy9326.schedule.data.AppSettingsDataStore
@@ -26,6 +27,7 @@ import tool.xfy9326.schedule.tools.DisposableValue
 import tool.xfy9326.schedule.tools.ExceptionHandler
 import tool.xfy9326.schedule.tools.ImageHelper
 import tool.xfy9326.schedule.ui.vm.base.AbstractViewModel
+import tool.xfy9326.schedule.utils.BackupUtils
 import tool.xfy9326.schedule.utils.DirUtils
 import tool.xfy9326.schedule.utils.ScheduleSyncHelper
 
@@ -44,10 +46,45 @@ class SettingsViewModel : AbstractViewModel() {
     val outputDebugLogs by lazy { MutableEventLiveData<Array<String>>() }
     val showDebugLog by lazy { MutableEventLiveData<String>() }
     val outputLogFileToUriResult by lazy { MutableEventLiveData<Boolean>() }
-    val syncToCalendarStatus by lazy { MutableEventLiveData<ScheduleSync.Result>() }
+    val backupScheduleToUriResult by lazy { MutableEventLiveData<Boolean>() }
+    val restoreScheduleFromUriResult by lazy { MutableEventLiveData<Pair<BatchResult, Boolean>>() }
+    val syncToCalendarStatus by lazy { MutableEventLiveData<BatchResult>() }
     val scheduleSyncEdit by lazy { MutableEventLiveData<Pair<String, List<Pair<Schedule.Min, ScheduleSync>>>>() }
+    val scheduleBackupList by lazy { MutableEventLiveData<List<Schedule.Min>>() }
 
     val waitCreateLogFileName by lazy { DisposableValue<String>() }
+    val waitBackupScheduleId by lazy { DisposableValue<List<Long>>() }
+
+    fun getScheduleBackupList() {
+        viewModelScope.launch {
+            scheduleBackupList.postEvent(ScheduleDBProvider.db.scheduleDAO.getScheduleMin().first())
+        }
+    }
+
+    fun backupScheduleToUri(context: Context, outputUri: Uri) {
+        val weakContext = context.weak()
+        viewModelScope.launch(Dispatchers.Default) {
+            val idList = waitBackupScheduleId.read()
+            if (idList != null) {
+                weakContext.get()?.let {
+                    backupScheduleToUriResult.postEvent(
+                        BackupUtils.backupSchedules(it, outputUri, idList)
+                    )
+                }
+            } else {
+                backupScheduleToUriResult.postEvent(false)
+            }
+        }
+    }
+
+    fun restoreScheduleFromUri(context: Context, outputUri: Uri) {
+        val weakContext = context.weak()
+        viewModelScope.launch(Dispatchers.Default) {
+            weakContext.get()?.let {
+                restoreScheduleFromUriResult.postEvent(BackupUtils.restoreSchedules(it, outputUri))
+            }
+        }
+    }
 
     fun getScheduleSyncEditList(key: String) {
         viewModelScope.launch {
@@ -119,7 +156,7 @@ class SettingsViewModel : AbstractViewModel() {
     }
 
     fun importScheduleImage(uri: Uri) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.Default) {
             val quality = ScheduleDataStore.scheduleBackgroundImageQualityFlow.first()
             val imageName = ImageHelper.importImageFromUri(App.instance, uri, DirUtils.PictureAppDir, quality)
             if (imageName == null) {
@@ -136,7 +173,7 @@ class SettingsViewModel : AbstractViewModel() {
 
     fun outputLogFileToUri(context: Context, outputUri: Uri) {
         val weakContext = context.weak()
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             val logName = waitCreateLogFileName.read()
             if (logName != null) {
                 weakContext.get()?.let {

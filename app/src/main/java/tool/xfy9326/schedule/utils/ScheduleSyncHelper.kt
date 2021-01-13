@@ -48,18 +48,7 @@ object ScheduleSyncHelper {
     }
 
     private fun getWeeklyRRULEText(interval: Int, count: Int, weekDay: WeekDay, firstDayOfWeek: WeekDay) =
-        "FREQ=WEEKLY;COUNT=$count;INTERVAL=$interval;BYDAY=${getDayOfWeek(weekDay)};WKST=${getDayOfWeek(firstDayOfWeek)}"
-
-    private fun getDayOfWeek(weekDay: WeekDay) =
-        when (weekDay) {
-            WeekDay.MONDAY -> "MO"
-            WeekDay.TUESDAY -> "TU"
-            WeekDay.WEDNESDAY -> "WE"
-            WeekDay.THURSDAY -> "TH"
-            WeekDay.FRIDAY -> "FR"
-            WeekDay.SATURDAY -> "SA"
-            WeekDay.SUNDAY -> "SU"
-        }
+        "FREQ=WEEKLY;COUNT=$count;INTERVAL=$interval;BYDAY=${weekDay.shortName};WKST=${firstDayOfWeek.shortName}"
 
     suspend fun syncCalendar(context: Context) = withContext(Dispatchers.Unconfined) {
         val contentResolver = context.contentResolver
@@ -90,11 +79,11 @@ object ScheduleSyncHelper {
                     }
                 }
 
-                return@withContext ScheduleSync.Result(true, totalSchedule, errorScheduleAmount)
+                return@withContext BatchResult(true, totalSchedule, errorScheduleAmount)
             } catch (e: Exception) {
                 clearAllCalendar(contentResolver)
                 e.printStackTrace()
-                return@withContext ScheduleSync.Result(false)
+                return@withContext BatchResult(false)
             } finally {
                 syncLock.unlock()
             }
