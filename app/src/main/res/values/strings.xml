@@ -301,6 +301,8 @@
     <string name="clear_calendar_settings_sum">清空为每个课表设定的日历同步设置数据</string>
     <string name="clear_calendar_settings_msg">是否清空课表的日历同步设置的数据？</string>
     <string name="clear_calendar_settings_success">所有课表的日历同步设置数据清空成功！</string>
+    <string name="attention">注意</string>
+    <string name="feedback_wechat_notification_msg">\u3000\u3000由于本地浏览器会不定期清理缓存导致反馈用户名变更，您将有可能无法查看以往的反馈信息。\n\u3000\u3000如果您对反馈回复有需求请在发帖后选择在微信中接收反馈信息。</string>
 
     <string name="scare_type_fit_center">等比缩放，从中间开始填充满</string>
     <string name="scare_type_center_crop">等比缩放直到完全填充</string>
@@ -319,6 +321,6 @@
 
     <string name="time_period" translatable="false">~</string>
     <string name="author" translatable="false">逸雪飞扬 (XFY9326)</string>
-    <string name="email" translatable="false">xfy9326@126.com</string>
+    <string name="email" translatable="false">XFY9326@126.com</string>
     <string name="open_source_website_url" translatable="false">https://github.com/XFY9326/Schedule</string>
 </resources>

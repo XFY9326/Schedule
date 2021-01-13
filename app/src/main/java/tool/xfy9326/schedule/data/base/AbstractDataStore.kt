@@ -9,11 +9,9 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.createDataStore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.shareIn
+import kotlinx.coroutines.flow.*
 import tool.xfy9326.schedule.App
+import tool.xfy9326.schedule.kt.tryEnumValueOf
 import kotlin.properties.ReadOnlyProperty
 
 abstract class AbstractDataStore(val name: String) {
@@ -30,6 +28,45 @@ abstract class AbstractDataStore(val name: String) {
 
     suspend fun clear() = edit {
         it.clear()
+    }
+
+    protected fun <T> Preferences.Key<T>.readAsFlow() = read {
+        it[this]
+    }
+
+    protected fun <T> Preferences.Key<T>.readAsFlow(defaultValue: T) = read {
+        it[this] ?: defaultValue
+    }
+
+    protected suspend fun Preferences.Key<Boolean>.readAsShowOnce() = read {
+        val value = it[this] ?: false
+        if (!value) {
+            edit { editPref ->
+                editPref[this] = true
+            }
+        }
+        value
+    }.first()
+
+    protected inline fun <reified E : Enum<E>> Preferences.Key<String>.readEnumAsFlow(defaultValue: E) = read {
+        tryEnumValueOf<E>(it[this]) ?: defaultValue
+    }
+
+    protected fun <T> Preferences.Key<T>.readAndInitAsFlow(initBlock: suspend () -> T?) = read {
+        if (it.contains(this)) {
+            it[this]
+        } else {
+            initBlock()?.let { default ->
+                edit { editPref ->
+                    editPref[this] = default
+                }
+            }
+            null
+        }
+    }.filterNotNull()
+
+    protected suspend fun <T> Preferences.Key<T>.saveData(data: T) = dataStore.edit {
+        it[this] = data
     }
 
     protected inline fun <reified T : Any> preferencesKey() =

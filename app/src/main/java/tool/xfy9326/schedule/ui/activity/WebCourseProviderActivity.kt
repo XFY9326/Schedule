@@ -70,9 +70,7 @@ class WebCourseProviderActivity : ViewModelActivity<WebCourseProviderViewModel, 
         viewModel.registerConfig(intent.getSerializableExtra(EXTRA_COURSE_IMPORT_CONFIG)
             ?.tryCast<CourseImportConfig<WebCourseProvider, WebCourseParser>>()!!)
 
-        runBlocking {
-            if (AppSettingsDataStore.keepWebProviderCacheFlow.first()) clearAll()
-        }
+        if (runBlocking { AppSettingsDataStore.keepWebProviderCacheFlow.first() }) clearAll()
     }
 
     override fun onBindLiveData(viewBinding: ActivityWebCourseProviderBinding, viewModel: WebCourseProviderViewModel) {
@@ -140,7 +138,6 @@ class WebCourseProviderActivity : ViewModelActivity<WebCourseProviderViewModel, 
 
     override fun onHandleSavedInstanceState(bundle: Bundle?, viewBinding: ActivityWebCourseProviderBinding, viewModel: WebCourseProviderViewModel) {
         if (bundle == null) {
-            clearAll()
             viewBinding.webViewWebCourseProvider.loadUrl(viewModel.courseProvider.initPageUrl)
         } else {
             if (WebCourseProviderBottomPanel.isShowing(supportFragmentManager)) {

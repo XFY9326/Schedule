@@ -3,7 +3,6 @@ package tool.xfy9326.schedule.data
 import tool.xfy9326.schedule.beans.NightMode
 import tool.xfy9326.schedule.beans.ScheduleSync
 import tool.xfy9326.schedule.data.base.AbstractDataStore
-import tool.xfy9326.schedule.kt.tryEnumValueOf
 
 object AppSettingsDataStore : AbstractDataStore("Settings") {
     val nightModeType by preferencesKey<String>()
@@ -18,9 +17,7 @@ object AppSettingsDataStore : AbstractDataStore("Settings") {
     private val calendarSyncAddReminderDefault by preferencesKey<Boolean>()
     private val calendarSyncReminderMinutes by preferencesKey<Int>()
 
-    suspend fun setNightModeType(nightMode: NightMode) = edit {
-        it[nightModeType] = nightMode.name
-    }
+    suspend fun setNightModeType(nightMode: NightMode) = nightModeType.saveData(nightMode.name)
 
     fun getDefaultScheduleSyncFlow(scheduleId: Long) = read {
         ScheduleSync(
@@ -32,31 +29,17 @@ object AppSettingsDataStore : AbstractDataStore("Settings") {
         )
     }
 
-    val calendarSyncReminderMinutesFlow = read {
-        it[calendarSyncReminderMinutes] ?: 10
-    }
+    val calendarSyncReminderMinutesFlow = calendarSyncReminderMinutes.readAsFlow(10)
 
-    val handleExceptionFlow = read {
-        it[handleException] ?: true
-    }
+    val handleExceptionFlow = handleException.readAsFlow(true)
 
-    val keepWebProviderCacheFlow = read {
-        it[keepWebProviderCache] ?: false
-    }
+    val keepWebProviderCacheFlow = keepWebProviderCache.readAsFlow(false)
 
-    val nightModeTypeFlow = read {
-        tryEnumValueOf(it[nightModeType]) ?: NightMode.FOLLOW_SYSTEM
-    }
+    val nightModeTypeFlow = nightModeType.readEnumAsFlow(NightMode.FOLLOW_SYSTEM)
 
-    val exitAppDirectlyFlow = read {
-        it[exitAppDirectly] ?: false
-    }
+    val exitAppDirectlyFlow = exitAppDirectly.readAsFlow(false)
 
-    val saveImageWhileSharingFlow = read {
-        it[saveImageWhileSharing] ?: false
-    }
+    val saveImageWhileSharingFlow = saveImageWhileSharing.readAsFlow(false)
 
-    val debugLogsMaxStoreAmountFlow = read {
-        it[debugLogsMaxStoreAmount] ?: 5
-    }
+    val debugLogsMaxStoreAmountFlow = debugLogsMaxStoreAmount.readAsFlow(5)
 }

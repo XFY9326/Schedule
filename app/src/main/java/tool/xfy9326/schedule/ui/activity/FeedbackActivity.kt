@@ -11,8 +11,11 @@ import android.webkit.WebChromeClient
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import kotlinx.coroutines.runBlocking
 import tool.xfy9326.schedule.BuildConfig
 import tool.xfy9326.schedule.R
+import tool.xfy9326.schedule.data.AppDataStore
 import tool.xfy9326.schedule.databinding.ActivityFeedbackBinding
 import tool.xfy9326.schedule.kt.buildBundle
 import tool.xfy9326.schedule.ui.activity.base.ViewBindingActivity
@@ -60,6 +63,8 @@ class FeedbackActivity : ViewBindingActivity<ActivityFeedbackBinding>() {
                 }
             }
         }
+
+        tryShowFeedbackNotificationMsg()
     }
 
     override fun onHandleSavedInstanceState(bundle: Bundle?, viewBinding: ActivityFeedbackBinding) {
@@ -94,6 +99,17 @@ class FeedbackActivity : ViewBindingActivity<ActivityFeedbackBinding>() {
             R.id.menu_feedbackOpenInBrowser -> IntentUtils.openUrlInBrowser(this, ONLINE_FEEDBACK_URL)
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun tryShowFeedbackNotificationMsg() {
+        if (!runBlocking { AppDataStore.hasShownFeedbackAttention() }) {
+            MaterialAlertDialogBuilder(this@FeedbackActivity).apply {
+                setTitle(R.string.attention)
+                setMessage(R.string.feedback_wechat_notification_msg)
+                setCancelable(false)
+                setPositiveButton(android.R.string.ok, null)
+            }.show()
+        }
     }
 
     private fun changeProgressBar(newProgress: Int) {
