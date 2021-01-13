@@ -11,21 +11,22 @@ import tool.xfy9326.schedule.content.base.CourseImportConfig
 import tool.xfy9326.schedule.content.base.NetworkCourseParser
 import tool.xfy9326.schedule.content.base.NetworkCourseProvider
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
-import tool.xfy9326.schedule.databinding.ActivityLoginCourseProviderBinding
+import tool.xfy9326.schedule.databinding.ActivityNetworkCourseProviderBinding
 import tool.xfy9326.schedule.kt.*
 import tool.xfy9326.schedule.ui.activity.base.ViewModelActivity
 import tool.xfy9326.schedule.ui.dialog.ImportCourseConflictDialog
 import tool.xfy9326.schedule.ui.vm.NetworkCourseProviderViewModel
 import tool.xfy9326.schedule.utils.DialogUtils
 import tool.xfy9326.schedule.utils.ViewUtils
+import java.io.Serializable
 
-class NetworkCourseProviderActivity : ViewModelActivity<NetworkCourseProviderViewModel, ActivityLoginCourseProviderBinding>(),
+class NetworkCourseProviderActivity : ViewModelActivity<NetworkCourseProviderViewModel, ActivityNetworkCourseProviderBinding>(),
     ImportCourseConflictDialog.OnConfirmImportCourseConflictListener {
     companion object {
         const val EXTRA_COURSE_IMPORT_CONFIG = "EXTRA_COURSE_IMPORT_CONFIG"
     }
 
-    override fun onPrepare(viewBinding: ActivityLoginCourseProviderBinding, viewModel: NetworkCourseProviderViewModel) {
+    override fun onPrepare(viewBinding: ActivityNetworkCourseProviderBinding, viewModel: NetworkCourseProviderViewModel) {
         setSupportActionBar(viewBinding.toolBarLoginCourseProvider.toolBarGeneral)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         viewModel.registerConfig(intent.getSerializableExtra(EXTRA_COURSE_IMPORT_CONFIG)
@@ -33,7 +34,7 @@ class NetworkCourseProviderActivity : ViewModelActivity<NetworkCourseProviderVie
         supportActionBar?.setTitle(if (viewModel.isLoginCourseProvider()) R.string.login_to_import_course else R.string.direct_import_course)
     }
 
-    override fun onBindLiveData(viewBinding: ActivityLoginCourseProviderBinding, viewModel: NetworkCourseProviderViewModel) {
+    override fun onBindLiveData(viewBinding: ActivityNetworkCourseProviderBinding, viewModel: NetworkCourseProviderViewModel) {
         viewModel.providerError.observeEvent(this, observer = ::showCourseAdapterError)
         viewModel.loginParams.observeEvent(this, observer = ::applyLoginParams)
         viewModel.refreshCaptcha.observeEvent(this, observer = ::setCaptcha)
@@ -47,7 +48,7 @@ class NetworkCourseProviderActivity : ViewModelActivity<NetworkCourseProviderVie
         }
     }
 
-    override fun onInitView(viewBinding: ActivityLoginCourseProviderBinding, viewModel: NetworkCourseProviderViewModel) {
+    override fun onInitView(viewBinding: ActivityNetworkCourseProviderBinding, viewModel: NetworkCourseProviderViewModel) {
         if (!viewModel.isImportingCourses.get()) {
             viewModel.initLoginParams()
         }
@@ -106,7 +107,7 @@ class NetworkCourseProviderActivity : ViewModelActivity<NetworkCourseProviderVie
         }
     }
 
-    override fun onConfirmImportCourseConflict() {
+    override fun onConfirmImportCourseConflict(value: Serializable?) {
         finish()
     }
 

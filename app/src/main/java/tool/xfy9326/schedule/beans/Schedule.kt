@@ -22,8 +22,11 @@ data class Schedule(
     @ColorInt
     var color: Int,
 ) {
-    constructor(name: String, startDate: Date, endDate: Date, times: Array<ScheduleTime>) :
-            this(DBConst.DEFAULT_ID, name, startDate, endDate, times, MaterialColorHelper.random())
+    constructor(name: String, times: Array<ScheduleTime>, color: Int) :
+            this(DBConst.DEFAULT_ID, name, Date(), Date(), times, color)
+
+    constructor(name: String, startDate: Date, endDate: Date, times: Array<ScheduleTime>, color: Int = MaterialColorHelper.random()) :
+            this(DBConst.DEFAULT_ID, name, startDate, endDate, times, color)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

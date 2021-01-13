@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.Gravity
 import androidx.annotation.CallSuper
 import androidx.annotation.StringRes
+import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.PreferenceDataStore
 import androidx.preference.PreferenceFragmentCompat
 import androidx.transition.Slide
@@ -32,7 +33,7 @@ abstract class AbstractSettingsFragment : PreferenceFragmentCompat() {
     override fun onStart() {
         super.onStart()
         titleName?.let {
-            requireActivity().actionBar?.setTitle(it)
+            (requireActivity() as? AppCompatActivity)?.supportActionBar?.setTitle(it)
         }
     }
 

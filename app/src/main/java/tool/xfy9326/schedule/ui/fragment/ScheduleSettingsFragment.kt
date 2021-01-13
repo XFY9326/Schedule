@@ -11,7 +11,10 @@ import com.jaredrummler.android.colorpicker.ColorPreferenceCompat
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.data.ScheduleDataStore
 import tool.xfy9326.schedule.data.base.DataStorePreferenceAdapter
-import tool.xfy9326.schedule.kt.*
+import tool.xfy9326.schedule.kt.getColorCompat
+import tool.xfy9326.schedule.kt.observeEvent
+import tool.xfy9326.schedule.kt.setOnPrefClickListener
+import tool.xfy9326.schedule.kt.showShortSnackBar
 import tool.xfy9326.schedule.tools.MaterialColorHelper
 import tool.xfy9326.schedule.ui.dialog.FullScreenLoadingDialog
 import tool.xfy9326.schedule.ui.fragment.base.AbstractSettingsFragment
@@ -44,7 +47,7 @@ class ScheduleSettingsFragment : AbstractSettingsFragment() {
 
     override fun onPrefInit(savedInstanceState: Bundle?) {
         setOnPrefClickListener(KEY_SELECT_SCHEDULE_BACKGROUND_IMAGE) {
-            tryStartActivityForResult(IntentUtils.getSelectImageFromDocumentIntent(), REQUEST_CODE_SELECT_SCHEDULE_BACKGROUND_IMAGE)
+            startActivityForResult(IntentUtils.getSelectImageFromDocumentIntent(), REQUEST_CODE_SELECT_SCHEDULE_BACKGROUND_IMAGE)
         }
         findPreference<MultiSelectListPreference>(ScheduleDataStore.notThisWeekCourseShowStyle.name)?.setOnPreferenceChangeListener { _, newValue ->
             newValue as Set<*>

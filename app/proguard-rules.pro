@@ -36,6 +36,24 @@
     public inflate(...);
 }
 
+# Kotlin Serialization
+-dontnote kotlinx.serialization.AnnotationsKt
+# noinspection ShrinkerUnresolvedReference
+-keepclassmembers class kotlinx.serialization.json.** {
+    *** Companion;
+}
+-keepclasseswithmembers class kotlinx.serialization.json.** {
+    kotlinx.serialization.KSerializer serializer(...);
+}
+
+-keep,includedescriptorclasses class tool.xfy9326.schedule.json.beans.**$$serializer { *; }
+-keepclassmembers class tool.xfy9326.schedule.json.beans.** {
+    *** Companion;
+}
+-keepclasseswithmembers class tool.xfy9326.schedule.json.beans.** {
+    kotlinx.serialization.KSerializer serializer(...);
+}
+
 # Glide
 -keep public class * implements com.bumptech.glide.module.GlideModule
 -keep class * extends com.bumptech.glide.module.AppGlideModule {

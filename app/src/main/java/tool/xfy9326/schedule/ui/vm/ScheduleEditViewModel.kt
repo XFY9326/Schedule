@@ -12,11 +12,8 @@ import tool.xfy9326.schedule.beans.WeekDay
 import tool.xfy9326.schedule.data.ScheduleDataStore
 import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
 import tool.xfy9326.schedule.kt.MutableEventLiveData
-import tool.xfy9326.schedule.kt.intersect
-import tool.xfy9326.schedule.kt.iterateAll
 import tool.xfy9326.schedule.kt.postEvent
 import tool.xfy9326.schedule.ui.vm.base.AbstractViewModel
-import tool.xfy9326.schedule.utils.CourseTimeUtils
 import tool.xfy9326.schedule.utils.ScheduleManager
 import java.util.*
 
@@ -76,7 +73,7 @@ class ScheduleEditViewModel : AbstractViewModel() {
     fun saveSchedule() {
         val cache = editSchedule
         viewModelScope.launch {
-            val errorMsg = validateSchedule(cache)
+            val errorMsg = ScheduleManager.validateSchedule(cache, ScheduleDBProvider.db.scheduleDAO.getScheduleCourses(cache.scheduleId).first())
             if (errorMsg == null) {
                 val newId = if (isEdit) {
                     ScheduleDBProvider.db.scheduleDAO.updateSchedule(cache)
@@ -111,50 +108,5 @@ class ScheduleEditViewModel : AbstractViewModel() {
         viewModelScope.launch {
             importScheduleTimes.postEvent(ScheduleDBProvider.db.scheduleDAO.getSchedule(scheduleId).firstOrNull()?.times)
         }
-    }
-
-    private suspend fun validateSchedule(schedule: Schedule): EditError? {
-        if (schedule.name.isBlank() || schedule.name.isEmpty()) {
-            return EditError.Type.SCHEDULE_NAME_EMPTY.make()
-        }
-
-        val maxWeekNum = CourseTimeUtils.getMaxWeekNum(schedule.startDate, schedule.endDate, ScheduleDataStore.firstDayOfWeekFlow.first())
-
-        if (schedule.startDate >= schedule.endDate) {
-            return EditError.Type.SCHEDULE_DATE_ERROR.make()
-        }
-        if (maxWeekNum <= 0) {
-            return EditError.Type.SCHEDULE_MAX_WEEK_NUM_ERROR.make()
-        }
-
-        for (i1 in schedule.times.indices) {
-            val time1 = schedule.times[i1]
-
-            if (time1.startHour >= time1.endHour && time1.startMinute >= time1.endMinute) {
-                return EditError.Type.SCHEDULE_TIME_START_END_ERROR.make(i1 + 1)
-            }
-
-            for (i2 in (i1 + 1)..schedule.times.lastIndex) {
-                val time2 = schedule.times[i2]
-                if (time1 intersect time2) {
-                    return EditError.Type.SCHEDULE_TIME_CONFLICT_ERROR.make(i1 + 1, i2 + 1)
-                }
-                if (time1.endHour >= time2.startHour && time1.endMinute >= time2.startMinute) {
-                    return EditError.Type.SCHEDULE_TIME_NOT_IN_ONE_DAY_ERROR.make()
-                }
-            }
-        }
-
-        val courses = ScheduleDBProvider.db.scheduleDAO.getScheduleCourses(schedule.scheduleId).first()
-
-        courses.iterateAll { course, courseTime ->
-            if (courseTime.classTime.classEndTime > schedule.times.size) {
-                return EditError.Type.SCHEDULE_COURSE_NUM_ERROR.make(course.name)
-            }
-            if (courseTime.weekNum.size > maxWeekNum) {
-                return EditError.Type.SCHEDULE_COURSE_WEEK_NUM_ERROR.make(course.name)
-            }
-        }
-        return null
     }
 }

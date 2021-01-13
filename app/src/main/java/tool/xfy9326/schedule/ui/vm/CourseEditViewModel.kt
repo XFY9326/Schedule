@@ -12,7 +12,9 @@ import tool.xfy9326.schedule.beans.EditError
 import tool.xfy9326.schedule.beans.Schedule
 import tool.xfy9326.schedule.data.ScheduleDataStore
 import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
-import tool.xfy9326.schedule.kt.*
+import tool.xfy9326.schedule.kt.MutableEventLiveData
+import tool.xfy9326.schedule.kt.postEvent
+import tool.xfy9326.schedule.kt.weak
 import tool.xfy9326.schedule.ui.dialog.CourseTimeEditDialog
 import tool.xfy9326.schedule.ui.vm.base.AbstractViewModel
 import tool.xfy9326.schedule.utils.CourseManager
@@ -82,7 +84,8 @@ class CourseEditViewModel : AbstractViewModel() {
     fun copyToOtherSchedule(scheduleId: Long) {
         viewModelScope.launch {
             val cache = editCourse.clone(scheduleId)
-            val errorMsg = validateCourse(scheduleId, cache)
+            val otherCourses = ScheduleDBProvider.db.scheduleDAO.getScheduleCoursesWithoutId(scheduleId, cache.courseId).first()
+            val errorMsg = CourseManager.validateCourse(cache, otherCourses)
             if (errorMsg == null) {
                 ScheduleDBProvider.db.scheduleDAO.putCourse(scheduleId, cache)
                 copyToOtherSchedule.postEvent(null)
@@ -97,7 +100,8 @@ class CourseEditViewModel : AbstractViewModel() {
     fun saveCourse(scheduleId: Long) {
         val cache = editCourse
         viewModelScope.launch {
-            val errorMsg = validateCourse(scheduleId, cache)
+            val otherCourses = ScheduleDBProvider.db.scheduleDAO.getScheduleCoursesWithoutId(scheduleId, cache.courseId).first()
+            val errorMsg = CourseManager.validateCourse(cache, otherCourses)
             if (errorMsg == null) {
                 val newId = if (isEdit) {
                     ScheduleDBProvider.db.scheduleDAO.updateCourse(cache)
@@ -114,33 +118,5 @@ class CourseEditViewModel : AbstractViewModel() {
                 courseSaveFailed.postEvent(errorMsg)
             }
         }
-    }
-
-    private suspend fun validateCourse(scheduleId: Long, course: Course): EditError? {
-        if (course.name.isBlank() || course.name.isEmpty()) {
-            return EditError.Type.COURSE_NAME_EMPTY.make()
-        }
-
-        if (course.times.isEmpty()) {
-            EditError.Type.COURSE_TIME_LIST_EMPTY.make()
-        }
-
-        course.times.forEachTwo { i1, courseTime1, i2, courseTime2 ->
-            if (courseTime1 intersect courseTime2) return EditError.Type.COURSE_TIME_INNER_CONFLICT_ERROR.make(i1 + 1, i2 + 1)
-        }
-
-        val otherCourses = ScheduleDBProvider.db.scheduleDAO.getScheduleCoursesWithoutId(scheduleId, course.courseId).first()
-
-        for (others in otherCourses) {
-            for (time in others.times) {
-                for ((i, courseTime) in course.times.withIndex()) {
-                    if (courseTime intersect time) {
-                        return EditError.Type.COURSE_TIME_OTHERS_CONFLICT_ERROR.make(i + 1, others.name)
-                    }
-                }
-            }
-        }
-
-        return null
     }
 }

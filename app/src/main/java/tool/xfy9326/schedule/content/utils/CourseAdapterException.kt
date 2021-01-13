@@ -21,6 +21,8 @@ class CourseAdapterException : Exception {
     enum class ErrorType {
         IMPORT_SELECT_OPTION_ERROR,
         IMPORT_OPTION_GET_ERROR,
+        PARSE_PAGE_ERROR,
+        PARSE_INFO_NOT_ENOUGH_ERROR,
         USER_ID_ERROR,
         USER_PASSWORD_ERROR,
         USER_ID_OR_PASSWORD_ERROR,
@@ -86,7 +88,9 @@ class CourseAdapterException : Exception {
             context.getString(
                 when (errorType) {
                     ErrorType.IMPORT_SELECT_OPTION_ERROR -> R.string.adapter_exception_import_option_error
-                    ErrorType.IMPORT_OPTION_GET_ERROR -> R.string.adapter_exception_import_option_error
+                    ErrorType.IMPORT_OPTION_GET_ERROR -> R.string.adapter_exception_import_option_get_error
+                    ErrorType.PARSE_PAGE_ERROR -> R.string.adapter_exception_parse_page_error
+                    ErrorType.PARSE_INFO_NOT_ENOUGH_ERROR -> R.string.adapter_exception_parse_info_not_enough_error
                     ErrorType.USER_ID_ERROR -> R.string.adapter_exception_login_user_id_error
                     ErrorType.USER_PASSWORD_ERROR -> R.string.adapter_exception_login_user_password_error
                     ErrorType.USER_ID_OR_PASSWORD_ERROR -> R.string.adapter_exception_login_user_id_or_password_error

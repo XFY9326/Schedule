@@ -6,6 +6,11 @@ import tool.xfy9326.schedule.beans.WeekDay
 import java.util.*
 
 class DBTypeConverter {
+    companion object {
+        val instance by lazy {
+            DBTypeConverter()
+        }
+    }
 
     @TypeConverter
     fun timestampToDate(value: Long?): Date? {

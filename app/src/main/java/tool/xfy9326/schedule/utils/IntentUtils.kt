@@ -24,6 +24,12 @@ object IntentUtils {
             addCategory(Intent.CATEGORY_OPENABLE)
         }
 
+    fun getSelectJsonFromDocumentIntent() =
+        Intent(Intent.ACTION_GET_CONTENT).apply {
+            type = MIMEConst.MIME_APPLICATION_JSON
+            addCategory(Intent.CATEGORY_OPENABLE)
+        }
+
     fun getShareImageIntent(context: Context, uri: Uri): Intent =
         Intent.createChooser(Intent(Intent.ACTION_SEND).apply {
             type = MIMEConst.MIME_IMAGE

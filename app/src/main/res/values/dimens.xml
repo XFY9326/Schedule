@@ -15,7 +15,6 @@
     <dimen name="slider_thumb_radius_not_touched">4dp</dimen>
     <dimen name="slider_thumb_radius_touched">12dp</dimen>
     <dimen name="slider_tracker_height">18dp</dimen>
-    <dimen name="dialog_corner_radius">16dp</dimen>
     <dimen name="collapse_tool_bar_height">180dp</dimen>
     <dimen name="circle_number_button_elevation">2dp</dimen>
     <dimen name="circle_number_button_size">35dp</dimen>
@@ -24,7 +23,4 @@
     <dimen name="full_screen_loading_dialog_button_margin_top">50dp</dimen>
     <dimen name="bottom_button_height">30dp</dimen>
     <dimen name="course_detail_dialog_bottom_button_height">28dp</dimen>
-
-    <!-- 修复MaterialDatePicker按钮位置不正确问题，未来可能会移除 -->
-    <dimen name="mtrl_calendar_header_toggle_margin_bottom">13dp</dimen>
 </resources>

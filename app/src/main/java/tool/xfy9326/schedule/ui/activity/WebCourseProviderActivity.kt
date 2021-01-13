@@ -27,6 +27,7 @@ import tool.xfy9326.schedule.ui.dialog.WebCourseProviderBottomPanel
 import tool.xfy9326.schedule.ui.vm.WebCourseProviderViewModel
 import tool.xfy9326.schedule.utils.DialogUtils
 import tool.xfy9326.schedule.utils.ViewUtils
+import java.io.Serializable
 
 @SuppressLint("SetJavaScriptEnabled")
 class WebCourseProviderActivity : ViewModelActivity<WebCourseProviderViewModel, ActivityWebCourseProviderBinding>(),
@@ -224,7 +225,7 @@ class WebCourseProviderActivity : ViewModelActivity<WebCourseProviderViewModel, 
         getCurrentHTML(false)
     }
 
-    override fun onConfirmImportCourseConflict() {
+    override fun onConfirmImportCourseConflict(value: Serializable?) {
         finish()
     }
 
