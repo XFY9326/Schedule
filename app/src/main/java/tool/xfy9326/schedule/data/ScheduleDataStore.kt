@@ -37,9 +37,7 @@ object ScheduleDataStore : AbstractDataStore("ScheduleSettings") {
     private val verticalCourseCellText by preferencesKey<Boolean>()
     val notThisWeekCourseShowStyle by preferencesSetKey<String>()
 
-    val firstDayOfWeekFlow = read {
-        tryEnumValueOf(it[firstDayOfWeek]) ?: WeekDay.MONDAY
-    }
+    val firstDayOfWeekFlow = firstDayOfWeek.readEnumAsFlow(WeekDay.MONDAY)
 
     val scheduleStylesFlow = readOnlyFlow.combine(firstDayOfWeekFlow) { pref, weekday ->
         ScheduleStyles(
@@ -68,21 +66,15 @@ object ScheduleDataStore : AbstractDataStore("ScheduleSettings") {
         }
     }
 
-    val useLightColorStatusBarColorFlow = read {
-        it[useLightColorStatusBarColor] ?: false
-    }
+    val useLightColorStatusBarColorFlow = useLightColorStatusBarColor.readAsFlow(false)
 
     val toolBarTintColorFlow = read {
         if (it[customScheduleTextColor] == true) it[toolBarTintColor] else null
     }
 
-    val scheduleBackgroundImageQualityFlow = read {
-        it[scheduleBackgroundImageQuality] ?: 60
-    }
+    val scheduleBackgroundImageQualityFlow = scheduleBackgroundImageQuality.readAsFlow(60)
 
-    val scheduleBackgroundImageFlow = read {
-        it[scheduleBackgroundImage]
-    }
+    val scheduleBackgroundImageFlow = scheduleBackgroundImage.readAsFlow()
 
     val scheduleBackgroundBuildBundleFlow = read {
         val enabled = it[enableScheduleBackground] ?: false
