@@ -51,6 +51,7 @@ class ScheduleView(
         scheduleViewData.weekNum,
         scheduleViewData.startDate,
         showWeekend,
+        scheduleViewData.weekStart,
         scheduleStyles,
         schedulePredefine
     ).also {

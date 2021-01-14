@@ -21,6 +21,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.google.android.material.navigation.NavigationView
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import tool.xfy9326.schedule.R
@@ -191,7 +192,11 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
     }
 
     override fun onBackPressed() {
-        requireViewModel().exitAppDirectly()
+        if (requireViewBinding().drawerSchedule.isDrawerOpen(GravityCompat.START)) {
+            requireViewBinding().drawerSchedule.closeDrawers()
+        } else {
+            requireViewModel().exitAppDirectly()
+        }
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
@@ -222,10 +227,9 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
                 return true
             }
         }
-        requireViewBinding().drawerSchedule.let {
-            it.postDelayed(resources.getInteger(android.R.integer.config_shortAnimTime).toLong()) {
-                it.closeDrawers()
-            }
+        lifecycleScope.launch {
+            delay(resources.getInteger(android.R.integer.config_shortAnimTime).toLong())
+            requireViewBinding().drawerSchedule.closeDrawers()
         }
         return true
     }

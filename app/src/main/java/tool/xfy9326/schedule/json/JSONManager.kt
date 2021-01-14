@@ -65,6 +65,7 @@ object JSONManager {
                 name = datum.schedule.name,
                 times = datum.schedule.times.map { ScheduleTimeJSON.fromScheduleTime(it) },
                 color = datum.schedule.color,
+                weekStart = datum.schedule.weekStart.shortName,
                 courses = jsonCourses
             ))
         }
@@ -79,7 +80,8 @@ object JSONManager {
             val schedule = Schedule(
                 name = scheduleJson.name,
                 times = scheduleJson.times.map { it.toScheduleTime() }.toTypedArray(),
-                color = scheduleJson.color
+                color = scheduleJson.color,
+                weekStart = WeekDay.valueOfShortName(scheduleJson.weekStart)
             )
             val courses = ArrayList<Course>(scheduleJson.courses.size)
             for (courseJson in scheduleJson.courses) {

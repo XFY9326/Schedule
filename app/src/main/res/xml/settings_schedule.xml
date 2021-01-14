@@ -10,9 +10,9 @@
             app:entries="@array/first_day_of_week"
             app:entryValues="@array/first_day_of_week_values"
             app:iconSpaceReserved="false"
-            app:key="firstDayOfWeek"
-            app:summary="@string/first_day_of_week_sum"
-            app:title="@string/first_day_of_week" />
+            app:key="defaultFirstDayOfWeek"
+            app:summary="@string/default_first_day_of_week_sum"
+            app:title="@string/default_first_day_of_week" />
 
         <androidx.preference.CheckBoxPreference
             app:defaultValue="false"

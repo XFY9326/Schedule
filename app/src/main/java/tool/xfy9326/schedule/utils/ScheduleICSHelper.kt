@@ -9,12 +9,12 @@ import tool.xfy9326.schedule.beans.WeekNumPattern.PatternType.*
 import tool.xfy9326.schedule.io.TextIO
 import tool.xfy9326.schedule.kt.iterateAll
 
-class ScheduleICSHelper constructor(schedule: Schedule, private val courses: Array<Course>, private val firstDayOfWeek: WeekDay) {
+class ScheduleICSHelper constructor(schedule: Schedule, private val courses: Array<Course>) {
     companion object {
         fun createICSFileName(context: Context, scheduleName: String) = "${context.getString(R.string.app_name)}-$scheduleName"
     }
 
-    private val scheduleCalculateTimes = ScheduleCalculateTimes(schedule, firstDayOfWeek)
+    private val scheduleCalculateTimes = ScheduleCalculateTimes(schedule)
 
     suspend fun dumpICS(context: Context, uri: Uri): Boolean {
         try {
@@ -37,7 +37,10 @@ class ScheduleICSHelper constructor(schedule: Schedule, private val courses: Arr
             }
         } else if (weekNumPattern.type == SPACED || weekNumPattern.type == SERIAL) {
             CourseTimeUtils.getRealClassTime(scheduleCalculateTimes, weekNumPattern.start + 1, classTime = courseTime.classTime).let { time ->
-                val rrule = ScheduleICSWriter.RRULE(weekNumPattern.interval, weekNumPattern.amount, courseTime.classTime.weekDay, firstDayOfWeek)
+                val rrule = ScheduleICSWriter.RRULE(weekNumPattern.interval,
+                    weekNumPattern.amount,
+                    courseTime.classTime.weekDay,
+                    scheduleCalculateTimes.weekStart)
                 iCal.addEvent(time.first, time.second, course.name, courseTime.location, getEventDescription(course), rrule)
             }
         } else if (weekNumPattern.type == MESSY) {
@@ -45,7 +48,7 @@ class ScheduleICSHelper constructor(schedule: Schedule, private val courses: Arr
                 CourseTimeUtils.getRealClassTime(scheduleCalculateTimes, period.start + 1, courseTime.classTime).let { time ->
                     val rrule =
                         if (period.length > 1) {
-                            ScheduleICSWriter.RRULE(1, period.length, courseTime.classTime.weekDay, firstDayOfWeek)
+                            ScheduleICSWriter.RRULE(1, period.length, courseTime.classTime.weekDay, scheduleCalculateTimes.weekStart)
                         } else {
                             null
                         }

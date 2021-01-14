@@ -17,6 +17,11 @@ import tool.xfy9326.schedule.kt.iterateAll
 import java.util.*
 
 object ScheduleManager {
+    val currentScheduleFlow =
+        AppDataStore.currentScheduleIdFlow.combine {
+            ScheduleDBProvider.db.scheduleDAO.getSchedule(it).filterNotNull()
+        }
+
     private val DEFAULT_SCHEDULE_TIMES = arrayOf(
         ScheduleTime(8, 0, 8, 45),
         ScheduleTime(8, 50, 9, 35),
@@ -89,21 +94,24 @@ object ScheduleManager {
         return true
     }
 
-    fun createDefaultSchedule() = getDefaultTermDate().let {
-        Schedule(App.instance.getString(R.string.default_schedule_name), it.first, it.second, DEFAULT_SCHEDULE_TIMES)
+    suspend fun createDefaultSchedule() = getDefaultTermDate().let {
+        Schedule(App.instance.getString(R.string.default_schedule_name),
+            it.first,
+            it.second,
+            DEFAULT_SCHEDULE_TIMES,
+            ScheduleDataStore.defaultFirstDayOfWeekFlow.first())
     }
 
-    fun createNewSchedule() = getDefaultTermDate().let {
-        Schedule(App.instance.getString(R.string.new_schedule_name), it.first, it.second, DEFAULT_SCHEDULE_TIMES)
+    suspend fun createNewSchedule() = getDefaultTermDate().let {
+        Schedule(App.instance.getString(R.string.new_schedule_name),
+            it.first,
+            it.second,
+            DEFAULT_SCHEDULE_TIMES,
+            ScheduleDataStore.defaultFirstDayOfWeekFlow.first())
     }
-
-    fun getCurrentScheduleFlow() =
-        AppDataStore.currentScheduleIdFlow.combine {
-            ScheduleDBProvider.db.scheduleDAO.getSchedule(it).filterNotNull()
-        }
 
     suspend fun saveCurrentSchedule(scheduleTimes: Array<ScheduleTime>, courses: Array<Course>) {
-        val schedule = getCurrentScheduleFlow().first().also {
+        val schedule = currentScheduleFlow.first().also {
             it.times = scheduleTimes
             adjustScheduleDateByCourses(it, courses)
         }
@@ -126,24 +134,23 @@ object ScheduleManager {
         ScheduleDBProvider.db.scheduleDAO.putNewScheduleCourses(schedule, courses)
     }
 
-    private suspend fun adjustScheduleDateByCourses(schedule: Schedule, courses: Array<Course>) {
-        val firstDayOfWeek = ScheduleDataStore.firstDayOfWeekFlow.first()
+    private fun adjustScheduleDateByCourses(schedule: Schedule, courses: Array<Course>) {
         val maxWeekNum = CourseManager.getMaxWeekNum(courses)
-        val scheduleMaxWeekNum = CourseTimeUtils.getMaxWeekNum(schedule.startDate, schedule.endDate, firstDayOfWeek)
+        val scheduleMaxWeekNum = CourseTimeUtils.getMaxWeekNum(schedule.startDate, schedule.endDate, schedule.weekStart)
 
         schedule.apply {
             if (maxWeekNum > scheduleMaxWeekNum) {
-                endDate = CourseTimeUtils.getTermEndDate(startDate, firstDayOfWeek, maxWeekNum)
+                endDate = CourseTimeUtils.getTermEndDate(startDate, schedule.weekStart, maxWeekNum)
             }
         }
     }
 
-    suspend fun validateSchedule(schedule: Schedule, scheduleCourses: Array<Course>): EditError? {
+    fun validateSchedule(schedule: Schedule, scheduleCourses: Array<Course>): EditError? {
         if (schedule.name.isBlank() || schedule.name.isEmpty()) {
             return EditError.Type.SCHEDULE_NAME_EMPTY.make()
         }
 
-        val maxWeekNum = CourseTimeUtils.getMaxWeekNum(schedule.startDate, schedule.endDate, ScheduleDataStore.firstDayOfWeekFlow.first())
+        val maxWeekNum = CourseTimeUtils.getMaxWeekNum(schedule.startDate, schedule.endDate, schedule.weekStart)
 
         if (schedule.startDate >= schedule.endDate) {
             return EditError.Type.SCHEDULE_DATE_ERROR.make()

@@ -8,7 +8,6 @@ import tool.xfy9326.schedule.kt.getColorCompat
 import tool.xfy9326.schedule.kt.spToPx
 
 data class ScheduleStyles(
-    val firstDayOfWeek: WeekDay,
     private val viewAlpha: Int,
     val forceShowWeekendColumn: Boolean,
     val showNotThisWeekCourse: Boolean,

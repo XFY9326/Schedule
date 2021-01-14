@@ -153,8 +153,8 @@
     <string name="schedule_settings_sum">课程表显示以及操作设置</string>
     <string name="general_settings">通用</string>
     <string name="general_settings_sum">基础的通用应用设置</string>
-    <string name="first_day_of_week">每周的第一天</string>
-    <string name="first_day_of_week_sum">改变课表周数计算与显示方式（不建议随意修改）</string>
+    <string name="default_first_day_of_week">默认每周的第一天</string>
+    <string name="default_first_day_of_week_sum">新建课表时默认的每周开始时间</string>
     <string name="night_mode">夜间模式</string>
     <string name="night_mode_sum">使用暗色的夜间显示模式</string>
     <string name="night_mode_enabled">开启夜间模式</string>
@@ -320,6 +320,8 @@
     <string name="restore_schedule_error">课表时出现错误！</string>
     <string name="backup_schedule_attention">注意事项：\n1. 将会备份选定课表的除学期外所有信息\n2. 备份导出的文件不建议手动修改，可能导致无法恢复\n3. 备份导出的文件可以直接分享给他人导入</string>
     <string name="restore_schedule_attention">注意事项：\n1. 将会恢复选定文件中所有课表信息\n2. 恢复后的课表学期信息将会自适应设定\n3. 如果需要设定正确的学期时间请前往课表编辑界面</string>
+    <string name="schedule_week_start">设定每周的第一天</string>
+    <string name="schedule_week_start_sum">修改每周开始日将会影响周数计算与课表显示</string>
 
     <string name="scare_type_fit_center">等比缩放，从中间开始填充满</string>
     <string name="scare_type_center_crop">等比缩放直到完全填充</string>
