@@ -66,6 +66,3 @@
 -keep class com.bumptech.glide.load.data.ParcelFileDescriptorRewinder$InternalRewinder {
     *** rewind();
 }
-
-# biweekly
--keep class biweekly.Biweekly

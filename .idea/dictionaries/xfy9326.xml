@@ -6,12 +6,18 @@
       <w>calscale</w>
       <w>cardview</w>
       <w>derivate</w>
+      <w>dtend</w>
+      <w>dtstamp</w>
+      <w>dtstart</w>
+      <w>hmmss</w>
       <w>iframe</w>
       <w>jetpack</w>
       <w>jsoup</w>
       <w>ktor</w>
+      <w>mdd</w>
       <w>mtrl</w>
       <w>prodid</w>
+      <w>rrule</w>
       <w>snackbar</w>
       <w>tbody</w>
       <w>vcalendar</w>

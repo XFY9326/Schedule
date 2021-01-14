@@ -8,10 +8,7 @@ import tool.xfy9326.schedule.beans.CourseTime
 import tool.xfy9326.schedule.beans.Schedule
 import tool.xfy9326.schedule.beans.WeekDay
 import tool.xfy9326.schedule.db.utils.DBTypeConverter
-import tool.xfy9326.schedule.json.beans.CourseJson
-import tool.xfy9326.schedule.json.beans.CourseTimeJson
-import tool.xfy9326.schedule.json.beans.ScheduleJson
-import tool.xfy9326.schedule.json.beans.ScheduleTimeJson
+import tool.xfy9326.schedule.json.beans.*
 
 object JSONManager {
     private val JSON by lazy {
@@ -21,7 +18,7 @@ object JSONManager {
         }
     }
 
-    fun encode(vararg schedules: ScheduleJsonBundle): String? {
+    fun encode(vararg schedules: ScheduleJSONBundle): String? {
         try {
             val data = getParsableClass(schedules)
             return JSON.encodeToString(data)
@@ -31,9 +28,9 @@ object JSONManager {
         return null
     }
 
-    fun decode(jsonText: String): List<ScheduleJsonBundle>? {
+    fun decode(jsonText: String): List<ScheduleJSONBundle>? {
         try {
-            val data = JSON.decodeFromString<List<ScheduleJson>>(jsonText)
+            val data = JSON.decodeFromString<BackupWrapperJSON>(jsonText)
             return fromParsableClass(data)
         } catch (e: Exception) {
             e.printStackTrace()
@@ -41,15 +38,15 @@ object JSONManager {
         return null
     }
 
-    private fun getParsableClass(data: Array<out ScheduleJsonBundle>): List<ScheduleJson> {
-        val scheduleJsonList = ArrayList<ScheduleJson>()
+    private fun getParsableClass(data: Array<out ScheduleJSONBundle>): BackupWrapperJSON {
+        val scheduleJsonList = ArrayList<ScheduleJSON>()
 
         for (datum in data) {
-            val jsonCourses = ArrayList<CourseJson>(datum.courses.size)
+            val jsonCourses = ArrayList<CourseJSON>(datum.courses.size)
             for (course in datum.courses) {
-                val jsonCourseTimes = ArrayList<CourseTimeJson>(course.times.size)
+                val jsonCourseTimes = ArrayList<CourseTimeJSON>(course.times.size)
                 for (time in course.times) {
-                    jsonCourseTimes.add(CourseTimeJson(
+                    jsonCourseTimes.add(CourseTimeJSON(
                         weekNum = DBTypeConverter.instance.booleanArrayToString(time.weekNum)!!,
                         weekDay = time.classTime.weekDay.shortName,
                         start = time.classTime.classStartTime,
@@ -57,28 +54,28 @@ object JSONManager {
                         location = time.location
                     ))
                 }
-                jsonCourses.add(CourseJson(
+                jsonCourses.add(CourseJSON(
                     name = course.name,
                     teacher = course.teacher,
                     color = course.color,
                     times = jsonCourseTimes
                 ))
             }
-            scheduleJsonList.add(ScheduleJson(
+            scheduleJsonList.add(ScheduleJSON(
                 name = datum.schedule.name,
-                times = datum.schedule.times.map { ScheduleTimeJson.fromScheduleTime(it) },
+                times = datum.schedule.times.map { ScheduleTimeJSON.fromScheduleTime(it) },
                 color = datum.schedule.color,
                 courses = jsonCourses
             ))
         }
 
-        return scheduleJsonList
+        return BackupWrapperJSON(data = scheduleJsonList)
     }
 
-    private fun fromParsableClass(data: List<ScheduleJson>): List<ScheduleJsonBundle> {
-        val scheduleList = ArrayList<ScheduleJsonBundle>()
+    private fun fromParsableClass(data: BackupWrapperJSON): List<ScheduleJSONBundle> {
+        val scheduleList = ArrayList<ScheduleJSONBundle>()
 
-        for (scheduleJson in data) {
+        for (scheduleJson in data.data) {
             val schedule = Schedule(
                 name = scheduleJson.name,
                 times = scheduleJson.times.map { it.toScheduleTime() }.toTypedArray(),
@@ -103,7 +100,7 @@ object JSONManager {
                     times = courseTimes
                 ))
             }
-            scheduleList.add(ScheduleJsonBundle(schedule, courses.toTypedArray()))
+            scheduleList.add(ScheduleJSONBundle(schedule, courses.toTypedArray()))
         }
 
         return scheduleList

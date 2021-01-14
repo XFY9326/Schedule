@@ -47,9 +47,6 @@ object ScheduleSyncHelper {
         clearAllCalendar(context.contentResolver)
     }
 
-    private fun getWeeklyRRULEText(interval: Int, count: Int, weekDay: WeekDay, firstDayOfWeek: WeekDay) =
-        "FREQ=WEEKLY;COUNT=$count;INTERVAL=$interval;BYDAY=${weekDay.shortName};WKST=${firstDayOfWeek.shortName}"
-
     suspend fun syncCalendar(context: Context) = withContext(Dispatchers.Unconfined) {
         val contentResolver = context.contentResolver
         if (syncLock.tryLock()) {
@@ -165,10 +162,10 @@ object ScheduleSyncHelper {
                 if (!insertEvent(contentResolver, sync, reminderMinutes, ContentValues().apply {
                         put(
                             CalendarContract.Events.RRULE,
-                            getWeeklyRRULEText(weekNumPattern.interval,
+                            ScheduleICSWriter.RRULE(weekNumPattern.interval,
                                 weekNumPattern.amount,
                                 courseTime.classTime.weekDay,
-                                scheduleCalculateTimes.firstDayOfWeek)
+                                scheduleCalculateTimes.firstDayOfWeek).text
                         )
                         addBasicInfoToCalendarEvent(this, calId, time, course, courseTime)
                     })) return false
@@ -180,7 +177,10 @@ object ScheduleSyncHelper {
                             if (period.length > 1) {
                                 put(
                                     CalendarContract.Events.RRULE,
-                                    getWeeklyRRULEText(1, period.length, courseTime.classTime.weekDay, scheduleCalculateTimes.firstDayOfWeek)
+                                    ScheduleICSWriter.RRULE(1,
+                                        period.length,
+                                        courseTime.classTime.weekDay,
+                                        scheduleCalculateTimes.firstDayOfWeek).text
                                 )
                             }
                             addBasicInfoToCalendarEvent(this, calId, time, course, courseTime)
@@ -213,10 +213,10 @@ object ScheduleSyncHelper {
             put(CalendarContract.Events.EVENT_TIMEZONE, TIMEZONE_ID)
             put(CalendarContract.Events.EVENT_COLOR, course.color)
             courseTime.location?.let {
-                put(CalendarContract.Events.EVENT_LOCATION, App.instance.getString(R.string.ics_description_teacher, it))
+                put(CalendarContract.Events.EVENT_LOCATION, it)
             }
             course.teacher?.let {
-                put(CalendarContract.Events.DESCRIPTION, it)
+                put(CalendarContract.Events.DESCRIPTION, App.instance.getString(R.string.ics_description_teacher, it))
             }
         }
     }
