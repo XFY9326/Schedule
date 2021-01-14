@@ -9,4 +9,8 @@ data class CourseTimeJSON(
     val start: Int,
     val duration: Int,
     val location: String? = null,
-)
+) {
+    init {
+        require(weekDay.isNotEmpty()) { "Week day empty!" }
+    }
+}

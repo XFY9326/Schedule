@@ -24,15 +24,12 @@ import java.util.concurrent.atomic.AtomicBoolean
 class ScheduleViewModel : AbstractViewModel() {
     companion object {
         private val currentScheduleId = AppDataStore.currentScheduleIdFlow
-        private val currentScheduleFlow = ScheduleManager.getCurrentScheduleFlow()
-        private val weekNumInfoFlow = currentScheduleFlow.combine(ScheduleDataStore.firstDayOfWeekFlow) { schedule, firstDayOfWeek ->
-            CourseTimeUtils.getWeekNum(schedule, firstDayOfWeek) to CourseTimeUtils.getMaxWeekNum(schedule.startDate,
-                schedule.endDate,
-                firstDayOfWeek)
+        private val weekNumInfoFlow = ScheduleManager.currentScheduleFlow.map {
+            CourseTimeUtils.getWeekNum(it) to CourseTimeUtils.getMaxWeekNum(it.startDate, it.endDate, it.weekStart)
         }
     }
 
-    val scheduleBuildData = currentScheduleFlow.combine(ScheduleDataStore.scheduleStylesFlow) { schedule, styles ->
+    val scheduleBuildData = ScheduleManager.currentScheduleFlow.combine(ScheduleDataStore.scheduleStylesFlow) { schedule, styles ->
         schedule to styles
     }.combineTransform(
         combineTransform = {
@@ -46,8 +43,8 @@ class ScheduleViewModel : AbstractViewModel() {
 
     var currentScrollPosition: Int? = null
 
-    val nowDay = ScheduleDataStore.firstDayOfWeekFlow.map {
-        CalendarUtils.getDay(firstDayOfWeek = it)
+    val nowDay = ScheduleManager.currentScheduleFlow.map {
+        CalendarUtils.getDay(firstDayOfWeek = it.weekStart)
     }.asDistinctLiveData()
     val scrollToWeek = MutableEventLiveData<Int>()
     val showWeekChanged = MutableEventLiveData<Pair<Int, WeekNumType>>()
@@ -122,9 +119,8 @@ class ScheduleViewModel : AbstractViewModel() {
                 val schedule = ScheduleDBProvider.db.scheduleDAO.getSchedule(scheduleId).first()
                 if (schedule != null) {
                     val courses = ScheduleDBProvider.db.scheduleDAO.getScheduleCourses(scheduleId).first()
-                    val firstDayOfWeek = ScheduleDataStore.firstDayOfWeekFlow.first()
                     weakContext.get()?.let {
-                        iceExportStatus.postEvent(ScheduleICSHelper(schedule, courses, firstDayOfWeek).dumpICS(it, outputUri))
+                        iceExportStatus.postEvent(ScheduleICSHelper(schedule, courses).dumpICS(it, outputUri))
                     }
                 } else {
                     iceExportStatus.postEvent(false)
@@ -169,7 +165,7 @@ class ScheduleViewModel : AbstractViewModel() {
 
     fun showCourseDetailDialog(courseId: Long, timeId: Long) {
         viewModelScope.launch {
-            currentScheduleFlow.combine(ScheduleDBProvider.db.scheduleDAO.getScheduleCourse(courseId)) { schedule, course ->
+            ScheduleManager.currentScheduleFlow.combine(ScheduleDBProvider.db.scheduleDAO.getScheduleCourse(courseId)) { schedule, course ->
                 if (course == null) {
                     null
                 } else {

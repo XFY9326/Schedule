@@ -11,6 +11,7 @@ import com.jaredrummler.android.colorpicker.ColorPickerDialogListener
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.Schedule
 import tool.xfy9326.schedule.beans.ScheduleTime
+import tool.xfy9326.schedule.beans.WeekDay
 import tool.xfy9326.schedule.databinding.ActivityScheduleEditBinding
 import tool.xfy9326.schedule.kt.*
 import tool.xfy9326.schedule.ui.activity.base.ViewModelActivity
@@ -91,6 +92,9 @@ class ScheduleEditActivity : ViewModelActivity<ScheduleEditViewModel, ActivitySc
         viewBinding.sliderScheduleCourseCostTime.value = viewModel.courseCostTime.toFloat()
         viewBinding.sliderScheduleBreakCostTime.value = viewModel.breakCostTime.toFloat()
 
+        viewBinding.layoutScheduleWeekStart.setOnClickListener {
+            showWeekStartSelectDialog()
+        }
         viewBinding.buttonScheduleStartDateEdit.setOnClickListener {
             viewModel.selectScheduleDate(true, viewModel.editSchedule.startDate)
         }
@@ -177,6 +181,29 @@ class ScheduleEditActivity : ViewModelActivity<ScheduleEditViewModel, ActivitySc
         } else {
             super.onBackPressed()
         }
+    }
+
+    private fun showWeekStartSelectDialog() {
+        val selectedItem = when (requireViewModel().editSchedule.weekStart) {
+            WeekDay.MONDAY -> 0
+            WeekDay.SUNDAY -> 1
+            else -> error("Unsupported week start day")
+        }
+        var selectedWeekDay = requireViewModel().editSchedule.weekStart
+        MaterialAlertDialogBuilder(this).apply {
+            setTitle(R.string.schedule_week_start)
+            setSingleChoiceItems(R.array.first_day_of_week, selectedItem) { _, which ->
+                selectedWeekDay = when (which) {
+                    0 -> WeekDay.MONDAY
+                    1 -> WeekDay.SUNDAY
+                    else -> error("Unsupported week start day")
+                }
+            }
+            setNegativeButton(android.R.string.cancel, null)
+            setPositiveButton(android.R.string.ok) { _, _ ->
+                requireViewModel().editSchedule.weekStart = selectedWeekDay
+            }
+        }.show(this)
     }
 
     private fun updateTextData() {
@@ -281,8 +308,10 @@ class ScheduleEditActivity : ViewModelActivity<ScheduleEditViewModel, ActivitySc
                 requireViewModel().editSchedule.times = it
                 scheduleTimeAdapter.submitList(it.toList())
             }
+            requireViewBinding().textViewScheduleTimeNum.text = getString(R.string.course_num, requireViewModel().editSchedule.times.size)
+        } else {
+            requireViewBinding().textViewScheduleTimeNum.text = getString(R.string.course_num, num)
         }
-        requireViewBinding().textViewScheduleTimeNum.text = getString(R.string.course_num, requireViewModel().editSchedule.times.size)
     }
 
     private fun selectScheduleTime(index: Int, hour: Int, minute: Int, isStart: Boolean) {

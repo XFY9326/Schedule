@@ -6,14 +6,14 @@ import java.util.*
 import kotlin.math.ceil
 
 object CourseTimeUtils {
-    fun getWeekNum(schedule: Schedule, firstDayOfWeek: WeekDay, calculateDate: Date = Date()): Int {
+    fun getWeekNum(schedule: Schedule, calculateDate: Date = Date()): Int {
         if (CalendarUtils.compareDateInDay(calculateDate, schedule.startDate) < 0) {
             return 0
         }
         if (CalendarUtils.compareDateInDay(calculateDate, schedule.endDate) > 0) {
             return 0
         }
-        val fixedStartDate = CalendarUtils.getFirstDateInThisWeek(schedule.startDate, firstDayOfWeek)
+        val fixedStartDate = CalendarUtils.getFirstDateInThisWeek(schedule.startDate, schedule.weekStart)
         return ceil((calculateDate.time - fixedStartDate.time) / (7 * 24 * 60 * 60 * 1000f)).toInt()
     }
 
@@ -54,10 +54,10 @@ object CourseTimeUtils {
     ): Pair<Date, Date> {
         CalendarUtils.getCalendar(
             date = scheduleCalculateTimes.weekCountBeginning,
-            firstDayOfWeek = scheduleCalculateTimes.firstDayOfWeek,
+            firstDayOfWeek = scheduleCalculateTimes.weekStart,
             clearToDate = true
         ).apply {
-            val dayOffset = (weekNum - 1) * 7 + classTime.weekDay.value(scheduleCalculateTimes.firstDayOfWeek) - 1
+            val dayOffset = (weekNum - 1) * 7 + classTime.weekDay.value(scheduleCalculateTimes.weekStart) - 1
             if (dayOffset != 0) add(Calendar.DATE, dayOffset)
 
             val start = scheduleCalculateTimes.times[classTime.classStartTime - 1]

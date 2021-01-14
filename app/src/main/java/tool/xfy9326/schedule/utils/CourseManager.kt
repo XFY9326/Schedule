@@ -23,13 +23,13 @@ object CourseManager {
     fun getScheduleViewDataByWeek(weekNum: Int, schedule: Schedule, courses: Array<Course>, scheduleStyles: ScheduleStyles): ScheduleViewData {
         val result = ArrayList<CourseCell>()
         val showNotThisWeekCourse = scheduleStyles.showNotThisWeekCourse
-        val maxWeekNum = CourseTimeUtils.getMaxWeekNum(schedule.startDate, schedule.endDate, scheduleStyles.firstDayOfWeek)
+        val maxWeekNum = CourseTimeUtils.getMaxWeekNum(schedule.startDate, schedule.endDate, schedule.weekStart)
         val startWeekDay = CalendarUtils.getWeekDay(schedule.startDate)
         val endWeekDay = CalendarUtils.getWeekDay(schedule.endDate)
 
         courses.iterateAll { course, courseTime ->
             val isThisWeekCourse =
-                hasThisWeekCourseBySchedule(courseTime, weekNum, maxWeekNum, startWeekDay, endWeekDay, scheduleStyles.firstDayOfWeek)
+                hasThisWeekCourseBySchedule(courseTime, weekNum, maxWeekNum, startWeekDay, endWeekDay, schedule.weekStart)
             if (isThisWeekCourse || showNotThisWeekCourse) {
                 val intersectCells = result.filter {
                     it.classTime intersect courseTime.classTime

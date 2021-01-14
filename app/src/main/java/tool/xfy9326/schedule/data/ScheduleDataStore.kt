@@ -2,7 +2,10 @@ package tool.xfy9326.schedule.data
 
 import androidx.datastore.preferences.core.remove
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.conflate
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 import tool.xfy9326.schedule.beans.ImageScareType
 import tool.xfy9326.schedule.beans.NotThisWeekCourseShowStyle
 import tool.xfy9326.schedule.beans.ScheduleStyles
@@ -14,7 +17,7 @@ import tool.xfy9326.schedule.utils.DirUtils
 import java.io.File
 
 object ScheduleDataStore : AbstractDataStore("ScheduleSettings") {
-    private val firstDayOfWeek by preferencesKey<String>()
+    private val defaultFirstDayOfWeek by preferencesKey<String>()
     private val scheduleViewAlpha by preferencesKey<Int>()
     private val forceShowWeekendColumn by preferencesKey<Boolean>()
     private val showNotThisWeekCourse by preferencesKey<Boolean>()
@@ -37,23 +40,22 @@ object ScheduleDataStore : AbstractDataStore("ScheduleSettings") {
     private val verticalCourseCellText by preferencesKey<Boolean>()
     val notThisWeekCourseShowStyle by preferencesSetKey<String>()
 
-    val firstDayOfWeekFlow = firstDayOfWeek.readEnumAsFlow(WeekDay.MONDAY)
+    val defaultFirstDayOfWeekFlow = defaultFirstDayOfWeek.readEnumAsFlow(WeekDay.MONDAY)
 
-    val scheduleStylesFlow = readOnlyFlow.combine(firstDayOfWeekFlow) { pref, weekday ->
+    val scheduleStylesFlow = read {
         ScheduleStyles(
-            firstDayOfWeek = weekday,
-            viewAlpha = pref[scheduleViewAlpha] ?: 100,
-            forceShowWeekendColumn = pref[forceShowWeekendColumn] ?: false,
-            showNotThisWeekCourse = pref[showNotThisWeekCourse] ?: true,
-            timeTextColor = if (pref[customScheduleTextColor] == true) pref[timeTextColor] else null,
-            courseCellTextSize = pref[courseCellTextSize] ?: 3,
-            cornerScreenMargin = pref[cornerScreenMargin] ?: false,
-            highlightShowTodayCell = pref[highlightShowTodayCell] ?: true,
-            highlightShowTodayCellColor = if (pref[customScheduleTextColor] == true) pref[highlightShowTodayCellColor] else null,
-            showScheduleTimes = pref[showScheduleTimes] ?: true,
-            horizontalCourseCellText = pref[horizontalCourseCellText] ?: false,
-            verticalCourseCellText = pref[verticalCourseCellText] ?: false,
-            notThisWeekCourseShowStyle = tryEnumValueOf(pref[notThisWeekCourseShowStyle])
+            viewAlpha = it[scheduleViewAlpha] ?: 100,
+            forceShowWeekendColumn = it[forceShowWeekendColumn] ?: false,
+            showNotThisWeekCourse = it[showNotThisWeekCourse] ?: true,
+            timeTextColor = if (it[customScheduleTextColor] == true) it[timeTextColor] else null,
+            courseCellTextSize = it[courseCellTextSize] ?: 3,
+            cornerScreenMargin = it[cornerScreenMargin] ?: false,
+            highlightShowTodayCell = it[highlightShowTodayCell] ?: true,
+            highlightShowTodayCellColor = if (it[customScheduleTextColor] == true) it[highlightShowTodayCellColor] else null,
+            showScheduleTimes = it[showScheduleTimes] ?: true,
+            horizontalCourseCellText = it[horizontalCourseCellText] ?: false,
+            verticalCourseCellText = it[verticalCourseCellText] ?: false,
+            notThisWeekCourseShowStyle = tryEnumValueOf(it[notThisWeekCourseShowStyle])
                 ?: setOf(NotThisWeekCourseShowStyle.USE_TRANSPARENT_BACKGROUND)
         )
     }.distinctUntilChanged()

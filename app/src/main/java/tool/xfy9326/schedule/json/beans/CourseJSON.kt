@@ -8,4 +8,8 @@ data class CourseJSON(
     val teacher: String? = null,
     val color: Int,
     val times: List<CourseTimeJSON>,
-)
+) {
+    init {
+        require(name.isNotEmpty()) { "Course name empty!" }
+    }
+}

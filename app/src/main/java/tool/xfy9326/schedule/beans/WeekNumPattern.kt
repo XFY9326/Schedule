@@ -70,7 +70,7 @@ class WeekNumPattern(weekNum: BooleanArray) {
         private fun fixWeekNumBySchedule(courseTime: CourseTime, scheduleCalculateTimes: ScheduleCalculateTimes): BooleanArray {
             val tempWeekNum = courseTime.weekNum
             val maxWeekNum = scheduleCalculateTimes.maxWeekNum
-            val weekStart = scheduleCalculateTimes.firstDayOfWeek
+            val weekStart = scheduleCalculateTimes.weekStart
 
             if (tempWeekNum.first()) {
                 val startWeekDay = CalendarUtils.getWeekDay(scheduleCalculateTimes.actualStartTime)

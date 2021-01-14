@@ -13,7 +13,6 @@ import tool.xfy9326.schedule.App
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.*
 import tool.xfy9326.schedule.data.AppSettingsDataStore
-import tool.xfy9326.schedule.data.ScheduleDataStore
 import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
 import tool.xfy9326.schedule.kt.iterateAll
 import java.util.*
@@ -53,7 +52,6 @@ object ScheduleSyncHelper {
             try {
                 clearAllCalendar(contentResolver)
 
-                val firstDayOfWeek = ScheduleDataStore.firstDayOfWeekFlow.first()
                 val reminderMinutes = AppSettingsDataStore.calendarSyncReminderMinutesFlow.first()
                 val schedules = ScheduleDBProvider.db.scheduleDAO.getSchedules().first()
                 var totalSchedule = 0
@@ -68,7 +66,7 @@ object ScheduleSyncHelper {
                             totalSchedule++
                         } else {
                             val courses = ScheduleDBProvider.db.scheduleDAO.getScheduleCourses(schedule.scheduleId).first()
-                            if (!syncSchedule(calId, contentResolver, firstDayOfWeek, schedule, courses, calIdInfo.second, reminderMinutes)) {
+                            if (!syncSchedule(calId, contentResolver, schedule, courses, calIdInfo.second, reminderMinutes)) {
                                 errorScheduleAmount++
                             }
                             totalSchedule++
@@ -124,13 +122,12 @@ object ScheduleSyncHelper {
     private fun syncSchedule(
         calId: Int,
         contentResolver: ContentResolver,
-        firstDayOfWeek: WeekDay,
         schedule: Schedule,
         courses: Array<Course>,
         sync: ScheduleSync,
         reminderMinutes: Int,
     ): Boolean {
-        val scheduleCalculateTimes = ScheduleCalculateTimes(schedule, firstDayOfWeek)
+        val scheduleCalculateTimes = ScheduleCalculateTimes(schedule)
 
         courses.iterateAll { course, courseTime ->
             if (!createCourseTimeCalendarEvent(calId, contentResolver, course, courseTime, scheduleCalculateTimes, sync, reminderMinutes)) {
@@ -165,7 +162,7 @@ object ScheduleSyncHelper {
                             ScheduleICSWriter.RRULE(weekNumPattern.interval,
                                 weekNumPattern.amount,
                                 courseTime.classTime.weekDay,
-                                scheduleCalculateTimes.firstDayOfWeek).text
+                                scheduleCalculateTimes.weekStart).text
                         )
                         addBasicInfoToCalendarEvent(this, calId, time, course, courseTime)
                     })) return false
@@ -180,7 +177,7 @@ object ScheduleSyncHelper {
                                     ScheduleICSWriter.RRULE(1,
                                         period.length,
                                         courseTime.classTime.weekDay,
-                                        scheduleCalculateTimes.firstDayOfWeek).text
+                                        scheduleCalculateTimes.weekStart).text
                                 )
                             }
                             addBasicInfoToCalendarEvent(this, calId, time, course, courseTime)

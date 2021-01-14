@@ -14,6 +14,7 @@ import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.Day
 import tool.xfy9326.schedule.beans.SchedulePredefine
 import tool.xfy9326.schedule.beans.ScheduleStyles
+import tool.xfy9326.schedule.beans.WeekDay
 import tool.xfy9326.schedule.kt.getStringArray
 import tool.xfy9326.schedule.utils.CourseTimeUtils
 import java.util.*
@@ -25,6 +26,7 @@ class ScheduleHeaderView(
     weekNum: Int,
     startDate: Date,
     showWeekend: Boolean,
+    firstDayOfWeek: WeekDay,
     private val styles: ScheduleStyles,
     private val predefine: SchedulePredefine,
 ) : ViewGroup(context) {
@@ -32,7 +34,7 @@ class ScheduleHeaderView(
         private val unspecifiedHeightSpec = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)
     }
 
-    private val days = CourseTimeUtils.getDayInWeek(weekNum, startDate, styles.firstDayOfWeek, showWeekend)
+    private val days = CourseTimeUtils.getDayInWeek(weekNum, startDate, firstDayOfWeek, showWeekend)
     private val weekDayStrArr = context.getStringArray(R.array.weekday)
     private val monthView = buildMonthView(days[0].month).also {
         addViewInLayout(it, -1, it.layoutParams, true)

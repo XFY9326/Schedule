@@ -9,7 +9,6 @@ import tool.xfy9326.schedule.beans.EditError
 import tool.xfy9326.schedule.beans.Schedule
 import tool.xfy9326.schedule.beans.ScheduleTime
 import tool.xfy9326.schedule.beans.WeekDay
-import tool.xfy9326.schedule.data.ScheduleDataStore
 import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
 import tool.xfy9326.schedule.kt.MutableEventLiveData
 import tool.xfy9326.schedule.kt.postEvent
@@ -37,7 +36,7 @@ class ScheduleEditViewModel : AbstractViewModel() {
 
     fun selectScheduleDate(isStart: Boolean, date: Date) {
         viewModelScope.launch {
-            selectScheduleDate.postEvent(Triple(isStart, date, ScheduleDataStore.firstDayOfWeekFlow.first()))
+            selectScheduleDate.postEvent(Triple(isStart, date, editSchedule.weekStart))
         }
     }
 

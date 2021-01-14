@@ -47,7 +47,7 @@ class ScheduleGridView(
         }
 
         for (cell in viewData.cells) {
-            ScheduleCellView(context, showWeekend, cell, predefine, styles, internalCellClickListener).let {
+            ScheduleCellView(context, showWeekend, cell, predefine, styles, viewData.weekStart, internalCellClickListener).let {
                 if (it.row in 0 until rowAmount) {
                     if (it.column in 0 until columnAmount) {
                         addViewInLayout(it, -1, it.layoutParams, true)
