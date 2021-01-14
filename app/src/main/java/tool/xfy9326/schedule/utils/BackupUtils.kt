@@ -8,7 +8,7 @@ import tool.xfy9326.schedule.beans.BatchResult
 import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
 import tool.xfy9326.schedule.io.TextIO
 import tool.xfy9326.schedule.json.JSONManager
-import tool.xfy9326.schedule.json.ScheduleJsonBundle
+import tool.xfy9326.schedule.json.ScheduleJSONBundle
 
 object BackupUtils {
     fun createBackupFileName(context: Context) = "${context.getString(R.string.app_name)}-${System.currentTimeMillis() / 1000}"
@@ -19,7 +19,7 @@ object BackupUtils {
                 val allBundles = Array(scheduleIds.size) {
                     val schedule = getSchedule(scheduleIds[it]).first()!!
                     val courses = getScheduleCourses(scheduleIds[it]).first()
-                    ScheduleJsonBundle(schedule, courses)
+                    ScheduleJSONBundle(schedule, courses)
                 }
                 JSONManager.encode(*allBundles)?.let {
                     TextIO.writeText(it, context, uri)
