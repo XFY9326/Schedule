@@ -29,7 +29,7 @@ class DataSettingsFragment : AbstractSettingsFragment() {
                 setTitle(R.string.clear_cache)
                 setMessage(R.string.clear_cache_msg)
                 setPositiveButton(android.R.string.ok) { _, _ ->
-                    requireSettingsViewModel()?.clearCache(requireContext())
+                    requireSettingsViewModel()?.clearCache()
                     requireRootLayout()?.showShortSnackBar(R.string.clear_cache_success)
                 }
                 setNegativeButton(android.R.string.cancel, null)

@@ -1,23 +1,21 @@
 package tool.xfy9326.schedule.io
 
-import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import tool.xfy9326.schedule.io.GlobalIO.asInputStream
+import tool.xfy9326.schedule.io.GlobalIO.asOutputStream
 import java.io.File
 import java.io.InputStream
 import java.io.OutputStream
 
-@Suppress("BlockingMethodInNonBlockingContext", "MemberVisibilityCanBePrivate", "unused")
 object ImageIO {
     private const val DEFAULT_BITMAP_SAVE_QUALITY = 100
 
-    suspend fun readImage(file: File) = readImage(file.inputStream())
-
-    suspend fun readImage(context: Context, uri: Uri) =
-        context.contentResolver.openInputStream(uri)?.let {
+    private suspend fun readImage(uri: Uri) =
+        uri.asInputStream()?.use {
             readImage(it)
         }
 
@@ -30,13 +28,12 @@ object ImageIO {
     ) = if (BaseIO.prepareFileFolder(file)) saveImage(file.outputStream(), bitmap, compressFormat, quality, recycle) else false
 
     suspend fun saveImage(
-        context: Context,
         uri: Uri,
         bitmap: Bitmap,
         compressFormat: Bitmap.CompressFormat,
         quality: Int = DEFAULT_BITMAP_SAVE_QUALITY,
         recycle: Boolean = false,
-    ) = context.contentResolver.openOutputStream(uri)?.let {
+    ) = uri.asOutputStream()?.use {
         saveImage(it, bitmap, compressFormat, quality, recycle)
     } ?: false
 
@@ -69,14 +66,13 @@ object ImageIO {
     }
 
     suspend fun importImageFromUri(
-        context: Context,
         fromUri: Uri,
         toFile: File,
         compressFormat: Bitmap.CompressFormat,
         quality: Int = DEFAULT_BITMAP_SAVE_QUALITY,
     ): Boolean {
         try {
-            readImage(context, fromUri)?.let {
+            readImage(fromUri)?.let {
                 return saveImage(toFile, it, compressFormat, quality, true)
             }
         } catch (e: Exception) {

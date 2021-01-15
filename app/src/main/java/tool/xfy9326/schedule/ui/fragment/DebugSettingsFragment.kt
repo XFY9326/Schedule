@@ -83,7 +83,7 @@ class DebugSettingsFragment : AbstractSettingsFragment() {
             if (resultCode == Activity.RESULT_OK) {
                 val outputUri = data?.data
                 if (outputUri != null) {
-                    requireSettingsViewModel()?.outputLogFileToUri(requireContext(), outputUri)
+                    requireSettingsViewModel()?.outputLogFileToUri(outputUri)
                 } else {
                     requireRootLayout()?.showShortSnackBar(R.string.output_file_create_failed)
                 }

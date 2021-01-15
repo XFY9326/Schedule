@@ -3,17 +3,16 @@ package tool.xfy9326.schedule.utils
 import android.content.ContentResolver
 import android.content.ContentUris
 import android.content.ContentValues
-import android.content.Context
 import android.provider.CalendarContract
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.withContext
-import tool.xfy9326.schedule.App
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.*
 import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
+import tool.xfy9326.schedule.io.GlobalIO
 import tool.xfy9326.schedule.kt.iterateAll
 import java.util.*
 
@@ -42,12 +41,12 @@ object ScheduleSyncHelper {
         contentResolver.delete(CalendarContract.Calendars.CONTENT_URI, ALL_CALENDAR_SELECTION, null)
     }
 
-    fun removeAllCalendar(context: Context) {
-        clearAllCalendar(context.contentResolver)
+    fun removeAllCalendar() {
+        clearAllCalendar(GlobalIO.contentResolver)
     }
 
-    suspend fun syncCalendar(context: Context) = withContext(Dispatchers.Unconfined) {
-        val contentResolver = context.contentResolver
+    suspend fun syncCalendar() = withContext(Dispatchers.Unconfined) {
+        val contentResolver = GlobalIO.contentResolver
         if (syncLock.tryLock()) {
             try {
                 clearAllCalendar(contentResolver)
@@ -213,7 +212,7 @@ object ScheduleSyncHelper {
                 put(CalendarContract.Events.EVENT_LOCATION, it)
             }
             course.teacher?.let {
-                put(CalendarContract.Events.DESCRIPTION, App.instance.getString(R.string.ics_description_teacher, it))
+                put(CalendarContract.Events.DESCRIPTION, GlobalIO.resources.getString(R.string.ics_description_teacher, it))
             }
         }
     }

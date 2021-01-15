@@ -12,7 +12,7 @@ class CourseImportViewModel : AbstractViewModel() {
 
     fun loadCourseImportMetas() {
         viewModelScope.launch {
-            courseMetas.postValue(CourseAdapterConfig.metas)
+            courseMetas.postValue(CourseAdapterConfig.getConfigs())
         }
     }
 }

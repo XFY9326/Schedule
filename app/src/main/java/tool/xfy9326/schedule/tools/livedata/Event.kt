@@ -2,8 +2,14 @@
 
 package tool.xfy9326.schedule.tools.livedata
 
-open class Event<out T>(val content: T) {
+import java.lang.ref.WeakReference
+
+open class Event<out T>(content: T) {
+    private val weakContentReference = WeakReference(Wrapper(content))
     private val consumedList = ArrayList<Int>()
+
+    val valueWrapper
+        get() = weakContentReference.get()
 
     @Synchronized
     fun isConsumed(tag: String? = null) = tag.hashCode() in consumedList
@@ -21,4 +27,6 @@ open class Event<out T>(val content: T) {
 
     @Synchronized
     fun consumeReset() = consumedList.clear()
+
+    class Wrapper<out T>(val value: T)
 }

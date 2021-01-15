@@ -1,6 +1,5 @@
 package tool.xfy9326.schedule.utils
 
-import android.content.Context
 import android.graphics.Bitmap
 import android.view.View
 import androidx.annotation.Px
@@ -9,11 +8,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.withContext
+import tool.xfy9326.schedule.App
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.*
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
 import tool.xfy9326.schedule.data.ScheduleDataStore
 import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
+import tool.xfy9326.schedule.io.GlobalIO
 import tool.xfy9326.schedule.kt.*
 import tool.xfy9326.schedule.tools.MaterialColorHelper
 import tool.xfy9326.schedule.ui.view.ScheduleView
@@ -116,8 +117,8 @@ object CourseManager {
         return foundConflicts
     }
 
-    fun createNewCourse(context: Context, scheduleId: Long) =
-        Course(0, scheduleId, context.getString(R.string.new_course), null, MaterialColorHelper.random(), listOf(createNewCourseTime()))
+    fun createNewCourse(scheduleId: Long) =
+        Course(0, scheduleId, GlobalIO.resources.getString(R.string.new_course), null, MaterialColorHelper.random(), listOf(createNewCourseTime()))
 
     fun createNewCourseTime(maxWeekNum: Int = 0) =
         CourseTime(if (maxWeekNum <= 0) {
@@ -152,7 +153,7 @@ object CourseManager {
         return null
     }
 
-    suspend fun generateScheduleImageByWeekNum(context: Context, scheduleId: Long, weekNum: Int, @Px targetWidth: Int) =
+    suspend fun generateScheduleImageByWeekNum(scheduleId: Long, weekNum: Int, @Px targetWidth: Int) =
         withContext(Dispatchers.Default) {
             val schedule = ScheduleDBProvider.db.scheduleDAO.getSchedule(scheduleId).firstOrNull() ?: return@withContext null
             val courses = ScheduleDBProvider.db.scheduleDAO.getScheduleCourses(scheduleId).first()
@@ -162,8 +163,8 @@ object CourseManager {
                 cornerScreenMargin = false
             ) ?: return@withContext null
 
-            val backgroundColor = context.getDefaultBackgroundColor()
-            val scheduleView = ScheduleView(context, getScheduleViewDataByWeek(weekNum, schedule, courses, styles))
+            val backgroundColor = App.instance.getDefaultBackgroundColor()
+            val scheduleView = ScheduleView(App.instance, getScheduleViewDataByWeek(weekNum, schedule, courses, styles))
 
             val widthSpec = View.MeasureSpec.makeMeasureSpec(targetWidth, View.MeasureSpec.AT_MOST)
             val heightSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)

@@ -168,7 +168,7 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
             R.id.menu_scheduleControlPanel -> requireViewModel().showScheduleControlPanel()
             R.id.menu_scheduleShare -> {
                 requireViewBinding().layoutSchedule.showShortSnackBar(R.string.generating_share_schedule)
-                requireViewModel().shareScheduleImage(this, getCurrentShowWeekNum())
+                requireViewModel().shareScheduleImage(getCurrentShowWeekNum(), resources.displayMetrics.widthPixels)
             }
         }
         return super.onOptionsItemSelected(item)
@@ -179,7 +179,7 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
             if (resultCode == Activity.RESULT_OK) {
                 val outputUri = data?.data
                 if (outputUri != null) {
-                    requireViewModel().exportICS(this, outputUri)
+                    requireViewModel().exportICS(outputUri)
                 } else {
                     requireViewBinding().layoutSchedule.showShortSnackBar(R.string.output_file_create_failed)
                 }
@@ -202,7 +202,7 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         if (requestCode == REQUEST_CODE_CALENDAR_PERMISSION) {
             if (PermissionUtils.checkGrantResults(grantResults)) {
-                requireViewModel().syncToCalendar(this)
+                requireViewModel().syncToCalendar()
             } else {
                 requireViewBinding().layoutSchedule.showShortSnackBar(R.string.calendar_permission_get_failed)
             }
@@ -216,7 +216,7 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
             R.id.menu_navCourseExportICS -> requireViewModel().selectScheduleForExportingICS()
             R.id.menu_navSyncToCalendar -> lifecycleScope.launch {
                 if (PermissionUtils.checkCalendarPermission(this@ScheduleActivity, REQUEST_CODE_CALENDAR_PERMISSION)) {
-                    requireViewModel().syncToCalendar(this@ScheduleActivity)
+                    requireViewModel().syncToCalendar()
                 }
             }
             R.id.menu_navScheduleManage -> startActivity<ScheduleManageActivity>()

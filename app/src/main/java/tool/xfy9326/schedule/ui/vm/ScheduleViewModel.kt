@@ -1,6 +1,5 @@
 package tool.xfy9326.schedule.ui.vm
 
-import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
 import androidx.lifecycle.viewModelScope
@@ -14,7 +13,10 @@ import tool.xfy9326.schedule.data.AppDataStore
 import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.data.ScheduleDataStore
 import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
-import tool.xfy9326.schedule.kt.*
+import tool.xfy9326.schedule.kt.MutableEventLiveData
+import tool.xfy9326.schedule.kt.asDistinctLiveData
+import tool.xfy9326.schedule.kt.combineTransform
+import tool.xfy9326.schedule.kt.postEvent
 import tool.xfy9326.schedule.tools.DisposableValue
 import tool.xfy9326.schedule.tools.ImageHelper
 import tool.xfy9326.schedule.ui.vm.base.AbstractViewModel
@@ -102,26 +104,20 @@ class ScheduleViewModel : AbstractViewModel() {
         }
     }
 
-    fun syncToCalendar(context: Context) {
-        val weakContext = context.weak()
+    fun syncToCalendar() {
         viewModelScope.launch(Dispatchers.Default) {
-            weakContext.get()?.let {
-                ScheduleSyncHelper.syncCalendar(it)?.let(syncToCalendarStatus::postEvent)
-            }
+            ScheduleSyncHelper.syncCalendar()?.let(syncToCalendarStatus::postEvent)
         }
     }
 
-    fun exportICS(context: Context, outputUri: Uri) {
-        val weakContext = context.weak()
+    fun exportICS(outputUri: Uri) {
         viewModelScope.launch {
             val scheduleId = waitExportScheduleId.read()
             if (scheduleId != null) {
                 val schedule = ScheduleDBProvider.db.scheduleDAO.getSchedule(scheduleId).first()
                 if (schedule != null) {
                     val courses = ScheduleDBProvider.db.scheduleDAO.getScheduleCourses(scheduleId).first()
-                    weakContext.get()?.let {
-                        iceExportStatus.postEvent(ScheduleICSHelper(schedule, courses).dumpICS(it, outputUri))
-                    }
+                    iceExportStatus.postEvent(ScheduleICSHelper(schedule, courses).dumpICS(outputUri))
                 } else {
                     iceExportStatus.postEvent(false)
                 }
@@ -131,30 +127,26 @@ class ScheduleViewModel : AbstractViewModel() {
         }
     }
 
-    fun shareScheduleImage(context: Context, weekNum: Int) {
-        val weakContext = context.weak()
+    fun shareScheduleImage(weekNum: Int, targetWidth: Int) {
         if (scheduleSharedMutex.tryLock()) {
             viewModelScope.launch {
                 try {
-                    weakContext.get()?.let {
-                        val scheduleId = currentScheduleId.first()
-                        val targetWidth = it.resources.displayMetrics.widthPixels
-                        val bitmap = CourseManager.generateScheduleImageByWeekNum(it, scheduleId, weekNum, targetWidth)
-                        if (bitmap != null) {
-                            val uri = if (AppSettingsDataStore.saveImageWhileSharingFlow.first()) {
-                                ImageHelper.outputImageToAlbum(it, bitmap)
-                            } else {
-                                ImageHelper.createShareCacheImage(it, bitmap)
-                            }
+                    val scheduleId = currentScheduleId.first()
+                    val bitmap = CourseManager.generateScheduleImageByWeekNum(scheduleId, weekNum, targetWidth)
+                    if (bitmap != null) {
+                        val uri = if (AppSettingsDataStore.saveImageWhileSharingFlow.first()) {
+                            ImageHelper.outputImageToAlbum(bitmap)
+                        } else {
+                            ImageHelper.createShareCacheImage(bitmap)
+                        }
 
-                            if (uri != null) {
-                                scheduleShared.postEvent(uri)
-                            } else {
-                                scheduleShared.postEvent(null)
-                            }
+                        if (uri != null) {
+                            scheduleShared.postEvent(uri)
                         } else {
                             scheduleShared.postEvent(null)
                         }
+                    } else {
+                        scheduleShared.postEvent(null)
                     }
                 } finally {
                     scheduleSharedMutex.unlock()

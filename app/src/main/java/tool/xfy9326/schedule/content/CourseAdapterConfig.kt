@@ -1,14 +1,23 @@
 package tool.xfy9326.schedule.content
 
-import tool.xfy9326.schedule.App
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import tool.xfy9326.schedule.content.adapters.config.NAUSSOImportConfig
 import tool.xfy9326.schedule.content.adapters.config.NAUWebImportConfig
 
 object CourseAdapterConfig {
-    val metas = arrayOf(
+    private val registerConfigs = arrayOf(
         NAUWebImportConfig(),
         NAUSSOImportConfig()
-    ).sortedBy {
-        it.getSchoolNameWords(App.instance) + it.getSystemNameWords(App.instance)
+    )
+
+    private val sortedConfigs by lazy {
+        registerConfigs.sortedBy {
+            it.getSchoolNameWords() + it.getSystemNameWords()
+        }
+    }
+
+    suspend fun getConfigs() = withContext(Dispatchers.Default) {
+        return@withContext sortedConfigs
     }
 }

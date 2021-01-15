@@ -1,19 +1,19 @@
 package tool.xfy9326.schedule.io
 
-import android.content.Context
 import android.net.Uri
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import tool.xfy9326.schedule.io.GlobalIO.readText
+import tool.xfy9326.schedule.io.GlobalIO.writeText
 import java.io.File
 import java.nio.charset.Charset
 
 object TextIO {
 
-    @Suppress("BlockingMethodInNonBlockingContext")
-    suspend fun readAssetFileAsText(context: Context, path: String, defaultText: String? = null, charset: Charset = Charsets.UTF_8) =
+    suspend fun readAssetText(path: String, defaultText: String? = null, charset: Charset = Charsets.UTF_8) =
         withContext(Dispatchers.IO) {
             try {
-                return@withContext context.assets.open(path).bufferedReader(charset).readText()
+                return@withContext GlobalIO.openAsset(path).reader(charset).use { it.readText() }
             } catch (e: Exception) {
                 e.printStackTrace()
             }
@@ -45,25 +45,20 @@ object TextIO {
         return@withContext defaultText
     }
 
-    @Suppress("BlockingMethodInNonBlockingContext")
-    suspend fun writeText(text: String, context: Context, outputUri: Uri, charset: Charset = Charsets.UTF_8) = withContext(Dispatchers.IO) {
+    suspend fun writeText(text: String, outputUri: Uri, charset: Charset = Charsets.UTF_8) = withContext(Dispatchers.IO) {
         try {
-            context.contentResolver.openOutputStream(outputUri)?.bufferedWriter(charset)?.use {
-                it.write(text)
-            }
-            return@withContext true
+            return@withContext outputUri.writeText(text, charset)
         } catch (e: Exception) {
             e.printStackTrace()
         }
         return@withContext false
     }
 
-    @Suppress("BlockingMethodInNonBlockingContext")
-    suspend fun readText(context: Context, outputUri: Uri, defaultText: String? = null, charset: Charset = Charsets.UTF_8) =
+    suspend fun readText(outputUri: Uri, defaultText: String? = null, charset: Charset = Charsets.UTF_8) =
         withContext(Dispatchers.IO) {
             try {
-                context.contentResolver.openInputStream(outputUri)?.bufferedReader(charset)?.use {
-                    return@withContext it.readText()
+                outputUri.readText(charset)?.let {
+                    return@withContext it
                 }
             } catch (e: Exception) {
                 e.printStackTrace()

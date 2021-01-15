@@ -19,7 +19,6 @@ import androidx.fragment.app.Fragment
 import tool.xfy9326.schedule.App
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.ui.activity.SplashActivity
-import java.lang.ref.WeakReference
 import kotlin.system.exitProcess
 
 inline fun showGlobalShortToast(@StringRes resId: Int, vararg params: Any) =
@@ -128,5 +127,3 @@ fun Context.getDefaultBackgroundColor(): Int {
 
 @Suppress("UNCHECKED_CAST")
 fun <T> DialogFragment.requireOwner() = (parentFragment ?: requireActivity()) as? T
-
-inline fun Context.weak() = WeakReference(this)

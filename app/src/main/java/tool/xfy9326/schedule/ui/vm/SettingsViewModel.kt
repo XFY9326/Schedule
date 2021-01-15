@@ -1,15 +1,12 @@
 package tool.xfy9326.schedule.ui.vm
 
-import android.content.Context
 import android.net.Uri
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import tool.xfy9326.schedule.App
 import tool.xfy9326.schedule.beans.BatchResult
 import tool.xfy9326.schedule.beans.Schedule
 import tool.xfy9326.schedule.beans.ScheduleSync
@@ -17,12 +14,11 @@ import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.data.ScheduleDataStore
 import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
 import tool.xfy9326.schedule.io.BaseIO
-import tool.xfy9326.schedule.io.BaseIO.deleteFile
+import tool.xfy9326.schedule.io.GlobalIO
 import tool.xfy9326.schedule.io.TextIO
 import tool.xfy9326.schedule.kt.MutableEventLiveData
 import tool.xfy9326.schedule.kt.asParentOf
 import tool.xfy9326.schedule.kt.postEvent
-import tool.xfy9326.schedule.kt.weak
 import tool.xfy9326.schedule.tools.DisposableValue
 import tool.xfy9326.schedule.tools.ExceptionHandler
 import tool.xfy9326.schedule.tools.ImageHelper
@@ -61,28 +57,20 @@ class SettingsViewModel : AbstractViewModel() {
         }
     }
 
-    fun backupScheduleToUri(context: Context, outputUri: Uri) {
-        val weakContext = context.weak()
+    fun backupScheduleToUri(outputUri: Uri) {
         viewModelScope.launch(Dispatchers.Default) {
             val idList = waitBackupScheduleId.read()
             if (idList != null) {
-                weakContext.get()?.let {
-                    backupScheduleToUriResult.postEvent(
-                        BackupUtils.backupSchedules(it, outputUri, idList)
-                    )
-                }
+                backupScheduleToUriResult.postEvent(BackupUtils.backupSchedules(outputUri, idList))
             } else {
                 backupScheduleToUriResult.postEvent(false)
             }
         }
     }
 
-    fun restoreScheduleFromUri(context: Context, outputUri: Uri) {
-        val weakContext = context.weak()
+    fun restoreScheduleFromUri(outputUri: Uri) {
         viewModelScope.launch(Dispatchers.Default) {
-            weakContext.get()?.let {
-                restoreScheduleFromUriResult.postEvent(BackupUtils.restoreSchedules(it, outputUri))
-            }
+            restoreScheduleFromUriResult.postEvent(BackupUtils.restoreSchedules(outputUri))
         }
     }
 
@@ -131,12 +119,9 @@ class SettingsViewModel : AbstractViewModel() {
         }
     }
 
-    fun clearCalendar(context: Context) {
-        val weakContext = context.weak()
+    fun clearCalendar() {
         viewModelScope.launch {
-            weakContext.get()?.let {
-                ScheduleSyncHelper.removeAllCalendar(it)
-            }
+            ScheduleSyncHelper.removeAllCalendar()
         }
     }
 
@@ -146,19 +131,16 @@ class SettingsViewModel : AbstractViewModel() {
         }
     }
 
-    fun syncToCalendar(context: Context) {
-        val weakContext = context.weak()
+    fun syncToCalendar() {
         viewModelScope.launch(Dispatchers.Default) {
-            weakContext.get()?.let {
-                ScheduleSyncHelper.syncCalendar(it)?.let(syncToCalendarStatus::postEvent)
-            }
+            ScheduleSyncHelper.syncCalendar()?.let(syncToCalendarStatus::postEvent)
         }
     }
 
     fun importScheduleImage(uri: Uri) {
         viewModelScope.launch(Dispatchers.Default) {
             val quality = ScheduleDataStore.scheduleBackgroundImageQualityFlow.first()
-            val imageName = ImageHelper.importImageFromUri(App.instance, uri, DirUtils.PictureAppDir, quality)
+            val imageName = ImageHelper.importImageFromUri(uri, DirUtils.PictureAppDir, quality)
             if (imageName == null) {
                 importScheduleImage.postEvent(false)
             } else {
@@ -171,14 +153,11 @@ class SettingsViewModel : AbstractViewModel() {
         }
     }
 
-    fun outputLogFileToUri(context: Context, outputUri: Uri) {
-        val weakContext = context.weak()
+    fun outputLogFileToUri(outputUri: Uri) {
         viewModelScope.launch(Dispatchers.IO) {
             val logName = waitCreateLogFileName.read()
             if (logName != null) {
-                weakContext.get()?.let {
-                    outputLogFileToUriResult.postEvent(BaseIO.writeFileToUri(it, outputUri, DirUtils.LogDir.asParentOf(logName)))
-                }
+                outputLogFileToUriResult.postEvent(BaseIO.writeFileToUri(outputUri, DirUtils.LogDir.asParentOf(logName)))
             } else {
                 outputLogFileToUriResult.postEvent(false)
             }
@@ -205,16 +184,9 @@ class SettingsViewModel : AbstractViewModel() {
         }
     }
 
-    fun clearCache(context: Context) {
-        val weakContext = context.weak()
+    fun clearCache() {
         viewModelScope.launch {
-            weakContext.get()?.let { context ->
-                context.cacheDir?.deleteFile()
-                ContextCompat.getCodeCacheDir(context)?.deleteFile()
-                ContextCompat.getExternalCacheDirs(context).forEach {
-                    it?.deleteFile()
-                }
-            }
+            GlobalIO.clearAllCache()
         }
     }
 
