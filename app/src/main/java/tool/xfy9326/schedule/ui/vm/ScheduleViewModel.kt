@@ -62,7 +62,7 @@ class ScheduleViewModel : AbstractViewModel() {
     val iceExportStatus = MutableEventLiveData<Boolean>()
     val syncToCalendarStatus = MutableEventLiveData<BatchResult>()
 
-    var nightModeChangeOldSurface: Bitmap? = null
+    val nightModeChangeOldSurface = DisposableValue<Bitmap>()
     val nightModeChanging = AtomicBoolean(false)
     val waitExportScheduleId = DisposableValue<Long>()
 

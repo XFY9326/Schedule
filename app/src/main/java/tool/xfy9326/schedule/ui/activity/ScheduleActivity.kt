@@ -333,7 +333,7 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
             val viewWidth = layoutScheduleRoot.measuredWidth
             val viewHeight = layoutScheduleRoot.measuredHeight
 
-            requireViewModel().nightModeChangeOldSurface = window.decorView.drawToBitmap()
+            requireViewModel().nightModeChangeOldSurface.write(layoutScheduleRoot.drawToBitmap())
 
             val finalRadius =
                 max(sqrt((viewWidth - startX) * (viewWidth - startX) + (viewHeight - startY) * (viewHeight - startY)),
@@ -366,8 +366,7 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
     }
 
     private fun animateNightModeChanged(button: AppCompatImageButton, startX: Float, startY: Float, finalRadius: Float, setNightMode: Boolean) {
-        requireViewModel().nightModeChangeOldSurface?.let { oldSurface ->
-            requireViewModel().nightModeChangeOldSurface = null
+        requireViewModel().nightModeChangeOldSurface.read()?.let { oldSurface ->
 
             requireViewBinding().apply {
                 imageViewNightModeChangeMask.setImageBitmap(oldSurface)
