@@ -39,14 +39,17 @@
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="45dp">
+                    android:layout_height="45dp"
+                    android:paddingStart="5dp"
+                    android:paddingEnd="5dp">
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/button_oddWeeksMode"
                         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:text="@string/set_all_odd_week"
+                        android:textSize="13sp"
                         app:layout_constraintEnd_toStartOf="@id/button_evenWeeksMode"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -54,11 +57,25 @@
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/button_evenWeeksMode"
                         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
                         android:text="@string/set_all_even_week"
-                        app:layout_constraintEnd_toEndOf="parent"
+                        android:textSize="13sp"
+                        app:layout_constraintEnd_toStartOf="@id/button_oppositeWeeks"
                         app:layout_constraintStart_toEndOf="@id/button_oddWeeksMode"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/button_oppositeWeeks"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="@string/select_opposite_weeks"
+                        android:textSize="13sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/button_evenWeeksMode"
                         app:layout_constraintTop_toTopOf="parent" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
