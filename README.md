@@ -1,5 +1,6 @@
 # Schedule
-Schedule Android App
+[![codebeat badge](https://codebeat.co/badges/78a08756-e6af-4d82-993e-060a7ad6a3aa)](https://codebeat.co/projects/github-com-xfy9326-schedule-master)  
+PureSchedule open source code
 
 ### Features:  
 - Data driven view
@@ -11,7 +12,7 @@ Schedule Android App
 
 Open Source License
 ```
-Copyright 2020 XFY9326
+Copyright 2021 XFY9326
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
