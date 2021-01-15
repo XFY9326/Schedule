@@ -1,7 +1,6 @@
 package tool.xfy9326.schedule.tools
 
 import android.content.ContentValues
-import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
@@ -9,6 +8,8 @@ import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
 import androidx.core.content.FileProvider
+import tool.xfy9326.schedule.App
+import tool.xfy9326.schedule.io.GlobalIO
 import tool.xfy9326.schedule.io.ImageIO
 import tool.xfy9326.schedule.kt.asParentOf
 import tool.xfy9326.schedule.utils.DirUtils
@@ -24,22 +25,22 @@ object ImageHelper {
     private val PRIVATE_STORAGE_BITMAP_COMPRESS_FORMAT = WEBPCompat
     private val OUTPUT_BITMAP_COMPRESS_FORMAT = Bitmap.CompressFormat.PNG
 
-    suspend fun importImageFromUri(context: Context, fromUri: Uri, toDir: File, quality: Int): String? {
+    suspend fun importImageFromUri(fromUri: Uri, toDir: File, quality: Int): String? {
         val imageFile = generateNewImageFile(toDir, PRIVATE_STORAGE_BITMAP_COMPRESS_FORMAT)
-        if (ImageIO.importImageFromUri(context, fromUri, imageFile, PRIVATE_STORAGE_BITMAP_COMPRESS_FORMAT, quality)) {
+        if (ImageIO.importImageFromUri(fromUri, imageFile, PRIVATE_STORAGE_BITMAP_COMPRESS_FORMAT, quality)) {
             return imageFile.name
         }
         return null
     }
 
-    suspend fun outputImageToAlbum(context: Context, bitmap: Bitmap): Uri? {
+    suspend fun outputImageToAlbum(bitmap: Bitmap, recycle: Boolean = true): Uri? {
         val newFileName = getNewFileNameByBitmapCompressFormat(UUID.randomUUID().toString(), OUTPUT_BITMAP_COMPRESS_FORMAT)
         val imageContentValues = createImageContentValues(newFileName, OUTPUT_BITMAP_COMPRESS_FORMAT, bitmap.width, bitmap.height)
-        val uri = context.contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, imageContentValues)
-        return if (uri != null && ImageIO.saveImage(context, uri, bitmap, OUTPUT_BITMAP_COMPRESS_FORMAT)) {
+        val uri = GlobalIO.contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, imageContentValues)
+        return if (uri != null && ImageIO.saveImage(uri, bitmap, OUTPUT_BITMAP_COMPRESS_FORMAT, recycle = recycle)) {
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
                 @Suppress("DEPRECATION")
-                context.sendBroadcast(Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri))
+                App.instance.sendBroadcast(Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri))
             }
             uri
         } else {
@@ -47,11 +48,11 @@ object ImageHelper {
         }
     }
 
-    suspend fun createShareCacheImage(context: Context, bitmap: Bitmap): Uri? {
+    suspend fun createShareCacheImage(bitmap: Bitmap, recycle: Boolean = true): Uri? {
         val newFileName = getNewFileNameByBitmapCompressFormat(UUID.randomUUID().toString(), OUTPUT_BITMAP_COMPRESS_FORMAT)
         val newImageFile = DirUtils.SharedFileDir.asParentOf(newFileName)
-        return if (ImageIO.saveImage(newImageFile, bitmap, OUTPUT_BITMAP_COMPRESS_FORMAT)) {
-            FileProvider.getUriForFile(context, IntentUtils.FILE_PROVIDER_AUTH, newImageFile)
+        return if (ImageIO.saveImage(newImageFile, bitmap, OUTPUT_BITMAP_COMPRESS_FORMAT, recycle = recycle)) {
+            FileProvider.getUriForFile(App.instance, IntentUtils.FILE_PROVIDER_AUTH, newImageFile)
         } else {
             null
         }

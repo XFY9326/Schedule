@@ -1,6 +1,5 @@
 package tool.xfy9326.schedule.ui.vm
 
-import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.first
@@ -13,7 +12,6 @@ import tool.xfy9326.schedule.beans.Schedule
 import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
 import tool.xfy9326.schedule.kt.MutableEventLiveData
 import tool.xfy9326.schedule.kt.postEvent
-import tool.xfy9326.schedule.kt.weak
 import tool.xfy9326.schedule.ui.dialog.CourseTimeEditDialog
 import tool.xfy9326.schedule.ui.vm.base.AbstractViewModel
 import tool.xfy9326.schedule.utils.CourseManager
@@ -32,8 +30,7 @@ class CourseEditViewModel : AbstractViewModel() {
     val loadAllSchedules = MutableEventLiveData<List<Schedule.Min>>()
     val copyToOtherSchedule = MutableEventLiveData<EditError?>()
 
-    fun requestDBCourse(context: Context, scheduleId: Long, courseId: Long) {
-        val weakContext = context.weak()
+    fun requestDBCourse(scheduleId: Long, courseId: Long) {
         isEdit = courseId != 0L
 
         if (!::editCourse.isInitialized) {
@@ -44,10 +41,8 @@ class CourseEditViewModel : AbstractViewModel() {
                         courseData.postValue(it)
                     }
                 } else {
-                    weakContext.get()?.let {
-                        editCourse = CourseManager.createNewCourse(it, scheduleId)
-                        courseData.postValue(editCourse)
-                    }
+                    editCourse = CourseManager.createNewCourse(scheduleId)
+                    courseData.postValue(editCourse)
                 }
                 originalCourseHashCode = editCourse.hashCode()
             }

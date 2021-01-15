@@ -2,10 +2,10 @@ package tool.xfy9326.schedule.utils
 
 import android.content.Context
 import android.net.Uri
-import tool.xfy9326.schedule.App
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.*
 import tool.xfy9326.schedule.beans.WeekNumPattern.PatternType.*
+import tool.xfy9326.schedule.io.GlobalIO
 import tool.xfy9326.schedule.io.TextIO
 import tool.xfy9326.schedule.kt.iterateAll
 
@@ -16,13 +16,13 @@ class ScheduleICSHelper constructor(schedule: Schedule, private val courses: Arr
 
     private val scheduleCalculateTimes = ScheduleCalculateTimes(schedule)
 
-    suspend fun dumpICS(context: Context, uri: Uri): Boolean {
+    suspend fun dumpICS(uri: Uri): Boolean {
         try {
             val iCal = ScheduleICSWriter()
             courses.iterateAll { course, courseTime ->
                 createCourseTimeVEvent(iCal, course, courseTime)
             }
-            return TextIO.writeText(iCal.build(), context, uri)
+            return TextIO.writeText(iCal.build(), uri)
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -62,6 +62,6 @@ class ScheduleICSHelper constructor(schedule: Schedule, private val courses: Arr
         if (course.teacher == null) {
             null
         } else {
-            App.instance.getString(R.string.ics_description_teacher, course.teacher)
+            GlobalIO.resources.getString(R.string.ics_description_teacher, course.teacher)
         }
 }

@@ -83,7 +83,7 @@ class BackupRestoreSettingsFragment : AbstractSettingsFragment(), MultiItemSelec
                 if (resultCode == Activity.RESULT_OK) {
                     val outputUri = data?.data
                     if (outputUri != null) {
-                        requireSettingsViewModel()?.backupScheduleToUri(requireContext(), outputUri)
+                        requireSettingsViewModel()?.backupScheduleToUri(outputUri)
                     } else {
                         requireRootLayout()?.showShortSnackBar(R.string.output_file_create_failed)
                     }
@@ -96,7 +96,7 @@ class BackupRestoreSettingsFragment : AbstractSettingsFragment(), MultiItemSelec
                 if (resultCode == Activity.RESULT_OK) {
                     val outputUri = data?.data
                     if (outputUri != null) {
-                        requireSettingsViewModel()?.restoreScheduleFromUri(requireContext(), outputUri)
+                        requireSettingsViewModel()?.restoreScheduleFromUri(outputUri)
                     } else {
                         requireRootLayout()?.showShortSnackBar(R.string.input_file_found_failed)
                     }

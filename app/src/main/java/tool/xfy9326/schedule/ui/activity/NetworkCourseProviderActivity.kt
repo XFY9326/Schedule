@@ -6,6 +6,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import androidx.core.view.isVisible
+import com.bumptech.glide.Glide
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.content.base.CourseImportConfig
 import tool.xfy9326.schedule.content.base.NetworkCourseParser
@@ -54,13 +55,13 @@ class NetworkCourseProviderActivity : ViewModelActivity<NetworkCourseProviderVie
         }
         viewBinding.textViewCourseAdapterSchool.apply {
             isSelected = true
-            text = viewModel.importConfig.getSchoolNameText(this@NetworkCourseProviderActivity)
+            text = viewModel.importConfig.getSchoolNameText()
         }
         viewBinding.textViewCourseAdapterSystem.apply {
             isSelected = true
-            text = viewModel.importConfig.getSystemNameText(this@NetworkCourseProviderActivity)
+            text = viewModel.importConfig.getSystemNameText()
         }
-        viewBinding.textViewCourseAdapterAuthor.text = getString(R.string.adapter_author, viewModel.importConfig.getAuthorNameText(this))
+        viewBinding.textViewCourseAdapterAuthor.text = getString(R.string.adapter_author, viewModel.importConfig.getAuthorNameText())
         viewBinding.spinnerCourseImportOptions.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 viewModel.refreshCaptcha(position)
@@ -248,11 +249,7 @@ class NetworkCourseProviderActivity : ViewModelActivity<NetworkCourseProviderVie
     }
 
     private fun setCaptcha(captcha: Bitmap?) {
-        if (captcha == null) {
-            requireViewBinding().imageViewCaptcha.setImageResource(R.drawable.ic_broken_image_24)
-        } else {
-            requireViewBinding().imageViewCaptcha.setImageBitmap(captcha)
-        }
+        Glide.with(this).load(captcha).error(R.drawable.ic_broken_image_24).into(requireViewBinding().imageViewCaptcha)
     }
 
     private fun showCourseAdapterError(exception: CourseAdapterException) {

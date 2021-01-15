@@ -41,7 +41,7 @@ class CourseEditActivity : ViewModelActivity<CourseEditViewModel, ActivityCourse
 
         courseTimeAdapter = CourseTimeAdapter()
 
-        viewModel.requestDBCourse(this, currentEditScheduleId, intent.getLongExtra(INTENT_EXTRA_COURSE_ID, 0))
+        viewModel.requestDBCourse(currentEditScheduleId, intent.getLongExtra(INTENT_EXTRA_COURSE_ID, 0))
     }
 
     override fun onBindLiveData(viewBinding: ActivityCourseEditBinding, viewModel: CourseEditViewModel) {

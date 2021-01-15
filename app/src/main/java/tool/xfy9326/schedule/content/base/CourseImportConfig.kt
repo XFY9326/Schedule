@@ -2,10 +2,10 @@
 
 package tool.xfy9326.schedule.content.base
 
-import android.content.Context
 import androidx.annotation.ArrayRes
 import androidx.annotation.StringRes
 import com.github.promeg.pinyinhelper.Pinyin
+import tool.xfy9326.schedule.io.GlobalIO
 import java.io.Serializable
 import kotlin.reflect.KClass
 
@@ -61,28 +61,28 @@ abstract class CourseImportConfig<T1 : BaseCourseProvider, T2 : ICourseParser>(
 
     fun <T : ICourseParser> validateParserType(clazz: KClass<T>) = clazz.java.isAssignableFrom(parserClass)
 
-    fun getSchoolNameText(context: Context) =
-        schoolNameTextCache ?: context.getString(schoolName).also {
+    fun getSchoolNameText() =
+        schoolNameTextCache ?: GlobalIO.resources.getString(schoolName).also {
             schoolNameTextCache = it
         }
 
-    fun getAuthorNameText(context: Context) =
-        authorNameTextCache ?: context.getString(authorName).also {
+    fun getAuthorNameText() =
+        authorNameTextCache ?: GlobalIO.resources.getString(authorName).also {
             authorNameTextCache = it
         }
 
-    fun getSystemNameText(context: Context) =
-        systemNameTextCache ?: context.getString(systemName).also {
+    fun getSystemNameText() =
+        systemNameTextCache ?: GlobalIO.resources.getString(systemName).also {
             systemNameTextCache = it
         }
 
-    fun getSchoolNameWords(context: Context) =
-        schoolNameWordsCache ?: getPinyin(getSchoolNameText(context)).also {
+    fun getSchoolNameWords() =
+        schoolNameWordsCache ?: getPinyin(getSchoolNameText()).also {
             schoolNameWordsCache = it
         }
 
-    fun getSystemNameWords(context: Context) =
-        systemNameWordsCache ?: getPinyin(getSystemNameText(context)).also {
+    fun getSystemNameWords() =
+        systemNameWordsCache ?: getPinyin(getSystemNameText()).also {
             systemNameWordsCache = it
         }
 

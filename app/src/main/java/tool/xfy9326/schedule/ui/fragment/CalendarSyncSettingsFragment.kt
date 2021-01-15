@@ -39,7 +39,7 @@ class CalendarSyncSettingsFragment : AbstractSettingsFragment(), MultiItemSelect
         setOnPrefClickListener(PREFERENCE_SYNC_TO_CALENDAR) {
             lifecycleScope.launch {
                 if (PermissionUtils.checkCalendarPermission(this@CalendarSyncSettingsFragment, REQUEST_CODE_CALENDAR_PERMISSION)) {
-                    requireSettingsViewModel()?.syncToCalendar(requireContext())
+                    requireSettingsViewModel()?.syncToCalendar()
                 }
             }
         }
@@ -49,7 +49,7 @@ class CalendarSyncSettingsFragment : AbstractSettingsFragment(), MultiItemSelect
                 setMessage(R.string.clear_calendar_msg)
                 setNegativeButton(android.R.string.cancel, null)
                 setPositiveButton(android.R.string.ok) { _, _ ->
-                    requireSettingsViewModel()?.clearCalendar(requireContext())
+                    requireSettingsViewModel()?.clearCalendar()
                     requireRootLayout()?.showShortSnackBar(R.string.clear_calendar_success)
                 }
             }.show(viewLifecycleOwner)
@@ -138,7 +138,7 @@ class CalendarSyncSettingsFragment : AbstractSettingsFragment(), MultiItemSelect
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         if (requestCode == REQUEST_CODE_CALENDAR_PERMISSION) {
             if (PermissionUtils.checkGrantResults(grantResults)) {
-                requireSettingsViewModel()?.syncToCalendar(requireContext())
+                requireSettingsViewModel()?.syncToCalendar()
             } else {
                 requireRootLayout()?.showShortSnackBar(R.string.calendar_permission_get_failed)
             }

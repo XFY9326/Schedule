@@ -1,8 +1,10 @@
 package tool.xfy9326.schedule.utils
 
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
-import tool.xfy9326.schedule.App
+import kotlinx.coroutines.flow.shareIn
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.Course
 import tool.xfy9326.schedule.beans.EditError
@@ -11,6 +13,7 @@ import tool.xfy9326.schedule.beans.ScheduleTime
 import tool.xfy9326.schedule.data.AppDataStore
 import tool.xfy9326.schedule.data.ScheduleDataStore
 import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
+import tool.xfy9326.schedule.io.GlobalIO
 import tool.xfy9326.schedule.kt.combine
 import tool.xfy9326.schedule.kt.intersect
 import tool.xfy9326.schedule.kt.iterateAll
@@ -20,7 +23,7 @@ object ScheduleManager {
     val currentScheduleFlow =
         AppDataStore.currentScheduleIdFlow.combine {
             ScheduleDBProvider.db.scheduleDAO.getSchedule(it).filterNotNull()
-        }
+        }.shareIn(GlobalScope, SharingStarted.Eagerly, 1)
 
     private val DEFAULT_SCHEDULE_TIMES = arrayOf(
         ScheduleTime(8, 0, 8, 45),
@@ -95,7 +98,7 @@ object ScheduleManager {
     }
 
     suspend fun createDefaultSchedule() = getDefaultTermDate().let {
-        Schedule(App.instance.getString(R.string.default_schedule_name),
+        Schedule(GlobalIO.resources.getString(R.string.default_schedule_name),
             it.first,
             it.second,
             DEFAULT_SCHEDULE_TIMES,
@@ -103,7 +106,7 @@ object ScheduleManager {
     }
 
     suspend fun createNewSchedule() = getDefaultTermDate().let {
-        Schedule(App.instance.getString(R.string.new_schedule_name),
+        Schedule(GlobalIO.resources.getString(R.string.new_schedule_name),
             it.first,
             it.second,
             DEFAULT_SCHEDULE_TIMES,

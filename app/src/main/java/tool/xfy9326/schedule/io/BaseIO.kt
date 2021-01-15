@@ -1,13 +1,12 @@
 package tool.xfy9326.schedule.io
 
-import android.content.Context
 import android.net.Uri
 import io.ktor.utils.io.jvm.nio.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import tool.xfy9326.schedule.io.GlobalIO.asOutputStream
 import java.io.File
 
-@Suppress("BlockingMethodInNonBlockingContext")
 object BaseIO {
     suspend fun File.deleteFile() = withContext(Dispatchers.IO) {
         when {
@@ -24,10 +23,10 @@ object BaseIO {
         return@withContext true
     }
 
-    suspend fun writeFileToUri(context: Context, uri: Uri, localFile: File) = withContext(Dispatchers.IO) {
+    suspend fun writeFileToUri(uri: Uri, localFile: File) = withContext(Dispatchers.IO) {
         if (localFile.isFile) {
             try {
-                context.contentResolver.openOutputStream(uri)?.use { output ->
+                uri.asOutputStream()?.use { output ->
                     localFile.inputStream().use { input ->
                         input.copyTo(output)
                     }

@@ -13,7 +13,7 @@ import tool.xfy9326.schedule.json.ScheduleJSONBundle
 object BackupUtils {
     fun createBackupFileName(context: Context) = "${context.getString(R.string.app_name)}-${System.currentTimeMillis() / 1000}"
 
-    suspend fun backupSchedules(context: Context, uri: Uri, scheduleIds: List<Long>): Boolean {
+    suspend fun backupSchedules(uri: Uri, scheduleIds: List<Long>): Boolean {
         try {
             ScheduleDBProvider.db.scheduleDAO.apply {
                 val allBundles = Array(scheduleIds.size) {
@@ -22,7 +22,7 @@ object BackupUtils {
                     ScheduleJSONBundle(schedule, courses)
                 }
                 JSONManager.encode(*allBundles)?.let {
-                    TextIO.writeText(it, context, uri)
+                    TextIO.writeText(it, uri)
                 }
             }
             return true
@@ -32,12 +32,12 @@ object BackupUtils {
         return false
     }
 
-    suspend fun restoreSchedules(context: Context, uri: Uri): Pair<BatchResult, Boolean> {
+    suspend fun restoreSchedules(uri: Uri): Pair<BatchResult, Boolean> {
         var totalAmount = 0
         var errorAmount = 0
         var hasConflicts = false
         try {
-            TextIO.readText(context, uri)?.let(JSONManager::decode)?.let {
+            TextIO.readText(uri)?.let(JSONManager::decode)?.let {
                 for (bundle in it) {
                     totalAmount++
                     val scheduleTimeValid = ScheduleManager.validateScheduleTime(bundle.schedule.times)

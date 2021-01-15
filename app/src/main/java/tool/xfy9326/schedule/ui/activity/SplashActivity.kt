@@ -47,7 +47,7 @@ class SplashActivity : AppCompatActivity() {
             if (AppDataStore.acceptEULAFlow.first()) {
                 startMainActivity()
             } else {
-                showEULA(TextIO.readAssetFileAsText(this@SplashActivity, DirUtils.ASSETS_EULA_FILE)!!)
+                showEULA(TextIO.readAssetText(DirUtils.ASSETS_EULA_FILE)!!)
             }
         }
     }
