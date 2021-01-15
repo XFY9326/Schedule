@@ -322,6 +322,7 @@
     <string name="restore_schedule_attention">注意事项：\n1. 将会恢复选定文件中所有课表信息\n2. 恢复后的课表学期信息将会自适应设定\n3. 如果需要设定正确的学期时间请前往课表编辑界面</string>
     <string name="schedule_week_start">设定每周的第一天</string>
     <string name="schedule_week_start_sum">修改每周开始日将会影响周数计算与课表显示</string>
+    <string name="select_opposite_weeks">反选</string>
 
     <string name="scare_type_fit_center">等比缩放，从中间开始填充满</string>
     <string name="scare_type_center_crop">等比缩放直到完全填充</string>

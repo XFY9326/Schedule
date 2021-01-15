@@ -145,6 +145,10 @@ class CourseTimeEditDialog : DialogFragment() {
             it.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
             for (v in weekNumButtonViews) v.isChecked = v.showNum.isEven()
         }
+        viewBinding.buttonOppositeWeeks.setOnClickListener {
+            it.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
+            for (v in weekNumButtonViews) v.isChecked = !v.isChecked
+        }
     }
 
     private fun buildWeekNumGrid(viewBinding: DialogCourseTimeEditBinding) {
