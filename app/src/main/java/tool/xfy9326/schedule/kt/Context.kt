@@ -21,23 +21,14 @@ import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.ui.activity.SplashActivity
 import kotlin.system.exitProcess
 
-inline fun showGlobalShortToast(@StringRes resId: Int, vararg params: Any) =
-    Toast.makeText(App.instance, App.instance.getString(resId, *params), Toast.LENGTH_SHORT).show()
+inline fun showGlobalShortToast(@StringRes resId: Int, vararg params: Any, showLong: Boolean = false) =
+    Toast.makeText(App.instance, App.instance.getString(resId, *params), if (showLong) Toast.LENGTH_LONG else Toast.LENGTH_SHORT).show()
 
-inline fun showGlobalLongToast(@StringRes resId: Int, vararg params: Any) =
-    Toast.makeText(App.instance, App.instance.getString(resId, *params), Toast.LENGTH_LONG).show()
+inline fun Context.showShortToast(@StringRes resId: Int, vararg params: Any, showLong: Boolean = false) =
+    Toast.makeText(this, getString(resId, *params), if (showLong) Toast.LENGTH_LONG else Toast.LENGTH_SHORT).show()
 
-inline fun Context.showShortToast(@StringRes resId: Int, vararg params: Any) =
-    Toast.makeText(this, getString(resId, *params), Toast.LENGTH_SHORT).show()
-
-inline fun Context.showLongToast(@StringRes resId: Int, vararg params: Any) =
-    Toast.makeText(this, getString(resId, *params), Toast.LENGTH_LONG).show()
-
-inline fun Fragment.showShortToast(@StringRes resId: Int, vararg params: Any) =
-    Toast.makeText(requireContext(), getString(resId, *params), Toast.LENGTH_SHORT).show()
-
-inline fun Fragment.showLongToast(@StringRes resId: Int, vararg params: Any) =
-    Toast.makeText(requireContext(), getString(resId, *params), Toast.LENGTH_LONG).show()
+inline fun Fragment.showShortToast(@StringRes resId: Int, vararg params: Any, showLong: Boolean = false) =
+    Toast.makeText(requireContext(), getString(resId, *params), if (showLong) Toast.LENGTH_LONG else Toast.LENGTH_SHORT).show()
 
 inline fun <reified A : Activity> Context.startActivity(intentBlock: Intent.() -> Unit = {}) {
     startActivity(Intent(this, A::class.java).apply(intentBlock))
