@@ -4,7 +4,9 @@ import android.graphics.Bitmap
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.EditText
 import android.widget.Spinner
+import androidx.annotation.StringRes
 import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import tool.xfy9326.schedule.R
@@ -142,43 +144,32 @@ class NetworkCourseProviderActivity : ViewModelActivity<NetworkCourseProviderVie
     private fun validateImportCourseParams(): NetworkCourseProviderViewModel.ImportParams? {
         requireViewBinding().apply {
             layoutCourseImportContent.clearFocus()
+            val option = getCurrentOption() ?: return null
 
-            if (requireViewModel().isLoginCourseProvider()) {
-                val userId = editTextUserId.text.getText().let {
-                    if (it == null) {
-                        layoutLoginCourseProvider.showShortSnackBar(R.string.user_id_empty)
-                        return null
-                    } else {
-                        it
-                    }
-                }
-                val userPw = editTextUserPw.text.getText().let {
-                    if (it == null) {
-                        layoutLoginCourseProvider.showShortSnackBar(R.string.user_pw_empty)
-                        return null
-                    } else {
-                        it
-                    }
-                }
+            return if (requireViewModel().isLoginCourseProvider()) {
+                val userId = getTextWithCheck(editTextUserId, R.string.user_id_empty)
+                val userPw = getTextWithCheck(editTextUserPw, R.string.user_pw_empty)
                 val captchaCode = if (layoutCaptcha.isVisible) {
-                    editTextCaptcha.text.getText().also {
-                        if (it == null) {
-                            layoutLoginCourseProvider.showShortSnackBar(R.string.captcha_empty)
-                            return null
-                        }
-                    }
+                    getTextWithCheck(editTextCaptcha, R.string.captcha_empty)
                 } else {
                     null
                 }
-                val option = getCurrentOption() ?: return null
-                return NetworkCourseProviderViewModel.ImportParams(userId, userPw, captchaCode, option)
+                NetworkCourseProviderViewModel.ImportParams(userId, userPw, captchaCode, option)
             } else {
-
-                val option = getCurrentOption() ?: return null
-                return NetworkCourseProviderViewModel.ImportParams(null, null, null, option)
+                NetworkCourseProviderViewModel.ImportParams(null, null, null, option)
             }
         }
     }
+
+    private fun getTextWithCheck(editText: EditText, @StringRes errorMsg: Int) =
+        editText.text.getText().let {
+            if (it == null) {
+                requireViewBinding().layoutLoginCourseProvider.showShortSnackBar(errorMsg)
+                null
+            } else {
+                it
+            }
+        }
 
     private fun getCurrentOption(): Int? {
         requireViewBinding().apply {
@@ -199,30 +190,8 @@ class NetworkCourseProviderActivity : ViewModelActivity<NetworkCourseProviderVie
         requireViewBinding().apply {
             if (params != null) {
                 when {
-                    params.optionsRes != null -> {
-                        val adapter = ArrayAdapter(
-                            this@NetworkCourseProviderActivity,
-                            android.R.layout.simple_list_item_1,
-                            getStringArray(params.optionsRes)
-                        ).apply {
-                            setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-                        }
-                        spinnerCourseImportOptions.adapter = adapter
-                        spinnerCourseImportOptions.setSelection(0)
-                        layoutImportOptions.isVisible = true
-                    }
-                    params.optionsOnline != null -> {
-                        val adapter = ArrayAdapter(
-                            this@NetworkCourseProviderActivity,
-                            android.R.layout.simple_list_item_1,
-                            params.optionsOnline
-                        ).apply {
-                            setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-                        }
-                        spinnerCourseImportOptions.adapter = adapter
-                        spinnerCourseImportOptions.setSelection(0)
-                        layoutImportOptions.isVisible = true
-                    }
+                    params.optionsRes != null -> setupOptions(getStringArray(params.optionsRes))
+                    params.optionsOnline != null -> setupOptions(params.optionsOnline)
                     else -> layoutImportOptions.isVisible = false
                 }
 
@@ -245,6 +214,21 @@ class NetworkCourseProviderActivity : ViewModelActivity<NetworkCourseProviderVie
                 layoutCourseImportLoading.isVisible = true
                 layoutCourseImportContent.isVisible = false
             }
+        }
+    }
+
+    private fun setupOptions(array: Array<String>) {
+        requireViewBinding().apply {
+            val adapter = ArrayAdapter(
+                this@NetworkCourseProviderActivity,
+                android.R.layout.simple_list_item_1,
+                array
+            ).apply {
+                setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            }
+            spinnerCourseImportOptions.adapter = adapter
+            spinnerCourseImportOptions.setSelection(0)
+            layoutImportOptions.isVisible = true
         }
     }
 

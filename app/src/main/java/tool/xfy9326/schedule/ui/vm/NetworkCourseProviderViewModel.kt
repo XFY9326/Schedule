@@ -124,7 +124,7 @@ class NetworkCourseProviderViewModel : AbstractViewModel() {
 
     fun importCourse(importParams: ImportParams, currentSchedule: Boolean, newScheduleName: String? = null) {
         if (isImportingCourses.compareAndSet(false, true)) {
-            viewModelScope.launch {
+            importCourseJob = viewModelScope.launch {
                 try {
                     val provider = courseProvider
 
