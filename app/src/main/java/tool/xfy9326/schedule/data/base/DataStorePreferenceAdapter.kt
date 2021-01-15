@@ -35,28 +35,28 @@ open class DataStorePreferenceAdapter(private val dataStore: DataStore<Preferenc
         }
     }
 
-    override fun putString(key: String, value: String?) = putData(preferencesKey(key), value)
+    override fun putString(key: String, value: String?) = putData(stringPreferencesKey(key), value)
 
-    override fun putStringSet(key: String, values: Set<String>?) = putData(preferencesSetKey(key), values)
+    override fun putStringSet(key: String, values: Set<String>?) = putData(stringSetPreferencesKey(key), values)
 
-    override fun putInt(key: String, value: Int) = putData(preferencesKey(key), value)
+    override fun putInt(key: String, value: Int) = putData(intPreferencesKey(key), value)
 
-    override fun putLong(key: String, value: Long) = putData(preferencesKey(key), value)
+    override fun putLong(key: String, value: Long) = putData(longPreferencesKey(key), value)
 
-    override fun putFloat(key: String, value: Float) = putData(preferencesKey(key), value)
+    override fun putFloat(key: String, value: Float) = putData(floatPreferencesKey(key), value)
 
-    override fun putBoolean(key: String, value: Boolean) = putData(preferencesKey(key), value)
+    override fun putBoolean(key: String, value: Boolean) = putData(booleanPreferencesKey(key), value)
 
 
-    override fun getString(key: String, defValue: String?): String? = readNullableData(preferencesKey(key), defValue)
+    override fun getString(key: String, defValue: String?): String? = readNullableData(stringPreferencesKey(key), defValue)
 
-    override fun getStringSet(key: String, defValues: Set<String>?): Set<String>? = readNullableData(preferencesSetKey(key), defValues)
+    override fun getStringSet(key: String, defValues: Set<String>?): Set<String>? = readNullableData(stringSetPreferencesKey(key), defValues)
 
-    override fun getInt(key: String, defValue: Int): Int = readNonNullData(preferencesKey(key), defValue)
+    override fun getInt(key: String, defValue: Int): Int = readNonNullData(intPreferencesKey(key), defValue)
 
-    override fun getLong(key: String, defValue: Long): Long = readNonNullData(preferencesKey(key), defValue)
+    override fun getLong(key: String, defValue: Long): Long = readNonNullData(longPreferencesKey(key), defValue)
 
-    override fun getFloat(key: String, defValue: Float): Float = readNonNullData(preferencesKey(key), defValue)
+    override fun getFloat(key: String, defValue: Float): Float = readNonNullData(floatPreferencesKey(key), defValue)
 
-    override fun getBoolean(key: String, defValue: Boolean): Boolean = readNonNullData(preferencesKey(key), defValue)
+    override fun getBoolean(key: String, defValue: Boolean): Boolean = readNonNullData(booleanPreferencesKey(key), defValue)
 }

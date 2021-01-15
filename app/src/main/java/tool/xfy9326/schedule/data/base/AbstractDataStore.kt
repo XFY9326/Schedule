@@ -2,10 +2,7 @@
 
 package tool.xfy9326.schedule.data.base
 
-import androidx.datastore.preferences.core.MutablePreferences
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.core.clear
-import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.*
 import androidx.datastore.preferences.createDataStore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.GlobalScope
@@ -69,9 +66,24 @@ abstract class AbstractDataStore(val name: String) {
         it[this] = data
     }
 
-    protected inline fun <reified T : Any> preferencesKey() =
-        ReadOnlyProperty<Any, Preferences.Key<T>> { _, property -> androidx.datastore.preferences.core.preferencesKey(property.name) }
+    protected fun booleanPreferencesKey() =
+        ReadOnlyProperty<Any, Preferences.Key<Boolean>> { _, property -> booleanPreferencesKey(property.name) }
 
-    protected inline fun <reified T : Any> preferencesSetKey() =
-        ReadOnlyProperty<Any, Preferences.Key<Set<T>>> { _, property -> androidx.datastore.preferences.core.preferencesSetKey(property.name) }
+    protected fun stringPreferencesKey() =
+        ReadOnlyProperty<Any, Preferences.Key<String>> { _, property -> stringPreferencesKey(property.name) }
+
+    protected fun intPreferencesKey() =
+        ReadOnlyProperty<Any, Preferences.Key<Int>> { _, property -> intPreferencesKey(property.name) }
+
+    protected fun longPreferencesKey() =
+        ReadOnlyProperty<Any, Preferences.Key<Long>> { _, property -> longPreferencesKey(property.name) }
+
+    protected fun floatPreferencesKey() =
+        ReadOnlyProperty<Any, Preferences.Key<Float>> { _, property -> floatPreferencesKey(property.name) }
+
+    protected fun doublePreferencesKey() =
+        ReadOnlyProperty<Any, Preferences.Key<Double>> { _, property -> doublePreferencesKey(property.name) }
+
+    protected fun stringSetPreferencesKey() =
+        ReadOnlyProperty<Any, Preferences.Key<Set<String>>> { _, property -> stringSetPreferencesKey(property.name) }
 }

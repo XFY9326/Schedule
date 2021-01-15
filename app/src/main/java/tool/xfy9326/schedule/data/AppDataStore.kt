@@ -4,9 +4,9 @@ import tool.xfy9326.schedule.data.base.AbstractDataStore
 import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
 
 object AppDataStore : AbstractDataStore("App") {
-    private val currentScheduleId by preferencesKey<Long>()
-    private val acceptEULA by preferencesKey<Boolean>()
-    private val showFeedbackAttention by preferencesKey<Boolean>()
+    private val currentScheduleId by longPreferencesKey()
+    private val acceptEULA by booleanPreferencesKey()
+    private val showFeedbackAttention by booleanPreferencesKey()
 
     val currentScheduleIdFlow = currentScheduleId.readAndInitAsFlow {
         ScheduleDBProvider.db.scheduleDAO.tryInitDefaultSchedule()

@@ -5,17 +5,17 @@ import tool.xfy9326.schedule.beans.ScheduleSync
 import tool.xfy9326.schedule.data.base.AbstractDataStore
 
 object AppSettingsDataStore : AbstractDataStore("Settings") {
-    val nightModeType by preferencesKey<String>()
-    private val saveImageWhileSharing by preferencesKey<Boolean>()
-    private val exitAppDirectly by preferencesKey<Boolean>()
-    val keepWebProviderCache by preferencesKey<Boolean>()
-    private val debugLogsMaxStoreAmount by preferencesKey<Int>()
-    private val handleException by preferencesKey<Boolean>()
-    private val calendarSyncScheduleDefault by preferencesKey<Boolean>()
-    private val calendarSyncScheduleEditableDefault by preferencesKey<Boolean>()
-    private val calendarSyncScheduleDefaultVisibleDefault by preferencesKey<Boolean>()
-    private val calendarSyncAddReminderDefault by preferencesKey<Boolean>()
-    private val calendarSyncReminderMinutes by preferencesKey<Int>()
+    val nightModeType by stringPreferencesKey()
+    private val saveImageWhileSharing by booleanPreferencesKey()
+    private val exitAppDirectly by booleanPreferencesKey()
+    val keepWebProviderCache by booleanPreferencesKey()
+    private val debugLogsMaxStoreAmount by intPreferencesKey()
+    private val handleException by booleanPreferencesKey()
+    private val calendarSyncScheduleDefault by booleanPreferencesKey()
+    private val calendarSyncScheduleEditableDefault by booleanPreferencesKey()
+    private val calendarSyncScheduleDefaultVisibleDefault by booleanPreferencesKey()
+    private val calendarSyncAddReminderDefault by booleanPreferencesKey()
+    private val calendarSyncReminderMinutes by intPreferencesKey()
 
     suspend fun setNightModeType(nightMode: NightMode) = nightModeType.saveData(nightMode.name)
 

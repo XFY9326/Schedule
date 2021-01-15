@@ -1,6 +1,5 @@
 package tool.xfy9326.schedule.data
 
-import androidx.datastore.preferences.core.remove
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.conflate
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -17,28 +16,28 @@ import tool.xfy9326.schedule.utils.DirUtils
 import java.io.File
 
 object ScheduleDataStore : AbstractDataStore("ScheduleSettings") {
-    private val defaultFirstDayOfWeek by preferencesKey<String>()
-    private val scheduleViewAlpha by preferencesKey<Int>()
-    private val forceShowWeekendColumn by preferencesKey<Boolean>()
-    private val showNotThisWeekCourse by preferencesKey<Boolean>()
-    private val customScheduleTextColor by preferencesKey<Boolean>()
-    val timeTextColor by preferencesKey<Int>()
-    val toolBarTintColor by preferencesKey<Int>()
-    private val courseCellTextSize by preferencesKey<Int>()
-    private val cornerScreenMargin by preferencesKey<Boolean>()
-    private val highlightShowTodayCell by preferencesKey<Boolean>()
-    val highlightShowTodayCellColor by preferencesKey<Int>()
-    private val scheduleBackgroundImage by preferencesKey<String>()
-    private val scheduleBackgroundImageQuality by preferencesKey<Int>()
-    private val scheduleBackgroundImageAlpha by preferencesKey<Int>()
-    private val enableScheduleBackground by preferencesKey<Boolean>()
-    private val scheduleBackgroundScareType by preferencesKey<String>()
-    private val useLightColorStatusBarColor by preferencesKey<Boolean>()
-    private val scheduleBackgroundFadeAnim by preferencesKey<Boolean>()
-    private val showScheduleTimes by preferencesKey<Boolean>()
-    private val horizontalCourseCellText by preferencesKey<Boolean>()
-    private val verticalCourseCellText by preferencesKey<Boolean>()
-    val notThisWeekCourseShowStyle by preferencesSetKey<String>()
+    private val defaultFirstDayOfWeek by stringPreferencesKey()
+    private val scheduleViewAlpha by intPreferencesKey()
+    private val forceShowWeekendColumn by booleanPreferencesKey()
+    private val showNotThisWeekCourse by booleanPreferencesKey()
+    private val customScheduleTextColor by booleanPreferencesKey()
+    val timeTextColor by intPreferencesKey()
+    val toolBarTintColor by intPreferencesKey()
+    private val courseCellTextSize by intPreferencesKey()
+    private val cornerScreenMargin by booleanPreferencesKey()
+    private val highlightShowTodayCell by booleanPreferencesKey()
+    val highlightShowTodayCellColor by intPreferencesKey()
+    private val scheduleBackgroundImage by stringPreferencesKey()
+    private val scheduleBackgroundImageQuality by intPreferencesKey()
+    private val scheduleBackgroundImageAlpha by intPreferencesKey()
+    private val enableScheduleBackground by booleanPreferencesKey()
+    private val scheduleBackgroundScareType by stringPreferencesKey()
+    private val useLightColorStatusBarColor by booleanPreferencesKey()
+    private val scheduleBackgroundFadeAnim by booleanPreferencesKey()
+    private val showScheduleTimes by booleanPreferencesKey()
+    private val horizontalCourseCellText by booleanPreferencesKey()
+    private val verticalCourseCellText by booleanPreferencesKey()
+    val notThisWeekCourseShowStyle by stringSetPreferencesKey()
 
     val defaultFirstDayOfWeekFlow = defaultFirstDayOfWeek.readEnumAsFlow(WeekDay.MONDAY)
 
