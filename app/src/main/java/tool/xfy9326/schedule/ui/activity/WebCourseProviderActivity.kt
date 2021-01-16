@@ -10,8 +10,9 @@ import android.view.animation.AnimationUtils
 import android.webkit.*
 import androidx.annotation.Keep
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.launch
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.content.base.CourseImportConfig
 import tool.xfy9326.schedule.content.base.WebCourseParser
@@ -71,7 +72,9 @@ class WebCourseProviderActivity : ViewModelActivity<WebCourseProviderViewModel, 
         viewModel.registerConfig(intent.getSerializableExtra(EXTRA_COURSE_IMPORT_CONFIG)
             ?.tryCast<CourseImportConfig<WebCourseProvider, WebCourseParser>>()!!)
 
-        if (runBlocking { AppSettingsDataStore.keepWebProviderCacheFlow.first() }) clearAll()
+        lifecycleScope.launch {
+            if (AppSettingsDataStore.keepWebProviderCacheFlow.first()) clearAll()
+        }
     }
 
     override fun onBindLiveData(viewBinding: ActivityWebCourseProviderBinding, viewModel: WebCourseProviderViewModel) {

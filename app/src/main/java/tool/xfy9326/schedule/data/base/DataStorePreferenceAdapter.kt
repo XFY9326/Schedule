@@ -20,7 +20,7 @@ open class DataStorePreferenceAdapter(private val dataStore: DataStore<Preferenc
     }
 
     private fun <T> readNullableData(key: Preferences.Key<T>, defValue: T?): T? {
-        return runBlocking {
+        return runBlocking(prefScope.coroutineContext) {
             dsData.map {
                 it[key] ?: defValue
             }.firstOrNull()
@@ -28,7 +28,7 @@ open class DataStorePreferenceAdapter(private val dataStore: DataStore<Preferenc
     }
 
     private fun <T> readNonNullData(key: Preferences.Key<T>, defValue: T): T {
-        return runBlocking {
+        return runBlocking(prefScope.coroutineContext) {
             dsData.map {
                 it[key] ?: defValue
             }.first()
