@@ -29,65 +29,72 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 
-            <com.google.android.material.appbar.AppBarLayout
-                android:id="@+id/layout_scheduleToolBar"
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/layout_scheduleContent"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
+                android:layout_height="match_parent"
                 android:fitsSystemWindows="true"
-                app:elevation="0dp">
+                android:orientation="vertical">
 
-                <com.google.android.material.appbar.MaterialToolbar
-                    android:id="@+id/toolBar_schedule"
+                <com.google.android.material.appbar.AppBarLayout
+                    android:id="@+id/layout_scheduleToolBar"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:fitsSystemWindows="true"
+                    app:elevation="0dp">
 
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/layout_scheduleDateInfoBar"
+                    <com.google.android.material.appbar.MaterialToolbar
+                        android:id="@+id/toolBar_schedule"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
-                        <com.google.android.material.textview.MaterialTextView
-                            android:id="@+id/textView_scheduleTodayDate"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/schedule_tool_bar_tint"
-                            android:textSize="20sp"
-                            android:textStyle="bold"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/layout_scheduleDateInfoBar"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
 
-                        <com.google.android.material.textview.MaterialTextView
-                            android:id="@+id/textView_scheduleNowShowWeekNum"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:minEms="3"
-                            android:textColor="@color/schedule_tool_bar_tint"
-                            android:textSize="13sp"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/textView_scheduleTodayDate" />
+                            <com.google.android.material.textview.MaterialTextView
+                                android:id="@+id/textView_scheduleTodayDate"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/schedule_tool_bar_tint"
+                                android:textSize="20sp"
+                                android:textStyle="bold"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
 
-                        <com.google.android.material.textview.MaterialTextView
-                            android:id="@+id/textView_scheduleNotCurrentWeek"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/schedule_tool_bar_tint"
-                            android:textSize="13sp"
-                            app:layout_constraintStart_toEndOf="@id/textView_scheduleNowShowWeekNum"
-                            app:layout_constraintTop_toBottomOf="@id/textView_scheduleTodayDate" />
+                            <com.google.android.material.textview.MaterialTextView
+                                android:id="@+id/textView_scheduleNowShowWeekNum"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:minEms="3"
+                                android:textColor="@color/schedule_tool_bar_tint"
+                                android:textSize="13sp"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@id/textView_scheduleTodayDate" />
 
-                    </androidx.constraintlayout.widget.ConstraintLayout>
+                            <com.google.android.material.textview.MaterialTextView
+                                android:id="@+id/textView_scheduleNotCurrentWeek"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/schedule_tool_bar_tint"
+                                android:textSize="13sp"
+                                app:layout_constraintStart_toEndOf="@id/textView_scheduleNowShowWeekNum"
+                                app:layout_constraintTop_toBottomOf="@id/textView_scheduleTodayDate" />
 
-                </com.google.android.material.appbar.MaterialToolbar>
+                        </androidx.constraintlayout.widget.ConstraintLayout>
 
-            </com.google.android.material.appbar.AppBarLayout>
+                    </com.google.android.material.appbar.MaterialToolbar>
 
-            <androidx.viewpager2.widget.ViewPager2
-                android:id="@+id/viewPager_schedulePanel"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="?attr/actionBarSize"
-                android:fitsSystemWindows="true" />
+                </com.google.android.material.appbar.AppBarLayout>
+
+                <androidx.viewpager2.widget.ViewPager2
+                    android:id="@+id/viewPager_schedulePanel"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
 
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
