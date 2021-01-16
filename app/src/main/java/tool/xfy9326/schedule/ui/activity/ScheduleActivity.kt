@@ -148,10 +148,10 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
             viewModel.scrollToCurrentWeekNum()
         }
 
-        window.decorView.setOnApplyWindowInsetsListener { v, insets ->
+        window.decorView.setOnApplyWindowInsetsListener { _, insets ->
             WindowInsetsCompat.toWindowInsetsCompat(insets).apply {
-                v.updatePadding(bottom = -systemWindowInsetBottom)
-            }.toWindowInsets()
+                viewBinding.layoutScheduleContent.updatePadding(top = systemWindowInsetTop)
+            }.consumeSystemWindowInsets().toWindowInsets()
         }
     }
 
@@ -333,7 +333,7 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
             val viewWidth = layoutScheduleRoot.measuredWidth
             val viewHeight = layoutScheduleRoot.measuredHeight
 
-            requireViewModel().nightModeChangeOldSurface.write(layoutScheduleRoot.drawToBitmap())
+            requireViewModel().nightModeChangeOldSurface.write(window.decorView.drawToBitmap())
 
             val finalRadius =
                 max(sqrt((viewWidth - startX) * (viewWidth - startX) + (viewHeight - startY) * (viewHeight - startY)),

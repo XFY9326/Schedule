@@ -116,7 +116,7 @@ class ScheduleGridView(
 
         val actualHeight =
             if (styles.cornerScreenMargin) {
-                rowHeight * rowAmount + predefine.gridBottomCornerScreenMargin + bottomInset
+                rowHeight * rowAmount + max(predefine.gridBottomCornerScreenMargin, bottomInset)
             } else {
                 rowHeight * rowAmount + bottomInset
             }
