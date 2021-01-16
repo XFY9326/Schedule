@@ -44,7 +44,8 @@ class CourseAdapterException : Exception {
          *
          * @param cause Exception cause
          */
-        fun report(cause: Throwable? = null): Nothing = throw make(cause)
+        @Suppress("NOTHING_TO_INLINE")
+        inline fun report(cause: Throwable? = null): Nothing = throw make(cause)
 
         /**
          * Throw exception
@@ -52,7 +53,8 @@ class CourseAdapterException : Exception {
          * @param msg Exception msg
          * @param cause Exception cause
          */
-        fun report(msg: String, cause: Throwable? = null): Nothing = throw make(msg, cause)
+        @Suppress("NOTHING_TO_INLINE")
+        inline fun report(msg: String, cause: Throwable? = null): Nothing = throw make(msg, cause)
 
 
         /**
