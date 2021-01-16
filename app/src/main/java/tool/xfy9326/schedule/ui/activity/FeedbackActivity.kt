@@ -11,8 +11,9 @@ import android.webkit.WebChromeClient
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.launch
 import tool.xfy9326.schedule.BuildConfig
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.data.AppDataStore
@@ -102,13 +103,15 @@ class FeedbackActivity : ViewBindingActivity<ActivityFeedbackBinding>() {
     }
 
     private fun tryShowFeedbackNotificationMsg() {
-        if (!runBlocking { AppDataStore.hasShownFeedbackAttention() }) {
-            MaterialAlertDialogBuilder(this@FeedbackActivity).apply {
-                setTitle(R.string.attention)
-                setMessage(R.string.feedback_wechat_notification_msg)
-                setCancelable(false)
-                setPositiveButton(android.R.string.ok, null)
-            }.show()
+        lifecycleScope.launch {
+            if (!AppDataStore.hasShownFeedbackAttention()) {
+                MaterialAlertDialogBuilder(this@FeedbackActivity).apply {
+                    setTitle(R.string.attention)
+                    setMessage(R.string.feedback_wechat_notification_msg)
+                    setCancelable(false)
+                    setPositiveButton(android.R.string.ok, null)
+                }.show()
+            }
         }
     }
 

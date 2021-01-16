@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.data.AppDataStore
 import tool.xfy9326.schedule.io.TextIO
@@ -55,7 +54,7 @@ class SplashActivity : AppCompatActivity() {
     private fun showEULA(eula: String) {
         DialogUtils.showEULADialog(this@SplashActivity, eula, false) {
             if (it) {
-                runBlocking {
+                lifecycleScope.launch {
                     AppDataStore.setAcceptEULA(true)
                     startMainActivity()
                 }
