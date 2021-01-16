@@ -1,4 +1,4 @@
-package tool.xfy9326.schedule.json.beans
+package tool.xfy9326.schedule.json
 
 import kotlinx.serialization.Serializable
 

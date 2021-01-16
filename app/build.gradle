@@ -26,13 +26,11 @@ android {
         resConfigs 'zh', 'en'
 
         packagingOptions {
-            exclude 'LICENSES'
             exclude 'META-INF/*.version'
             exclude 'main/java/androidx/datastore/preferences/PreferencesProto.java'
             exclude 'DebugProbesKt.bin'
             exclude 'META-INF/CHANGES'
             exclude 'META-INF/README.md'
-            exclude 'okhttp3/internal/publicsuffix/NOTICE'
         }
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -90,6 +88,8 @@ dependencies {
     ext.androidx_lifecycle_version = '2.2.0'
     ext.androidx_room_version = '2.2.6'
 
+    ext.ktor_version = '1.5.0'
+
     // Kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinx_coroutines_version"
@@ -128,7 +128,8 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.11.0'
 
     // Ktor
-    implementation 'io.ktor:ktor-client-android:1.5.0'
+    implementation "io.ktor:ktor-client-android:$ktor_version"
+    // implementation "io.ktor:ktor-client-serialization:$ktor_version"
 
     // Jsoup
     implementation 'org.jsoup:jsoup:1.13.1'

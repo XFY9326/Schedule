@@ -5,8 +5,7 @@
     <string name="default_schedule_name">默认课表</string>
     <string name="new_schedule_name">新课表</string>
     <string name="app_crash">应用运行时发生崩溃</string>
-    <string name="app_crash_summary">\u3000\u3000非常抱歉应用无法正常启动，您可以向我们反馈该问题以尽快修复。建议您尝试检查更新并使用最新版本或清空应用数据后重新打开。</string>
-    <string name="check_update">检查更新</string>
+    <string name="app_crash_summary">\u3000\u3000非常抱歉应用无法正常启动，您可以向我们反馈该问题以尽快修复。建议您检查并使用最新版本或清空应用数据后重新打开。</string>
     <string name="view_error_detail">查看错误报告</string>
     <string name="feedback">问题反馈</string>
     <string name="crash_detail">错误详情</string>

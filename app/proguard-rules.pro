@@ -46,11 +46,11 @@
     kotlinx.serialization.KSerializer serializer(...);
 }
 
--keep,includedescriptorclasses class tool.xfy9326.schedule.json.beans.**$$serializer { *; }
--keepclassmembers class tool.xfy9326.schedule.json.beans.** {
+-keep,includedescriptorclasses class tool.xfy9326.schedule.json.**$$serializer { *; }
+-keepclassmembers class tool.xfy9326.schedule.json.** {
     *** Companion;
 }
--keepclasseswithmembers class tool.xfy9326.schedule.json.beans.** {
+-keepclasseswithmembers class tool.xfy9326.schedule.json.** {
     kotlinx.serialization.KSerializer serializer(...);
 }
 
