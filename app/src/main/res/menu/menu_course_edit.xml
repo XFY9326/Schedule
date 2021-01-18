@@ -3,12 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/menu_courseEditCopy"
-        android:icon="@drawable/ic_copy_24"
+        android:icon="@drawable/ic_transform_24"
         android:title="@string/copy_to_other_schedule"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/menu_courseEditSave"
-        android:icon="@drawable/ic_save_28"
+        android:icon="@drawable/ic_save_24"
         android:title="@string/save"
         app:showAsAction="always" />
 </menu>
