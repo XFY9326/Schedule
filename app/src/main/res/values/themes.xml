@@ -113,8 +113,8 @@
     </style>
 
     <style name="AppTheme.NightModeTransitionAnimation">
-        <item name="android:windowEnterAnimation">@android:anim/fade_in</item>
-        <item name="android:windowExitAnimation">@android:anim/fade_out</item>
+        <item name="android:windowEnterAnimation">@anim/anim_fast_fade_in</item>
+        <item name="android:windowExitAnimation">@anim/anim_fast_fade_out</item>
     </style>
 
 </resources>
