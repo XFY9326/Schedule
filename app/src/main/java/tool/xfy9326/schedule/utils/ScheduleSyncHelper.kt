@@ -122,7 +122,7 @@ object ScheduleSyncHelper {
         calId: Int,
         contentResolver: ContentResolver,
         schedule: Schedule,
-        courses: Array<Course>,
+        courses: List<Course>,
         sync: ScheduleSync,
         reminderMinutes: Int,
     ): Boolean {

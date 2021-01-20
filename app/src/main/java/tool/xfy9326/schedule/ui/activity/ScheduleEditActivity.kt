@@ -212,7 +212,7 @@ class ScheduleEditActivity : ViewModelActivity<ScheduleEditViewModel, ActivitySc
 
     private fun applyScheduleToView(schedule: Schedule) {
         requireViewBinding().apply {
-            scheduleTimeAdapter.submitList(schedule.times.toList())
+            scheduleTimeAdapter.submitList(schedule.times)
 
             editTextScheduleName.setText(schedule.name)
             sliderScheduleTimeNum.value = schedule.times.size.toFloat()
@@ -254,7 +254,7 @@ class ScheduleEditActivity : ViewModelActivity<ScheduleEditViewModel, ActivitySc
     private fun updateCourseCostTime(minute: Int, viewInit: Boolean) {
         if (!viewInit) {
             val breakCostTime = requireViewModel().breakCostTime
-            val times = requireViewModel().editSchedule.times.toList()
+            val times = requireViewModel().editSchedule.times
             var last: ScheduleTime? = null
             for (time in times) {
                 last?.endTimeMove(breakCostTime)?.let {
@@ -273,7 +273,7 @@ class ScheduleEditActivity : ViewModelActivity<ScheduleEditViewModel, ActivitySc
     private fun updateBreakCostTime(minute: Int, viewInit: Boolean) {
         if (!viewInit) {
             val courseCostTime = requireViewModel().courseCostTime
-            val times = requireViewModel().editSchedule.times.toList()
+            val times = requireViewModel().editSchedule.times
             var last: ScheduleTime? = null
             for (time in times) {
                 last?.endTimeMove(minute)?.let {
@@ -304,9 +304,9 @@ class ScheduleEditActivity : ViewModelActivity<ScheduleEditViewModel, ActivitySc
                     times.removeLast()
                 }
             }
-            times.toTypedArray().let {
+            times.let {
                 requireViewModel().editSchedule.times = it
-                scheduleTimeAdapter.submitList(it.toList())
+                scheduleTimeAdapter.submitList(it)
             }
             requireViewBinding().textViewScheduleTimeNum.text = getString(R.string.course_num, requireViewModel().editSchedule.times.size)
         } else {

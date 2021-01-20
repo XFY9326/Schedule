@@ -127,7 +127,7 @@ object BackupUtils {
         for (scheduleJson in data.data) {
             val schedule = Schedule(
                 name = scheduleJson.name,
-                times = scheduleJson.times.map { it.toScheduleTime() }.toTypedArray(),
+                times = scheduleJson.times.map { it.toScheduleTime() },
                 color = scheduleJson.color,
                 weekStart = WeekDay.valueOfShortName(scheduleJson.weekStart)
             )
@@ -150,7 +150,7 @@ object BackupUtils {
                     times = courseTimes
                 ))
             }
-            scheduleList.add(ScheduleCourseBundle(schedule, courses.toTypedArray()))
+            scheduleList.add(ScheduleCourseBundle(schedule, courses))
         }
 
         return scheduleList

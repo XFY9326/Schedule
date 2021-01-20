@@ -12,14 +12,14 @@ class NAUCourseWebParser : WebCourseParser() {
 
     private val loginParser = NAUCourseLoginParser()
 
-    override fun onLoadScheduleTimes(importOption: Int): Array<ScheduleTime> = loginParser.parseScheduleTimes(importOption)
+    override fun onLoadScheduleTimes(importOption: Int): List<ScheduleTime> = loginParser.parseScheduleTimes(importOption)
 
     override fun onParseCourses(
         importOption: Int,
         htmlContent: String,
         iframeContent: Array<String>,
         frameContent: Array<String>,
-    ): Array<Course> {
+    ): List<Course> {
         for (content in iframeContent) {
             if (PAGE_TEXT in content) return loginParser.parseCourses(importOption, content)
         }

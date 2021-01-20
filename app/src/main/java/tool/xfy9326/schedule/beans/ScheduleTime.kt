@@ -19,7 +19,7 @@ data class ScheduleTime(
         private const val HOUR_MINUTE_DIVIDE = ":"
         private const val TIME_DIVIDE = "~"
 
-        fun serialize(arr: Array<ScheduleTime>) =
+        fun serialize(arr: List<ScheduleTime>) =
             buildString {
                 for (time in arr) {
                     append("%02d%02d%02d%02d".format(time.startHour, time.startMinute, time.endHour, time.endMinute))
@@ -34,7 +34,7 @@ data class ScheduleTime(
                 str.substring(base + 4, base + 6).toInt(),
                 str.substring(base + 6, base + 8).toInt()
             )
-        }
+        }.toList()
 
         private fun timeAdd(hour: Int, minute: Int, addMinute: Int): Pair<Int, Int> {
             CalendarUtils.getCalendar().apply {

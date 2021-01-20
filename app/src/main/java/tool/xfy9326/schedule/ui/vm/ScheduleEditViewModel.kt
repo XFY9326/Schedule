@@ -32,7 +32,7 @@ class ScheduleEditViewModel : AbstractViewModel() {
     val selectScheduleDate = MutableEventLiveData<Triple<Boolean, Date, WeekDay>>()
     val scheduleSaveFailed = MutableEventLiveData<EditError>()
     val loadAllSchedules = MutableEventLiveData<List<Schedule.Min>>()
-    val importScheduleTimes = MutableEventLiveData<Array<ScheduleTime>?>()
+    val importScheduleTimes = MutableEventLiveData<List<ScheduleTime>?>()
 
     fun selectScheduleDate(isStart: Boolean, date: Date) {
         viewModelScope.launch {
