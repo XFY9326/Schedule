@@ -233,7 +233,11 @@ class NetworkCourseProviderActivity : ViewModelActivity<NetworkCourseProviderVie
     }
 
     private fun setCaptcha(captcha: Bitmap?) {
-        Glide.with(this).load(captcha).error(R.drawable.ic_broken_image_24).into(requireViewBinding().imageViewCaptcha)
+        if (captcha == null) {
+            requireViewBinding().imageViewCaptcha.setImageResource(R.drawable.ic_broken_image_24)
+        } else {
+            Glide.with(this).load(captcha).error(R.drawable.ic_broken_image_24).into(requireViewBinding().imageViewCaptcha)
+        }
     }
 
     private fun showCourseAdapterError(exception: CourseAdapterException) {

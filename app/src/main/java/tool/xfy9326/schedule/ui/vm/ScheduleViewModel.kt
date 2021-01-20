@@ -38,7 +38,7 @@ class ScheduleViewModel : AbstractViewModel() {
             ScheduleDBProvider.db.scheduleDAO.getScheduleCourses(it.first.scheduleId)
         },
         transform = { pair, courses ->
-            Triple(pair.first, courses, pair.second)
+            ScheduleBuildBundle(pair.first, courses, pair.second)
         }
     ).distinctUntilChanged().shareIn(GlobalScope, SharingStarted.Eagerly, 1).asDistinctLiveData()
     val weekNumInfo = weekNumInfoFlow.shareIn(GlobalScope, SharingStarted.Eagerly, 1).asDistinctLiveData()
@@ -51,7 +51,7 @@ class ScheduleViewModel : AbstractViewModel() {
     val scrollToWeek = MutableEventLiveData<Int>()
     val showWeekChanged = MutableEventLiveData<Pair<Int, WeekNumType>>()
     val showScheduleControlPanel = MutableEventLiveData<Pair<Int, Int>>()
-    val showCourseDetailDialog = MutableEventLiveData<Triple<Array<ScheduleTime>, Course, Long>>()
+    val showCourseDetailDialog = MutableEventLiveData<Triple<List<ScheduleTime>, Course, Long>>()
     val openCourseManageActivity = MutableEventLiveData<Long>()
     val exitAppDirectly = MutableEventLiveData<Boolean>()
     val toolBarTintColor = ScheduleDataStore.toolBarTintColorFlow.asDistinctLiveData()

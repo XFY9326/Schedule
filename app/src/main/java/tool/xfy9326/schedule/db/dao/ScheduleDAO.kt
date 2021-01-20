@@ -15,15 +15,15 @@ import tool.xfy9326.schedule.utils.ScheduleManager
 abstract class ScheduleDAO {
     companion object {
         fun Flow<List<CourseBundle>>.convert() = map { list ->
-            Array(list.size) {
-                list[it].course.times = list[it].courseTime
-                list[it].course
+            list.map {
+                it.course.times = it.courseTime
+                it.course
             }
         }
     }
 
     @Transaction
-    open suspend fun updateScheduleCourses(schedule: Schedule, courses: Array<Course>) {
+    open suspend fun updateScheduleCourses(schedule: Schedule, courses: List<Course>) {
         updateSchedule(schedule)
         deleteCourseByScheduleId(schedule.scheduleId)
         for (course in courses) {
@@ -32,7 +32,7 @@ abstract class ScheduleDAO {
     }
 
     @Transaction
-    open suspend fun putNewScheduleCourses(schedule: Schedule, courses: Array<Course>) {
+    open suspend fun putNewScheduleCourses(schedule: Schedule, courses: List<Course>) {
         val scheduleId = putSchedule(schedule)
         for (course in courses) {
             putCourse(scheduleId, course)

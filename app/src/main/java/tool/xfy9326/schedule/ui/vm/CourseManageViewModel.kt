@@ -13,7 +13,7 @@ import tool.xfy9326.schedule.ui.vm.base.AbstractViewModel
 
 class CourseManageViewModel : AbstractViewModel() {
     private var hasCourseInit: Boolean = false
-    var coursesLivaData = MediatorLiveData<Array<Course>>()
+    var coursesLivaData = MediatorLiveData<List<Course>>()
     val courseRecovered = MutableNotifyLiveData()
 
     fun requestDBCourses(scheduleId: Long) {

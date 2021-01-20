@@ -37,6 +37,7 @@ object ImageIO {
         saveImage(it, bitmap, compressFormat, quality, recycle)
     } ?: false
 
+    @Suppress("BlockingMethodInNonBlockingContext")
     private suspend fun saveImage(outputStream: OutputStream, bitmap: Bitmap, compressFormat: Bitmap.CompressFormat, quality: Int, recycle: Boolean) =
         withContext(Dispatchers.IO) {
             try {

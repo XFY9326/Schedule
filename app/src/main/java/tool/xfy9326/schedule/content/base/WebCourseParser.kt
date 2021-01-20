@@ -22,7 +22,7 @@ abstract class WebCourseParser : ICourseParser {
      * @param importOption Import option, Default: 0
      * @return
      */
-    protected abstract fun onLoadScheduleTimes(importOption: Int): Array<ScheduleTime>
+    protected abstract fun onLoadScheduleTimes(importOption: Int): List<ScheduleTime>
 
     /**
      * Parse courses
@@ -38,5 +38,5 @@ abstract class WebCourseParser : ICourseParser {
         htmlContent: String,
         iframeContent: Array<String>,
         frameContent: Array<String>,
-    ): Array<Course>
+    ): List<Course>
 }

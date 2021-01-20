@@ -36,11 +36,11 @@ class CourseDetailDialog : DialogFragment() {
         private val DIVIDER_HEIGHT = 1.dpToPx()
         private val DIVIDER_MARGIN = 12.dpToPx()
 
-        fun showDialog(fragmentManager: FragmentManager, course: Course, scheduleTimes: Array<ScheduleTime>, currentTimeId: Long) {
+        fun showDialog(fragmentManager: FragmentManager, course: Course, scheduleTimes: List<ScheduleTime>, currentTimeId: Long) {
             CourseDetailDialog().apply {
                 arguments = buildBundle {
                     putSerializable(ARGUMENT_COURSE, course)
-                    putSerializable(ARGUMENT_SCHEDULE_TIMES, scheduleTimes)
+                    putSerializable(ARGUMENT_SCHEDULE_TIMES, scheduleTimes.toTypedArray())
                     putLong(ARGUMENT_CURRENT_TIME_ID, currentTimeId)
                 }
             }.show(fragmentManager, null)

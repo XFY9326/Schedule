@@ -22,7 +22,7 @@ abstract class NetworkCourseParser : ICourseParser {
      * @param htmlContent Html content
      * @return Schedule time list
      */
-    protected abstract fun onParseScheduleTimes(importOption: Int, htmlContent: String?): Array<ScheduleTime>
+    protected abstract fun onParseScheduleTimes(importOption: Int, htmlContent: String?): List<ScheduleTime>
 
     /**
      * Parse courses
@@ -31,5 +31,5 @@ abstract class NetworkCourseParser : ICourseParser {
      * @param htmlContent Html content
      * @return Course Array
      */
-    protected abstract fun onParseCourses(importOption: Int, htmlContent: String): Array<Course>
+    protected abstract fun onParseCourses(importOption: Int, htmlContent: String): List<Course>
 }

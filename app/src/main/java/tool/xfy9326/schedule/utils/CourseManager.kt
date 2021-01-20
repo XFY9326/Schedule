@@ -21,16 +21,16 @@ import tool.xfy9326.schedule.ui.view.ScheduleView
 import kotlin.math.max
 
 object CourseManager {
-    fun getScheduleViewDataByWeek(weekNum: Int, schedule: Schedule, courses: Array<Course>, scheduleStyles: ScheduleStyles): ScheduleViewData {
+    fun getScheduleViewDataByWeek(weekNum: Int, bundle: ScheduleBuildBundle): ScheduleViewData {
         val result = ArrayList<CourseCell>()
-        val showNotThisWeekCourse = scheduleStyles.showNotThisWeekCourse
-        val maxWeekNum = CourseTimeUtils.getMaxWeekNum(schedule.startDate, schedule.endDate, schedule.weekStart)
-        val startWeekDay = CalendarUtils.getWeekDay(schedule.startDate)
-        val endWeekDay = CalendarUtils.getWeekDay(schedule.endDate)
+        val showNotThisWeekCourse = bundle.scheduleStyles.showNotThisWeekCourse
+        val maxWeekNum = CourseTimeUtils.getMaxWeekNum(bundle.schedule.startDate, bundle.schedule.endDate, bundle.schedule.weekStart)
+        val startWeekDay = CalendarUtils.getWeekDay(bundle.schedule.startDate)
+        val endWeekDay = CalendarUtils.getWeekDay(bundle.schedule.endDate)
 
-        courses.iterateAll { course, courseTime ->
+        bundle.courses.iterateAll { course, courseTime ->
             val isThisWeekCourse =
-                hasThisWeekCourseBySchedule(courseTime, weekNum, maxWeekNum, startWeekDay, endWeekDay, schedule.weekStart)
+                hasThisWeekCourseBySchedule(courseTime, weekNum, maxWeekNum, startWeekDay, endWeekDay, bundle.schedule.weekStart)
             if (isThisWeekCourse || showNotThisWeekCourse) {
                 val intersectCells = result.filter {
                     it.classTime intersect courseTime.classTime
@@ -57,7 +57,7 @@ object CourseManager {
             }
         }
 
-        return ScheduleViewData(weekNum, schedule, result.toTypedArray(), scheduleStyles)
+        return ScheduleViewData(weekNum, bundle.schedule, result, bundle.scheduleStyles)
     }
 
     private fun hasThisWeekCourseBySchedule(
@@ -78,7 +78,7 @@ object CourseManager {
             false
         }
 
-    fun getMaxWeekNum(courses: Array<Course>): Int {
+    fun getMaxWeekNum(courses: List<Course>): Int {
         var defaultValue = 1
         courses.iterateAll { _, courseTime ->
             courseTime.weekNum = courseTime.weekNum.fit()
@@ -87,7 +87,7 @@ object CourseManager {
         return defaultValue
     }
 
-    fun hasWeekendCourse(cells: Array<CourseCell>): Boolean {
+    fun hasWeekendCourse(cells: List<CourseCell>): Boolean {
         for (cell in cells) {
             if (cell.classTime.weekDay.isWeekend) {
                 return true
@@ -96,7 +96,7 @@ object CourseManager {
         return false
     }
 
-    fun solveConflicts(scheduleTimes: Array<ScheduleTime>, courses: Array<Course>): Boolean {
+    fun solveConflicts(scheduleTimes: List<ScheduleTime>, courses: List<Course>): Boolean {
         val allTimes = courses.flatMap {
             it.times
         }
@@ -127,7 +127,7 @@ object CourseManager {
             BooleanArray(maxWeekNum) { false }
         }, WeekDay.MONDAY, 1, 1, null)
 
-    fun validateCourse(course: Course, otherCourses: Array<Course>): EditError? {
+    fun validateCourse(course: Course, otherCourses: List<Course>): EditError? {
         if (course.name.isBlank() || course.name.isEmpty()) {
             return EditError.Type.COURSE_NAME_EMPTY.make()
         }
@@ -164,7 +164,7 @@ object CourseManager {
             ) ?: return@withContext null
 
             val backgroundColor = App.instance.getDefaultBackgroundColor()
-            val scheduleView = ScheduleView(App.instance, getScheduleViewDataByWeek(weekNum, schedule, courses, styles))
+            val scheduleView = ScheduleView(App.instance, getScheduleViewDataByWeek(weekNum, ScheduleBuildBundle(schedule, courses, styles)))
 
             val widthSpec = View.MeasureSpec.makeMeasureSpec(targetWidth, View.MeasureSpec.AT_MOST)
             val heightSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)

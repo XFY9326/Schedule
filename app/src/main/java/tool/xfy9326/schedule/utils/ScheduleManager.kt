@@ -25,7 +25,7 @@ object ScheduleManager {
             ScheduleDBProvider.db.scheduleDAO.getSchedule(it).filterNotNull()
         }.shareIn(GlobalScope, SharingStarted.Eagerly, 1)
 
-    private val DEFAULT_SCHEDULE_TIMES = arrayOf(
+    private val DEFAULT_SCHEDULE_TIMES = listOf(
         ScheduleTime(8, 0, 8, 45),
         ScheduleTime(8, 50, 9, 35),
         ScheduleTime(9, 50, 10, 35),
@@ -76,7 +76,7 @@ object ScheduleManager {
         }
     }
 
-    fun validateScheduleTime(times: Array<ScheduleTime>): Boolean {
+    fun validateScheduleTime(times: List<ScheduleTime>): Boolean {
         for (i1 in times.indices) {
             val time1 = times[i1]
 
@@ -113,7 +113,7 @@ object ScheduleManager {
             ScheduleDataStore.defaultFirstDayOfWeekFlow.first())
     }
 
-    suspend fun saveCurrentSchedule(scheduleTimes: Array<ScheduleTime>, courses: Array<Course>) {
+    suspend fun saveCurrentSchedule(scheduleTimes: List<ScheduleTime>, courses: List<Course>) {
         val schedule = currentScheduleFlow.first().also {
             it.times = scheduleTimes
             adjustScheduleDateByCourses(it, courses)
@@ -121,7 +121,7 @@ object ScheduleManager {
         ScheduleDBProvider.db.scheduleDAO.updateScheduleCourses(schedule, courses)
     }
 
-    suspend fun saveNewSchedule(newScheduleName: String?, scheduleTimes: Array<ScheduleTime>, courses: Array<Course>) {
+    suspend fun saveNewSchedule(newScheduleName: String?, scheduleTimes: List<ScheduleTime>, courses: List<Course>) {
         val schedule = createNewSchedule().also {
             it.times = scheduleTimes
             adjustScheduleDateByCourses(it, courses)
@@ -132,12 +132,12 @@ object ScheduleManager {
         ScheduleDBProvider.db.scheduleDAO.putNewScheduleCourses(schedule, courses)
     }
 
-    suspend fun saveNewSchedule(schedule: Schedule, courses: Array<Course>) {
+    suspend fun saveNewSchedule(schedule: Schedule, courses: List<Course>) {
         adjustScheduleDateByCourses(schedule, courses)
         ScheduleDBProvider.db.scheduleDAO.putNewScheduleCourses(schedule, courses)
     }
 
-    private fun adjustScheduleDateByCourses(schedule: Schedule, courses: Array<Course>) {
+    private fun adjustScheduleDateByCourses(schedule: Schedule, courses: List<Course>) {
         val maxWeekNum = CourseManager.getMaxWeekNum(courses)
         val scheduleMaxWeekNum = CourseTimeUtils.getMaxWeekNum(schedule.startDate, schedule.endDate, schedule.weekStart)
 
@@ -148,7 +148,7 @@ object ScheduleManager {
         }
     }
 
-    fun validateSchedule(schedule: Schedule, scheduleCourses: Array<Course>): EditError? {
+    fun validateSchedule(schedule: Schedule, scheduleCourses: List<Course>): EditError? {
         if (schedule.name.isBlank() || schedule.name.isEmpty()) {
             return EditError.Type.SCHEDULE_NAME_EMPTY.make()
         }

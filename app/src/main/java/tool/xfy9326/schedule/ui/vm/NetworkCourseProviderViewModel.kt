@@ -1,6 +1,7 @@
 package tool.xfy9326.schedule.ui.vm
 
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
@@ -69,7 +70,7 @@ class NetworkCourseProviderViewModel : AbstractViewModel() {
                     val captchaImage = if (provider is LoginCourseProvider) {
                         val captchaUrl = provider.loadCaptchaUrl(0)
                         if (captchaUrl != null) {
-                            provider.getCaptchaImage(captchaUrl)
+                            BitmapFactory.decodeStream(provider.readCaptchaImageBytes(captchaUrl))
                         } else {
                             null
                         }
@@ -100,7 +101,7 @@ class NetworkCourseProviderViewModel : AbstractViewModel() {
                     val captchaImage = if (provider is LoginCourseProvider) {
                         val captchaUrl = provider.loadCaptchaUrl(importOption)
                         if (captchaUrl != null) {
-                            provider.getCaptchaImage(captchaUrl)
+                            BitmapFactory.decodeStream(provider.readCaptchaImageBytes(captchaUrl))
                         } else {
                             null
                         }
