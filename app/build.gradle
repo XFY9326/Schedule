@@ -11,7 +11,7 @@ rootProject.ext {
     versionName = "1.0.1"
     minSdkVersion = 23
     targetSDKVersion = 30
-    buildToolsVersion = "30.0.2"
+    buildToolsVersion = "30.0.3"
 }
 
 android {
