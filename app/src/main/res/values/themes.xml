@@ -46,6 +46,7 @@
 
     <style name="AppTheme.SnackBar" parent="Widget.MaterialComponents.Snackbar">
         <item name="animationMode">slide</item>
+        <item name="backgroundTint">@color/snack_bar_background_tint</item>
     </style>
 
     <style name="AppTheme.OverflowMenuStyle" parent="@style/Widget.MaterialComponents.PopupMenu.Overflow">
