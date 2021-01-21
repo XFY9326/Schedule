@@ -206,7 +206,7 @@ class WebCourseProviderActivity : ViewModelActivity<WebCourseProviderViewModel, 
             isVisible = false
             startAnimation(AnimationUtils.loadAnimation(this@WebCourseProviderActivity, R.anim.anim_bottom_button_out))
         }
-        WebCourseProviderBottomPanel.showDialog(supportFragmentManager, requireViewModel().importConfig.getAuthorNameText())
+        WebCourseProviderBottomPanel.showDialog(supportFragmentManager, requireViewModel().importConfig.authorNameText)
     }
 
     private fun getCurrentHTML(currentSchedule: Boolean) {

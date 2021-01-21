@@ -13,6 +13,13 @@
             app:summary="@string/night_mode_sum"
             app:title="@string/night_mode" />
 
+        <androidx.preference.CheckBoxPreference
+            app:defaultValue="false"
+            app:icon="@drawable/ic_style_24"
+            app:key="customActivityTransitionAnimation"
+            app:summary="@string/custom_activity_transition_animation_sum"
+            app:title="@string/custom_activity_transition_animation" />
+
     </androidx.preference.PreferenceCategory>
 
     <androidx.preference.PreferenceCategory

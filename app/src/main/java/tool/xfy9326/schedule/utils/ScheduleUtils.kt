@@ -19,7 +19,7 @@ import tool.xfy9326.schedule.kt.intersect
 import tool.xfy9326.schedule.kt.iterateAll
 import java.util.*
 
-object ScheduleManager {
+object ScheduleUtils {
     val currentScheduleFlow =
         AppDataStore.currentScheduleIdFlow.combine {
             ScheduleDBProvider.db.scheduleDAO.getSchedule(it).filterNotNull()
@@ -138,7 +138,7 @@ object ScheduleManager {
     }
 
     private fun adjustScheduleDateByCourses(schedule: Schedule, courses: List<Course>) {
-        val maxWeekNum = CourseManager.getMaxWeekNum(courses)
+        val maxWeekNum = CourseUtils.getMaxWeekNum(courses)
         val scheduleMaxWeekNum = CourseTimeUtils.getMaxWeekNum(schedule.startDate, schedule.endDate, schedule.weekStart)
 
         schedule.apply {

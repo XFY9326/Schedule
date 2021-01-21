@@ -59,7 +59,7 @@ object ImageIO {
 
     private suspend fun readImage(inputStream: InputStream) = withContext(Dispatchers.IO) {
         try {
-            return@withContext BitmapFactory.decodeStream(inputStream)
+            return@withContext inputStream.use(BitmapFactory::decodeStream)
         } catch (e: Exception) {
             e.printStackTrace()
         }

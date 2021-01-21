@@ -6,7 +6,6 @@ import tool.xfy9326.schedule.beans.CourseTime
 import tool.xfy9326.schedule.beans.ScheduleTime
 import tool.xfy9326.schedule.beans.WeekDay
 import tool.xfy9326.schedule.content.base.NetworkCourseParser
-import tool.xfy9326.schedule.kt.fit
 import tool.xfy9326.schedule.kt.isEven
 import tool.xfy9326.schedule.kt.isOdd
 
@@ -58,7 +57,7 @@ class NAUCourseLoginParser : NetworkCourseParser() {
                 }
             }
 
-            return weeks.fit()
+            return weeks
         }
 
         private fun getCourseTime(location: String, timeStr: String): CourseTime? {

@@ -44,6 +44,13 @@
         <item name="android:forceDarkAllowed" tools:ignore="NewApi">false</item>
     </style>
 
+    <style name="AppTheme.ActivityAnimation" parent="@android:style/Animation.Activity">
+        <item name="android:activityOpenEnterAnimation">@anim/anim_scroll_in_right</item>
+        <item name="android:activityOpenExitAnimation">@anim/anim_scroll_out_left</item>
+        <item name="android:activityCloseEnterAnimation">@anim/anim_scroll_in_left</item>
+        <item name="android:activityCloseExitAnimation">@anim/anim_scroll_out_right</item>
+    </style>
+
     <style name="AppTheme.SnackBar" parent="Widget.MaterialComponents.Snackbar">
         <item name="animationMode">slide</item>
         <item name="backgroundTint">@color/snack_bar_background_tint</item>

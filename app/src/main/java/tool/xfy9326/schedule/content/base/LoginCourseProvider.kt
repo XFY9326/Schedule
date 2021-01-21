@@ -2,6 +2,8 @@
 
 package tool.xfy9326.schedule.content.base
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import io.ktor.client.*
 import io.ktor.client.request.*
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
@@ -14,9 +16,9 @@ import java.io.InputStream
  */
 abstract class LoginCourseProvider : NetworkCourseProvider() {
 
-    suspend fun loadCaptchaUrl(importOption: Int) = onLoadCaptcha(requireHttpClient(), importOption)
-
-    suspend fun readCaptchaImageBytes(url: String) = onReadCaptchaImageBytes(requireHttpClient(), url)
+    suspend fun getCaptchaImage(importOption: Int = 0) = onLoadCaptcha(requireHttpClient(), importOption)?.let {
+        onGetCaptchaImage(requireHttpClient(), it)
+    }
 
     suspend fun login(userId: String, userPw: String, captchaCode: String?, importOption: Int) =
         onLogin(requireHttpClient(), userId, userPw, captchaCode, importOption)
@@ -48,9 +50,9 @@ abstract class LoginCourseProvider : NetworkCourseProvider() {
      * @param url Captcha image url
      * @return Captcha image stream
      */
-    protected open suspend fun onReadCaptchaImageBytes(httpClient: HttpClient, url: String) =
+    protected open suspend fun onGetCaptchaImage(httpClient: HttpClient, url: String): Bitmap =
         try {
-            httpClient.get<InputStream>(url)
+            httpClient.get<InputStream>(url).use(BitmapFactory::decodeStream)
         } catch (e: Exception) {
             CourseAdapterException.ErrorType.CAPTCHA_DOWNLOAD_ERROR.report(e)
         }

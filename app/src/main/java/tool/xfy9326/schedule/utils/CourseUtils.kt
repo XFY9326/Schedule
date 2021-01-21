@@ -20,7 +20,7 @@ import tool.xfy9326.schedule.tools.MaterialColorHelper
 import tool.xfy9326.schedule.ui.view.ScheduleView
 import kotlin.math.max
 
-object CourseManager {
+object CourseUtils {
     fun getScheduleViewDataByWeek(weekNum: Int, bundle: ScheduleBuildBundle): ScheduleViewData {
         val result = ArrayList<CourseCell>()
         val showNotThisWeekCourse = bundle.scheduleStyles.showNotThisWeekCourse
@@ -163,8 +163,10 @@ object CourseManager {
                 cornerScreenMargin = false
             ) ?: return@withContext null
 
-            val backgroundColor = App.instance.getDefaultBackgroundColor()
-            val scheduleView = ScheduleView(App.instance, getScheduleViewDataByWeek(weekNum, ScheduleBuildBundle(schedule, courses, styles)))
+            val context = App.instance
+
+            val backgroundColor = context.getDefaultBackgroundColor()
+            val scheduleView = ScheduleView(context, getScheduleViewDataByWeek(weekNum, ScheduleBuildBundle(schedule, courses, styles)))
 
             val widthSpec = View.MeasureSpec.makeMeasureSpec(targetWidth, View.MeasureSpec.AT_MOST)
             val heightSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)

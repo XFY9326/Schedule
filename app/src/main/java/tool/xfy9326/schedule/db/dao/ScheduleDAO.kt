@@ -9,7 +9,7 @@ import tool.xfy9326.schedule.beans.Schedule
 import tool.xfy9326.schedule.db.DBConst
 import tool.xfy9326.schedule.db.query.CourseBundle
 import tool.xfy9326.schedule.kt.fit
-import tool.xfy9326.schedule.utils.ScheduleManager
+import tool.xfy9326.schedule.utils.ScheduleUtils
 
 @Dao
 abstract class ScheduleDAO {
@@ -55,7 +55,7 @@ abstract class ScheduleDAO {
     @Transaction
     open suspend fun tryInitDefaultSchedule() =
         if (getScheduleCount() == 0L) {
-            putSchedule(ScheduleManager.createDefaultSchedule())
+            putSchedule(ScheduleUtils.createDefaultSchedule())
         } else {
             null
         }
