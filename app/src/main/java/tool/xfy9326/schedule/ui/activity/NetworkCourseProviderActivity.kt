@@ -57,13 +57,13 @@ class NetworkCourseProviderActivity : ViewModelActivity<NetworkCourseProviderVie
         }
         viewBinding.textViewCourseAdapterSchool.apply {
             isSelected = true
-            text = viewModel.importConfig.getSchoolNameText()
+            text = viewModel.importConfig.schoolNameText
         }
         viewBinding.textViewCourseAdapterSystem.apply {
             isSelected = true
-            text = viewModel.importConfig.getSystemNameText()
+            text = viewModel.importConfig.systemNameText
         }
-        viewBinding.textViewCourseAdapterAuthor.text = getString(R.string.adapter_author, viewModel.importConfig.getAuthorNameText())
+        viewBinding.textViewCourseAdapterAuthor.text = getString(R.string.adapter_author, viewModel.importConfig.authorNameText)
         viewBinding.spinnerCourseImportOptions.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 viewModel.refreshCaptcha(position)
@@ -190,7 +190,7 @@ class NetworkCourseProviderActivity : ViewModelActivity<NetworkCourseProviderVie
         requireViewBinding().apply {
             if (params != null) {
                 when {
-                    params.optionsRes != null -> setupOptions(getStringArray(params.optionsRes))
+                    params.optionsRes != null -> setupOptions(params.optionsRes)
                     params.optionsOnline != null -> setupOptions(params.optionsOnline)
                     else -> layoutImportOptions.isVisible = false
                 }

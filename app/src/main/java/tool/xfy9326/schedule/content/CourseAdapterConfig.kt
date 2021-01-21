@@ -13,7 +13,7 @@ object CourseAdapterConfig {
 
     private val sortedConfigs by lazy {
         registerConfigs.sortedBy {
-            it.getSchoolNameWords() + it.getSystemNameWords()
+            it.schoolNamePinyin + it.systemNamePinyin
         }
     }
 

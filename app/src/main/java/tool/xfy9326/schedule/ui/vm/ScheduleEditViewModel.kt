@@ -13,7 +13,7 @@ import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
 import tool.xfy9326.schedule.kt.MutableEventLiveData
 import tool.xfy9326.schedule.kt.postEvent
 import tool.xfy9326.schedule.ui.vm.base.AbstractViewModel
-import tool.xfy9326.schedule.utils.ScheduleManager
+import tool.xfy9326.schedule.utils.ScheduleUtils
 import java.util.*
 
 class ScheduleEditViewModel : AbstractViewModel() {
@@ -51,7 +51,7 @@ class ScheduleEditViewModel : AbstractViewModel() {
                         scheduleData.postValue(it)
                     }
                 } else {
-                    editSchedule = ScheduleManager.createNewSchedule()
+                    editSchedule = ScheduleUtils.createNewSchedule()
                     scheduleData.postValue(editSchedule)
                 }
                 originalScheduleHashCode = editSchedule.hashCode()
@@ -72,7 +72,7 @@ class ScheduleEditViewModel : AbstractViewModel() {
     fun saveSchedule() {
         val cache = editSchedule
         viewModelScope.launch {
-            val errorMsg = ScheduleManager.validateSchedule(cache, ScheduleDBProvider.db.scheduleDAO.getScheduleCourses(cache.scheduleId).first())
+            val errorMsg = ScheduleUtils.validateSchedule(cache, ScheduleDBProvider.db.scheduleDAO.getScheduleCourses(cache.scheduleId).first())
             if (errorMsg == null) {
                 val newId = if (isEdit) {
                     ScheduleDBProvider.db.scheduleDAO.updateSchedule(cache)

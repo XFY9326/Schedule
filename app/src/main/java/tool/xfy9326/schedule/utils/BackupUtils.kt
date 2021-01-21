@@ -50,13 +50,13 @@ object BackupUtils {
             TextIO.readText(uri)?.let(::decode)?.let {
                 for (bundle in it) {
                     totalAmount++
-                    val scheduleTimeValid = ScheduleManager.validateScheduleTime(bundle.schedule.times)
+                    val scheduleTimeValid = ScheduleUtils.validateScheduleTime(bundle.schedule.times)
                     if (!scheduleTimeValid) {
                         errorAmount++
                         continue
                     }
-                    hasConflicts = CourseManager.solveConflicts(bundle.schedule.times, bundle.courses)
-                    ScheduleManager.saveNewSchedule(bundle.schedule, bundle.courses)
+                    hasConflicts = CourseUtils.solveConflicts(bundle.schedule.times, bundle.courses)
+                    ScheduleUtils.saveNewSchedule(bundle.schedule, bundle.courses)
                 }
             }
             return BatchResult(true, totalAmount, errorAmount) to hasConflicts

@@ -10,6 +10,7 @@ import tool.xfy9326.schedule.tools.ExceptionHandler
 class App : Application() {
     companion object {
         lateinit var instance: App
+            private set
     }
 
     override fun onCreate() {

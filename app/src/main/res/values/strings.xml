@@ -72,7 +72,6 @@
     <string name="max_week_num_error">最大周数必须大于一周！</string>
     <string name="course_num_error">课程\"%1$s\"超过课表最大课程节数！</string>
     <string name="course_week_num_error">课程\"%1$s\"周数超过课表最大周数！</string>
-    <string name="schedule_time_error">课表时间存在错误！</string>
     <string name="schedule_time_conflict_error">第%1$d节课与第%2$d节课时间存在冲突！</string>
     <string name="schedule_time_not_in_one_day_error">所有课程时间必须在一天之内！</string>
     <string name="schedule_time_start_end_error">第%1$d节课开始时间必须小于结束时间！</string>
@@ -125,7 +124,6 @@
     <string name="importing_courses_msg">您是否想取消导入课程？</string>
     <string name="create_new_schedule">创建新课表</string>
     <string name="new_schedule_name_title">新课表名称</string>
-    <string name="max_course_num_error">导入课程中存在超过当前最大课程节数的课程！</string>
     <string name="import_course_has_conflict">导入的课程存在时间冲突！</string>
     <string name="import_course_has_conflict_msg">导入的课程中存在上课时间冲突的问题，该部分课程时间的上课周数已经被设置为空，您可以稍后手动解决问题。</string>
     <string name="refresh">刷新</string>
@@ -322,6 +320,8 @@
     <string name="schedule_week_start">设定每周的第一天</string>
     <string name="schedule_week_start_sum">修改每周开始日将会影响周数计算与课表显示</string>
     <string name="select_opposite_weeks">反选</string>
+    <string name="custom_activity_transition_animation">使用左右滑动的窗口切换动画</string>
+    <string name="custom_activity_transition_animation_sum">适用于系统自带动画显示不佳的情况\n注：彻底重启应用后方可生效</string>
 
     <string name="scare_type_fit_center">等比缩放，从中间开始填充满</string>
     <string name="scare_type_center_crop">等比缩放直到完全填充</string>

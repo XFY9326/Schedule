@@ -228,7 +228,7 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
             }
         }
         lifecycleScope.launch {
-            delay(resources.getInteger(android.R.integer.config_shortAnimTime).toLong())
+            delay(resources.getInteger(R.integer.drawer_close_anim_time).toLong())
             requireViewBinding().drawerSchedule.closeDrawers()
         }
         return true

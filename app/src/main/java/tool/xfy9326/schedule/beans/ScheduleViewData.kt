@@ -1,6 +1,6 @@
 package tool.xfy9326.schedule.beans
 
-import tool.xfy9326.schedule.utils.CourseManager
+import tool.xfy9326.schedule.utils.CourseUtils
 import java.util.*
 
 data class ScheduleViewData(
@@ -14,7 +14,7 @@ data class ScheduleViewData(
     val styles: ScheduleStyles,
 ) {
     val hasWeekendCourse
-        get() = CourseManager.hasWeekendCourse(cells)
+        get() = CourseUtils.hasWeekendCourse(cells)
 
     constructor(weekNum: Int, schedule: Schedule, cells: List<CourseCell>, styles: ScheduleStyles) :
             this(schedule.scheduleId, schedule.startDate, schedule.endDate, weekNum, schedule.weekStart, schedule.times, cells, styles)

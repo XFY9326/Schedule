@@ -17,7 +17,7 @@ import tool.xfy9326.schedule.beans.*
 import tool.xfy9326.schedule.kt.buildBundle
 import tool.xfy9326.schedule.ui.view.ScheduleView
 import tool.xfy9326.schedule.ui.vm.ScheduleViewModel
-import tool.xfy9326.schedule.utils.CourseManager
+import tool.xfy9326.schedule.utils.CourseUtils
 import kotlin.properties.Delegates
 
 class TableFragment : Fragment(), Observer<ScheduleBuildBundle> {
@@ -53,7 +53,7 @@ class TableFragment : Fragment(), Observer<ScheduleBuildBundle> {
     override fun onChanged(scheduleBuildBundle: ScheduleBuildBundle) {
         context?.let {
             lifecycleScope.launch(Dispatchers.Default) {
-                val scheduleData = CourseManager.getScheduleViewDataByWeek(weekNum, scheduleBuildBundle)
+                val scheduleData = CourseUtils.getScheduleViewDataByWeek(weekNum, scheduleBuildBundle)
                 val scheduleView = ScheduleView(it, scheduleData)
                 scheduleView.setOnCourseClickListener(this@TableFragment::onCourseCellClick)
                 lifecycleScope.launchWhenStarted {
