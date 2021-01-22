@@ -9,10 +9,11 @@ import tool.xfy9326.schedule.data.AppSettingsDataStore
 
 abstract class AbstractActivity : AppCompatActivity() {
     protected open var useBackInsteadOfNavigateHome: Boolean = true
+    protected open var enableCustomActivityAnimation: Boolean = true
 
     @CallSuper
     override fun onCreate(savedInstanceState: Bundle?) {
-        if (AppSettingsDataStore.useCustomActivityTransitionAnimation) {
+        if (enableCustomActivityAnimation && AppSettingsDataStore.useCustomActivityTransitionAnimation) {
             window.setWindowAnimations(R.style.AppTheme_ActivityAnimation)
         }
         super.onCreate(savedInstanceState)

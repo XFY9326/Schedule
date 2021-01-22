@@ -32,7 +32,7 @@ object ScheduleDataStore : AbstractDataStore("ScheduleSettings") {
     private val scheduleBackgroundImageAlpha by intPreferencesKey()
     private val enableScheduleBackground by booleanPreferencesKey()
     private val scheduleBackgroundScareType by stringPreferencesKey()
-    private val useLightColorStatusBarColor by booleanPreferencesKey()
+    private val useLightColorSystemBarColor by booleanPreferencesKey()
     private val scheduleBackgroundFadeAnim by booleanPreferencesKey()
     private val showScheduleTimes by booleanPreferencesKey()
     private val horizontalCourseCellText by booleanPreferencesKey()
@@ -67,7 +67,7 @@ object ScheduleDataStore : AbstractDataStore("ScheduleSettings") {
         }
     }
 
-    val useLightColorStatusBarColorFlow = useLightColorStatusBarColor.readAsFlow(false)
+    val useLightColorSystemBarColorFlow = useLightColorSystemBarColor.readAsFlow(false)
 
     val toolBarTintColorFlow = read {
         if (it[customScheduleTextColor] == true) it[toolBarTintColor] else null

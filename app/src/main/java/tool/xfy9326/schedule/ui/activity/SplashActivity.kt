@@ -2,7 +2,6 @@ package tool.xfy9326.schedule.ui.activity
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -11,10 +10,11 @@ import tool.xfy9326.schedule.data.AppDataStore
 import tool.xfy9326.schedule.io.TextIO
 import tool.xfy9326.schedule.kt.showGlobalShortToast
 import tool.xfy9326.schedule.kt.startActivity
+import tool.xfy9326.schedule.ui.activity.base.AbstractActivity
 import tool.xfy9326.schedule.utils.DialogUtils
 import tool.xfy9326.schedule.utils.DirUtils
 
-class SplashActivity : AppCompatActivity() {
+class SplashActivity : AbstractActivity() {
     companion object {
         const val INTENT_EXTRA_CRASH_RELAUNCH = "CRASH_RELAUNCH"
         const val INTENT_EXTRA_APP_ERROR = "APP_ERROR"
@@ -22,8 +22,12 @@ class SplashActivity : AppCompatActivity() {
         const val INTENT_EXTRA_APP_RELAUNCH = "APP_RELAUNCH"
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override var useBackInsteadOfNavigateHome: Boolean = false
+
+    // getWindow() may null when application start
+    override var enableCustomActivityAnimation: Boolean = false
+
+    override fun onActivityInit(savedInstanceState: Bundle?) {
         when {
             validateFirstLaunch() -> finish()
             validateAppError() -> startAppErrorActivity()
