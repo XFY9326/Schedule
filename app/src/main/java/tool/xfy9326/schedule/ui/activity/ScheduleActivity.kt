@@ -39,6 +39,7 @@ import tool.xfy9326.schedule.ui.activity.base.ViewModelActivity
 import tool.xfy9326.schedule.ui.adapter.ScheduleViewPagerAdapter
 import tool.xfy9326.schedule.ui.dialog.CourseDetailDialog
 import tool.xfy9326.schedule.ui.dialog.ScheduleControlPanel
+import tool.xfy9326.schedule.ui.dialog.UpgradeDialog
 import tool.xfy9326.schedule.ui.vm.ScheduleViewModel
 import tool.xfy9326.schedule.utils.DialogUtils
 import tool.xfy9326.schedule.utils.IntentUtils
@@ -137,6 +138,9 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
                 startActivity(IntentUtils.getShareImageIntent(this, it))
             }
         }
+        viewModel.updateInfo.observeEvent(this) {
+            UpgradeDialog.showDialog(supportFragmentManager, it)
+        }
     }
 
     override fun onInitView(viewBinding: ActivityScheduleBinding, viewModel: ScheduleViewModel) {
@@ -153,6 +157,8 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
                 viewBinding.layoutScheduleContent.updatePadding(top = systemWindowInsetTop)
             }.consumeSystemWindowInsets().toWindowInsets()
         }
+
+        viewModel.checkUpgrade()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
