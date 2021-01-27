@@ -202,6 +202,7 @@ class ScheduleEditActivity : ViewModelActivity<ScheduleEditViewModel, ActivitySc
             setNegativeButton(android.R.string.cancel, null)
             setPositiveButton(android.R.string.ok) { _, _ ->
                 requireViewModel().editSchedule.weekStart = selectedWeekDay
+                updateWeekStartText(selectedWeekDay)
             }
         }.show(this)
     }
@@ -210,12 +211,23 @@ class ScheduleEditActivity : ViewModelActivity<ScheduleEditViewModel, ActivitySc
         requireViewModel().editSchedule.name = requireViewBinding().editTextScheduleName.text.toString()
     }
 
+    private fun updateWeekStartText(weekDay: WeekDay) {
+        requireViewBinding().textViewScheduleWeekStart.text = getStringArray(R.array.first_day_of_week)[
+                when (weekDay) {
+                    WeekDay.MONDAY -> 0
+                    WeekDay.SUNDAY -> 1
+                    else -> error("Unsupported week start day")
+                }
+        ]
+    }
+
     private fun applyScheduleToView(schedule: Schedule) {
         requireViewBinding().apply {
             scheduleTimeAdapter.submitList(schedule.times)
 
             editTextScheduleName.setText(schedule.name)
             sliderScheduleTimeNum.value = schedule.times.size.toFloat()
+            updateWeekStartText(schedule.weekStart)
 
             updateScheduleDate(true, schedule.startDate, false)
             updateScheduleDate(false, schedule.endDate, false)

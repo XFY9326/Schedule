@@ -5,11 +5,13 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
+import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.EditError
 import tool.xfy9326.schedule.beans.Schedule
 import tool.xfy9326.schedule.beans.ScheduleTime
 import tool.xfy9326.schedule.beans.WeekDay
 import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
+import tool.xfy9326.schedule.io.GlobalIO
 import tool.xfy9326.schedule.kt.MutableEventLiveData
 import tool.xfy9326.schedule.kt.postEvent
 import tool.xfy9326.schedule.ui.vm.base.AbstractViewModel
@@ -23,8 +25,8 @@ class ScheduleEditViewModel : AbstractViewModel() {
     lateinit var editSchedule: Schedule
         private set
 
-    var courseCostTime = 40
-    var breakCostTime = 10
+    var courseCostTime = GlobalIO.resources.getInteger(R.integer.default_course_cost_time)
+    var breakCostTime = GlobalIO.resources.getInteger(R.integer.default_break_cost_time)
     var scheduleTimeCourseTimeSame = false
 
     val scheduleSaveComplete = MutableEventLiveData<Long>()
