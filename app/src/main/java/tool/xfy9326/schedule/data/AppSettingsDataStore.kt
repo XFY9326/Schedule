@@ -19,6 +19,7 @@ object AppSettingsDataStore : AbstractDataStore("Settings") {
     private val calendarSyncAddReminderDefault by booleanPreferencesKey()
     private val calendarSyncReminderMinutes by intPreferencesKey()
     private val customActivityTransitionAnimation by booleanPreferencesKey()
+    private val useBrowserDownloadUpgradeFile by booleanPreferencesKey()
 
     suspend fun setNightModeType(nightMode: NightMode) = nightModeType.saveData(nightMode.name)
 
@@ -35,6 +36,8 @@ object AppSettingsDataStore : AbstractDataStore("Settings") {
     val useCustomActivityTransitionAnimation by lazy {
         runBlocking { customActivityTransitionAnimation.readAsFlow(false).first() }
     }
+
+    val useBrowserDownloadUpgradeFileFlow = useBrowserDownloadUpgradeFile.readAsFlow(false)
 
     val calendarSyncReminderMinutesFlow = calendarSyncReminderMinutes.readAsFlow(10)
 

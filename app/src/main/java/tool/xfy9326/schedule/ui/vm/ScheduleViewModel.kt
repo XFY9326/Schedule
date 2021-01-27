@@ -13,6 +13,7 @@ import tool.xfy9326.schedule.data.AppDataStore
 import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.data.ScheduleDataStore
 import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
+import tool.xfy9326.schedule.json.upgrade.UpdateInfo
 import tool.xfy9326.schedule.kt.MutableEventLiveData
 import tool.xfy9326.schedule.kt.asDistinctLiveData
 import tool.xfy9326.schedule.kt.combineTransform
@@ -61,6 +62,7 @@ class ScheduleViewModel : AbstractViewModel() {
     val selectScheduleForExportingICS = MutableEventLiveData<List<Schedule.Min>>()
     val iceExportStatus = MutableEventLiveData<Boolean>()
     val syncToCalendarStatus = MutableEventLiveData<BatchResult>()
+    val updateInfo = MutableEventLiveData<UpdateInfo>()
 
     val nightModeChangeOldSurface = DisposableValue<Bitmap>()
     val nightModeChanging = AtomicBoolean(false)
@@ -95,6 +97,12 @@ class ScheduleViewModel : AbstractViewModel() {
     fun exitAppDirectly() {
         viewModelScope.launch(Dispatchers.IO) {
             exitAppDirectly.postEvent(AppSettingsDataStore.exitAppDirectlyFlow.first())
+        }
+    }
+
+    fun checkUpgrade() {
+        viewModelScope.launch(Dispatchers.Default) {
+            UpgradeUtils.check(false).second?.let(updateInfo::postEvent)
         }
     }
 
