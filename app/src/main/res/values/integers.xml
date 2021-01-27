@@ -3,4 +3,7 @@
     <integer name="very_short_anim_time">100</integer>
     <integer name="activity_transition_anim_time">300</integer>
     <integer name="drawer_close_anim_time">300</integer>
+    <integer name="default_course_num_size_pre_day">14</integer>
+    <integer name="default_course_cost_time">40</integer>
+    <integer name="default_break_cost_time">10</integer>
 </resources>
