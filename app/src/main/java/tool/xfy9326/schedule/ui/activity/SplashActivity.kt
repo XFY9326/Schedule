@@ -20,6 +20,8 @@ class SplashActivity : AbstractActivity() {
         const val INTENT_EXTRA_APP_ERROR = "APP_ERROR"
         const val INTENT_EXTRA_APP_ERROR_CRASH_LOG = "APP_ERROR_CRASH_LOG"
         const val INTENT_EXTRA_APP_RELAUNCH = "APP_RELAUNCH"
+
+        const val INTENT_EXTRA_APP_INIT_LAUNCH = "APP_INIT_LAUNCH"
     }
 
     override var useBackInsteadOfNavigateHome: Boolean = false
@@ -69,7 +71,9 @@ class SplashActivity : AbstractActivity() {
     }
 
     private fun startMainActivity() {
-        startActivity<ScheduleActivity>()
+        startActivity<ScheduleActivity> {
+            putExtra(INTENT_EXTRA_APP_INIT_LAUNCH, true)
+        }
         finishWithTransitionAnim()
     }
 

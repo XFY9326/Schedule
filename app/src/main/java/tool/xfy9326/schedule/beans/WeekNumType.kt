@@ -10,11 +10,11 @@ enum class WeekNumType {
     IN_VACATION;
 
     companion object {
-        fun create(weekNum: Int, nowWeekNum: Int) =
+        fun create(showWeekNum: Int, nowWeekNum: Int) =
             when {
                 nowWeekNum == 0 -> IN_VACATION
-                nowWeekNum == weekNum -> CURRENT_WEEK
-                nowWeekNum + 1 == weekNum -> NEXT_WEEK
+                nowWeekNum == showWeekNum -> CURRENT_WEEK
+                nowWeekNum + 1 == showWeekNum -> NEXT_WEEK
                 else -> NOT_CURRENT_WEEK
             }
     }
