@@ -39,12 +39,37 @@
                 android:textSize="17sp" />
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cardView_appErrorFeedback"
+                android:id="@+id/cardView_appErrorCheckUpdate"
                 style="@style/AppTheme.CardView.SelectableItemBackground"
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
                 android:layout_marginStart="30dp"
                 android:layout_marginTop="50dp"
+                android:layout_marginEnd="30dp"
+                android:layout_marginBottom="20dp"
+                app:cardBackgroundColor="@android:color/holo_blue_light">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:drawablePadding="12dp"
+                    android:gravity="center"
+                    android:text="@string/check_upgrade"
+                    android:textColor="@android:color/white"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:drawableStartCompat="@drawable/ic_cloud_download_40" />
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardView_appErrorFeedback"
+                style="@style/AppTheme.CardView.SelectableItemBackground"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="30dp"
                 android:layout_marginEnd="30dp"
                 android:layout_marginBottom="20dp"
                 app:cardBackgroundColor="@android:color/holo_orange_light">

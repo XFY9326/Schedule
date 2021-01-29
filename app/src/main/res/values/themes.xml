@@ -2,19 +2,22 @@
 
     <style name="AppTheme" parent="AppTheme.Base">
         <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowLightNavigationBar" tools:ignore="NewApi">true</item>
     </style>
 
     <style name="AppTheme.LaunchScreen.Base" parent="Theme.MaterialComponents.DayNight.NoActionBar.Bridge">
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
-        <item name="android:navigationBarColor">@color/launch_screen_windows_background</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:windowLayoutInDisplayCutoutMode" tools:ignore="NewApi">shortEdges</item>
         <item name="android:forceDarkAllowed" tools:ignore="NewApi">true</item>
     </style>
 
     <style name="AppTheme.LaunchScreen" parent="AppTheme.LaunchScreen.Base">
         <item name="android:windowBackground">@drawable/background_launch_screen</item>
-        <item name="android:windowLightStatusBar" tools:ignore="NewApi">true</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowLightNavigationBar" tools:ignore="NewApi">true</item>
     </style>
 
     <style name="AppTheme.Base" parent="Theme.MaterialComponents.DayNight.NoActionBar.Bridge">
@@ -44,8 +47,16 @@
         <item name="android:forceDarkAllowed" tools:ignore="NewApi">false</item>
     </style>
 
+    <style name="AppTheme.ActivityAnimation" parent="@android:style/Animation.Activity">
+        <item name="android:activityOpenEnterAnimation">@anim/anim_scroll_in_right</item>
+        <item name="android:activityOpenExitAnimation">@anim/anim_scroll_out_left</item>
+        <item name="android:activityCloseEnterAnimation">@anim/anim_scroll_in_left</item>
+        <item name="android:activityCloseExitAnimation">@anim/anim_scroll_out_right</item>
+    </style>
+
     <style name="AppTheme.SnackBar" parent="Widget.MaterialComponents.Snackbar">
         <item name="animationMode">slide</item>
+        <item name="backgroundTint">@color/snack_bar_background_tint</item>
     </style>
 
     <style name="AppTheme.OverflowMenuStyle" parent="@style/Widget.MaterialComponents.PopupMenu.Overflow">
@@ -113,8 +124,8 @@
     </style>
 
     <style name="AppTheme.NightModeTransitionAnimation">
-        <item name="android:windowEnterAnimation">@android:anim/fade_in</item>
-        <item name="android:windowExitAnimation">@android:anim/fade_out</item>
+        <item name="android:windowEnterAnimation">@anim/anim_fast_fade_in</item>
+        <item name="android:windowExitAnimation">@anim/anim_fast_fade_out</item>
     </style>
 
 </resources>

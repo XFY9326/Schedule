@@ -1,6 +1,7 @@
-package tool.xfy9326.schedule.json
+package tool.xfy9326.schedule.json.backup
 
 import kotlinx.serialization.Serializable
+import tool.xfy9326.schedule.kt.APP_ID
 
 @Serializable
 class BackupWrapperJSON(
@@ -9,7 +10,7 @@ class BackupWrapperJSON(
     val data: List<ScheduleJSON>,
 ) {
     companion object {
-        private const val BACKUP_NAME = "PureSchedule"
+        private const val BACKUP_NAME = APP_ID
         private const val VERSION = 1
     }
 }

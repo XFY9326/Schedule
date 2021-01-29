@@ -29,7 +29,7 @@ data class CourseTime(
     var weekNum: BooleanArray,
     @Embedded
     var classTime: ClassTime,
-    var location: String?,
+    var location: String? = null,
 ) : Serializable {
 
     constructor(weekNum: BooleanArray, weekDay: WeekDay, classStartTime: Int, classDuration: Int, location: String? = null) :

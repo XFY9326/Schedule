@@ -50,6 +50,12 @@
         app:title="@string/debug_settings" />
 
     <androidx.preference.Preference
+        app:icon="@drawable/ic_cloud_download_24"
+        app:key="checkUpgrade"
+        app:persistent="false"
+        app:title="@string/check_upgrade" />
+
+    <androidx.preference.Preference
         app:icon="@drawable/ic_about_24"
         app:key="about"
         app:persistent="false"

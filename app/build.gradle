@@ -7,9 +7,11 @@ plugins {
 
 rootProject.ext {
     applicationId = 'tool.xfy9326.schedule'
+    versionCode = 2
+    versionName = "1.1.0"
     minSdkVersion = 23
     targetSDKVersion = 30
-    buildToolsVersion = "30.0.2"
+    buildToolsVersion = "30.0.3"
 }
 
 android {
@@ -20,8 +22,8 @@ android {
         applicationId rootProject.ext.applicationId
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSDKVersion
-        versionCode 1
-        versionName "1.0"
+        versionCode rootProject.ext.versionCode
+        versionName rootProject.ext.versionName
 
         resConfigs 'zh', 'en'
 
@@ -129,7 +131,7 @@ dependencies {
 
     // Ktor
     implementation "io.ktor:ktor-client-android:$ktor_version"
-    // implementation "io.ktor:ktor-client-serialization:$ktor_version"
+    implementation "io.ktor:ktor-client-serialization:$ktor_version"
 
     // Jsoup
     implementation 'org.jsoup:jsoup:1.13.1'

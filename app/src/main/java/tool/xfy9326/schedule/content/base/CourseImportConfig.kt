@@ -25,16 +25,16 @@ import kotlin.reflect.KClass
  */
 abstract class CourseImportConfig<T1 : BaseCourseProvider, T2 : ICourseParser>(
     @StringRes
-    val schoolName: Int,
+    private val schoolName: Int,
     @StringRes
-    val authorName: Int,
+    private val authorName: Int,
     @StringRes
-    val systemName: Int,
+    private val systemName: Int,
     @ArrayRes
-    val importOptions: Int? = null,
-    val providerClass: Class<T1>,
-    val parserClass: Class<T2>,
-    val providerParams: Array<Any?> = emptyArray(),
+    private val importOptions: Int? = null,
+    private val providerClass: Class<T1>,
+    private val parserClass: Class<T2>,
+    private val providerParams: Array<Any?> = emptyArray(),
 ) : Serializable {
     companion object {
         private fun getPinyin(str: String): String =
@@ -45,11 +45,26 @@ abstract class CourseImportConfig<T1 : BaseCourseProvider, T2 : ICourseParser>(
             }.toString()
     }
 
-    private var schoolNameTextCache: String? = null
-    private var schoolNameWordsCache: String? = null
-    private var authorNameTextCache: String? = null
-    private var systemNameTextCache: String? = null
-    private var systemNameWordsCache: String? = null
+    val schoolNameText by lazy {
+        GlobalIO.resources.getString(schoolName)
+    }
+    val authorNameText by lazy {
+        GlobalIO.resources.getString(authorName)
+    }
+    val systemNameText by lazy {
+        GlobalIO.resources.getString(systemName)
+    }
+
+    val importOptionsArrayText: Array<String>? by lazy {
+        importOptions?.let(GlobalIO.resources::getStringArray)
+    }
+
+    val schoolNamePinyin by lazy {
+        getPinyin(schoolNameText)
+    }
+    val systemNamePinyin by lazy {
+        getPinyin(systemNameText)
+    }
 
     fun newProvider(): T1 = providerClass.newInstance().apply {
         initParams(providerParams.copyOf())
@@ -61,31 +76,6 @@ abstract class CourseImportConfig<T1 : BaseCourseProvider, T2 : ICourseParser>(
 
     fun <T : ICourseParser> validateParserType(clazz: KClass<T>) = clazz.java.isAssignableFrom(parserClass)
 
-    fun getSchoolNameText() =
-        schoolNameTextCache ?: GlobalIO.resources.getString(schoolName).also {
-            schoolNameTextCache = it
-        }
-
-    fun getAuthorNameText() =
-        authorNameTextCache ?: GlobalIO.resources.getString(authorName).also {
-            authorNameTextCache = it
-        }
-
-    fun getSystemNameText() =
-        systemNameTextCache ?: GlobalIO.resources.getString(systemName).also {
-            systemNameTextCache = it
-        }
-
-    fun getSchoolNameWords() =
-        schoolNameWordsCache ?: getPinyin(getSchoolNameText()).also {
-            schoolNameWordsCache = it
-        }
-
-    fun getSystemNameWords() =
-        systemNameWordsCache ?: getPinyin(getSystemNameText()).also {
-            systemNameWordsCache = it
-        }
-
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other !is CourseImportConfig<*, *>) return false
@@ -96,6 +86,7 @@ abstract class CourseImportConfig<T1 : BaseCourseProvider, T2 : ICourseParser>(
         if (importOptions != other.importOptions) return false
         if (providerClass != other.providerClass) return false
         if (parserClass != other.parserClass) return false
+        if (!providerParams.contentEquals(other.providerParams)) return false
 
         return true
     }
@@ -107,6 +98,7 @@ abstract class CourseImportConfig<T1 : BaseCourseProvider, T2 : ICourseParser>(
         result = 31 * result + (importOptions ?: 0)
         result = 31 * result + providerClass.hashCode()
         result = 31 * result + parserClass.hashCode()
+        result = 31 * result + providerParams.contentHashCode()
         return result
     }
 }

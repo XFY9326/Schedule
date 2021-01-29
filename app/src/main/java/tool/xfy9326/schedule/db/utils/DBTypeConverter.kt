@@ -10,6 +10,9 @@ class DBTypeConverter {
         val instance by lazy {
             DBTypeConverter()
         }
+
+        private const val CHAR_ZERO = '0'
+        private const val CHAR_ONE = '1'
     }
 
     @TypeConverter
@@ -26,7 +29,7 @@ class DBTypeConverter {
     fun stringToBooleanArray(value: String?): BooleanArray? {
         return value?.let {
             BooleanArray(it.length) { p ->
-                value[p] == '1'
+                value[p] == CHAR_ONE
             }
         }
     }
@@ -36,7 +39,7 @@ class DBTypeConverter {
         return booleanArray?.let {
             buildString(it.size) {
                 it.forEach { b ->
-                    append(if (b) '1' else '0')
+                    append(if (b) CHAR_ONE else CHAR_ZERO)
                 }
             }
         }
@@ -53,14 +56,14 @@ class DBTypeConverter {
     }
 
     @TypeConverter
-    fun stringToScheduleTimeArray(value: String?): Array<ScheduleTime>? {
+    fun stringToScheduleTimeArray(value: String?): List<ScheduleTime>? {
         return value?.let {
             ScheduleTime.deserialize(it)
         }
     }
 
     @TypeConverter
-    fun scheduleTimeArrayToString(arr: Array<ScheduleTime>?): String? {
+    fun scheduleTimeArrayToString(arr: List<ScheduleTime>?): String? {
         return arr?.let {
             ScheduleTime.serialize(it)
         }

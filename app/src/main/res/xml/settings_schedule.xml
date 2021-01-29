@@ -110,9 +110,9 @@
         <androidx.preference.CheckBoxPreference
             app:defaultValue="false"
             app:iconSpaceReserved="false"
-            app:key="useLightColorStatusBarColor"
-            app:summary="@string/use_light_color_status_bar_color_sum"
-            app:title="@string/use_light_color_status_bar_color" />
+            app:key="useLightColorSystemBarColor"
+            app:summary="@string/use_light_color_system_bar_color_sum"
+            app:title="@string/use_light_color_system_bar_color" />
 
         <androidx.preference.CheckBoxPreference
             app:defaultValue="false"

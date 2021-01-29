@@ -2,6 +2,7 @@ package tool.xfy9326.schedule.content.base
 
 import tool.xfy9326.schedule.beans.Course
 import tool.xfy9326.schedule.beans.ScheduleTime
+import tool.xfy9326.schedule.kt.fitAllWeekNum
 
 /**
  * Web course parser
@@ -12,9 +13,8 @@ abstract class WebCourseParser : ICourseParser {
 
     fun loadScheduleTimes(importOption: Int) = onLoadScheduleTimes(importOption)
 
-
     fun parseCourses(importOption: Int, htmlContent: String, iframeContent: Array<String>, frameContent: Array<String>) =
-        onParseCourses(importOption, htmlContent, iframeContent, frameContent)
+        onParseCourses(importOption, htmlContent, iframeContent, frameContent).fitAllWeekNum()
 
     /**
      * Load schedule times
@@ -22,7 +22,7 @@ abstract class WebCourseParser : ICourseParser {
      * @param importOption Import option, Default: 0
      * @return
      */
-    protected abstract fun onLoadScheduleTimes(importOption: Int): Array<ScheduleTime>
+    protected abstract fun onLoadScheduleTimes(importOption: Int): List<ScheduleTime>
 
     /**
      * Parse courses
@@ -38,5 +38,5 @@ abstract class WebCourseParser : ICourseParser {
         htmlContent: String,
         iframeContent: Array<String>,
         frameContent: Array<String>,
-    ): Array<Course>
+    ): List<Course>
 }

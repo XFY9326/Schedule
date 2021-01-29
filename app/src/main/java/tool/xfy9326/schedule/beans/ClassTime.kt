@@ -2,7 +2,6 @@ package tool.xfy9326.schedule.beans
 
 import androidx.annotation.IntRange
 import androidx.room.ColumnInfo
-import tool.xfy9326.schedule.db.DBConst
 import java.io.Serializable
 
 data class ClassTime(
@@ -20,6 +19,7 @@ data class ClassTime(
 
     companion object {
         private const val CLASS_TIME_PERIOD_SYMBOL = "-"
+        private const val TIME_DIVIDE = "~"
     }
 
     operator fun compareTo(classTime: ClassTime): Int {
@@ -43,6 +43,6 @@ data class ClassTime(
                 classStartTime.toString()
             }
         } else {
-            scheduleTimes[classStartTime].toString()
+            "${scheduleTimes[classStartTime - 1].startTimeStr}$TIME_DIVIDE${scheduleTimes[classEndTime - 1].endTimeStr}"
         }
 }

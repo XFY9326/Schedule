@@ -4,14 +4,22 @@ import android.content.Context
 import android.content.res.ColorStateList
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.RecyclerView
 import tool.xfy9326.schedule.beans.Course
 import tool.xfy9326.schedule.databinding.ItemCourseBinding
+import tool.xfy9326.schedule.ui.recyclerview.AdvancedDividerItemDecoration
 import tool.xfy9326.schedule.ui.recyclerview.BaseDifferItemCallBack
 import tool.xfy9326.schedule.ui.recyclerview.SwipeListViewBindingAdapter
 
 class CourseManageAdapter : SwipeListViewBindingAdapter<Course, ItemCourseBinding>(CourseDifferCallback()) {
     private var onCourseEditListener: ((Course) -> Unit)? = null
     private var onCourseSwipedListener: ((Course) -> Unit)? = null
+
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+        recyclerView.addItemDecoration(AdvancedDividerItemDecoration(recyclerView.context, DividerItemDecoration.VERTICAL))
+        super.onAttachedToRecyclerView(recyclerView)
+    }
 
     override fun onCreateContentViewBinding(layoutInflater: LayoutInflater, parent: ViewGroup, viewType: Int): ItemCourseBinding =
         ItemCourseBinding.inflate(layoutInflater, parent, false)

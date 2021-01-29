@@ -1,12 +1,16 @@
 package tool.xfy9326.schedule.io
 
 import android.net.Uri
+import io.ktor.util.cio.*
+import io.ktor.utils.io.core.*
+import io.ktor.utils.io.jvm.javaio.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import tool.xfy9326.schedule.io.GlobalIO.readText
 import tool.xfy9326.schedule.io.GlobalIO.writeText
 import java.io.File
 import java.nio.charset.Charset
+import kotlin.io.use
 
 object TextIO {
 
@@ -20,13 +24,13 @@ object TextIO {
             return@withContext defaultText
         }
 
-    suspend fun writeText(text: String, path: File, overwrite: Boolean = true, charset: Charset = Charsets.UTF_8) = withContext(Dispatchers.IO) {
+    suspend fun writeText(text: String, file: File, overwrite: Boolean = true, charset: Charset = Charsets.UTF_8) = withContext(Dispatchers.IO) {
         try {
-            if (BaseIO.prepareFileFolder(path)) {
+            if (BaseIO.prepareFileFolder(file)) {
                 if (overwrite) {
-                    path.writeText(text, charset)
+                    file.writeText(text, charset)
                 } else {
-                    path.appendText(text, charset)
+                    file.appendText(text, charset)
                 }
                 return@withContext true
             }
@@ -36,9 +40,9 @@ object TextIO {
         return@withContext false
     }
 
-    suspend fun readText(path: File, defaultText: String? = null, charset: Charset = Charsets.UTF_8) = withContext(Dispatchers.IO) {
+    suspend fun readText(file: File, defaultText: String? = null, charset: Charset = Charsets.UTF_8) = withContext(Dispatchers.IO) {
         try {
-            if (path.exists()) return@withContext path.readText(charset)
+            if (file.exists()) return@withContext file.readText(charset)
         } catch (e: Exception) {
             e.printStackTrace()
         }
