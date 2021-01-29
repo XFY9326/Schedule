@@ -16,7 +16,6 @@ import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
 import tool.xfy9326.schedule.io.BaseIO
 import tool.xfy9326.schedule.io.GlobalIO
 import tool.xfy9326.schedule.io.TextIO
-import tool.xfy9326.schedule.json.upgrade.UpdateInfo
 import tool.xfy9326.schedule.kt.MutableEventLiveData
 import tool.xfy9326.schedule.kt.asParentOf
 import tool.xfy9326.schedule.kt.postEvent
@@ -27,7 +26,6 @@ import tool.xfy9326.schedule.ui.vm.base.AbstractViewModel
 import tool.xfy9326.schedule.utils.BackupUtils
 import tool.xfy9326.schedule.utils.DirUtils
 import tool.xfy9326.schedule.utils.ScheduleSyncHelper
-import tool.xfy9326.schedule.utils.UpgradeUtils
 
 class SettingsViewModel : AbstractViewModel() {
     private val scheduleSyncFlow = ScheduleDBProvider.db.scheduleSyncDao.getScheduleSyncsInfo().map {
@@ -52,13 +50,6 @@ class SettingsViewModel : AbstractViewModel() {
 
     val waitCreateLogFileName by lazy { DisposableValue<String>() }
     val waitBackupScheduleId by lazy { DisposableValue<List<Long>>() }
-    val updateInfo = MutableEventLiveData<Pair<Boolean, UpdateInfo?>>()
-
-    fun checkUpgrade() {
-        viewModelScope.launch(Dispatchers.Default) {
-            updateInfo.postEvent(UpgradeUtils.check(true))
-        }
-    }
 
     fun getScheduleBackupList() {
         viewModelScope.launch {
