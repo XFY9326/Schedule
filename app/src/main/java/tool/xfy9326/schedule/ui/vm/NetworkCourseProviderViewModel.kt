@@ -3,6 +3,7 @@ package tool.xfy9326.schedule.ui.vm
 import android.graphics.Bitmap
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
@@ -14,8 +15,8 @@ import tool.xfy9326.schedule.content.utils.CourseAdapterException
 import tool.xfy9326.schedule.kt.MutableEventLiveData
 import tool.xfy9326.schedule.kt.postEvent
 import tool.xfy9326.schedule.ui.vm.base.AbstractViewModel
-import tool.xfy9326.schedule.utils.CourseManager
-import tool.xfy9326.schedule.utils.ScheduleManager
+import tool.xfy9326.schedule.utils.CourseUtils
+import tool.xfy9326.schedule.utils.ScheduleUtils
 import java.net.ConnectException
 import java.net.SocketException
 import java.net.SocketTimeoutException
@@ -53,12 +54,12 @@ class NetworkCourseProviderViewModel : AbstractViewModel() {
 
     fun initLoginParams() {
         if (loginParamsLock.tryLock()) {
-            viewModelScope.launch {
+            viewModelScope.launch(Dispatchers.IO) {
                 try {
                     val provider = courseProvider
                     provider.init()
 
-                    val optionsRes = importConfig.importOptions
+                    val optionsRes = importConfig.importOptionsArrayText
                     val optionsOnline =
                         if (optionsRes == null) {
                             courseProvider.loadImportOptions()
@@ -67,12 +68,7 @@ class NetworkCourseProviderViewModel : AbstractViewModel() {
                         }
 
                     val captchaImage = if (provider is LoginCourseProvider) {
-                        val captchaUrl = provider.loadCaptchaUrl(0)
-                        if (captchaUrl != null) {
-                            provider.getCaptchaImage(captchaUrl)
-                        } else {
-                            null
-                        }
+                        provider.getCaptchaImage()
                     } else {
                         null
                     }
@@ -93,17 +89,12 @@ class NetworkCourseProviderViewModel : AbstractViewModel() {
 
     fun refreshCaptcha(importOption: Int) {
         if (captchaLock.tryLock()) {
-            viewModelScope.launch {
+            viewModelScope.launch(Dispatchers.IO) {
                 try {
                     val provider = courseProvider
 
                     val captchaImage = if (provider is LoginCourseProvider) {
-                        val captchaUrl = provider.loadCaptchaUrl(importOption)
-                        if (captchaUrl != null) {
-                            provider.getCaptchaImage(captchaUrl)
-                        } else {
-                            null
-                        }
+                        provider.getCaptchaImage(importOption)
                     } else {
                         null
                     }
@@ -124,7 +115,7 @@ class NetworkCourseProviderViewModel : AbstractViewModel() {
 
     fun importCourse(importParams: ImportParams, currentSchedule: Boolean, newScheduleName: String? = null) {
         if (isImportingCourses.compareAndSet(false, true)) {
-            importCourseJob = viewModelScope.launch {
+            importCourseJob = viewModelScope.launch(Dispatchers.Default) {
                 try {
                     val provider = courseProvider
 
@@ -139,19 +130,19 @@ class NetworkCourseProviderViewModel : AbstractViewModel() {
                     val scheduleTimes = courseParser.parseScheduleTimes(importParams.importOption, scheduleTimesHtml)
                     val courses = courseParser.parseCourses(importParams.importOption, coursesHtml)
 
-                    val scheduleTimeValid = ScheduleManager.validateScheduleTime(scheduleTimes)
+                    val scheduleTimeValid = ScheduleUtils.validateScheduleTime(scheduleTimes)
                     if (!scheduleTimeValid) {
                         courseImportFinish.postEvent(false to false)
                         providerError.postEvent(CourseAdapterException.ErrorType.SCHEDULE_TIMES_ERROR.make())
                         return@launch
                     }
 
-                    val hasConflicts = CourseManager.solveConflicts(scheduleTimes, courses)
+                    val hasConflicts = CourseUtils.solveConflicts(scheduleTimes, courses)
 
                     if (currentSchedule) {
-                        ScheduleManager.saveCurrentSchedule(scheduleTimes, courses)
+                        ScheduleUtils.saveCurrentSchedule(scheduleTimes, courses)
                     } else {
-                        ScheduleManager.saveNewSchedule(newScheduleName, scheduleTimes, courses)
+                        ScheduleUtils.saveNewSchedule(newScheduleName, scheduleTimes, courses)
                     }
 
                     courseImportFinish.postEvent(true to hasConflicts)
@@ -182,7 +173,7 @@ class NetworkCourseProviderViewModel : AbstractViewModel() {
         finishImport()
     }
 
-    class LoginParams(val optionsOnline: Array<String>?, val optionsRes: Int?, val captcha: Bitmap?, val allowLogin: Boolean)
+    class LoginParams(val optionsOnline: Array<String>?, val optionsRes: Array<String>?, val captcha: Bitmap?, val allowLogin: Boolean)
 
     class ImportParams(val userId: String?, val userPw: String?, val captchaCode: String?, val importOption: Int)
 }

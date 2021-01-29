@@ -17,11 +17,11 @@ class CourseImportAdapter : BaseViewBindingAdapter<ItemCourseImportBinding, View
     override fun onBindViewHolder(holder: ViewBindingViewHolder<ItemCourseImportBinding>, position: Int) {
         holder.viewBinding.textViewCourseImportSchoolName.apply {
             isSelected = true
-            text = importConfigs[position].getSchoolNameText()
+            text = importConfigs[position].schoolNameText
         }
         holder.viewBinding.textViewCourseImportSystemName.apply {
             isSelected = true
-            text = importConfigs[position].getSystemNameText()
+            text = importConfigs[position].systemNameText
         }
         holder.viewBinding.layoutCourseImportItem.setOnClickListener {
             onCourseImportItemClickListener?.invoke(importConfigs[holder.adapterPosition])

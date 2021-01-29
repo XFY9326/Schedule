@@ -3,7 +3,9 @@
 package tool.xfy9326.schedule.kt
 
 import android.app.Dialog
+import android.content.Context
 import android.content.res.Resources
+import android.graphics.Color
 import android.graphics.drawable.*
 import android.os.Build
 import android.text.Editable
@@ -23,6 +25,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.vectordrawable.graphics.drawable.Animatable2Compat
 import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
 import com.google.android.material.snackbar.Snackbar
+import tool.xfy9326.schedule.R
 
 fun Float.dpToPx() = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, this, Resources.getSystem().displayMetrics)
 
@@ -109,13 +112,43 @@ fun Editable?.getText(): String? {
     }
 }
 
-// New api setSystemBarsBehavior() is not stable even in Android R
 @Suppress("DEPRECATION")
-fun Window.enableLightStatusBar(enabled: Boolean) {
-    decorView.systemUiVisibility = if (enabled) {
-        decorView.systemUiVisibility or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-    } else {
-        decorView.systemUiVisibility and View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR.inv()
+fun Window.enableLightSystemBar(context: Context, enabled: Boolean) {
+    when {
+//        New api setSystemBarsBehavior() is not stable even in Android R
+//        Build.VERSION.SDK_INT >= Build.VERSION_CODES.R -> {
+//            insetsController?.apply {
+//                if (enabled) {
+//                    setSystemBarsAppearance(WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS, WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS)
+//                    setSystemBarsAppearance(WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS, WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS)
+//                } else {
+//                    setSystemBarsAppearance(0, WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS)
+//                    setSystemBarsAppearance(0, WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS)
+//                }
+//            }
+//        }
+        Build.VERSION.SDK_INT >= Build.VERSION_CODES.O -> {
+            decorView.systemUiVisibility = if (enabled) {
+                decorView.systemUiVisibility or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR or View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
+            } else {
+                decorView.systemUiVisibility and View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR.inv() and View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR.inv()
+            }
+        }
+        else -> {
+            decorView.systemUiVisibility = if (enabled) {
+                decorView.systemUiVisibility or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+            } else {
+                decorView.systemUiVisibility and View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR.inv()
+            }
+            navigationBarColor = if (enabled) {
+                context.getColorCompat(R.color.light_navigation_bar)
+            } else {
+                context.getColorCompat(R.color.not_light_navigation_bar)
+            }
+        }
+    }
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+        navigationBarDividerColor = Color.TRANSPARENT
     }
 }
 

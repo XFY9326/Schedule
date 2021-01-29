@@ -13,17 +13,14 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import tool.xfy9326.schedule.beans.Course
-import tool.xfy9326.schedule.beans.CourseCell
-import tool.xfy9326.schedule.beans.Schedule
-import tool.xfy9326.schedule.beans.ScheduleStyles
+import tool.xfy9326.schedule.beans.*
 import tool.xfy9326.schedule.kt.buildBundle
 import tool.xfy9326.schedule.ui.view.ScheduleView
 import tool.xfy9326.schedule.ui.vm.ScheduleViewModel
-import tool.xfy9326.schedule.utils.CourseManager
+import tool.xfy9326.schedule.utils.CourseUtils
 import kotlin.properties.Delegates
 
-class TableFragment : Fragment(), Observer<Triple<Schedule, Array<Course>, ScheduleStyles>> {
+class TableFragment : Fragment(), Observer<ScheduleBuildBundle> {
     companion object {
         private const val ARGUMENT_WEEK_NUM = "ARGUMENT_WEEK_NUM"
 
@@ -53,10 +50,10 @@ class TableFragment : Fragment(), Observer<Triple<Schedule, Array<Course>, Sched
         }
     }
 
-    override fun onChanged(data: Triple<Schedule, Array<Course>, ScheduleStyles>) {
+    override fun onChanged(scheduleBuildBundle: ScheduleBuildBundle) {
         context?.let {
             lifecycleScope.launch(Dispatchers.Default) {
-                val scheduleData = CourseManager.getScheduleViewDataByWeek(weekNum, data.first, data.second, data.third)
+                val scheduleData = CourseUtils.getScheduleViewDataByWeek(weekNum, scheduleBuildBundle)
                 val scheduleView = ScheduleView(it, scheduleData)
                 scheduleView.setOnCourseClickListener(this@TableFragment::onCourseCellClick)
                 lifecycleScope.launchWhenStarted {

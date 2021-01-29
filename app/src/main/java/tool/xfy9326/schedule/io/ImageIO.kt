@@ -3,6 +3,7 @@ package tool.xfy9326.schedule.io
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
+import io.ktor.utils.io.streams.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import tool.xfy9326.schedule.io.GlobalIO.asInputStream
@@ -37,6 +38,7 @@ object ImageIO {
         saveImage(it, bitmap, compressFormat, quality, recycle)
     } ?: false
 
+    @Suppress("BlockingMethodInNonBlockingContext")
     private suspend fun saveImage(outputStream: OutputStream, bitmap: Bitmap, compressFormat: Bitmap.CompressFormat, quality: Int, recycle: Boolean) =
         withContext(Dispatchers.IO) {
             try {
@@ -58,7 +60,7 @@ object ImageIO {
 
     private suspend fun readImage(inputStream: InputStream) = withContext(Dispatchers.IO) {
         try {
-            return@withContext BitmapFactory.decodeStream(inputStream)
+            return@withContext inputStream.use(BitmapFactory::decodeStream)
         } catch (e: Exception) {
             e.printStackTrace()
         }

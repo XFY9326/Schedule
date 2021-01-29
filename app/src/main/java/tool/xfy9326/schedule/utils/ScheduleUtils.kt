@@ -19,28 +19,30 @@ import tool.xfy9326.schedule.kt.intersect
 import tool.xfy9326.schedule.kt.iterateAll
 import java.util.*
 
-object ScheduleManager {
+object ScheduleUtils {
     val currentScheduleFlow =
         AppDataStore.currentScheduleIdFlow.combine {
             ScheduleDBProvider.db.scheduleDAO.getSchedule(it).filterNotNull()
         }.shareIn(GlobalScope, SharingStarted.Eagerly, 1)
 
-    private val DEFAULT_SCHEDULE_TIMES = arrayOf(
-        ScheduleTime(8, 0, 8, 45),
-        ScheduleTime(8, 50, 9, 35),
-        ScheduleTime(9, 50, 10, 35),
-        ScheduleTime(10, 40, 11, 25),
-        ScheduleTime(11, 30, 12, 15),
-        ScheduleTime(13, 30, 14, 15),
-        ScheduleTime(14, 20, 15, 5),
-        ScheduleTime(15, 20, 16, 5),
-        ScheduleTime(16, 10, 16, 55),
-        ScheduleTime(17, 5, 17, 50),
-        ScheduleTime(17, 55, 18, 40),
-        ScheduleTime(19, 20, 20, 5),
-        ScheduleTime(20, 10, 20, 55),
-        ScheduleTime(21, 0, 21, 45)
-    )
+    private val DEFAULT_SCHEDULE_TIMES by lazy {
+        listOf(
+            ScheduleTime(8, 0, 8, 45),
+            ScheduleTime(8, 50, 9, 35),
+            ScheduleTime(9, 50, 10, 35),
+            ScheduleTime(10, 40, 11, 25),
+            ScheduleTime(11, 30, 12, 15),
+            ScheduleTime(13, 30, 14, 15),
+            ScheduleTime(14, 20, 15, 5),
+            ScheduleTime(15, 20, 16, 5),
+            ScheduleTime(16, 10, 16, 55),
+            ScheduleTime(17, 5, 17, 50),
+            ScheduleTime(17, 55, 18, 40),
+            ScheduleTime(19, 20, 20, 5),
+            ScheduleTime(20, 10, 20, 55),
+            ScheduleTime(21, 0, 21, 45)
+        )
+    }
 
     private fun getDefaultTermDate(): Pair<Date, Date> {
         CalendarUtils.getCalendar(clearToDate = true).apply {
@@ -76,7 +78,7 @@ object ScheduleManager {
         }
     }
 
-    fun validateScheduleTime(times: Array<ScheduleTime>): Boolean {
+    fun validateScheduleTime(times: List<ScheduleTime>): Boolean {
         for (i1 in times.indices) {
             val time1 = times[i1]
 
@@ -113,7 +115,7 @@ object ScheduleManager {
             ScheduleDataStore.defaultFirstDayOfWeekFlow.first())
     }
 
-    suspend fun saveCurrentSchedule(scheduleTimes: Array<ScheduleTime>, courses: Array<Course>) {
+    suspend fun saveCurrentSchedule(scheduleTimes: List<ScheduleTime>, courses: List<Course>) {
         val schedule = currentScheduleFlow.first().also {
             it.times = scheduleTimes
             adjustScheduleDateByCourses(it, courses)
@@ -121,7 +123,7 @@ object ScheduleManager {
         ScheduleDBProvider.db.scheduleDAO.updateScheduleCourses(schedule, courses)
     }
 
-    suspend fun saveNewSchedule(newScheduleName: String?, scheduleTimes: Array<ScheduleTime>, courses: Array<Course>) {
+    suspend fun saveNewSchedule(newScheduleName: String?, scheduleTimes: List<ScheduleTime>, courses: List<Course>) {
         val schedule = createNewSchedule().also {
             it.times = scheduleTimes
             adjustScheduleDateByCourses(it, courses)
@@ -132,13 +134,13 @@ object ScheduleManager {
         ScheduleDBProvider.db.scheduleDAO.putNewScheduleCourses(schedule, courses)
     }
 
-    suspend fun saveNewSchedule(schedule: Schedule, courses: Array<Course>) {
+    suspend fun saveNewSchedule(schedule: Schedule, courses: List<Course>) {
         adjustScheduleDateByCourses(schedule, courses)
         ScheduleDBProvider.db.scheduleDAO.putNewScheduleCourses(schedule, courses)
     }
 
-    private fun adjustScheduleDateByCourses(schedule: Schedule, courses: Array<Course>) {
-        val maxWeekNum = CourseManager.getMaxWeekNum(courses)
+    private fun adjustScheduleDateByCourses(schedule: Schedule, courses: List<Course>) {
+        val maxWeekNum = CourseUtils.getMaxWeekNum(courses)
         val scheduleMaxWeekNum = CourseTimeUtils.getMaxWeekNum(schedule.startDate, schedule.endDate, schedule.weekStart)
 
         schedule.apply {
@@ -148,7 +150,7 @@ object ScheduleManager {
         }
     }
 
-    fun validateSchedule(schedule: Schedule, scheduleCourses: Array<Course>): EditError? {
+    fun validateSchedule(schedule: Schedule, scheduleCourses: List<Course>): EditError? {
         if (schedule.name.isBlank() || schedule.name.isEmpty()) {
             return EditError.Type.SCHEDULE_NAME_EMPTY.make()
         }

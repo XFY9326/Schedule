@@ -6,7 +6,9 @@
       <w>calscale</w>
       <w>cardview</w>
       <w>codebeat</w>
+      <w>debian</w>
       <w>derivate</w>
+      <w>dists</w>
       <w>dtend</w>
       <w>dtstamp</w>
       <w>dtstart</w>
@@ -15,17 +17,25 @@
       <w>jetpack</w>
       <w>jsoup</w>
       <w>ktor</w>
+      <w>loginout</w>
       <w>mdd</w>
+      <w>miui</w>
       <w>mtrl</w>
+      <w>noninteractive</w>
       <w>prodid</w>
       <w>rrule</w>
+      <w>sdkmanager</w>
       <w>snackbar</w>
       <w>tbody</w>
+      <w>tsinghua</w>
+      <w>tuxjg</w>
       <w>vcalendar</w>
       <w>vevent</w>
       <w>wechat</w>
       <w>weixin</w>
+      <w>wget</w>
       <w>wkst</w>
+      <w>workdir</w>
     </words>
   </dictionary>
 </component>

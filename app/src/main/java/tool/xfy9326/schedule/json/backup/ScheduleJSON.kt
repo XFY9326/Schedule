@@ -1,4 +1,4 @@
-package tool.xfy9326.schedule.json
+package tool.xfy9326.schedule.json.backup
 
 import kotlinx.serialization.Serializable
 import tool.xfy9326.schedule.beans.WeekDay

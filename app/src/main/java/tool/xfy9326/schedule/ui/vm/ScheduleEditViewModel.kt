@@ -5,15 +5,17 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
+import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.EditError
 import tool.xfy9326.schedule.beans.Schedule
 import tool.xfy9326.schedule.beans.ScheduleTime
 import tool.xfy9326.schedule.beans.WeekDay
 import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
+import tool.xfy9326.schedule.io.GlobalIO
 import tool.xfy9326.schedule.kt.MutableEventLiveData
 import tool.xfy9326.schedule.kt.postEvent
 import tool.xfy9326.schedule.ui.vm.base.AbstractViewModel
-import tool.xfy9326.schedule.utils.ScheduleManager
+import tool.xfy9326.schedule.utils.ScheduleUtils
 import java.util.*
 
 class ScheduleEditViewModel : AbstractViewModel() {
@@ -23,8 +25,8 @@ class ScheduleEditViewModel : AbstractViewModel() {
     lateinit var editSchedule: Schedule
         private set
 
-    var courseCostTime = 40
-    var breakCostTime = 10
+    var courseCostTime = GlobalIO.resources.getInteger(R.integer.default_course_cost_time)
+    var breakCostTime = GlobalIO.resources.getInteger(R.integer.default_break_cost_time)
     var scheduleTimeCourseTimeSame = false
 
     val scheduleSaveComplete = MutableEventLiveData<Long>()
@@ -32,7 +34,7 @@ class ScheduleEditViewModel : AbstractViewModel() {
     val selectScheduleDate = MutableEventLiveData<Triple<Boolean, Date, WeekDay>>()
     val scheduleSaveFailed = MutableEventLiveData<EditError>()
     val loadAllSchedules = MutableEventLiveData<List<Schedule.Min>>()
-    val importScheduleTimes = MutableEventLiveData<Array<ScheduleTime>?>()
+    val importScheduleTimes = MutableEventLiveData<List<ScheduleTime>?>()
 
     fun selectScheduleDate(isStart: Boolean, date: Date) {
         viewModelScope.launch {
@@ -51,7 +53,7 @@ class ScheduleEditViewModel : AbstractViewModel() {
                         scheduleData.postValue(it)
                     }
                 } else {
-                    editSchedule = ScheduleManager.createNewSchedule()
+                    editSchedule = ScheduleUtils.createNewSchedule()
                     scheduleData.postValue(editSchedule)
                 }
                 originalScheduleHashCode = editSchedule.hashCode()
@@ -72,7 +74,7 @@ class ScheduleEditViewModel : AbstractViewModel() {
     fun saveSchedule() {
         val cache = editSchedule
         viewModelScope.launch {
-            val errorMsg = ScheduleManager.validateSchedule(cache, ScheduleDBProvider.db.scheduleDAO.getScheduleCourses(cache.scheduleId).first())
+            val errorMsg = ScheduleUtils.validateSchedule(cache, ScheduleDBProvider.db.scheduleDAO.getScheduleCourses(cache.scheduleId).first())
             if (errorMsg == null) {
                 val newId = if (isEdit) {
                     ScheduleDBProvider.db.scheduleDAO.updateSchedule(cache)

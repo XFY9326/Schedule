@@ -9,21 +9,21 @@ import tool.xfy9326.schedule.beans.Schedule
 import tool.xfy9326.schedule.db.DBConst
 import tool.xfy9326.schedule.db.query.CourseBundle
 import tool.xfy9326.schedule.kt.fit
-import tool.xfy9326.schedule.utils.ScheduleManager
+import tool.xfy9326.schedule.utils.ScheduleUtils
 
 @Dao
 abstract class ScheduleDAO {
     companion object {
         fun Flow<List<CourseBundle>>.convert() = map { list ->
-            Array(list.size) {
-                list[it].course.times = list[it].courseTime
-                list[it].course
+            list.map {
+                it.course.times = it.courseTime
+                it.course
             }
         }
     }
 
     @Transaction
-    open suspend fun updateScheduleCourses(schedule: Schedule, courses: Array<Course>) {
+    open suspend fun updateScheduleCourses(schedule: Schedule, courses: List<Course>) {
         updateSchedule(schedule)
         deleteCourseByScheduleId(schedule.scheduleId)
         for (course in courses) {
@@ -32,7 +32,7 @@ abstract class ScheduleDAO {
     }
 
     @Transaction
-    open suspend fun putNewScheduleCourses(schedule: Schedule, courses: Array<Course>) {
+    open suspend fun putNewScheduleCourses(schedule: Schedule, courses: List<Course>) {
         val scheduleId = putSchedule(schedule)
         for (course in courses) {
             putCourse(scheduleId, course)
@@ -55,7 +55,7 @@ abstract class ScheduleDAO {
     @Transaction
     open suspend fun tryInitDefaultSchedule() =
         if (getScheduleCount() == 0L) {
-            putSchedule(ScheduleManager.createDefaultSchedule())
+            putSchedule(ScheduleUtils.createDefaultSchedule())
         } else {
             null
         }

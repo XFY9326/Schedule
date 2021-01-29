@@ -93,6 +93,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/schedule_start_date"
+                    android:textColor="@color/theme_color_primary_text"
                     android:textSize="13sp" />
 
                 <com.google.android.material.textview.MaterialTextView
@@ -132,6 +133,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/schedule_end_date"
+                    android:textColor="@color/theme_color_primary_text"
                     android:textSize="13sp" />
 
                 <com.google.android.material.textview.MaterialTextView
@@ -163,7 +165,7 @@
                 style="@style/AppTheme.SelectableItemBackground"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="12dp"
                 android:gravity="center_vertical"
                 android:paddingStart="5dp"
                 android:paddingTop="8dp"
@@ -192,6 +194,13 @@
                         android:textSize="12sp" />
 
                 </androidx.appcompat.widget.LinearLayoutCompat>
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/textView_scheduleWeekStart"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="5dp"
+                    android:textSize="12sp" />
 
             </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -249,6 +258,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:stepSize="1"
+                android:value="@integer/default_course_cost_time"
                 android:valueFrom="5"
                 android:valueTo="120" />
 
@@ -297,6 +307,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:stepSize="1"
+                android:value="@integer/default_break_cost_time"
                 android:valueFrom="5"
                 android:valueTo="120" />
 
@@ -367,6 +378,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:stepSize="1"
+                android:value="@integer/default_course_num_size_pre_day"
                 android:valueFrom="5"
                 android:valueTo="30" />
 
@@ -383,7 +395,7 @@
                 android:id="@+id/recyclerView_scheduleTimeList"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="2dp"
+                android:layout_marginTop="5dp"
                 android:clipChildren="false"
                 android:clipToPadding="false"
                 android:overScrollMode="never"

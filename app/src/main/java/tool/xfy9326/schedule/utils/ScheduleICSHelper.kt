@@ -9,7 +9,7 @@ import tool.xfy9326.schedule.io.GlobalIO
 import tool.xfy9326.schedule.io.TextIO
 import tool.xfy9326.schedule.kt.iterateAll
 
-class ScheduleICSHelper constructor(schedule: Schedule, private val courses: Array<Course>) {
+class ScheduleICSHelper constructor(schedule: Schedule, private val courses: List<Course>) {
     companion object {
         fun createICSFileName(context: Context, scheduleName: String) = "${context.getString(R.string.app_name)}-$scheduleName"
     }

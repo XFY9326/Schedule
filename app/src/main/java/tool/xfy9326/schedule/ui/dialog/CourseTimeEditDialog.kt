@@ -15,7 +15,7 @@ import tool.xfy9326.schedule.beans.WeekDay
 import tool.xfy9326.schedule.databinding.DialogCourseTimeEditBinding
 import tool.xfy9326.schedule.kt.*
 import tool.xfy9326.schedule.ui.view.CircleNumberButton
-import tool.xfy9326.schedule.utils.CourseManager
+import tool.xfy9326.schedule.utils.CourseUtils
 import kotlin.properties.Delegates
 
 class CourseTimeEditDialog : DialogFragment() {
@@ -59,7 +59,7 @@ class CourseTimeEditDialog : DialogFragment() {
         super.onCreate(savedInstanceState)
         maxWeekNum = requireArguments().getInt(EXTRA_MAX_WEEK_NUM)
         maxCourseNum = requireArguments().getInt(EXTRA_MAX_COURSE_NUM)
-        editCourseTime = (requireArguments().getSerializable(EXTRA_COURSE_TIME) as? CourseTime?) ?: CourseManager.createNewCourseTime(maxWeekNum)
+        editCourseTime = (requireArguments().getSerializable(EXTRA_COURSE_TIME) as? CourseTime?) ?: CourseUtils.createNewCourseTime(maxWeekNum)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

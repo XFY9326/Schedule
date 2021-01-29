@@ -12,7 +12,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.databinding.DialogScheduleControlPanelBinding
 import tool.xfy9326.schedule.kt.buildBundle
-import tool.xfy9326.schedule.kt.enableLightStatusBar
+import tool.xfy9326.schedule.kt.enableLightSystemBar
 import tool.xfy9326.schedule.kt.isUsingNightMode
 import tool.xfy9326.schedule.kt.postEvent
 import tool.xfy9326.schedule.ui.vm.ScheduleViewModel
@@ -39,11 +39,11 @@ class ScheduleControlPanel : BottomSheetDialogFragment() {
     override fun onAttach(context: Context) {
         super.onAttach(context)
         viewModel = ViewModelProvider(requireActivity())[ScheduleViewModel::class.java]
-        viewModel.useLightColorStatusBarColor.observe(this) {
+        viewModel.useLightColorSystemBarColor.observe(this) {
             lifecycleScope.launchWhenStarted {
                 // Light status bar in Android Window means status bar that used in light background, so the status bar color is black.
                 // For default, it's true in app theme.
-                dialog?.window?.enableLightStatusBar(!it && !requireContext().isUsingNightMode())
+                dialog?.window?.enableLightSystemBar(context, !it && !requireContext().isUsingNightMode())
             }
         }
     }

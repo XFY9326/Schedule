@@ -2,6 +2,7 @@ package tool.xfy9326.schedule.ui.vm
 
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
@@ -12,8 +13,8 @@ import tool.xfy9326.schedule.content.utils.CourseAdapterException
 import tool.xfy9326.schedule.kt.MutableEventLiveData
 import tool.xfy9326.schedule.kt.postEvent
 import tool.xfy9326.schedule.ui.vm.base.AbstractViewModel
-import tool.xfy9326.schedule.utils.CourseManager
-import tool.xfy9326.schedule.utils.ScheduleManager
+import tool.xfy9326.schedule.utils.CourseUtils
+import tool.xfy9326.schedule.utils.ScheduleUtils
 import java.util.concurrent.atomic.AtomicBoolean
 
 class WebCourseProviderViewModel : AbstractViewModel() {
@@ -44,7 +45,7 @@ class WebCourseProviderViewModel : AbstractViewModel() {
 
     fun validateHtmlPage(importParams: ImportParams, currentSchedule: Boolean) {
         if (validatePageLock.tryLock()) {
-            viewModelScope.launch {
+            viewModelScope.launch(Dispatchers.Default) {
                 try {
                     val pageInfo = courseProvider.validateCourseImportPage(
                         importParams.htmlContent,
@@ -71,7 +72,7 @@ class WebCourseProviderViewModel : AbstractViewModel() {
 
     fun importCourse(importParams: ImportParams, importOption: Int, currentSchedule: Boolean, newScheduleName: String?) {
         if (isImportingCourses.compareAndSet(false, true)) {
-            importCourseJob = viewModelScope.launch {
+            importCourseJob = viewModelScope.launch(Dispatchers.Default) {
                 try {
                     val scheduleTimes = courseParser.loadScheduleTimes(importOption)
                     val courses = courseParser.parseCourses(
@@ -81,19 +82,19 @@ class WebCourseProviderViewModel : AbstractViewModel() {
                         importParams.frameContent
                     )
 
-                    val scheduleTimeValid = ScheduleManager.validateScheduleTime(scheduleTimes)
+                    val scheduleTimeValid = ScheduleUtils.validateScheduleTime(scheduleTimes)
                     if (!scheduleTimeValid) {
                         courseImportFinish.postEvent(false to false)
                         providerError.postEvent(CourseAdapterException.ErrorType.SCHEDULE_TIMES_ERROR.make())
                         return@launch
                     }
 
-                    val hasConflicts = CourseManager.solveConflicts(scheduleTimes, courses)
+                    val hasConflicts = CourseUtils.solveConflicts(scheduleTimes, courses)
 
                     if (currentSchedule) {
-                        ScheduleManager.saveCurrentSchedule(scheduleTimes, courses)
+                        ScheduleUtils.saveCurrentSchedule(scheduleTimes, courses)
                     } else {
-                        ScheduleManager.saveNewSchedule(newScheduleName, scheduleTimes, courses)
+                        ScheduleUtils.saveNewSchedule(newScheduleName, scheduleTimes, courses)
                     }
 
                     courseImportFinish.postEvent(true to hasConflicts)

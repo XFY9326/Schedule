@@ -19,4 +19,6 @@
     <color name="dark_gray_icon">#B5B5B5</color>
 
     <color name="light_tool_bar">#1565C0</color>
+
+    <color name="snack_bar_background_tint">#4D4D4D</color>
 </resources>

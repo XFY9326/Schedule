@@ -104,9 +104,9 @@ class CourseAdapterException : Exception {
                     ErrorType.CAPTCHA_DOWNLOAD_ERROR -> R.string.adapter_exception_captcha_download_error
                     ErrorType.INIT_ERROR -> R.string.adapter_exception_init_error
                     ErrorType.CLOSE_ERROR -> R.string.adapter_exception_close_error
-                    ErrorType.MAX_COURSE_NUM_ERROR -> R.string.max_course_num_error
+                    ErrorType.MAX_COURSE_NUM_ERROR -> R.string.adapter_exception_max_course_num_error
                     ErrorType.INCOMPLETE_COURSE_INFO_ERROR -> R.string.adapter_exception_incomplete_course_info
-                    ErrorType.SCHEDULE_TIMES_ERROR -> R.string.schedule_time_error
+                    ErrorType.SCHEDULE_TIMES_ERROR -> R.string.adapter_exception_schedule_time_error
                     ErrorType.CUSTOM_ERROR -> error("Invalid course adapter error type!")
                 }
             )

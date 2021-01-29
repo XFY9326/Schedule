@@ -6,6 +6,8 @@ import java.io.File
 
 const val NEW_LINE = "\n"
 
+const val APP_ID = "PureSchedule"
+
 fun Int.isOdd(): Boolean = this % 2 != 0
 
 fun Int.isEven(): Boolean = this % 2 == 0

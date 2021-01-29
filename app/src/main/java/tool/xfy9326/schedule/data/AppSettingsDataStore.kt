@@ -1,5 +1,7 @@
 package tool.xfy9326.schedule.data
 
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 import tool.xfy9326.schedule.beans.NightMode
 import tool.xfy9326.schedule.beans.ScheduleSync
 import tool.xfy9326.schedule.data.base.AbstractDataStore
@@ -16,6 +18,8 @@ object AppSettingsDataStore : AbstractDataStore("Settings") {
     private val calendarSyncScheduleDefaultVisibleDefault by booleanPreferencesKey()
     private val calendarSyncAddReminderDefault by booleanPreferencesKey()
     private val calendarSyncReminderMinutes by intPreferencesKey()
+    private val customActivityTransitionAnimation by booleanPreferencesKey()
+    private val useBrowserDownloadUpgradeFile by booleanPreferencesKey()
 
     suspend fun setNightModeType(nightMode: NightMode) = nightModeType.saveData(nightMode.name)
 
@@ -28,6 +32,12 @@ object AppSettingsDataStore : AbstractDataStore("Settings") {
             it[calendarSyncAddReminderDefault] ?: false
         )
     }
+
+    val useCustomActivityTransitionAnimation by lazy {
+        runBlocking { customActivityTransitionAnimation.readAsFlow(false).first() }
+    }
+
+    val useBrowserDownloadUpgradeFileFlow = useBrowserDownloadUpgradeFile.readAsFlow(false)
 
     val calendarSyncReminderMinutesFlow = calendarSyncReminderMinutes.readAsFlow(10)
 

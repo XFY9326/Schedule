@@ -14,8 +14,8 @@ import tool.xfy9326.schedule.kt.MutableEventLiveData
 import tool.xfy9326.schedule.kt.postEvent
 import tool.xfy9326.schedule.ui.dialog.CourseTimeEditDialog
 import tool.xfy9326.schedule.ui.vm.base.AbstractViewModel
-import tool.xfy9326.schedule.utils.CourseManager
 import tool.xfy9326.schedule.utils.CourseTimeUtils
+import tool.xfy9326.schedule.utils.CourseUtils
 
 class CourseEditViewModel : AbstractViewModel() {
     private var isEdit = false
@@ -41,7 +41,7 @@ class CourseEditViewModel : AbstractViewModel() {
                         courseData.postValue(it)
                     }
                 } else {
-                    editCourse = CourseManager.createNewCourse(scheduleId)
+                    editCourse = CourseUtils.createNewCourse(scheduleId)
                     courseData.postValue(editCourse)
                 }
                 originalCourseHashCode = editCourse.hashCode()
@@ -79,7 +79,7 @@ class CourseEditViewModel : AbstractViewModel() {
         viewModelScope.launch {
             val cache = editCourse.clone(scheduleId)
             val otherCourses = ScheduleDBProvider.db.scheduleDAO.getScheduleCoursesWithoutId(scheduleId, cache.courseId).first()
-            val errorMsg = CourseManager.validateCourse(cache, otherCourses)
+            val errorMsg = CourseUtils.validateCourse(cache, otherCourses)
             if (errorMsg == null) {
                 ScheduleDBProvider.db.scheduleDAO.putCourse(scheduleId, cache)
                 copyToOtherSchedule.postEvent(null)
@@ -95,7 +95,7 @@ class CourseEditViewModel : AbstractViewModel() {
         val cache = editCourse
         viewModelScope.launch {
             val otherCourses = ScheduleDBProvider.db.scheduleDAO.getScheduleCoursesWithoutId(scheduleId, cache.courseId).first()
-            val errorMsg = CourseManager.validateCourse(cache, otherCourses)
+            val errorMsg = CourseUtils.validateCourse(cache, otherCourses)
             if (errorMsg == null) {
                 val newId = if (isEdit) {
                     ScheduleDBProvider.db.scheduleDAO.updateCourse(cache)

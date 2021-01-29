@@ -3,6 +3,7 @@
 package tool.xfy9326.schedule.kt
 
 import android.app.Activity
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
@@ -16,6 +17,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
+import kotlinx.coroutines.*
 import tool.xfy9326.schedule.App
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.ui.activity.SplashActivity
@@ -118,3 +120,20 @@ fun Context.getDefaultBackgroundColor(): Int {
 
 @Suppress("UNCHECKED_CAST")
 fun <T> DialogFragment.requireOwner() = (parentFragment ?: requireActivity()) as? T
+
+fun BroadcastReceiver.goAsync(
+    coroutineScope: CoroutineScope = GlobalScope,
+    dispatcher: CoroutineDispatcher = Dispatchers.Default,
+    block: suspend () -> Unit,
+) {
+    val result = goAsync()
+    coroutineScope.launch(dispatcher) {
+        try {
+            block()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        } finally {
+            result.finish()
+        }
+    }
+}

@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
+import android.os.Bundle
 import android.view.*
 import android.view.animation.AccelerateInterpolator
 import androidx.annotation.DrawableRes
@@ -39,11 +40,9 @@ import tool.xfy9326.schedule.ui.activity.base.ViewModelActivity
 import tool.xfy9326.schedule.ui.adapter.ScheduleViewPagerAdapter
 import tool.xfy9326.schedule.ui.dialog.CourseDetailDialog
 import tool.xfy9326.schedule.ui.dialog.ScheduleControlPanel
+import tool.xfy9326.schedule.ui.dialog.UpgradeDialog
 import tool.xfy9326.schedule.ui.vm.ScheduleViewModel
-import tool.xfy9326.schedule.utils.DialogUtils
-import tool.xfy9326.schedule.utils.IntentUtils
-import tool.xfy9326.schedule.utils.PermissionUtils
-import tool.xfy9326.schedule.utils.ScheduleICSHelper
+import tool.xfy9326.schedule.utils.*
 import kotlin.math.max
 import kotlin.math.sqrt
 
@@ -125,10 +124,10 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
         }
         viewModel.scheduleBackground.observe(this, ::onChangeScheduleBackground)
         viewModel.toolBarTintColor.observe(this, ::setToolBarTintColor)
-        viewModel.useLightColorStatusBarColor.observe(this) {
+        viewModel.useLightColorSystemBarColor.observe(this) {
             // Light status bar in Android Window means status bar that used in light background, so the status bar color is black.
             // For default, it's true in app theme.
-            window.enableLightStatusBar(!it && !isUsingNightMode())
+            window.enableLightSystemBar(this, !it && !isUsingNightMode())
         }
         viewModel.scheduleShared.observeEvent(this) {
             if (it == null) {
@@ -153,6 +152,15 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
                 viewBinding.layoutScheduleContent.updatePadding(top = systemWindowInsetTop)
             }.consumeSystemWindowInsets().toWindowInsets()
         }
+    }
+
+    override fun onHandleSavedInstanceState(bundle: Bundle?, viewBinding: ActivityScheduleBinding, viewModel: ScheduleViewModel) {
+        if (intent?.getBooleanExtra(SplashActivity.INTENT_EXTRA_APP_INIT_LAUNCH, false) == true) {
+            UpgradeUtils.checkUpgrade(this, false,
+                onFoundUpgrade = { UpgradeDialog.showDialog(supportFragmentManager, it) }
+            )
+        }
+        super.onHandleSavedInstanceState(bundle, viewBinding, viewModel)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -228,7 +236,7 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
             }
         }
         lifecycleScope.launch {
-            delay(resources.getInteger(android.R.integer.config_shortAnimTime).toLong())
+            delay(resources.getInteger(R.integer.drawer_close_anim_time).toLong())
             requireViewBinding().drawerSchedule.closeDrawers()
         }
         return true
@@ -268,7 +276,8 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
 
     private fun refreshToolBarTime(nowWeekNum: Int) {
         val useWeekNum = if (requireViewModel().currentScrollPosition == null) {
-            nowWeekNum
+            // In vacation -> Show first week
+            if (nowWeekNum == 0) 1 else nowWeekNum
         } else {
             getCurrentShowWeekNum()
         }
@@ -276,6 +285,7 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
     }
 
     private fun setupViewPager(nowWeekNum: Int, maxWeekNum: Int) {
+        // In vacation -> Show first week
         var position = nowWeekNum
         if (nowWeekNum != 0) position--
 

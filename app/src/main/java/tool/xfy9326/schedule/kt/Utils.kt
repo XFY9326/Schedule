@@ -27,8 +27,17 @@ inline fun broadcastReceiver(crossinline receiver: (Context?, Intent?) -> Unit) 
 
 fun Calendar.getWeekDay() = WeekDay.fromCalWeekDay(get(Calendar.DAY_OF_WEEK))
 
-inline fun Array<Course>.iterateAll(action: (Course, CourseTime) -> Unit) {
+inline fun List<Course>.iterateAll(action: (Course, CourseTime) -> Unit) {
     for (course in this) for (time in course.times) action(course, time)
+}
+
+fun List<Course>.fitAllWeekNum(): List<Course> {
+    this.forEach {
+        it.times.forEach { time ->
+            time.weekNum = time.weekNum.fit()
+        }
+    }
+    return this
 }
 
 infix fun ClassTime.intersect(classTime: ClassTime): Boolean =

@@ -16,9 +16,9 @@ import java.io.InputStream
  */
 abstract class LoginCourseProvider : NetworkCourseProvider() {
 
-    suspend fun loadCaptchaUrl(importOption: Int) = onLoadCaptcha(requireHttpClient(), importOption)
-
-    suspend fun getCaptchaImage(url: String) = onDownloadCaptcha(requireHttpClient(), url)
+    suspend fun getCaptchaImage(importOption: Int = 0) = onLoadCaptcha(requireHttpClient(), importOption)?.let {
+        onGetCaptchaImage(requireHttpClient(), it)
+    }
 
     suspend fun login(userId: String, userPw: String, captchaCode: String?, importOption: Int) =
         onLogin(requireHttpClient(), userId, userPw, captchaCode, importOption)
@@ -44,15 +44,15 @@ abstract class LoginCourseProvider : NetworkCourseProvider() {
     protected abstract suspend fun onLogin(httpClient: HttpClient, userId: String, userPw: String, captchaCode: String?, importOption: Int)
 
     /**
-     * Download captcha image
+     * Read captcha image bytes
      *
      * @param httpClient Ktor HttpClient
      * @param url Captcha image url
-     * @return Captcha image
+     * @return Captcha image stream
      */
-    protected open suspend fun onDownloadCaptcha(httpClient: HttpClient, url: String): Bitmap =
+    protected open suspend fun onGetCaptchaImage(httpClient: HttpClient, url: String): Bitmap =
         try {
-            BitmapFactory.decodeStream(httpClient.get<InputStream>(url))
+            httpClient.get<InputStream>(url).use(BitmapFactory::decodeStream)
         } catch (e: Exception) {
             CourseAdapterException.ErrorType.CAPTCHA_DOWNLOAD_ERROR.report(e)
         }

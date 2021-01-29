@@ -202,6 +202,7 @@ class ScheduleEditActivity : ViewModelActivity<ScheduleEditViewModel, ActivitySc
             setNegativeButton(android.R.string.cancel, null)
             setPositiveButton(android.R.string.ok) { _, _ ->
                 requireViewModel().editSchedule.weekStart = selectedWeekDay
+                updateWeekStartText(selectedWeekDay)
             }
         }.show(this)
     }
@@ -210,12 +211,23 @@ class ScheduleEditActivity : ViewModelActivity<ScheduleEditViewModel, ActivitySc
         requireViewModel().editSchedule.name = requireViewBinding().editTextScheduleName.text.toString()
     }
 
+    private fun updateWeekStartText(weekDay: WeekDay) {
+        requireViewBinding().textViewScheduleWeekStart.text = getStringArray(R.array.first_day_of_week)[
+                when (weekDay) {
+                    WeekDay.MONDAY -> 0
+                    WeekDay.SUNDAY -> 1
+                    else -> error("Unsupported week start day")
+                }
+        ]
+    }
+
     private fun applyScheduleToView(schedule: Schedule) {
         requireViewBinding().apply {
-            scheduleTimeAdapter.submitList(schedule.times.toList())
+            scheduleTimeAdapter.submitList(schedule.times)
 
             editTextScheduleName.setText(schedule.name)
             sliderScheduleTimeNum.value = schedule.times.size.toFloat()
+            updateWeekStartText(schedule.weekStart)
 
             updateScheduleDate(true, schedule.startDate, false)
             updateScheduleDate(false, schedule.endDate, false)
@@ -254,7 +266,7 @@ class ScheduleEditActivity : ViewModelActivity<ScheduleEditViewModel, ActivitySc
     private fun updateCourseCostTime(minute: Int, viewInit: Boolean) {
         if (!viewInit) {
             val breakCostTime = requireViewModel().breakCostTime
-            val times = requireViewModel().editSchedule.times.toList()
+            val times = requireViewModel().editSchedule.times
             var last: ScheduleTime? = null
             for (time in times) {
                 last?.endTimeMove(breakCostTime)?.let {
@@ -273,7 +285,7 @@ class ScheduleEditActivity : ViewModelActivity<ScheduleEditViewModel, ActivitySc
     private fun updateBreakCostTime(minute: Int, viewInit: Boolean) {
         if (!viewInit) {
             val courseCostTime = requireViewModel().courseCostTime
-            val times = requireViewModel().editSchedule.times.toList()
+            val times = requireViewModel().editSchedule.times
             var last: ScheduleTime? = null
             for (time in times) {
                 last?.endTimeMove(minute)?.let {
@@ -304,9 +316,9 @@ class ScheduleEditActivity : ViewModelActivity<ScheduleEditViewModel, ActivitySc
                     times.removeLast()
                 }
             }
-            times.toTypedArray().let {
+            times.let {
                 requireViewModel().editSchedule.times = it
-                scheduleTimeAdapter.submitList(it.toList())
+                scheduleTimeAdapter.submitList(it)
             }
             requireViewBinding().textViewScheduleTimeNum.text = getString(R.string.course_num, requireViewModel().editSchedule.times.size)
         } else {

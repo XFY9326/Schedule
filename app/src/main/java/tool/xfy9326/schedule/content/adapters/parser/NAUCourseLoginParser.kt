@@ -6,7 +6,6 @@ import tool.xfy9326.schedule.beans.CourseTime
 import tool.xfy9326.schedule.beans.ScheduleTime
 import tool.xfy9326.schedule.beans.WeekDay
 import tool.xfy9326.schedule.content.base.NetworkCourseParser
-import tool.xfy9326.schedule.kt.fit
 import tool.xfy9326.schedule.kt.isEven
 import tool.xfy9326.schedule.kt.isOdd
 
@@ -58,7 +57,7 @@ class NAUCourseLoginParser : NetworkCourseParser() {
                 }
             }
 
-            return weeks.fit()
+            return weeks
         }
 
         private fun getCourseTime(location: String, timeStr: String): CourseTime? {
@@ -76,7 +75,7 @@ class NAUCourseLoginParser : NetworkCourseParser() {
     }
 
     override fun onParseScheduleTimes(importOption: Int, htmlContent: String?) =
-        arrayOf(
+        listOf(
             ScheduleTime(8, 30, 9, 10),
             ScheduleTime(9, 20, 10, 0),
             ScheduleTime(10, 20, 11, 0),
@@ -92,7 +91,7 @@ class NAUCourseLoginParser : NetworkCourseParser() {
             ScheduleTime(20, 10, 20, 50)
         )
 
-    override fun onParseCourses(importOption: Int, htmlContent: String): Array<Course> {
+    override fun onParseCourses(importOption: Int, htmlContent: String): List<Course> {
         val body = Jsoup.parse(htmlContent).body()
         val trTags = body.select(COURSE_TR_TAGS)
         val result = ArrayList<Course>(trTags.size)
@@ -118,6 +117,6 @@ class NAUCourseLoginParser : NetworkCourseParser() {
             result.add(Course(courseName, courseTeacher, courseTimes))
         }
 
-        return result.toTypedArray()
+        return result
     }
 }
