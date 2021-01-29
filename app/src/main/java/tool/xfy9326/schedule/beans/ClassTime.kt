@@ -2,6 +2,7 @@ package tool.xfy9326.schedule.beans
 
 import androidx.annotation.IntRange
 import androidx.room.ColumnInfo
+import tool.xfy9326.schedule.db.DBConst
 import java.io.Serializable
 
 data class ClassTime(
