@@ -4,17 +4,27 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Rect
 import android.graphics.drawable.Drawable
-import android.view.View
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlin.math.roundToInt
 
 
-class AdvancedDividerItemDecoration(context: Context, private var orientation: Int) : DividerItemDecoration(context, orientation) {
+class AdvancedDividerItemDecoration(context: Context, private var orientation: Int, private val horizonMargins: Int = 0) :
+    DividerItemDecoration(context, orientation) {
     private val mBounds = Rect()
+    private var dividerDrawable: Drawable? = null
+    private var drawDividerListener: ((position: Int, itemAmount: Int) -> Boolean)? = { position, itemAmount ->
+        position != itemAmount - 1
+    }
 
-    private var horizonMargins = 0
+    fun setDividerDrawable(drawable: Drawable) {
+        dividerDrawable = drawable
+    }
+
+    fun setOnDrawDividerListener(drawDividerListener: ((position: Int, itemAmount: Int) -> Boolean)?) {
+        this.drawDividerListener = drawDividerListener
+    }
 
     override fun setOrientation(orientation: Int) {
         super.setOrientation(orientation)
@@ -22,16 +32,16 @@ class AdvancedDividerItemDecoration(context: Context, private var orientation: I
     }
 
     override fun onDraw(c: Canvas, parent: RecyclerView, state: RecyclerView.State) {
-        val drawable = this.drawable
-        if (parent.layoutManager == null || parent.layoutManager !is LinearLayoutManager || drawable == null) return
+        val divider = dividerDrawable ?: drawable
+        if (parent.layoutManager == null || parent.layoutManager !is LinearLayoutManager || divider == null) return
         if (orientation == VERTICAL) {
-            drawVertical(c, parent, drawable, state)
+            drawVertical(c, parent, divider)
         } else if (orientation == HORIZONTAL) {
-            drawHorizontal(c, parent, drawable, state)
+            drawHorizontal(c, parent, divider)
         }
     }
 
-    private fun drawVertical(canvas: Canvas, parent: RecyclerView, drawable: Drawable, state: RecyclerView.State) {
+    private fun drawVertical(canvas: Canvas, parent: RecyclerView, drawable: Drawable) {
         canvas.save()
         val left: Int
         val right: Int
@@ -44,9 +54,13 @@ class AdvancedDividerItemDecoration(context: Context, private var orientation: I
             right = parent.width
         }
 
-        val childCount = state.itemCount - 1
+        val listener = drawDividerListener
+        val childCount = parent.childCount
+        val layoutManager = parent.layoutManager!!
         for (i in 0 until childCount) {
             val child = parent.getChildAt(i)
+            if (listener != null && !listener(parent.getChildAdapterPosition(child), layoutManager.itemCount)) continue
+
             parent.getDecoratedBoundsWithMargins(child, mBounds)
             val bottom = mBounds.bottom + child.translationY.roundToInt()
             val top = bottom - drawable.intrinsicHeight
@@ -56,7 +70,7 @@ class AdvancedDividerItemDecoration(context: Context, private var orientation: I
         canvas.restore()
     }
 
-    private fun drawHorizontal(canvas: Canvas, parent: RecyclerView, drawable: Drawable, state: RecyclerView.State) {
+    private fun drawHorizontal(canvas: Canvas, parent: RecyclerView, drawable: Drawable) {
         canvas.save()
         val top: Int
         val bottom: Int
@@ -69,10 +83,13 @@ class AdvancedDividerItemDecoration(context: Context, private var orientation: I
             bottom = parent.height
         }
 
-        val childCount = state.itemCount - 1
+        val listener = drawDividerListener
+        val childCount = parent.childCount
         val layoutManager = parent.layoutManager!!
         for (i in 0 until childCount) {
             val child = parent.getChildAt(i)
+            if (listener != null && !listener(parent.getChildAdapterPosition(child), layoutManager.itemCount)) continue
+
             layoutManager.getDecoratedBoundsWithMargins(child, mBounds)
             val right = mBounds.right + child.translationX.roundToInt()
             val left = right - drawable.intrinsicWidth
@@ -80,14 +97,5 @@ class AdvancedDividerItemDecoration(context: Context, private var orientation: I
             drawable.draw(canvas)
         }
         canvas.restore()
-    }
-
-    override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
-        val position = parent.getChildAdapterPosition(view)
-        if (position == state.itemCount - 1) {
-            outRect.setEmpty()
-        } else {
-            super.getItemOffsets(outRect, view, parent, state)
-        }
     }
 }

@@ -12,6 +12,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.withContext
 import tool.xfy9326.schedule.BuildConfig
 import tool.xfy9326.schedule.data.AppDataStore
@@ -31,6 +32,8 @@ object UpgradeUtils {
     private const val LATEST_VERSION_CHECK_URL = "https://$UPDATE_SERVER/$UPDATE_PRODUCT/$UPDATE_LATEST"
     private const val INDEX_VERSION_URL = "https://$UPDATE_SERVER/$UPDATE_PRODUCT/$UPDATE_INDEX"
 
+    private val UPDATE_CHECK_MUTEX = Mutex()
+
     fun checkUpgrade(
         lifecycleOwner: LifecycleOwner,
         forceCheck: Boolean,
@@ -39,16 +42,22 @@ object UpgradeUtils {
         onFoundUpgrade: ((UpdateInfo) -> Unit)? = null,
     ) {
         GlobalScope.launch(Dispatchers.Unconfined) {
-            requestUpgrade(forceCheck).let {
-                if (it.first) {
-                    val info = it.second
-                    if (info == null) {
-                        if (onNoUpgrade != null) lifecycleOwner.lifecycleScope.launchWhenStarted { onNoUpgrade() }
-                    } else {
-                        if (onFoundUpgrade != null) lifecycleOwner.lifecycleScope.launchWhenStarted { onFoundUpgrade(info) }
+            if (UPDATE_CHECK_MUTEX.tryLock()) {
+                try {
+                    requestUpgrade(forceCheck).let {
+                        if (it.first) {
+                            val info = it.second
+                            if (info == null) {
+                                if (onNoUpgrade != null) lifecycleOwner.lifecycleScope.launchWhenStarted { onNoUpgrade() }
+                            } else {
+                                if (onFoundUpgrade != null) lifecycleOwner.lifecycleScope.launchWhenStarted { onFoundUpgrade(info) }
+                            }
+                        } else {
+                            if (onFailed != null) lifecycleOwner.lifecycleScope.launchWhenStarted { onFailed() }
+                        }
                     }
-                } else {
-                    if (onFailed != null) lifecycleOwner.lifecycleScope.launchWhenStarted { onFailed() }
+                } finally {
+                    UPDATE_CHECK_MUTEX.unlock()
                 }
             }
         }
