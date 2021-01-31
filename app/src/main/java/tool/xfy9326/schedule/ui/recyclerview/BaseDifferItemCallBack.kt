@@ -10,6 +10,6 @@ open class BaseDifferItemCallBack<E> : DiffUtil.ItemCallback<E>() {
     }
 
     override fun areItemsTheSame(oldItem: E, newItem: E): Boolean {
-        return oldItem?.equals(newItem) ?: (newItem == null)
+        return oldItem == newItem
     }
 }

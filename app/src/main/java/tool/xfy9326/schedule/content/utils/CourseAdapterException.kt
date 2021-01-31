@@ -3,6 +3,7 @@
 package tool.xfy9326.schedule.content.utils
 
 import android.content.Context
+import androidx.annotation.StringRes
 import tool.xfy9326.schedule.R
 
 /**
@@ -18,26 +19,26 @@ class CourseAdapterException : Exception {
      *
      * @constructor Create empty Error type
      */
-    enum class ErrorType {
-        IMPORT_SELECT_OPTION_ERROR,
-        IMPORT_OPTION_GET_ERROR,
-        PARSE_PAGE_ERROR,
-        PARSE_INFO_NOT_ENOUGH_ERROR,
-        USER_ID_ERROR,
-        USER_PASSWORD_ERROR,
-        USER_ID_OR_PASSWORD_ERROR,
-        LOGIN_SERVER_ERROR,
-        ACCOUNT_ERROR,
-        CONNECTION_ERROR,
-        UNKNOWN_ERROR,
-        PARSER_ERROR,
-        CAPTCHA_DOWNLOAD_ERROR,
-        INIT_ERROR,
-        CLOSE_ERROR,
-        MAX_COURSE_NUM_ERROR,
-        INCOMPLETE_COURSE_INFO_ERROR,
-        SCHEDULE_TIMES_ERROR,
-        CUSTOM_ERROR;
+    enum class ErrorType(@StringRes private val msgId: Int?) {
+        IMPORT_SELECT_OPTION_ERROR(R.string.adapter_exception_import_option_error),
+        IMPORT_OPTION_GET_ERROR(R.string.adapter_exception_import_option_get_error),
+        PARSE_PAGE_ERROR(R.string.adapter_exception_parse_page_error),
+        PARSE_INFO_NOT_ENOUGH_ERROR(R.string.adapter_exception_parse_info_not_enough_error),
+        USER_ID_ERROR(R.string.adapter_exception_login_user_id_error),
+        USER_PASSWORD_ERROR(R.string.adapter_exception_login_user_password_error),
+        USER_ID_OR_PASSWORD_ERROR(R.string.adapter_exception_login_user_id_or_password_error),
+        LOGIN_SERVER_ERROR(R.string.adapter_exception_login_server_error),
+        ACCOUNT_ERROR(R.string.adapter_exception_login_account_error),
+        CONNECTION_ERROR(R.string.adapter_exception_login_connection_error),
+        UNKNOWN_ERROR(R.string.adapter_exception_unknown_error),
+        PARSER_ERROR(R.string.adapter_exception_parse_error),
+        CAPTCHA_DOWNLOAD_ERROR(R.string.adapter_exception_captcha_download_error),
+        INIT_ERROR(R.string.adapter_exception_init_error),
+        CLOSE_ERROR(R.string.adapter_exception_close_error),
+        MAX_COURSE_NUM_ERROR(R.string.adapter_exception_max_course_num_error),
+        INCOMPLETE_COURSE_INFO_ERROR(R.string.adapter_exception_incomplete_course_info),
+        SCHEDULE_TIMES_ERROR(R.string.adapter_exception_schedule_time_error),
+        CUSTOM_ERROR(null);
 
         /**
          * Throw exception
@@ -81,35 +82,20 @@ class CourseAdapterException : Exception {
             } else {
                 CourseAdapterException(msg, cause)
             }
+
+        fun getText(context: Context) =
+            if (msgId == null) {
+                error("Unsupported error type!")
+            } else {
+                context.getString(msgId)
+            }
     }
 
     fun getText(context: Context) =
         if (errorType == ErrorType.CUSTOM_ERROR) {
             message.orEmpty()
         } else {
-            context.getString(
-                when (errorType) {
-                    ErrorType.IMPORT_SELECT_OPTION_ERROR -> R.string.adapter_exception_import_option_error
-                    ErrorType.IMPORT_OPTION_GET_ERROR -> R.string.adapter_exception_import_option_get_error
-                    ErrorType.PARSE_PAGE_ERROR -> R.string.adapter_exception_parse_page_error
-                    ErrorType.PARSE_INFO_NOT_ENOUGH_ERROR -> R.string.adapter_exception_parse_info_not_enough_error
-                    ErrorType.USER_ID_ERROR -> R.string.adapter_exception_login_user_id_error
-                    ErrorType.USER_PASSWORD_ERROR -> R.string.adapter_exception_login_user_password_error
-                    ErrorType.USER_ID_OR_PASSWORD_ERROR -> R.string.adapter_exception_login_user_id_or_password_error
-                    ErrorType.LOGIN_SERVER_ERROR -> R.string.adapter_exception_login_server_error
-                    ErrorType.ACCOUNT_ERROR -> R.string.adapter_exception_login_account_error
-                    ErrorType.CONNECTION_ERROR -> R.string.adapter_exception_login_connection_error
-                    ErrorType.UNKNOWN_ERROR -> R.string.adapter_exception_unknown_error
-                    ErrorType.PARSER_ERROR -> R.string.adapter_exception_parse_error
-                    ErrorType.CAPTCHA_DOWNLOAD_ERROR -> R.string.adapter_exception_captcha_download_error
-                    ErrorType.INIT_ERROR -> R.string.adapter_exception_init_error
-                    ErrorType.CLOSE_ERROR -> R.string.adapter_exception_close_error
-                    ErrorType.MAX_COURSE_NUM_ERROR -> R.string.adapter_exception_max_course_num_error
-                    ErrorType.INCOMPLETE_COURSE_INFO_ERROR -> R.string.adapter_exception_incomplete_course_info
-                    ErrorType.SCHEDULE_TIMES_ERROR -> R.string.adapter_exception_schedule_time_error
-                    ErrorType.CUSTOM_ERROR -> error("Invalid course adapter error type!")
-                }
-            )
+            errorType.getText(context)
         }
 
     private constructor(msg: String) : super(msg) {

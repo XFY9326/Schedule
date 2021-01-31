@@ -3,14 +3,14 @@ package tool.xfy9326.schedule.beans
 import java.util.*
 
 @Suppress("unused")
-enum class WeekDay {
-    MONDAY,
-    TUESDAY,
-    WEDNESDAY,
-    THURSDAY,
-    FRIDAY,
-    SATURDAY,
-    SUNDAY;
+enum class WeekDay(val shortName: String, val calWeekDay: Int) {
+    MONDAY(WeekDay.SHORT_NAME_MO, Calendar.MONDAY),
+    TUESDAY(WeekDay.SHORT_NAME_TU, Calendar.TUESDAY),
+    WEDNESDAY(WeekDay.SHORT_NAME_WE, Calendar.WEDNESDAY),
+    THURSDAY(WeekDay.SHORT_NAME_TH, Calendar.THURSDAY),
+    FRIDAY(WeekDay.SHORT_NAME_FR, Calendar.FRIDAY),
+    SATURDAY(WeekDay.SHORT_NAME_SA, Calendar.SATURDAY),
+    SUNDAY(WeekDay.SHORT_NAME_SU, Calendar.SUNDAY);
 
     companion object {
         private const val SHORT_NAME_MO = "MO"
@@ -21,75 +21,35 @@ enum class WeekDay {
         private const val SHORT_NAME_SA = "SA"
         private const val SHORT_NAME_SU = "SU"
 
-        private val VALUES = values()
         const val MAX_VALUE = 7
         const val MIN_VALUE = 1
 
-        fun fromCalWeekDay(calWeekDay: Int) =
-            when (calWeekDay) {
-                Calendar.MONDAY -> MONDAY
-                Calendar.TUESDAY -> TUESDAY
-                Calendar.WEDNESDAY -> WEDNESDAY
-                Calendar.THURSDAY -> THURSDAY
-                Calendar.FRIDAY -> FRIDAY
-                Calendar.SATURDAY -> SATURDAY
-                Calendar.SUNDAY -> SUNDAY
-                else -> error("Calendar week day value error! Must be one of Calendar week day values!")
-            }
+        fun valueOfCalWeekDay(calWeekDay: Int) =
+            values().find {
+                it.calWeekDay == calWeekDay
+            } ?: error("Calendar week day value error! Must be one of Calendar week day values!")
 
-        fun from(ordinal: Int) = VALUES[ordinal]
+        fun from(ordinal: Int) = values()[ordinal]
 
-        fun of(num: Int): WeekDay {
-            if (num !in 1..7) {
+        fun of(value: Int): WeekDay {
+            if (value !in 1..7) {
                 error("Week day num must in 1..7")
             }
-            return VALUES[num - 1]
+            return values()[value - 1]
         }
 
         fun valueOfShortName(str: String) =
-            when (str.toUpperCase(Locale.getDefault())) {
-                SHORT_NAME_MO -> MONDAY
-                SHORT_NAME_TU -> TUESDAY
-                SHORT_NAME_WE -> WEDNESDAY
-                SHORT_NAME_TH -> THURSDAY
-                SHORT_NAME_FR -> FRIDAY
-                SHORT_NAME_SA -> SATURDAY
-                SHORT_NAME_SU -> SUNDAY
-                else -> error("Value error!")
-            }
-
-        private fun getShortName(weekDay: WeekDay) =
-            when (weekDay) {
-                MONDAY -> SHORT_NAME_MO
-                TUESDAY -> SHORT_NAME_TU
-                WEDNESDAY -> SHORT_NAME_WE
-                THURSDAY -> SHORT_NAME_TH
-                FRIDAY -> SHORT_NAME_FR
-                SATURDAY -> SHORT_NAME_SA
-                SUNDAY -> SHORT_NAME_SU
+            str.toUpperCase(Locale.getDefault()).let { shortName ->
+                values().find {
+                    it.shortName == shortName
+                } ?: error("Value error!")
             }
     }
-
-    val calWeekDay: Int
-        get() {
-            return when (this) {
-                MONDAY -> Calendar.MONDAY
-                TUESDAY -> Calendar.TUESDAY
-                WEDNESDAY -> Calendar.WEDNESDAY
-                THURSDAY -> Calendar.THURSDAY
-                FRIDAY -> Calendar.FRIDAY
-                SATURDAY -> Calendar.SATURDAY
-                SUNDAY -> Calendar.SUNDAY
-            }
-        }
 
     val value: Int = ordinal + 1
 
     val isWeekend: Boolean
         get() = (this == SATURDAY || this == SUNDAY)
-
-    val shortName: String
-        get() = getShortName(this)
 
     fun value(firstDayOfWeek: WeekDay): Int {
         return when (firstDayOfWeek) {
