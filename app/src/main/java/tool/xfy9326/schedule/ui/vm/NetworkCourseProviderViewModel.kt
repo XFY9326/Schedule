@@ -8,12 +8,10 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
-import tool.xfy9326.schedule.content.base.CourseImportConfig
-import tool.xfy9326.schedule.content.base.LoginCourseProvider
-import tool.xfy9326.schedule.content.base.NetworkCourseParser
-import tool.xfy9326.schedule.content.base.NetworkCourseProvider
+import tool.xfy9326.schedule.content.base.*
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
 import tool.xfy9326.schedule.data.AppSettingsDataStore
+import tool.xfy9326.schedule.io.GlobalIO
 import tool.xfy9326.schedule.kt.MutableEventLiveData
 import tool.xfy9326.schedule.kt.postEvent
 import tool.xfy9326.schedule.ui.vm.base.AbstractViewModel
@@ -26,9 +24,9 @@ import java.net.UnknownHostException
 import java.util.concurrent.atomic.AtomicBoolean
 
 class NetworkCourseProviderViewModel : AbstractViewModel() {
-    lateinit var importConfig: CourseImportConfig<NetworkCourseProvider, NetworkCourseParser>
+    lateinit var importConfig: CourseImportConfig<*, NetworkCourseProvider<*>, NetworkCourseParser>
         private set
-    private lateinit var courseProvider: NetworkCourseProvider
+    private lateinit var courseProvider: NetworkCourseProvider<*>
     private lateinit var courseParser: NetworkCourseParser
 
     val loginParams = MutableEventLiveData<LoginParams?>()
@@ -44,7 +42,7 @@ class NetworkCourseProviderViewModel : AbstractViewModel() {
 
     val isImportingCourses = AtomicBoolean(false)
 
-    fun registerConfig(config: CourseImportConfig<NetworkCourseProvider, NetworkCourseParser>) {
+    fun registerConfig(config: CourseImportConfig<*, NetworkCourseProvider<*>, NetworkCourseParser>) {
         if (!::importConfig.isInitialized || importConfig != config) {
             importConfig = config
             courseProvider = config.newProvider()
@@ -61,13 +59,12 @@ class NetworkCourseProviderViewModel : AbstractViewModel() {
                     val provider = courseProvider
                     provider.init()
 
-                    val optionsRes = importConfig.importOptionsArrayText
-                    val optionsOnline =
-                        if (optionsRes == null) {
-                            courseProvider.loadImportOptions()
-                        } else {
-                            null
-                        }
+                    val optionsRes = importConfig.staticImportOptionsResId
+                    val options = if (optionsRes == null) {
+                        courseProvider.loadImportOptions()
+                    } else {
+                        GlobalIO.resources.getStringArray(optionsRes)
+                    }
 
                     val captchaImage = if (provider is LoginCourseProvider) {
                         provider.getCaptchaImage()
@@ -75,7 +72,7 @@ class NetworkCourseProviderViewModel : AbstractViewModel() {
                         null
                     }
 
-                    loginParams.postEvent(LoginParams(optionsOnline, optionsRes, captchaImage, provider is LoginCourseProvider))
+                    loginParams.postEvent(LoginParams(options, captchaImage, provider is LoginCourseProvider))
                 } catch (e: CourseAdapterException) {
                     loginParams.postEvent(null)
                     providerError.postEvent(e)
@@ -115,7 +112,7 @@ class NetworkCourseProviderViewModel : AbstractViewModel() {
         }
     }
 
-    fun importCourse(importParams: ImportParams, currentSchedule: Boolean, newScheduleName: String? = null) {
+    fun importCourse(importParams: NetworkImportParams, currentSchedule: Boolean, newScheduleName: String? = null) {
         if (isImportingCourses.compareAndSet(false, true)) {
             importCourseJob = viewModelScope.launch(Dispatchers.Default) {
                 try {
@@ -181,7 +178,7 @@ class NetworkCourseProviderViewModel : AbstractViewModel() {
         finishImport()
     }
 
-    class LoginParams(val optionsOnline: Array<String>?, val optionsRes: Array<String>?, val captcha: Bitmap?, val allowLogin: Boolean)
+    class LoginParams(val options: Array<String>?, val captcha: Bitmap?, val allowLogin: Boolean)
 
-    class ImportParams(val userId: String?, val userPw: String?, val captchaCode: String?, val importOption: Int)
+    class NetworkImportParams(val userId: String?, val userPw: String?, val captchaCode: String?, val importOption: Int)
 }

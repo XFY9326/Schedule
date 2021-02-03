@@ -16,11 +16,10 @@ import tool.xfy9326.schedule.ui.dialog.MultiItemSelectDialog
 import tool.xfy9326.schedule.ui.fragment.base.AbstractSettingsFragment
 import tool.xfy9326.schedule.utils.BackupUtils
 import tool.xfy9326.schedule.utils.IntentUtils
-import java.io.Serializable
 
 @Suppress("unused")
 class BackupRestoreSettingsFragment : AbstractSettingsFragment(), MultiItemSelectDialog.OnMultiItemSelectedListener,
-    ImportCourseConflictDialog.OnConfirmImportCourseConflictListener {
+    ImportCourseConflictDialog.OnConfirmImportCourseConflictListener<BatchResult> {
     companion object {
         private const val PREFERENCE_BACKUP_SCHEDULE = "backupSchedule"
         private const val PREFERENCE_RESTORE_SCHEDULE = "restoreSchedule"
@@ -108,8 +107,8 @@ class BackupRestoreSettingsFragment : AbstractSettingsFragment(), MultiItemSelec
         super.onActivityResult(requestCode, resultCode, data)
     }
 
-    override fun onConfirmImportCourseConflict(value: Serializable?) {
-        (value as? BatchResult)?.let(::showRestoreResult)
+    override fun onConfirmImportCourseConflict(value: BatchResult?) {
+        value?.let(::showRestoreResult)
     }
 
     override fun onMultiItemSelected(tag: String?, idArr: LongArray, selectedArr: BooleanArray) {

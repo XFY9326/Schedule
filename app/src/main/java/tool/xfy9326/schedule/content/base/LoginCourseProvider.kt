@@ -8,13 +8,14 @@ import io.ktor.client.*
 import io.ktor.client.request.*
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
 import java.io.InputStream
+import java.io.Serializable
 
 /**
  * Login course provider
  *
  * @constructor Create empty Login course provider
  */
-abstract class LoginCourseProvider : NetworkCourseProvider() {
+abstract class LoginCourseProvider<P : Serializable>(params: P?) : NetworkCourseProvider<P>(params) {
 
     suspend fun getCaptchaImage(importOption: Int = 0) = onLoadCaptcha(requireHttpClient(), importOption)?.let {
         onGetCaptchaImage(requireHttpClient(), it)

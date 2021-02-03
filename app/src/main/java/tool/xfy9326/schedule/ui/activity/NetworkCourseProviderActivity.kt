@@ -10,9 +10,7 @@ import androidx.annotation.StringRes
 import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import tool.xfy9326.schedule.R
-import tool.xfy9326.schedule.content.base.CourseImportConfig
-import tool.xfy9326.schedule.content.base.NetworkCourseParser
-import tool.xfy9326.schedule.content.base.NetworkCourseProvider
+import tool.xfy9326.schedule.content.base.*
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
 import tool.xfy9326.schedule.databinding.ActivityNetworkCourseProviderBinding
 import tool.xfy9326.schedule.kt.*
@@ -21,10 +19,9 @@ import tool.xfy9326.schedule.ui.dialog.ImportCourseConflictDialog
 import tool.xfy9326.schedule.ui.vm.NetworkCourseProviderViewModel
 import tool.xfy9326.schedule.utils.DialogUtils
 import tool.xfy9326.schedule.utils.ViewUtils
-import java.io.Serializable
 
 class NetworkCourseProviderActivity : ViewModelActivity<NetworkCourseProviderViewModel, ActivityNetworkCourseProviderBinding>(),
-    ImportCourseConflictDialog.OnConfirmImportCourseConflictListener {
+    ImportCourseConflictDialog.OnConfirmImportCourseConflictListener<Nothing> {
     companion object {
         const val EXTRA_COURSE_IMPORT_CONFIG = "EXTRA_COURSE_IMPORT_CONFIG"
     }
@@ -36,8 +33,9 @@ class NetworkCourseProviderActivity : ViewModelActivity<NetworkCourseProviderVie
     override fun onPrepare(viewBinding: ActivityNetworkCourseProviderBinding, viewModel: NetworkCourseProviderViewModel) {
         setSupportActionBar(viewBinding.toolBarLoginCourseProvider.toolBarGeneral)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        viewModel.registerConfig(intent.getSerializableExtra(EXTRA_COURSE_IMPORT_CONFIG)
-            ?.tryCast<CourseImportConfig<NetworkCourseProvider, NetworkCourseParser>>()!!)
+
+        viewModel.registerConfig(intent.getSerializableExtra(EXTRA_COURSE_IMPORT_CONFIG)?.tryCast()!!)
+
         supportActionBar?.setTitle(if (viewModel.isLoginCourseProvider()) R.string.login_to_import_course else R.string.direct_import_course)
     }
 
@@ -61,13 +59,13 @@ class NetworkCourseProviderActivity : ViewModelActivity<NetworkCourseProviderVie
         }
         viewBinding.textViewCourseAdapterSchool.apply {
             isSelected = true
-            text = viewModel.importConfig.schoolNameText
+            text = getString(viewModel.importConfig.schoolNameResId)
         }
         viewBinding.textViewCourseAdapterSystem.apply {
             isSelected = true
-            text = viewModel.importConfig.systemNameText
+            text = getString(viewModel.importConfig.systemNameResId)
         }
-        viewBinding.textViewCourseAdapterAuthor.text = getString(R.string.adapter_author, viewModel.importConfig.authorNameText)
+        viewBinding.textViewCourseAdapterAuthor.text = getString(R.string.adapter_author, getString(viewModel.importConfig.authorNameResId))
         viewBinding.spinnerCourseImportOptions.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 viewModel.refreshCaptcha(position)
@@ -114,7 +112,7 @@ class NetworkCourseProviderActivity : ViewModelActivity<NetworkCourseProviderVie
         }
     }
 
-    override fun onConfirmImportCourseConflict(value: Serializable?) {
+    override fun onConfirmImportCourseConflict(value: Nothing?) {
         finish()
     }
 
@@ -134,7 +132,7 @@ class NetworkCourseProviderActivity : ViewModelActivity<NetworkCourseProviderVie
         }
     }
 
-    private fun importCourse(importParams: NetworkCourseProviderViewModel.ImportParams, currentSchedule: Boolean, newScheduleName: String? = null) {
+    private fun importCourse(importParams: NetworkCourseProviderViewModel.NetworkImportParams, currentSchedule: Boolean, newScheduleName: String? = null) {
         requireViewBinding().apply {
             layoutCourseImportContent.setAllEnable(false)
             progressBarLoadingCourseImportInit.isIndeterminate = true
@@ -145,7 +143,7 @@ class NetworkCourseProviderActivity : ViewModelActivity<NetworkCourseProviderVie
         requireViewModel().importCourse(importParams, currentSchedule, newScheduleName)
     }
 
-    private fun validateImportCourseParams(): NetworkCourseProviderViewModel.ImportParams? {
+    private fun validateImportCourseParams(): NetworkCourseProviderViewModel.NetworkImportParams? {
         requireViewBinding().apply {
             layoutCourseImportContent.clearFocus()
             val option = getCurrentOption() ?: return null
@@ -158,9 +156,9 @@ class NetworkCourseProviderActivity : ViewModelActivity<NetworkCourseProviderVie
                 } else {
                     null
                 }
-                NetworkCourseProviderViewModel.ImportParams(userId, userPw, captchaCode, option)
+                NetworkCourseProviderViewModel.NetworkImportParams(userId, userPw, captchaCode, option)
             } else {
-                NetworkCourseProviderViewModel.ImportParams(null, null, null, option)
+                NetworkCourseProviderViewModel.NetworkImportParams(null, null, null, option)
             }
         }
     }
@@ -193,10 +191,10 @@ class NetworkCourseProviderActivity : ViewModelActivity<NetworkCourseProviderVie
     private fun applyLoginParams(params: NetworkCourseProviderViewModel.LoginParams?) {
         requireViewBinding().apply {
             if (params != null) {
-                when {
-                    params.optionsRes != null -> setupOptions(params.optionsRes)
-                    params.optionsOnline != null -> setupOptions(params.optionsOnline)
-                    else -> layoutImportOptions.isVisible = false
+                if (params.options == null) {
+                    layoutImportOptions.isVisible = false
+                } else {
+                    setupOptions(params.options)
                 }
 
                 layoutUserId.isVisible = params.allowLogin

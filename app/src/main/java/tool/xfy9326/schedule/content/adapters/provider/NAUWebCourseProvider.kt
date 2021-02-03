@@ -2,7 +2,7 @@ package tool.xfy9326.schedule.content.adapters.provider
 
 import tool.xfy9326.schedule.content.base.WebCourseProvider
 
-class NAUWebCourseProvider : WebCourseProvider() {
+class NAUWebCourseProvider : WebCourseProvider<Nothing>(null) {
     companion object {
         private const val PAGE_TEXT = "在修课程课表"
         private const val COURSE_TEXT_1 = "MyCourseScheduleTable.aspx"
