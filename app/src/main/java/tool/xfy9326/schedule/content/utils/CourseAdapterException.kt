@@ -29,16 +29,28 @@ class CourseAdapterException : Exception {
         USER_ID_OR_PASSWORD_ERROR(R.string.adapter_exception_login_user_id_or_password_error),
         LOGIN_SERVER_ERROR(R.string.adapter_exception_login_server_error),
         ACCOUNT_ERROR(R.string.adapter_exception_login_account_error),
+
+        // 课程导入时会自动判断该错误
         CONNECTION_ERROR(R.string.adapter_exception_login_connection_error),
         UNKNOWN_ERROR(R.string.adapter_exception_unknown_error),
         PARSER_ERROR(R.string.adapter_exception_parse_error),
         CAPTCHA_DOWNLOAD_ERROR(R.string.adapter_exception_captcha_download_error),
+
+        // 主要在课程导入时使用
         INIT_ERROR(R.string.adapter_exception_init_error),
+
+        // 主要在课程导入时使用
         CLOSE_ERROR(R.string.adapter_exception_close_error),
+
+        // 课程导入时会自动判断该错误
         MAX_COURSE_NUM_ERROR(R.string.adapter_exception_max_course_num_error),
         INCOMPLETE_COURSE_INFO_ERROR(R.string.adapter_exception_incomplete_course_info),
         SCHEDULE_TIMES_ERROR(R.string.adapter_exception_schedule_time_error),
+
+        // 课程导入时会自动判断该错误
         SCHEDULE_COURSE_IMPORT_EMPTY(R.string.adapter_exception_schedule_course_empty),
+
+        // 如果可以添加固定的报错内容，就不要使用该报错类型
         CUSTOM_ERROR(null);
 
         /**
