@@ -32,8 +32,8 @@ abstract class CourseImportConfig<T1 : BaseCourseProvider, T2 : ICourseParser>(
     private val systemName: Int,
     @ArrayRes
     private val importOptions: Int? = null,
-    private val providerClass: Class<T1>,
-    private val parserClass: Class<T2>,
+    private val providerClass: Class<out T1>,
+    private val parserClass: Class<out T2>,
     private val providerParams: Array<Any?> = emptyArray(),
 ) : Serializable {
     companion object {

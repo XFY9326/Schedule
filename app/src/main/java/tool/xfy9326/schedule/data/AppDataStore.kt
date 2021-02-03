@@ -8,6 +8,7 @@ object AppDataStore : AbstractDataStore("App") {
     private val acceptEULA by booleanPreferencesKey()
     private val showFeedbackAttention by booleanPreferencesKey()
     private val ignoreUpdateVersionCode by intPreferencesKey()
+    private val readOnlineImportAttention by booleanPreferencesKey()
 
     val currentScheduleIdFlow = currentScheduleId.readAndInitAsFlow {
         ScheduleDBProvider.db.scheduleDAO.tryInitDefaultSchedule()
@@ -16,6 +17,10 @@ object AppDataStore : AbstractDataStore("App") {
     val acceptEULAFlow = acceptEULA.readAsFlow(false)
 
     val ignoreUpdateVersionCodeFlow = ignoreUpdateVersionCode.readAsFlow(0)
+
+    val readOnlineImportAttentionFlow = readOnlineImportAttention.readAsFlow(false)
+
+    suspend fun setReadOnlineImportAttention(data: Boolean) = readOnlineImportAttention.saveData(data)
 
     suspend fun hasShownFeedbackAttention() = showFeedbackAttention.readAsShowOnce()
 

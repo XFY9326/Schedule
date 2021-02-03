@@ -4,12 +4,14 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import tool.xfy9326.schedule.content.base.CourseImportConfig
 import tool.xfy9326.schedule.content.base.WebCourseParser
 import tool.xfy9326.schedule.content.base.WebCourseProvider
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
+import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.kt.MutableEventLiveData
 import tool.xfy9326.schedule.kt.postEvent
 import tool.xfy9326.schedule.ui.vm.base.AbstractViewModel
@@ -81,6 +83,12 @@ class WebCourseProviderViewModel : AbstractViewModel() {
                         importParams.iframeContent,
                         importParams.frameContent
                     )
+
+                    if (courses.isEmpty() && !AppSettingsDataStore.allowImportEmptyScheduleFlow.first()) {
+                        courseImportFinish.postEvent(false to false)
+                        providerError.postEvent(CourseAdapterException.ErrorType.SCHEDULE_COURSE_IMPORT_EMPTY.make())
+                        return@launch
+                    }
 
                     val scheduleTimeValid = ScheduleUtils.validateScheduleTime(scheduleTimes)
                     if (!scheduleTimeValid) {

@@ -8,13 +8,6 @@
         app:title="@string/general_settings" />
 
     <androidx.preference.Preference
-        app:fragment="tool.xfy9326.schedule.ui.fragment.DataSettingsFragment"
-        app:icon="@drawable/ic_data_24"
-        app:persistent="false"
-        app:summary="@string/data_settings_sum"
-        app:title="@string/data_settings" />
-
-    <androidx.preference.Preference
         app:fragment="tool.xfy9326.schedule.ui.fragment.ScheduleSettingsFragment"
         app:icon="@drawable/ic_table_24"
         app:persistent="false"
@@ -27,6 +20,13 @@
         app:persistent="false"
         app:summary="@string/calendar_sync_settings_sum"
         app:title="@string/calendar_sync_settings" />
+
+    <androidx.preference.Preference
+        app:fragment="tool.xfy9326.schedule.ui.fragment.OnlineCourseImportSettingsFragment"
+        app:icon="@drawable/ic_online_24"
+        app:persistent="false"
+        app:summary="@string/online_course_import_sum"
+        app:title="@string/online_course_import" />
 
     <androidx.preference.Preference
         app:fragment="tool.xfy9326.schedule.ui.fragment.BackupRestoreSettingsFragment"

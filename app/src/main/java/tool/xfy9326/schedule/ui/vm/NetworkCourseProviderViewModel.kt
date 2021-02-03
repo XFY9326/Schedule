@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import tool.xfy9326.schedule.content.base.CourseImportConfig
@@ -12,6 +13,7 @@ import tool.xfy9326.schedule.content.base.LoginCourseProvider
 import tool.xfy9326.schedule.content.base.NetworkCourseParser
 import tool.xfy9326.schedule.content.base.NetworkCourseProvider
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
+import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.kt.MutableEventLiveData
 import tool.xfy9326.schedule.kt.postEvent
 import tool.xfy9326.schedule.ui.vm.base.AbstractViewModel
@@ -129,6 +131,12 @@ class NetworkCourseProviderViewModel : AbstractViewModel() {
 
                     val scheduleTimes = courseParser.parseScheduleTimes(importParams.importOption, scheduleTimesHtml)
                     val courses = courseParser.parseCourses(importParams.importOption, coursesHtml)
+
+                    if (courses.isEmpty() && !AppSettingsDataStore.allowImportEmptyScheduleFlow.first()) {
+                        courseImportFinish.postEvent(false to false)
+                        providerError.postEvent(CourseAdapterException.ErrorType.SCHEDULE_COURSE_IMPORT_EMPTY.make())
+                        return@launch
+                    }
 
                     val scheduleTimeValid = ScheduleUtils.validateScheduleTime(scheduleTimes)
                     if (!scheduleTimeValid) {

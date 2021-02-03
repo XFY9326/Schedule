@@ -18,7 +18,7 @@
         <item android:title="@string/import_and_export">
             <menu>
                 <item
-                    android:id="@+id/menu_navCourseImport"
+                    android:id="@+id/menu_navOnlineCourseImport"
                     android:icon="@drawable/ic_online_24"
                     android:title="@string/online_course_import" />
                 <item

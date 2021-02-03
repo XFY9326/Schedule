@@ -9,6 +9,7 @@ import androidx.preference.PreferenceDataStore
 import androidx.preference.PreferenceFragmentCompat
 import androidx.transition.Slide
 import tool.xfy9326.schedule.ui.activity.SettingsActivity
+import tool.xfy9326.schedule.ui.activity.base.AbstractSettingsActivity
 
 abstract class AbstractSettingsFragment : PreferenceFragmentCompat() {
     protected abstract val preferenceResId: Int
@@ -41,5 +42,7 @@ abstract class AbstractSettingsFragment : PreferenceFragmentCompat() {
 
     protected fun requireSettingsViewModel() = (activity as? SettingsActivity)?.settingsViewModel
 
-    protected fun requireRootLayout() = (activity as? SettingsActivity)?.rootLayout
+    protected fun requireRootLayout() = (activity as AbstractSettingsActivity?)?.rootLayout
+
+    protected fun requestBack() = (activity as AbstractSettingsActivity?)?.requestBack()
 }
