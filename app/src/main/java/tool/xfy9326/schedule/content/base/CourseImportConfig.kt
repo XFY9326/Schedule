@@ -4,8 +4,8 @@ package tool.xfy9326.schedule.content.base
 
 import androidx.annotation.ArrayRes
 import androidx.annotation.StringRes
-import com.github.promeg.pinyinhelper.Pinyin
-import tool.xfy9326.schedule.io.GlobalIO
+import tool.xfy9326.schedule.kt.cast
+import tool.xfy9326.schedule.kt.clone
 import java.io.Serializable
 import kotlin.reflect.KClass
 
@@ -16,95 +16,50 @@ import kotlin.reflect.KClass
  * NetworkCourseProvider -- NetworkCourseParser
  * WebCourseProvider -- WebCourseParser
  *
+ * 注：由于泛型，无法使用Parcelable类型传递数据
+ *
+ * @param P Serializable
  * @param T1 CourseProvider
  * @param T2 CourseParser
- * @property schoolName School name string res id
- * @property authorName Author name string res id
- * @property systemName System name string res id
- * @property staticImportOptions Import option string array res id (Useless for WebCourseProvider)
+ * @property schoolNameResId School name string res id
+ * @property authorNameResId Author name string res id
+ * @property systemNameResId System name string res id
+ * @property staticImportOptionsResId Import option string array res id (Useless for WebCourseProvider)
  * @property providerClass CourseProvider java class
  * @property parserClass CourseParser java class
  * @property providerParams Provider params
+ * @property sortingBasis 用于列表排序（建议国内院校使用拼音，国际学校使用英文）
  * @constructor Create empty Course import config
  */
-abstract class CourseImportConfig<T1 : BaseCourseProvider, T2 : ICourseParser>(
+abstract class CourseImportConfig<P : Serializable, T1 : BaseCourseProvider<P>, T2 : ICourseParser>(
     @StringRes
-    private val schoolName: Int,
+    val schoolNameResId: Int,
     @StringRes
-    private val authorName: Int,
+    val authorNameResId: Int,
     @StringRes
-    private val systemName: Int,
+    val systemNameResId: Int,
     @ArrayRes
-    private val staticImportOptions: Int? = null,
+    val staticImportOptionsResId: Int? = null,
     // KClass不可序列化，此处只能使用Java的Class
-    private val providerClass: Class<out T1>,
+    private val providerClass: Class<T1>,
     // KClass不可序列化，此处只能使用Java的Class
-    private val parserClass: Class<out T2>,
-    private val providerParams: Array<Any?> = emptyArray(),
+    private val parserClass: Class<T2>,
+    private val providerParams: P? = null,
+    val sortingBasis: String,
 ) : Serializable {
-    companion object {
-        private fun getPinyin(str: String): String =
-            StringBuilder().apply {
-                for (c in str) {
-                    if (c != ' ') append(Pinyin.toPinyin(c))
-                }
-            }.toString()
-    }
 
-    val schoolNameText by lazy {
-        GlobalIO.resources.getString(schoolName)
-    }
-    val authorNameText by lazy {
-        GlobalIO.resources.getString(authorName)
-    }
-    val systemNameText by lazy {
-        GlobalIO.resources.getString(systemName)
-    }
-
-    val importOptionsArrayText: Array<String>? by lazy {
-        staticImportOptions?.let(GlobalIO.resources::getStringArray)
-    }
-
-    val schoolNamePinyin by lazy {
-        getPinyin(schoolNameText)
-    }
-    val systemNamePinyin by lazy {
-        getPinyin(systemNameText)
-    }
-
-    fun newProvider(): T1 = providerClass.newInstance().apply {
-        initParams(providerParams.copyOf())
+    fun newProvider(): T1 {
+        val constructor = providerClass.constructors.first()
+        return if (constructor.genericParameterTypes.isEmpty()) {
+            constructor.newInstance()
+        } else {
+            constructor.newInstance(providerParams?.clone())
+        }.cast()
     }
 
     fun newParser(): T2 = parserClass.newInstance()
 
-    fun <T : BaseCourseProvider> validateProviderType(clazz: KClass<T>) = clazz.java.isAssignableFrom(providerClass)
+    fun validateProviderType(clazz: KClass<out BaseCourseProvider<*>>) = clazz.java.isAssignableFrom(providerClass)
 
-    fun <T : ICourseParser> validateParserType(clazz: KClass<T>) = clazz.java.isAssignableFrom(parserClass)
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (other !is CourseImportConfig<*, *>) return false
-
-        if (schoolName != other.schoolName) return false
-        if (authorName != other.authorName) return false
-        if (systemName != other.systemName) return false
-        if (staticImportOptions != other.staticImportOptions) return false
-        if (providerClass != other.providerClass) return false
-        if (parserClass != other.parserClass) return false
-        if (!providerParams.contentEquals(other.providerParams)) return false
-
-        return true
-    }
-
-    override fun hashCode(): Int {
-        var result = schoolName
-        result = 31 * result + authorName
-        result = 31 * result + systemName
-        result = 31 * result + (staticImportOptions ?: 0)
-        result = 31 * result + providerClass.hashCode()
-        result = 31 * result + parserClass.hashCode()
-        result = 31 * result + providerParams.contentHashCode()
-        return result
-    }
+    fun validateParserType(clazz: KClass<out ICourseParser>) = clazz.java.isAssignableFrom(parserClass)
 }
