@@ -14,8 +14,6 @@ import androidx.appcompat.widget.AppCompatImageButton
 import androidx.core.animation.doOnEnd
 import androidx.core.graphics.drawable.toDrawable
 import androidx.core.view.*
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
@@ -58,9 +56,9 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
         private const val REQUEST_CODE_CALENDAR_PERMISSION = 2
     }
 
-    private var scheduleViewPagerAdapter: ScheduleViewPagerAdapter? = null
+    override val vmClass = ScheduleViewModel::class
 
-    override fun onCreateViewModel(owner: ViewModelStoreOwner): ScheduleViewModel = ViewModelProvider(owner)[ScheduleViewModel::class.java]
+    private var scheduleViewPagerAdapter: ScheduleViewPagerAdapter? = null
 
     override fun onCreateViewBinding() = ActivityScheduleBinding.inflate(layoutInflater)
 
@@ -135,6 +133,9 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
             } else {
                 startActivity(IntentUtils.getShareImageIntent(this, it))
             }
+        }
+        viewModel.onlineCourseImportEnabled.observe(this) {
+            viewBinding.navSchedule.menu.findItem(R.id.menu_navOnlineCourseImport)?.isVisible = it
         }
     }
 
@@ -220,7 +221,7 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.menu_navCourseImport -> startActivity<OnlineCourseImportActivity>()
+            R.id.menu_navOnlineCourseImport -> startActivity<OnlineCourseImportActivity>()
             R.id.menu_navCourseExportICS -> requireViewModel().selectScheduleForExportingICS()
             R.id.menu_navSyncToCalendar -> lifecycleScope.launch {
                 if (PermissionUtils.checkCalendarPermission(this@ScheduleActivity, REQUEST_CODE_CALENDAR_PERMISSION)) {

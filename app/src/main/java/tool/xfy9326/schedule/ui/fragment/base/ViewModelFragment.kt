@@ -12,26 +12,23 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.viewbinding.ViewBinding
-import tool.xfy9326.schedule.kt.getSuperGenericTypeClass
 import tool.xfy9326.schedule.ui.vm.base.AbstractViewModel
+import kotlin.reflect.KClass
 
 abstract class ViewModelFragment<M : AbstractViewModel, V : ViewBinding> : Fragment() {
     companion object {
         private const val REFLECT_METHOD_INFLATE = "inflate"
     }
 
+    protected abstract val vmClass: KClass<M>
     private lateinit var viewModel: M
     private lateinit var viewBinding: V
 
     protected open fun onGetViewModelStoreOwner(): ViewModelStoreOwner = this
 
-    protected open fun onCreateViewModel(owner: ViewModelStoreOwner): M = ViewModelProvider(owner)[this::class.getSuperGenericTypeClass(0)]
+    protected open fun onCreateViewModel(owner: ViewModelStoreOwner, vmClass: KClass<M>): M = ViewModelProvider(owner)[vmClass.java]
 
-    protected open fun onCreateViewBinding(inflater: LayoutInflater, container: ViewGroup?): V {
-        val viewBindingClass = this::class.getSuperGenericTypeClass<V>(1)
-        val inflateMethod = viewBindingClass.getMethod(REFLECT_METHOD_INFLATE, LayoutInflater::class.java, ViewGroup::class.java, Boolean::class.java)
-        return viewBindingClass.cast(inflateMethod.invoke(null, inflater, container, false))!!
-    }
+    protected abstract fun onCreateViewBinding(inflater: LayoutInflater, container: ViewGroup?): V
 
     protected open fun beforeBindLiveData(viewBinding: V, viewModel: M) {}
 
@@ -42,7 +39,7 @@ abstract class ViewModelFragment<M : AbstractViewModel, V : ViewBinding> : Fragm
     @CallSuper
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        viewModel = onCreateViewModel(onGetViewModelStoreOwner())
+        viewModel = onCreateViewModel(onGetViewModelStoreOwner(), vmClass)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

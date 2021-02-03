@@ -61,6 +61,7 @@ class ScheduleViewModel : AbstractViewModel() {
     val selectScheduleForExportingICS = MutableEventLiveData<List<Schedule.Min>>()
     val iceExportStatus = MutableEventLiveData<Boolean>()
     val syncToCalendarStatus = MutableEventLiveData<BatchResult>()
+    val onlineCourseImportEnabled = AppSettingsDataStore.enableOnlineCourseImportFlow.asDistinctLiveData()
 
     val nightModeChangeOldSurface = DisposableValue<Bitmap>()
     val nightModeChanging = AtomicBoolean(false)

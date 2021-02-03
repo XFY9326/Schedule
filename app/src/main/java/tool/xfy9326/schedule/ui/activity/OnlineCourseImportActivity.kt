@@ -1,9 +1,16 @@
 package tool.xfy9326.schedule.ui.activity
 
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.content.base.CourseImportConfig
+import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.databinding.ActivityOnlineCourseImportBinding
+import tool.xfy9326.schedule.kt.observeNotify
+import tool.xfy9326.schedule.kt.show
 import tool.xfy9326.schedule.kt.showShortSnackBar
 import tool.xfy9326.schedule.kt.startActivity
 import tool.xfy9326.schedule.ui.activity.base.ViewModelActivity
@@ -13,11 +20,17 @@ import tool.xfy9326.schedule.ui.vm.CourseImportViewModel
 import tool.xfy9326.schedule.utils.CourseImportUtils
 
 class OnlineCourseImportActivity : ViewModelActivity<CourseImportViewModel, ActivityOnlineCourseImportBinding>() {
+    override val vmClass = CourseImportViewModel::class
+
     private lateinit var courseImportAdapter: CourseImportAdapter
+
+    override fun onCreateViewBinding() = ActivityOnlineCourseImportBinding.inflate(layoutInflater)
 
     override fun onPrepare(viewBinding: ActivityOnlineCourseImportBinding, viewModel: CourseImportViewModel) {
         setSupportActionBar(viewBinding.toolBarCourseImport)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        lifecycleScope.launch { if (!AppSettingsDataStore.enableOnlineCourseImportFlow.first()) finish() }
 
         viewModel.loadCourseImportMetas()
         courseImportAdapter = CourseImportAdapter()
@@ -25,12 +38,32 @@ class OnlineCourseImportActivity : ViewModelActivity<CourseImportViewModel, Acti
 
     override fun onBindLiveData(viewBinding: ActivityOnlineCourseImportBinding, viewModel: CourseImportViewModel) {
         viewModel.courseMetas.observe(this, courseImportAdapter::updateList)
+        viewModel.onlineImportAttention.observeNotify(this) {
+            MaterialAlertDialogBuilder(this).apply {
+                setTitle(R.string.online_course_import)
+                setMessage(R.string.online_course_import_attention)
+                setCancelable(false)
+                setPositiveButton(R.string.has_read) { _, _ ->
+                    viewModel.hasReadOnlineImportAttention()
+                }
+                setNegativeButton(android.R.string.cancel) { _, _ ->
+                    finish()
+                }
+                setNeutralButton(R.string.disable_function) { _, _ ->
+                    lifecycleScope.launch {
+                        AppSettingsDataStore.setEnableOnlineCourseImportFlow(false)
+                        finish()
+                    }
+                }
+            }.show(this)
+        }
     }
 
     override fun onInitView(viewBinding: ActivityOnlineCourseImportBinding, viewModel: CourseImportViewModel) {
         courseImportAdapter.setOnCourseImportItemClickListener(::onCourseImport)
         viewBinding.recyclerViewCourseImportList.adapter = courseImportAdapter
         viewBinding.recyclerViewCourseImportList.addItemDecoration(AdvancedDividerItemDecoration(this, DividerItemDecoration.VERTICAL))
+        viewModel.tryShowOnlineImportAttention()
     }
 
     private fun onCourseImport(config: CourseImportConfig<*, *>) {

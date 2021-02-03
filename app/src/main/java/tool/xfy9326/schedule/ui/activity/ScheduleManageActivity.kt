@@ -12,7 +12,11 @@ import tool.xfy9326.schedule.ui.adapter.ScheduleManageAdapter.ScheduleOperation.
 import tool.xfy9326.schedule.ui.vm.ScheduleManageViewModel
 
 class ScheduleManageActivity : ViewModelActivity<ScheduleManageViewModel, ActivityScheduleManageBinding>() {
+    override val vmClass = ScheduleManageViewModel::class
+
     private lateinit var scheduleManageAdapter: ScheduleManageAdapter
+
+    override fun onCreateViewBinding() = ActivityScheduleManageBinding.inflate(layoutInflater)
 
     override fun onPrepare(viewBinding: ActivityScheduleManageBinding, viewModel: ScheduleManageViewModel) {
         setSupportActionBar(viewBinding.toolBarScheduleManage)

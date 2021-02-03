@@ -18,8 +18,12 @@ class CourseManageActivity : ViewModelActivity<CourseManageViewModel, ActivityCo
         const val EXTRA_SCHEDULE_ID = "EXTRA_SCHEDULE_ID"
     }
 
+    override val vmClass = CourseManageViewModel::class
+
     private var currentEditCourseScheduleId by Delegates.notNull<Long>()
     private lateinit var courseManageAdapter: CourseManageAdapter
+
+    override fun onCreateViewBinding() = ActivityCourseManageBinding.inflate(layoutInflater)
 
     override fun onPrepare(viewBinding: ActivityCourseManageBinding, viewModel: CourseManageViewModel) {
         setSupportActionBar(viewBinding.toolBarCourseManage)

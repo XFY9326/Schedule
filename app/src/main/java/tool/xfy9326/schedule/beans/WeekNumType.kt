@@ -1,13 +1,14 @@
 package tool.xfy9326.schedule.beans
 
 import android.content.Context
+import androidx.annotation.StringRes
 import tool.xfy9326.schedule.R
 
-enum class WeekNumType {
-    NOT_CURRENT_WEEK,
-    CURRENT_WEEK,
-    NEXT_WEEK,
-    IN_VACATION;
+enum class WeekNumType(@StringRes private val textId: Int) {
+    NOT_CURRENT_WEEK(R.string.not_current_week),
+    CURRENT_WEEK(R.string.current_week),
+    NEXT_WEEK(R.string.next_week),
+    IN_VACATION(R.string.in_vacation);
 
     companion object {
         fun create(showWeekNum: Int, nowWeekNum: Int) =
@@ -19,11 +20,5 @@ enum class WeekNumType {
             }
     }
 
-    fun getText(context: Context) =
-        when (this) {
-            NOT_CURRENT_WEEK -> context.getString(R.string.not_current_week)
-            CURRENT_WEEK -> context.getString(R.string.current_week)
-            NEXT_WEEK -> context.getString(R.string.next_week)
-            IN_VACATION -> context.getString(R.string.in_vacation)
-        }
+    fun getText(context: Context) = context.getString(textId)
 }
