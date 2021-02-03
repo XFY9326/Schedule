@@ -20,9 +20,9 @@ import tool.xfy9326.schedule.utils.ScheduleUtils
 import java.util.concurrent.atomic.AtomicBoolean
 
 class WebCourseProviderViewModel : AbstractViewModel() {
-    lateinit var importConfig: CourseImportConfig<WebCourseProvider, WebCourseParser>
+    lateinit var importConfig: CourseImportConfig<*, WebCourseProvider<*>, WebCourseParser>
         private set
-    lateinit var courseProvider: WebCourseProvider
+    lateinit var courseProvider: WebCourseProvider<*>
         private set
     private lateinit var courseParser: WebCourseParser
 
@@ -37,7 +37,7 @@ class WebCourseProviderViewModel : AbstractViewModel() {
     private val isImportingCourses = AtomicBoolean(false)
     private var importCourseJob: Job? = null
 
-    fun registerConfig(config: CourseImportConfig<WebCourseProvider, WebCourseParser>) {
+    fun registerConfig(config: CourseImportConfig<*, WebCourseProvider<*>, WebCourseParser>) {
         if (!::importConfig.isInitialized || importConfig != config) {
             importConfig = config
             courseProvider = config.newProvider()

@@ -2,12 +2,14 @@
 
 package tool.xfy9326.schedule.content.base
 
+import java.io.Serializable
+
 /**
  * Web course provider
  *
  * @constructor Create empty Web course provider
  */
-abstract class WebCourseProvider : BaseCourseProvider() {
+abstract class WebCourseProvider<P : Serializable>(params: P?) : BaseCourseProvider<P>(params) {
     val initPageUrl: String
         get() = onLoadInitPage()
 

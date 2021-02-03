@@ -2,7 +2,7 @@
 
 package tool.xfy9326.schedule.kt
 
-import java.io.File
+import java.io.*
 
 const val NEW_LINE = "\n"
 
@@ -84,3 +84,19 @@ inline fun <T> List<T>.forEachTwo(action: (Int, T, Int, T) -> Unit) {
 }
 
 inline fun File.asParentOf(childName: String) = File(this, childName)
+
+fun <T : Serializable> T.clone(): T? {
+    try {
+        ByteArrayOutputStream().use { byteOutput ->
+            ObjectOutputStream(byteOutput).use {
+                it.writeObject(this)
+            }
+            ObjectInputStream(ByteArrayInputStream(byteOutput.toByteArray())).use {
+                return it.readObject().tryCast()
+            }
+        }
+    } catch (e: Exception) {
+        e.printStackTrace()
+    }
+    return null
+}
