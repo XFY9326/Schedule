@@ -14,9 +14,6 @@ import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import tool.xfy9326.schedule.R
-import tool.xfy9326.schedule.content.base.CourseImportConfig
-import tool.xfy9326.schedule.content.base.WebCourseParser
-import tool.xfy9326.schedule.content.base.WebCourseProvider
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
 import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.databinding.ActivityWebCourseProviderBinding
@@ -28,11 +25,10 @@ import tool.xfy9326.schedule.ui.dialog.WebCourseProviderBottomPanel
 import tool.xfy9326.schedule.ui.vm.WebCourseProviderViewModel
 import tool.xfy9326.schedule.utils.DialogUtils
 import tool.xfy9326.schedule.utils.ViewUtils
-import java.io.Serializable
 
 @SuppressLint("SetJavaScriptEnabled")
 class WebCourseProviderActivity : ViewModelActivity<WebCourseProviderViewModel, ActivityWebCourseProviderBinding>(),
-    WebCourseProviderBottomPanel.OnWebCourseProviderBottomPanelOperateListener, ImportCourseConflictDialog.OnConfirmImportCourseConflictListener,
+    WebCourseProviderBottomPanel.OnWebCourseProviderBottomPanelOperateListener, ImportCourseConflictDialog.OnConfirmImportCourseConflictListener<Nothing>,
     FullScreenLoadingDialog.OnRequestCancelListener {
     companion object {
         const val EXTRA_COURSE_IMPORT_CONFIG = "EXTRA_COURSE_IMPORT_CONFIG"
@@ -73,8 +69,7 @@ class WebCourseProviderActivity : ViewModelActivity<WebCourseProviderViewModel, 
         setSupportActionBar(viewBinding.toolBarWebCourseProvider.toolBarGeneral)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        viewModel.registerConfig(intent.getSerializableExtra(EXTRA_COURSE_IMPORT_CONFIG)
-            ?.tryCast<CourseImportConfig<WebCourseProvider, WebCourseParser>>()!!)
+        viewModel.registerConfig(intent.getSerializableExtra(EXTRA_COURSE_IMPORT_CONFIG)?.tryCast()!!)
 
         lifecycleScope.launch {
             if (AppSettingsDataStore.keepWebProviderCacheFlow.first()) clearAll()
@@ -210,7 +205,7 @@ class WebCourseProviderActivity : ViewModelActivity<WebCourseProviderViewModel, 
             isVisible = false
             startAnimation(AnimationUtils.loadAnimation(this@WebCourseProviderActivity, R.anim.anim_bottom_button_out))
         }
-        WebCourseProviderBottomPanel.showDialog(supportFragmentManager, requireViewModel().importConfig.authorNameText)
+        WebCourseProviderBottomPanel.showDialog(supportFragmentManager, getString(requireViewModel().importConfig.authorNameResId))
     }
 
     private fun getCurrentHTML(currentSchedule: Boolean) {
@@ -232,7 +227,7 @@ class WebCourseProviderActivity : ViewModelActivity<WebCourseProviderViewModel, 
         getCurrentHTML(false)
     }
 
-    override fun onConfirmImportCourseConflict(value: Serializable?) {
+    override fun onConfirmImportCourseConflict(value: Nothing?) {
         finish()
     }
 

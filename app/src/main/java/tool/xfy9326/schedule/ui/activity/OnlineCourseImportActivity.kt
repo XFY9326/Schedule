@@ -22,8 +22,6 @@ import tool.xfy9326.schedule.utils.CourseImportUtils
 class OnlineCourseImportActivity : ViewModelActivity<CourseImportViewModel, ActivityOnlineCourseImportBinding>() {
     override val vmClass = CourseImportViewModel::class
 
-    private lateinit var courseImportAdapter: CourseImportAdapter
-
     override fun onCreateViewBinding() = ActivityOnlineCourseImportBinding.inflate(layoutInflater)
 
     override fun onPrepare(viewBinding: ActivityOnlineCourseImportBinding, viewModel: CourseImportViewModel) {
@@ -31,13 +29,9 @@ class OnlineCourseImportActivity : ViewModelActivity<CourseImportViewModel, Acti
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         lifecycleScope.launch { if (!AppSettingsDataStore.enableOnlineCourseImportFlow.first()) finish() }
-
-        viewModel.loadCourseImportMetas()
-        courseImportAdapter = CourseImportAdapter()
     }
 
     override fun onBindLiveData(viewBinding: ActivityOnlineCourseImportBinding, viewModel: CourseImportViewModel) {
-        viewModel.courseMetas.observe(this, courseImportAdapter::updateList)
         viewModel.onlineImportAttention.observeNotify(this) {
             MaterialAlertDialogBuilder(this).apply {
                 setTitle(R.string.online_course_import)
@@ -60,13 +54,14 @@ class OnlineCourseImportActivity : ViewModelActivity<CourseImportViewModel, Acti
     }
 
     override fun onInitView(viewBinding: ActivityOnlineCourseImportBinding, viewModel: CourseImportViewModel) {
+        val courseImportAdapter = CourseImportAdapter()
         courseImportAdapter.setOnCourseImportItemClickListener(::onCourseImport)
         viewBinding.recyclerViewCourseImportList.adapter = courseImportAdapter
         viewBinding.recyclerViewCourseImportList.addItemDecoration(AdvancedDividerItemDecoration(this, DividerItemDecoration.VERTICAL))
         viewModel.tryShowOnlineImportAttention()
     }
 
-    private fun onCourseImport(config: CourseImportConfig<*, *>) {
+    private fun onCourseImport(config: CourseImportConfig<*, *, *>) {
         val importMethod = CourseImportUtils.getCourseImportMethod(config,
             onInterfaceProviderError = {
                 requireViewBinding().layoutCourseImport.showShortSnackBar(R.string.interface_provider_error)

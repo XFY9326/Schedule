@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'kotlin-kapt'
+    id 'kotlin-parcelize'
     id 'kotlinx-serialization'
 }
 
@@ -30,7 +31,6 @@ android {
         packagingOptions {
             exclude 'META-INF/*.version'
             exclude 'main/java/androidx/datastore/preferences/PreferencesProto.java'
-            exclude 'DebugProbesKt.bin'
             exclude 'META-INF/CHANGES'
             exclude 'META-INF/README.md'
         }
@@ -68,6 +68,10 @@ android {
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             manifestPlaceholders = ['ApplicationId': applicationId]
+
+            packagingOptions {
+                exclude 'DebugProbesKt.bin'
+            }
         }
     }
 
@@ -138,10 +142,6 @@ dependencies {
 
     // ColorPicker
     implementation 'com.jaredrummler:colorpicker:1.1.0'
-
-    // Pinyin
-    implementation 'com.github.promeg:tinypinyin:2.0.3'
-    implementation 'com.github.promeg:tinypinyin-lexicons-android-cncity:2.0.3'
 
     // Test
     testImplementation 'junit:junit:4.13.1'

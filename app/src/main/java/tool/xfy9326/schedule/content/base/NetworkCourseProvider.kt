@@ -5,14 +5,15 @@ package tool.xfy9326.schedule.content.base
 import io.ktor.client.*
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
 import tool.xfy9326.schedule.content.utils.CourseAdapterUtils
+import java.io.Serializable
 
 /**
  * Network course provider
- * All methods might be called not only once. It's not recommended to define and use global varieties.
+ * 注：所有方法可能并非只执行一次，因此不建议使用全局变量传递参数
  *
  * @constructor Create empty Network course provider
  */
-abstract class NetworkCourseProvider : BaseCourseProvider() {
+abstract class NetworkCourseProvider<P : Serializable>(params: P?) : BaseCourseProvider<P>(params) {
     private var httpClient: HttpClient? = null
 
     suspend fun init() {
