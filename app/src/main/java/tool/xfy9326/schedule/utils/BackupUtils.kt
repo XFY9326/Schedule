@@ -87,7 +87,7 @@ object BackupUtils {
     }
 
     private fun getParsableClass(data: Array<out ScheduleCourseBundle>): BackupWrapperJSON {
-        val scheduleJsonList = ArrayList<ScheduleJSON>()
+        val scheduleJsonList = ArrayList<ScheduleJSON>(data.size)
 
         for (datum in data) {
             val jsonCourses = ArrayList<CourseJSON>(datum.courses.size)
@@ -122,7 +122,7 @@ object BackupUtils {
     }
 
     private fun fromParsableClass(data: BackupWrapperJSON): List<ScheduleCourseBundle> {
-        val scheduleList = ArrayList<ScheduleCourseBundle>()
+        val scheduleList = ArrayList<ScheduleCourseBundle>(data.data.size)
 
         for (scheduleJson in data.data) {
             val schedule = Schedule(
