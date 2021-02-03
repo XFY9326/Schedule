@@ -230,10 +230,7 @@
     <string name="not_this_week">[非本周]</string>
     <string name="keep_at_least_one_style">请至少保持一种显示方式！</string>
     <string name="manually_change_night_mode">已关闭自动切换夜间模式</string>
-    <string name="data_settings">数据</string>
-    <string name="data_settings_sum">应用数据的存储管理</string>
     <string name="data_manage">数据管理</string>
-    <string name="cache_settings">缓存设置</string>
     <string name="restore_settings">重置应用设置为默认设置</string>
     <string name="restore_settings_success">应用设置重置成功！</string>
     <string name="restore_settings_msg">是否要将应用设置重置为默认设置？\n注意，该操作不可逆！</string>
@@ -339,6 +336,15 @@
     <string name="app_update_settings">应用更新设置</string>
     <string name="use_browser_download_upgrade_file">默认使用浏览器下载更新文件</string>
     <string name="use_browser_download_upgrade_file_sum">避免直接下载更新文件时出现错误</string>
+    <string name="online_course_import_sum">课表与课程在线导入相关的设定</string>
+    <string name="online_course_import_attention">\u3000\u3000在线课程导入是通过解析课程网页或者模拟登陆的方式实现的，本APP承诺未经允许不将用户的数据上传至非校方服务器。\n\u3000\u3000如果您对该功能的信息安全存在质疑可以查看APP源码并自行编译，或者停用该功能。\n\u3000\u3000本功能可能由于校方网页变动而失效，或者存在导入错误的情况。因此请务必自行核对校方原始课表，出现任何由于导入信息错误导致的问题本APP不负任何责任。\n\u3000\u3000若导入课程存在问题，请及时在错误反馈中上报，谢谢。</string>
+    <string name="allow_import_empty_schedule">允许导入空课表</string>
+    <string name="allow_import_empty_schedule_sum">允许在无任何导入课程时保存该课表</string>
+    <string name="enable_online_course_import">启用在线导入功能</string>
+    <string name="enable_online_course_import_sum">关闭后将不能使用且不会显示该功能</string>
+    <string name="import_settings">导入设置</string>
+    <string name="has_read">已阅读</string>
+    <string name="disable_function">停用</string>
 
     <string name="scare_type_fit_center">等比缩放，从中间开始填充满</string>
     <string name="scare_type_center_crop">等比缩放直到完全填充</string>

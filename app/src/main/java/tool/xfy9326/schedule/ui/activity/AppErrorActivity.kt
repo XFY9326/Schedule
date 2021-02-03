@@ -16,6 +16,10 @@ class AppErrorActivity : ViewModelActivity<AppErrorViewModel, ActivityAppErrorBi
         const val INTENT_EXTRA_CRASH_LOG = "CRASH_LOG"
     }
 
+    override val vmClass = AppErrorViewModel::class
+
+    override fun onCreateViewBinding() = ActivityAppErrorBinding.inflate(layoutInflater)
+
     override fun onBindLiveData(viewBinding: ActivityAppErrorBinding, viewModel: AppErrorViewModel) {
         viewModel.crashLog.observeEvent(this) {
             if (it == null) {

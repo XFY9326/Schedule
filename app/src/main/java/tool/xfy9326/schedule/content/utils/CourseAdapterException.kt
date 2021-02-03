@@ -38,6 +38,7 @@ class CourseAdapterException : Exception {
         MAX_COURSE_NUM_ERROR(R.string.adapter_exception_max_course_num_error),
         INCOMPLETE_COURSE_INFO_ERROR(R.string.adapter_exception_incomplete_course_info),
         SCHEDULE_TIMES_ERROR(R.string.adapter_exception_schedule_time_error),
+        SCHEDULE_COURSE_IMPORT_EMPTY(R.string.adapter_exception_schedule_course_empty),
         CUSTOM_ERROR(null);
 
         /**

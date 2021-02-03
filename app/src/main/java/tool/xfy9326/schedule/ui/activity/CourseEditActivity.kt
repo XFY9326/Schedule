@@ -29,8 +29,12 @@ class CourseEditActivity : ViewModelActivity<CourseEditViewModel, ActivityCourse
         const val INTENT_EXTRA_SCHEDULE_ID = "EXTRA_SCHEDULE_ID"
     }
 
+    override val vmClass = CourseEditViewModel::class
+
     private var currentEditScheduleId by Delegates.notNull<Long>()
     private lateinit var courseTimeAdapter: CourseTimeAdapter
+
+    override fun onCreateViewBinding() = ActivityCourseEditBinding.inflate(layoutInflater)
 
     override fun onPrepare(viewBinding: ActivityCourseEditBinding, viewModel: CourseEditViewModel) {
         setSupportActionBar(viewBinding.toolBarCourseEdit.toolBarGeneral)

@@ -63,7 +63,11 @@ class WebCourseProviderActivity : ViewModelActivity<WebCourseProviderViewModel, 
             """
     }
 
+    override val vmClass = WebCourseProviderViewModel::class
+
     private val loadingDialogController = FullScreenLoadingDialog.createControllerInstance(this)
+
+    override fun onCreateViewBinding() = ActivityWebCourseProviderBinding.inflate(layoutInflater)
 
     override fun onPrepare(viewBinding: ActivityWebCourseProviderBinding, viewModel: WebCourseProviderViewModel) {
         setSupportActionBar(viewBinding.toolBarWebCourseProvider.toolBarGeneral)

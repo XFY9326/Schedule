@@ -32,10 +32,6 @@
 # App
 -keep public class * extends tool.xfy9326.schedule.ui.fragment.base.AbstractSettingsFragment
 
--keepclassmembers class * extends androidx.viewbinding.ViewBinding{
-    public inflate(...);
-}
-
 # Kotlin Serialization
 -dontnote kotlinx.serialization.AnnotationsKt
 # noinspection ShrinkerUnresolvedReference

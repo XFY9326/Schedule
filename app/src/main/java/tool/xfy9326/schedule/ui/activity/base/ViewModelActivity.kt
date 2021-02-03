@@ -1,30 +1,23 @@
 package tool.xfy9326.schedule.ui.activity.base
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.viewbinding.ViewBinding
-import tool.xfy9326.schedule.kt.getSuperGenericTypeClass
 import tool.xfy9326.schedule.ui.vm.base.AbstractViewModel
+import kotlin.reflect.KClass
 
 abstract class ViewModelActivity<M : AbstractViewModel, V : ViewBinding> : AbstractActivity() {
-    companion object {
-        private const val REFLECT_METHOD_INFLATE = "inflate"
-    }
+    protected abstract val vmClass: KClass<M>
 
     private lateinit var viewModel: M
     private lateinit var viewBinding: V
 
     protected open fun onGetViewModelStoreOwner(): ViewModelStoreOwner = this
 
-    protected open fun onCreateViewModel(owner: ViewModelStoreOwner): M = ViewModelProvider(owner)[this::class.getSuperGenericTypeClass(0)]
+    protected open fun onCreateViewModel(owner: ViewModelStoreOwner, vmClass: KClass<M>): M = ViewModelProvider(owner)[vmClass.java]
 
-    protected open fun onCreateViewBinding(): V {
-        val viewBindingClass = this::class.getSuperGenericTypeClass<V>(1)
-        val inflateMethod = viewBindingClass.getMethod(REFLECT_METHOD_INFLATE, LayoutInflater::class.java)
-        return viewBindingClass.cast(inflateMethod.invoke(null, layoutInflater))!!
-    }
+    protected abstract fun onCreateViewBinding(): V
 
     protected open fun onBindView(viewBinding: V) {
         setContentView(viewBinding.root)
@@ -39,7 +32,7 @@ abstract class ViewModelActivity<M : AbstractViewModel, V : ViewBinding> : Abstr
     protected open fun onHandleSavedInstanceState(bundle: Bundle?, viewBinding: V, viewModel: M) {}
 
     final override fun onActivityInit(savedInstanceState: Bundle?) {
-        viewModel = onCreateViewModel(onGetViewModelStoreOwner())
+        viewModel = onCreateViewModel(onGetViewModelStoreOwner(), vmClass)
 
         viewBinding = onCreateViewBinding()
         onBindView(viewBinding)

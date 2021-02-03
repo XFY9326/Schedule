@@ -29,6 +29,10 @@ class NetworkCourseProviderActivity : ViewModelActivity<NetworkCourseProviderVie
         const val EXTRA_COURSE_IMPORT_CONFIG = "EXTRA_COURSE_IMPORT_CONFIG"
     }
 
+    override val vmClass = NetworkCourseProviderViewModel::class
+
+    override fun onCreateViewBinding() = ActivityNetworkCourseProviderBinding.inflate(layoutInflater)
+
     override fun onPrepare(viewBinding: ActivityNetworkCourseProviderBinding, viewModel: NetworkCourseProviderViewModel) {
         setSupportActionBar(viewBinding.toolBarLoginCourseProvider.toolBarGeneral)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
