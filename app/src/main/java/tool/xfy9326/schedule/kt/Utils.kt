@@ -25,7 +25,7 @@ inline fun broadcastReceiver(crossinline receiver: (Context?, Intent?) -> Unit) 
         }
     }
 
-fun Calendar.getWeekDay() = WeekDay.fromCalWeekDay(get(Calendar.DAY_OF_WEEK))
+fun Calendar.getWeekDay() = WeekDay.valueOfCalWeekDay(get(Calendar.DAY_OF_WEEK))
 
 inline fun List<Course>.iterateAll(action: (Course, CourseTime) -> Unit) {
     for (course in this) for (time in course.times) action(course, time)

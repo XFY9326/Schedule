@@ -10,7 +10,7 @@ object AppSettingsDataStore : AbstractDataStore("Settings") {
     val nightModeType by stringPreferencesKey()
     private val saveImageWhileSharing by booleanPreferencesKey()
     private val exitAppDirectly by booleanPreferencesKey()
-    val keepWebProviderCache by booleanPreferencesKey()
+    private val keepWebProviderCache by booleanPreferencesKey()
     private val debugLogsMaxStoreAmount by intPreferencesKey()
     private val handleException by booleanPreferencesKey()
     private val calendarSyncScheduleDefault by booleanPreferencesKey()
@@ -20,8 +20,12 @@ object AppSettingsDataStore : AbstractDataStore("Settings") {
     private val calendarSyncReminderMinutes by intPreferencesKey()
     private val customActivityTransitionAnimation by booleanPreferencesKey()
     private val useBrowserDownloadUpgradeFile by booleanPreferencesKey()
+    private val allowImportEmptySchedule by booleanPreferencesKey()
+    val enableOnlineCourseImport by booleanPreferencesKey()
 
     suspend fun setNightModeType(nightMode: NightMode) = nightModeType.saveData(nightMode.name)
+
+    suspend fun setEnableOnlineCourseImportFlow(data: Boolean) = enableOnlineCourseImport.saveData(data)
 
     fun getDefaultScheduleSyncFlow(scheduleId: Long) = read {
         ScheduleSync(
@@ -32,6 +36,10 @@ object AppSettingsDataStore : AbstractDataStore("Settings") {
             it[calendarSyncAddReminderDefault] ?: false
         )
     }
+
+    val enableOnlineCourseImportFlow = enableOnlineCourseImport.readAsFlow(true)
+
+    val allowImportEmptyScheduleFlow = allowImportEmptySchedule.readAsFlow(false)
 
     val useCustomActivityTransitionAnimation by lazy {
         runBlocking { customActivityTransitionAnimation.readAsFlow(false).first() }

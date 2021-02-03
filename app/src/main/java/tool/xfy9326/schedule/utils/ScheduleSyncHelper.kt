@@ -46,7 +46,7 @@ object ScheduleSyncHelper {
         clearAllCalendar(GlobalIO.contentResolver)
     }
 
-    suspend fun syncCalendar() = withContext(Dispatchers.Unconfined) {
+    suspend fun syncCalendar() = withContext(Dispatchers.Default) {
         val contentResolver = GlobalIO.contentResolver
         if (syncLock.tryLock()) {
             try {

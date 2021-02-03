@@ -28,5 +28,8 @@ open class Event<out T>(content: T) {
     @Synchronized
     fun consumeReset() = consumedList.clear()
 
+    @Synchronized
+    fun clearEvent() = weakContentReference.clear()
+
     class Wrapper<out T>(val value: T)
 }

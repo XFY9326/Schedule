@@ -9,6 +9,10 @@ import tool.xfy9326.schedule.ui.vm.AboutViewModel
 import tool.xfy9326.schedule.utils.DialogUtils
 
 class AboutActivity : ViewModelActivity<AboutViewModel, ActivityAboutBinding>() {
+    override val vmClass = AboutViewModel::class
+
+    override fun onCreateViewBinding() = ActivityAboutBinding.inflate(layoutInflater)
+
     override fun onPrepare(viewBinding: ActivityAboutBinding, viewModel: AboutViewModel) {
         setSupportActionBar(viewBinding.toolBarAbout.toolBarGeneral)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)

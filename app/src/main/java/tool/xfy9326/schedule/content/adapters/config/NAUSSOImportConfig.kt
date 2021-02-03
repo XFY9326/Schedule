@@ -9,7 +9,7 @@ class NAUSSOImportConfig : CourseImportConfig<NAUSSOCourseProvider, NAUCourseLog
     schoolName = R.string.school_nanjing_audit_university,
     authorName = R.string.adapter_author_xfy9326,
     systemName = R.string.system_nau_sso,
-    importOptions = R.array.adapter_options_term,
+    staticImportOptions = R.array.adapter_options_term,
     providerClass = NAUSSOCourseProvider::class.java,
     parserClass = NAUCourseLoginParser::class.java
 )

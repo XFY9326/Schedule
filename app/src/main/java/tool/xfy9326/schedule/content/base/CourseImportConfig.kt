@@ -10,14 +10,18 @@ import java.io.Serializable
 import kotlin.reflect.KClass
 
 /**
- * Course import config
+ * 课程导入配置
+ * 当前可用：
+ * LoginCourseProvider -- NetworkCourseParser
+ * NetworkCourseProvider -- NetworkCourseParser
+ * WebCourseProvider -- WebCourseParser
  *
  * @param T1 CourseProvider
  * @param T2 CourseParser
  * @property schoolName School name string res id
  * @property authorName Author name string res id
  * @property systemName System name string res id
- * @property importOptions Import option string array res id (Useless for WebCourseProvider)
+ * @property staticImportOptions Import option string array res id (Useless for WebCourseProvider)
  * @property providerClass CourseProvider java class
  * @property parserClass CourseParser java class
  * @property providerParams Provider params
@@ -31,9 +35,11 @@ abstract class CourseImportConfig<T1 : BaseCourseProvider, T2 : ICourseParser>(
     @StringRes
     private val systemName: Int,
     @ArrayRes
-    private val importOptions: Int? = null,
-    private val providerClass: Class<T1>,
-    private val parserClass: Class<T2>,
+    private val staticImportOptions: Int? = null,
+    // KClass不可序列化，此处只能使用Java的Class
+    private val providerClass: Class<out T1>,
+    // KClass不可序列化，此处只能使用Java的Class
+    private val parserClass: Class<out T2>,
     private val providerParams: Array<Any?> = emptyArray(),
 ) : Serializable {
     companion object {
@@ -56,7 +62,7 @@ abstract class CourseImportConfig<T1 : BaseCourseProvider, T2 : ICourseParser>(
     }
 
     val importOptionsArrayText: Array<String>? by lazy {
-        importOptions?.let(GlobalIO.resources::getStringArray)
+        staticImportOptions?.let(GlobalIO.resources::getStringArray)
     }
 
     val schoolNamePinyin by lazy {
@@ -83,7 +89,7 @@ abstract class CourseImportConfig<T1 : BaseCourseProvider, T2 : ICourseParser>(
         if (schoolName != other.schoolName) return false
         if (authorName != other.authorName) return false
         if (systemName != other.systemName) return false
-        if (importOptions != other.importOptions) return false
+        if (staticImportOptions != other.staticImportOptions) return false
         if (providerClass != other.providerClass) return false
         if (parserClass != other.parserClass) return false
         if (!providerParams.contentEquals(other.providerParams)) return false
@@ -95,7 +101,7 @@ abstract class CourseImportConfig<T1 : BaseCourseProvider, T2 : ICourseParser>(
         var result = schoolName
         result = 31 * result + authorName
         result = 31 * result + systemName
-        result = 31 * result + (importOptions ?: 0)
+        result = 31 * result + (staticImportOptions ?: 0)
         result = 31 * result + providerClass.hashCode()
         result = 31 * result + parserClass.hashCode()
         result = 31 * result + providerParams.contentHashCode()

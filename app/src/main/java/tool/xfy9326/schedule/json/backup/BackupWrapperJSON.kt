@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 import tool.xfy9326.schedule.kt.APP_ID
 
 @Serializable
-class BackupWrapperJSON(
+data class BackupWrapperJSON(
     val name: String = BACKUP_NAME,
     val version: Int = VERSION,
     val data: List<ScheduleJSON>,

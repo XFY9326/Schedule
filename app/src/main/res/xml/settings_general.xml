@@ -54,4 +54,23 @@
             app:title="@string/save_image_while_sharing" />
 
     </androidx.preference.PreferenceCategory>
+
+    <androidx.preference.PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="@string/data_manage">
+
+        <androidx.preference.Preference
+            app:iconSpaceReserved="false"
+            app:key="clearCache"
+            app:persistent="false"
+            app:title="@string/clear_cache" />
+
+        <androidx.preference.Preference
+            app:iconSpaceReserved="false"
+            app:key="restoreSettings"
+            app:persistent="false"
+            app:title="@string/restore_settings" />
+
+    </androidx.preference.PreferenceCategory>
+
 </androidx.preference.PreferenceScreen>

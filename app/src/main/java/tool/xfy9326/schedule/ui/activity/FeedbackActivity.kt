@@ -32,6 +32,8 @@ class FeedbackActivity : ViewBindingActivity<ActivityFeedbackBinding>() {
             "clientVersion=${BuildConfig.VERSION_NAME}(${BuildConfig.VERSION_CODE})&osVersion=${Build.VERSION.RELEASE}(${Build.VERSION.SDK_INT})&device=${Build.BRAND}-${Build.MODEL}".toByteArray()
     }
 
+    override fun onCreateViewBinding() = ActivityFeedbackBinding.inflate(layoutInflater)
+
     override fun onInitView(viewBinding: ActivityFeedbackBinding) {
         setSupportActionBar(viewBinding.toolBarFeedback.toolBarGeneral)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)

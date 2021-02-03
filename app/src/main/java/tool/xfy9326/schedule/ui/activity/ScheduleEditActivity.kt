@@ -37,8 +37,12 @@ class ScheduleEditActivity : ViewModelActivity<ScheduleEditViewModel, ActivitySc
         private const val TAG_SCHEDULE_TIME_END_PREFIX = "TAG_SCHEDULE_TIME_END_"
     }
 
+    override val vmClass = ScheduleEditViewModel::class
+
     private val scheduleDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
     private lateinit var scheduleTimeAdapter: ScheduleTimeAdapter
+
+    override fun onCreateViewBinding() = ActivityScheduleEditBinding.inflate(layoutInflater)
 
     override fun onPrepare(viewBinding: ActivityScheduleEditBinding, viewModel: ScheduleEditViewModel) {
         setSupportActionBar(viewBinding.toolBarScheduleEdit.toolBarGeneral)

@@ -41,7 +41,7 @@ object UpgradeUtils {
         onNoUpgrade: (() -> Unit)? = null,
         onFoundUpgrade: ((UpdateInfo) -> Unit)? = null,
     ) {
-        GlobalScope.launch(Dispatchers.Unconfined) {
+        GlobalScope.launch(Dispatchers.Default) {
             if (UPDATE_CHECK_MUTEX.tryLock()) {
                 try {
                     requestUpgrade(forceCheck).let {

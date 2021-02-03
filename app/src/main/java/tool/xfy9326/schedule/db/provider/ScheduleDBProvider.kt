@@ -11,7 +11,7 @@ import tool.xfy9326.schedule.db.dao.ScheduleDAO
 import tool.xfy9326.schedule.db.dao.ScheduleSyncDAO
 import tool.xfy9326.schedule.db.utils.DBTypeConverter
 
-object ScheduleDBProvider : AbstractDBProvider<ScheduleDBProvider.ScheduleDB>() {
+object ScheduleDBProvider : AbstractDBProvider<ScheduleDBProvider.ScheduleDB>(ScheduleDB::class) {
     override val name: String = "Schedule.db"
     private const val DB_VERSION = 1
 
