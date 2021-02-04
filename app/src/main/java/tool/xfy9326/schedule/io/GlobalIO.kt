@@ -26,7 +26,7 @@ object GlobalIO {
 
     fun Uri.readText(charset: Charset = StandardCharsets.UTF_8) = asInputStream()?.reader(charset)?.use { it.readText() }
 
-    fun Uri.readBytes() = asInputStream()?.readBytes()
+    fun Uri.readBytes() = asInputStream()?.use { it.readBytes() }
 
     fun openAsset(path: String) = assetManager.open(path)
 
