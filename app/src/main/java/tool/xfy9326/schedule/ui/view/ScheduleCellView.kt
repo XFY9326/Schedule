@@ -40,13 +40,13 @@ class ScheduleCellView : LinearLayoutCompat {
         courseCell: CourseCell,
         schedulePredefine: SchedulePredefine,
         scheduleSettings: ScheduleStyles,
-        firstDayOfWeek: WeekDay,
+        weekStart: WeekDay,
         courseCellClickListener: ((CourseCell) -> Unit),
     ) : this(context, schedulePredefine, scheduleSettings) {
-        if (showWeekend || firstDayOfWeek == WeekDay.MONDAY) {
-            this.column = courseCell.classTime.weekDay.value(firstDayOfWeek)
+        if (showWeekend || weekStart == WeekDay.MONDAY) {
+            this.column = courseCell.classTime.weekDay.orderedValue(weekStart)
         } else {
-            this.column = courseCell.classTime.weekDay.value(firstDayOfWeek) - 1
+            this.column = courseCell.classTime.weekDay.orderedValue(weekStart) - 1
         }
         this.row = courseCell.classTime.classStartTime - 1
         this.rowSpan = courseCell.classTime.classDuration

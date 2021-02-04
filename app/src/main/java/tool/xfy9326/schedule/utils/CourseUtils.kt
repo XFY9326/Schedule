@@ -66,12 +66,12 @@ object CourseUtils {
         maxWeekNum: Int,
         startWeekDay: WeekDay,
         endWeekDay: WeekDay,
-        firstDayOfWeek: WeekDay,
+        weekStart: WeekDay,
     ) =
         if (courseTime.hasThisWeekCourse(weekNum)) {
             when (weekNum) {
-                1 -> startWeekDay.value(firstDayOfWeek) <= courseTime.classTime.weekDay.value(firstDayOfWeek)
-                maxWeekNum -> endWeekDay.value(firstDayOfWeek) >= courseTime.classTime.weekDay.value(firstDayOfWeek)
+                1 -> startWeekDay.orderedValue(weekStart) <= courseTime.classTime.weekDay.orderedValue(weekStart)
+                maxWeekNum -> endWeekDay.orderedValue(weekStart) >= courseTime.classTime.weekDay.orderedValue(weekStart)
                 else -> true
             }
         } else {

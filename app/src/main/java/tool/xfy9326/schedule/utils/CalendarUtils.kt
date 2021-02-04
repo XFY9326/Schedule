@@ -7,7 +7,7 @@ import java.util.*
 import kotlin.math.floor
 
 object CalendarUtils {
-    fun getCalendar(date: Date? = null, firstDayOfWeek: WeekDay? = null, clearToDate: Boolean = false): Calendar =
+    fun getCalendar(date: Date? = null, weekStart: WeekDay? = null, clearToDate: Boolean = false): Calendar =
         Calendar.getInstance(Locale.getDefault()).apply {
             if (date != null) time = date
             if (clearToDate) {
@@ -16,11 +16,11 @@ object CalendarUtils {
                 set(Calendar.SECOND, 0)
                 set(Calendar.MILLISECOND, 0)
             }
-            if (firstDayOfWeek != null) this.firstDayOfWeek = firstDayOfWeek.calWeekDay
+            if (weekStart != null) this.firstDayOfWeek = weekStart.calWeekDay
         }
 
-    fun getDay(date: Date? = null, firstDayOfWeek: WeekDay): Day =
-        getCalendar(date, firstDayOfWeek).let {
+    fun getDay(date: Date? = null, weekStart: WeekDay): Day =
+        getCalendar(date, weekStart).let {
             Day(it.get(Calendar.MONTH) + 1, it.get(Calendar.DATE), it.getWeekDay())
         }
 
@@ -34,15 +34,15 @@ object CalendarUtils {
             set(Calendar.MILLISECOND, 999)
         }.time
 
-    fun getFirstDateInThisWeek(date: Date, firstDayOfWeek: WeekDay): Date =
-        getCalendar(date, firstDayOfWeek, true).apply {
-            add(Calendar.DATE, 1 - getWeekDay().value(firstDayOfWeek))
+    fun getFirstDateInThisWeek(date: Date, weekStart: WeekDay): Date =
+        getCalendar(date, weekStart, true).apply {
+            add(Calendar.DATE, 1 - getWeekDay().orderedValue(weekStart))
         }.time
 
-    fun getLastDateInThisWeek(date: Date, firstDayOfWeek: WeekDay, actualEnd: Boolean = false): Date =
-        getCalendar(date, firstDayOfWeek, true).apply {
+    fun getLastDateInThisWeek(date: Date, weekStart: WeekDay, actualEnd: Boolean = false): Date =
+        getCalendar(date, weekStart, true).apply {
             add(
-                Calendar.DATE, 7 - getWeekDay().value(firstDayOfWeek) + if (actualEnd) {
+                Calendar.DATE, 7 - getWeekDay().orderedValue(weekStart) + if (actualEnd) {
                     1
                 } else {
                     0

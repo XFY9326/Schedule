@@ -95,7 +95,7 @@ class ScheduleICSWriter {
         return builder.toString()
     }
 
-    class RRULE(interval: Int, count: Int, weekDay: WeekDay, firstDayOfWeek: WeekDay) {
-        val text = "FREQ=WEEKLY;COUNT=$count;INTERVAL=$interval;BYDAY=${weekDay.shortName};WKST=${firstDayOfWeek.shortName}"
+    class RRULE(interval: Int, count: Int, weekDay: WeekDay, weekStart: WeekDay) {
+        val text = "FREQ=WEEKLY;COUNT=$count;INTERVAL=$interval;BYDAY=${weekDay.shortName};WKST=${weekStart.shortName}"
     }
 }

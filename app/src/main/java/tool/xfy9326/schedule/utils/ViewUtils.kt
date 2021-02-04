@@ -9,7 +9,7 @@ import tool.xfy9326.schedule.content.utils.CourseAdapterException
 import tool.xfy9326.schedule.ui.dialog.CrashViewDialog
 
 object ViewUtils {
-    fun showCourseAdapterError(activity: AppCompatActivity, coordinatorLayout: CoordinatorLayout, exception: CourseAdapterException) {
+    fun showCourseAdapterErrorSnackBar(activity: AppCompatActivity, coordinatorLayout: CoordinatorLayout, exception: CourseAdapterException) {
         Snackbar.make(coordinatorLayout, exception.getText(activity), Snackbar.LENGTH_LONG)
             .setActionTextColor(Color.RED)
             .setAction(R.string.details) {
