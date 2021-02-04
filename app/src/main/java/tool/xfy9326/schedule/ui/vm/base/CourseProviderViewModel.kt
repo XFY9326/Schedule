@@ -72,7 +72,6 @@ abstract class CourseProviderViewModel<I, P1 : BaseCourseProvider<*>, P2 : ICour
                 try {
                     onRun(courseProvider)
                 } catch (e: CourseAdapterException) {
-                    onFailed?.invoke()
                     providerError.postEvent(e)
                 } catch (e: Exception) {
                     onFailed?.invoke()
