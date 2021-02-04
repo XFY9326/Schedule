@@ -12,7 +12,7 @@ import tool.xfy9326.schedule.databinding.ActivityOnlineCourseImportBinding
 import tool.xfy9326.schedule.kt.observeNotify
 import tool.xfy9326.schedule.kt.show
 import tool.xfy9326.schedule.kt.showShortSnackBar
-import tool.xfy9326.schedule.kt.startActivity
+import tool.xfy9326.schedule.ui.activity.base.CourseProviderActivity
 import tool.xfy9326.schedule.ui.activity.base.ViewModelActivity
 import tool.xfy9326.schedule.ui.adapter.CourseImportAdapter
 import tool.xfy9326.schedule.ui.recyclerview.AdvancedDividerItemDecoration
@@ -75,12 +75,8 @@ class OnlineCourseImportActivity : ViewModelActivity<CourseImportViewModel, Acti
         )
         when (importMethod) {
             CourseImportUtils.ImportMethod.LOGIN_IMPORT, CourseImportUtils.ImportMethod.NETWORK_IMPORT ->
-                startActivity<NetworkCourseProviderActivity> {
-                    putExtra(NetworkCourseProviderActivity.EXTRA_COURSE_IMPORT_CONFIG, config)
-                }
-            CourseImportUtils.ImportMethod.WEB_IMPORT -> startActivity<WebCourseProviderActivity> {
-                putExtra(WebCourseProviderActivity.EXTRA_COURSE_IMPORT_CONFIG, config)
-            }
+                CourseProviderActivity.startProviderActivity<NetworkCourseProviderActivity>(this, config)
+            CourseImportUtils.ImportMethod.WEB_IMPORT -> CourseProviderActivity.startProviderActivity<WebCourseProviderActivity>(this, config)
         }
     }
 }

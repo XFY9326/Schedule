@@ -44,6 +44,13 @@ enum class WeekDay(val shortName: String, val calWeekDay: Int) {
                     it.shortName == shortName
                 } ?: error("Value error!")
             }
+
+        private fun getOrderedValue(weekDay: WeekDay, weekStart: WeekDay) =
+            when (weekStart) {
+                MONDAY -> weekDay.value
+                SUNDAY -> if (weekDay == SUNDAY) 1 else weekDay.value + 1
+                else -> error("First day of week must be MONDAY or SUNDAY")
+            }
     }
 
     val value: Int = ordinal + 1
@@ -51,16 +58,5 @@ enum class WeekDay(val shortName: String, val calWeekDay: Int) {
     val isWeekend: Boolean
         get() = (this == SATURDAY || this == SUNDAY)
 
-    fun value(firstDayOfWeek: WeekDay): Int {
-        return when (firstDayOfWeek) {
-            MONDAY -> value
-            SUNDAY ->
-                if (this == SUNDAY) {
-                    1
-                } else {
-                    value + 1
-                }
-            else -> throw IllegalArgumentException("First day of week must be MONDAY or SUNDAY")
-        }
-    }
+    fun orderedValue(weekStart: WeekDay) = getOrderedValue(this, weekStart)
 }

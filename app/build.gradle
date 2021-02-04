@@ -8,8 +8,8 @@ plugins {
 
 rootProject.ext {
     applicationId = 'tool.xfy9326.schedule'
-    versionCode = 3
-    versionName = "1.1.1"
+    versionCode = 4
+    versionName = "1.1.2"
     minSdkVersion = 23
     targetSDKVersion = 30
     buildToolsVersion = "30.0.3"

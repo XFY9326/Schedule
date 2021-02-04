@@ -17,8 +17,8 @@ object CourseTimeUtils {
         return ceil((calculateDate.time - fixedStartDate.time) / (7 * 24 * 60 * 60 * 1000f)).toInt()
     }
 
-    fun getDayInWeek(weekNum: Int, termStartCountDate: Date, firstDayOfWeek: WeekDay, hasWeekend: Boolean): Array<Day> {
-        val calendar = CalendarUtils.getCalendar(CalendarUtils.getFirstDateInThisWeek(termStartCountDate, firstDayOfWeek)).apply {
+    fun getDayInWeek(weekNum: Int, termStartCountDate: Date, weekStart: WeekDay, hasWeekend: Boolean): Array<Day> {
+        val calendar = CalendarUtils.getCalendar(CalendarUtils.getFirstDateInThisWeek(termStartCountDate, weekStart)).apply {
             val dayOffset = (weekNum - 1) * 7 - 1
             if (dayOffset != 0) add(Calendar.DATE, dayOffset)
         }
@@ -33,18 +33,18 @@ object CourseTimeUtils {
         }
     }
 
-    fun getMaxWeekNum(startDate: Date, endDate: Date, firstDayOfWeek: WeekDay) =
+    fun getMaxWeekNum(startDate: Date, endDate: Date, weekStart: WeekDay) =
         CalendarUtils.getWeekPeriod(
-            CalendarUtils.getFirstDateInThisWeek(startDate, firstDayOfWeek),
-            CalendarUtils.getLastDateInThisWeek(endDate, firstDayOfWeek, true)
+            CalendarUtils.getFirstDateInThisWeek(startDate, weekStart),
+            CalendarUtils.getLastDateInThisWeek(endDate, weekStart, true)
         )
 
-    fun getTermEndDate(startDate: Date, firstDayOfWeek: WeekDay, weekNum: Int): Date {
-        val weekCountStart = CalendarUtils.getFirstDateInThisWeek(startDate, firstDayOfWeek)
-        val endWeekNum = CalendarUtils.getCalendar(weekCountStart, firstDayOfWeek, true).apply {
+    fun getTermEndDate(startDate: Date, weekStart: WeekDay, weekNum: Int): Date {
+        val weekCountStart = CalendarUtils.getFirstDateInThisWeek(startDate, weekStart)
+        val endWeekNum = CalendarUtils.getCalendar(weekCountStart, weekStart, true).apply {
             add(Calendar.DATE, weekNum * 7 - 1)
         }.time
-        return CalendarUtils.getLastDateInThisWeek(endWeekNum, firstDayOfWeek)
+        return CalendarUtils.getLastDateInThisWeek(endWeekNum, weekStart)
     }
 
     fun getRealClassTime(
@@ -54,10 +54,10 @@ object CourseTimeUtils {
     ): Pair<Date, Date> {
         CalendarUtils.getCalendar(
             date = scheduleCalculateTimes.weekCountBeginning,
-            firstDayOfWeek = scheduleCalculateTimes.weekStart,
+            weekStart = scheduleCalculateTimes.weekStart,
             clearToDate = true
         ).apply {
-            val dayOffset = (weekNum - 1) * 7 + classTime.weekDay.value(scheduleCalculateTimes.weekStart) - 1
+            val dayOffset = (weekNum - 1) * 7 + classTime.weekDay.orderedValue(scheduleCalculateTimes.weekStart) - 1
             if (dayOffset != 0) add(Calendar.DATE, dayOffset)
 
             val start = scheduleCalculateTimes.times[classTime.classStartTime - 1]

@@ -26,7 +26,7 @@ class ScheduleHeaderView(
     weekNum: Int,
     startDate: Date,
     showWeekend: Boolean,
-    firstDayOfWeek: WeekDay,
+    weekStart: WeekDay,
     private val styles: ScheduleStyles,
     private val predefine: SchedulePredefine,
 ) : ViewGroup(context) {
@@ -34,7 +34,7 @@ class ScheduleHeaderView(
         private val unspecifiedHeightSpec = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)
     }
 
-    private val days = CourseTimeUtils.getDayInWeek(weekNum, startDate, firstDayOfWeek, showWeekend)
+    private val days = CourseTimeUtils.getDayInWeek(weekNum, startDate, weekStart, showWeekend)
     private val weekDayStrArr = context.getStringArray(R.array.weekday)
     private val monthView = buildMonthView(days[0].month).also {
         addViewInLayout(it, -1, it.layoutParams, true)

@@ -46,7 +46,7 @@ class ScheduleViewModel : AbstractViewModel() {
     var currentScrollPosition: Int? = null
 
     val nowDay = ScheduleUtils.currentScheduleFlow.map {
-        CalendarUtils.getDay(firstDayOfWeek = it.weekStart)
+        CalendarUtils.getDay(weekStart = it.weekStart)
     }.asDistinctLiveData()
     val scrollToWeek = MutableEventLiveData<Int>()
     val showWeekChanged = MutableEventLiveData<Pair<Int, WeekNumType>>()
