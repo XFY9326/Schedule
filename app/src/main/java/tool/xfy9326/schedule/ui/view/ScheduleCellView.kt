@@ -20,9 +20,8 @@ import kotlin.properties.Delegates
 
 
 @SuppressLint("ViewConstructor")
-class ScheduleCellView : LinearLayoutCompat {
-    private val predefine: SchedulePredefine
-    private val styles: ScheduleStyles
+class ScheduleCellView private constructor(context: Context, private val predefine: SchedulePredefine, private val styles: ScheduleStyles) :
+    LinearLayoutCompat(context) {
     private var courseCellClickListener: ((CourseCell) -> Unit)? = null
 
     var column by Delegates.notNull<Int>()
@@ -69,17 +68,7 @@ class ScheduleCellView : LinearLayoutCompat {
         initAsScheduleTimeCell(index, scheduleTime)
     }
 
-    private constructor(
-        context: Context,
-        schedulePredefine: SchedulePredefine,
-        scheduleSettings: ScheduleStyles,
-    ) : super(context) {
-        this.predefine = schedulePredefine
-        this.styles = scheduleSettings
-        initStyle()
-    }
-
-    private fun initStyle() {
+    init {
         alpha = styles.scheduleViewAlpha
         orientation = VERTICAL
         setPadding(predefine.gridCellPadding)
