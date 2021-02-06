@@ -41,7 +41,7 @@ class WebCourseProviderActivity :
         private const val HTML_PRINT_JAVASCRIPT =
             """
                 javascript:
-                var currentSchedule = %s;
+                var isCurrentSchedule = %s;
                 
                 var htmlContent = document.getElementsByTagName("html")[0].outerHTML;
                 
@@ -57,7 +57,7 @@ class WebCourseProviderActivity :
                     frameList.push(frameTags[i].contentDocument.body.parentElement.outerHTML);
                 }
                 
-                window.$HTML_PRINT_JAVASCRIPT_INTERFACE_NAME.$HTML_PRINT_JAVASCRIPT_METHOD_NAME(htmlContent, iframeList, frameList, currentSchedule);
+                window.$HTML_PRINT_JAVASCRIPT_INTERFACE_NAME.$HTML_PRINT_JAVASCRIPT_METHOD_NAME(htmlContent, iframeList, frameList, isCurrentSchedule);
             """
     }
 
@@ -118,9 +118,9 @@ class WebCourseProviderActivity :
                     htmlContent: String,
                     iframeContent: Array<String>,
                     frameContent: Array<String>,
-                    currentSchedule: Boolean,
+                    isCurrentSchedule: Boolean,
                 ) {
-                    onGetCurrentHTML(htmlContent, iframeContent, frameContent, currentSchedule)
+                    onGetCurrentHTML(htmlContent, iframeContent, frameContent, isCurrentSchedule)
                 }
             }, HTML_PRINT_JAVASCRIPT_INTERFACE_NAME)
         }
@@ -223,8 +223,8 @@ class WebCourseProviderActivity :
         getCurrentHTML(false)
     }
 
-    private fun onGetCurrentHTML(htmlContent: String, iframeContent: Array<String>, frameContent: Array<String>, currentSchedule: Boolean) {
-        requireViewModel().validateHtmlPage(WebCourseImportParams(htmlContent, iframeContent, frameContent), currentSchedule)
+    private fun onGetCurrentHTML(htmlContent: String, iframeContent: Array<String>, frameContent: Array<String>, isCurrentSchedule: Boolean) {
+        requireViewModel().validateHtmlPage(WebCourseImportParams(htmlContent, iframeContent, frameContent), isCurrentSchedule)
     }
 
     override fun onReadyImportCourse() {
@@ -259,6 +259,6 @@ class WebCourseProviderActivity :
     @Suppress("unused")
     private interface HTMLPrinterJavaScriptInterface {
         @Keep
-        fun printHTML(htmlContent: String, iframeContent: Array<String>, frameContent: Array<String>, currentSchedule: Boolean)
+        fun printHTML(htmlContent: String, iframeContent: Array<String>, frameContent: Array<String>, isCurrentSchedule: Boolean)
     }
 }

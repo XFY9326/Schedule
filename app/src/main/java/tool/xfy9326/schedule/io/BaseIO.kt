@@ -4,7 +4,7 @@ import android.net.Uri
 import io.ktor.utils.io.jvm.nio.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import tool.xfy9326.schedule.io.GlobalIO.asOutputStream
+import tool.xfy9326.schedule.kt.asOutputStream
 import java.io.File
 
 object BaseIO {
@@ -29,9 +29,9 @@ object BaseIO {
                 uri.asOutputStream()?.use { output ->
                     localFile.inputStream().use { input ->
                         input.copyTo(output)
+                        return@withContext true
                     }
                 }
-                return@withContext true
             } catch (e: Exception) {
                 e.printStackTrace()
             }

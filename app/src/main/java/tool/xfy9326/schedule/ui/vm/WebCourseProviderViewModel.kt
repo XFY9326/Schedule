@@ -20,7 +20,7 @@ class WebCourseProviderViewModel : CourseProviderViewModel<WebCourseImportParams
 
     private val validatePageLock = Mutex()
 
-    fun validateHtmlPage(importParams: WebCourseImportParams, currentSchedule: Boolean) {
+    fun validateHtmlPage(importParams: WebCourseImportParams, isCurrentSchedule: Boolean) {
         providerFunctionRunner(validatePageLock, Dispatchers.Default,
             onRun = {
                 val pageInfo = it.validateCourseImportPage(
@@ -29,7 +29,7 @@ class WebCourseProviderViewModel : CourseProviderViewModel<WebCourseImportParams
                     importParams.frameContent
                 )
                 if (pageInfo.isValidPage) {
-                    validateHtmlPage.postEvent(Triple(currentSchedule, importParams, pageInfo.asImportOption))
+                    validateHtmlPage.postEvent(Triple(isCurrentSchedule, importParams, pageInfo.asImportOption))
                 } else {
                     validateHtmlPage.postEvent(null)
                 }

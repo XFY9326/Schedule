@@ -82,6 +82,8 @@ class NAUSSOCourseProvider : LoginCourseProvider<Nothing>(null) {
         }
     }
 
+    override val enableCaptcha = false
+
     override suspend fun onLogin(httpClient: HttpClient, userId: String, userPw: String, captchaCode: String?, importOption: Int) =
         ssoLogin(httpClient, userId, userPw)
 

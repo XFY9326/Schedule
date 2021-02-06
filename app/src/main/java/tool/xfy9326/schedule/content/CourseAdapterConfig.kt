@@ -8,7 +8,7 @@ object CourseAdapterConfig {
         NAUWebImportConfig(),
         NAUSSOImportConfig()
     ).sortedBy {
-        it.sortingBasis
+        it.lowerCaseSortingBasis
     }
 
     val size = registerConfigs.size

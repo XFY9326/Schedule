@@ -22,9 +22,7 @@ abstract class CourseProviderActivity<I, P1 : BaseCourseProvider<*>, P2 : ICours
         const val EXTRA_COURSE_IMPORT_CONFIG = "EXTRA_COURSE_IMPORT_CONFIG"
 
         inline fun <reified T : CourseProviderActivity<*, *, *, *, *>> startProviderActivity(context: Context, config: CourseImportConfig<*, *, *>) {
-            context.startActivity<T> {
-                putExtra(EXTRA_COURSE_IMPORT_CONFIG, config)
-            }
+            context.startActivity<T> { putExtra(EXTRA_COURSE_IMPORT_CONFIG, config) }
         }
     }
 
@@ -42,8 +40,8 @@ abstract class CourseProviderActivity<I, P1 : BaseCourseProvider<*>, P2 : ICours
         }
     }
 
-    protected fun requestImportCourse(currentSchedule: Boolean, importParams: I, importOption: Int) {
-        if (currentSchedule) {
+    protected fun requestImportCourse(isCurrentSchedule: Boolean, importParams: I, importOption: Int) {
+        if (isCurrentSchedule) {
             DialogUtils.showOverwriteScheduleAttentionDialog(this) {
                 onReadyImportCourse()
                 requireViewModel().importCourse(importParams, importOption, true, null)
