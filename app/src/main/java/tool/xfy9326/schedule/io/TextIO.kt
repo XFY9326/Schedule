@@ -6,8 +6,8 @@ import io.ktor.utils.io.core.*
 import io.ktor.utils.io.jvm.javaio.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import tool.xfy9326.schedule.io.GlobalIO.readText
-import tool.xfy9326.schedule.io.GlobalIO.writeText
+import tool.xfy9326.schedule.kt.readText
+import tool.xfy9326.schedule.kt.writeText
 import java.io.File
 import java.nio.charset.Charset
 import kotlin.io.use
@@ -58,15 +58,14 @@ object TextIO {
         return@withContext false
     }
 
-    suspend fun readText(outputUri: Uri, defaultText: String? = null, charset: Charset = Charsets.UTF_8) =
-        withContext(Dispatchers.IO) {
-            try {
-                outputUri.readText(charset)?.let {
-                    return@withContext it
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
+    suspend fun readText(outputUri: Uri, defaultText: String? = null, charset: Charset = Charsets.UTF_8) = withContext(Dispatchers.IO) {
+        try {
+            outputUri.readText(charset)?.let {
+                return@withContext it
             }
-            return@withContext defaultText
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
+        return@withContext defaultText
+    }
 }

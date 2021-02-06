@@ -26,10 +26,13 @@ import java.util.concurrent.atomic.AtomicBoolean
 abstract class CourseProviderViewModel<I, P1 : BaseCourseProvider<*>, P2 : ICourseParser> : AbstractViewModel() {
     protected lateinit var internalImportConfig: CourseImportConfig<*, P1, P2>
         private set
-    protected lateinit var courseProvider: P1
-        private set
-    protected lateinit var courseParser: P2
-        private set
+    private lateinit var _courseProvider: P1
+    private lateinit var _courseParser: P2
+
+    protected val courseProvider
+        get() = _courseProvider
+    protected val courseParser
+        get() = _courseParser
 
     val providerError = MutableEventLiveData<CourseAdapterException>()
 
@@ -49,8 +52,8 @@ abstract class CourseProviderViewModel<I, P1 : BaseCourseProvider<*>, P2 : ICour
     fun registerConfig(config: CourseImportConfig<*, P1, P2>) {
         if (!::internalImportConfig.isInitialized || internalImportConfig != config) {
             internalImportConfig = config
-            courseProvider = config.newProvider()
-            courseParser = config.newParser()
+            _courseProvider = config.newProvider()
+            _courseParser = config.newParser()
         }
     }
 
@@ -70,7 +73,7 @@ abstract class CourseProviderViewModel<I, P1 : BaseCourseProvider<*>, P2 : ICour
         if (mutex == null || mutex.tryLock()) {
             viewModelScope.launch(dispatcher) {
                 try {
-                    onRun(courseProvider)
+                    onRun(_courseProvider)
                 } catch (e: CourseAdapterException) {
                     providerError.postEvent(e)
                 } catch (e: Exception) {
@@ -87,7 +90,7 @@ abstract class CourseProviderViewModel<I, P1 : BaseCourseProvider<*>, P2 : ICour
         if (internalIsImportingCourses.compareAndSet(false, true)) {
             importCourseJob = viewModelScope.launch(Dispatchers.Default) {
                 try {
-                    val result = onImportCourse(importParams, importOption, courseProvider, courseParser)
+                    val result = onImportCourse(importParams, importOption, _courseProvider, _courseParser)
                     val scheduleTimes = result.first
                     val courses = result.second
 

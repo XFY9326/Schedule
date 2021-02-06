@@ -1,6 +1,5 @@
 package tool.xfy9326.schedule.ui.activity
 
-import android.graphics.Bitmap
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -32,7 +31,7 @@ class NetworkCourseProviderActivity :
         setSupportActionBar(viewBinding.toolBarLoginCourseProvider.toolBarGeneral)
         supportActionBar?.apply {
             setDisplayHomeAsUpEnabled(true)
-            setTitle(if (viewModel.isLoginCourseProvider()) R.string.login_to_import_course else R.string.direct_import_course)
+            setTitle(if (viewModel.isLoginCourseProvider) R.string.login_to_import_course else R.string.direct_import_course)
         }
     }
 
@@ -124,7 +123,7 @@ class NetworkCourseProviderActivity :
         requireViewBinding().apply {
             layoutCourseImportContent.clearFocus()
 
-            return if (requireViewModel().isLoginCourseProvider()) {
+            return if (requireViewModel().isLoginCourseProvider) {
                 val userId = getTextWithCheck(editTextUserId, R.string.user_id_empty)
                 val userPw = getTextWithCheck(editTextUserPw, R.string.user_pw_empty)
                 val captchaCode = if (layoutCaptcha.isVisible) {
@@ -175,13 +174,7 @@ class NetworkCourseProviderActivity :
 
                 layoutUserId.isVisible = params.allowLogin
                 layoutUserPw.isVisible = params.allowLogin
-
-                if (params.captcha != null && params.allowLogin) {
-                    setCaptcha(params.captcha)
-                    layoutCaptcha.isVisible = true
-                } else {
-                    layoutCaptcha.isVisible = false
-                }
+                layoutCaptcha.isVisible = params.enableCaptcha
 
                 layoutCourseImportLoading.isVisible = false
                 layoutCourseImportContent.isVisible = true
@@ -210,7 +203,7 @@ class NetworkCourseProviderActivity :
         }
     }
 
-    private fun setCaptcha(captcha: Bitmap?) {
+    private fun setCaptcha(captcha: ByteArray?) {
         if (captcha == null) {
             requireViewBinding().imageViewCaptcha.setImageResource(R.drawable.ic_broken_image_24)
         } else {

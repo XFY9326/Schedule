@@ -1,6 +1,5 @@
 package tool.xfy9326.schedule.ui.vm
 
-import android.graphics.Bitmap
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.sync.Mutex
 import tool.xfy9326.schedule.beans.Course
@@ -14,16 +13,15 @@ import tool.xfy9326.schedule.kt.MutableEventLiveData
 import tool.xfy9326.schedule.kt.postEvent
 import tool.xfy9326.schedule.ui.vm.base.CourseProviderViewModel
 
-class NetworkCourseProviderViewModel :
-    CourseProviderViewModel<NetworkCourseImportParams, NetworkCourseProvider<*>, NetworkCourseParser>() {
-
+class NetworkCourseProviderViewModel : CourseProviderViewModel<NetworkCourseImportParams, NetworkCourseProvider<*>, NetworkCourseParser>() {
     val loginParams = MutableEventLiveData<NetworkLoginParams?>()
-    val refreshCaptcha = MutableEventLiveData<Bitmap?>()
+    val refreshCaptcha = MutableEventLiveData<ByteArray?>()
 
     private val captchaLock = Mutex()
     private val loginParamsLock = Mutex()
 
-    fun isLoginCourseProvider() = courseProvider is LoginCourseProvider
+    val isLoginCourseProvider
+        get() = courseProvider is LoginCourseProvider
 
     fun initLoginParams() {
         providerFunctionRunner(loginParamsLock, Dispatchers.IO,
@@ -36,14 +34,9 @@ class NetworkCourseProviderViewModel :
                 } else {
                     GlobalIO.resources.getStringArray(optionsRes)
                 }
+                val enableCaptcha = it !is LoginCourseProvider || it.enableCaptcha
 
-                val captchaImage = if (it is LoginCourseProvider) {
-                    it.getCaptchaImage()
-                } else {
-                    null
-                }
-
-                loginParams.postEvent(NetworkLoginParams(options, captchaImage, it is LoginCourseProvider))
+                loginParams.postEvent(NetworkLoginParams(options, enableCaptcha, it is LoginCourseProvider))
             },
             onFailed = {
                 loginParams.postEvent(null)
@@ -55,8 +48,8 @@ class NetworkCourseProviderViewModel :
         providerFunctionRunner(captchaLock, Dispatchers.IO,
             onRun = {
                 refreshCaptcha.postEvent(
-                    if (it is LoginCourseProvider) {
-                        it.getCaptchaImage(importOption)
+                    if (it is LoginCourseProvider && it.enableCaptcha) {
+                        it.loadCaptchaImage(importOption)
                     } else {
                         null
                     }
@@ -88,5 +81,5 @@ class NetworkCourseProviderViewModel :
         return scheduleTimes to courses
     }
 
-    class NetworkLoginParams(val options: Array<String>?, val captcha: Bitmap?, val allowLogin: Boolean)
+    class NetworkLoginParams(val options: Array<String>?, val enableCaptcha: Boolean, val allowLogin: Boolean)
 }
