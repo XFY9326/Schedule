@@ -2,14 +2,13 @@ package tool.xfy9326.schedule.ui.view
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.util.Log
+import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.Px
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.children
 import tool.xfy9326.schedule.beans.CourseCell
 import tool.xfy9326.schedule.beans.SchedulePredefine
-import tool.xfy9326.schedule.beans.ScheduleStyles
 import tool.xfy9326.schedule.beans.ScheduleViewData
 import kotlin.math.ceil
 import kotlin.math.max
@@ -17,21 +16,20 @@ import kotlin.math.max
 @SuppressLint("ViewConstructor")
 class ScheduleGridView(
     context: Context,
-    showWeekend: Boolean,
-    private val columnAmount: Int,
     viewData: ScheduleViewData,
-    private val styles: ScheduleStyles,
+    private val columnAmount: Int,
     private val predefine: SchedulePredefine,
 ) : ViewGroup(context) {
     companion object {
-        private const val LOG_TAG = "ScheduleGridView"
         private val unspecifiedHeightSpec = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)
     }
 
+    private val styles = viewData.styles
     private val rowAmount = viewData.times.size
 
     private var timeColumnWidth = 0
     private var courseColumnWidth = 0
+    private lateinit var xRecords: IntArray
     private var rowHeight = 0
 
     private var courseCellClickListener: ((CourseCell) -> Unit)? = null
@@ -40,32 +38,13 @@ class ScheduleGridView(
     }
 
     init {
-        for ((i, time) in viewData.times.withIndex()) {
-            ScheduleCellView(context, i, time, predefine, styles).let {
-                addViewInLayout(it, -1, it.layoutParams, true)
-            }
-        }
-
-        for (cell in viewData.cells) {
-            ScheduleCellView(context, showWeekend, cell, predefine, styles, viewData.weekStart, internalCellClickListener).let {
-                if (it.row in 0 until rowAmount) {
-                    if (it.column in 0 until columnAmount) {
-                        addViewInLayout(it, -1, it.layoutParams, true)
-                    } else {
-                        Log.w(LOG_TAG, "Course column error! It should in 0..${columnAmount - 1} but now it's ${it.column}. Skip it!")
-                    }
-                } else {
-                    Log.w(LOG_TAG, "Course row error! It should in 0..${rowAmount - 1} but now it's ${it.row}. Skip it!")
-                }
-            }
-        }
-
         layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
     }
 
-    fun setMeasureConfig(timeColumnWidth: Int, courseColumnWidth: Int) {
+    fun setMeasureConfig(timeColumnWidth: Int, courseColumnWidth: Int, xRecords: IntArray) {
         this.timeColumnWidth = timeColumnWidth
         this.courseColumnWidth = courseColumnWidth
+        this.xRecords = xRecords
     }
 
     fun measureTimeColumnWidth(@Px maxWidth: Int): Int {
@@ -125,51 +104,32 @@ class ScheduleGridView(
     }
 
     override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
-        if (childCount > 0) layoutCells(l, t)
-    }
+        if (childCount > 0) {
+            val leftToRight = context.resources.configuration.layoutDirection == LAYOUT_DIRECTION_LTR
 
-    private fun layoutCells(l: Int, t: Int) {
-        val yRecord = Array(rowAmount + 1) {
-            t + rowHeight * it
-        }
-        var xTemp = l
-        val leftToRight = context.resources.configuration.layoutDirection == LAYOUT_DIRECTION_LTR
-        val xRecord = Array(columnAmount + 1) {
-            if (it == 0) return@Array 0
-            xTemp += if (leftToRight) {
-                when (it) {
-                    1 -> timeColumnWidth
-                    else -> courseColumnWidth
+            for (child in children) {
+                child as ScheduleCellView
+
+                val startY = rowHeight * child.row
+                val endY = rowHeight * (child.row + child.rowSpan)
+
+                if (leftToRight) {
+                    child.layout(xRecords[child.column], startY, xRecords[child.column + 1], endY)
+                } else {
+                    child.layout(xRecords[columnAmount - child.column - 1], startY, xRecords[columnAmount - child.column], endY)
                 }
-            } else {
-                when (it) {
-                    columnAmount -> timeColumnWidth
-                    else -> courseColumnWidth
-                }
-            }
-            xTemp
-        }
-
-        for (child in children) {
-            child as ScheduleCellView
-
-            if (leftToRight) {
-                child.layout(
-                    xRecord[child.column],
-                    yRecord[child.row],
-                    xRecord[child.column + 1],
-                    yRecord[child.row + child.rowSpan]
-                )
-            } else {
-                child.layout(
-                    xRecord[columnAmount - child.column - 1],
-                    yRecord[child.row],
-                    xRecord[columnAmount - child.column],
-                    yRecord[child.row + child.rowSpan]
-                )
             }
         }
     }
+
+    fun addScheduleCellWithoutLayout(cellView: ScheduleCellView) {
+        if (cellView.row in 0 until rowAmount && cellView.column in 0 until columnAmount) {
+            addViewPreventLayout(cellView)
+            if (!cellView.isTimeColumn) cellView.setOnCourseCellClickListener(internalCellClickListener)
+        }
+    }
+
+    private fun addViewPreventLayout(view: View) = addViewInLayout(view, -1, view.layoutParams, true)
 
     fun setOnCourseClickListener(listener: ((CourseCell) -> Unit)?) {
         this.courseCellClickListener = listener

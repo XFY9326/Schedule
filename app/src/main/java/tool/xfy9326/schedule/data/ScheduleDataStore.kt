@@ -37,6 +37,7 @@ object ScheduleDataStore : AbstractDataStore("ScheduleSettings") {
     private val showScheduleTimes by booleanPreferencesKey()
     private val horizontalCourseCellText by booleanPreferencesKey()
     private val verticalCourseCellText by booleanPreferencesKey()
+    private val enableScheduleGridScroll by booleanPreferencesKey()
     val notThisWeekCourseShowStyle by stringSetPreferencesKey()
 
     val defaultFirstDayOfWeekFlow = defaultFirstDayOfWeek.readEnumAsFlow(WeekDay.MONDAY)
@@ -55,7 +56,8 @@ object ScheduleDataStore : AbstractDataStore("ScheduleSettings") {
             horizontalCourseCellText = it[horizontalCourseCellText] ?: false,
             verticalCourseCellText = it[verticalCourseCellText] ?: false,
             notThisWeekCourseShowStyle = tryEnumValueOf(it[notThisWeekCourseShowStyle])
-                ?: setOf(NotThisWeekCourseShowStyle.USE_TRANSPARENT_BACKGROUND)
+                ?: setOf(NotThisWeekCourseShowStyle.USE_TRANSPARENT_BACKGROUND),
+            enableScheduleGridScroll = it[enableScheduleGridScroll] ?: true
         )
     }.distinctUntilChanged()
 

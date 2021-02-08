@@ -8,6 +8,7 @@ import android.text.SpannableStringBuilder
 import android.text.style.StyleSpan
 import android.util.TypedValue
 import android.view.Gravity
+import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.widget.LinearLayoutCompat
@@ -16,6 +17,7 @@ import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.*
 import tool.xfy9326.schedule.kt.NEW_LINE
 import tool.xfy9326.schedule.tools.MaterialColorHelper
+import tool.xfy9326.schedule.utils.ViewUtils
 import kotlin.properties.Delegates
 
 
@@ -33,6 +35,9 @@ class ScheduleCellView private constructor(context: Context, private val predefi
     var rowSpan by Delegates.notNull<Int>()
         private set
 
+    val isTimeColumn
+        get() = column == 0
+
     constructor(
         context: Context,
         showWeekend: Boolean,
@@ -40,7 +45,6 @@ class ScheduleCellView private constructor(context: Context, private val predefi
         schedulePredefine: SchedulePredefine,
         scheduleSettings: ScheduleStyles,
         weekStart: WeekDay,
-        courseCellClickListener: ((CourseCell) -> Unit),
     ) : this(context, schedulePredefine, scheduleSettings) {
         if (showWeekend || weekStart == WeekDay.MONDAY) {
             this.column = courseCell.classTime.weekDay.orderedValue(weekStart)
@@ -49,7 +53,6 @@ class ScheduleCellView private constructor(context: Context, private val predefi
         }
         this.row = courseCell.classTime.classStartTime - 1
         this.rowSpan = courseCell.classTime.classDuration
-        this.courseCellClickListener = courseCellClickListener
 
         initAsCourseCell(courseCell)
     }
@@ -76,59 +79,59 @@ class ScheduleCellView private constructor(context: Context, private val predefi
     }
 
     private fun initAsCourseCell(courseCell: CourseCell) {
-        TextView(context).apply {
-            val showText = buildString {
-                if (courseCell.courseLocation == null) {
-                    append(courseCell.courseName)
+        addViewPreventLayout(
+            TextView(context).apply {
+                val showText = buildString {
+                    if (courseCell.courseLocation == null) {
+                        append(courseCell.courseName)
+                    } else {
+                        append(context.getString(R.string.course_cell_text, courseCell.courseName, courseCell.courseLocation))
+                    }
+                }
+                text = if (!courseCell.isThisWeekCourse && NotThisWeekCourseShowStyle.SHOW_NOT_THIS_WEEK_TEXT in styles.notThisWeekCourseShowStyle) {
+                    val notThisWeekText = context.getString(R.string.not_this_week)
+                    SpannableStringBuilder(notThisWeekText + showText).apply {
+                        setSpan(StyleSpan(Typeface.BOLD), 0, notThisWeekText.length, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+                    }
                 } else {
-                    append(context.getString(R.string.course_cell_text, courseCell.courseName, courseCell.courseLocation))
+                    showText
                 }
-            }
-            text = if (!courseCell.isThisWeekCourse && NotThisWeekCourseShowStyle.SHOW_NOT_THIS_WEEK_TEXT in styles.notThisWeekCourseShowStyle) {
-                val notThisWeekText = context.getString(R.string.not_this_week)
-                SpannableStringBuilder(notThisWeekText + showText).apply {
-                    setSpan(StyleSpan(Typeface.BOLD), 0, notThisWeekText.length, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+                layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
+                background = ViewUtils.buildBackground(courseCell.cellColor, predefine.courseCellRippleColor, predefine.courseCellBackgroundRadius)
+
+                setTextSize(TypedValue.COMPLEX_UNIT_PX, styles.getCourseCellTextSize(context))
+                setPadding(predefine.courseCellTextPadding)
+
+                setTextColor(
+                    if (MaterialColorHelper.isLightColor(courseCell.cellColor)) {
+                        predefine.courseCellTextColorDark
+                    } else {
+                        predefine.courseCellTextColorLight
+                    }
+                )
+
+                if (!courseCell.isThisWeekCourse && NotThisWeekCourseShowStyle.USE_TRANSPARENT_BACKGROUND in styles.notThisWeekCourseShowStyle) {
+                    alpha = predefine.notThisWeekCourseCellAlpha
                 }
-            } else {
-                showText
-            }
-            layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
-            background = ScheduleView.buildBackground(courseCell.cellColor, predefine.courseCellRippleColor, predefine.courseCellBackgroundRadius)
 
-            setTextSize(TypedValue.COMPLEX_UNIT_PX, styles.getCourseCellTextSize(context))
-            setPadding(predefine.courseCellTextPadding)
-
-            setTextColor(
-                if (MaterialColorHelper.isLightColor(courseCell.cellColor)) {
-                    predefine.courseCellTextColorDark
+                gravity = if (styles.horizontalCourseCellText && styles.verticalCourseCellText) {
+                    Gravity.CENTER
+                } else if (styles.verticalCourseCellText) {
+                    Gravity.CENTER_VERTICAL
+                } else if (styles.horizontalCourseCellText) {
+                    Gravity.CENTER_HORIZONTAL
                 } else {
-                    predefine.courseCellTextColorLight
+                    Gravity.TOP or Gravity.START
                 }
-            )
 
-            if (!courseCell.isThisWeekCourse && NotThisWeekCourseShowStyle.USE_TRANSPARENT_BACKGROUND in styles.notThisWeekCourseShowStyle) {
-                alpha = predefine.notThisWeekCourseCellAlpha
+                isClickable = true
+                isFocusable = true
+
+                setOnClickListener {
+                    courseCellClickListener?.invoke(courseCell)
+                }
             }
-
-            gravity = if (styles.horizontalCourseCellText && styles.verticalCourseCellText) {
-                Gravity.CENTER
-            } else if (styles.verticalCourseCellText) {
-                Gravity.CENTER_VERTICAL
-            } else if (styles.horizontalCourseCellText) {
-                Gravity.CENTER_HORIZONTAL
-            } else {
-                Gravity.TOP or Gravity.START
-            }
-
-            isClickable = true
-            isFocusable = true
-
-            setOnClickListener {
-                courseCellClickListener?.invoke(courseCell)
-            }
-        }.also {
-            addViewInLayout(it, -1, it.layoutParams, true)
-        }
+        )
     }
 
     private fun initAsScheduleTimeCell(index: Int, scheduleTime: ScheduleTime) {
@@ -137,36 +140,42 @@ class ScheduleCellView private constructor(context: Context, private val predefi
 
         gravity = Gravity.CENTER
 
-        TextView(context).apply {
-            text = courseTimeNumText
-            setTextSize(TypedValue.COMPLEX_UNIT_PX, predefine.timeCellCourseNumTextSize)
-            typeface = Typeface.defaultFromStyle(Typeface.BOLD)
-            setTextColor(timeTextColor)
-            setPadding(0, predefine.timeCellVerticalPadding, 0, predefine.timeCellVerticalPadding)
-
-            gravity = Gravity.CENTER
-
-            layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
-        }.also {
-            addViewInLayout(it, -1, it.layoutParams, true)
-        }
-
-        if (styles.showScheduleTimes) {
-            val courseTimeText = scheduleTime.startTimeStr + NEW_LINE + scheduleTime.endTimeStr
+        addViewPreventLayout(
             TextView(context).apply {
-                text = courseTimeText
-                setTextSize(TypedValue.COMPLEX_UNIT_PX, predefine.timeCellScheduleTimeTextSize)
+                text = courseTimeNumText
+                setTextSize(TypedValue.COMPLEX_UNIT_PX, predefine.timeCellCourseNumTextSize)
+                typeface = Typeface.defaultFromStyle(Typeface.BOLD)
                 setTextColor(timeTextColor)
-                setPadding(0, predefine.timeCellTimeDivideTopMargin, 0, 0)
+                setPadding(0, predefine.timeCellVerticalPadding, 0, predefine.timeCellVerticalPadding)
 
                 gravity = Gravity.CENTER
 
-                layoutParams = LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply {
-                    setMargins(0, predefine.timeCellTimeDivideTopMargin, 0, 0)
-                }
-            }.also {
-                addViewInLayout(it, -1, it.layoutParams, true)
+                layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
             }
+        )
+
+        if (styles.showScheduleTimes) {
+            val courseTimeText = scheduleTime.startTimeStr + NEW_LINE + scheduleTime.endTimeStr
+            addViewPreventLayout(
+                TextView(context).apply {
+                    text = courseTimeText
+                    setTextSize(TypedValue.COMPLEX_UNIT_PX, predefine.timeCellScheduleTimeTextSize)
+                    setTextColor(timeTextColor)
+                    setPadding(0, predefine.timeCellTimeDivideTopMargin, 0, 0)
+
+                    gravity = Gravity.CENTER
+
+                    layoutParams = LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply {
+                        setMargins(0, predefine.timeCellTimeDivideTopMargin, 0, 0)
+                    }
+                }
+            )
         }
+    }
+
+    private fun addViewPreventLayout(view: View) = addViewInLayout(view, -1, view.layoutParams, true)
+
+    fun setOnCourseCellClickListener(listener: ((CourseCell) -> Unit)?) {
+        this.courseCellClickListener = listener
     }
 }
