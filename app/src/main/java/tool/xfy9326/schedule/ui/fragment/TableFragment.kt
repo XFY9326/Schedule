@@ -11,13 +11,12 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import tool.xfy9326.schedule.beans.*
+import tool.xfy9326.schedule.beans.CourseCell
+import tool.xfy9326.schedule.beans.ScheduleBuildBundle
 import tool.xfy9326.schedule.kt.buildBundle
-import tool.xfy9326.schedule.ui.view.ScheduleView
 import tool.xfy9326.schedule.ui.vm.ScheduleViewModel
-import tool.xfy9326.schedule.utils.CourseUtils
+import tool.xfy9326.schedule.utils.ScheduleViewHelper
 import kotlin.properties.Delegates
 
 class TableFragment : Fragment(), Observer<ScheduleBuildBundle> {
@@ -44,18 +43,14 @@ class TableFragment : Fragment(), Observer<ScheduleBuildBundle> {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return view ?: FrameLayout(requireContext()).apply {
             layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
-            layoutTransition = LayoutTransition().apply {
-                setAnimateParentHierarchy(false)
-            }
+            layoutTransition = LayoutTransition().apply { setAnimateParentHierarchy(false) }
         }
     }
 
     override fun onChanged(scheduleBuildBundle: ScheduleBuildBundle) {
         context?.let {
-            lifecycleScope.launch(Dispatchers.Default) {
-                val scheduleData = CourseUtils.getScheduleViewDataByWeek(weekNum, scheduleBuildBundle)
-                val scheduleView = ScheduleView(it, scheduleData)
-                scheduleView.setOnCourseClickListener(this@TableFragment::onCourseCellClick)
+            lifecycleScope.launch {
+                val scheduleView = ScheduleViewHelper.buildScheduleView(it, weekNum, scheduleBuildBundle, ::onCourseCellClick)
                 lifecycleScope.launchWhenStarted {
                     updateScheduleView(scheduleView)
                 }
@@ -63,10 +58,10 @@ class TableFragment : Fragment(), Observer<ScheduleBuildBundle> {
         }
     }
 
-    private fun updateScheduleView(scheduleView: ScheduleView) {
+    private fun updateScheduleView(view: View) {
         (requireView() as ViewGroup).apply {
             if (childCount > 0) removeAllViewsInLayout()
-            addView(scheduleView)
+            addView(view)
         }
     }
 

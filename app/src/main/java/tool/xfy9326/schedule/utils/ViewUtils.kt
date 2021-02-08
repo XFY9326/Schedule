@@ -1,6 +1,12 @@
 package tool.xfy9326.schedule.utils
 
+import android.content.res.ColorStateList
 import android.graphics.Color
+import android.graphics.drawable.Drawable
+import android.graphics.drawable.GradientDrawable
+import android.graphics.drawable.RippleDrawable
+import androidx.annotation.ColorInt
+import androidx.annotation.Px
 import androidx.appcompat.app.AppCompatActivity
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import com.google.android.material.snackbar.Snackbar
@@ -15,5 +21,13 @@ object ViewUtils {
             .setAction(R.string.details) {
                 CrashViewDialog.showDialog(activity.supportFragmentManager, exception.stackTraceToString(), false)
             }.show()
+    }
+
+    fun buildBackground(@ColorInt contentColorInt: Int, @ColorInt rippleColorInt: Int, @Px radius: Float): Drawable {
+        val content = GradientDrawable().apply {
+            if (radius != 0f) cornerRadius = radius
+            setColor(contentColorInt)
+        }
+        return RippleDrawable(ColorStateList.valueOf(rippleColorInt), content, null)
     }
 }

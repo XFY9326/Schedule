@@ -345,6 +345,8 @@
     <string name="import_settings">导入设置</string>
     <string name="has_read">已阅读</string>
     <string name="disable_function">停用</string>
+    <string name="lock_schedule_header_scroll">滑动时锁定课程表首行</string>
+    <string name="lock_schedule_header_scroll_sum">关闭后将会连带课表首行日期整体滑动</string>
 
     <string name="scare_type_fit_center">等比缩放，从中间开始填充满</string>
     <string name="scare_type_center_crop">等比缩放直到完全填充</string>

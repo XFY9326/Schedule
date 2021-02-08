@@ -133,7 +133,7 @@ class ScheduleViewModel : AbstractViewModel() {
             viewModelScope.launch(Dispatchers.Default) {
                 try {
                     val scheduleId = currentScheduleId.first()
-                    val bitmap = CourseUtils.generateScheduleImageByWeekNum(scheduleId, weekNum, targetWidth)
+                    val bitmap = ScheduleViewHelper.generateScheduleImageByWeekNum(scheduleId, weekNum, targetWidth)
                     if (bitmap != null) {
                         val uri = if (AppSettingsDataStore.saveImageWhileSharingFlow.first()) {
                             ImageHelper.outputImageToAlbum(bitmap)
