@@ -24,4 +24,6 @@
     <dimen name="bottom_button_height">30dp</dimen>
     <dimen name="course_detail_dialog_bottom_button_height">28dp</dimen>
     <dimen name="divider_margin_course_detail_time">12dp</dimen>
+    <dimen name="water_mark_text_size">14dp</dimen>
+    <dimen name="water_mark_text_padding">10dp</dimen>
 </resources>
