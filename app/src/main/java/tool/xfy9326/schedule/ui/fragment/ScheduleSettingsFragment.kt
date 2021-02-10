@@ -1,7 +1,6 @@
 package tool.xfy9326.schedule.ui.fragment
 
 import android.app.Activity.RESULT_OK
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.lifecycle.lifecycleScope
@@ -18,6 +17,7 @@ import tool.xfy9326.schedule.kt.showShortSnackBar
 import tool.xfy9326.schedule.tools.MaterialColorHelper
 import tool.xfy9326.schedule.ui.dialog.FullScreenLoadingDialog
 import tool.xfy9326.schedule.ui.fragment.base.AbstractSettingsFragment
+import tool.xfy9326.schedule.ui.vm.SettingsViewModel
 import tool.xfy9326.schedule.utils.IntentUtils
 
 @Suppress("unused")
@@ -46,6 +46,8 @@ class ScheduleSettingsFragment : AbstractSettingsFragment() {
     }
 
     override fun onPrefInit(savedInstanceState: Bundle?) {
+        loadingDialogController = FullScreenLoadingDialog.createControllerInstance(this)
+
         setOnPrefClickListener(KEY_SELECT_SCHEDULE_BACKGROUND_IMAGE) {
             startActivityForResult(IntentUtils.getSelectImageFromDocumentIntent(), REQUEST_CODE_SELECT_SCHEDULE_BACKGROUND_IMAGE)
         }
@@ -62,21 +64,14 @@ class ScheduleSettingsFragment : AbstractSettingsFragment() {
         findPreference<ColorPreferenceCompat>(ScheduleDataStore.timeTextColor.name)?.presets = MaterialColorHelper.all()
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        loadingDialogController = FullScreenLoadingDialog.createControllerInstance(this)
-        requireSettingsViewModel()?.importScheduleImage?.observeEvent(this) {
+    override fun onBindLiveDataFromSettingsViewMode(viewModel: SettingsViewModel) {
+        viewModel.importScheduleImage.observeEvent(this) {
             loadingDialogController.hide()
-            requireRootLayout()?.showShortSnackBar(
-                if (it) {
-                    R.string.schedule_background_set_success
-                } else {
-                    R.string.schedule_background_set_failed
-                }
-            )
+            requireRootLayout()?.showShortSnackBar(if (it) R.string.schedule_background_set_success else R.string.schedule_background_set_failed)
         }
     }
 
+    // TODO: Deprecated
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == REQUEST_CODE_SELECT_SCHEDULE_BACKGROUND_IMAGE) {
             if (resultCode == RESULT_OK) {

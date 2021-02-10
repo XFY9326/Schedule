@@ -75,6 +75,7 @@ class CrashViewDialog : DialogFragment() {
         dialog?.setWindowWidthPercent(WINDOW_WIDTH_PERCENT)
     }
 
+    // TODO: Deprecated
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == REQUEST_CODE_CREATE_LOG_DOCUMENT) {
             if (resultCode == Activity.RESULT_OK) {

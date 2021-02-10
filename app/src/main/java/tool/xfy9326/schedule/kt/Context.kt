@@ -85,6 +85,7 @@ fun Context.tryStartActivity(intent: Intent, options: Bundle? = null, showToast:
     return false
 }
 
+// TODO: Deprecated
 // Intent.resolveActivity can't resolve CREATE_DOCUMENT action
 fun Activity.tryStartActivityForResult(intent: Intent, requestCode: Int, options: Bundle? = null, showToast: Boolean = true): Boolean {
     try {
@@ -96,6 +97,7 @@ fun Activity.tryStartActivityForResult(intent: Intent, requestCode: Int, options
     return false
 }
 
+// TODO: Deprecated
 // Intent.resolveActivity can't resolve CREATE_DOCUMENT action
 fun Fragment.tryStartActivityForResult(intent: Intent, requestCode: Int, options: Bundle? = null, showToast: Boolean = true): Boolean {
     try {
