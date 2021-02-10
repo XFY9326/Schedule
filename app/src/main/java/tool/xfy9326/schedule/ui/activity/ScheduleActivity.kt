@@ -183,6 +183,7 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
         return super.onOptionsItemSelected(item)
     }
 
+    // TODO: Deprecated
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == REQUEST_CODE_EXPORT_ICS_FILE) {
             if (resultCode == Activity.RESULT_OK) {
@@ -208,6 +209,7 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
         }
     }
 
+    // TODO: Deprecated
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         if (requestCode == REQUEST_CODE_CALENDAR_PERMISSION) {
             if (PermissionUtils.checkGrantResults(grantResults)) {

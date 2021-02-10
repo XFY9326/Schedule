@@ -1,6 +1,5 @@
 package tool.xfy9326.schedule.ui.fragment
 
-import android.content.Context
 import android.os.Bundle
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceDataStore
@@ -14,6 +13,7 @@ import tool.xfy9326.schedule.kt.show
 import tool.xfy9326.schedule.kt.showShortSnackBar
 import tool.xfy9326.schedule.ui.dialog.MultiItemSelectDialog
 import tool.xfy9326.schedule.ui.fragment.base.AbstractSettingsFragment
+import tool.xfy9326.schedule.ui.vm.SettingsViewModel
 import tool.xfy9326.schedule.utils.PermissionUtils
 
 @Suppress("unused")
@@ -79,48 +79,45 @@ class CalendarSyncSettingsFragment : AbstractSettingsFragment(), MultiItemSelect
         }
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        requireSettingsViewModel()?.apply {
-            syncToCalendarStatus.observeEvent(this@CalendarSyncSettingsFragment) {
-                if (it.success) {
-                    if (it.failedAmount == 0) {
-                        requireRootLayout()?.showShortSnackBar(R.string.calendar_sync_success)
-                    } else {
-                        requireRootLayout()?.showShortSnackBar(R.string.calendar_sync_failed, it.total, it.failedAmount)
-                    }
+    override fun onBindLiveDataFromSettingsViewMode(viewModel: SettingsViewModel) {
+        viewModel.syncToCalendarStatus.observeEvent(this) {
+            if (it.success) {
+                if (it.failedAmount == 0) {
+                    requireRootLayout()?.showShortSnackBar(R.string.calendar_sync_success)
                 } else {
-                    requireRootLayout()?.showShortSnackBar(R.string.calendar_sync_error)
+                    requireRootLayout()?.showShortSnackBar(R.string.calendar_sync_failed, it.total, it.failedAmount)
                 }
+            } else {
+                requireRootLayout()?.showShortSnackBar(R.string.calendar_sync_error)
             }
-            scheduleSyncEdit.observeEvent(this@CalendarSyncSettingsFragment) {
-                MultiItemSelectDialog.showDialog(
-                    childFragmentManager,
-                    it.first,
-                    getString(R.string.select_multi_schedule),
-                    showArr = it.second.map { pair ->
-                        pair.first.name
-                    }.toTypedArray(),
-                    idArr = it.second.map { pair ->
-                        pair.first.scheduleId
-                    }.toLongArray(),
-                    selectedArr = when (it.first) {
-                        PREFERENCE_CALENDAR_SYNC_LIST -> it.second.map { pair ->
-                            pair.second.syncable
-                        }
-                        PREFERENCE_CALENDAR_EDITABLE_LIST -> it.second.map { pair ->
-                            pair.second.editable
-                        }
-                        PREFERENCE_CALENDAR_VISIBLE_LIST -> it.second.map { pair ->
-                            pair.second.defaultVisible
-                        }
-                        PREFERENCE_CALENDAR_ADD_REMINDER_LIST -> it.second.map { pair ->
-                            pair.second.addReminder
-                        }
-                        else -> error("Unsupported key! ${it.first}")
-                    }.toBooleanArray()
-                )
-            }
+        }
+        viewModel.scheduleSyncEdit.observeEvent(this) {
+            MultiItemSelectDialog.showDialog(
+                childFragmentManager,
+                it.first,
+                getString(R.string.select_multi_schedule),
+                showArr = it.second.map { pair ->
+                    pair.first.name
+                }.toTypedArray(),
+                idArr = it.second.map { pair ->
+                    pair.first.scheduleId
+                }.toLongArray(),
+                selectedArr = when (it.first) {
+                    PREFERENCE_CALENDAR_SYNC_LIST -> it.second.map { pair ->
+                        pair.second.syncable
+                    }
+                    PREFERENCE_CALENDAR_EDITABLE_LIST -> it.second.map { pair ->
+                        pair.second.editable
+                    }
+                    PREFERENCE_CALENDAR_VISIBLE_LIST -> it.second.map { pair ->
+                        pair.second.defaultVisible
+                    }
+                    PREFERENCE_CALENDAR_ADD_REMINDER_LIST -> it.second.map { pair ->
+                        pair.second.addReminder
+                    }
+                    else -> error("Unsupported key! ${it.first}")
+                }.toBooleanArray()
+            )
         }
     }
 
@@ -135,6 +132,7 @@ class CalendarSyncSettingsFragment : AbstractSettingsFragment(), MultiItemSelect
         }
     }
 
+    // TODO: Deprecated
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         if (requestCode == REQUEST_CODE_CALENDAR_PERMISSION) {
             if (PermissionUtils.checkGrantResults(grantResults)) {

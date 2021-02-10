@@ -1,7 +1,6 @@
 package tool.xfy9326.schedule.ui.fragment
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.annotation.StringRes
@@ -13,6 +12,7 @@ import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.kt.*
 import tool.xfy9326.schedule.ui.dialog.CrashViewDialog
 import tool.xfy9326.schedule.ui.fragment.base.AbstractSettingsFragment
+import tool.xfy9326.schedule.ui.vm.SettingsViewModel
 import tool.xfy9326.schedule.utils.IntentUtils
 
 @Suppress("unused")
@@ -49,35 +49,33 @@ class DebugSettingsFragment : AbstractSettingsFragment() {
         }
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        requireSettingsViewModel()?.apply {
-            readDebugLogs.observeEvent(this@DebugSettingsFragment) {
-                showDebugLogsSelectDialog(it, R.string.read_debug_logs) { log ->
-                    showDebugLog(log)
+    override fun onBindLiveDataFromSettingsViewMode(viewModel: SettingsViewModel) {
+        viewModel.readDebugLogs.observeEvent(this) {
+            showDebugLogsSelectDialog(it, R.string.read_debug_logs) { log ->
+                viewModel.showDebugLog(log)
+            }
+        }
+        viewModel.outputDebugLogs.observeEvent(this) {
+            showDebugLogsSelectDialog(it, R.string.output_debug_logs) { log ->
+                viewModel.waitCreateLogFileName.write(log)
+                tryStartActivityForResult(IntentUtils.getCreateNewDocumentIntent(log), REQUEST_CODE_CREATE_LOG_DOCUMENT)
+            }
+        }
+        viewModel.showDebugLog.observeEvent(this) {
+            CrashViewDialog.showDialog(childFragmentManager, it)
+        }
+        viewModel.outputLogFileToUriResult.observeEvent(this) {
+            requireRootLayout()?.showShortSnackBar(
+                if (it) {
+                    R.string.output_file_success
+                } else {
+                    R.string.output_file_failed
                 }
-            }
-            outputDebugLogs.observeEvent(this@DebugSettingsFragment) {
-                showDebugLogsSelectDialog(it, R.string.output_debug_logs) { log ->
-                    waitCreateLogFileName.write(log)
-                    tryStartActivityForResult(IntentUtils.getCreateNewDocumentIntent(log), REQUEST_CODE_CREATE_LOG_DOCUMENT)
-                }
-            }
-            showDebugLog.observeEvent(this@DebugSettingsFragment) {
-                CrashViewDialog.showDialog(childFragmentManager, it)
-            }
-            outputLogFileToUriResult.observeEvent(this@DebugSettingsFragment) {
-                requireRootLayout()?.showShortSnackBar(
-                    if (it) {
-                        R.string.output_file_success
-                    } else {
-                        R.string.output_file_failed
-                    }
-                )
-            }
+            )
         }
     }
 
+    // TODO: Deprecated
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == REQUEST_CODE_CREATE_LOG_DOCUMENT) {
             if (resultCode == Activity.RESULT_OK) {
