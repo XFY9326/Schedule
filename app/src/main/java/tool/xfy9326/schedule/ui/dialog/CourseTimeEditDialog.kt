@@ -5,8 +5,8 @@ import android.os.Bundle
 import android.view.*
 import android.view.View.MeasureSpec
 import android.widget.FrameLayout
+import androidx.appcompat.app.AppCompatDialogFragment
 import androidx.core.view.setMargins
-import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import androidx.gridlayout.widget.GridLayout
 import tool.xfy9326.schedule.R
@@ -18,7 +18,7 @@ import tool.xfy9326.schedule.ui.view.CircleNumberButton
 import tool.xfy9326.schedule.utils.CourseUtils
 import kotlin.properties.Delegates
 
-class CourseTimeEditDialog : DialogFragment() {
+class CourseTimeEditDialog : AppCompatDialogFragment() {
     companion object {
         private const val EXTRA_EDIT_POSITION = "EXTRA_EDIT_POSITION"
         private const val EXTRA_COURSE_TIME = "EXTRA_COURSE_TIME"

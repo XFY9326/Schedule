@@ -1,8 +1,7 @@
 package tool.xfy9326.schedule.ui.fragment
 
-import android.app.Activity.RESULT_OK
-import android.content.Intent
 import android.os.Bundle
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.MultiSelectListPreference
 import androidx.preference.PreferenceDataStore
@@ -14,20 +13,27 @@ import tool.xfy9326.schedule.kt.getColorCompat
 import tool.xfy9326.schedule.kt.observeEvent
 import tool.xfy9326.schedule.kt.setOnPrefClickListener
 import tool.xfy9326.schedule.kt.showShortSnackBar
+import tool.xfy9326.schedule.tools.MIMEConst
 import tool.xfy9326.schedule.tools.MaterialColorHelper
 import tool.xfy9326.schedule.ui.dialog.FullScreenLoadingDialog
 import tool.xfy9326.schedule.ui.fragment.base.AbstractSettingsFragment
 import tool.xfy9326.schedule.ui.vm.SettingsViewModel
-import tool.xfy9326.schedule.utils.IntentUtils
 
 @Suppress("unused")
 class ScheduleSettingsFragment : AbstractSettingsFragment() {
     companion object {
         private const val KEY_SELECT_SCHEDULE_BACKGROUND_IMAGE = "selectScheduleBackgroundImage"
-        private const val REQUEST_CODE_SELECT_SCHEDULE_BACKGROUND_IMAGE = 1
     }
 
     private lateinit var loadingDialogController: FullScreenLoadingDialog.Controller
+    private val selectBackgroundImage = registerForActivityResult(ActivityResultContracts.GetContent()) {
+        if (it == null) {
+            requireRootLayout()?.showShortSnackBar(R.string.schedule_background_set_cancel)
+        } else {
+            loadingDialogController.show(false)
+            requireSettingsViewModel()?.importScheduleImage(it)
+        }
+    }
 
     override val titleName: Int = R.string.schedule_settings
     override val preferenceResId: Int = R.xml.settings_schedule
@@ -49,7 +55,7 @@ class ScheduleSettingsFragment : AbstractSettingsFragment() {
         loadingDialogController = FullScreenLoadingDialog.createControllerInstance(this)
 
         setOnPrefClickListener(KEY_SELECT_SCHEDULE_BACKGROUND_IMAGE) {
-            startActivityForResult(IntentUtils.getSelectImageFromDocumentIntent(), REQUEST_CODE_SELECT_SCHEDULE_BACKGROUND_IMAGE)
+            selectBackgroundImage.launch(MIMEConst.MIME_IMAGE)
         }
         findPreference<MultiSelectListPreference>(ScheduleDataStore.notThisWeekCourseShowStyle.name)?.setOnPreferenceChangeListener { _, newValue ->
             newValue as Set<*>
@@ -69,23 +75,5 @@ class ScheduleSettingsFragment : AbstractSettingsFragment() {
             loadingDialogController.hide()
             requireRootLayout()?.showShortSnackBar(if (it) R.string.schedule_background_set_success else R.string.schedule_background_set_failed)
         }
-    }
-
-    // TODO: Deprecated
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == REQUEST_CODE_SELECT_SCHEDULE_BACKGROUND_IMAGE) {
-            if (resultCode == RESULT_OK) {
-                val uri = data?.data
-                if (uri == null) {
-                    requireRootLayout()?.showShortSnackBar(R.string.image_select_failed)
-                } else {
-                    loadingDialogController.show(false)
-                    requireSettingsViewModel()?.importScheduleImage(uri)
-                }
-            } else {
-                requireRootLayout()?.showShortSnackBar(R.string.schedule_background_set_cancel)
-            }
-        }
-        super.onActivityResult(requestCode, resultCode, data)
     }
 }

@@ -10,7 +10,5 @@ object MIMEConst {
     const val MIME_IMAGE_WEBP = "image/webp"
     const val MIME_IMAGE_JPEG = "image/jpeg"
 
-    const val MIME_TEXT_CALENDAR = "text/calendar"
-
     const val MIME_APPLICATION_JSON = "application/json"
 }

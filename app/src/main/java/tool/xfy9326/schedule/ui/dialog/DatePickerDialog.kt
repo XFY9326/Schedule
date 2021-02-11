@@ -4,14 +4,14 @@ import android.app.DatePickerDialog
 import android.app.Dialog
 import android.os.Bundle
 import android.widget.DatePicker
-import androidx.fragment.app.DialogFragment
+import androidx.appcompat.app.AppCompatDialogFragment
 import androidx.fragment.app.FragmentManager
 import tool.xfy9326.schedule.kt.buildBundle
 import tool.xfy9326.schedule.kt.requireOwner
 import tool.xfy9326.schedule.utils.CalendarUtils
 import java.util.*
 
-class DatePickerDialog : DialogFragment(), DatePickerDialog.OnDateSetListener {
+class DatePickerDialog : AppCompatDialogFragment(), DatePickerDialog.OnDateSetListener {
     companion object {
         private const val EXTRA_TAG = "EXTRA_TAG"
         private const val EXTRA_DATE = "EXTRA_DATE"

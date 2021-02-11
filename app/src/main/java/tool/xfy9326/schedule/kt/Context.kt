@@ -12,7 +12,6 @@ import android.os.IBinder
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.annotation.*
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 import androidx.fragment.app.DialogFragment
@@ -78,30 +77,6 @@ fun Context.hideKeyboard(windowToken: IBinder) {
 fun Context.tryStartActivity(intent: Intent, options: Bundle? = null, showToast: Boolean = true): Boolean {
     try {
         ContextCompat.startActivity(this, intent, options)
-        return true
-    } catch (e: Exception) {
-        if (showToast) showShortToast(R.string.application_launch_failed)
-    }
-    return false
-}
-
-// TODO: Deprecated
-// Intent.resolveActivity can't resolve CREATE_DOCUMENT action
-fun Activity.tryStartActivityForResult(intent: Intent, requestCode: Int, options: Bundle? = null, showToast: Boolean = true): Boolean {
-    try {
-        ActivityCompat.startActivityForResult(this, intent, requestCode, options)
-        return true
-    } catch (e: Exception) {
-        if (showToast) showShortToast(R.string.application_launch_failed)
-    }
-    return false
-}
-
-// TODO: Deprecated
-// Intent.resolveActivity can't resolve CREATE_DOCUMENT action
-fun Fragment.tryStartActivityForResult(intent: Intent, requestCode: Int, options: Bundle? = null, showToast: Boolean = true): Boolean {
-    try {
-        startActivityForResult(intent, requestCode, options)
         return true
     } catch (e: Exception) {
         if (showToast) showShortToast(R.string.application_launch_failed)

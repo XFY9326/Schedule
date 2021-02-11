@@ -3,12 +3,12 @@ package tool.xfy9326.schedule.ui.dialog
 import android.app.TimePickerDialog
 import android.os.Bundle
 import android.widget.TimePicker
-import androidx.fragment.app.DialogFragment
+import androidx.appcompat.app.AppCompatDialogFragment
 import androidx.fragment.app.FragmentManager
 import tool.xfy9326.schedule.kt.buildBundle
 import tool.xfy9326.schedule.kt.requireOwner
 
-class TimePickerDialog : DialogFragment(), TimePickerDialog.OnTimeSetListener {
+class TimePickerDialog : AppCompatDialogFragment(), TimePickerDialog.OnTimeSetListener {
     companion object {
         private const val EXTRA_TAG = "EXTRA_TAG"
         private const val EXTRA_HOUR = "EXTRA_HOUR"

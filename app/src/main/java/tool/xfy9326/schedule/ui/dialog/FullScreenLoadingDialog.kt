@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.*
 import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDialogFragment
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
@@ -17,7 +18,7 @@ import tool.xfy9326.schedule.kt.buildBundle
 import tool.xfy9326.schedule.kt.getDrawableCompat
 import tool.xfy9326.schedule.kt.requireOwner
 
-class FullScreenLoadingDialog : DialogFragment() {
+class FullScreenLoadingDialog : AppCompatDialogFragment() {
     companion object {
         private val FRAGMENT_TAG = FullScreenLoadingDialog::class.simpleName
         private const val EXTRA_SHOW_CANCEL_BUTTON = "SHOW_CANCEL_BUTTON"
