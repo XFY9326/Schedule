@@ -7,6 +7,7 @@ import androidx.annotation.StringRes
 import tool.xfy9326.schedule.kt.cast
 import tool.xfy9326.schedule.kt.clone
 import java.io.Serializable
+import java.util.*
 import kotlin.reflect.KClass
 
 /**
@@ -45,8 +46,10 @@ abstract class CourseImportConfig<P : Serializable, T1 : BaseCourseProvider<P>, 
     // KClass不可序列化，此处只能使用Java的Class
     private val parserClass: Class<T2>,
     private val providerParams: P? = null,
-    val sortingBasis: String,
+    private val sortingBasis: String,
 ) : Serializable {
+    @Transient
+    val lowerCaseSortingBasis = sortingBasis.toLowerCase(Locale.getDefault())
 
     fun newProvider(): T1 {
         val constructor = providerClass.constructors.first()

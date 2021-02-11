@@ -4,24 +4,24 @@ import android.app.DatePickerDialog
 import android.app.Dialog
 import android.os.Bundle
 import android.widget.DatePicker
-import androidx.fragment.app.DialogFragment
+import androidx.appcompat.app.AppCompatDialogFragment
 import androidx.fragment.app.FragmentManager
 import tool.xfy9326.schedule.kt.buildBundle
 import tool.xfy9326.schedule.kt.requireOwner
 import tool.xfy9326.schedule.utils.CalendarUtils
 import java.util.*
 
-class DatePickerDialog : DialogFragment(), DatePickerDialog.OnDateSetListener {
+class DatePickerDialog : AppCompatDialogFragment(), DatePickerDialog.OnDateSetListener {
     companion object {
         private const val EXTRA_TAG = "EXTRA_TAG"
         private const val EXTRA_DATE = "EXTRA_DATE"
-        private const val EXTRA_FIRST_DAY_OF_WEEK = "EXTRA_FIRST_DAY_OF_WEEK"
+        private const val EXTRA_WEEK_START = "EXTRA_WEEK_START"
 
-        fun showDialog(fragmentManager: FragmentManager, tag: String?, date: Date, firstDayOfWeek: Int) {
+        fun showDialog(fragmentManager: FragmentManager, tag: String?, date: Date, calWeekStart: Int) {
             DatePickerDialog().apply {
                 arguments = buildBundle {
                     putString(EXTRA_TAG, tag)
-                    putInt(EXTRA_FIRST_DAY_OF_WEEK, firstDayOfWeek)
+                    putInt(EXTRA_WEEK_START, calWeekStart)
                     putSerializable(EXTRA_DATE, date)
                 }
             }.show(fragmentManager, tag)
@@ -46,7 +46,7 @@ class DatePickerDialog : DialogFragment(), DatePickerDialog.OnDateSetListener {
             calendar.get(Calendar.MONTH),
             calendar.get(Calendar.DATE)
         ).apply {
-            datePicker.firstDayOfWeek = requireArguments().getInt(EXTRA_FIRST_DAY_OF_WEEK)
+            datePicker.firstDayOfWeek = requireArguments().getInt(EXTRA_WEEK_START)
         }
     }
 

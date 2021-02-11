@@ -6,8 +6,8 @@ import android.net.Uri
 import io.ktor.utils.io.streams.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import tool.xfy9326.schedule.io.GlobalIO.asInputStream
-import tool.xfy9326.schedule.io.GlobalIO.asOutputStream
+import tool.xfy9326.schedule.kt.asInputStream
+import tool.xfy9326.schedule.kt.asOutputStream
 import java.io.File
 import java.io.InputStream
 import java.io.OutputStream

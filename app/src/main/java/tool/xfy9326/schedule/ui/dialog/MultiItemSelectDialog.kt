@@ -1,13 +1,13 @@
 package tool.xfy9326.schedule.ui.dialog
 
 import android.os.Bundle
-import androidx.fragment.app.DialogFragment
+import androidx.appcompat.app.AppCompatDialogFragment
 import androidx.fragment.app.FragmentManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import tool.xfy9326.schedule.kt.buildBundle
 import tool.xfy9326.schedule.kt.requireOwner
 
-class MultiItemSelectDialog : DialogFragment() {
+class MultiItemSelectDialog : AppCompatDialogFragment() {
     companion object {
         private const val EXTRA_TAG = "EXTRA_TAG"
         private const val EXTRA_TITLE = "EXTRA_TITLE"

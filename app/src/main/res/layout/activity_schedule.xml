@@ -66,13 +66,13 @@
 
                             <com.google.android.material.textview.MaterialTextView
                                 android:id="@+id/textView_scheduleNowShowWeekNum"
-                                android:layout_width="wrap_content"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:minEms="3"
-                                android:textColor="@color/schedule_tool_bar_tint"
+                                android:textAlignment="viewStart"
                                 android:textSize="13sp"
                                 app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@id/textView_scheduleTodayDate" />
+                                app:layout_constraintTop_toBottomOf="@id/textView_scheduleTodayDate"
+                                app:layout_constraintWidth_min="60dp" />
 
                             <com.google.android.material.textview.MaterialTextView
                                 android:id="@+id/textView_scheduleNotCurrentWeek"
@@ -80,8 +80,8 @@
                                 android:layout_height="wrap_content"
                                 android:textColor="@color/schedule_tool_bar_tint"
                                 android:textSize="13sp"
-                                app:layout_constraintStart_toEndOf="@id/textView_scheduleNowShowWeekNum"
-                                app:layout_constraintTop_toBottomOf="@id/textView_scheduleTodayDate" />
+                                app:layout_constraintBaseline_toBaselineOf="@id/textView_scheduleNowShowWeekNum"
+                                app:layout_constraintStart_toEndOf="@id/textView_scheduleNowShowWeekNum" />
 
                         </androidx.constraintlayout.widget.ConstraintLayout>
 

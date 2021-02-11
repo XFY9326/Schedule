@@ -13,28 +13,23 @@ import androidx.core.view.setPadding
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.Day
 import tool.xfy9326.schedule.beans.SchedulePredefine
-import tool.xfy9326.schedule.beans.ScheduleStyles
-import tool.xfy9326.schedule.beans.WeekDay
+import tool.xfy9326.schedule.beans.ScheduleViewData
 import tool.xfy9326.schedule.kt.getStringArray
-import tool.xfy9326.schedule.utils.CourseTimeUtils
-import java.util.*
+import tool.xfy9326.schedule.utils.ViewUtils
 import kotlin.math.max
 
 @SuppressLint("ViewConstructor")
 class ScheduleHeaderView(
     context: Context,
-    weekNum: Int,
-    startDate: Date,
-    showWeekend: Boolean,
-    firstDayOfWeek: WeekDay,
-    private val styles: ScheduleStyles,
+    scheduleViewData: ScheduleViewData,
+    private val days: Array<Day>,
     private val predefine: SchedulePredefine,
 ) : ViewGroup(context) {
     companion object {
         private val unspecifiedHeightSpec = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)
     }
 
-    private val days = CourseTimeUtils.getDayInWeek(weekNum, startDate, firstDayOfWeek, showWeekend)
+    private val styles = scheduleViewData.styles
     private val weekDayStrArr = context.getStringArray(R.array.weekday)
     private val monthView = buildMonthView(days[0].month).also {
         addViewInLayout(it, -1, it.layoutParams, true)
@@ -49,15 +44,17 @@ class ScheduleHeaderView(
     private var headerHeight = minimumHeight
     private var timeColumnWidth: Int = 0
     private var courseColumnWidth: Int = 0
+    private lateinit var xRecords: IntArray
 
     init {
         alpha = styles.scheduleViewAlpha
         layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
     }
 
-    fun setMeasureConfig(timeColumnWidth: Int, courseColumnWidth: Int) {
+    fun setMeasureConfig(timeColumnWidth: Int, courseColumnWidth: Int, xRecords: IntArray) {
         this.timeColumnWidth = timeColumnWidth
         this.courseColumnWidth = courseColumnWidth
+        this.xRecords = xRecords
     }
 
     private fun buildMonthView(month: Int) =
@@ -92,7 +89,7 @@ class ScheduleHeaderView(
                 setPadding(predefine.courseCellTextPadding / 2)
 
                 if (styles.highlightShowTodayCell && isToday) {
-                    background = ScheduleView.buildBackground(
+                    background = ViewUtils.buildBackground(
                         styles.getHighlightShowTodayCellColor(context),
                         predefine.courseCellRippleColor,
                         predefine.courseCellBackgroundRadius
@@ -141,41 +138,21 @@ class ScheduleHeaderView(
     }
 
     override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
-        if (childCount > 0) layoutChildren(l, t)
-    }
+        if (childCount > 0) {
+            val leftToRight = context.resources.configuration.layoutDirection == LAYOUT_DIRECTION_LTR
 
-    private fun layoutChildren(l: Int, t: Int) {
-        var xTemp = l
-        val leftToRight = context.resources.configuration.layoutDirection == LAYOUT_DIRECTION_LTR
-        val xRecord = Array(columnAmount + 1) {
-            if (it == 0) return@Array 0
-            xTemp += if (leftToRight) {
-                when (it) {
-                    1 -> monthView.measuredWidth
-                    else -> dayViews[it - 2].measuredWidth
+            for (i in 0 until columnAmount) {
+                val view = if (i == 0) {
+                    monthView
+                } else {
+                    dayViews[i - 1]
                 }
-            } else {
-                when (it) {
-                    columnAmount -> monthView.measuredWidth
-                    else -> dayViews[it - 1].measuredWidth
+                if (leftToRight) {
+                    view.layout(xRecords[i], 0, xRecords[i + 1], measuredHeight)
+                } else {
+                    view.layout(xRecords[columnAmount - i - 1], 0, xRecords[columnAmount - i], measuredHeight)
                 }
             }
-            xTemp
-        }
-
-        val monthX = getChildX(xRecord, leftToRight, 0)
-        monthView.layout(monthX.first, t, monthX.second, measuredHeight)
-
-        for ((i, dayView) in dayViews.withIndex()) {
-            val dayX = getChildX(xRecord, leftToRight, i + 1)
-            dayView.layout(dayX.first, t, dayX.second, measuredHeight)
         }
     }
-
-    private fun getChildX(xRecord: Array<Int>, leftToRight: Boolean, column: Int) =
-        if (leftToRight) {
-            xRecord[column] to xRecord[column + 1]
-        } else {
-            xRecord[columnAmount - column - 1] to xRecord[columnAmount - column]
-        }
 }

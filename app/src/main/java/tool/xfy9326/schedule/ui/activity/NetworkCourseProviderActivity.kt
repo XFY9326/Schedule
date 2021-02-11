@@ -1,6 +1,5 @@
 package tool.xfy9326.schedule.ui.activity
 
-import android.graphics.Bitmap
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -11,50 +10,40 @@ import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.content.base.*
+import tool.xfy9326.schedule.content.beans.NetworkCourseImportParams
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
 import tool.xfy9326.schedule.databinding.ActivityNetworkCourseProviderBinding
 import tool.xfy9326.schedule.kt.*
-import tool.xfy9326.schedule.ui.activity.base.ViewModelActivity
-import tool.xfy9326.schedule.ui.dialog.ImportCourseConflictDialog
+import tool.xfy9326.schedule.ui.activity.base.CourseProviderActivity
 import tool.xfy9326.schedule.ui.vm.NetworkCourseProviderViewModel
 import tool.xfy9326.schedule.utils.DialogUtils
 import tool.xfy9326.schedule.utils.ViewUtils
 
-class NetworkCourseProviderActivity : ViewModelActivity<NetworkCourseProviderViewModel, ActivityNetworkCourseProviderBinding>(),
-    ImportCourseConflictDialog.OnConfirmImportCourseConflictListener<Nothing> {
-    companion object {
-        const val EXTRA_COURSE_IMPORT_CONFIG = "EXTRA_COURSE_IMPORT_CONFIG"
-    }
-
+class NetworkCourseProviderActivity :
+    CourseProviderActivity<NetworkCourseImportParams, NetworkCourseProvider<*>, NetworkCourseParser, NetworkCourseProviderViewModel, ActivityNetworkCourseProviderBinding>() {
     override val vmClass = NetworkCourseProviderViewModel::class
 
     override fun onCreateViewBinding() = ActivityNetworkCourseProviderBinding.inflate(layoutInflater)
 
     override fun onPrepare(viewBinding: ActivityNetworkCourseProviderBinding, viewModel: NetworkCourseProviderViewModel) {
+        super.onPrepare(viewBinding, viewModel)
+
         setSupportActionBar(viewBinding.toolBarLoginCourseProvider.toolBarGeneral)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
-        viewModel.registerConfig(intent.getSerializableExtra(EXTRA_COURSE_IMPORT_CONFIG)?.tryCast()!!)
-
-        supportActionBar?.setTitle(if (viewModel.isLoginCourseProvider()) R.string.login_to_import_course else R.string.direct_import_course)
-    }
-
-    override fun onBindLiveData(viewBinding: ActivityNetworkCourseProviderBinding, viewModel: NetworkCourseProviderViewModel) {
-        viewModel.providerError.observeEvent(this, observer = ::showCourseAdapterError)
-        viewModel.loginParams.observeEvent(this, observer = ::applyLoginParams)
-        viewModel.refreshCaptcha.observeEvent(this, observer = ::setCaptcha)
-        viewModel.courseImportFinish.observeEvent(this) {
-            if (it.first) {
-                afterSaveCourse(it.second)
-            } else {
-                viewBinding.layoutCourseImportContent.setAllEnable(true)
-                viewModel.initLoginParams()
-            }
+        supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(true)
+            setTitle(if (viewModel.isLoginCourseProvider) R.string.login_to_import_course else R.string.direct_import_course)
         }
     }
 
+    override fun onBindLiveData(viewBinding: ActivityNetworkCourseProviderBinding, viewModel: NetworkCourseProviderViewModel) {
+        super.onBindLiveData(viewBinding, viewModel)
+
+        viewModel.loginParams.observeEvent(this, observer = ::applyLoginParams)
+        viewModel.refreshCaptcha.observeEvent(this, observer = ::setCaptcha)
+    }
+
     override fun onInitView(viewBinding: ActivityNetworkCourseProviderBinding, viewModel: NetworkCourseProviderViewModel) {
-        if (!viewModel.isImportingCourses.get()) {
+        if (!viewModel.isImportingCourses) {
             viewModel.initLoginParams()
         }
         viewBinding.textViewCourseAdapterSchool.apply {
@@ -83,17 +72,21 @@ class NetworkCourseProviderActivity : ViewModelActivity<NetworkCourseProviderVie
         }
 
         viewBinding.buttonImportCourseToCurrentSchedule.setOnClickListener {
-            importCourseToCurrentSchedule()
+            getCurrentOption()?.let {
+                requestImportCourse(true, getImportCourseParams(), it)
+            }
         }
         viewBinding.buttonImportCourseToNewSchedule.setOnClickListener {
-            importCourseToNewSchedule()
+            getCurrentOption()?.let {
+                requestImportCourse(false, getImportCourseParams(), it)
+            }
         }
     }
 
     override fun onBackPressed() {
         requireViewBinding().layoutCourseImportContent.clearFocus()
 
-        if (requireViewModel().isImportingCourses.get()) {
+        if (requireViewModel().isImportingCourses) {
             DialogUtils.showCancelScheduleImportDialog(this) {
                 requireViewModel().finishImport()
                 finish()
@@ -103,36 +96,20 @@ class NetworkCourseProviderActivity : ViewModelActivity<NetworkCourseProviderVie
         }
     }
 
-    private fun afterSaveCourse(hasConflict: Boolean) {
-        showShortToast(R.string.course_import_success)
-        if (hasConflict) {
-            ImportCourseConflictDialog.showDialog(supportFragmentManager)
-        } else {
-            finish()
+    override fun onShowCourseAdapterError(exception: CourseAdapterException) {
+        ViewUtils.showCourseAdapterErrorSnackBar(this, requireViewBinding().layoutLoginCourseProvider, exception)
+    }
+
+    override fun onCourseImportFinish(isSuccess: Boolean, hasConflict: Boolean) {
+        if (!isSuccess) {
+            requireViewBinding().layoutCourseImportContent.setAllEnable(true)
+            requireViewModel().initLoginParams()
         }
+        super.onCourseImportFinish(isSuccess, hasConflict)
+        if (isSuccess && !hasConflict) finish()
     }
 
-    override fun onConfirmImportCourseConflict(value: Nothing?) {
-        finish()
-    }
-
-    private fun importCourseToCurrentSchedule() {
-        validateImportCourseParams()?.let {
-            DialogUtils.showOverwriteScheduleAttentionDialog(this) {
-                importCourse(it, true)
-            }
-        }
-    }
-
-    private fun importCourseToNewSchedule() {
-        validateImportCourseParams()?.let { params ->
-            DialogUtils.showNewScheduleNameDialog(this) {
-                importCourse(params, false, it)
-            }
-        }
-    }
-
-    private fun importCourse(importParams: NetworkCourseProviderViewModel.NetworkImportParams, currentSchedule: Boolean, newScheduleName: String? = null) {
+    override fun onReadyImportCourse() {
         requireViewBinding().apply {
             layoutCourseImportContent.setAllEnable(false)
             progressBarLoadingCourseImportInit.isIndeterminate = true
@@ -140,15 +117,13 @@ class NetworkCourseProviderActivity : ViewModelActivity<NetworkCourseProviderVie
             layoutCourseImportLoading.isVisible = true
             layoutCourseImportContent.isVisible = false
         }
-        requireViewModel().importCourse(importParams, currentSchedule, newScheduleName)
     }
 
-    private fun validateImportCourseParams(): NetworkCourseProviderViewModel.NetworkImportParams? {
+    private fun getImportCourseParams(): NetworkCourseImportParams {
         requireViewBinding().apply {
             layoutCourseImportContent.clearFocus()
-            val option = getCurrentOption() ?: return null
 
-            return if (requireViewModel().isLoginCourseProvider()) {
+            return if (requireViewModel().isLoginCourseProvider) {
                 val userId = getTextWithCheck(editTextUserId, R.string.user_id_empty)
                 val userPw = getTextWithCheck(editTextUserPw, R.string.user_pw_empty)
                 val captchaCode = if (layoutCaptcha.isVisible) {
@@ -156,9 +131,9 @@ class NetworkCourseProviderActivity : ViewModelActivity<NetworkCourseProviderVie
                 } else {
                     null
                 }
-                NetworkCourseProviderViewModel.NetworkImportParams(userId, userPw, captchaCode, option)
+                NetworkCourseImportParams(userId, userPw, captchaCode)
             } else {
-                NetworkCourseProviderViewModel.NetworkImportParams(null, null, null, option)
+                NetworkCourseImportParams(null, null, null)
             }
         }
     }
@@ -188,7 +163,7 @@ class NetworkCourseProviderActivity : ViewModelActivity<NetworkCourseProviderVie
         }
     }
 
-    private fun applyLoginParams(params: NetworkCourseProviderViewModel.LoginParams?) {
+    private fun applyLoginParams(params: NetworkCourseProviderViewModel.NetworkLoginParams?) {
         requireViewBinding().apply {
             if (params != null) {
                 if (params.options == null) {
@@ -199,13 +174,7 @@ class NetworkCourseProviderActivity : ViewModelActivity<NetworkCourseProviderVie
 
                 layoutUserId.isVisible = params.allowLogin
                 layoutUserPw.isVisible = params.allowLogin
-
-                if (params.captcha != null && params.allowLogin) {
-                    setCaptcha(params.captcha)
-                    layoutCaptcha.isVisible = true
-                } else {
-                    layoutCaptcha.isVisible = false
-                }
+                layoutCaptcha.isVisible = params.enableCaptcha
 
                 layoutCourseImportLoading.isVisible = false
                 layoutCourseImportContent.isVisible = true
@@ -234,15 +203,11 @@ class NetworkCourseProviderActivity : ViewModelActivity<NetworkCourseProviderVie
         }
     }
 
-    private fun setCaptcha(captcha: Bitmap?) {
+    private fun setCaptcha(captcha: ByteArray?) {
         if (captcha == null) {
             requireViewBinding().imageViewCaptcha.setImageResource(R.drawable.ic_broken_image_24)
         } else {
             Glide.with(this).load(captcha).error(R.drawable.ic_broken_image_24).into(requireViewBinding().imageViewCaptcha)
         }
-    }
-
-    private fun showCourseAdapterError(exception: CourseAdapterException) {
-        ViewUtils.showCourseAdapterError(this, requireViewBinding().layoutLoginCourseProvider, exception)
     }
 }

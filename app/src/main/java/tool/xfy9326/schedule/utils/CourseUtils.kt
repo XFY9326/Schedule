@@ -1,23 +1,14 @@
 package tool.xfy9326.schedule.utils
 
-import android.graphics.Bitmap
-import android.view.View
-import androidx.annotation.Px
-import androidx.core.graphics.applyCanvas
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.firstOrNull
-import kotlinx.coroutines.withContext
-import tool.xfy9326.schedule.App
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.*
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
-import tool.xfy9326.schedule.data.ScheduleDataStore
-import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
 import tool.xfy9326.schedule.io.GlobalIO
-import tool.xfy9326.schedule.kt.*
+import tool.xfy9326.schedule.kt.fit
+import tool.xfy9326.schedule.kt.forEachTwo
+import tool.xfy9326.schedule.kt.intersect
+import tool.xfy9326.schedule.kt.iterateAll
 import tool.xfy9326.schedule.tools.MaterialColorHelper
-import tool.xfy9326.schedule.ui.view.ScheduleView
 import kotlin.math.max
 
 object CourseUtils {
@@ -66,12 +57,12 @@ object CourseUtils {
         maxWeekNum: Int,
         startWeekDay: WeekDay,
         endWeekDay: WeekDay,
-        firstDayOfWeek: WeekDay,
+        weekStart: WeekDay,
     ) =
         if (courseTime.hasThisWeekCourse(weekNum)) {
             when (weekNum) {
-                1 -> startWeekDay.value(firstDayOfWeek) <= courseTime.classTime.weekDay.value(firstDayOfWeek)
-                maxWeekNum -> endWeekDay.value(firstDayOfWeek) >= courseTime.classTime.weekDay.value(firstDayOfWeek)
+                1 -> startWeekDay.orderedValue(weekStart) <= courseTime.classTime.weekDay.orderedValue(weekStart)
+                maxWeekNum -> endWeekDay.orderedValue(weekStart) >= courseTime.classTime.weekDay.orderedValue(weekStart)
                 else -> true
             }
         } else {
@@ -152,31 +143,4 @@ object CourseUtils {
 
         return null
     }
-
-    suspend fun generateScheduleImageByWeekNum(scheduleId: Long, weekNum: Int, @Px targetWidth: Int) =
-        withContext(Dispatchers.Default) {
-            val schedule = ScheduleDBProvider.db.scheduleDAO.getSchedule(scheduleId).firstOrNull() ?: return@withContext null
-            val courses = ScheduleDBProvider.db.scheduleDAO.getScheduleCourses(scheduleId).first()
-            val styles = ScheduleDataStore.scheduleStylesFlow.firstOrNull()?.copy(
-                viewAlpha = 100,
-                timeTextColor = null,
-                cornerScreenMargin = false
-            ) ?: return@withContext null
-
-            val context = App.instance
-
-            val backgroundColor = context.getDefaultBackgroundColor()
-            val scheduleView = ScheduleView(context, getScheduleViewDataByWeek(weekNum, ScheduleBuildBundle(schedule, courses, styles)))
-
-            val widthSpec = View.MeasureSpec.makeMeasureSpec(targetWidth, View.MeasureSpec.AT_MOST)
-            val heightSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
-            scheduleView.measure(widthSpec, heightSpec)
-            scheduleView.layout(0, 0, scheduleView.measuredWidth, scheduleView.measuredHeight)
-            scheduleView.requestLayout()
-
-            return@withContext Bitmap.createBitmap(scheduleView.measuredWidth, scheduleView.measuredHeight, Bitmap.Config.ARGB_8888).applyCanvas {
-                drawColor(backgroundColor)
-                scheduleView.draw(this)
-            }
-        }
 }

@@ -6,9 +6,9 @@ import android.view.Gravity
 import android.view.Menu
 import android.view.View
 import android.widget.Button
+import androidx.appcompat.app.AppCompatDialogFragment
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.view.isVisible
-import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -28,7 +28,7 @@ import tool.xfy9326.schedule.kt.showShortToast
 import tool.xfy9326.schedule.tools.MIMEConst
 import tool.xfy9326.schedule.utils.DownloadUtils
 
-class UpgradeDialog : DialogFragment() {
+class UpgradeDialog : AppCompatDialogFragment() {
     companion object {
         const val UPDATE_INFO = "UPDATE_INFO"
 

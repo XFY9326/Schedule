@@ -21,6 +21,7 @@ object AppSettingsDataStore : AbstractDataStore("Settings") {
     private val customActivityTransitionAnimation by booleanPreferencesKey()
     private val useBrowserDownloadUpgradeFile by booleanPreferencesKey()
     private val allowImportEmptySchedule by booleanPreferencesKey()
+    private val drawWaterMarkOnScheduleImage by booleanPreferencesKey()
     val enableOnlineCourseImport by booleanPreferencesKey()
 
     suspend fun setNightModeType(nightMode: NightMode) = nightModeType.saveData(nightMode.name)
@@ -36,6 +37,8 @@ object AppSettingsDataStore : AbstractDataStore("Settings") {
             it[calendarSyncAddReminderDefault] ?: false
         )
     }
+
+    val drawWaterMarkOnScheduleImageFlow = drawWaterMarkOnScheduleImage.readAsFlow(true)
 
     val enableOnlineCourseImportFlow = enableOnlineCourseImport.readAsFlow(true)
 

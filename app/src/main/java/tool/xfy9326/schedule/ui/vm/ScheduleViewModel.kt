@@ -25,7 +25,6 @@ import java.util.concurrent.atomic.AtomicBoolean
 
 class ScheduleViewModel : AbstractViewModel() {
     companion object {
-        private val currentScheduleId = AppDataStore.currentScheduleIdFlow
         private val weekNumInfoFlow = ScheduleUtils.currentScheduleFlow.map {
             CourseTimeUtils.getWeekNum(it) to CourseTimeUtils.getMaxWeekNum(it.startDate, it.endDate, it.weekStart)
         }
@@ -46,7 +45,7 @@ class ScheduleViewModel : AbstractViewModel() {
     var currentScrollPosition: Int? = null
 
     val nowDay = ScheduleUtils.currentScheduleFlow.map {
-        CalendarUtils.getDay(firstDayOfWeek = it.weekStart)
+        CalendarUtils.getDay(weekStart = it.weekStart)
     }.asDistinctLiveData()
     val scrollToWeek = MutableEventLiveData<Int>()
     val showWeekChanged = MutableEventLiveData<Pair<Int, WeekNumType>>()
@@ -77,7 +76,7 @@ class ScheduleViewModel : AbstractViewModel() {
 
     fun openCurrentScheduleCourseManageActivity() {
         viewModelScope.launch(Dispatchers.IO) {
-            openCourseManageActivity.postEvent(currentScheduleId.first())
+            openCourseManageActivity.postEvent(AppDataStore.currentScheduleIdFlow.first())
         }
     }
 
@@ -132,8 +131,9 @@ class ScheduleViewModel : AbstractViewModel() {
         if (scheduleSharedMutex.tryLock()) {
             viewModelScope.launch(Dispatchers.Default) {
                 try {
-                    val scheduleId = currentScheduleId.first()
-                    val bitmap = CourseUtils.generateScheduleImageByWeekNum(scheduleId, weekNum, targetWidth)
+                    val scheduleId = AppDataStore.currentScheduleIdFlow.first()
+                    val waterMark = AppSettingsDataStore.drawWaterMarkOnScheduleImageFlow.first()
+                    val bitmap = ScheduleViewHelper.generateScheduleImageByWeekNum(scheduleId, weekNum, targetWidth, waterMark)
                     if (bitmap != null) {
                         val uri = if (AppSettingsDataStore.saveImageWhileSharingFlow.first()) {
                             ImageHelper.outputImageToAlbum(bitmap)
