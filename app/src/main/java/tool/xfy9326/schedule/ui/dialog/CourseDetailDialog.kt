@@ -4,8 +4,8 @@ import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatDialogFragment
 import androidx.core.view.isVisible
-import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.Course
@@ -16,7 +16,7 @@ import tool.xfy9326.schedule.tools.MaterialColorHelper
 import tool.xfy9326.schedule.ui.activity.CourseEditActivity
 import tool.xfy9326.schedule.ui.adapter.CourseDetailAdapter
 
-class CourseDetailDialog : DialogFragment() {
+class CourseDetailDialog : AppCompatDialogFragment() {
     companion object {
         private const val ARGUMENT_COURSE = "COURSE"
         private const val ARGUMENT_SCHEDULE_TIMES = "SCHEDULE_TIMES"

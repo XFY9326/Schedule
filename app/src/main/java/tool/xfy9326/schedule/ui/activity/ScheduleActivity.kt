@@ -1,12 +1,11 @@
 package tool.xfy9326.schedule.ui.activity
 
-import android.app.Activity
-import android.content.Intent
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.os.Bundle
 import android.view.*
 import android.view.animation.AccelerateInterpolator
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.DrawableRes
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatDelegate
@@ -33,7 +32,6 @@ import tool.xfy9326.schedule.data.ScheduleDataStore
 import tool.xfy9326.schedule.databinding.ActivityScheduleBinding
 import tool.xfy9326.schedule.databinding.LayoutNavHeaderBinding
 import tool.xfy9326.schedule.kt.*
-import tool.xfy9326.schedule.tools.MIMEConst
 import tool.xfy9326.schedule.ui.activity.base.ViewModelActivity
 import tool.xfy9326.schedule.ui.adapter.ScheduleViewPagerAdapter
 import tool.xfy9326.schedule.ui.dialog.CourseDetailDialog
@@ -51,14 +49,27 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
         private const val EXTRA_START_X = "START_X"
         private const val EXTRA_START_Y = "START_Y"
         private const val EXTRA_FINAL_RADIUS = "FINAL_RADIUS"
-
-        private const val REQUEST_CODE_EXPORT_ICS_FILE = 1
-        private const val REQUEST_CODE_CALENDAR_PERMISSION = 2
     }
 
     override val vmClass = ScheduleViewModel::class
 
     private var scheduleViewPagerAdapter: ScheduleViewPagerAdapter? = null
+
+    private val requestCalendarPermission = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
+        if (PermissionUtils.checkGrantResults(it)) {
+            requireViewModel().syncToCalendar()
+        } else {
+            requireViewBinding().layoutSchedule.showShortSnackBar(R.string.calendar_permission_get_failed)
+        }
+    }
+    private val exportICSFile = registerForActivityResult(ActivityResultContracts.CreateDocument()) {
+        if (it != null) {
+            requireViewModel().exportICS(it)
+        } else {
+            requireViewModel().waitExportScheduleId.consume()
+            requireViewBinding().layoutSchedule.showShortSnackBar(R.string.output_file_cancel)
+        }
+    }
 
     override fun onCreateViewBinding() = ActivityScheduleBinding.inflate(layoutInflater)
 
@@ -100,10 +111,7 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
         viewModel.selectScheduleForExportingICS.observeEvent(this) {
             DialogUtils.showScheduleSelectDialog(this, R.string.export_to_ics, it) { name, id ->
                 viewModel.waitExportScheduleId.write(id)
-                tryStartActivityForResult(
-                    IntentUtils.getCreateNewDocumentIntent(ScheduleICSHelper.createICSFileName(this, name), MIMEConst.MIME_TEXT_CALENDAR),
-                    REQUEST_CODE_EXPORT_ICS_FILE
-                )
+                exportICSFile.launch(ScheduleICSHelper.createICSFileName(this, name))
             }
         }
         viewModel.iceExportStatus.observeEvent(this) {
@@ -183,24 +191,6 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
         return super.onOptionsItemSelected(item)
     }
 
-    // TODO: Deprecated
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == REQUEST_CODE_EXPORT_ICS_FILE) {
-            if (resultCode == Activity.RESULT_OK) {
-                val outputUri = data?.data
-                if (outputUri != null) {
-                    requireViewModel().exportICS(outputUri)
-                } else {
-                    requireViewBinding().layoutSchedule.showShortSnackBar(R.string.output_file_create_failed)
-                }
-            } else {
-                requireViewModel().waitExportScheduleId.consume()
-                requireViewBinding().layoutSchedule.showShortSnackBar(R.string.output_file_cancel)
-            }
-        }
-        super.onActivityResult(requestCode, resultCode, data)
-    }
-
     override fun onBackPressed() {
         if (requireViewBinding().drawerSchedule.isDrawerOpen(GravityCompat.START)) {
             requireViewBinding().drawerSchedule.closeDrawers()
@@ -209,24 +199,12 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
         }
     }
 
-    // TODO: Deprecated
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        if (requestCode == REQUEST_CODE_CALENDAR_PERMISSION) {
-            if (PermissionUtils.checkGrantResults(grantResults)) {
-                requireViewModel().syncToCalendar()
-            } else {
-                requireViewBinding().layoutSchedule.showShortSnackBar(R.string.calendar_permission_get_failed)
-            }
-        }
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-    }
-
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.menu_navOnlineCourseImport -> startActivity<OnlineCourseImportActivity>()
             R.id.menu_navCourseExportICS -> requireViewModel().selectScheduleForExportingICS()
             R.id.menu_navSyncToCalendar -> lifecycleScope.launch {
-                if (PermissionUtils.checkCalendarPermission(this@ScheduleActivity, REQUEST_CODE_CALENDAR_PERMISSION)) {
+                if (PermissionUtils.checkCalendarPermission(this@ScheduleActivity, requestCalendarPermission)) {
                     requireViewModel().syncToCalendar()
                 }
             }

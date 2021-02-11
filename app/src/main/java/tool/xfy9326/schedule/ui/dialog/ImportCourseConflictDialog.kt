@@ -3,14 +3,14 @@ package tool.xfy9326.schedule.ui.dialog
 import android.content.DialogInterface
 import android.os.Bundle
 import android.os.Parcelable
-import androidx.fragment.app.DialogFragment
+import androidx.appcompat.app.AppCompatDialogFragment
 import androidx.fragment.app.FragmentManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.kt.buildBundle
 import tool.xfy9326.schedule.kt.requireOwner
 
-class ImportCourseConflictDialog : DialogFragment(), DialogInterface.OnClickListener {
+class ImportCourseConflictDialog : AppCompatDialogFragment(), DialogInterface.OnClickListener {
     companion object {
         private val DIALOG_TAG = ImportCourseConflictDialog::class.simpleName
         private const val EXTRA_PASSED_VALUE = "EXTRA_PASSED_VALUE"

@@ -1,11 +1,10 @@
 package tool.xfy9326.schedule.utils
 
 import android.Manifest
-import android.app.Activity
+import android.content.Context
 import android.content.pm.PackageManager
-import androidx.core.app.ActivityCompat
+import androidx.activity.result.ActivityResultLauncher
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.sync.Mutex
@@ -17,37 +16,23 @@ object PermissionUtils {
 
     private val permissionRequestLock = Mutex()
 
-    suspend fun checkCalendarPermission(activity: Activity, requestCode: Int) =
-        checkPermission(
-            activity = activity,
-            requestCode = requestCode,
-            permissions = arrayOf(Manifest.permission.READ_CALENDAR, Manifest.permission.WRITE_CALENDAR)
-        )
+    suspend fun checkCalendarPermission(context: Context, launcher: ActivityResultLauncher<Array<String>>) =
+        checkPermission(context, launcher, arrayOf(Manifest.permission.READ_CALENDAR, Manifest.permission.WRITE_CALENDAR))
 
-    suspend fun checkCalendarPermission(fragment: Fragment, requestCode: Int) =
-        checkPermission(
-            fragment = fragment,
-            requestCode = requestCode,
-            permissions = arrayOf(Manifest.permission.READ_CALENDAR, Manifest.permission.WRITE_CALENDAR)
-        )
-
-    fun checkGrantResults(grantResults: IntArray): Boolean {
+    fun checkGrantResults(grantResults: Map<String, Boolean>): Boolean {
         for (result in grantResults) {
-            if (result != PackageManager.PERMISSION_GRANTED) return false
+            if (!result.value) return false
         }
         return true
     }
 
-    private suspend fun checkPermission(activity: Activity? = null, fragment: Fragment? = null, requestCode: Int, permissions: Array<String>) =
+    private suspend fun checkPermission(context: Context, launcher: ActivityResultLauncher<Array<String>>, permissions: Array<String>) =
         withContext(Dispatchers.Main.immediate) {
-            require(activity != null || fragment != null)
-
             if (permissionRequestLock.tryLock()) {
                 try {
                     val invalidPermissions = ArrayList<String>()
                     for (permission in permissions) {
-                        if (ContextCompat.checkSelfPermission(activity ?: fragment!!.requireContext(),
-                                permission) != PackageManager.PERMISSION_GRANTED
+                        if (ContextCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED
                         ) {
                             invalidPermissions.add(permission)
                         }
@@ -55,11 +40,7 @@ object PermissionUtils {
                     return@withContext if (invalidPermissions.isEmpty()) {
                         true
                     } else {
-                        if (activity != null) {
-                            ActivityCompat.requestPermissions(activity, invalidPermissions.toTypedArray(), requestCode)
-                        } else {
-                            fragment?.requestPermissions(invalidPermissions.toTypedArray(), requestCode)
-                        }
+                        launcher.launch(invalidPermissions.toTypedArray())
                         false
                     }
                 } finally {
