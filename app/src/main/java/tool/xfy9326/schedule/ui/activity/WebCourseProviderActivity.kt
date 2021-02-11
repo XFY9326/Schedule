@@ -14,24 +14,26 @@ import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import tool.xfy9326.schedule.R
+import tool.xfy9326.schedule.content.base.WebCourseParser
+import tool.xfy9326.schedule.content.base.WebCourseProvider
+import tool.xfy9326.schedule.content.beans.WebCourseImportParams
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
 import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.databinding.ActivityWebCourseProviderBinding
 import tool.xfy9326.schedule.kt.*
-import tool.xfy9326.schedule.ui.activity.base.ViewModelActivity
+import tool.xfy9326.schedule.ui.activity.base.CourseProviderActivity
 import tool.xfy9326.schedule.ui.dialog.FullScreenLoadingDialog
-import tool.xfy9326.schedule.ui.dialog.ImportCourseConflictDialog
 import tool.xfy9326.schedule.ui.dialog.WebCourseProviderBottomPanel
 import tool.xfy9326.schedule.ui.vm.WebCourseProviderViewModel
 import tool.xfy9326.schedule.utils.DialogUtils
 import tool.xfy9326.schedule.utils.ViewUtils
 
-@SuppressLint("SetJavaScriptEnabled")
-class WebCourseProviderActivity : ViewModelActivity<WebCourseProviderViewModel, ActivityWebCourseProviderBinding>(),
-    WebCourseProviderBottomPanel.OnWebCourseProviderBottomPanelOperateListener, ImportCourseConflictDialog.OnConfirmImportCourseConflictListener<Nothing>,
+class WebCourseProviderActivity :
+    CourseProviderActivity<WebCourseImportParams, WebCourseProvider<*>, WebCourseParser, WebCourseProviderViewModel, ActivityWebCourseProviderBinding>(),
+    WebCourseProviderBottomPanel.OnWebCourseProviderBottomPanelOperateListener,
     FullScreenLoadingDialog.OnRequestCancelListener {
+
     companion object {
-        const val EXTRA_COURSE_IMPORT_CONFIG = "EXTRA_COURSE_IMPORT_CONFIG"
         private const val EXTRA_WEB_VIEW = "EXTRA_WEB_VIEW"
 
         private const val HTML_PRINT_JAVASCRIPT_INTERFACE_NAME = "HtmlPrint"
@@ -39,7 +41,7 @@ class WebCourseProviderActivity : ViewModelActivity<WebCourseProviderViewModel, 
         private const val HTML_PRINT_JAVASCRIPT =
             """
                 javascript:
-                var currentSchedule = %s;
+                var isCurrentSchedule = %s;
                 
                 var htmlContent = document.getElementsByTagName("html")[0].outerHTML;
                 
@@ -55,7 +57,7 @@ class WebCourseProviderActivity : ViewModelActivity<WebCourseProviderViewModel, 
                     frameList.push(frameTags[i].contentDocument.body.parentElement.outerHTML);
                 }
                 
-                window.$HTML_PRINT_JAVASCRIPT_INTERFACE_NAME.$HTML_PRINT_JAVASCRIPT_METHOD_NAME(htmlContent, iframeList, frameList, currentSchedule);
+                window.$HTML_PRINT_JAVASCRIPT_INTERFACE_NAME.$HTML_PRINT_JAVASCRIPT_METHOD_NAME(htmlContent, iframeList, frameList, isCurrentSchedule);
             """
     }
 
@@ -66,33 +68,27 @@ class WebCourseProviderActivity : ViewModelActivity<WebCourseProviderViewModel, 
     override fun onCreateViewBinding() = ActivityWebCourseProviderBinding.inflate(layoutInflater)
 
     override fun onPrepare(viewBinding: ActivityWebCourseProviderBinding, viewModel: WebCourseProviderViewModel) {
+        super.onPrepare(viewBinding, viewModel)
+
         setSupportActionBar(viewBinding.toolBarWebCourseProvider.toolBarGeneral)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        viewModel.registerConfig(intent.getSerializableExtra(EXTRA_COURSE_IMPORT_CONFIG)?.tryCast()!!)
-
-        lifecycleScope.launch {
-            if (AppSettingsDataStore.keepWebProviderCacheFlow.first()) clearAll()
-        }
+        lifecycleScope.launch { if (AppSettingsDataStore.keepWebProviderCacheFlow.first()) clearAll() }
     }
 
     override fun onBindLiveData(viewBinding: ActivityWebCourseProviderBinding, viewModel: WebCourseProviderViewModel) {
-        viewModel.providerError.observeEvent(this, observer = ::showCourseAdapterError)
+        super.onBindLiveData(viewBinding, viewModel)
+
         viewModel.validateHtmlPage.observeEvent(this) {
             if (it == null) {
                 viewBinding.layoutWebCourseProvider.showShortSnackBar(R.string.invalid_course_import_page)
             } else {
-                onValidatePageSuccess(it.first, it.third, it.second)
-            }
-        }
-        viewModel.courseImportFinish.observeEvent(this) {
-            loadingDialogController.hide()
-            if (it.first) {
-                afterSaveCourse(it.second)
+                requestImportCourse(it.first, it.second, it.third)
             }
         }
     }
 
+    @SuppressLint("SetJavaScriptEnabled")
     override fun onInitView(viewBinding: ActivityWebCourseProviderBinding, viewModel: WebCourseProviderViewModel) {
         viewBinding.webViewWebCourseProvider.apply {
             settings.apply {
@@ -122,9 +118,9 @@ class WebCourseProviderActivity : ViewModelActivity<WebCourseProviderViewModel, 
                     htmlContent: String,
                     iframeContent: Array<String>,
                     frameContent: Array<String>,
-                    currentSchedule: Boolean,
+                    isCurrentSchedule: Boolean,
                 ) {
-                    onGetCurrentHTML(htmlContent, iframeContent, frameContent, currentSchedule)
+                    onGetCurrentHTML(htmlContent, iframeContent, frameContent, isCurrentSchedule)
                 }
             }, HTML_PRINT_JAVASCRIPT_INTERFACE_NAME)
         }
@@ -141,7 +137,7 @@ class WebCourseProviderActivity : ViewModelActivity<WebCourseProviderViewModel, 
 
     override fun onHandleSavedInstanceState(bundle: Bundle?, viewBinding: ActivityWebCourseProviderBinding, viewModel: WebCourseProviderViewModel) {
         if (bundle == null) {
-            viewBinding.webViewWebCourseProvider.loadUrl(viewModel.courseProvider.initPageUrl)
+            viewBinding.webViewWebCourseProvider.loadUrl(viewModel.initPageUrl)
         } else {
             if (WebCourseProviderBottomPanel.isShowing(supportFragmentManager)) {
                 viewBinding.buttonWebCourseProviderPanel.isVisible = false
@@ -227,33 +223,21 @@ class WebCourseProviderActivity : ViewModelActivity<WebCourseProviderViewModel, 
         getCurrentHTML(false)
     }
 
-    override fun onConfirmImportCourseConflict(value: Nothing?) {
-        finish()
+    private fun onGetCurrentHTML(htmlContent: String, iframeContent: Array<String>, frameContent: Array<String>, isCurrentSchedule: Boolean) {
+        requireViewModel().validateHtmlPage(WebCourseImportParams(htmlContent, iframeContent, frameContent), isCurrentSchedule)
     }
 
-    private fun onGetCurrentHTML(htmlContent: String, iframeContent: Array<String>, frameContent: Array<String>, currentSchedule: Boolean) {
-        requireViewModel().validateHtmlPage(WebCourseProviderViewModel.ImportParams(htmlContent, iframeContent, frameContent), currentSchedule)
+    override fun onReadyImportCourse() {
+        loadingDialogController.show()
     }
 
-    private fun onValidatePageSuccess(importParams: WebCourseProviderViewModel.ImportParams, importOption: Int, currentSchedule: Boolean) {
-        if (currentSchedule) {
-            DialogUtils.showOverwriteScheduleAttentionDialog(this@WebCourseProviderActivity) {
-                loadingDialogController.show()
-                requireViewModel().importCourse(importParams, importOption, currentSchedule, null)
-            }
-        } else {
-            DialogUtils.showNewScheduleNameDialog(this@WebCourseProviderActivity) {
-                loadingDialogController.show()
-                requireViewModel().importCourse(importParams, importOption, currentSchedule, it)
-            }
-        }
+    override fun onCourseImportFinish(isSuccess: Boolean, hasConflict: Boolean) {
+        loadingDialogController.hide()
+        super.onCourseImportFinish(isSuccess, hasConflict)
     }
 
-    private fun afterSaveCourse(hasConflict: Boolean) {
-        requireViewBinding().layoutWebCourseProvider.showShortSnackBar(R.string.course_import_success)
-        if (hasConflict) {
-            ImportCourseConflictDialog.showDialog(supportFragmentManager)
-        }
+    override fun onShowCourseAdapterError(exception: CourseAdapterException) {
+        ViewUtils.showCourseAdapterErrorSnackBar(this, requireViewBinding().layoutWebCourseProvider, exception)
     }
 
     private fun clearAll() {
@@ -271,14 +255,10 @@ class WebCourseProviderActivity : ViewModelActivity<WebCourseProviderViewModel, 
         WebStorage.getInstance().deleteAllData()
     }
 
-    private fun showCourseAdapterError(exception: CourseAdapterException) {
-        ViewUtils.showCourseAdapterError(this, requireViewBinding().layoutWebCourseProvider, exception)
-    }
-
     @Keep
     @Suppress("unused")
     private interface HTMLPrinterJavaScriptInterface {
         @Keep
-        fun printHTML(htmlContent: String, iframeContent: Array<String>, frameContent: Array<String>, currentSchedule: Boolean)
+        fun printHTML(htmlContent: String, iframeContent: Array<String>, frameContent: Array<String>, isCurrentSchedule: Boolean)
     }
 }

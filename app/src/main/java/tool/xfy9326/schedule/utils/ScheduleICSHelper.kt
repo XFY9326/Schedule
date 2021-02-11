@@ -11,7 +11,7 @@ import tool.xfy9326.schedule.kt.iterateAll
 
 class ScheduleICSHelper constructor(schedule: Schedule, private val courses: List<Course>) {
     companion object {
-        fun createICSFileName(context: Context, scheduleName: String) = "${context.getString(R.string.app_name)}-$scheduleName"
+        fun createICSFileName(context: Context, scheduleName: String) = "${context.getString(R.string.app_name)}-$scheduleName.ics"
     }
 
     private val scheduleCalculateTimes = ScheduleCalculateTimes(schedule)

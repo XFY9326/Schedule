@@ -21,7 +21,7 @@ object BackupUtils {
         }
     }
 
-    fun createBackupFileName(context: Context) = "${context.getString(R.string.app_name)}-${System.currentTimeMillis() / 1000}"
+    fun createBackupFileName(context: Context) = "${context.getString(R.string.app_name)}-${System.currentTimeMillis() / 1000}.json"
 
     suspend fun backupSchedules(uri: Uri, scheduleIds: List<Long>): Boolean {
         try {

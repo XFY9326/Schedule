@@ -46,7 +46,7 @@ abstract class AbstractDataStore(val name: String) {
     }.first()
 
     protected inline fun <reified E : Enum<E>> Preferences.Key<String>.readEnumAsFlow(defaultValue: E) = read {
-        tryEnumValueOf<E>(it[this]) ?: defaultValue
+        tryEnumValueOf(it[this]) ?: defaultValue
     }
 
     protected fun <T> Preferences.Key<T>.readAndInitAsFlow(initBlock: suspend () -> T?) = read {

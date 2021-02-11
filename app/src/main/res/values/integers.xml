@@ -6,4 +6,5 @@
     <integer name="default_course_num_size_pre_day">14</integer>
     <integer name="default_course_cost_time">40</integer>
     <integer name="default_break_cost_time">10</integer>
+    <integer name="default_water_mark_alpha">90</integer>
 </resources>

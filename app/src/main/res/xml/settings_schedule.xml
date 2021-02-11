@@ -45,6 +45,13 @@
             app:summary="@string/corner_screen_adapter_sum"
             app:title="@string/corner_screen_adapter" />
 
+        <androidx.preference.CheckBoxPreference
+            app:defaultValue="true"
+            app:iconSpaceReserved="false"
+            app:key="enableScheduleGridScroll"
+            app:summary="@string/lock_schedule_header_scroll_sum"
+            app:title="@string/lock_schedule_header_scroll" />
+
     </androidx.preference.PreferenceCategory>
 
     <androidx.preference.PreferenceCategory

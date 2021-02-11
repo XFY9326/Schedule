@@ -53,6 +53,12 @@
             app:summary="@string/save_image_while_sharing_sum"
             app:title="@string/save_image_while_sharing" />
 
+        <androidx.preference.CheckBoxPreference
+            app:defaultValue="true"
+            app:icon="@drawable/ic_image_24"
+            app:key="drawWaterMarkOnScheduleImage"
+            app:title="@string/draw_water_mark_on_schedule_image" />
+
     </androidx.preference.PreferenceCategory>
 
     <androidx.preference.PreferenceCategory

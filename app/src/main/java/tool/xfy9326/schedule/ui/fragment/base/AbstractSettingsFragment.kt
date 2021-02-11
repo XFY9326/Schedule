@@ -1,5 +1,6 @@
 package tool.xfy9326.schedule.ui.fragment.base
 
+import android.content.Context
 import android.os.Bundle
 import android.view.Gravity
 import androidx.annotation.CallSuper
@@ -10,6 +11,7 @@ import androidx.preference.PreferenceFragmentCompat
 import androidx.transition.Slide
 import tool.xfy9326.schedule.ui.activity.SettingsActivity
 import tool.xfy9326.schedule.ui.activity.base.AbstractSettingsActivity
+import tool.xfy9326.schedule.ui.vm.SettingsViewModel
 
 abstract class AbstractSettingsFragment : PreferenceFragmentCompat() {
     protected abstract val preferenceResId: Int
@@ -25,6 +27,12 @@ abstract class AbstractSettingsFragment : PreferenceFragmentCompat() {
     }
 
     @CallSuper
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        requireSettingsViewModel()?.let(::onBindLiveDataFromSettingsViewMode)
+    }
+
+    @CallSuper
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         preferenceManager.preferenceDataStore = preferenceDataStore
         setPreferencesFromResource(preferenceResId, rootKey)
@@ -37,6 +45,8 @@ abstract class AbstractSettingsFragment : PreferenceFragmentCompat() {
             (requireActivity() as? AppCompatActivity)?.supportActionBar?.setTitle(it)
         }
     }
+
+    protected open fun onBindLiveDataFromSettingsViewMode(viewModel: SettingsViewModel) {}
 
     protected open fun onPrefInit(savedInstanceState: Bundle?) {}
 

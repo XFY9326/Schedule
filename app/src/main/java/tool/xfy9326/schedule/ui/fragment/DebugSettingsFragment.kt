@@ -1,19 +1,20 @@
 package tool.xfy9326.schedule.ui.fragment
 
-import android.app.Activity
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.StringRes
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceDataStore
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.data.AppSettingsDataStore
-import tool.xfy9326.schedule.kt.*
+import tool.xfy9326.schedule.kt.observeEvent
+import tool.xfy9326.schedule.kt.setOnPrefClickListener
+import tool.xfy9326.schedule.kt.show
+import tool.xfy9326.schedule.kt.showShortSnackBar
 import tool.xfy9326.schedule.ui.dialog.CrashViewDialog
 import tool.xfy9326.schedule.ui.fragment.base.AbstractSettingsFragment
-import tool.xfy9326.schedule.utils.IntentUtils
+import tool.xfy9326.schedule.ui.vm.SettingsViewModel
 
 @Suppress("unused")
 class DebugSettingsFragment : AbstractSettingsFragment() {
@@ -21,13 +22,19 @@ class DebugSettingsFragment : AbstractSettingsFragment() {
         private const val KEY_READ_DEBUG_LOGS = "readDebugLogs"
         private const val KEY_OUTPUT_DEBUG_LOGS = "outputDebugLogs"
         private const val KEY_CLEAR_DEBUG_LOGS = "clearDebugLogs"
-
-        private const val REQUEST_CODE_CREATE_LOG_DOCUMENT = 1
     }
 
     override val titleName: Int = R.string.debug_settings
     override val preferenceResId: Int = R.xml.settings_debug
     override val preferenceDataStore: PreferenceDataStore = AppSettingsDataStore.getPreferenceDataStore(lifecycleScope)
+    private val outputLogFile = registerForActivityResult(ActivityResultContracts.CreateDocument()) {
+        if (it != null) {
+            requireSettingsViewModel()?.outputLogFileToUri(it)
+        } else {
+            requireSettingsViewModel()?.waitCreateLogFileName?.consume()
+            requireRootLayout()?.showShortSnackBar(R.string.output_file_cancel)
+        }
+    }
 
     override fun onPrefInit(savedInstanceState: Bundle?) {
         setOnPrefClickListener(KEY_READ_DEBUG_LOGS) {
@@ -49,50 +56,30 @@ class DebugSettingsFragment : AbstractSettingsFragment() {
         }
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        requireSettingsViewModel()?.apply {
-            readDebugLogs.observeEvent(this@DebugSettingsFragment) {
-                showDebugLogsSelectDialog(it, R.string.read_debug_logs) { log ->
-                    showDebugLog(log)
-                }
-            }
-            outputDebugLogs.observeEvent(this@DebugSettingsFragment) {
-                showDebugLogsSelectDialog(it, R.string.output_debug_logs) { log ->
-                    waitCreateLogFileName.write(log)
-                    tryStartActivityForResult(IntentUtils.getCreateNewDocumentIntent(log), REQUEST_CODE_CREATE_LOG_DOCUMENT)
-                }
-            }
-            showDebugLog.observeEvent(this@DebugSettingsFragment) {
-                CrashViewDialog.showDialog(childFragmentManager, it)
-            }
-            outputLogFileToUriResult.observeEvent(this@DebugSettingsFragment) {
-                requireRootLayout()?.showShortSnackBar(
-                    if (it) {
-                        R.string.output_file_success
-                    } else {
-                        R.string.output_file_failed
-                    }
-                )
+    override fun onBindLiveDataFromSettingsViewMode(viewModel: SettingsViewModel) {
+        viewModel.readDebugLogs.observeEvent(this) {
+            showDebugLogsSelectDialog(it, R.string.read_debug_logs) { log ->
+                viewModel.showDebugLog(log)
             }
         }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == REQUEST_CODE_CREATE_LOG_DOCUMENT) {
-            if (resultCode == Activity.RESULT_OK) {
-                val outputUri = data?.data
-                if (outputUri != null) {
-                    requireSettingsViewModel()?.outputLogFileToUri(outputUri)
+        viewModel.outputDebugLogs.observeEvent(this) {
+            showDebugLogsSelectDialog(it, R.string.output_debug_logs) { log ->
+                viewModel.waitCreateLogFileName.write(log)
+                outputLogFile.launch(log)
+            }
+        }
+        viewModel.showDebugLog.observeEvent(this) {
+            CrashViewDialog.showDialog(childFragmentManager, it)
+        }
+        viewModel.outputLogFileToUriResult.observeEvent(this) {
+            requireRootLayout()?.showShortSnackBar(
+                if (it) {
+                    R.string.output_file_success
                 } else {
-                    requireRootLayout()?.showShortSnackBar(R.string.output_file_create_failed)
+                    R.string.output_file_failed
                 }
-            } else {
-                requireSettingsViewModel()?.waitCreateLogFileName?.consume()
-                requireRootLayout()?.showShortSnackBar(R.string.output_file_cancel)
-            }
+            )
         }
-        super.onActivityResult(requestCode, resultCode, data)
     }
 
     private fun showDebugLogsSelectDialog(logs: Array<String>, @StringRes titleId: Int, onSelect: (String) -> Unit) {
