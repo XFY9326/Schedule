@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.AppCompatImageButton
 import androidx.core.animation.doOnEnd
 import androidx.core.graphics.drawable.toDrawable
+import androidx.core.os.bundleOf
 import androidx.core.view.*
 import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.widget.ViewPager2
@@ -330,12 +331,12 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
                 max(sqrt((viewWidth - startX) * (viewWidth - startX) + (viewHeight - startY) * (viewHeight - startY)),
                     sqrt(startX * startX + (viewHeight - startY) * (viewHeight - startY)))
 
-            intent.putExtra(EXTRA_ANIMATE_NIGHT_MODE_CHANGED_BUNDLE, buildBundle {
-                putFloat(EXTRA_START_X, startX)
-                putFloat(EXTRA_START_Y, startY)
-                putFloat(EXTRA_FINAL_RADIUS, finalRadius)
-                putBoolean(EXTRA_SET_NIGHT_MODE, setNightMode)
-            })
+            intent.putExtra(EXTRA_ANIMATE_NIGHT_MODE_CHANGED_BUNDLE, bundleOf(
+                EXTRA_START_X to startX,
+                EXTRA_START_Y to startY,
+                EXTRA_FINAL_RADIUS to finalRadius,
+                EXTRA_SET_NIGHT_MODE to setNightMode
+            ))
         }
     }
 

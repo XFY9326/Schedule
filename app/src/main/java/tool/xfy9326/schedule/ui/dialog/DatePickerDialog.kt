@@ -5,8 +5,8 @@ import android.app.Dialog
 import android.os.Bundle
 import android.widget.DatePicker
 import androidx.appcompat.app.AppCompatDialogFragment
+import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
-import tool.xfy9326.schedule.kt.buildBundle
 import tool.xfy9326.schedule.kt.requireOwner
 import tool.xfy9326.schedule.utils.CalendarUtils
 import java.util.*
@@ -19,11 +19,11 @@ class DatePickerDialog : AppCompatDialogFragment(), DatePickerDialog.OnDateSetLi
 
         fun showDialog(fragmentManager: FragmentManager, tag: String?, date: Date, calWeekStart: Int) {
             DatePickerDialog().apply {
-                arguments = buildBundle {
-                    putString(EXTRA_TAG, tag)
-                    putInt(EXTRA_WEEK_START, calWeekStart)
-                    putSerializable(EXTRA_DATE, date)
-                }
+                arguments = bundleOf(
+                    EXTRA_TAG to tag,
+                    EXTRA_WEEK_START to calWeekStart,
+                    EXTRA_DATE to date
+                )
             }.show(fragmentManager, tag)
         }
 

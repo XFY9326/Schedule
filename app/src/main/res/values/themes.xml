@@ -40,6 +40,7 @@
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
         <item name="snackbarStyle">@style/AppTheme.SnackBar</item>
         <item name="android:dialogTheme">@style/AppTheme.MaterialDialog</item>
+        <item name="dialogTheme">@style/AppTheme.MaterialDialog</item>
         <item name="android:datePickerDialogTheme">@style/AppTheme.DateTimePickerDialog</item>
         <item name="android:timePickerDialogTheme">@style/AppTheme.DateTimePickerDialog</item>
         <item name="sliderStyle">@style/AppTheme.AnimateSlider</item>

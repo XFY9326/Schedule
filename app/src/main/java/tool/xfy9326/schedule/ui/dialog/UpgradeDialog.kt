@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.Button
 import androidx.appcompat.app.AppCompatDialogFragment
 import androidx.appcompat.widget.PopupMenu
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.lifecycleScope
@@ -22,7 +23,6 @@ import tool.xfy9326.schedule.databinding.DialogUpgradeBinding
 import tool.xfy9326.schedule.json.upgrade.DownloadSource
 import tool.xfy9326.schedule.json.upgrade.UpdateInfo
 import tool.xfy9326.schedule.kt.APP_ID
-import tool.xfy9326.schedule.kt.buildBundle
 import tool.xfy9326.schedule.kt.setWindowWidthPercent
 import tool.xfy9326.schedule.kt.showShortToast
 import tool.xfy9326.schedule.tools.MIMEConst
@@ -39,9 +39,9 @@ class UpgradeDialog : AppCompatDialogFragment() {
             if (fragmentManager.findFragmentByTag(UPDATE_FRAGMENT_TAG) == null) {
                 try {
                     UpgradeDialog().apply {
-                        arguments = buildBundle {
-                            putSerializable(UPDATE_INFO, updateInfo)
-                        }
+                        arguments = bundleOf(
+                            UPDATE_INFO to updateInfo
+                        )
                     }.show(fragmentManager, UPDATE_FRAGMENT_TAG)
                 } catch (e: Exception) {
                     e.printStackTrace()

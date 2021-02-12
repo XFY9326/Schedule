@@ -3,6 +3,7 @@ package tool.xfy9326.schedule.ui.dialog
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
+import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -11,7 +12,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.databinding.DialogScheduleControlPanelBinding
-import tool.xfy9326.schedule.kt.buildBundle
 import tool.xfy9326.schedule.kt.enableLightSystemBar
 import tool.xfy9326.schedule.kt.isUsingNightMode
 import tool.xfy9326.schedule.kt.postEvent
@@ -25,11 +25,11 @@ class ScheduleControlPanel : BottomSheetDialogFragment() {
 
         fun showDialog(fragmentManager: FragmentManager, currentShowWeekNum: Int, nowWeekNum: Int, maxWeekNum: Int) {
             ScheduleControlPanel().apply {
-                arguments = buildBundle {
-                    putInt(ARGUMENT_CURRENT_SHOW_WEEK_NUM, currentShowWeekNum)
-                    putInt(ARGUMENT_NOW_WEEK_NUM, nowWeekNum)
-                    putInt(ARGUMENT_MAX_WEEK_NUM, maxWeekNum)
-                }
+                arguments = bundleOf(
+                    ARGUMENT_CURRENT_SHOW_WEEK_NUM to currentShowWeekNum,
+                    ARGUMENT_NOW_WEEK_NUM to nowWeekNum,
+                    ARGUMENT_MAX_WEEK_NUM to maxWeekNum
+                )
             }.show(fragmentManager, null)
         }
     }
