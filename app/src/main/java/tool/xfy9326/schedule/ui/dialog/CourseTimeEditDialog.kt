@@ -6,6 +6,7 @@ import android.view.*
 import android.view.View.MeasureSpec
 import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatDialogFragment
+import androidx.core.os.bundleOf
 import androidx.core.view.setMargins
 import androidx.fragment.app.FragmentManager
 import androidx.gridlayout.widget.GridLayout
@@ -30,12 +31,12 @@ class CourseTimeEditDialog : AppCompatDialogFragment() {
 
         fun showDialog(fragmentManager: FragmentManager, editBundle: EditBundle) {
             CourseTimeEditDialog().apply {
-                arguments = buildBundle {
-                    putInt(EXTRA_MAX_WEEK_NUM, editBundle.maxWeekNum)
-                    putInt(EXTRA_MAX_COURSE_NUM, editBundle.maxCourseNum)
-                    putSerializable(EXTRA_COURSE_TIME, editBundle.courseTime)
-                    putInt(EXTRA_EDIT_POSITION, editBundle.editPosition ?: -1)
-                }
+                arguments = bundleOf(
+                    EXTRA_MAX_WEEK_NUM to editBundle.maxWeekNum,
+                    EXTRA_MAX_COURSE_NUM to editBundle.maxCourseNum,
+                    EXTRA_COURSE_TIME to editBundle.courseTime,
+                    EXTRA_EDIT_POSITION to (editBundle.editPosition ?: -1)
+                )
             }.show(fragmentManager, null)
         }
     }
