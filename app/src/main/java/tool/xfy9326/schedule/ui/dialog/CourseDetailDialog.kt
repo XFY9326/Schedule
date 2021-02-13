@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatDialogFragment
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
 import tool.xfy9326.schedule.R
@@ -26,11 +27,11 @@ class CourseDetailDialog : AppCompatDialogFragment() {
 
         fun showDialog(fragmentManager: FragmentManager, course: Course, scheduleTimes: List<ScheduleTime>, currentTimeId: Long) {
             CourseDetailDialog().apply {
-                arguments = buildBundle {
-                    putSerializable(ARGUMENT_COURSE, course)
-                    putSerializable(ARGUMENT_SCHEDULE_TIMES, scheduleTimes.toTypedArray())
-                    putLong(ARGUMENT_CURRENT_TIME_ID, currentTimeId)
-                }
+                arguments = bundleOf(
+                    ARGUMENT_COURSE to course,
+                    ARGUMENT_SCHEDULE_TIMES to scheduleTimes.toTypedArray(),
+                    ARGUMENT_CURRENT_TIME_ID to currentTimeId
+                )
             }.show(fragmentManager, null)
         }
     }

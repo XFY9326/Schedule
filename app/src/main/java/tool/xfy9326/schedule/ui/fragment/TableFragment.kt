@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
@@ -14,7 +15,6 @@ import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 import tool.xfy9326.schedule.beans.CourseCell
 import tool.xfy9326.schedule.beans.ScheduleBuildBundle
-import tool.xfy9326.schedule.kt.buildBundle
 import tool.xfy9326.schedule.ui.vm.ScheduleViewModel
 import tool.xfy9326.schedule.utils.ScheduleViewHelper
 import kotlin.properties.Delegates
@@ -24,9 +24,9 @@ class TableFragment : Fragment(), Observer<ScheduleBuildBundle> {
         private const val ARGUMENT_WEEK_NUM = "ARGUMENT_WEEK_NUM"
 
         fun create(weekNum: Int) = TableFragment().apply {
-            arguments = buildBundle {
-                putInt(ARGUMENT_WEEK_NUM, weekNum)
-            }
+            arguments = bundleOf(
+                ARGUMENT_WEEK_NUM to weekNum
+            )
         }
     }
 

@@ -2,9 +2,9 @@ package tool.xfy9326.schedule.ui.dialog
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatDialogFragment
+import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import tool.xfy9326.schedule.kt.buildBundle
 import tool.xfy9326.schedule.kt.requireOwner
 
 class MultiItemSelectDialog : AppCompatDialogFragment() {
@@ -25,13 +25,13 @@ class MultiItemSelectDialog : AppCompatDialogFragment() {
         ) {
             require(showArr.size == selectedArr.size && showArr.size == idArr.size)
             MultiItemSelectDialog().apply {
-                arguments = buildBundle {
-                    putString(EXTRA_TAG, tag)
-                    putString(EXTRA_TITLE, title)
-                    putStringArray(EXTRA_SHOW_ARR, showArr)
-                    putLongArray(EXTRA_ID_ARR, idArr)
-                    putBooleanArray(EXTRA_SELECTED_ARR, selectedArr)
-                }
+                arguments = bundleOf(
+                    EXTRA_TAG to tag,
+                    EXTRA_TITLE to title,
+                    EXTRA_SHOW_ARR to showArr,
+                    EXTRA_ID_ARR to idArr,
+                    EXTRA_SELECTED_ARR to selectedArr
+                )
             }.show(fragmentManager, tag)
         }
     }

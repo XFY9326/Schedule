@@ -4,11 +4,14 @@ package tool.xfy9326.schedule.ui.activity.base
 
 import android.os.Bundle
 import android.view.MenuItem
+import androidx.fragment.app.commit
+import androidx.preference.Preference
+import androidx.preference.PreferenceFragmentCompat
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.databinding.ActivitySettingsBinding
 import tool.xfy9326.schedule.ui.fragment.base.AbstractSettingsFragment
 
-abstract class AbstractSettingsActivity : ViewBindingActivity<ActivitySettingsBinding>() {
+abstract class AbstractSettingsActivity : ViewBindingActivity<ActivitySettingsBinding>(), PreferenceFragmentCompat.OnPreferenceStartFragmentCallback {
     val rootLayout by lazy {
         requireViewBinding().layoutSettings
     }
@@ -28,7 +31,9 @@ abstract class AbstractSettingsActivity : ViewBindingActivity<ActivitySettingsBi
 
     private fun setupBaseSettingsFragment(savedInstanceState: Bundle?) {
         if (savedInstanceState == null) {
-            supportFragmentManager.beginTransaction().replace(R.id.fragmentContainer_settingsContent, onCreateMainSettingsFragment()).commit()
+            supportFragmentManager.commit {
+                replace(R.id.fragmentContainer_settingsContent, onCreateMainSettingsFragment())
+            }
         }
     }
 
@@ -38,6 +43,27 @@ abstract class AbstractSettingsActivity : ViewBindingActivity<ActivitySettingsBi
             return true
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    /**
+     * Reference: [PreferenceFragmentCompat.onPreferenceTreeClick]
+     * Deprecated API usage: [androidx.fragment.app.Fragment.setTargetFragment]
+     */
+    override fun onPreferenceStartFragment(caller: PreferenceFragmentCompat, pref: Preference): Boolean {
+        val fragment = supportFragmentManager.fragmentFactory.instantiate(classLoader, pref.fragment)
+        fragment.arguments = pref.extras
+
+        supportFragmentManager.commit {
+            setCustomAnimations(
+                R.anim.anim_scroll_in_right,
+                R.anim.anim_scroll_out_left,
+                R.anim.anim_scroll_in_left,
+                R.anim.anim_scroll_out_right
+            )
+            replace(R.id.fragmentContainer_settingsContent, fragment)
+            addToBackStack(null)
+        }
+        return true
     }
 
     fun requestBack() {
