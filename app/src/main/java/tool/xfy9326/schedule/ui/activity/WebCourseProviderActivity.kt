@@ -149,7 +149,7 @@ class WebCourseProviderActivity :
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        outState.putBundle(EXTRA_WEB_VIEW, buildBundle {
+        outState.putBundle(EXTRA_WEB_VIEW, Bundle().apply {
             requireViewBinding().webViewWebCourseProvider.saveState(this)
         })
         super.onSaveInstanceState(outState)

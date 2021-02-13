@@ -6,6 +6,7 @@ import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDialogFragment
 import androidx.appcompat.widget.LinearLayoutCompat
+import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -14,7 +15,6 @@ import androidx.transition.Fade
 import com.google.android.material.button.MaterialButton
 import kotlinx.coroutines.*
 import tool.xfy9326.schedule.R
-import tool.xfy9326.schedule.kt.buildBundle
 import tool.xfy9326.schedule.kt.getDrawableCompat
 import tool.xfy9326.schedule.kt.requireOwner
 
@@ -143,9 +143,9 @@ class FullScreenLoadingDialog : AppCompatDialogFragment() {
 
         private fun showDialog(fragmentManager: FragmentManager, showCancel: Boolean) {
             FullScreenLoadingDialog().apply {
-                arguments = buildBundle {
-                    putBoolean(EXTRA_SHOW_CANCEL_BUTTON, showCancel)
-                }
+                arguments = bundleOf(
+                    EXTRA_SHOW_CANCEL_BUTTON to showCancel
+                )
             }.show(fragmentManager, FRAGMENT_TAG)
         }
 

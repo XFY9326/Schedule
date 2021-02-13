@@ -4,8 +4,8 @@ import android.app.TimePickerDialog
 import android.os.Bundle
 import android.widget.TimePicker
 import androidx.appcompat.app.AppCompatDialogFragment
+import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
-import tool.xfy9326.schedule.kt.buildBundle
 import tool.xfy9326.schedule.kt.requireOwner
 
 class TimePickerDialog : AppCompatDialogFragment(), TimePickerDialog.OnTimeSetListener {
@@ -17,12 +17,12 @@ class TimePickerDialog : AppCompatDialogFragment(), TimePickerDialog.OnTimeSetLi
 
         fun showDialog(fragmentManager: FragmentManager, tag: String?, hour: Int, minute: Int, is24HourView: Boolean) {
             TimePickerDialog().apply {
-                arguments = buildBundle {
-                    putString(EXTRA_TAG, tag)
-                    putInt(EXTRA_HOUR, hour)
-                    putInt(EXTRA_MINUTE, minute)
-                    putBoolean(EXTRA_IS_24_HOUR_VIEW, is24HourView)
-                }
+                arguments = bundleOf(
+                    EXTRA_TAG to tag,
+                    EXTRA_HOUR to hour,
+                    EXTRA_MINUTE to minute,
+                    EXTRA_IS_24_HOUR_VIEW to is24HourView
+                )
             }.show(fragmentManager, tag)
         }
     }

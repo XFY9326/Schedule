@@ -6,15 +6,12 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.os.Bundle
 import androidx.documentfile.provider.DocumentFile
 import androidx.preference.Preference
 import tool.xfy9326.schedule.beans.*
 import tool.xfy9326.schedule.ui.fragment.base.AbstractSettingsFragment
 import java.util.*
 import kotlin.math.min
-
-inline fun buildBundle(crossinline block: Bundle.() -> Unit) = Bundle().apply(block)
 
 fun Uri.deleteFile(context: Context) = DocumentFile.fromSingleUri(context, this)?.delete() == true
 

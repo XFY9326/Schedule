@@ -4,10 +4,10 @@ import android.content.DialogInterface
 import android.os.Bundle
 import android.os.Parcelable
 import androidx.appcompat.app.AppCompatDialogFragment
+import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import tool.xfy9326.schedule.R
-import tool.xfy9326.schedule.kt.buildBundle
 import tool.xfy9326.schedule.kt.requireOwner
 
 class ImportCourseConflictDialog : AppCompatDialogFragment(), DialogInterface.OnClickListener {
@@ -17,9 +17,9 @@ class ImportCourseConflictDialog : AppCompatDialogFragment(), DialogInterface.On
 
         fun showDialog(fragmentManager: FragmentManager, passedValue: Parcelable? = null) {
             ImportCourseConflictDialog().apply {
-                arguments = buildBundle {
-                    putParcelable(EXTRA_PASSED_VALUE, passedValue)
-                }
+                arguments = bundleOf(
+                    EXTRA_PASSED_VALUE to passedValue
+                )
             }.show(fragmentManager, DIALOG_TAG)
         }
     }

@@ -18,7 +18,6 @@ import tool.xfy9326.schedule.BuildConfig
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.data.AppDataStore
 import tool.xfy9326.schedule.databinding.ActivityFeedbackBinding
-import tool.xfy9326.schedule.kt.buildBundle
 import tool.xfy9326.schedule.ui.activity.base.ViewBindingActivity
 import tool.xfy9326.schedule.utils.IntentUtils
 
@@ -81,7 +80,7 @@ class FeedbackActivity : ViewBindingActivity<ActivityFeedbackBinding>() {
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        outState.putBundle(EXTRA_WEB_VIEW, buildBundle {
+        outState.putBundle(EXTRA_WEB_VIEW, Bundle().apply {
             requireViewBinding().webViewFeedback.saveState(this)
         })
         super.onSaveInstanceState(outState)

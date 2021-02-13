@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatDialogFragment
+import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -14,7 +15,10 @@ import kotlinx.coroutines.withContext
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.databinding.DialogCrashViewBinding
 import tool.xfy9326.schedule.io.TextIO
-import tool.xfy9326.schedule.kt.*
+import tool.xfy9326.schedule.kt.APP_ID
+import tool.xfy9326.schedule.kt.setWindowWidthPercent
+import tool.xfy9326.schedule.kt.showGlobalShortToast
+import tool.xfy9326.schedule.kt.showShortToast
 
 class CrashViewDialog : AppCompatDialogFragment() {
     companion object {
@@ -27,10 +31,10 @@ class CrashViewDialog : AppCompatDialogFragment() {
 
         fun showDialog(fragmentManager: FragmentManager, crashLog: String, outputCrashLog: Boolean = true) {
             CrashViewDialog().apply {
-                arguments = buildBundle {
-                    putString(ARGUMENT_CRASH_LOG, crashLog)
-                    putBoolean(ARGUMENT_OUTPUT_CRASH_LOG, outputCrashLog)
-                }
+                arguments = bundleOf(
+                    ARGUMENT_CRASH_LOG to crashLog,
+                    ARGUMENT_OUTPUT_CRASH_LOG to outputCrashLog
+                )
             }.show(fragmentManager, null)
         }
     }
