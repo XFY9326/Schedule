@@ -2,14 +2,17 @@ package tool.xfy9326.schedule.ui.dialog
 
 import android.content.Context
 import android.os.Bundle
-import android.view.*
-import android.view.View.MeasureSpec
+import android.view.Gravity
+import android.view.HapticFeedbackConstants
+import android.view.ViewTreeObserver
+import android.view.Window
 import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatDialogFragment
 import androidx.core.os.bundleOf
 import androidx.core.view.setMargins
 import androidx.fragment.app.FragmentManager
 import androidx.gridlayout.widget.GridLayout
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.CourseTime
 import tool.xfy9326.schedule.beans.WeekDay
@@ -26,7 +29,7 @@ class CourseTimeEditDialog : AppCompatDialogFragment() {
         private const val EXTRA_MAX_WEEK_NUM = "EXTRA_MAX_WEEK_NUM"
         private const val EXTRA_MAX_COURSE_NUM = "EXTRA_MAX_COURSE_NUM"
 
-        private const val WINDOW_WIDTH_PERCENT = 0.85
+        private const val WINDOW_WIDTH_PERCENT = 1.0
         private const val DEFAULT_BUTTON_COUNT_IN_ROW = 4
 
         fun showDialog(fragmentManager: FragmentManager, editBundle: EditBundle) {
@@ -75,54 +78,65 @@ class CourseTimeEditDialog : AppCompatDialogFragment() {
         weekNumCellMargin = resources.getDimensionPixelSize(R.dimen.circle_number_button_margin)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
-        DialogCourseTimeEditBinding.inflate(layoutInflater, container, false).apply {
-            dialog?.apply {
-                requestWindowFeature(Window.FEATURE_NO_TITLE)
-            }
+    override fun onCreateDialog(savedInstanceState: Bundle?) =
+        MaterialAlertDialogBuilder(requireContext()).apply {
+            setTitle(R.string.course_time_edit)
+            setView(DialogCourseTimeEditBinding.inflate(layoutInflater).apply {
+                viewBinding = this
 
-            buildWeekNumGrid(this)
-            buildWeekNumModeButton(this)
-            buildCourseTimeWheel(this)
-            editTextCourseLocation.setText(editCourseTime.location.orEmpty())
+                buildWeekNumGrid(this)
+                buildWeekNumModeButton(this)
+                buildCourseTimeWheel(this)
+                editTextCourseLocation.setText(editCourseTime.location.orEmpty())
 
-            buttonCourseTimeEditConfirm.setOnClickListener {
-                requireContext().hideKeyboard(root.windowToken)
+                gridLayoutCourseWeeks.viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
+                    override fun onPreDraw(): Boolean {
+                        var changed = false
+                        gridLayoutCourseWeeks.apply {
+                            val count =
+                                if (measuredWidth != 0) {
+                                    measuredWidth / (weekNumCellSize + weekNumCellMargin * 2)
+                                } else {
+                                    DEFAULT_BUTTON_COUNT_IN_ROW
+                                }
+                            val newColumnCount = when {
+                                count <= 1 -> 1
+                                count.isOdd() -> count - 1
+                                else -> count
+                            }
+                            println(columnCount)
+                            if (newColumnCount != columnCount) {
+                                columnCount = newColumnCount
+                                changed = true
+                            }
+                        }
+                        gridLayoutCourseWeeks.viewTreeObserver.removeOnPreDrawListener(this)
+                        return !changed
+                    }
+                })
+
+            }.root)
+
+            setPositiveButton(android.R.string.ok) { _, _ ->
+                viewBinding?.apply {
+                    requireContext().hideKeyboard(root.windowToken)
+                }
                 updateEditData()
                 val position = requireArguments().getInt(EXTRA_EDIT_POSITION, -1)
                 requireOwner<OnCourseTimeEditListener>()?.onCourseTimeEditComplete(editCourseTime, if (position < 0) null else position)
-                dismiss()
             }
-
-            buttonCourseTimeEditCancel.setOnClickListener {
-                requireContext().hideKeyboard(root.windowToken)
-                dismiss()
+            setNegativeButton(android.R.string.cancel) { _, _ ->
+                viewBinding?.apply {
+                    requireContext().hideKeyboard(root.windowToken)
+                }
             }
-        }.also {
-            viewBinding = it
-        }.root
+        }.create().also { dialog ->
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        }
 
     override fun onStart() {
         super.onStart()
-        val width = dialog?.setWindowWidthPercent(WINDOW_WIDTH_PERCENT)
-        if (width != null) {
-            viewBinding?.apply {
-                root.measure(MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED))
-                gridLayoutCourseWeeks.apply {
-                    val count =
-                        if (measuredWidth != 0) {
-                            measuredWidth / (weekNumCellSize + weekNumCellMargin * 2)
-                        } else {
-                            DEFAULT_BUTTON_COUNT_IN_ROW
-                        }
-                    columnCount = when {
-                        count <= 0 -> 1
-                        count.isOdd() -> count - 1
-                        else -> count
-                    }
-                }
-            }
-        }
+        requireDialog().setWindowWidthPercent(WINDOW_WIDTH_PERCENT)
     }
 
     private fun updateEditData() {
