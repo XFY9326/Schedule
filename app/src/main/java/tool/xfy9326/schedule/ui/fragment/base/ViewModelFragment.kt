@@ -16,19 +16,17 @@ import tool.xfy9326.schedule.ui.vm.base.AbstractViewModel
 import kotlin.reflect.KClass
 
 abstract class ViewModelFragment<M : AbstractViewModel, V : ViewBinding> : Fragment() {
-    companion object {
-        private const val REFLECT_METHOD_INFLATE = "inflate"
-    }
-
     protected abstract val vmClass: KClass<M>
     private lateinit var viewModel: M
-    private lateinit var viewBinding: V
+    private var viewBinding: V? = null
 
     protected open fun onGetViewModelStoreOwner(): ViewModelStoreOwner = this
 
     protected open fun onCreateViewModel(owner: ViewModelStoreOwner, vmClass: KClass<M>): M = ViewModelProvider(owner)[vmClass.java]
 
     protected abstract fun onCreateViewBinding(inflater: LayoutInflater, container: ViewGroup?): V
+
+    protected abstract fun onBindViewBinding(view: View): V
 
     protected open fun beforeBindLiveData(viewBinding: V, viewModel: M) {}
 
@@ -44,11 +42,14 @@ abstract class ViewModelFragment<M : AbstractViewModel, V : ViewBinding> : Fragm
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return if (view == null) {
-            viewBinding = onCreateViewBinding(inflater, container)
-            viewBinding.root
+            onCreateViewBinding(inflater, container).apply {
+                viewBinding = this
+            }.root
         } else {
-            (requireView().parent as ViewGroup?)?.removeView(view)
-            view
+            val oldView = requireView()
+            (oldView.parent as? ViewGroup?)?.removeView(oldView)
+            viewBinding = onBindViewBinding(oldView)
+            oldView
         }
     }
 
@@ -56,14 +57,19 @@ abstract class ViewModelFragment<M : AbstractViewModel, V : ViewBinding> : Fragm
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        beforeBindLiveData(viewBinding, viewModel)
-        onBindLiveData(viewBinding, viewModel)
-        onInitView(viewBinding, viewModel)
+        beforeBindLiveData(requireViewBinding(), requireViewModel())
+        onBindLiveData(requireViewBinding(), requireViewModel())
+        onInitView(requireViewBinding(), requireViewModel())
 
-        viewModel.onViewInitialized(savedInstanceState == null)
+        requireViewModel().onViewInitialized(savedInstanceState == null)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        viewBinding = null
     }
 
     fun requireViewModel(): M = viewModel
 
-    fun requireViewBinding(): V = viewBinding
+    fun requireViewBinding(): V = viewBinding!!
 }

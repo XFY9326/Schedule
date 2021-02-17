@@ -159,7 +159,12 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
 
         window.decorView.setOnApplyWindowInsetsListener { _, insets ->
             WindowInsetsCompat.toWindowInsetsCompat(insets).apply {
-                viewBinding.layoutScheduleContent.updatePadding(top = systemWindowInsetTop)
+                val layoutParams = (viewBinding.layoutScheduleContent.layoutParams as? ViewGroup.MarginLayoutParams)
+                if (layoutParams == null) {
+                    viewBinding.layoutScheduleContent.updatePadding(top = systemWindowInsetTop)
+                } else {
+                    layoutParams.updateMargins(top = systemWindowInsetTop)
+                }
             }.consumeSystemWindowInsets().toWindowInsets()
         }
     }
