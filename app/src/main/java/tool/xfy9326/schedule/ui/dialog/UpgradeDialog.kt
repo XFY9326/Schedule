@@ -141,7 +141,7 @@ class UpgradeDialog : AppCompatDialogFragment() {
 
     override fun onStart() {
         super.onStart()
-        dialog?.apply {
+        requireDialog().apply {
             setCancelable(!updateInfo.forceUpdate)
             setCanceledOnTouchOutside(!updateInfo.forceUpdate)
             setWindowWidthPercent(CONTENT_WIDTH_PERCENT)

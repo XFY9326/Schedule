@@ -83,6 +83,6 @@ class CrashViewDialog : AppCompatDialogFragment() {
 
     override fun onStart() {
         super.onStart()
-        dialog?.setWindowWidthPercent(WINDOW_WIDTH_PERCENT)
+        requireDialog().setWindowWidthPercent(WINDOW_WIDTH_PERCENT)
     }
 }
