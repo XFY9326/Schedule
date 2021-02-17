@@ -55,7 +55,7 @@ fun Dialog.setWindowWidthPercent(widthPercent: Double): Int? {
 fun AlertDialog.Builder.show(lifecycleOwner: LifecycleOwner) {
     val dialog = create()
     val observer = object : DefaultLifecycleObserver {
-        override fun onStop(owner: LifecycleOwner) {
+        override fun onDestroy(owner: LifecycleOwner) {
             if (dialog.isShowing) dialog.dismiss()
             owner.lifecycle.removeObserver(this)
         }
@@ -135,14 +135,11 @@ fun Window.enableLightSystemBar(context: Context, enabled: Boolean) {
             }
         }
         else -> {
-            decorView.systemUiVisibility = if (enabled) {
-                decorView.systemUiVisibility or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+            if (enabled) {
+                decorView.systemUiVisibility = decorView.systemUiVisibility or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+                navigationBarColor = context.getColorCompat(R.color.light_navigation_bar)
             } else {
-                decorView.systemUiVisibility and View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR.inv()
-            }
-            navigationBarColor = if (enabled) {
-                context.getColorCompat(R.color.light_navigation_bar)
-            } else {
+                decorView.systemUiVisibility = decorView.systemUiVisibility and View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR.inv()
                 context.getColorCompat(R.color.not_light_navigation_bar)
             }
         }
