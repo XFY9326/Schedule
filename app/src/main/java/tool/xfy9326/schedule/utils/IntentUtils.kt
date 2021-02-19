@@ -18,18 +18,6 @@ object IntentUtils {
         })
     }
 
-    fun getSelectImageFromDocumentIntent() =
-        Intent(Intent.ACTION_GET_CONTENT).apply {
-            type = MIMEConst.MIME_IMAGE
-            addCategory(Intent.CATEGORY_OPENABLE)
-        }
-
-    fun getSelectJsonFromDocumentIntent() =
-        Intent(Intent.ACTION_GET_CONTENT).apply {
-            type = MIMEConst.MIME_APPLICATION_JSON
-            addCategory(Intent.CATEGORY_OPENABLE)
-        }
-
     fun getShareImageIntent(context: Context, uri: Uri): Intent =
         Intent.createChooser(Intent(Intent.ACTION_SEND).apply {
             type = MIMEConst.MIME_IMAGE
@@ -37,11 +25,4 @@ object IntentUtils {
             putExtra(Intent.EXTRA_STREAM, uri)
             putExtra(Intent.EXTRA_MIME_TYPES, MIMEConst.MIME_IMAGE)
         }, context.getString(R.string.share_image))
-
-    fun getCreateNewDocumentIntent(fileName: String, mimeType: String? = null) =
-        Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
-            type = mimeType ?: MIMEConst.MIME_ALL
-            addCategory(Intent.CATEGORY_OPENABLE)
-            putExtra(Intent.EXTRA_TITLE, fileName)
-        }
 }

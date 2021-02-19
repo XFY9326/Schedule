@@ -59,6 +59,7 @@
             android:paddingStart="20dp"
             android:paddingEnd="20dp"
             android:text="@string/long_click_to_set_current_schedule"
+            android:textAlignment="viewStart"
             android:textSize="12sp" />
 
         <FrameLayout
