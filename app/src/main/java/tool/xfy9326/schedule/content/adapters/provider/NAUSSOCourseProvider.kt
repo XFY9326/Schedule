@@ -23,7 +23,7 @@ class NAUSSOCourseProvider : LoginCourseProvider<Nothing>(null) {
         private const val JWC_LOGIN_SINGLE_URL = "http://$JWC_HOST/Login_Single.aspx"
         private const val JWC_SSO_LOGIN_URL = "http://$SSO_HOST/sso/login?service=$JWC_LOGIN_SINGLE_URL"
 
-        private const val JWC_LOGOUT_URL = "http://$JWC_HOST/Loginout.aspx"
+        private const val JWC_LOGOUT_URL = "http://$JWC_HOST/Students/NauEventHandle.ashx?class=LoginHandle&meth=LogOut"
         private const val SSO_LOGOUT_URL = "http://$SSO_HOST/sso/logout"
 
         private const val JWC_COURSE_THIS_TERM_URL = "http://$JWC_HOST/Students/MyCourseScheduleTable.aspx"
