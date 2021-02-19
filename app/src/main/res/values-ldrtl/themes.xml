@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="AppTheme.CollapsingToolbarLayout" parent="Widget.Design.CollapsingToolbar">
+        <item name="collapsedTitleGravity">right|center_vertical</item>
+        <item name="expandedTitleGravity">right|bottom</item>
+    </style>
+</resources>

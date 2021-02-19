@@ -50,8 +50,8 @@
     <string name="save_success">保存成功</string>
     <string name="schedule_name">课表名称</string>
     <string name="base_info">基本信息</string>
-    <string name="schedule_start_date">开始日期：</string>
-    <string name="schedule_end_date">结束日期：</string>
+    <string name="schedule_start_date">开始日期</string>
+    <string name="schedule_end_date">结束日期</string>
     <string name="course_per_day">每日课程数</string>
     <string name="schedule_time_edit">课表时间</string>
     <string name="course_cost_time_edit">修改上课时间</string>
@@ -62,7 +62,7 @@
     <string name="course_list_num">第%1$d节课</string>
     <string name="course_list_num_simple">第%1$d节</string>
     <string name="save">保存</string>
-    <string name="schedule_time_list">所有课程时间：</string>
+    <string name="schedule_time_list">所有课程时间</string>
     <string name="long_click_to_set_current_schedule">Tips：长按以切换到该课表</string>
     <string name="swipe_to_delete_course">Tips：侧滑以删除课程</string>
     <string name="course_cost_time_same_mode">所有课程上课时间相等</string>
@@ -105,7 +105,7 @@
     <string name="user_id">用户名</string>
     <string name="user_pw">密码</string>
     <string name="captcha">验证码</string>
-    <string name="options">导入选项：</string>
+    <string name="options">导入选项 </string>
     <string name="import_course_to_current_schedule">导入到当前课表</string>
     <string name="import_course_to_new_schedule">导入到新课表</string>
     <string name="login_to_import_course">登录以导入课程</string>
@@ -323,7 +323,7 @@
     <string name="update_version_info">v%1$s(%2$d) -> v%3$s(%4$d)</string>
     <string name="update_now">立即更新</string>
     <string name="ignore_update">忽略</string>
-    <string name="change_log">更新日志：</string>
+    <string name="change_log">更新日志</string>
     <string name="downloading_update_description">v%1$s(%2$d)</string>
     <string name="start_download_update">开始下载更新！</string>
     <string name="no_update_source">暂无可用更新源</string>
