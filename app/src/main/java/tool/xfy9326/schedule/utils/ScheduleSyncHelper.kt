@@ -15,6 +15,7 @@ import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
 import tool.xfy9326.schedule.io.GlobalIO
 import tool.xfy9326.schedule.kt.APP_ID
 import tool.xfy9326.schedule.kt.iterateAll
+import tool.xfy9326.schedule.kt.withTryLock
 import java.util.*
 
 object ScheduleSyncHelper {
@@ -46,9 +47,9 @@ object ScheduleSyncHelper {
         clearAllCalendar(GlobalIO.contentResolver)
     }
 
-    suspend fun syncCalendar() = withContext(Dispatchers.Default) {
+    suspend fun syncCalendar(): BatchResult? = withContext(Dispatchers.Default) {
         val contentResolver = GlobalIO.contentResolver
-        if (syncLock.tryLock()) {
+        syncLock.withTryLock {
             try {
                 clearAllCalendar(contentResolver)
 
@@ -74,16 +75,12 @@ object ScheduleSyncHelper {
                     }
                 }
 
-                return@withContext BatchResult(true, totalSchedule, errorScheduleAmount)
+                return@withTryLock BatchResult(true, totalSchedule, errorScheduleAmount)
             } catch (e: Exception) {
                 clearAllCalendar(contentResolver)
                 e.printStackTrace()
-                return@withContext BatchResult(false)
-            } finally {
-                syncLock.unlock()
+                return@withTryLock BatchResult(false)
             }
-        } else {
-            return@withContext null
         }
     }
 

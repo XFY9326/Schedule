@@ -70,8 +70,8 @@ abstract class CourseProviderViewModel<I, P1 : BaseCourseProvider<*>, P2 : ICour
         onRun: suspend (P1) -> Unit,
         onFailed: (suspend () -> Unit)? = null,
     ) {
-        if (mutex == null || mutex.tryLock()) {
-            viewModelScope.launch(dispatcher) {
+        viewModelScope.launch(dispatcher) {
+            if (mutex == null || mutex.tryLock()) {
                 try {
                     onRun(_courseProvider)
                 } catch (e: CourseAdapterException) {

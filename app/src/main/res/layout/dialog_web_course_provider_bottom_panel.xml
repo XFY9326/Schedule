@@ -73,8 +73,8 @@
                     android:gravity="center"
                     android:text="@string/import_course_to_new_schedule"
                     android:textColor="@android:color/white"
-                    android:textSize="12sp"
-                    app:cornerRadius="25dp" />
+                    android:textSize="13sp"
+                    app:cornerRadius="10dp" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/button_importCourseToCurrentSchedule"
@@ -86,8 +86,8 @@
                     android:gravity="center"
                     android:text="@string/import_course_to_current_schedule"
                     android:textColor="@android:color/white"
-                    android:textSize="12sp"
-                    app:cornerRadius="25dp" />
+                    android:textSize="13sp"
+                    app:cornerRadius="10dp" />
 
             </androidx.appcompat.widget.LinearLayoutCompat>
 
