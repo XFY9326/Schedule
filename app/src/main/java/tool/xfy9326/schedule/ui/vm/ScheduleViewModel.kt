@@ -13,10 +13,7 @@ import tool.xfy9326.schedule.data.AppDataStore
 import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.data.ScheduleDataStore
 import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
-import tool.xfy9326.schedule.kt.MutableEventLiveData
-import tool.xfy9326.schedule.kt.asDistinctLiveData
-import tool.xfy9326.schedule.kt.combineTransform
-import tool.xfy9326.schedule.kt.postEvent
+import tool.xfy9326.schedule.kt.*
 import tool.xfy9326.schedule.tools.DisposableValue
 import tool.xfy9326.schedule.tools.ImageHelper
 import tool.xfy9326.schedule.ui.vm.base.AbstractViewModel
@@ -24,10 +21,8 @@ import tool.xfy9326.schedule.utils.*
 import java.util.concurrent.atomic.AtomicBoolean
 
 class ScheduleViewModel : AbstractViewModel() {
-    companion object {
-        private val weekNumInfoFlow = ScheduleUtils.currentScheduleFlow.map {
-            CourseTimeUtils.getWeekNum(it) to CourseTimeUtils.getMaxWeekNum(it.startDate, it.endDate, it.weekStart)
-        }
+    private val weekNumInfoFlow = ScheduleUtils.currentScheduleFlow.map {
+        CourseTimeUtils.getWeekNum(it) to CourseTimeUtils.getMaxWeekNum(it.startDate, it.endDate, it.weekStart)
     }
 
     val scheduleBuildData = ScheduleUtils.currentScheduleFlow.combine(ScheduleDataStore.scheduleStylesFlow) { schedule, styles ->
@@ -128,29 +123,25 @@ class ScheduleViewModel : AbstractViewModel() {
     }
 
     fun shareScheduleImage(weekNum: Int, targetWidth: Int) {
-        if (scheduleSharedMutex.tryLock()) {
-            viewModelScope.launch(Dispatchers.Default) {
-                try {
-                    val scheduleId = AppDataStore.currentScheduleIdFlow.first()
-                    val waterMark = AppSettingsDataStore.drawWaterMarkOnScheduleImageFlow.first()
-                    val bitmap = ScheduleViewHelper.generateScheduleImageByWeekNum(scheduleId, weekNum, targetWidth, waterMark)
-                    if (bitmap != null) {
-                        val uri = if (AppSettingsDataStore.saveImageWhileSharingFlow.first()) {
-                            ImageHelper.outputImageToAlbum(bitmap)
-                        } else {
-                            ImageHelper.createShareCacheImage(bitmap)
-                        }
+        viewModelScope.launch(Dispatchers.Default) {
+            scheduleSharedMutex.withTryLock {
+                val scheduleId = AppDataStore.currentScheduleIdFlow.first()
+                val waterMark = AppSettingsDataStore.drawWaterMarkOnScheduleImageFlow.first()
+                val bitmap = ScheduleViewHelper.generateScheduleImageByWeekNum(scheduleId, weekNum, targetWidth, waterMark)
+                if (bitmap != null) {
+                    val uri = if (AppSettingsDataStore.saveImageWhileSharingFlow.first()) {
+                        ImageHelper.outputImageToAlbum(bitmap)
+                    } else {
+                        ImageHelper.createShareCacheImage(bitmap)
+                    }
 
-                        if (uri != null) {
-                            scheduleShared.postEvent(uri)
-                        } else {
-                            scheduleShared.postEvent(null)
-                        }
+                    if (uri != null) {
+                        scheduleShared.postEvent(uri)
                     } else {
                         scheduleShared.postEvent(null)
                     }
-                } finally {
-                    scheduleSharedMutex.unlock()
+                } else {
+                    scheduleShared.postEvent(null)
                 }
             }
         }

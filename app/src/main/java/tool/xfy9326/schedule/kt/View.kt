@@ -67,7 +67,7 @@ fun AlertDialog.Builder.show(lifecycleOwner: LifecycleOwner) {
     dialog.show()
 }
 
-fun Drawable.startAnimateDrawable() {
+fun Drawable.tryStartAnimateDrawable() {
     when {
         this is AnimatedVectorDrawable -> start()
         this is AnimatedVectorDrawableCompat -> start()
@@ -78,7 +78,7 @@ fun Drawable.startAnimateDrawable() {
     }
 }
 
-fun Drawable.stopAnimateDrawable() {
+fun Drawable.tryStopAnimateDrawable() {
     when {
         this is AnimatedVectorDrawable -> stop()
         this is AnimatedVectorDrawableCompat -> stop()
@@ -88,8 +88,6 @@ fun Drawable.stopAnimateDrawable() {
         Build.VERSION.SDK_INT >= Build.VERSION_CODES.P && this is AnimatedImageDrawable -> stop()
     }
 }
-
-fun Drawable.isAnimatedVectorDrawable() = this is AnimatedVectorDrawable || this is AnimatedVectorDrawableCompat
 
 fun ViewGroup.setAllEnable(enabled: Boolean) {
     isEnabled = enabled

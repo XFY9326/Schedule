@@ -2,19 +2,18 @@ package tool.xfy9326.schedule.ui.vm
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.sync.Mutex
-import tool.xfy9326.schedule.beans.Course
-import tool.xfy9326.schedule.beans.ScheduleTime
 import tool.xfy9326.schedule.content.base.WebCourseParser
 import tool.xfy9326.schedule.content.base.WebCourseProvider
 import tool.xfy9326.schedule.content.beans.WebCourseImportParams
 import tool.xfy9326.schedule.kt.MutableEventLiveData
 import tool.xfy9326.schedule.kt.postEvent
+import tool.xfy9326.schedule.ui.activity.base.CourseProviderActivity
 import tool.xfy9326.schedule.ui.vm.base.CourseProviderViewModel
 
 class WebCourseProviderViewModel : CourseProviderViewModel<WebCourseImportParams, WebCourseProvider<*>, WebCourseParser>() {
     var isBottomPanelInitShowed = false
 
-    val validateHtmlPage = MutableEventLiveData<Triple<Boolean, WebCourseImportParams, Int>?>()
+    val validateHtmlPage = MutableEventLiveData<CourseProviderActivity.ImportRequestParams<WebCourseImportParams>?>()
     val initPageUrl
         get() = courseProvider.initPageUrl
 
@@ -29,7 +28,7 @@ class WebCourseProviderViewModel : CourseProviderViewModel<WebCourseImportParams
                     importParams.frameContent
                 )
                 if (pageInfo.isValidPage) {
-                    validateHtmlPage.postEvent(Triple(isCurrentSchedule, importParams, pageInfo.asImportOption))
+                    validateHtmlPage.postEvent(CourseProviderActivity.ImportRequestParams(isCurrentSchedule, importParams, pageInfo.asImportOption))
                 } else {
                     validateHtmlPage.postEvent(null)
                 }
@@ -45,14 +44,14 @@ class WebCourseProviderViewModel : CourseProviderViewModel<WebCourseImportParams
         importOption: Int,
         courseProvider: WebCourseProvider<*>,
         courseParser: WebCourseParser,
-    ): Pair<List<ScheduleTime>, List<Course>> {
+    ): ImportContent {
         val scheduleTimes = courseParser.loadScheduleTimes(importOption)
-        val courses = courseParser.parseCourses(
+        val coursesParseResult = courseParser.parseCourses(
             importOption,
             importParams.htmlContent,
             importParams.iframeContent,
             importParams.frameContent
         )
-        return scheduleTimes to courses
+        return ImportContent(scheduleTimes, coursesParseResult)
     }
 }

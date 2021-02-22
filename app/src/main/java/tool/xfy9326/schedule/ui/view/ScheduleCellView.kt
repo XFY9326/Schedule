@@ -114,14 +114,17 @@ class ScheduleCellView private constructor(context: Context, private val predefi
                     alpha = predefine.notThisWeekCourseCellAlpha
                 }
 
-                gravity = if (styles.horizontalCourseCellText && styles.verticalCourseCellText) {
-                    Gravity.CENTER
+                if (styles.horizontalCourseCellText && styles.verticalCourseCellText) {
+                    textAlignment = View.TEXT_ALIGNMENT_INHERIT
+                    gravity = Gravity.CENTER
                 } else if (styles.verticalCourseCellText) {
-                    Gravity.CENTER_VERTICAL
+                    textAlignment = View.TEXT_ALIGNMENT_VIEW_START
+                    gravity = Gravity.CENTER_VERTICAL
                 } else if (styles.horizontalCourseCellText) {
-                    Gravity.CENTER_HORIZONTAL
+                    textAlignment = View.TEXT_ALIGNMENT_INHERIT
+                    gravity = Gravity.CENTER_HORIZONTAL
                 } else {
-                    Gravity.TOP or Gravity.START
+                    textAlignment = View.TEXT_ALIGNMENT_VIEW_START
                 }
 
                 isClickable = true

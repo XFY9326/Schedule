@@ -46,7 +46,7 @@ class ScheduleView(
 
     private fun getXRecords(timeColumnWidth: Int, courseColumnWidth: Int): IntArray {
         var xTemp = 0
-        val leftToRight = context.resources.configuration.layoutDirection == LAYOUT_DIRECTION_LTR
+        val leftToRight = layoutDirection == LAYOUT_DIRECTION_LTR
         return IntArray(columnAmount + 1) {
             if (it != 0) xTemp += if (leftToRight && it == 1 || !leftToRight && it == columnAmount) timeColumnWidth else courseColumnWidth
             xTemp

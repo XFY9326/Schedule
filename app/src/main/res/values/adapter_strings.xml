@@ -36,6 +36,7 @@
     <string name="adapter_exception_max_course_num_error">导入课程中存在超过当前最大课程节数的课程！</string>
     <string name="adapter_exception_schedule_time_error">课表时间存在错误！</string>
     <string name="adapter_exception_schedule_course_empty">导入的课表中无任何课程！</string>
+    <string name="adapter_exception_failed_to_import_some_course">部分课程无法导入！</string>
 
     <!-- Other Field -->
 </resources>

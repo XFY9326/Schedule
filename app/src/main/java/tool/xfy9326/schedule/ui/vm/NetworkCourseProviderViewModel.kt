@@ -2,12 +2,11 @@ package tool.xfy9326.schedule.ui.vm
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.sync.Mutex
-import tool.xfy9326.schedule.beans.Course
-import tool.xfy9326.schedule.beans.ScheduleTime
 import tool.xfy9326.schedule.content.base.LoginCourseProvider
 import tool.xfy9326.schedule.content.base.NetworkCourseParser
 import tool.xfy9326.schedule.content.base.NetworkCourseProvider
 import tool.xfy9326.schedule.content.beans.NetworkCourseImportParams
+import tool.xfy9326.schedule.content.beans.NetworkLoginParams
 import tool.xfy9326.schedule.io.GlobalIO
 import tool.xfy9326.schedule.kt.MutableEventLiveData
 import tool.xfy9326.schedule.kt.postEvent
@@ -66,20 +65,24 @@ class NetworkCourseProviderViewModel : CourseProviderViewModel<NetworkCourseImpo
         importOption: Int,
         courseProvider: NetworkCourseProvider<*>,
         courseParser: NetworkCourseParser,
-    ): Pair<List<ScheduleTime>, List<Course>> {
+    ): ImportContent {
         if (courseProvider is LoginCourseProvider) {
             courseProvider.login(importParams.userId!!, importParams.userPw!!, importParams.captchaCode, importOption)
         }
 
-        val scheduleTimesHtml = courseProvider.loadScheduleTimesHtml(importOption)
-        val coursesHtml = courseProvider.loadCoursesHtml(importOption)
-        courseProvider.close()
+        val scheduleTimesHtml: String?
+        val coursesHtml: String
+        try {
+            scheduleTimesHtml = courseProvider.loadScheduleTimesHtml(importOption)
+            coursesHtml = courseProvider.loadCoursesHtml(importOption)
+        } finally {
+            courseProvider.close()
+        }
 
         val scheduleTimes = courseParser.parseScheduleTimes(importOption, scheduleTimesHtml)
-        val courses = courseParser.parseCourses(importOption, coursesHtml)
+        val coursesParseResult = courseParser.parseCourses(importOption, coursesHtml)
 
-        return scheduleTimes to courses
+        return ImportContent(scheduleTimes, coursesParseResult)
     }
 
-    class NetworkLoginParams(val options: Array<String>?, val enableCaptcha: Boolean, val allowLogin: Boolean)
 }

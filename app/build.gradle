@@ -12,8 +12,8 @@ rootProject.ext {
     targetSDKVersion = 30
     applicationName = 'PureSchedule'
     applicationId = 'tool.xfy9326.schedule'
-    versionCode = 6
-    versionName = "1.1.4"
+    versionCode = 7
+    versionName = "1.1.5"
 }
 
 android {
@@ -105,7 +105,6 @@ dependencies {
 
     // Kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinx_coroutines_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlinx_coroutines_version"
 
     // Kotlin Serialization
@@ -152,7 +151,7 @@ dependencies {
     implementation 'com.jaredrummler:colorpicker:1.1.0'
 
     // Test
-    testImplementation 'junit:junit:4.13.1'
+    testImplementation 'junit:junit:4.13.2'
     testImplementation "androidx.room:room-testing:$androidx_room_version"
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'

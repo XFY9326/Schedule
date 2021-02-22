@@ -18,6 +18,7 @@ import tool.xfy9326.schedule.BuildConfig
 import tool.xfy9326.schedule.data.AppDataStore
 import tool.xfy9326.schedule.json.upgrade.UpdateIndex
 import tool.xfy9326.schedule.json.upgrade.UpdateInfo
+import tool.xfy9326.schedule.kt.withTryLock
 
 object UpgradeUtils {
     private const val CURRENT_VERSION = BuildConfig.VERSION_CODE
@@ -42,22 +43,18 @@ object UpgradeUtils {
         onFoundUpgrade: ((UpdateInfo) -> Unit)? = null,
     ) {
         GlobalScope.launch(Dispatchers.Default) {
-            if (UPDATE_CHECK_MUTEX.tryLock()) {
-                try {
-                    requestUpgrade(forceCheck).let {
-                        if (it.first) {
-                            val info = it.second
-                            if (info == null) {
-                                if (onNoUpgrade != null) lifecycleOwner.lifecycleScope.launchWhenStarted { onNoUpgrade() }
-                            } else {
-                                if (onFoundUpgrade != null) lifecycleOwner.lifecycleScope.launchWhenStarted { onFoundUpgrade(info) }
-                            }
+            UPDATE_CHECK_MUTEX.withTryLock {
+                requestUpgrade(forceCheck).let {
+                    if (it.first) {
+                        val info = it.second
+                        if (info == null) {
+                            if (onNoUpgrade != null) lifecycleOwner.lifecycleScope.launchWhenStarted { onNoUpgrade() }
                         } else {
-                            if (onFailed != null) lifecycleOwner.lifecycleScope.launchWhenStarted { onFailed() }
+                            if (onFoundUpgrade != null) lifecycleOwner.lifecycleScope.launchWhenStarted { onFoundUpgrade(info) }
                         }
+                    } else {
+                        if (onFailed != null) lifecycleOwner.lifecycleScope.launchWhenStarted { onFailed() }
                     }
-                } finally {
-                    UPDATE_CHECK_MUTEX.unlock()
                 }
             }
         }

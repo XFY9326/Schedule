@@ -28,13 +28,12 @@ inline fun List<Course>.iterateAll(action: (Course, CourseTime) -> Unit) {
     for (course in this) for (time in course.times) action(course, time)
 }
 
-fun List<Course>.fitAllWeekNum(): List<Course> {
+fun List<Course>.fitAllWeekNum() {
     this.forEach {
         it.times.forEach { time ->
             time.weekNum = time.weekNum.fit()
         }
     }
-    return this
 }
 
 infix fun ClassTime.intersect(classTime: ClassTime): Boolean =

@@ -1,28 +1,30 @@
 package tool.xfy9326.schedule.ui.recyclerview
 
 import android.animation.Animator
-import android.animation.AnimatorListenerAdapter
 import android.animation.ValueAnimator
 import android.graphics.Canvas
 import android.graphics.drawable.GradientDrawable
 import android.view.HapticFeedbackConstants
 import android.view.View
 import android.view.ViewAnimationUtils
+import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.ScaleAnimation
+import androidx.core.animation.addListener
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import tool.xfy9326.schedule.kt.dpToPx
-import tool.xfy9326.schedule.kt.isAnimatedVectorDrawable
-import tool.xfy9326.schedule.kt.startAnimateDrawable
+import tool.xfy9326.schedule.kt.tryStartAnimateDrawable
 import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.math.abs
+import kotlin.math.max
+import kotlin.math.sqrt
 
 class SwipeItemCallback : ItemTouchHelper.Callback() {
     companion object {
         private val foregroundSwipeCorner = 10f.dpToPx()
         private const val foregroundCornerDuration = 150L
-        private const val backgroundCircularRevealDuration = 380L
+        private const val backgroundCircularRevealDuration = 400L
         private const val swipeIconDuration = 100L
         private const val swipeIconScaleTo = 1.2f
         private const val swipeThreshold = 0.3f
@@ -62,10 +64,8 @@ class SwipeItemCallback : ItemTouchHelper.Callback() {
         if (viewHolder is SwipeItemViewHolder<*>) {
             if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
                 setupForegroundCorner(viewHolder, dX)
-                if (viewHolder.swipeIconView.drawable.isAnimatedVectorDrawable()) {
-                    setupSwipeIcon(viewHolder, dX, isCurrentlyActive)
-                }
-                setupBackground(recyclerView, viewHolder, dX)
+                setupSwipeIcon(viewHolder, dX, isCurrentlyActive)
+                setupBackground(viewHolder, dX)
             } else if (actionState == ItemTouchHelper.ACTION_STATE_IDLE) {
                 if (dX <= 0) resetSwipeView(viewHolder)
             }
@@ -86,6 +86,8 @@ class SwipeItemCallback : ItemTouchHelper.Callback() {
 
     private fun resetSwipeView(viewHolder: SwipeItemViewHolder<*>) {
         hasSetSwipeAction.set(false)
+        hasChangedCorner.set(false)
+        hasAnimatedIcon.set(false)
         circularRevealAnimation?.cancel()
         viewHolder.backgroundSwipeView.visibility = View.INVISIBLE
         (viewHolder.foregroundSwipeView.background as? GradientDrawable)?.apply {
@@ -94,19 +96,19 @@ class SwipeItemCallback : ItemTouchHelper.Callback() {
         }
     }
 
-    private fun setupBackground(recyclerView: RecyclerView, viewHolder: SwipeItemViewHolder<*>, dX: Float) {
-        val notSwiped = recyclerView.width * getSwipeThreshold(viewHolder) > abs(dX)
+    private fun setupBackground(viewHolder: SwipeItemViewHolder<*>, dX: Float) {
+        val notSwiped = viewHolder.backgroundSwipeView.measuredWidth * getSwipeThreshold(viewHolder) > abs(dX)
 
         if (notSwiped) {
             if (hasSetSwipeAction.compareAndSet(true, false)) {
                 animateSwipeIcon(viewHolder)
-                animateTransitionBackground(viewHolder, dX, false)
+                animateTransitionBackground(viewHolder, false)
                 viewHolder.itemView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
             }
         } else {
             if (hasSetSwipeAction.compareAndSet(false, true)) {
                 animateSwipeIcon(viewHolder)
-                animateTransitionBackground(viewHolder, dX, true)
+                animateTransitionBackground(viewHolder, true)
                 viewHolder.itemView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
             }
         }
@@ -125,13 +127,19 @@ class SwipeItemCallback : ItemTouchHelper.Callback() {
     }
 
     private fun setupSwipeIcon(viewHolder: SwipeItemViewHolder<*>, dX: Float, isCurrentlyActive: Boolean) {
-        if (viewHolder.itemView.right + dX < viewHolder.swipeIconView.left) {
+        val edgeSwiped = if (viewHolder.itemView.layoutDirection == ViewGroup.LAYOUT_DIRECTION_LTR) {
+            viewHolder.itemView.right + dX < viewHolder.swipeIconView.left
+        } else {
+            viewHolder.itemView.left + dX > viewHolder.swipeIconView.right
+        }
+
+        if (edgeSwiped) {
             if (hasAnimatedIcon.compareAndSet(true, false)) {
-                viewHolder.swipeIconView.drawable.startAnimateDrawable()
+                viewHolder.swipeIconView.drawable.tryStartAnimateDrawable()
             }
         } else {
             if (hasAnimatedIcon.compareAndSet(false, true)) {
-                if (isCurrentlyActive) viewHolder.swipeIconView.drawable.startAnimateDrawable()
+                if (isCurrentlyActive) viewHolder.swipeIconView.drawable.tryStartAnimateDrawable()
             }
         }
     }
@@ -143,7 +151,12 @@ class SwipeItemCallback : ItemTouchHelper.Callback() {
                 addUpdateListener {
                     val value = it.animatedValue as Float
                     icon.mutate()
-                    icon.cornerRadii = floatArrayOf(0f, 0f, value, value, value, value, 0f, 0f)
+                    icon.cornerRadii =
+                        if (viewHolder.foregroundSwipeView.layoutDirection == ViewGroup.LAYOUT_DIRECTION_LTR) {
+                            floatArrayOf(0f, 0f, value, value, value, value, 0f, 0f)
+                        } else {
+                            floatArrayOf(value, value, 0f, 0f, 0f, 0f, value, value)
+                        }
                 }
                 start()
             }
@@ -159,19 +172,16 @@ class SwipeItemCallback : ItemTouchHelper.Callback() {
         }
     }
 
-    private fun animateTransitionBackground(viewHolder: SwipeItemViewHolder<*>, dX: Float, showSwipeBackground: Boolean) {
-        val iconX = viewHolder.swipeIconView.x + viewHolder.swipeIconView.width / 2
-        val iconY = viewHolder.swipeIconView.y + viewHolder.swipeIconView.height / 2
-        val startRadius = if (showSwipeBackground) {
-            0f
-        } else {
-            viewHolder.foregroundSwipeView.right + dX
-        }
-        val finalRadius = if (showSwipeBackground) {
-            viewHolder.swipeIconView.x
-        } else {
-            0f
-        }
+    private fun animateTransitionBackground(viewHolder: SwipeItemViewHolder<*>, showSwipeBackground: Boolean) {
+        val viewWidth = viewHolder.backgroundSwipeView.measuredWidth
+        val viewHeight = viewHolder.backgroundSwipeView.measuredHeight
+        val iconX = viewHolder.swipeIconView.x + viewHolder.swipeIconView.measuredWidth / 2
+        val iconY = viewHolder.swipeIconView.y + viewHolder.swipeIconView.measuredHeight / 2
+        val maxRadius = max(sqrt((viewWidth - iconX) * (viewWidth - iconX) + (viewHeight - iconY) * (viewHeight - iconY)),
+            sqrt(iconX * iconX + (viewHeight - iconY) * (viewHeight - iconY)))
+
+        val startRadius = if (showSwipeBackground) 0f else maxRadius
+        val finalRadius = if (showSwipeBackground) maxRadius else 0f
 
         circularRevealAnimation?.let {
             it.removeAllListeners()
@@ -182,19 +192,17 @@ class SwipeItemCallback : ItemTouchHelper.Callback() {
             viewHolder.backgroundSwipeView, iconX.toInt(), iconY.toInt(), startRadius, finalRadius
         ).apply {
             duration = backgroundCircularRevealDuration
-            addListener(object : AnimatorListenerAdapter() {
-                override fun onAnimationStart(animation: Animator?) {
+            addListener(
+                onStart = {
                     if (showSwipeBackground) viewHolder.backgroundSwipeView.visibility = View.VISIBLE
-                }
-
-                override fun onAnimationCancel(animation: Animator?) {
+                },
+                onCancel = {
                     viewHolder.backgroundSwipeView.visibility = if (showSwipeBackground) View.VISIBLE else View.INVISIBLE
-                }
-
-                override fun onAnimationEnd(animation: Animator?) {
+                },
+                onEnd = {
                     if (!showSwipeBackground) viewHolder.backgroundSwipeView.visibility = View.INVISIBLE
                 }
-            })
+            )
             start()
         }
     }

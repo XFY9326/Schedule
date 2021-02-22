@@ -21,6 +21,7 @@ object AppSettingsDataStore : AbstractDataStore("Settings") {
     private val customActivityTransitionAnimation by booleanPreferencesKey()
     private val useBrowserDownloadUpgradeFile by booleanPreferencesKey()
     private val allowImportEmptySchedule by booleanPreferencesKey()
+    private val allowImportIncompleteSchedule by booleanPreferencesKey()
     private val drawWaterMarkOnScheduleImage by booleanPreferencesKey()
     val enableOnlineCourseImport by booleanPreferencesKey()
 
@@ -37,6 +38,8 @@ object AppSettingsDataStore : AbstractDataStore("Settings") {
             it[calendarSyncAddReminderDefault] ?: false
         )
     }
+
+    val allowImportIncompleteScheduleFlow = allowImportIncompleteSchedule.readAsFlow(false)
 
     val drawWaterMarkOnScheduleImageFlow = drawWaterMarkOnScheduleImage.readAsFlow(true)
 

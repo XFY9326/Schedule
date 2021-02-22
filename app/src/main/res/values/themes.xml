@@ -46,6 +46,7 @@
         <item name="sliderStyle">@style/AppTheme.AnimateSlider</item>
         <item name="materialAlertDialogTheme">@style/AppTheme.MaterialDialog</item>
         <item name="android:forceDarkAllowed" tools:ignore="NewApi">false</item>
+        <item name="collapsingToolbarLayoutStyle">@style/AppTheme.CollapsingToolbarLayout</item>
     </style>
 
     <style name="AppTheme.ActivityAnimation" parent="@android:style/Animation.Activity">
@@ -129,4 +130,8 @@
         <item name="android:windowExitAnimation">@anim/anim_fast_fade_out</item>
     </style>
 
+    <style name="AppTheme.CollapsingToolbarLayout" parent="Widget.Design.CollapsingToolbar">
+        <item name="collapsedTitleGravity">left|center_vertical</item>
+        <item name="expandedTitleGravity">left|bottom</item>
+    </style>
 </resources>

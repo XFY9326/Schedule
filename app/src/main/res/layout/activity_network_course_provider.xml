@@ -205,21 +205,21 @@
                         android:id="@+id/button_importCourseToNewSchedule"
                         style="@style/Widget.MaterialComponents.Button"
                         android:layout_width="match_parent"
-                        android:layout_height="60dp"
+                        android:layout_height="58dp"
                         android:layout_marginStart="10dp"
                         android:layout_marginTop="30dp"
                         android:layout_marginEnd="10dp"
                         android:gravity="center"
                         android:text="@string/import_course_to_new_schedule"
                         android:textColor="@android:color/white"
-                        android:textSize="15sp"
-                        app:cornerRadius="25dp" />
+                        android:textSize="14sp"
+                        app:cornerRadius="10dp" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/button_importCourseToCurrentSchedule"
                         style="@style/Widget.MaterialComponents.Button"
                         android:layout_width="match_parent"
-                        android:layout_height="60dp"
+                        android:layout_height="58dp"
                         android:layout_marginStart="10dp"
                         android:layout_marginTop="5dp"
                         android:layout_marginEnd="10dp"
@@ -227,8 +227,8 @@
                         android:gravity="center"
                         android:text="@string/import_course_to_current_schedule"
                         android:textColor="@android:color/white"
-                        android:textSize="15sp"
-                        app:cornerRadius="25dp" />
+                        android:textSize="14sp"
+                        app:cornerRadius="10dp" />
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/textView_courseAdapterAuthor"

@@ -1,8 +1,8 @@
 package tool.xfy9326.schedule.content.adapters.parser
 
-import tool.xfy9326.schedule.beans.Course
 import tool.xfy9326.schedule.beans.ScheduleTime
 import tool.xfy9326.schedule.content.base.WebCourseParser
+import tool.xfy9326.schedule.content.beans.CourseParseResult
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
 
 class NAUCourseWebParser : WebCourseParser() {
@@ -10,7 +10,7 @@ class NAUCourseWebParser : WebCourseParser() {
         private const val PAGE_TEXT = "在修课程课表"
     }
 
-    private val loginParser = NAUCourseLoginParser()
+    private val loginParser = NAUCourseParser()
 
     override fun onLoadScheduleTimes(importOption: Int): List<ScheduleTime> = loginParser.parseScheduleTimes(importOption)
 
@@ -19,10 +19,10 @@ class NAUCourseWebParser : WebCourseParser() {
         htmlContent: String,
         iframeContent: Array<String>,
         frameContent: Array<String>,
-    ): List<Course> {
+    ): CourseParseResult {
         for (content in iframeContent) {
             if (PAGE_TEXT in content) return loginParser.parseCourses(importOption, content)
         }
-        CourseAdapterException.ErrorType.PARSER_ERROR.report()
+        CourseAdapterException.Error.PARSER_ERROR.report()
     }
 }
