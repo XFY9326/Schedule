@@ -20,6 +20,7 @@
         android:focusable="true"
         android:focusableInTouchMode="true"
         android:singleLine="true"
+        android:textAlignment="viewStart"
         android:textColor="@color/theme_color_primary_text" />
 
     <com.google.android.material.textview.MaterialTextView

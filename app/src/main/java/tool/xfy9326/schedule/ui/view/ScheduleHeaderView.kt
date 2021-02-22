@@ -139,7 +139,7 @@ class ScheduleHeaderView(
 
     override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
         if (childCount > 0) {
-            val leftToRight = context.resources.configuration.layoutDirection == LAYOUT_DIRECTION_LTR
+            val leftToRight = layoutDirection == LAYOUT_DIRECTION_LTR
 
             for (i in 0 until columnAmount) {
                 val view = if (i == 0) {

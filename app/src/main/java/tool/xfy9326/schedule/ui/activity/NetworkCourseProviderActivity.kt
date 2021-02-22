@@ -11,11 +11,13 @@ import com.bumptech.glide.Glide
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.content.base.*
 import tool.xfy9326.schedule.content.beans.NetworkCourseImportParams
+import tool.xfy9326.schedule.content.beans.NetworkLoginParams
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
 import tool.xfy9326.schedule.databinding.ActivityNetworkCourseProviderBinding
 import tool.xfy9326.schedule.kt.*
 import tool.xfy9326.schedule.ui.activity.base.CourseProviderActivity
 import tool.xfy9326.schedule.ui.vm.NetworkCourseProviderViewModel
+import tool.xfy9326.schedule.ui.vm.base.CourseProviderViewModel
 import tool.xfy9326.schedule.utils.DialogUtils
 import tool.xfy9326.schedule.utils.ViewUtils
 
@@ -73,12 +75,12 @@ class NetworkCourseProviderActivity :
 
         viewBinding.buttonImportCourseToCurrentSchedule.setOnClickListener {
             getCurrentOption()?.let {
-                requestImportCourse(true, getImportCourseParams(), it)
+                requestImportCourse(ImportRequestParams(true, getImportCourseParams(), it))
             }
         }
         viewBinding.buttonImportCourseToNewSchedule.setOnClickListener {
             getCurrentOption()?.let {
-                requestImportCourse(false, getImportCourseParams(), it)
+                requestImportCourse(ImportRequestParams(false, getImportCourseParams(), it))
             }
         }
     }
@@ -100,13 +102,13 @@ class NetworkCourseProviderActivity :
         ViewUtils.showCourseAdapterErrorSnackBar(this, requireViewBinding().layoutLoginCourseProvider, exception)
     }
 
-    override fun onCourseImportFinish(isSuccess: Boolean, hasConflict: Boolean) {
-        if (!isSuccess) {
+    override fun onCourseImportFinish(result: CourseProviderViewModel.ImportResult) {
+        if (!result.isSuccess) {
             requireViewBinding().layoutCourseImportContent.setAllEnable(true)
             requireViewModel().initLoginParams()
         }
-        super.onCourseImportFinish(isSuccess, hasConflict)
-        if (isSuccess && !hasConflict) finish()
+        super.onCourseImportFinish(result)
+        if (result.isSuccess && !result.hasConflicts) finish()
     }
 
     override fun onReadyImportCourse() {
@@ -163,7 +165,7 @@ class NetworkCourseProviderActivity :
         }
     }
 
-    private fun applyLoginParams(params: NetworkCourseProviderViewModel.NetworkLoginParams?) {
+    private fun applyLoginParams(params: NetworkLoginParams?) {
         requireViewBinding().apply {
             if (params != null) {
                 if (params.options == null) {

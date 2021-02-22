@@ -12,14 +12,14 @@ import tool.xfy9326.schedule.R
  * @constructor Create empty Course adapter exception
  */
 class CourseAdapterException : Exception {
-    private val errorType: ErrorType
+    val type: Error
 
     /**
-     * Error type
+     * Error
      *
-     * @constructor Create empty Error type
+     * @constructor Create empty Error
      */
-    enum class ErrorType(@StringRes private val msgId: Int?) {
+    enum class Error(@StringRes private val msgId: Int?, val strictMode: Boolean = false) {
         IMPORT_SELECT_OPTION_ERROR(R.string.adapter_exception_import_option_error),
         IMPORT_OPTION_GET_ERROR(R.string.adapter_exception_import_option_get_error),
         PARSE_PAGE_ERROR(R.string.adapter_exception_parse_page_error),
@@ -48,7 +48,8 @@ class CourseAdapterException : Exception {
         SCHEDULE_TIMES_ERROR(R.string.adapter_exception_schedule_time_error),
 
         // 课程导入时会自动判断该错误
-        SCHEDULE_COURSE_IMPORT_EMPTY(R.string.adapter_exception_schedule_course_empty),
+        SCHEDULE_COURSE_IMPORT_EMPTY(R.string.adapter_exception_schedule_course_empty, true),
+        FAILED_TO_IMPORT_SOME_COURSE(R.string.adapter_exception_failed_to_import_some_course, true),
 
         // 如果可以添加固定的报错内容，就不要使用该报错类型
         CUSTOM_ERROR(null);
@@ -105,25 +106,27 @@ class CourseAdapterException : Exception {
     }
 
     fun getText(context: Context) =
-        if (errorType == ErrorType.CUSTOM_ERROR) {
+        if (type == Error.CUSTOM_ERROR) {
             message.orEmpty()
         } else {
-            errorType.getText(context)
+            type.getText(context)
         }
 
+    fun getDeepStackTraceString() = cause?.stackTraceToString() ?: stackTraceToString()
+
     private constructor(msg: String) : super(msg) {
-        this.errorType = ErrorType.CUSTOM_ERROR
+        this.type = Error.CUSTOM_ERROR
     }
 
     private constructor(msg: String, cause: Throwable) : super(msg, cause) {
-        this.errorType = ErrorType.CUSTOM_ERROR
+        this.type = Error.CUSTOM_ERROR
     }
 
-    private constructor(type: ErrorType) : super(type.name) {
-        this.errorType = type
+    private constructor(type: Error) : super(type.name) {
+        this.type = type
     }
 
-    private constructor(type: ErrorType, cause: Throwable) : super(type.name, cause) {
-        this.errorType = type
+    private constructor(type: Error, cause: Throwable) : super(type.name, cause) {
+        this.type = type
     }
 }

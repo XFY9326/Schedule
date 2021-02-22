@@ -2,6 +2,7 @@
 
 package tool.xfy9326.schedule.kt
 
+import kotlinx.coroutines.sync.Mutex
 import java.io.*
 
 const val NEW_LINE = "\n"
@@ -97,6 +98,17 @@ fun <T : Serializable> T.clone(): T? {
         }
     } catch (e: Exception) {
         e.printStackTrace()
+    }
+    return null
+}
+
+inline fun <T> Mutex.withTryLock(owner: Any? = null, action: () -> T): T? {
+    if (tryLock(owner)) {
+        try {
+            return action()
+        } finally {
+            unlock(owner)
+        }
     }
     return null
 }
