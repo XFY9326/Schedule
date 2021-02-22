@@ -24,6 +24,14 @@
             app:defaultValue="false"
             app:dependency="enableOnlineCourseImport"
             app:iconSpaceReserved="false"
+            app:key="allowImportIncompleteSchedule"
+            app:summary="@string/allow_import_incomplete_schedule_sum"
+            app:title="@string/allow_import_incomplete_schedule" />
+
+        <androidx.preference.CheckBoxPreference
+            app:defaultValue="false"
+            app:dependency="enableOnlineCourseImport"
+            app:iconSpaceReserved="false"
             app:key="keepWebProviderCache"
             app:summary="@string/keep_web_browser_cache_sum"
             app:title="@string/keep_web_browser_cache" />

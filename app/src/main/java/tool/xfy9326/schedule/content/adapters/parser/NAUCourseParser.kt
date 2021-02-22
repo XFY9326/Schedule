@@ -6,10 +6,11 @@ import tool.xfy9326.schedule.beans.CourseTime
 import tool.xfy9326.schedule.beans.ScheduleTime
 import tool.xfy9326.schedule.beans.WeekDay
 import tool.xfy9326.schedule.content.base.NetworkCourseParser
+import tool.xfy9326.schedule.content.beans.CourseParseResult
 import tool.xfy9326.schedule.kt.isEven
 import tool.xfy9326.schedule.kt.isOdd
 
-class NAUCourseLoginParser : NetworkCourseParser() {
+class NAUCourseParser : NetworkCourseParser() {
     companion object {
         private const val INIT_WEEK_NUM = 20
         private const val COURSE_TR_TAGS = "#content > tbody > tr[align='center']"
@@ -91,32 +92,43 @@ class NAUCourseLoginParser : NetworkCourseParser() {
             ScheduleTime(20, 10, 20, 50)
         )
 
-    override fun onParseCourses(importOption: Int, htmlContent: String): List<Course> {
+    override fun onParseCourses(importOption: Int, htmlContent: String): CourseParseResult {
         val body = Jsoup.parse(htmlContent).body()
         val trTags = body.select(COURSE_TR_TAGS)
-        val result = ArrayList<Course>(trTags.size)
+
+        val builder = CourseParseResult.Builder(trTags.size)
+        var test = true
+
         for (trTag in trTags) {
-            val values = trTag.children()
-            val courseName = values[2].text()
-            val courseTeacher = values[7].text()
+            builder.add {
+                if (test) {
+                    test = false
+                    error("Test")
+                }
+                val values = trTag.children()
+                val courseName = values[2].text()
+                val courseTeacher = values[7].text()
 
-            val timeStr = values[8].text().trim()
+                val timeStr = values[8].text().trim()
 
-            if ("上课地点：" !in timeStr || timeStr.isEmpty()) continue
+                if ("上课地点：" !in timeStr || timeStr.isEmpty()) {
+                    null
+                } else {
+                    val timeStrArr = timeStr.split("上课地点：")
+                    val courseTimes = ArrayList<CourseTime>(timeStrArr.size - 1)
 
-            val timeStrArr = timeStr.split("上课地点：")
-            val courseTimes = ArrayList<CourseTime>(timeStrArr.size - 1)
+                    for (i in 1 until timeStrArr.size) {
+                        val times = timeStrArr[i].split("上课时间：")
+                        getCourseTime(times[0].trim(), times[1].trim())?.let {
+                            courseTimes.add(it)
+                        }
+                    }
 
-            for (i in 1 until timeStrArr.size) {
-                val times = timeStrArr[i].split("上课时间：")
-                getCourseTime(times[0].trim(), times[1].trim())?.let {
-                    courseTimes.add(it)
+                    Course(courseName, courseTeacher, courseTimes)
                 }
             }
-
-            result.add(Course(courseName, courseTeacher, courseTimes))
         }
 
-        return result
+        return builder.build()
     }
 }

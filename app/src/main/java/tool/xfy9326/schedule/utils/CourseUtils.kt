@@ -95,7 +95,7 @@ object CourseUtils {
         var foundConflicts = false
 
         allTimes.forEach {
-            if (it.classTime.classEndTime > scheduleTimes.size) CourseAdapterException.ErrorType.MAX_COURSE_NUM_ERROR.report()
+            if (it.classTime.classEndTime > scheduleTimes.size) CourseAdapterException.Error.MAX_COURSE_NUM_ERROR.report()
         }
 
         allTimes.forEachTwo { _, t1, _, t2 ->

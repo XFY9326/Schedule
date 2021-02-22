@@ -13,6 +13,7 @@ import tool.xfy9326.schedule.kt.showShortToast
 import tool.xfy9326.schedule.kt.startActivity
 import tool.xfy9326.schedule.kt.tryCast
 import tool.xfy9326.schedule.ui.dialog.ImportCourseConflictDialog
+import tool.xfy9326.schedule.ui.dialog.StrictImportModeWarningDialog
 import tool.xfy9326.schedule.ui.vm.base.CourseProviderViewModel
 import tool.xfy9326.schedule.utils.DialogUtils
 
@@ -34,22 +35,26 @@ abstract class CourseProviderActivity<I, P1 : BaseCourseProvider<*>, P2 : ICours
 
     @CallSuper
     override fun onBindLiveData(viewBinding: V, viewModel: M) {
-        viewModel.providerError.observeEvent(this, observer = ::onShowCourseAdapterError)
-        viewModel.courseImportFinish.observeEvent(this) {
-            onCourseImportFinish(it.first, it.second)
+        viewModel.providerError.observeEvent(this) {
+            if (it.type.strictMode) {
+                StrictImportModeWarningDialog.showDialog(supportFragmentManager, it.getText(this), it.getDeepStackTraceString())
+            } else {
+                onShowCourseAdapterError(it)
+            }
         }
+        viewModel.courseImportFinish.observeEvent(this, observer = ::onCourseImportFinish)
     }
 
-    protected fun requestImportCourse(isCurrentSchedule: Boolean, importParams: I, importOption: Int) {
-        if (isCurrentSchedule) {
+    protected fun requestImportCourse(params: ImportRequestParams<I>) {
+        if (params.isCurrentSchedule) {
             DialogUtils.showOverwriteScheduleAttentionDialog(this) {
                 onReadyImportCourse()
-                requireViewModel().importCourse(importParams, importOption, true, null)
+                requireViewModel().importCourse(params.importParams, params.importOption, true, null)
             }
         } else {
             DialogUtils.showNewScheduleNameDialog(this) {
                 onReadyImportCourse()
-                requireViewModel().importCourse(importParams, importOption, false, it)
+                requireViewModel().importCourse(params.importParams, params.importOption, false, it)
             }
         }
     }
@@ -59,12 +64,14 @@ abstract class CourseProviderActivity<I, P1 : BaseCourseProvider<*>, P2 : ICours
     }
 
     @CallSuper
-    protected open fun onCourseImportFinish(isSuccess: Boolean, hasConflict: Boolean) {
-        if (isSuccess) showShortToast(R.string.course_import_success)
-        if (hasConflict) ImportCourseConflictDialog.showDialog(supportFragmentManager)
+    protected open fun onCourseImportFinish(result: CourseProviderViewModel.ImportResult) {
+        if (result.isSuccess) showShortToast(R.string.course_import_success)
+        if (result.hasConflicts) ImportCourseConflictDialog.showDialog(supportFragmentManager)
     }
 
     protected abstract fun onShowCourseAdapterError(exception: CourseAdapterException)
 
     protected open fun onReadyImportCourse() {}
+
+    class ImportRequestParams<I>(val isCurrentSchedule: Boolean, val importParams: I, val importOption: Int)
 }

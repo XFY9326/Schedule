@@ -19,7 +19,7 @@ object ViewUtils {
         Snackbar.make(coordinatorLayout, exception.getText(activity), Snackbar.LENGTH_LONG)
             .setActionTextColor(Color.RED)
             .setAction(R.string.details) {
-                CrashViewDialog.showDialog(activity.supportFragmentManager, exception.stackTraceToString(), false)
+                CrashViewDialog.showDialog(activity.supportFragmentManager, exception.getDeepStackTraceString(), false)
             }.show()
     }
 
