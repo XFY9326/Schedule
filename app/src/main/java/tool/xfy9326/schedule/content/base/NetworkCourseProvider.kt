@@ -20,7 +20,7 @@ abstract class NetworkCourseProvider<P : Serializable>(params: P?) : BaseCourseP
         try {
             httpClient = onPrepareClient()
         } catch (e: Exception) {
-            CourseAdapterException.ErrorType.INIT_ERROR.report(e)
+            CourseAdapterException.Error.INIT_ERROR.report(e)
         }
     }
 
@@ -29,7 +29,7 @@ abstract class NetworkCourseProvider<P : Serializable>(params: P?) : BaseCourseP
     suspend fun loadImportOptions() = try {
         onLoadImportOptions(requireHttpClient())
     } catch (e: Exception) {
-        CourseAdapterException.ErrorType.IMPORT_OPTION_GET_ERROR.report(e)
+        CourseAdapterException.Error.IMPORT_OPTION_GET_ERROR.report(e)
     }
 
     suspend fun loadScheduleTimesHtml(importOption: Int) = onLoadScheduleTimesHtml(requireHttpClient(), importOption)
@@ -41,7 +41,7 @@ abstract class NetworkCourseProvider<P : Serializable>(params: P?) : BaseCourseP
             onClearConnection(requireHttpClient())
             httpClient?.close()
         } catch (e: Exception) {
-            CourseAdapterException.ErrorType.CLOSE_ERROR.report(e)
+            CourseAdapterException.Error.CLOSE_ERROR.report(e)
         }
     }
 

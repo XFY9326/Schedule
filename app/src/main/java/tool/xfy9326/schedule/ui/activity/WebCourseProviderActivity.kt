@@ -25,6 +25,7 @@ import tool.xfy9326.schedule.ui.activity.base.CourseProviderActivity
 import tool.xfy9326.schedule.ui.dialog.FullScreenLoadingDialog
 import tool.xfy9326.schedule.ui.dialog.WebCourseProviderBottomPanel
 import tool.xfy9326.schedule.ui.vm.WebCourseProviderViewModel
+import tool.xfy9326.schedule.ui.vm.base.CourseProviderViewModel
 import tool.xfy9326.schedule.utils.DialogUtils
 import tool.xfy9326.schedule.utils.ViewUtils
 
@@ -83,7 +84,7 @@ class WebCourseProviderActivity :
             if (it == null) {
                 viewBinding.layoutWebCourseProvider.showShortSnackBar(R.string.invalid_course_import_page)
             } else {
-                requestImportCourse(it.first, it.second, it.third)
+                requestImportCourse(it)
             }
         }
     }
@@ -231,10 +232,12 @@ class WebCourseProviderActivity :
         loadingDialogController.show()
     }
 
-    override fun onCourseImportFinish(isSuccess: Boolean, hasConflict: Boolean) {
+    override fun onCourseImportFinish(result: CourseProviderViewModel.ImportResult) {
         loadingDialogController.hide()
-        super.onCourseImportFinish(isSuccess, hasConflict)
+        super.onCourseImportFinish(result)
     }
+
+    override fun onConfirmImportCourseConflict(value: Nothing?) {}
 
     override fun onShowCourseAdapterError(exception: CourseAdapterException) {
         ViewUtils.showCourseAdapterErrorSnackBar(this, requireViewBinding().layoutWebCourseProvider, exception)

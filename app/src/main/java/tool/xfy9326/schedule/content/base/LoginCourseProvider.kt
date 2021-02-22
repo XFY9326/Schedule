@@ -20,7 +20,7 @@ abstract class LoginCourseProvider<P : Serializable>(params: P?) : NetworkCourse
         if (enableCaptcha) {
             val url = loadCaptchaUrl(importOption)
             if (url == null) {
-                CourseAdapterException.ErrorType.CAPTCHA_DOWNLOAD_ERROR.report()
+                CourseAdapterException.Error.CAPTCHA_DOWNLOAD_ERROR.report()
             } else {
                 downloadCaptchaImage(url, importOption)
             }
@@ -34,7 +34,7 @@ abstract class LoginCourseProvider<P : Serializable>(params: P?) : NetworkCourse
         try {
             onDownloadCaptchaImage(requireHttpClient(), captchaUrl, importOption)
         } catch (e: Exception) {
-            CourseAdapterException.ErrorType.CAPTCHA_DOWNLOAD_ERROR.report(e)
+            CourseAdapterException.Error.CAPTCHA_DOWNLOAD_ERROR.report(e)
         }
 
     suspend fun login(userId: String, userPw: String, captchaCode: String?, importOption: Int) =
