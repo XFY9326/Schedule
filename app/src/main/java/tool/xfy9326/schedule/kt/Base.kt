@@ -3,7 +3,7 @@
 package tool.xfy9326.schedule.kt
 
 import kotlinx.coroutines.sync.Mutex
-import java.io.*
+import java.io.File
 
 const val NEW_LINE = "\n"
 
@@ -13,38 +13,8 @@ fun Int.isOdd(): Boolean = this % 2 != 0
 
 fun Int.isEven(): Boolean = this % 2 == 0
 
-fun BooleanArray.fit(): BooleanArray {
-    var newSize = size
-    for (i in size - 1 downTo 0) {
-        if (this[i]) {
-            break
-        } else {
-            newSize = i
-        }
-    }
-    return when (newSize) {
-        0 -> BooleanArray(0)
-        size -> this
-        else -> copyOfRange(0, newSize)
-    }
-}
-
 fun <T> Iterable<T>?.nullableToList(): List<T> {
     return this?.toList() ?: emptyList()
-}
-
-fun ByteArray.toHex(): String {
-    val builder = StringBuilder()
-    for (byte in this) {
-        val hex = Integer.toHexString(byte.toInt() and 0xFF)
-        if (hex.length == 1) builder.append('0')
-        builder.append(hex)
-    }
-    return builder.toString()
-}
-
-fun String.hexToByteArray(): ByteArray = ByteArray(length / 2) {
-    (substring(2 * it, 2 * it + 2).toInt(16) and 0xFF).toByte()
 }
 
 inline fun <reified E : Enum<E>> tryEnumValueOf(name: String?): E? {
@@ -85,22 +55,6 @@ inline fun <T> List<T>.forEachTwo(action: (Int, T, Int, T) -> Unit) {
 }
 
 inline fun File.asParentOf(childName: String) = File(this, childName)
-
-fun <T : Serializable> T.clone(): T? {
-    try {
-        ByteArrayOutputStream().use { byteOutput ->
-            ObjectOutputStream(byteOutput).use {
-                it.writeObject(this)
-            }
-            ObjectInputStream(ByteArrayInputStream(byteOutput.toByteArray())).use {
-                return it.readObject().tryCast()
-            }
-        }
-    } catch (e: Exception) {
-        e.printStackTrace()
-    }
-    return null
-}
 
 inline fun <T> Mutex.withTryLock(owner: Any? = null, action: () -> T): T? {
     if (tryLock(owner)) {
