@@ -6,4 +6,11 @@
     <external-cache-path
         name="shared_files_external"
         path="SharedFiles" />
+
+    <files-path
+        name="log"
+        path="Log" />
+    <external-files-path
+        name="log_external"
+        path="Log" />
 </paths>

@@ -1,5 +1,6 @@
 package tool.xfy9326.schedule.ui.activity
 
+import androidx.core.view.isVisible
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.databinding.ActivityAppErrorBinding
 import tool.xfy9326.schedule.kt.observeEvent
@@ -9,6 +10,7 @@ import tool.xfy9326.schedule.ui.activity.base.ViewModelActivity
 import tool.xfy9326.schedule.ui.dialog.CrashViewDialog
 import tool.xfy9326.schedule.ui.dialog.UpgradeDialog
 import tool.xfy9326.schedule.ui.vm.AppErrorViewModel
+import tool.xfy9326.schedule.utils.IntentUtils
 import tool.xfy9326.schedule.utils.UpgradeUtils
 
 class AppErrorActivity : ViewModelActivity<AppErrorViewModel, ActivityAppErrorBinding>() {
@@ -46,6 +48,14 @@ class AppErrorActivity : ViewModelActivity<AppErrorViewModel, ActivityAppErrorBi
         }
         viewBinding.cardViewAppErrorFeedback.setOnClickListener {
             startActivity<FeedbackActivity>()
+        }
+
+        if (crashLogFileName != null) {
+            viewBinding.cardViewAppErrorSend.setOnClickListener {
+                IntentUtils.sendCrashReport(this, crashLogFileName)
+            }
+        } else {
+            viewBinding.cardViewAppErrorSend.isVisible = false
         }
     }
 }
