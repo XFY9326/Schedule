@@ -4,7 +4,6 @@ import android.content.Context
 import android.os.Bundle
 import android.view.Gravity
 import android.view.HapticFeedbackConstants
-import android.view.ViewTreeObserver
 import android.view.Window
 import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatDialogFragment
@@ -16,6 +15,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.CourseTime
 import tool.xfy9326.schedule.beans.WeekDay
+import tool.xfy9326.schedule.content.utils.arrangeWeekNum
 import tool.xfy9326.schedule.databinding.DialogCourseTimeEditBinding
 import tool.xfy9326.schedule.kt.*
 import tool.xfy9326.schedule.ui.view.CircleNumberButton
@@ -89,32 +89,17 @@ class CourseTimeEditDialog : AppCompatDialogFragment() {
                 buildCourseTimeWheel(this)
                 editTextCourseLocation.setText(editCourseTime.location.orEmpty())
 
-                gridLayoutCourseWeeks.viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
-                    override fun onPreDraw(): Boolean {
-                        var changed = false
-                        gridLayoutCourseWeeks.apply {
-                            val count =
-                                if (measuredWidth != 0) {
-                                    measuredWidth / (weekNumCellSize + weekNumCellMargin * 2)
-                                } else {
-                                    DEFAULT_BUTTON_COUNT_IN_ROW
-                                }
-                            val newColumnCount = when {
-                                count <= 1 -> 1
-                                count.isOdd() -> count - 1
-                                else -> count
-                            }
-                            println(columnCount)
-                            if (newColumnCount != columnCount) {
-                                columnCount = newColumnCount
-                                changed = true
-                            }
-                        }
-                        gridLayoutCourseWeeks.viewTreeObserver.removeOnPreDrawListener(this)
-                        return !changed
+                gridLayoutCourseWeeks.addOnMeasureChangedListener {
+                    val count = gridLayoutCourseWeeks.measuredWidth / (weekNumCellSize + weekNumCellMargin * 2)
+                    val newColumnCount = when {
+                        count <= 1 -> 1
+                        count.isOdd() -> count - 1
+                        else -> count
                     }
-                })
-
+                    if (newColumnCount != gridLayoutCourseWeeks.columnCount) {
+                        gridLayoutCourseWeeks.columnCount = newColumnCount
+                    }
+                }
             }.root)
 
             setPositiveButton(android.R.string.ok) { _, _ ->
@@ -147,7 +132,7 @@ class CourseTimeEditDialog : AppCompatDialogFragment() {
             editCourseTime.classTime.classDuration = pickerCourseEndTime.value - pickerCourseStartTime.value + 1
             editCourseTime.weekNum = weekNumButtonViews.map {
                 it.isChecked
-            }.toBooleanArray().fit()
+            }.toBooleanArray().arrangeWeekNum()
         }
     }
 

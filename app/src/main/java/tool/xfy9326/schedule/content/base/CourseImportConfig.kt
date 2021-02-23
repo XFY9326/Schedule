@@ -4,8 +4,8 @@ package tool.xfy9326.schedule.content.base
 
 import androidx.annotation.ArrayRes
 import androidx.annotation.StringRes
+import tool.xfy9326.schedule.content.utils.clone
 import tool.xfy9326.schedule.kt.cast
-import tool.xfy9326.schedule.kt.clone
 import java.io.Serializable
 import java.util.*
 import kotlin.reflect.KClass
