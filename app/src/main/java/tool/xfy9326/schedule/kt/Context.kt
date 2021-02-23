@@ -73,12 +73,11 @@ fun Context.hideKeyboard(windowToken: IBinder) {
     }
 }
 
-// Intent.resolveActivity can't resolve CREATE_DOCUMENT action
 fun Context.tryStartActivity(intent: Intent, options: Bundle? = null, showToast: Boolean = true): Boolean {
-    try {
+    if (intent.resolveActivity(packageManager) != null) {
         ContextCompat.startActivity(this, intent, options)
         return true
-    } catch (e: Exception) {
+    } else {
         if (showToast) showShortToast(R.string.application_launch_failed)
     }
     return false

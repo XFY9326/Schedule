@@ -17,6 +17,12 @@
             app:persistent="false"
             app:title="@string/output_debug_logs" />
 
+        <androidx.preference.Preference
+            app:iconSpaceReserved="false"
+            app:key="sendDebugLog"
+            app:persistent="false"
+            app:title="@string/send_debug_log" />
+
         <androidx.preference.SeekBarPreference
             android:max="20"
             app:defaultValue="5"
