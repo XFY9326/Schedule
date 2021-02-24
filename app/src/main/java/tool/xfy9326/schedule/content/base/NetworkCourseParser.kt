@@ -1,38 +1,17 @@
-@file:Suppress("unused")
-
 package tool.xfy9326.schedule.content.base
 
 import tool.xfy9326.schedule.beans.ScheduleTime
-import tool.xfy9326.schedule.content.beans.CourseParseResult
-import tool.xfy9326.schedule.kt.fitAllWeekNum
+import tool.xfy9326.schedule.content.utils.arrangeWeekNum
+import java.io.Serializable
 
-/**
- * Network course parser
- *
- * @constructor Create empty Network course parser
- */
-abstract class NetworkCourseParser : ICourseParser {
+abstract class NetworkCourseParser<P : Serializable> : AbstractCourseParser<P>() {
     fun parseScheduleTimes(importOption: Int, htmlContent: String? = null) = onParseScheduleTimes(importOption, htmlContent)
 
     fun parseCourses(importOption: Int, htmlContent: String) = onParseCourses(importOption, htmlContent).also {
-        it.courses.fitAllWeekNum()
+        it.courses.arrangeWeekNum()
     }
 
-    /**
-     * Parse schedule times
-     *
-     * @param importOption Import option, Default: 0
-     * @param htmlContent Html content
-     * @return Schedule time list
-     */
     protected abstract fun onParseScheduleTimes(importOption: Int, htmlContent: String?): List<ScheduleTime>
 
-    /**
-     * Parse courses
-     *
-     * @param importOption Import option, Default: 0
-     * @param htmlContent Html content
-     * @return Course Array
-     */
     protected abstract fun onParseCourses(importOption: Int, htmlContent: String): CourseParseResult
 }

@@ -3,8 +3,8 @@ package tool.xfy9326.schedule.utils
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.*
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
+import tool.xfy9326.schedule.content.utils.arrangeWeekNum
 import tool.xfy9326.schedule.io.GlobalIO
-import tool.xfy9326.schedule.kt.fit
 import tool.xfy9326.schedule.kt.forEachTwo
 import tool.xfy9326.schedule.kt.intersect
 import tool.xfy9326.schedule.kt.iterateAll
@@ -72,7 +72,7 @@ object CourseUtils {
     fun getMaxWeekNum(courses: List<Course>): Int {
         var defaultValue = 1
         courses.iterateAll { _, courseTime ->
-            courseTime.weekNum = courseTime.weekNum.fit()
+            courseTime.weekNum = courseTime.weekNum.arrangeWeekNum()
             defaultValue = max(defaultValue, courseTime.weekNum.size)
         }
         return defaultValue

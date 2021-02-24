@@ -38,8 +38,7 @@ class SettingsViewModel : AbstractViewModel() {
     }
 
     val importScheduleImage by lazy { MutableEventLiveData<Boolean>() }
-    val readDebugLogs by lazy { MutableEventLiveData<Array<String>>() }
-    val outputDebugLogs by lazy { MutableEventLiveData<Array<String>>() }
+    val allDebugLogs by lazy { MutableEventLiveData<Pair<String, Array<String>>>() }
     val showDebugLog by lazy { MutableEventLiveData<String>() }
     val outputLogFileToUriResult by lazy { MutableEventLiveData<Boolean>() }
     val backupScheduleToUriResult by lazy { MutableEventLiveData<Boolean>() }
@@ -172,15 +171,9 @@ class SettingsViewModel : AbstractViewModel() {
         }
     }
 
-    fun readDebugLogs() {
+    fun getAllLogs(action: String) {
         viewModelScope.launch {
-            readDebugLogs.postEvent(ExceptionHandler.getAllDebugLogs())
-        }
-    }
-
-    fun outputDebugLogs() {
-        viewModelScope.launch {
-            outputDebugLogs.postEvent(ExceptionHandler.getAllDebugLogs())
+            allDebugLogs.postEvent(action to ExceptionHandler.getAllDebugLogs())
         }
     }
 

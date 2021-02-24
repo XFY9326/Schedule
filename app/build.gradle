@@ -12,8 +12,8 @@ rootProject.ext {
     targetSDKVersion = 30
     applicationName = 'PureSchedule'
     applicationId = 'tool.xfy9326.schedule'
-    versionCode = 7
-    versionName = "1.1.5"
+    versionCode = 8
+    versionName = "1.1.6"
 }
 
 android {
@@ -108,7 +108,7 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlinx_coroutines_version"
 
     // Kotlin Serialization
-    implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1"
+    implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.1.0"
 
     // AndroidX
     implementation 'androidx.core:core-ktx:1.3.2'

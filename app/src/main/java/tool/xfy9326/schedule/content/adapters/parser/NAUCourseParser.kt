@@ -5,12 +5,12 @@ import tool.xfy9326.schedule.beans.Course
 import tool.xfy9326.schedule.beans.CourseTime
 import tool.xfy9326.schedule.beans.ScheduleTime
 import tool.xfy9326.schedule.beans.WeekDay
+import tool.xfy9326.schedule.content.base.CourseParseResult
 import tool.xfy9326.schedule.content.base.NetworkCourseParser
-import tool.xfy9326.schedule.content.beans.CourseParseResult
 import tool.xfy9326.schedule.kt.isEven
 import tool.xfy9326.schedule.kt.isOdd
 
-class NAUCourseParser : NetworkCourseParser() {
+class NAUCourseParser : NetworkCourseParser<Nothing>() {
     companion object {
         private const val INIT_WEEK_NUM = 20
         private const val COURSE_TR_TAGS = "#content > tbody > tr[align='center']"
@@ -97,14 +97,9 @@ class NAUCourseParser : NetworkCourseParser() {
         val trTags = body.select(COURSE_TR_TAGS)
 
         val builder = CourseParseResult.Builder(trTags.size)
-        var test = true
 
         for (trTag in trTags) {
             builder.add {
-                if (test) {
-                    test = false
-                    error("Test")
-                }
                 val values = trTag.children()
                 val courseName = values[2].text()
                 val courseTeacher = values[7].text()

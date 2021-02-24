@@ -1,4 +1,4 @@
-package tool.xfy9326.schedule.content.beans
+package tool.xfy9326.schedule.content.base
 
 import tool.xfy9326.schedule.beans.Course
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
@@ -14,13 +14,6 @@ class CourseParseResult private constructor(val courses: List<Course>, val ignor
             }
         private var error: CourseAdapterException? = null
 
-        /**
-         * Add Course
-         *
-         * @param skipErrorCourse
-         * @param action Add course
-         * @receiver Return null means give up adding course
-         */
         fun add(skipErrorCourse: Boolean = true, action: () -> Course?) {
             try {
                 action()?.let(courses::add)

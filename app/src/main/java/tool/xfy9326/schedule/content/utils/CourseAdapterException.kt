@@ -6,19 +6,9 @@ import android.content.Context
 import androidx.annotation.StringRes
 import tool.xfy9326.schedule.R
 
-/**
- * Course adapter exception
- *
- * @constructor Create empty Course adapter exception
- */
 class CourseAdapterException : Exception {
     val type: Error
 
-    /**
-     * Error
-     *
-     * @constructor Create empty Error
-     */
     enum class Error(@StringRes private val msgId: Int?, val strictMode: Boolean = false) {
         IMPORT_SELECT_OPTION_ERROR(R.string.adapter_exception_import_option_error),
         IMPORT_OPTION_GET_ERROR(R.string.adapter_exception_import_option_get_error),
@@ -29,54 +19,32 @@ class CourseAdapterException : Exception {
         USER_ID_OR_PASSWORD_ERROR(R.string.adapter_exception_login_user_id_or_password_error),
         LOGIN_SERVER_ERROR(R.string.adapter_exception_login_server_error),
         ACCOUNT_ERROR(R.string.adapter_exception_login_account_error),
+        INCOMPLETE_COURSE_INFO_ERROR(R.string.adapter_exception_incomplete_course_info),
+        UNKNOWN_ERROR(R.string.adapter_exception_unknown_error),
 
         // 课程导入时会自动判断该错误
         CONNECTION_ERROR(R.string.adapter_exception_login_connection_error),
-        UNKNOWN_ERROR(R.string.adapter_exception_unknown_error),
         PARSER_ERROR(R.string.adapter_exception_parse_error),
         CAPTCHA_DOWNLOAD_ERROR(R.string.adapter_exception_captcha_download_error),
 
-        // 主要在课程导入时使用
         INIT_ERROR(R.string.adapter_exception_init_error),
-
-        // 主要在课程导入时使用
         CLOSE_ERROR(R.string.adapter_exception_close_error),
 
-        // 课程导入时会自动判断该错误
         MAX_COURSE_NUM_ERROR(R.string.adapter_exception_max_course_num_error),
-        INCOMPLETE_COURSE_INFO_ERROR(R.string.adapter_exception_incomplete_course_info),
         SCHEDULE_TIMES_ERROR(R.string.adapter_exception_schedule_time_error),
-
-        // 课程导入时会自动判断该错误
         SCHEDULE_COURSE_IMPORT_EMPTY(R.string.adapter_exception_schedule_course_empty, true),
         FAILED_TO_IMPORT_SOME_COURSE(R.string.adapter_exception_failed_to_import_some_course, true),
 
         // 如果可以添加固定的报错内容，就不要使用该报错类型
         CUSTOM_ERROR(null);
 
-        /**
-         * Throw exception
-         *
-         * @param cause Exception cause
-         */
         @Suppress("NOTHING_TO_INLINE")
         inline fun report(cause: Throwable? = null): Nothing = throw make(cause)
 
-        /**
-         * Throw exception
-         *
-         * @param msg Exception msg
-         * @param cause Exception cause
-         */
         @Suppress("NOTHING_TO_INLINE")
         inline fun report(msg: String, cause: Throwable? = null): Nothing = throw make(msg, cause)
 
 
-        /**
-         * Make exception
-         *
-         * @param cause Exception cause
-         */
         fun make(cause: Throwable? = null) =
             if (cause == null) {
                 CourseAdapterException(this)
@@ -84,12 +52,6 @@ class CourseAdapterException : Exception {
                 CourseAdapterException(this, cause)
             }
 
-        /**
-         * Make exception
-         *
-         * @param msg Exception msg
-         * @param cause Exception cause
-         */
         fun make(msg: String, cause: Throwable? = null) =
             if (cause == null) {
                 CourseAdapterException(msg)

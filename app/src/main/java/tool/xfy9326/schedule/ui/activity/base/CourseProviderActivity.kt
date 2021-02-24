@@ -4,9 +4,9 @@ import android.content.Context
 import androidx.annotation.CallSuper
 import androidx.viewbinding.ViewBinding
 import tool.xfy9326.schedule.R
-import tool.xfy9326.schedule.content.base.BaseCourseProvider
+import tool.xfy9326.schedule.content.base.AbstractCourseParser
+import tool.xfy9326.schedule.content.base.AbstractCourseProvider
 import tool.xfy9326.schedule.content.base.CourseImportConfig
-import tool.xfy9326.schedule.content.base.ICourseParser
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
 import tool.xfy9326.schedule.kt.observeEvent
 import tool.xfy9326.schedule.kt.showShortToast
@@ -17,12 +17,12 @@ import tool.xfy9326.schedule.ui.dialog.StrictImportModeWarningDialog
 import tool.xfy9326.schedule.ui.vm.base.CourseProviderViewModel
 import tool.xfy9326.schedule.utils.DialogUtils
 
-abstract class CourseProviderActivity<I, P1 : BaseCourseProvider<*>, P2 : ICourseParser, M : CourseProviderViewModel<I, P1, P2>, V : ViewBinding> :
+abstract class CourseProviderActivity<I, P1 : AbstractCourseProvider<*>, P2 : AbstractCourseParser<*>, M : CourseProviderViewModel<I, P1, P2>, V : ViewBinding> :
     ViewModelActivity<M, V>(), ImportCourseConflictDialog.OnConfirmImportCourseConflictListener<Nothing> {
     companion object {
         const val EXTRA_COURSE_IMPORT_CONFIG = "EXTRA_COURSE_IMPORT_CONFIG"
 
-        inline fun <reified T : CourseProviderActivity<*, *, *, *, *>> startProviderActivity(context: Context, config: CourseImportConfig<*, *, *>) {
+        inline fun <reified T : CourseProviderActivity<*, *, *, *, *>> startProviderActivity(context: Context, config: CourseImportConfig<*, *, *, *>) {
             context.startActivity<T> { putExtra(EXTRA_COURSE_IMPORT_CONFIG, config) }
         }
     }

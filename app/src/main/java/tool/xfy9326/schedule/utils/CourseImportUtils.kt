@@ -10,7 +10,7 @@ object CourseImportUtils {
     }
 
     fun getCourseImportMethod(
-        config: CourseImportConfig<*, *, *>,
+        config: CourseImportConfig<*, *, *, *>,
         onInvalidParser: () -> Unit,
         onInterfaceProviderError: () -> Unit,
         onUnknownProviderError: () -> Unit,
@@ -37,7 +37,7 @@ object CourseImportUtils {
                     onInvalidParser()
                 }
             }
-            config.validateProviderType(BaseCourseProvider::class) -> onInterfaceProviderError()
+            config.validateProviderType(AbstractCourseProvider::class) -> onInterfaceProviderError()
             else -> onUnknownProviderError()
         }
         return null

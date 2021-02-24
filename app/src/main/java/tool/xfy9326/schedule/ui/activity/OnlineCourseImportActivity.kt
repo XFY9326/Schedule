@@ -61,7 +61,7 @@ class OnlineCourseImportActivity : ViewModelActivity<CourseImportViewModel, Acti
         viewModel.tryShowOnlineImportAttention()
     }
 
-    private fun onCourseImport(config: CourseImportConfig<*, *, *>) {
+    private fun onCourseImport(config: CourseImportConfig<*, *, *, *>) {
         val importMethod = CourseImportUtils.getCourseImportMethod(config,
             onInterfaceProviderError = {
                 requireViewBinding().layoutCourseImport.showShortSnackBar(R.string.interface_provider_error)

@@ -3,10 +3,13 @@ package tool.xfy9326.schedule.utils
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import androidx.core.content.FileProvider
 import tool.xfy9326.schedule.BuildConfig
 import tool.xfy9326.schedule.R
+import tool.xfy9326.schedule.kt.asParentOf
 import tool.xfy9326.schedule.kt.tryStartActivity
 import tool.xfy9326.schedule.tools.MIMEConst
+import java.util.*
 
 object IntentUtils {
     const val FILE_PROVIDER_AUTH = BuildConfig.APPLICATION_ID + ".file.provider"
@@ -25,4 +28,26 @@ object IntentUtils {
             putExtra(Intent.EXTRA_STREAM, uri)
             putExtra(Intent.EXTRA_MIME_TYPES, MIMEConst.MIME_IMAGE)
         }, context.getString(R.string.share_image))
+
+    fun sendCrashReport(context: Context, crashLogFileName: String) {
+        val uri = FileProvider.getUriForFile(context, FILE_PROVIDER_AUTH, DirUtils.LogDir.asParentOf(crashLogFileName))
+        val mailAddress = context.getString(R.string.email)
+        val mailTitle = context.getString(R.string.crash_report_email_title, context.getString(R.string.app_name))
+        val mailContent = context.getString(
+            R.string.crash_report_email_content,
+            BuildConfig.APPLICATION_ID,
+            BuildConfig.VERSION_NAME,
+            BuildConfig.VERSION_CODE,
+            Date().toString()
+        )
+
+        context.tryStartActivity(Intent(Intent.ACTION_SEND).apply {
+            type = MIMEConst.MIME_TEXT
+            flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+            putExtra(Intent.EXTRA_EMAIL, arrayOf(mailAddress))
+            putExtra(Intent.EXTRA_SUBJECT, mailTitle)
+            putExtra(Intent.EXTRA_TEXT, mailContent)
+            putExtra(Intent.EXTRA_STREAM, uri)
+        })
+    }
 }
