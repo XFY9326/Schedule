@@ -6,9 +6,9 @@ import kotlinx.coroutines.flow.map
 import tool.xfy9326.schedule.beans.Course
 import tool.xfy9326.schedule.beans.CourseTime
 import tool.xfy9326.schedule.beans.Schedule
+import tool.xfy9326.schedule.content.utils.arrangeWeekNum
 import tool.xfy9326.schedule.db.DBConst
 import tool.xfy9326.schedule.db.query.CourseBundle
-import tool.xfy9326.schedule.kt.fit
 import tool.xfy9326.schedule.utils.ScheduleUtils
 
 @Dao
@@ -66,7 +66,7 @@ abstract class ScheduleDAO {
         val courseId = putCourseRaw(course)
         for (time in course.times) {
             time.courseId = courseId
-            time.weekNum = time.weekNum.fit()
+            time.weekNum = time.weekNum.arrangeWeekNum()
             putCourseTime(time)
         }
         return courseId
@@ -78,7 +78,7 @@ abstract class ScheduleDAO {
         updateCourseRaw(course)
         for (time in course.times) {
             time.courseId = course.courseId
-            time.weekNum = time.weekNum.fit()
+            time.weekNum = time.weekNum.arrangeWeekNum()
             putCourseTime(time)
         }
         return course.courseId

@@ -37,11 +37,11 @@ class WebCourseProviderBottomPanel : BottomSheetDialogFragment() {
 
             binding.textViewCourseAdapterAuthor.text = getString(R.string.adapter_author, authorName)
             binding.buttonImportCourseToNewSchedule.setOnClickListener {
-                requireOwner<OnWebCourseProviderBottomPanelOperateListener>()?.onImportCourseToNewSchedule()
+                requireOwner<OnWebCourseProviderBottomPanelOperateListener>()?.onImportCourseToSchedule(false)
                 dismiss()
             }
             binding.buttonImportCourseToCurrentSchedule.setOnClickListener {
-                requireOwner<OnWebCourseProviderBottomPanelOperateListener>()?.onImportCourseToCurrentSchedule()
+                requireOwner<OnWebCourseProviderBottomPanelOperateListener>()?.onImportCourseToSchedule(true)
                 dismiss()
             }
 
@@ -62,8 +62,6 @@ class WebCourseProviderBottomPanel : BottomSheetDialogFragment() {
     interface OnWebCourseProviderBottomPanelOperateListener {
         fun onWebCourseProviderBottomPanelDismiss()
 
-        fun onImportCourseToCurrentSchedule()
-
-        fun onImportCourseToNewSchedule()
+        fun onImportCourseToSchedule(isCurrentSchedule: Boolean)
     }
 }

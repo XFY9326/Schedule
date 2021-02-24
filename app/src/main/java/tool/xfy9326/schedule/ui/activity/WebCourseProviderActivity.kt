@@ -11,12 +11,13 @@ import android.webkit.*
 import androidx.annotation.Keep
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import tool.xfy9326.schedule.R
+import tool.xfy9326.schedule.beans.WebCourseImportParams
 import tool.xfy9326.schedule.content.base.WebCourseParser
 import tool.xfy9326.schedule.content.base.WebCourseProvider
-import tool.xfy9326.schedule.content.beans.WebCourseImportParams
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
 import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.databinding.ActivityWebCourseProviderBinding
@@ -30,7 +31,7 @@ import tool.xfy9326.schedule.utils.DialogUtils
 import tool.xfy9326.schedule.utils.ViewUtils
 
 class WebCourseProviderActivity :
-    CourseProviderActivity<WebCourseImportParams, WebCourseProvider<*>, WebCourseParser, WebCourseProviderViewModel, ActivityWebCourseProviderBinding>(),
+    CourseProviderActivity<WebCourseImportParams, WebCourseProvider<*>, WebCourseParser<*>, WebCourseProviderViewModel, ActivityWebCourseProviderBinding>(),
     WebCourseProviderBottomPanel.OnWebCourseProviderBottomPanelOperateListener,
     FullScreenLoadingDialog.OnRequestCancelListener {
 
@@ -74,7 +75,7 @@ class WebCourseProviderActivity :
         setSupportActionBar(viewBinding.toolBarWebCourseProvider.toolBarGeneral)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        lifecycleScope.launch { if (AppSettingsDataStore.keepWebProviderCacheFlow.first()) clearAll() }
+        lifecycleScope.launch(Dispatchers.Main) { if (!AppSettingsDataStore.keepWebProviderCacheFlow.first()) clearAll() }
     }
 
     override fun onBindLiveData(viewBinding: ActivityWebCourseProviderBinding, viewModel: WebCourseProviderViewModel) {
@@ -115,12 +116,7 @@ class WebCourseProviderActivity :
             }
             addJavascriptInterface(object : HTMLPrinterJavaScriptInterface {
                 @JavascriptInterface
-                override fun printHTML(
-                    htmlContent: String,
-                    iframeContent: Array<String>,
-                    frameContent: Array<String>,
-                    isCurrentSchedule: Boolean,
-                ) {
+                override fun printHTML(htmlContent: String, iframeContent: Array<String>, frameContent: Array<String>, isCurrentSchedule: Boolean) {
                     onGetCurrentHTML(htmlContent, iframeContent, frameContent, isCurrentSchedule)
                 }
             }, HTML_PRINT_JAVASCRIPT_INTERFACE_NAME)
@@ -205,10 +201,6 @@ class WebCourseProviderActivity :
         WebCourseProviderBottomPanel.showDialog(supportFragmentManager, getString(requireViewModel().importConfig.authorNameResId))
     }
 
-    private fun getCurrentHTML(currentSchedule: Boolean) {
-        requireViewBinding().webViewWebCourseProvider.loadUrl(HTML_PRINT_JAVASCRIPT.format(currentSchedule.toString()))
-    }
-
     override fun onWebCourseProviderBottomPanelDismiss() {
         requireViewBinding().buttonWebCourseProviderPanel.apply {
             isVisible = true
@@ -216,12 +208,8 @@ class WebCourseProviderActivity :
         }
     }
 
-    override fun onImportCourseToCurrentSchedule() {
-        getCurrentHTML(true)
-    }
-
-    override fun onImportCourseToNewSchedule() {
-        getCurrentHTML(false)
+    override fun onImportCourseToSchedule(isCurrentSchedule: Boolean) {
+        requireViewBinding().webViewWebCourseProvider.evaluateJavascript(HTML_PRINT_JAVASCRIPT.format(isCurrentSchedule.toString()), null)
     }
 
     private fun onGetCurrentHTML(htmlContent: String, iframeContent: Array<String>, frameContent: Array<String>, isCurrentSchedule: Boolean) {
@@ -245,6 +233,7 @@ class WebCourseProviderActivity :
 
     private fun clearAll() {
         requireViewBinding().webViewWebCourseProvider.apply {
+            settings.javaScriptEnabled = false
             clearHistory()
             clearFormData()
             clearMatches()

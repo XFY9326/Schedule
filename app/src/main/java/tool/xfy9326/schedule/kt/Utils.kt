@@ -2,9 +2,7 @@
 
 package tool.xfy9326.schedule.kt
 
-import android.content.BroadcastReceiver
 import android.content.Context
-import android.content.Intent
 import android.net.Uri
 import androidx.documentfile.provider.DocumentFile
 import androidx.preference.Preference
@@ -15,25 +13,10 @@ import kotlin.math.min
 
 fun Uri.deleteFile(context: Context) = DocumentFile.fromSingleUri(context, this)?.delete() == true
 
-inline fun broadcastReceiver(crossinline receiver: (Context?, Intent?) -> Unit) =
-    object : BroadcastReceiver() {
-        override fun onReceive(context: Context?, intent: Intent?) {
-            receiver(context, intent)
-        }
-    }
-
 fun Calendar.getWeekDay() = WeekDay.valueOfCalWeekDay(get(Calendar.DAY_OF_WEEK))
 
 inline fun List<Course>.iterateAll(action: (Course, CourseTime) -> Unit) {
     for (course in this) for (time in course.times) action(course, time)
-}
-
-fun List<Course>.fitAllWeekNum() {
-    this.forEach {
-        it.times.forEach { time ->
-            time.weekNum = time.weekNum.fit()
-        }
-    }
 }
 
 infix fun ClassTime.intersect(classTime: ClassTime): Boolean =

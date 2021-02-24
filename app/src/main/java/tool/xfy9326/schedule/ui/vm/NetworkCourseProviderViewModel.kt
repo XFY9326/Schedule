@@ -2,17 +2,17 @@ package tool.xfy9326.schedule.ui.vm
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.sync.Mutex
+import tool.xfy9326.schedule.beans.NetworkCourseImportParams
+import tool.xfy9326.schedule.beans.NetworkLoginParams
 import tool.xfy9326.schedule.content.base.LoginCourseProvider
 import tool.xfy9326.schedule.content.base.NetworkCourseParser
 import tool.xfy9326.schedule.content.base.NetworkCourseProvider
-import tool.xfy9326.schedule.content.beans.NetworkCourseImportParams
-import tool.xfy9326.schedule.content.beans.NetworkLoginParams
 import tool.xfy9326.schedule.io.GlobalIO
 import tool.xfy9326.schedule.kt.MutableEventLiveData
 import tool.xfy9326.schedule.kt.postEvent
 import tool.xfy9326.schedule.ui.vm.base.CourseProviderViewModel
 
-class NetworkCourseProviderViewModel : CourseProviderViewModel<NetworkCourseImportParams, NetworkCourseProvider<*>, NetworkCourseParser>() {
+class NetworkCourseProviderViewModel : CourseProviderViewModel<NetworkCourseImportParams, NetworkCourseProvider<*>, NetworkCourseParser<*>>() {
     val loginParams = MutableEventLiveData<NetworkLoginParams?>()
     val refreshCaptcha = MutableEventLiveData<ByteArray?>()
 
@@ -64,7 +64,7 @@ class NetworkCourseProviderViewModel : CourseProviderViewModel<NetworkCourseImpo
         importParams: NetworkCourseImportParams,
         importOption: Int,
         courseProvider: NetworkCourseProvider<*>,
-        courseParser: NetworkCourseParser,
+        courseParser: NetworkCourseParser<*>,
     ): ImportContent {
         if (courseProvider is LoginCourseProvider) {
             courseProvider.login(importParams.userId!!, importParams.userPw!!, importParams.captchaCode, importOption)

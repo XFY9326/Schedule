@@ -9,9 +9,9 @@ import androidx.annotation.StringRes
 import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import tool.xfy9326.schedule.R
+import tool.xfy9326.schedule.beans.NetworkCourseImportParams
+import tool.xfy9326.schedule.beans.NetworkLoginParams
 import tool.xfy9326.schedule.content.base.*
-import tool.xfy9326.schedule.content.beans.NetworkCourseImportParams
-import tool.xfy9326.schedule.content.beans.NetworkLoginParams
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
 import tool.xfy9326.schedule.databinding.ActivityNetworkCourseProviderBinding
 import tool.xfy9326.schedule.kt.*
@@ -22,7 +22,7 @@ import tool.xfy9326.schedule.utils.DialogUtils
 import tool.xfy9326.schedule.utils.ViewUtils
 
 class NetworkCourseProviderActivity :
-    CourseProviderActivity<NetworkCourseImportParams, NetworkCourseProvider<*>, NetworkCourseParser, NetworkCourseProviderViewModel, ActivityNetworkCourseProviderBinding>() {
+    CourseProviderActivity<NetworkCourseImportParams, NetworkCourseProvider<*>, NetworkCourseParser<*>, NetworkCourseProviderViewModel, ActivityNetworkCourseProviderBinding>() {
     override val vmClass = NetworkCourseProviderViewModel::class
 
     override fun onCreateViewBinding() = ActivityNetworkCourseProviderBinding.inflate(layoutInflater)

@@ -7,7 +7,7 @@ import tool.xfy9326.schedule.content.adapters.parser.NAUCourseParser
 import tool.xfy9326.schedule.content.adapters.provider.NAUSSOCourseProvider
 import tool.xfy9326.schedule.content.base.CourseImportConfig
 
-class NAUSSOImportConfig : CourseImportConfig<Nothing, NAUSSOCourseProvider, NAUCourseParser>(
+class NAUSSOImportConfig : CourseImportConfig<Nothing, NAUSSOCourseProvider, Nothing, NAUCourseParser>(
     schoolNameResId = R.string.school_nanjing_audit_university,
     authorNameResId = R.string.adapter_author_xfy9326,
     systemNameResId = R.string.system_nau_sso,

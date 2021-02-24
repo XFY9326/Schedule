@@ -15,6 +15,7 @@ import tool.xfy9326.schedule.kt.showShortSnackBar
 import tool.xfy9326.schedule.ui.dialog.CrashViewDialog
 import tool.xfy9326.schedule.ui.fragment.base.AbstractSettingsFragment
 import tool.xfy9326.schedule.ui.vm.SettingsViewModel
+import tool.xfy9326.schedule.utils.IntentUtils
 
 @Suppress("unused")
 class DebugSettingsFragment : AbstractSettingsFragment() {
@@ -22,6 +23,7 @@ class DebugSettingsFragment : AbstractSettingsFragment() {
         private const val KEY_READ_DEBUG_LOGS = "readDebugLogs"
         private const val KEY_OUTPUT_DEBUG_LOGS = "outputDebugLogs"
         private const val KEY_CLEAR_DEBUG_LOGS = "clearDebugLogs"
+        private const val KEY_SEND_DEBUG_LOG = "sendDebugLog"
     }
 
     override val titleName: Int = R.string.debug_settings
@@ -38,10 +40,13 @@ class DebugSettingsFragment : AbstractSettingsFragment() {
 
     override fun onPrefInit(savedInstanceState: Bundle?) {
         setOnPrefClickListener(KEY_READ_DEBUG_LOGS) {
-            requireSettingsViewModel()?.readDebugLogs()
+            requireSettingsViewModel()?.getAllLogs(KEY_READ_DEBUG_LOGS)
         }
         setOnPrefClickListener(KEY_OUTPUT_DEBUG_LOGS) {
-            requireSettingsViewModel()?.outputDebugLogs()
+            requireSettingsViewModel()?.getAllLogs(KEY_OUTPUT_DEBUG_LOGS)
+        }
+        setOnPrefClickListener(KEY_SEND_DEBUG_LOG) {
+            requireSettingsViewModel()?.getAllLogs(KEY_SEND_DEBUG_LOG)
         }
         setOnPrefClickListener(KEY_CLEAR_DEBUG_LOGS) {
             MaterialAlertDialogBuilder(requireContext()).apply {
@@ -57,15 +62,18 @@ class DebugSettingsFragment : AbstractSettingsFragment() {
     }
 
     override fun onBindLiveDataFromSettingsViewMode(viewModel: SettingsViewModel) {
-        viewModel.readDebugLogs.observeEvent(this) {
-            showDebugLogsSelectDialog(it, R.string.read_debug_logs) { log ->
-                viewModel.showDebugLog(log)
-            }
-        }
-        viewModel.outputDebugLogs.observeEvent(this) {
-            showDebugLogsSelectDialog(it, R.string.output_debug_logs) { log ->
-                viewModel.waitCreateLogFileName.write(log)
-                outputLogFile.launch(log)
+        viewModel.allDebugLogs.observeEvent(this) {
+            when (it.first) {
+                KEY_READ_DEBUG_LOGS -> showDebugLogsSelectDialog(it.second, R.string.read_debug_logs) { log ->
+                    viewModel.showDebugLog(log)
+                }
+                KEY_OUTPUT_DEBUG_LOGS -> showDebugLogsSelectDialog(it.second, R.string.output_debug_logs) { log ->
+                    viewModel.waitCreateLogFileName.write(log)
+                    outputLogFile.launch(log)
+                }
+                KEY_SEND_DEBUG_LOG -> showDebugLogsSelectDialog(it.second, R.string.send_debug_log) { log ->
+                    IntentUtils.sendCrashReport(requireContext(), log)
+                }
             }
         }
         viewModel.showDebugLog.observeEvent(this) {

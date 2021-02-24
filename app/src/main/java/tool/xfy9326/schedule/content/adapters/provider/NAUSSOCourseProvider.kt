@@ -9,14 +9,14 @@ import io.ktor.http.*
 import org.jsoup.Jsoup
 import tool.xfy9326.schedule.content.base.LoginCourseProvider
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
-import tool.xfy9326.schedule.kt.toHex
+import tool.xfy9326.schedule.content.utils.toHex
 import java.math.BigInteger
 import java.security.KeyFactory
 import java.security.interfaces.RSAPublicKey
 import java.security.spec.RSAPublicKeySpec
 import javax.crypto.Cipher
 
-class NAUSSOCourseProvider : LoginCourseProvider<Nothing>(null) {
+class NAUSSOCourseProvider : LoginCourseProvider<Nothing>() {
     companion object {
         private const val JWC_HOST = "jwc.nau.edu.cn"
         private const val SSO_HOST = "sso.nau.edu.cn"

@@ -9,7 +9,7 @@ import tool.xfy9326.schedule.ui.recyclerview.BaseViewBindingAdapter
 import tool.xfy9326.schedule.ui.viewholder.ViewBindingViewHolder
 
 class CourseImportAdapter : BaseViewBindingAdapter<ItemCourseImportBinding, ViewBindingViewHolder<ItemCourseImportBinding>>() {
-    private var onCourseImportItemClickListener: ((CourseImportConfig<*, *, *>) -> Unit)? = null
+    private var onCourseImportItemClickListener: ((CourseImportConfig<*, *, *, *>) -> Unit)? = null
 
     override fun onCreateViewHolder(layoutInflater: LayoutInflater, parent: ViewGroup, viewType: Int) =
         ViewBindingViewHolder(ItemCourseImportBinding.inflate(layoutInflater, parent, false))
@@ -28,7 +28,7 @@ class CourseImportAdapter : BaseViewBindingAdapter<ItemCourseImportBinding, View
         }
     }
 
-    fun setOnCourseImportItemClickListener(onCourseImportItemClickListener: ((CourseImportConfig<*, *, *>) -> Unit)?) {
+    fun setOnCourseImportItemClickListener(onCourseImportItemClickListener: ((CourseImportConfig<*, *, *, *>) -> Unit)?) {
         this.onCourseImportItemClickListener = onCourseImportItemClickListener
     }
 

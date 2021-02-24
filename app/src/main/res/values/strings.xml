@@ -7,6 +7,7 @@
     <string name="app_crash">应用运行时发生崩溃</string>
     <string name="app_crash_summary">\u3000\u3000非常抱歉应用无法正常启动，您可以向我们反馈该问题以尽快修复。建议您检查并使用最新版本或清空应用数据后重新打开。</string>
     <string name="view_error_detail">查看错误报告</string>
+    <string name="send_error_log">发送反馈邮件</string>
     <string name="feedback">问题反馈</string>
     <string name="crash_detail">错误详情</string>
     <string name="crash_detail_not_found">未找到错误报告！</string>
@@ -113,7 +114,7 @@
     <string name="web_page_import_course">通过网页导入课程</string>
     <string name="details">详情</string>
     <string name="reload">重新加载</string>
-    <string name="adapter_author">\@%1$s</string>
+    <string name="adapter_author" translatable="false">\@%1$s</string>
     <string name="captcha_empty">验证码为空！</string>
     <string name="user_id_empty">用户名为空！</string>
     <string name="user_pw_empty">密码为空！</string>
@@ -144,7 +145,7 @@
     <string name="online_feedback">在线反馈</string>
     <string name="online_feedback_sum">反馈服务由腾讯兔小巢提供</string>
     <string name="email_title">邮箱</string>
-    <string name="application_launch_failed">应用调起失败！</string>
+    <string name="application_launch_failed">外部应用调起失败！</string>
     <string name="about">关于</string>
     <string name="schedule_settings">课程表</string>
     <string name="schedule_settings_sum">课程表显示以及操作设置</string>
@@ -320,11 +321,11 @@
     <string name="export">导出</string>
     <string name="found_new_version">检测到版本更新！</string>
     <string name="force_update_warning">这是一个重要的版本更新，请立即更新！</string>
-    <string name="update_version_info">v%1$s(%2$d) -> v%3$s(%4$d)</string>
+    <string name="update_version_info" translatable="false">v%1$s(%2$d) -> v%3$s(%4$d)</string>
     <string name="update_now">立即更新</string>
     <string name="ignore_update">忽略</string>
     <string name="change_log">更新日志</string>
-    <string name="downloading_update_description">v%1$s(%2$d)</string>
+    <string name="downloading_update_description" translatable="false">v%1$s(%2$d)</string>
     <string name="start_download_update">开始下载更新！</string>
     <string name="no_update_source">暂无可用更新源</string>
     <string name="no_new_update">您已经在使用最新版本！</string>
@@ -349,6 +350,7 @@
     <string name="allow_import_incomplete_schedule_sum">将会跳过部分无法导入的课程</string>
     <string name="schedule_import_strict_mode">课表导入严格模式警告</string>
     <string name="schedule_import_strict_mode_msg">\u3000\u3000由于启用了课表导入的严格检查功能，该课表在该情况下无法导入。\n\n错误原因：%1$s\n\n\u3000\u3000启用严格的课表检查将保证课程导入的完整性，如果依然需要导入该课表，请在\'设置-在线课程导入\'中进行更改。</string>
+    <string name="send_debug_log">发送错误日志</string>
 
     <string name="scare_type_fit_center">等比缩放，从中间开始填充满</string>
     <string name="scare_type_center_crop">等比缩放直到完全填充</string>
@@ -365,8 +367,11 @@
     <string name="first_day_of_week_monday">星期一</string>
     <string name="first_day_of_week_sunday">星期日</string>
 
+    <string name="crash_report_email_title">%1$s-崩溃反馈报告</string>
+    <string name="crash_report_email_content">应用ID：%1$s&lt;br&gt;当前版本：v%2$s(%3$d)&lt;br&gt;反馈时间：%4$s&lt;br&gt;</string>
+
     <string name="time_period" translatable="false">~</string>
     <string name="author" translatable="false">逸雪飞扬 (XFY9326)</string>
-    <string name="email" translatable="false">XFY9326@126.com</string>
-    <string name="open_source_website_url" translatable="false">https://github.com/XFY9326/Schedule</string>
+    <string name="email" translatable="false">xfy9326@126.com</string>
+    <string name="open_source_website_url" translatable="false">https://github.com/xfy9326/Schedule</string>
 </resources>
