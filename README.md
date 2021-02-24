@@ -3,6 +3,7 @@
 PureSchedule open source code  
 
 Coding Mirror: [Coding.net](https://xfy9326.coding.net/public/Schedule/Schedule/git/files)  
+Course Adapter Wiki: [Wiki](https://github.com/XFY9326/Schedule/wiki)  
 
 ### Features:  
 - Data driven view
