@@ -7,10 +7,7 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.sync.Mutex
 import tool.xfy9326.schedule.beans.ScheduleTime
-import tool.xfy9326.schedule.content.base.BaseCourseProvider
-import tool.xfy9326.schedule.content.base.CourseImportConfig
-import tool.xfy9326.schedule.content.base.ICourseParser
-import tool.xfy9326.schedule.content.beans.CourseParseResult
+import tool.xfy9326.schedule.content.base.*
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
 import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.kt.MutableEventLiveData
@@ -23,8 +20,8 @@ import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 import java.util.concurrent.atomic.AtomicBoolean
 
-abstract class CourseProviderViewModel<I, P1 : BaseCourseProvider<*>, P2 : ICourseParser> : AbstractViewModel() {
-    protected lateinit var internalImportConfig: CourseImportConfig<*, P1, P2>
+abstract class CourseProviderViewModel<I, P1 : AbstractCourseProvider<*>, P2 : AbstractCourseParser<*>> : AbstractViewModel() {
+    protected lateinit var internalImportConfig: CourseImportConfig<*, P1, *, P2>
         private set
     private lateinit var _courseProvider: P1
     private lateinit var _courseParser: P2
@@ -47,7 +44,7 @@ abstract class CourseProviderViewModel<I, P1 : BaseCourseProvider<*>, P2 : ICour
     val importConfig
         get() = internalImportConfig
 
-    fun registerConfig(config: CourseImportConfig<*, P1, P2>) {
+    fun registerConfig(config: CourseImportConfig<*, P1, *, P2>) {
         if (!::internalImportConfig.isInitialized || internalImportConfig != config) {
             internalImportConfig = config
             _courseProvider = config.newProvider()

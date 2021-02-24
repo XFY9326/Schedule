@@ -16,7 +16,7 @@ import java.security.interfaces.RSAPublicKey
 import java.security.spec.RSAPublicKeySpec
 import javax.crypto.Cipher
 
-class NAUSSOCourseProvider : LoginCourseProvider<Nothing>(null) {
+class NAUSSOCourseProvider : LoginCourseProvider<Nothing>() {
     companion object {
         private const val JWC_HOST = "jwc.nau.edu.cn"
         private const val SSO_HOST = "sso.nau.edu.cn"
