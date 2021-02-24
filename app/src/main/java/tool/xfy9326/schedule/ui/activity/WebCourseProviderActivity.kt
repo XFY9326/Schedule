@@ -115,12 +115,7 @@ class WebCourseProviderActivity :
             }
             addJavascriptInterface(object : HTMLPrinterJavaScriptInterface {
                 @JavascriptInterface
-                override fun printHTML(
-                    htmlContent: String,
-                    iframeContent: Array<String>,
-                    frameContent: Array<String>,
-                    isCurrentSchedule: Boolean,
-                ) {
+                override fun printHTML(htmlContent: String, iframeContent: Array<String>, frameContent: Array<String>, isCurrentSchedule: Boolean) {
                     onGetCurrentHTML(htmlContent, iframeContent, frameContent, isCurrentSchedule)
                 }
             }, HTML_PRINT_JAVASCRIPT_INTERFACE_NAME)
@@ -205,10 +200,6 @@ class WebCourseProviderActivity :
         WebCourseProviderBottomPanel.showDialog(supportFragmentManager, getString(requireViewModel().importConfig.authorNameResId))
     }
 
-    private fun getCurrentHTML(currentSchedule: Boolean) {
-        requireViewBinding().webViewWebCourseProvider.loadUrl(HTML_PRINT_JAVASCRIPT.format(currentSchedule.toString()))
-    }
-
     override fun onWebCourseProviderBottomPanelDismiss() {
         requireViewBinding().buttonWebCourseProviderPanel.apply {
             isVisible = true
@@ -216,12 +207,8 @@ class WebCourseProviderActivity :
         }
     }
 
-    override fun onImportCourseToCurrentSchedule() {
-        getCurrentHTML(true)
-    }
-
-    override fun onImportCourseToNewSchedule() {
-        getCurrentHTML(false)
+    override fun onImportCourseToSchedule(isCurrentSchedule: Boolean) {
+        requireViewBinding().webViewWebCourseProvider.evaluateJavascript(HTML_PRINT_JAVASCRIPT.format(isCurrentSchedule.toString()), null)
     }
 
     private fun onGetCurrentHTML(htmlContent: String, iframeContent: Array<String>, frameContent: Array<String>, isCurrentSchedule: Boolean) {
@@ -245,6 +232,7 @@ class WebCourseProviderActivity :
 
     private fun clearAll() {
         requireViewBinding().webViewWebCourseProvider.apply {
+            settings.javaScriptEnabled = false
             clearHistory()
             clearFormData()
             clearMatches()
