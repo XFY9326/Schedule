@@ -11,6 +11,7 @@ import android.webkit.*
 import androidx.annotation.Keep
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import tool.xfy9326.schedule.R
@@ -74,7 +75,7 @@ class WebCourseProviderActivity :
         setSupportActionBar(viewBinding.toolBarWebCourseProvider.toolBarGeneral)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        lifecycleScope.launch { if (AppSettingsDataStore.keepWebProviderCacheFlow.first()) clearAll() }
+        lifecycleScope.launch(Dispatchers.Main) { if (!AppSettingsDataStore.keepWebProviderCacheFlow.first()) clearAll() }
     }
 
     override fun onBindLiveData(viewBinding: ActivityWebCourseProviderBinding, viewModel: WebCourseProviderViewModel) {
