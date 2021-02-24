@@ -22,7 +22,7 @@ import tool.xfy9326.schedule.utils.DialogUtils
 import tool.xfy9326.schedule.utils.ViewUtils
 
 class NetworkCourseProviderActivity :
-    CourseProviderActivity<NetworkCourseImportParams, NetworkCourseProvider<*>, NetworkCourseParser, NetworkCourseProviderViewModel, ActivityNetworkCourseProviderBinding>() {
+    CourseProviderActivity<NetworkCourseImportParams, NetworkCourseProvider<*>, NetworkCourseParser<*>, NetworkCourseProviderViewModel, ActivityNetworkCourseProviderBinding>() {
     override val vmClass = NetworkCourseProviderViewModel::class
 
     override fun onCreateViewBinding() = ActivityNetworkCourseProviderBinding.inflate(layoutInflater)

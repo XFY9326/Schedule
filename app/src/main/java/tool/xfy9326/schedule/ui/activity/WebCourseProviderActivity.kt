@@ -30,7 +30,7 @@ import tool.xfy9326.schedule.utils.DialogUtils
 import tool.xfy9326.schedule.utils.ViewUtils
 
 class WebCourseProviderActivity :
-    CourseProviderActivity<WebCourseImportParams, WebCourseProvider<*>, WebCourseParser, WebCourseProviderViewModel, ActivityWebCourseProviderBinding>(),
+    CourseProviderActivity<WebCourseImportParams, WebCourseProvider<*>, WebCourseParser<*>, WebCourseProviderViewModel, ActivityWebCourseProviderBinding>(),
     WebCourseProviderBottomPanel.OnWebCourseProviderBottomPanelOperateListener,
     FullScreenLoadingDialog.OnRequestCancelListener {
 

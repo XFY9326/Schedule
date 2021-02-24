@@ -10,7 +10,7 @@ import tool.xfy9326.schedule.kt.postEvent
 import tool.xfy9326.schedule.ui.activity.base.CourseProviderActivity
 import tool.xfy9326.schedule.ui.vm.base.CourseProviderViewModel
 
-class WebCourseProviderViewModel : CourseProviderViewModel<WebCourseImportParams, WebCourseProvider<*>, WebCourseParser>() {
+class WebCourseProviderViewModel : CourseProviderViewModel<WebCourseImportParams, WebCourseProvider<*>, WebCourseParser<*>>() {
     var isBottomPanelInitShowed = false
 
     val validateHtmlPage = MutableEventLiveData<CourseProviderActivity.ImportRequestParams<WebCourseImportParams>?>()
@@ -43,7 +43,7 @@ class WebCourseProviderViewModel : CourseProviderViewModel<WebCourseImportParams
         importParams: WebCourseImportParams,
         importOption: Int,
         courseProvider: WebCourseProvider<*>,
-        courseParser: WebCourseParser,
+        courseParser: WebCourseParser<*>,
     ): ImportContent {
         val scheduleTimes = courseParser.loadScheduleTimes(importOption)
         val coursesParseResult = courseParser.parseCourses(

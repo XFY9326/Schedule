@@ -12,7 +12,7 @@ import tool.xfy9326.schedule.kt.MutableEventLiveData
 import tool.xfy9326.schedule.kt.postEvent
 import tool.xfy9326.schedule.ui.vm.base.CourseProviderViewModel
 
-class NetworkCourseProviderViewModel : CourseProviderViewModel<NetworkCourseImportParams, NetworkCourseProvider<*>, NetworkCourseParser>() {
+class NetworkCourseProviderViewModel : CourseProviderViewModel<NetworkCourseImportParams, NetworkCourseProvider<*>, NetworkCourseParser<*>>() {
     val loginParams = MutableEventLiveData<NetworkLoginParams?>()
     val refreshCaptcha = MutableEventLiveData<ByteArray?>()
 
@@ -64,7 +64,7 @@ class NetworkCourseProviderViewModel : CourseProviderViewModel<NetworkCourseImpo
         importParams: NetworkCourseImportParams,
         importOption: Int,
         courseProvider: NetworkCourseProvider<*>,
-        courseParser: NetworkCourseParser,
+        courseParser: NetworkCourseParser<*>,
     ): ImportContent {
         if (courseProvider is LoginCourseProvider) {
             courseProvider.login(importParams.userId!!, importParams.userPw!!, importParams.captchaCode, importOption)

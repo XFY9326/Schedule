@@ -1,11 +1,11 @@
 package tool.xfy9326.schedule.content.adapters.parser
 
 import tool.xfy9326.schedule.beans.ScheduleTime
+import tool.xfy9326.schedule.content.base.CourseParseResult
 import tool.xfy9326.schedule.content.base.WebCourseParser
-import tool.xfy9326.schedule.content.beans.CourseParseResult
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
 
-class NAUCourseWebParser : WebCourseParser() {
+class NAUCourseWebParser : WebCourseParser<Nothing>() {
     companion object {
         private const val PAGE_TEXT = "在修课程课表"
     }
