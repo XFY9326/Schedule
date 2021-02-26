@@ -8,10 +8,10 @@ import tool.xfy9326.schedule.content.base.AbstractCourseParser
 import tool.xfy9326.schedule.content.base.AbstractCourseProvider
 import tool.xfy9326.schedule.content.base.CourseImportConfig
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
+import tool.xfy9326.schedule.kt.castNonNull
 import tool.xfy9326.schedule.kt.observeEvent
 import tool.xfy9326.schedule.kt.showShortToast
 import tool.xfy9326.schedule.kt.startActivity
-import tool.xfy9326.schedule.kt.tryCast
 import tool.xfy9326.schedule.ui.dialog.ImportCourseConflictDialog
 import tool.xfy9326.schedule.ui.dialog.StrictImportModeWarningDialog
 import tool.xfy9326.schedule.ui.vm.base.CourseProviderViewModel
@@ -20,17 +20,17 @@ import tool.xfy9326.schedule.utils.DialogUtils
 abstract class CourseProviderActivity<I, P1 : AbstractCourseProvider<*>, P2 : AbstractCourseParser<*>, M : CourseProviderViewModel<I, P1, P2>, V : ViewBinding> :
     ViewModelActivity<M, V>(), ImportCourseConflictDialog.OnConfirmImportCourseConflictListener<Nothing> {
     companion object {
-        const val EXTRA_COURSE_IMPORT_CONFIG = "EXTRA_COURSE_IMPORT_CONFIG"
+        const val EXTRA_COURSE_IMPORT_CONFIG_CLASS = "EXTRA_COURSE_IMPORT_CONFIG_CLASS"
 
         inline fun <reified T : CourseProviderActivity<*, *, *, *, *>> startProviderActivity(context: Context, config: CourseImportConfig<*, *, *, *>) {
-            context.startActivity<T> { putExtra(EXTRA_COURSE_IMPORT_CONFIG, config) }
+            context.startActivity<T> { putExtra(EXTRA_COURSE_IMPORT_CONFIG_CLASS, config.javaClass) }
         }
     }
 
     // 应该在Override方法开始执行时CallSuper
     @CallSuper
     override fun onPrepare(viewBinding: V, viewModel: M) {
-        viewModel.registerConfig(intent.getSerializableExtra(EXTRA_COURSE_IMPORT_CONFIG)?.tryCast()!!)
+        viewModel.registerConfig(intent.getSerializableExtra(EXTRA_COURSE_IMPORT_CONFIG_CLASS).castNonNull())
     }
 
     @CallSuper

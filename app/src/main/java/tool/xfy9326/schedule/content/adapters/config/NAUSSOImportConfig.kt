@@ -12,7 +12,7 @@ class NAUSSOImportConfig : CourseImportConfig<Nothing, NAUSSOCourseProvider, Not
     authorNameResId = R.string.adapter_author_xfy9326,
     systemNameResId = R.string.system_nau_sso,
     staticImportOptionsResId = R.array.adapter_options_term,
-    providerClass = NAUSSOCourseProvider::class.java,
-    parserClass = NAUCourseParser::class.java,
+    providerClass = NAUSSOCourseProvider::class,
+    parserClass = NAUCourseParser::class,
     sortingBasis = "NanJingShenJiDaXueSSO"
 )
