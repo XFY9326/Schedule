@@ -11,7 +11,7 @@ class NAUWebImportConfig : CourseImportConfig<Nothing, NAUWebCourseProvider, Not
     schoolNameResId = R.string.school_nanjing_audit_university,
     authorNameResId = R.string.adapter_author_xfy9326,
     systemNameResId = R.string.system_nau_jwc_web,
-    providerClass = NAUWebCourseProvider::class.java,
-    parserClass = NAUCourseWebParser::class.java,
+    providerClass = NAUWebCourseProvider::class,
+    parserClass = NAUCourseWebParser::class,
     sortingBasis = "NanJingShenJiDaXueWeb"
 )

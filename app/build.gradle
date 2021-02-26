@@ -12,8 +12,8 @@ rootProject.ext {
     targetSDKVersion = 30
     applicationName = 'PureSchedule'
     applicationId = 'tool.xfy9326.schedule'
-    versionCode = 8
-    versionName = "1.1.6"
+    versionCode = 9
+    versionName = "1.1.7"
 }
 
 android {

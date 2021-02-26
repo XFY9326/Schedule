@@ -20,6 +20,8 @@ import tool.xfy9326.schedule.ui.vm.CourseImportViewModel
 import tool.xfy9326.schedule.utils.CourseImportUtils
 
 class OnlineCourseImportActivity : ViewModelActivity<CourseImportViewModel, ActivityOnlineCourseImportBinding>() {
+    private lateinit var courseImportAdapter: CourseImportAdapter
+
     override val vmClass = CourseImportViewModel::class
 
     override fun onCreateViewBinding() = ActivityOnlineCourseImportBinding.inflate(layoutInflater)
@@ -51,14 +53,18 @@ class OnlineCourseImportActivity : ViewModelActivity<CourseImportViewModel, Acti
                 }
             }.show(this)
         }
+        viewModel.sortedConfigs.observe(this) {
+            courseImportAdapter.updateConfigs(it)
+        }
     }
 
     override fun onInitView(viewBinding: ActivityOnlineCourseImportBinding, viewModel: CourseImportViewModel) {
-        val courseImportAdapter = CourseImportAdapter()
+        courseImportAdapter = CourseImportAdapter()
         courseImportAdapter.setOnCourseImportItemClickListener(::onCourseImport)
         viewBinding.recyclerViewCourseImportList.adapter = courseImportAdapter
         viewBinding.recyclerViewCourseImportList.addItemDecoration(AdvancedDividerItemDecoration(this, DividerItemDecoration.VERTICAL))
         viewModel.tryShowOnlineImportAttention()
+        viewModel.loadAllConfigs()
     }
 
     private fun onCourseImport(config: CourseImportConfig<*, *, *, *>) {

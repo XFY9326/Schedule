@@ -7,6 +7,7 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.sync.Mutex
 import tool.xfy9326.schedule.beans.ScheduleTime
+import tool.xfy9326.schedule.content.CourseAdapterManager.newConfigInstance
 import tool.xfy9326.schedule.content.base.*
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
 import tool.xfy9326.schedule.data.AppSettingsDataStore
@@ -20,11 +21,11 @@ import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 import java.util.concurrent.atomic.AtomicBoolean
 
-abstract class CourseProviderViewModel<I, P1 : AbstractCourseProvider<*>, P2 : AbstractCourseParser<*>> : AbstractViewModel() {
-    protected lateinit var internalImportConfig: CourseImportConfig<*, P1, *, P2>
+abstract class CourseProviderViewModel<I, T1 : AbstractCourseProvider<*>, T2 : AbstractCourseParser<*>> : AbstractViewModel() {
+    protected lateinit var internalImportConfig: CourseImportConfig<*, T1, *, T2>
         private set
-    private lateinit var _courseProvider: P1
-    private lateinit var _courseParser: P2
+    private lateinit var _courseProvider: T1
+    private lateinit var _courseParser: T2
 
     protected val courseProvider
         get() = _courseProvider
@@ -44,25 +45,25 @@ abstract class CourseProviderViewModel<I, P1 : AbstractCourseProvider<*>, P2 : A
     val importConfig
         get() = internalImportConfig
 
-    fun registerConfig(config: CourseImportConfig<*, P1, *, P2>) {
-        if (!::internalImportConfig.isInitialized || internalImportConfig != config) {
-            internalImportConfig = config
-            _courseProvider = config.newProvider()
-            _courseParser = config.newParser()
+    fun registerConfig(config: Class<CourseImportConfig<*, T1, *, T2>>) {
+        if (!::internalImportConfig.isInitialized) {
+            internalImportConfig = config.newConfigInstance()
+            _courseProvider = internalImportConfig.newProvider()
+            _courseParser = internalImportConfig.newParser()
         }
     }
 
     protected abstract suspend fun onImportCourse(
         importParams: I,
         importOption: Int,
-        courseProvider: P1,
-        courseParser: P2,
+        courseProvider: T1,
+        courseParser: T2,
     ): ImportContent
 
     protected fun providerFunctionRunner(
         mutex: Mutex? = null,
         dispatcher: CoroutineDispatcher = Dispatchers.Default,
-        onRun: suspend (P1) -> Unit,
+        onRun: suspend (T1) -> Unit,
         onFailed: (suspend () -> Unit)? = null,
     ) {
         viewModelScope.launch(dispatcher) {
