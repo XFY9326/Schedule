@@ -101,7 +101,7 @@ dependencies {
     ext.androidx_lifecycle_version = '2.3.0'
     ext.androidx_room_version = '2.2.6'
 
-    ext.ktor_version = '1.5.1'
+    ext.ktor_version = '1.5.2'
 
     // Kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
@@ -122,7 +122,7 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
 
     implementation 'androidx.preference:preference-ktx:1.1.1'
-    implementation 'androidx.datastore:datastore-preferences:1.0.0-alpha06'
+    implementation 'androidx.datastore:datastore-preferences:1.0.0-alpha07'
 
     // LifeCycle, ViewModel, LiveData
     implementation "androidx.lifecycle:lifecycle-common-java8:$androidx_lifecycle_version"
