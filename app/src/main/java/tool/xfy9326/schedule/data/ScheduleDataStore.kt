@@ -5,14 +5,14 @@ import kotlinx.coroutines.flow.conflate
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
+import lib.xfy9326.io.utils.asParentOf
 import tool.xfy9326.schedule.beans.ImageScareType
 import tool.xfy9326.schedule.beans.NotThisWeekCourseShowStyle
 import tool.xfy9326.schedule.beans.ScheduleStyles
 import tool.xfy9326.schedule.beans.WeekDay
 import tool.xfy9326.schedule.data.base.AbstractDataStore
-import tool.xfy9326.schedule.kt.asParentOf
 import tool.xfy9326.schedule.kt.tryEnumValueOf
-import tool.xfy9326.schedule.utils.DirUtils
+import tool.xfy9326.schedule.utils.PathManager
 import java.io.File
 
 object ScheduleDataStore : AbstractDataStore("ScheduleSettings") {
@@ -89,7 +89,7 @@ object ScheduleDataStore : AbstractDataStore("ScheduleSettings") {
         }
     }.flowOn(Dispatchers.IO).map {
         if (it != null) {
-            val file = DirUtils.PictureAppDir.asParentOf(it.second)
+            val file = PathManager.PictureAppDir.asParentOf(it.second)
             if (file.isFile) {
                 it.first to file
             } else {

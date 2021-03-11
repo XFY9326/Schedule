@@ -2,12 +2,12 @@ package tool.xfy9326.schedule.ui.vm
 
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
-import tool.xfy9326.schedule.io.TextIO
+import lib.xfy9326.io.processor.textReader
+import lib.xfy9326.io.utils.asParentOf
 import tool.xfy9326.schedule.kt.MutableEventLiveData
-import tool.xfy9326.schedule.kt.asParentOf
 import tool.xfy9326.schedule.kt.postEvent
 import tool.xfy9326.schedule.ui.vm.base.AbstractViewModel
-import tool.xfy9326.schedule.utils.DirUtils
+import tool.xfy9326.schedule.utils.PathManager
 
 class AppErrorViewModel : AbstractViewModel() {
     val crashLog = MutableEventLiveData<String?>()
@@ -16,7 +16,7 @@ class AppErrorViewModel : AbstractViewModel() {
         if (crashLogFileName == null) {
             crashLog.postEvent(null)
         } else {
-            crashLog.postEvent(TextIO.readText(DirUtils.LogDir.asParentOf(crashLogFileName)))
+            crashLog.postEvent(PathManager.LogDir.asParentOf(crashLogFileName).textReader().read())
         }
     }
 }
