@@ -8,11 +8,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.withContext
+import lib.xfy9326.io.IOManager
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.*
 import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
-import tool.xfy9326.schedule.io.GlobalIO
 import tool.xfy9326.schedule.kt.APP_ID
 import tool.xfy9326.schedule.kt.iterateAll
 import tool.xfy9326.schedule.kt.withTryLock
@@ -44,11 +44,11 @@ object ScheduleSyncHelper {
     }
 
     fun removeAllCalendar() {
-        clearAllCalendar(GlobalIO.contentResolver)
+        clearAllCalendar(IOManager.contentResolver)
     }
 
     suspend fun syncCalendar(): BatchResult? = withContext(Dispatchers.Default) {
-        val contentResolver = GlobalIO.contentResolver
+        val contentResolver = IOManager.contentResolver
         syncLock.withTryLock {
             try {
                 clearAllCalendar(contentResolver)
@@ -210,7 +210,7 @@ object ScheduleSyncHelper {
                 put(CalendarContract.Events.EVENT_LOCATION, it)
             }
             course.teacher?.let {
-                put(CalendarContract.Events.DESCRIPTION, GlobalIO.resources.getString(R.string.ics_description_teacher, it))
+                put(CalendarContract.Events.DESCRIPTION, IOManager.resources.getString(R.string.ics_description_teacher, it))
             }
         }
     }

@@ -1,10 +1,10 @@
 package tool.xfy9326.schedule.utils
 
+import lib.xfy9326.io.IOManager
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.*
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
 import tool.xfy9326.schedule.content.utils.arrangeWeekNum
-import tool.xfy9326.schedule.io.GlobalIO
 import tool.xfy9326.schedule.kt.forEachTwo
 import tool.xfy9326.schedule.kt.intersect
 import tool.xfy9326.schedule.kt.iterateAll
@@ -109,7 +109,7 @@ object CourseUtils {
     }
 
     fun createNewCourse(scheduleId: Long) =
-        Course(0, scheduleId, GlobalIO.resources.getString(R.string.new_course), null, MaterialColorHelper.random(), listOf(createNewCourseTime()))
+        Course(0, scheduleId, IOManager.resources.getString(R.string.new_course), null, MaterialColorHelper.random(), listOf(createNewCourseTime()))
 
     fun createNewCourseTime(maxWeekNum: Int = 0) =
         CourseTime(if (maxWeekNum <= 0) {

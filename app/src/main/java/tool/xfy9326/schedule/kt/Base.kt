@@ -1,9 +1,8 @@
-@file:Suppress("unused", "NOTHING_TO_INLINE")
+@file:Suppress("unused")
 
 package tool.xfy9326.schedule.kt
 
 import kotlinx.coroutines.sync.Mutex
-import java.io.File
 
 const val NEW_LINE = "\n"
 
@@ -53,8 +52,6 @@ inline fun <T> Array<out T>.forEachTwo(action: (Int, T, Int, T) -> Unit) {
 inline fun <T> List<T>.forEachTwo(action: (Int, T, Int, T) -> Unit) {
     for (i1 in indices) for (i2 in (i1 + 1)..lastIndex) action(i1, this[i1], i2, this[i2])
 }
-
-inline fun File.asParentOf(childName: String) = File(this, childName)
 
 inline fun <T> Mutex.withTryLock(owner: Any? = null, action: () -> T): T? {
     if (tryLock(owner)) {
