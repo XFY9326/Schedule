@@ -18,24 +18,24 @@ import tool.xfy9326.schedule.ui.activity.base.CourseProviderActivity
 import tool.xfy9326.schedule.ui.activity.base.ViewModelActivity
 import tool.xfy9326.schedule.ui.adapter.CourseImportAdapter
 import tool.xfy9326.schedule.ui.recyclerview.AdvancedDividerItemDecoration
-import tool.xfy9326.schedule.ui.vm.CourseImportViewModel
+import tool.xfy9326.schedule.ui.vm.OnlineCourseImportViewModel
 import tool.xfy9326.schedule.utils.schedule.CourseImportUtils
 
-class OnlineCourseImportActivity : ViewModelActivity<CourseImportViewModel, ActivityOnlineCourseImportBinding>() {
+class OnlineCourseImportActivity : ViewModelActivity<OnlineCourseImportViewModel, ActivityOnlineCourseImportBinding>() {
     private lateinit var courseImportAdapter: CourseImportAdapter
 
-    override val vmClass = CourseImportViewModel::class
+    override val vmClass = OnlineCourseImportViewModel::class
 
     override fun onCreateViewBinding() = ActivityOnlineCourseImportBinding.inflate(layoutInflater)
 
-    override fun onPrepare(viewBinding: ActivityOnlineCourseImportBinding, viewModel: CourseImportViewModel) {
+    override fun onPrepare(viewBinding: ActivityOnlineCourseImportBinding, viewModel: OnlineCourseImportViewModel) {
         setSupportActionBar(viewBinding.toolBarCourseImport)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         lifecycleScope.launch { if (!AppSettingsDataStore.enableOnlineCourseImportFlow.first()) finish() }
     }
 
-    override fun onBindLiveData(viewBinding: ActivityOnlineCourseImportBinding, viewModel: CourseImportViewModel) {
+    override fun onBindLiveData(viewBinding: ActivityOnlineCourseImportBinding, viewModel: OnlineCourseImportViewModel) {
         viewModel.onlineImportAttention.observeNotify(this) {
             showOnlineImportAttentionDialog(true)
         }
@@ -44,13 +44,11 @@ class OnlineCourseImportActivity : ViewModelActivity<CourseImportViewModel, Acti
         }
     }
 
-    override fun onInitView(viewBinding: ActivityOnlineCourseImportBinding, viewModel: CourseImportViewModel) {
+    override fun onInitView(viewBinding: ActivityOnlineCourseImportBinding, viewModel: OnlineCourseImportViewModel) {
         courseImportAdapter = CourseImportAdapter()
         courseImportAdapter.setOnCourseImportItemClickListener(::onCourseImport)
         viewBinding.recyclerViewCourseImportList.adapter = courseImportAdapter
         viewBinding.recyclerViewCourseImportList.addItemDecoration(AdvancedDividerItemDecoration(this, DividerItemDecoration.VERTICAL))
-        viewModel.tryShowOnlineImportAttention()
-        viewModel.loadAllConfigs()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
