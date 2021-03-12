@@ -12,11 +12,16 @@ import tool.xfy9326.schedule.tools.livedata.MutableNotifyLiveData
 import tool.xfy9326.schedule.tools.livedata.notify
 import tool.xfy9326.schedule.ui.vm.base.AbstractViewModel
 
-class CourseImportViewModel : AbstractViewModel() {
+class OnlineCourseImportViewModel : AbstractViewModel() {
     val onlineImportAttention = MutableNotifyLiveData()
     val sortedConfigs = MutableLiveData<List<CourseImportConfig<*, *, *, *>>>()
 
-    fun tryShowOnlineImportAttention() {
+    override fun onViewInitialized(firstInitialized: Boolean) {
+        if (firstInitialized) loadAllConfigs()
+        tryShowOnlineImportAttention()
+    }
+
+    private fun tryShowOnlineImportAttention() {
         viewModelScope.launch {
             if (!AppDataStore.readOnlineImportAttentionFlow.first()) onlineImportAttention.notify()
         }
@@ -28,7 +33,7 @@ class CourseImportViewModel : AbstractViewModel() {
         }
     }
 
-    fun loadAllConfigs() {
+    private fun loadAllConfigs() {
         viewModelScope.launch {
             sortedConfigs.postValue(CourseAdapterManager.getSortedConfigs())
         }
