@@ -9,7 +9,7 @@ import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.content.base.CourseImportConfig
 import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.databinding.ActivityOnlineCourseImportBinding
-import tool.xfy9326.schedule.kt.observeNotify
+import tool.xfy9326.schedule.tools.livedata.observeNotify
 import tool.xfy9326.schedule.kt.show
 import tool.xfy9326.schedule.kt.showShortSnackBar
 import tool.xfy9326.schedule.ui.activity.base.CourseProviderActivity
@@ -17,7 +17,7 @@ import tool.xfy9326.schedule.ui.activity.base.ViewModelActivity
 import tool.xfy9326.schedule.ui.adapter.CourseImportAdapter
 import tool.xfy9326.schedule.ui.recyclerview.AdvancedDividerItemDecoration
 import tool.xfy9326.schedule.ui.vm.CourseImportViewModel
-import tool.xfy9326.schedule.utils.CourseImportUtils
+import tool.xfy9326.schedule.utils.schedule.CourseImportUtils
 
 class OnlineCourseImportActivity : ViewModelActivity<CourseImportViewModel, ActivityOnlineCourseImportBinding>() {
     private lateinit var courseImportAdapter: CourseImportAdapter

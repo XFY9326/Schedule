@@ -5,9 +5,9 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import tool.xfy9326.schedule.data.AppDataStore
 import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
-import tool.xfy9326.schedule.kt.MutableNotifyLiveData
+import tool.xfy9326.schedule.tools.livedata.MutableNotifyLiveData
 import tool.xfy9326.schedule.kt.asDistinctLiveData
-import tool.xfy9326.schedule.kt.notify
+import tool.xfy9326.schedule.tools.livedata.notify
 import tool.xfy9326.schedule.ui.vm.base.AbstractViewModel
 
 class ScheduleManageViewModel : AbstractViewModel() {

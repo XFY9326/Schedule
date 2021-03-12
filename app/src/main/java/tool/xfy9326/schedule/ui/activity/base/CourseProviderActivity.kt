@@ -9,13 +9,13 @@ import tool.xfy9326.schedule.content.base.AbstractCourseProvider
 import tool.xfy9326.schedule.content.base.CourseImportConfig
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
 import tool.xfy9326.schedule.kt.castNonNull
-import tool.xfy9326.schedule.kt.observeEvent
+import tool.xfy9326.schedule.tools.livedata.observeEvent
 import tool.xfy9326.schedule.kt.showShortToast
 import tool.xfy9326.schedule.kt.startActivity
 import tool.xfy9326.schedule.ui.dialog.ImportCourseConflictDialog
 import tool.xfy9326.schedule.ui.dialog.StrictImportModeWarningDialog
 import tool.xfy9326.schedule.ui.vm.base.CourseProviderViewModel
-import tool.xfy9326.schedule.utils.DialogUtils
+import tool.xfy9326.schedule.utils.view.DialogUtils
 
 abstract class CourseProviderActivity<I, P1 : AbstractCourseProvider<*>, P2 : AbstractCourseParser<*>, M : CourseProviderViewModel<I, P1, P2>, V : ViewBinding> :
     ViewModelActivity<M, V>(), ImportCourseConflictDialog.OnConfirmImportCourseConflictListener<Nothing> {

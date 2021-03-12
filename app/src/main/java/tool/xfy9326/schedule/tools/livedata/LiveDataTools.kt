@@ -1,12 +1,8 @@
 @file:Suppress("unused")
 
-package tool.xfy9326.schedule.kt
+package tool.xfy9326.schedule.tools.livedata
 
 import androidx.lifecycle.*
-import tool.xfy9326.schedule.tools.livedata.Event
-import tool.xfy9326.schedule.tools.livedata.EventObserver
-import tool.xfy9326.schedule.tools.livedata.Notify
-import tool.xfy9326.schedule.tools.livedata.NotifyObserver
 
 typealias MutableEventLiveData<T> = MutableLiveData<Event<T>>
 typealias MutableNotifyLiveData = MutableLiveData<Notify>

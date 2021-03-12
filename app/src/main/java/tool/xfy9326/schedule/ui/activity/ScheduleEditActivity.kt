@@ -14,12 +14,13 @@ import tool.xfy9326.schedule.beans.ScheduleTime
 import tool.xfy9326.schedule.beans.WeekDay
 import tool.xfy9326.schedule.databinding.ActivityScheduleEditBinding
 import tool.xfy9326.schedule.kt.*
+import tool.xfy9326.schedule.tools.livedata.observeEvent
 import tool.xfy9326.schedule.ui.activity.base.ViewModelActivity
 import tool.xfy9326.schedule.ui.adapter.ScheduleTimeAdapter
 import tool.xfy9326.schedule.ui.dialog.DatePickerDialog
 import tool.xfy9326.schedule.ui.dialog.TimePickerDialog
 import tool.xfy9326.schedule.ui.vm.ScheduleEditViewModel
-import tool.xfy9326.schedule.utils.DialogUtils
+import tool.xfy9326.schedule.utils.view.DialogUtils
 import java.text.SimpleDateFormat
 import java.util.*
 

@@ -5,7 +5,7 @@ import com.google.android.material.snackbar.Snackbar
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.Course
 import tool.xfy9326.schedule.databinding.ActivityCourseManageBinding
-import tool.xfy9326.schedule.kt.observeNotify
+import tool.xfy9326.schedule.tools.livedata.observeNotify
 import tool.xfy9326.schedule.kt.showShortSnackBar
 import tool.xfy9326.schedule.kt.startActivity
 import tool.xfy9326.schedule.ui.activity.base.ViewModelActivity

@@ -9,7 +9,7 @@ import tool.xfy9326.schedule.beans.Schedule
 import tool.xfy9326.schedule.content.utils.arrangeWeekNum
 import tool.xfy9326.schedule.db.DBConst
 import tool.xfy9326.schedule.db.query.CourseBundle
-import tool.xfy9326.schedule.utils.ScheduleUtils
+import tool.xfy9326.schedule.utils.schedule.ScheduleUtils
 
 @Dao
 abstract class ScheduleDAO {

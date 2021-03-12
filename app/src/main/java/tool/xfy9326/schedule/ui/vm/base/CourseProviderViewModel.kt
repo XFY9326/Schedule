@@ -11,10 +11,10 @@ import tool.xfy9326.schedule.content.CourseAdapterManager.newConfigInstance
 import tool.xfy9326.schedule.content.base.*
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
 import tool.xfy9326.schedule.data.AppSettingsDataStore
-import tool.xfy9326.schedule.kt.MutableEventLiveData
-import tool.xfy9326.schedule.kt.postEvent
-import tool.xfy9326.schedule.utils.CourseUtils
-import tool.xfy9326.schedule.utils.ScheduleUtils
+import tool.xfy9326.schedule.tools.livedata.MutableEventLiveData
+import tool.xfy9326.schedule.tools.livedata.postEvent
+import tool.xfy9326.schedule.utils.schedule.CourseUtils
+import tool.xfy9326.schedule.utils.schedule.ScheduleUtils
 import java.net.ConnectException
 import java.net.SocketException
 import java.net.SocketTimeoutException

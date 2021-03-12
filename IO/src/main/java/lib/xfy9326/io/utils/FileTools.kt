@@ -17,5 +17,5 @@ suspend fun File.deleteAll() = withContext(Dispatchers.IO + SupervisorJob()) {
 
 suspend fun File.createParentFolder() = withContext(Dispatchers.IO + SupervisorJob()) {
     val parent = parentFile
-    if (parent?.exists() == true) parent.mkdirs() else true
+    if (parent?.exists() == false) parent.mkdirs() else true
 }

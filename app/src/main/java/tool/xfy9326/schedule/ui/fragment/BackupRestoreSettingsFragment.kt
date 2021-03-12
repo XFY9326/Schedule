@@ -4,10 +4,10 @@ import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.BatchResult
-import tool.xfy9326.schedule.kt.observeEvent
 import tool.xfy9326.schedule.kt.setOnPrefClickListener
 import tool.xfy9326.schedule.kt.showShortSnackBar
 import tool.xfy9326.schedule.tools.MIMEConst
+import tool.xfy9326.schedule.tools.livedata.observeEvent
 import tool.xfy9326.schedule.ui.dialog.ImportCourseConflictDialog
 import tool.xfy9326.schedule.ui.dialog.MultiItemSelectDialog
 import tool.xfy9326.schedule.ui.fragment.base.AbstractSettingsFragment

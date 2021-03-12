@@ -1,4 +1,4 @@
-package tool.xfy9326.schedule.utils
+package tool.xfy9326.schedule.utils.ics
 
 import tool.xfy9326.schedule.BuildConfig
 import tool.xfy9326.schedule.beans.WeekDay

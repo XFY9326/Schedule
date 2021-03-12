@@ -10,8 +10,8 @@ import tool.xfy9326.schedule.data.AppDataStore
 import tool.xfy9326.schedule.kt.showGlobalShortToast
 import tool.xfy9326.schedule.kt.startActivity
 import tool.xfy9326.schedule.ui.activity.base.AbstractActivity
-import tool.xfy9326.schedule.utils.DialogUtils
-import tool.xfy9326.schedule.utils.PathManager
+import tool.xfy9326.schedule.utils.view.DialogUtils
+import tool.xfy9326.schedule.utils.file.RawManager
 
 class SplashActivity : AbstractActivity() {
     companion object {
@@ -51,7 +51,7 @@ class SplashActivity : AbstractActivity() {
             if (AppDataStore.acceptEULAFlow.first()) {
                 startMainActivity()
             } else {
-                showEULA(PathManager.ASSETS_EULA_FILE_READER.read()!!)
+                showEULA(RawManager.readEULA())
             }
         }
     }

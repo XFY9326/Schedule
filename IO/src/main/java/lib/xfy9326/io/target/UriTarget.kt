@@ -1,4 +1,4 @@
-@file:Suppress("NOTHING_TO_INLINE")
+@file:Suppress("BlockingMethodInNonBlockingContext")
 
 package lib.xfy9326.io.target
 
@@ -20,9 +20,9 @@ enum class UriWriteMode(internal val mode: String) {
 fun Uri.asTarget(writeMode: UriWriteMode = UriWriteMode.WRITE) = UriTarget(this, writeMode)
 
 class UriTarget internal constructor(private val uri: Uri, private val writeMode: UriWriteMode) : InputTarget<InputStream>, OutputTarget<OutputStream> {
-    override fun openInputStream(): InputStream =
+    override suspend fun openInputStream(): InputStream =
         IOManager.contentResolver.openInputStream(uri) ?: throw IOException("Input stream open failed! Uri: $uri")
 
-    override fun openOutputStream(): OutputStream =
+    override suspend fun openOutputStream(): OutputStream =
         IOManager.contentResolver.openOutputStream(uri, writeMode.mode) ?: throw IOException("Output stream open failed! Uri: $uri")
 }

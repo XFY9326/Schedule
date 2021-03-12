@@ -1,5 +1,3 @@
-@file:Suppress("NOTHING_TO_INLINE")
-
 package lib.xfy9326.io.target
 
 import androidx.annotation.RawRes
@@ -10,5 +8,5 @@ import java.io.InputStream
 fun createRawTarget(@RawRes rawId: Int) = RawTarget(rawId)
 
 class RawTarget internal constructor(@RawRes private val rawId: Int) : InputTarget<InputStream> {
-    override fun openInputStream(): InputStream = IOManager.resources.openRawResource(rawId)
+    override suspend fun openInputStream(): InputStream = IOManager.resources.openRawResource(rawId)
 }

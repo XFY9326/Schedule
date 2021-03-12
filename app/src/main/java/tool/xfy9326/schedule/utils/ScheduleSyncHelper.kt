@@ -16,6 +16,8 @@ import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
 import tool.xfy9326.schedule.kt.APP_ID
 import tool.xfy9326.schedule.kt.iterateAll
 import tool.xfy9326.schedule.kt.withTryLock
+import tool.xfy9326.schedule.utils.ics.ScheduleICSWriter
+import tool.xfy9326.schedule.utils.schedule.CourseTimeUtils
 import java.util.*
 
 object ScheduleSyncHelper {
