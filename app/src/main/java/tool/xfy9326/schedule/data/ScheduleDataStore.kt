@@ -12,7 +12,7 @@ import tool.xfy9326.schedule.beans.ScheduleStyles
 import tool.xfy9326.schedule.beans.WeekDay
 import tool.xfy9326.schedule.data.base.AbstractDataStore
 import tool.xfy9326.schedule.kt.tryEnumValueOf
-import tool.xfy9326.schedule.utils.PathManager
+import tool.xfy9326.schedule.utils.file.PathManager
 import java.io.File
 
 object ScheduleDataStore : AbstractDataStore("ScheduleSettings") {

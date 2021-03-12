@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 import tool.xfy9326.schedule.beans.CourseCell
 import tool.xfy9326.schedule.beans.ScheduleBuildBundle
 import tool.xfy9326.schedule.ui.vm.ScheduleViewModel
-import tool.xfy9326.schedule.utils.ScheduleViewHelper
+import tool.xfy9326.schedule.utils.view.ScheduleViewHelper
 import kotlin.properties.Delegates
 
 class TableFragment : Fragment(), Observer<ScheduleBuildBundle> {

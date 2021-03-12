@@ -14,7 +14,7 @@ import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.databinding.DialogScheduleControlPanelBinding
 import tool.xfy9326.schedule.kt.enableLightSystemBar
 import tool.xfy9326.schedule.kt.isUsingNightMode
-import tool.xfy9326.schedule.kt.postEvent
+import tool.xfy9326.schedule.tools.livedata.postEvent
 import tool.xfy9326.schedule.ui.vm.ScheduleViewModel
 
 class ScheduleControlPanel : BottomSheetDialogFragment() {

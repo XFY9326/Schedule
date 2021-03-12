@@ -1,4 +1,4 @@
-package tool.xfy9326.schedule.utils
+package tool.xfy9326.schedule.utils.schedule
 
 import tool.xfy9326.schedule.content.base.*
 

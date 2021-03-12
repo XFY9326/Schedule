@@ -33,6 +33,7 @@ import tool.xfy9326.schedule.data.ScheduleDataStore
 import tool.xfy9326.schedule.databinding.ActivityScheduleBinding
 import tool.xfy9326.schedule.databinding.LayoutNavHeaderBinding
 import tool.xfy9326.schedule.kt.*
+import tool.xfy9326.schedule.tools.livedata.observeEvent
 import tool.xfy9326.schedule.ui.activity.base.ViewModelActivity
 import tool.xfy9326.schedule.ui.adapter.ScheduleViewPagerAdapter
 import tool.xfy9326.schedule.ui.dialog.CourseDetailDialog
@@ -40,6 +41,8 @@ import tool.xfy9326.schedule.ui.dialog.ScheduleControlPanel
 import tool.xfy9326.schedule.ui.dialog.UpgradeDialog
 import tool.xfy9326.schedule.ui.vm.ScheduleViewModel
 import tool.xfy9326.schedule.utils.*
+import tool.xfy9326.schedule.utils.ics.ScheduleICSHelper
+import tool.xfy9326.schedule.utils.view.DialogUtils
 import kotlin.math.max
 import kotlin.math.sqrt
 

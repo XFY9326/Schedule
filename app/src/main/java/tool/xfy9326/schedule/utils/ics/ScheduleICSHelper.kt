@@ -1,4 +1,4 @@
-package tool.xfy9326.schedule.utils
+package tool.xfy9326.schedule.utils.ics
 
 import android.content.Context
 import android.net.Uri
@@ -8,6 +8,7 @@ import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.*
 import tool.xfy9326.schedule.beans.WeekNumPattern.PatternType.*
 import tool.xfy9326.schedule.kt.iterateAll
+import tool.xfy9326.schedule.utils.schedule.CourseTimeUtils
 
 class ScheduleICSHelper constructor(schedule: Schedule, private val courses: List<Course>) {
     companion object {

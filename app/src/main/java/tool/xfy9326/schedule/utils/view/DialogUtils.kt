@@ -1,4 +1,4 @@
-package tool.xfy9326.schedule.utils
+package tool.xfy9326.schedule.utils.view
 
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity

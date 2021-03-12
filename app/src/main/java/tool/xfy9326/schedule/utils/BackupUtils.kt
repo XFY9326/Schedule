@@ -11,6 +11,8 @@ import tool.xfy9326.schedule.beans.*
 import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
 import tool.xfy9326.schedule.db.utils.DBTypeConverter
 import tool.xfy9326.schedule.json.backup.*
+import tool.xfy9326.schedule.utils.schedule.CourseUtils
+import tool.xfy9326.schedule.utils.schedule.ScheduleUtils
 
 object BackupUtils {
     private val JSON by lazy {

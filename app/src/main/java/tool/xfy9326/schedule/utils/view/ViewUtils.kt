@@ -1,4 +1,4 @@
-package tool.xfy9326.schedule.utils
+package tool.xfy9326.schedule.utils.view
 
 import android.content.res.ColorStateList
 import android.graphics.Color

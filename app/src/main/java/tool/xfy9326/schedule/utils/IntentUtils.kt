@@ -9,6 +9,7 @@ import tool.xfy9326.schedule.BuildConfig
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.kt.tryStartActivity
 import tool.xfy9326.schedule.tools.MIMEConst
+import tool.xfy9326.schedule.utils.file.PathManager
 import java.util.*
 
 object IntentUtils {

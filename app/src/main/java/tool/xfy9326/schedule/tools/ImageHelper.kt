@@ -12,9 +12,10 @@ import lib.xfy9326.io.IOManager
 import lib.xfy9326.io.processor.bitmapReader
 import lib.xfy9326.io.processor.bitmapWriter
 import lib.xfy9326.io.utils.asParentOf
+import lib.xfy9326.io.utils.isWEBP
 import tool.xfy9326.schedule.App
-import tool.xfy9326.schedule.utils.PathManager
 import tool.xfy9326.schedule.utils.IntentUtils
+import tool.xfy9326.schedule.utils.file.PathManager
 import java.io.File
 import java.util.*
 
@@ -118,17 +119,12 @@ object ImageHelper {
             Bitmap.CompressFormat.WEBP
         }
 
-    @Suppress("DEPRECATION")
-    private fun isWEBP(format: Bitmap.CompressFormat?) =
-        format == Bitmap.CompressFormat.WEBP || Build.VERSION.SDK_INT >= Build.VERSION_CODES.R &&
-                (format == Bitmap.CompressFormat.WEBP_LOSSY || format == Bitmap.CompressFormat.WEBP_LOSSLESS)
-
     private fun getNewFileNameByBitmapCompressFormat(fileName: String, compressFormat: Bitmap.CompressFormat): String {
         val pureFileName = fileName.substringBeforeLast('.')
         val newExtension = when {
             compressFormat == Bitmap.CompressFormat.JPEG -> IMAGE_JPEG
             compressFormat == Bitmap.CompressFormat.PNG -> IMAGE_PNG
-            isWEBP(compressFormat) -> IMAGE_WEBP
+            compressFormat.isWEBP() -> IMAGE_WEBP
             else -> error("Unknown bitmap compress format! $compressFormat")
         }
         return "$pureFileName.$newExtension"
@@ -138,7 +134,7 @@ object ImageHelper {
         when {
             compressFormat == Bitmap.CompressFormat.JPEG -> MIMEConst.MIME_IMAGE_JPEG
             compressFormat == Bitmap.CompressFormat.PNG -> MIMEConst.MIME_IMAGE_PNG
-            isWEBP(compressFormat) -> MIMEConst.MIME_IMAGE_WEBP
+            compressFormat.isWEBP() -> MIMEConst.MIME_IMAGE_WEBP
             else -> error("Unknown bitmap compress format! $compressFormat")
         }
 }

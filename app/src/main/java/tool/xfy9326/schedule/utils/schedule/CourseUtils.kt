@@ -1,4 +1,4 @@
-package tool.xfy9326.schedule.utils
+package tool.xfy9326.schedule.utils.schedule
 
 import lib.xfy9326.io.IOManager
 import tool.xfy9326.schedule.R
@@ -9,6 +9,7 @@ import tool.xfy9326.schedule.kt.forEachTwo
 import tool.xfy9326.schedule.kt.intersect
 import tool.xfy9326.schedule.kt.iterateAll
 import tool.xfy9326.schedule.tools.MaterialColorHelper
+import tool.xfy9326.schedule.utils.CalendarUtils
 import kotlin.math.max
 
 object CourseUtils {

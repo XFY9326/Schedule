@@ -13,7 +13,7 @@ import tool.xfy9326.schedule.BuildConfig
 import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.kt.appErrorRelaunch
 import tool.xfy9326.schedule.kt.crashRelaunch
-import tool.xfy9326.schedule.utils.PathManager
+import tool.xfy9326.schedule.utils.file.PathManager
 import java.io.File
 import java.util.*
 

@@ -1,4 +1,4 @@
-package tool.xfy9326.schedule.utils
+package tool.xfy9326.schedule.utils.view
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -20,6 +20,8 @@ import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
 import tool.xfy9326.schedule.kt.getColorCompat
 import tool.xfy9326.schedule.kt.getDefaultBackgroundColor
 import tool.xfy9326.schedule.ui.view.*
+import tool.xfy9326.schedule.utils.schedule.CourseTimeUtils
+import tool.xfy9326.schedule.utils.schedule.CourseUtils
 
 object ScheduleViewHelper {
     private const val MIN_SCHEDULE_COLUMN_COUNT = 6
