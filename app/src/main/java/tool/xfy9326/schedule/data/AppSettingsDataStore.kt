@@ -35,7 +35,7 @@ object AppSettingsDataStore : AbstractDataStore("Settings") {
             it[calendarSyncScheduleDefault] ?: true,
             it[calendarSyncScheduleDefaultVisibleDefault] ?: true,
             it[calendarSyncScheduleEditableDefault] ?: false,
-            it[calendarSyncAddReminderDefault] ?: false
+            it[calendarSyncAddReminderDefault] ?: true
         )
     }
 
