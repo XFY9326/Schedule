@@ -1,15 +1,21 @@
 plugins {
-    id 'com.android.library'
-    id 'kotlin-android'
+    id "com.android.library"
+    id "kotlin-android"
 }
 
+def config = rootProject.ext
+def androidConfig = config.android
+def dependenciesVersion = config.dependencies
+def kotlinxVersion = dependenciesVersion.kotlinx
+def androidxVersion = dependenciesVersion.androidx
+
 android {
-    compileSdkVersion 30
-    buildToolsVersion "30.0.3"
+    compileSdkVersion androidConfig.compileSdkVersion
+    buildToolsVersion androidConfig.buildToolsVersion
 
     defaultConfig {
-        minSdkVersion 16
-        targetSdkVersion 30
+        minSdkVersion androidConfig.minSdkVersion
+        targetSdkVersion androidConfig.targetSDKVersion
         versionCode 1
         versionName "1.0"
 
@@ -20,7 +26,7 @@ android {
     buildTypes {
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
         }
     }
 
@@ -36,12 +42,12 @@ android {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlinx_coroutines_version"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlinxVersion.coroutines"
 
-    implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinx_serialization"
+    implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinxVersion.serialization"
 
-    implementation "androidx.core:core-ktx:$androidx_core_version"
+    implementation "androidx.core:core-ktx:$androidxVersion.core"
 
-    testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+    testImplementation "junit:junit:$dependenciesVersion.junit"
+    androidTestImplementation "androidx.test.ext:junit:$androidxVersion.test.junit"
 }
