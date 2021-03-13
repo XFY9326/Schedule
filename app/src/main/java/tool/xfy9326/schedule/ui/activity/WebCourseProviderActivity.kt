@@ -64,6 +64,8 @@ class WebCourseProviderActivity :
             """
     }
 
+    override val exitIfImportSuccess = false
+
     override val vmClass = WebCourseProviderViewModel::class
 
     private val loadingDialogController = FullScreenLoadingDialog.createControllerInstance(this)
@@ -221,12 +223,9 @@ class WebCourseProviderActivity :
         loadingDialogController.show()
     }
 
-    override fun onCourseImportFinish(result: CourseProviderViewModel.ImportResult) {
+    override fun onCourseImportFinish(result: CourseProviderViewModel.ImportResult, editScheduleId: Long?) {
         loadingDialogController.hide()
-        super.onCourseImportFinish(result)
     }
-
-    override fun onConfirmImportCourseConflict(value: Nothing?) {}
 
     override fun onShowCourseAdapterError(exception: CourseAdapterException) {
         ViewUtils.showCourseAdapterErrorSnackBar(this, requireViewBinding().layoutWebCourseProvider, exception)

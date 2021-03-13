@@ -2,9 +2,7 @@ package tool.xfy9326.schedule.ui.dialog
 
 import android.content.DialogInterface
 import android.os.Bundle
-import android.os.Parcelable
 import androidx.appcompat.app.AppCompatDialogFragment
-import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import tool.xfy9326.schedule.R
@@ -13,13 +11,10 @@ import tool.xfy9326.schedule.kt.requireOwner
 class ImportCourseConflictDialog : AppCompatDialogFragment(), DialogInterface.OnClickListener {
     companion object {
         private val DIALOG_TAG = ImportCourseConflictDialog::class.simpleName
-        private const val EXTRA_PASSED_VALUE = "EXTRA_PASSED_VALUE"
 
-        fun showDialog(fragmentManager: FragmentManager, passedValue: Parcelable? = null) {
+        fun showDialog(fragmentManager: FragmentManager, value: Bundle? = null) {
             ImportCourseConflictDialog().apply {
-                arguments = bundleOf(
-                    EXTRA_PASSED_VALUE to passedValue
-                )
+                arguments = value
             }.show(fragmentManager, DIALOG_TAG)
         }
     }
@@ -39,12 +34,10 @@ class ImportCourseConflictDialog : AppCompatDialogFragment(), DialogInterface.On
     }
 
     override fun onClick(dialog: DialogInterface?, which: Int) {
-        requireOwner<OnConfirmImportCourseConflictListener<*>>()?.onConfirmImportCourseConflict(
-            requireArguments().getParcelable(EXTRA_PASSED_VALUE)
-        )
+        requireOwner<OnReadImportCourseConflictListener>()?.onReadImportCourseConflict(arguments)
     }
 
-    interface OnConfirmImportCourseConflictListener<T> {
-        fun onConfirmImportCourseConflict(value: T?)
+    interface OnReadImportCourseConflictListener {
+        fun onReadImportCourseConflict(value: Bundle?)
     }
 }
