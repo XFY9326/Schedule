@@ -33,7 +33,7 @@ object ScheduleViewHelper {
         scheduleBuildBundle: ScheduleBuildBundle,
         listener: ((CourseCell) -> Unit)? = null,
         noScroll: Boolean = false,
-    ): View = withContext(Dispatchers.Default) {
+    ): View = withContext(Dispatchers.Default + SupervisorJob()) {
         val viewData = CourseUtils.getScheduleViewDataByWeek(weekNum, scheduleBuildBundle)
 
         val schedulePredefine = SchedulePredefine.load(context)
@@ -57,7 +57,7 @@ object ScheduleViewHelper {
         val scheduleGridView = ScheduleGridView(context, viewData, columnAmount, schedulePredefine)
 
         for (viewDeferred in cellsDeferred) {
-            viewDeferred.await().let(scheduleGridView::addScheduleCellWithoutLayout)
+            scheduleGridView.addScheduleCellPreventLayout(viewDeferred.await())
         }
 
         val scheduleView = ScheduleView(context, viewData.styles, columnAmount, scheduleHeaderViewDeferred.await(), scheduleGridView)
