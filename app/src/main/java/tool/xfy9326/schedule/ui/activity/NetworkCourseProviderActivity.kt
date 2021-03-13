@@ -24,6 +24,9 @@ import tool.xfy9326.schedule.utils.view.ViewUtils
 
 class NetworkCourseProviderActivity :
     CourseProviderActivity<NetworkCourseImportParams, NetworkCourseProvider<*>, NetworkCourseParser<*>, NetworkCourseProviderViewModel, ActivityNetworkCourseProviderBinding>() {
+
+    override val exitIfImportSuccess = true
+
     override val vmClass = NetworkCourseProviderViewModel::class
 
     override fun onCreateViewBinding() = ActivityNetworkCourseProviderBinding.inflate(layoutInflater)
@@ -103,13 +106,11 @@ class NetworkCourseProviderActivity :
         ViewUtils.showCourseAdapterErrorSnackBar(this, requireViewBinding().layoutLoginCourseProvider, exception)
     }
 
-    override fun onCourseImportFinish(result: CourseProviderViewModel.ImportResult) {
-        if (!result.isSuccess) {
+    override fun onCourseImportFinish(result: CourseProviderViewModel.ImportResult, editScheduleId: Long?) {
+        if (result == CourseProviderViewModel.ImportResult.FAILED) {
             requireViewBinding().layoutCourseImportContent.setAllEnable(true)
             requireViewModel().initLoginParams()
         }
-        super.onCourseImportFinish(result)
-        if (result.isSuccess && !result.hasConflicts) finish()
     }
 
     override fun onReadyImportCourse() {

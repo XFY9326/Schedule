@@ -23,20 +23,22 @@ abstract class ScheduleDAO {
     }
 
     @Transaction
-    open suspend fun updateScheduleCourses(schedule: Schedule, courses: List<Course>) {
+    open suspend fun updateScheduleCourses(schedule: Schedule, courses: List<Course>): Long {
         updateSchedule(schedule)
         deleteCourseByScheduleId(schedule.scheduleId)
         for (course in courses) {
             putCourse(schedule.scheduleId, course)
         }
+        return schedule.scheduleId
     }
 
     @Transaction
-    open suspend fun putNewScheduleCourses(schedule: Schedule, courses: List<Course>) {
+    open suspend fun putNewScheduleCourses(schedule: Schedule, courses: List<Course>): Long {
         val scheduleId = putSchedule(schedule)
         for (course in courses) {
             putCourse(scheduleId, course)
         }
+        return scheduleId
     }
 
     fun getScheduleCourses(scheduleId: Long) = getCourses(scheduleId).convert()

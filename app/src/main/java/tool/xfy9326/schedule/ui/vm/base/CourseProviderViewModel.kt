@@ -33,7 +33,7 @@ abstract class CourseProviderViewModel<I, T1 : AbstractCourseProvider<*>, T2 : A
         get() = _courseParser
 
     val providerError = MutableEventLiveData<CourseAdapterException>()
-    val courseImportFinish = MutableEventLiveData<ImportResult>()
+    val courseImportFinish = MutableEventLiveData<Pair<ImportResult, Long?>>()
 
     private val loginParamsLock = Mutex()
     private var importCourseJob: Job? = null
@@ -107,13 +107,17 @@ abstract class CourseProviderViewModel<I, T1 : AbstractCourseProvider<*>, T2 : A
 
                     val hasConflicts = CourseUtils.solveConflicts(content.scheduleTimes, courses)
 
-                    if (currentSchedule) {
+                    val editScheduleId = if (currentSchedule) {
                         ScheduleUtils.saveCurrentSchedule(content.scheduleTimes, courses)
                     } else {
                         ScheduleUtils.saveNewSchedule(newScheduleName, content.scheduleTimes, courses)
                     }
 
-                    reportFinishResult(true, hasConflicts)
+                    if (hasConflicts) {
+                        reportFinishResult(ImportResult.SUCCESS_WITH_IGNORABLE_CONFLICTS, editScheduleId)
+                    } else {
+                        reportFinishResult(ImportResult.SUCCESS, editScheduleId)
+                    }
                 } catch (e: CourseAdapterException) {
                     reportError(e, true)
                 } catch (e: Exception) {
@@ -131,12 +135,12 @@ abstract class CourseProviderViewModel<I, T1 : AbstractCourseProvider<*>, T2 : A
     }
 
     protected fun reportError(err: CourseAdapterException, isImportFinish: Boolean) {
-        if (isImportFinish) reportFinishResult(false)
+        if (isImportFinish) reportFinishResult(ImportResult.FAILED)
         providerError.postEvent(err)
     }
 
-    protected fun reportFinishResult(isSuccess: Boolean, hasConflicts: Boolean = false) {
-        courseImportFinish.postEvent(ImportResult(isSuccess, hasConflicts))
+    protected fun reportFinishResult(result: ImportResult, scheduleId: Long? = null) {
+        courseImportFinish.postEvent(result to scheduleId)
     }
 
     fun finishImport() {
@@ -146,7 +150,11 @@ abstract class CourseProviderViewModel<I, T1 : AbstractCourseProvider<*>, T2 : A
 
     protected class ImportContent(val scheduleTimes: List<ScheduleTime>, val coursesParserResult: CourseParseResult)
 
-    class ImportResult(val isSuccess: Boolean, val hasConflicts: Boolean)
+    enum class ImportResult {
+        SUCCESS,
+        FAILED,
+        SUCCESS_WITH_IGNORABLE_CONFLICTS
+    }
 
     override fun onCleared() {
         finishImport()

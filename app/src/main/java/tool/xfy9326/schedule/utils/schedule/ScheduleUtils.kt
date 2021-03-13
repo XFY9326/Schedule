@@ -116,15 +116,15 @@ object ScheduleUtils {
             ScheduleDataStore.defaultFirstDayOfWeekFlow.first())
     }
 
-    suspend fun saveCurrentSchedule(scheduleTimes: List<ScheduleTime>, courses: List<Course>) {
+    suspend fun saveCurrentSchedule(scheduleTimes: List<ScheduleTime>, courses: List<Course>): Long {
         val schedule = currentScheduleFlow.first().also {
             it.times = scheduleTimes
             adjustScheduleDateByCourses(it, courses)
         }
-        ScheduleDBProvider.db.scheduleDAO.updateScheduleCourses(schedule, courses)
+        return ScheduleDBProvider.db.scheduleDAO.updateScheduleCourses(schedule, courses)
     }
 
-    suspend fun saveNewSchedule(newScheduleName: String?, scheduleTimes: List<ScheduleTime>, courses: List<Course>) {
+    suspend fun saveNewSchedule(newScheduleName: String?, scheduleTimes: List<ScheduleTime>, courses: List<Course>): Long {
         val schedule = createNewSchedule().also {
             it.times = scheduleTimes
             adjustScheduleDateByCourses(it, courses)
@@ -132,7 +132,7 @@ object ScheduleUtils {
         if (newScheduleName != null) {
             schedule.name = newScheduleName
         }
-        ScheduleDBProvider.db.scheduleDAO.putNewScheduleCourses(schedule, courses)
+        return ScheduleDBProvider.db.scheduleDAO.putNewScheduleCourses(schedule, courses)
     }
 
     suspend fun saveNewSchedule(schedule: Schedule, courses: List<Course>) {
