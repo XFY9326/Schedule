@@ -19,7 +19,7 @@ import tool.xfy9326.schedule.content.utils.arrangeWeekNum
 import tool.xfy9326.schedule.databinding.DialogCourseTimeEditBinding
 import tool.xfy9326.schedule.kt.*
 import tool.xfy9326.schedule.ui.view.CircleNumberButton
-import tool.xfy9326.schedule.utils.CourseUtils
+import tool.xfy9326.schedule.utils.schedule.CourseUtils
 import kotlin.properties.Delegates
 
 class CourseTimeEditDialog : AppCompatDialogFragment() {

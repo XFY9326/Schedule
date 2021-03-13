@@ -25,7 +25,7 @@ object DownloadUtils {
                 setTitle(title)
                 setDescription(description)
                 setMimeType(mimeType)
-                setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+                setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE)
                 try {
                     setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, subPath)
                 } catch (e: Exception) {

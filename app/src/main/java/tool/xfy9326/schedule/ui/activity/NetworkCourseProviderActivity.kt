@@ -15,14 +15,18 @@ import tool.xfy9326.schedule.content.base.*
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
 import tool.xfy9326.schedule.databinding.ActivityNetworkCourseProviderBinding
 import tool.xfy9326.schedule.kt.*
+import tool.xfy9326.schedule.tools.livedata.observeEvent
 import tool.xfy9326.schedule.ui.activity.base.CourseProviderActivity
 import tool.xfy9326.schedule.ui.vm.NetworkCourseProviderViewModel
 import tool.xfy9326.schedule.ui.vm.base.CourseProviderViewModel
-import tool.xfy9326.schedule.utils.DialogUtils
-import tool.xfy9326.schedule.utils.ViewUtils
+import tool.xfy9326.schedule.utils.view.DialogUtils
+import tool.xfy9326.schedule.utils.view.ViewUtils
 
 class NetworkCourseProviderActivity :
     CourseProviderActivity<NetworkCourseImportParams, NetworkCourseProvider<*>, NetworkCourseParser<*>, NetworkCourseProviderViewModel, ActivityNetworkCourseProviderBinding>() {
+
+    override val exitIfImportSuccess = true
+
     override val vmClass = NetworkCourseProviderViewModel::class
 
     override fun onCreateViewBinding() = ActivityNetworkCourseProviderBinding.inflate(layoutInflater)
@@ -102,13 +106,11 @@ class NetworkCourseProviderActivity :
         ViewUtils.showCourseAdapterErrorSnackBar(this, requireViewBinding().layoutLoginCourseProvider, exception)
     }
 
-    override fun onCourseImportFinish(result: CourseProviderViewModel.ImportResult) {
-        if (!result.isSuccess) {
+    override fun onCourseImportFinish(result: CourseProviderViewModel.ImportResult, editScheduleId: Long?) {
+        if (result == CourseProviderViewModel.ImportResult.FAILED) {
             requireViewBinding().layoutCourseImportContent.setAllEnable(true)
             requireViewModel().initLoginParams()
         }
-        super.onCourseImportFinish(result)
-        if (result.isSuccess && !result.hasConflicts) finish()
     }
 
     override fun onReadyImportCourse() {

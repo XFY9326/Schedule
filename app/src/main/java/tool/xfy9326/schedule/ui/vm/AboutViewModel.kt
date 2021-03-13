@@ -2,11 +2,10 @@ package tool.xfy9326.schedule.ui.vm
 
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
-import tool.xfy9326.schedule.io.TextIO
-import tool.xfy9326.schedule.kt.MutableEventLiveData
-import tool.xfy9326.schedule.kt.postEvent
+import tool.xfy9326.schedule.tools.livedata.MutableEventLiveData
+import tool.xfy9326.schedule.tools.livedata.postEvent
 import tool.xfy9326.schedule.ui.vm.base.AbstractViewModel
-import tool.xfy9326.schedule.utils.DirUtils
+import tool.xfy9326.schedule.utils.file.RawManager
 
 class AboutViewModel : AbstractViewModel() {
     val showEULA = MutableEventLiveData<String>()
@@ -14,17 +13,13 @@ class AboutViewModel : AbstractViewModel() {
 
     fun showEULA() {
         viewModelScope.launch {
-            TextIO.readAssetText(DirUtils.ASSETS_EULA_FILE)?.let {
-                showEULA.postEvent(it)
-            }
+            showEULA.postEvent(RawManager.readEULA())
         }
     }
 
     fun showOpenSourceLicense() {
         viewModelScope.launch {
-            TextIO.readAssetText(DirUtils.ASSETS_LICENSE_FILE)?.let {
-                showOpenSourceLicense.postEvent(it)
-            }
+            showOpenSourceLicense.postEvent(RawManager.readOpenSourceLicense())
         }
     }
 }

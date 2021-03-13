@@ -22,13 +22,14 @@ import tool.xfy9326.schedule.content.utils.CourseAdapterException
 import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.databinding.ActivityWebCourseProviderBinding
 import tool.xfy9326.schedule.kt.*
+import tool.xfy9326.schedule.tools.livedata.observeEvent
 import tool.xfy9326.schedule.ui.activity.base.CourseProviderActivity
 import tool.xfy9326.schedule.ui.dialog.FullScreenLoadingDialog
 import tool.xfy9326.schedule.ui.dialog.WebCourseProviderBottomPanel
 import tool.xfy9326.schedule.ui.vm.WebCourseProviderViewModel
 import tool.xfy9326.schedule.ui.vm.base.CourseProviderViewModel
-import tool.xfy9326.schedule.utils.DialogUtils
-import tool.xfy9326.schedule.utils.ViewUtils
+import tool.xfy9326.schedule.utils.view.DialogUtils
+import tool.xfy9326.schedule.utils.view.ViewUtils
 
 class WebCourseProviderActivity :
     CourseProviderActivity<WebCourseImportParams, WebCourseProvider<*>, WebCourseParser<*>, WebCourseProviderViewModel, ActivityWebCourseProviderBinding>(),
@@ -62,6 +63,8 @@ class WebCourseProviderActivity :
                 window.$HTML_PRINT_JAVASCRIPT_INTERFACE_NAME.$HTML_PRINT_JAVASCRIPT_METHOD_NAME(htmlContent, iframeList, frameList, isCurrentSchedule);
             """
     }
+
+    override val exitIfImportSuccess = false
 
     override val vmClass = WebCourseProviderViewModel::class
 
@@ -220,12 +223,9 @@ class WebCourseProviderActivity :
         loadingDialogController.show()
     }
 
-    override fun onCourseImportFinish(result: CourseProviderViewModel.ImportResult) {
+    override fun onCourseImportFinish(result: CourseProviderViewModel.ImportResult, editScheduleId: Long?) {
         loadingDialogController.hide()
-        super.onCourseImportFinish(result)
     }
-
-    override fun onConfirmImportCourseConflict(value: Nothing?) {}
 
     override fun onShowCourseAdapterError(exception: CourseAdapterException) {
         ViewUtils.showCourseAdapterErrorSnackBar(this, requireViewBinding().layoutWebCourseProvider, exception)

@@ -7,24 +7,25 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.sync.Mutex
 import tool.xfy9326.schedule.beans.ScheduleTime
+import tool.xfy9326.schedule.content.CourseAdapterManager.newConfigInstance
 import tool.xfy9326.schedule.content.base.*
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
 import tool.xfy9326.schedule.data.AppSettingsDataStore
-import tool.xfy9326.schedule.kt.MutableEventLiveData
-import tool.xfy9326.schedule.kt.postEvent
-import tool.xfy9326.schedule.utils.CourseUtils
-import tool.xfy9326.schedule.utils.ScheduleUtils
+import tool.xfy9326.schedule.tools.livedata.MutableEventLiveData
+import tool.xfy9326.schedule.tools.livedata.postEvent
+import tool.xfy9326.schedule.utils.schedule.CourseUtils
+import tool.xfy9326.schedule.utils.schedule.ScheduleUtils
 import java.net.ConnectException
 import java.net.SocketException
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 import java.util.concurrent.atomic.AtomicBoolean
 
-abstract class CourseProviderViewModel<I, P1 : AbstractCourseProvider<*>, P2 : AbstractCourseParser<*>> : AbstractViewModel() {
-    protected lateinit var internalImportConfig: CourseImportConfig<*, P1, *, P2>
+abstract class CourseProviderViewModel<I, T1 : AbstractCourseProvider<*>, T2 : AbstractCourseParser<*>> : AbstractViewModel() {
+    protected lateinit var internalImportConfig: CourseImportConfig<*, T1, *, T2>
         private set
-    private lateinit var _courseProvider: P1
-    private lateinit var _courseParser: P2
+    private lateinit var _courseProvider: T1
+    private lateinit var _courseParser: T2
 
     protected val courseProvider
         get() = _courseProvider
@@ -32,7 +33,7 @@ abstract class CourseProviderViewModel<I, P1 : AbstractCourseProvider<*>, P2 : A
         get() = _courseParser
 
     val providerError = MutableEventLiveData<CourseAdapterException>()
-    val courseImportFinish = MutableEventLiveData<ImportResult>()
+    val courseImportFinish = MutableEventLiveData<Pair<ImportResult, Long?>>()
 
     private val loginParamsLock = Mutex()
     private var importCourseJob: Job? = null
@@ -44,25 +45,25 @@ abstract class CourseProviderViewModel<I, P1 : AbstractCourseProvider<*>, P2 : A
     val importConfig
         get() = internalImportConfig
 
-    fun registerConfig(config: CourseImportConfig<*, P1, *, P2>) {
-        if (!::internalImportConfig.isInitialized || internalImportConfig != config) {
-            internalImportConfig = config
-            _courseProvider = config.newProvider()
-            _courseParser = config.newParser()
+    fun registerConfig(config: Class<CourseImportConfig<*, T1, *, T2>>) {
+        if (!::internalImportConfig.isInitialized) {
+            internalImportConfig = config.newConfigInstance()
+            _courseProvider = internalImportConfig.newProvider()
+            _courseParser = internalImportConfig.newParser()
         }
     }
 
     protected abstract suspend fun onImportCourse(
         importParams: I,
         importOption: Int,
-        courseProvider: P1,
-        courseParser: P2,
+        courseProvider: T1,
+        courseParser: T2,
     ): ImportContent
 
     protected fun providerFunctionRunner(
         mutex: Mutex? = null,
         dispatcher: CoroutineDispatcher = Dispatchers.Default,
-        onRun: suspend (P1) -> Unit,
+        onRun: suspend (T1) -> Unit,
         onFailed: (suspend () -> Unit)? = null,
     ) {
         viewModelScope.launch(dispatcher) {
@@ -106,13 +107,17 @@ abstract class CourseProviderViewModel<I, P1 : AbstractCourseProvider<*>, P2 : A
 
                     val hasConflicts = CourseUtils.solveConflicts(content.scheduleTimes, courses)
 
-                    if (currentSchedule) {
+                    val editScheduleId = if (currentSchedule) {
                         ScheduleUtils.saveCurrentSchedule(content.scheduleTimes, courses)
                     } else {
                         ScheduleUtils.saveNewSchedule(newScheduleName, content.scheduleTimes, courses)
                     }
 
-                    reportFinishResult(true, hasConflicts)
+                    if (hasConflicts) {
+                        reportFinishResult(ImportResult.SUCCESS_WITH_IGNORABLE_CONFLICTS, editScheduleId)
+                    } else {
+                        reportFinishResult(ImportResult.SUCCESS, editScheduleId)
+                    }
                 } catch (e: CourseAdapterException) {
                     reportError(e, true)
                 } catch (e: Exception) {
@@ -130,12 +135,12 @@ abstract class CourseProviderViewModel<I, P1 : AbstractCourseProvider<*>, P2 : A
     }
 
     protected fun reportError(err: CourseAdapterException, isImportFinish: Boolean) {
-        if (isImportFinish) reportFinishResult(false)
+        if (isImportFinish) reportFinishResult(ImportResult.FAILED)
         providerError.postEvent(err)
     }
 
-    protected fun reportFinishResult(isSuccess: Boolean, hasConflicts: Boolean = false) {
-        courseImportFinish.postEvent(ImportResult(isSuccess, hasConflicts))
+    protected fun reportFinishResult(result: ImportResult, scheduleId: Long? = null) {
+        courseImportFinish.postEvent(result to scheduleId)
     }
 
     fun finishImport() {
@@ -145,7 +150,11 @@ abstract class CourseProviderViewModel<I, P1 : AbstractCourseProvider<*>, P2 : A
 
     protected class ImportContent(val scheduleTimes: List<ScheduleTime>, val coursesParserResult: CourseParseResult)
 
-    class ImportResult(val isSuccess: Boolean, val hasConflicts: Boolean)
+    enum class ImportResult {
+        SUCCESS,
+        FAILED,
+        SUCCESS_WITH_IGNORABLE_CONFLICTS
+    }
 
     override fun onCleared() {
         finishImport()

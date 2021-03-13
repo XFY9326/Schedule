@@ -1,6 +1,6 @@
 package tool.xfy9326.schedule.beans
 
-import tool.xfy9326.schedule.utils.CourseUtils
+import tool.xfy9326.schedule.utils.schedule.CourseUtils
 import java.util.*
 
 data class ScheduleViewData(

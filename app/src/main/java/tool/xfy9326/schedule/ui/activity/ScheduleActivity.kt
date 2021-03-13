@@ -33,6 +33,7 @@ import tool.xfy9326.schedule.data.ScheduleDataStore
 import tool.xfy9326.schedule.databinding.ActivityScheduleBinding
 import tool.xfy9326.schedule.databinding.LayoutNavHeaderBinding
 import tool.xfy9326.schedule.kt.*
+import tool.xfy9326.schedule.tools.livedata.observeEvent
 import tool.xfy9326.schedule.ui.activity.base.ViewModelActivity
 import tool.xfy9326.schedule.ui.adapter.ScheduleViewPagerAdapter
 import tool.xfy9326.schedule.ui.dialog.CourseDetailDialog
@@ -40,6 +41,8 @@ import tool.xfy9326.schedule.ui.dialog.ScheduleControlPanel
 import tool.xfy9326.schedule.ui.dialog.UpgradeDialog
 import tool.xfy9326.schedule.ui.vm.ScheduleViewModel
 import tool.xfy9326.schedule.utils.*
+import tool.xfy9326.schedule.utils.ics.ScheduleICSHelper
+import tool.xfy9326.schedule.utils.view.DialogUtils
 import kotlin.math.max
 import kotlin.math.sqrt
 
@@ -77,14 +80,12 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
     override fun onPrepare(viewBinding: ActivityScheduleBinding, viewModel: ScheduleViewModel) {
         setSupportActionBar(viewBinding.toolBarSchedule)
         viewBinding.viewPagerSchedulePanel.offscreenPageLimit = 1
-
-        checkNightModeChangedAnimation()
     }
 
     override fun onBindLiveData(viewBinding: ActivityScheduleBinding, viewModel: ScheduleViewModel) {
         viewModel.weekNumInfo.observe(this) {
-            refreshToolBarTime(it.first)
             setupViewPager(it.first, it.second)
+            refreshToolBarTime(it.first)
         }
         viewModel.nowDay.observe(this, ::updateDate)
         viewModel.showWeekChanged.observeEvent(this) {
@@ -150,6 +151,7 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
 
     override fun onInitView(viewBinding: ActivityScheduleBinding, viewModel: ScheduleViewModel) {
         setupDrawer(viewBinding)
+        checkNightModeChangedAnimation()
 
         viewBinding.viewPagerSchedulePanel.registerOnPageChangeCallback(ScheduleViewPagerChangeCallback())
 
@@ -272,14 +274,15 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
     }
 
     private fun setupViewPager(nowWeekNum: Int, maxWeekNum: Int) {
-        // In vacation -> Show first week
-        var position = nowWeekNum
-        if (nowWeekNum != 0) position--
-
         requireViewBinding().viewPagerSchedulePanel.apply {
             if (adapter == null) {
+                // In vacation -> Show first week
+                var position = nowWeekNum
+                if (nowWeekNum != 0) position--
+
                 scheduleViewPagerAdapter = ScheduleViewPagerAdapter(this@ScheduleActivity, maxWeekNum)
                 adapter = scheduleViewPagerAdapter
+
                 setCurrentItem(requireViewModel().currentScrollPosition ?: position, false)
             } else {
                 scheduleViewPagerAdapter?.updateMaxWeekNum(maxWeekNum)

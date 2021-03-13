@@ -17,7 +17,7 @@ import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.*
 import tool.xfy9326.schedule.kt.NEW_LINE
 import tool.xfy9326.schedule.tools.MaterialColorHelper
-import tool.xfy9326.schedule.utils.ViewUtils
+import tool.xfy9326.schedule.utils.view.ViewUtils
 import kotlin.properties.Delegates
 
 

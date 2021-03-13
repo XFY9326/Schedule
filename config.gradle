@@ -1,0 +1,33 @@
+ext {
+    projectName = "PureSchedule"
+    gitCommitId = "git rev-parse --short HEAD".execute().text.trim()
+
+    android = [
+            buildToolsVersion: "30.0.3",
+            compileSdkVersion: 30,
+            targetSdkVersion : 30,
+            minSdkVersion    : 23,
+            applicationId    : "tool.xfy9326.schedule",
+            versionCode      : 9,
+            versionName      : "1.1.7"
+    ]
+
+    dependencies = [
+            kotlinx : [
+                    coroutines   : "1.4.3",
+                    serialization: "1.1.0"
+            ],
+            androidx: [
+                    core     : "1.3.2",
+                    appcompat: "1.2.0",
+                    lifecycle: "2.3.0",
+                    room     : "2.2.6",
+                    test     : [
+                            junit   : "1.1.2",
+                            espresso: "3.3.0"
+                    ]
+            ],
+            ktor    : "1.5.2",
+            junit   : "4.13.2"
+    ]
+}

@@ -2,12 +2,13 @@ package tool.xfy9326.schedule.ui.fragment
 
 import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.os.bundleOf
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.BatchResult
-import tool.xfy9326.schedule.kt.observeEvent
 import tool.xfy9326.schedule.kt.setOnPrefClickListener
 import tool.xfy9326.schedule.kt.showShortSnackBar
 import tool.xfy9326.schedule.tools.MIMEConst
+import tool.xfy9326.schedule.tools.livedata.observeEvent
 import tool.xfy9326.schedule.ui.dialog.ImportCourseConflictDialog
 import tool.xfy9326.schedule.ui.dialog.MultiItemSelectDialog
 import tool.xfy9326.schedule.ui.fragment.base.AbstractSettingsFragment
@@ -16,8 +17,9 @@ import tool.xfy9326.schedule.utils.BackupUtils
 
 @Suppress("unused")
 class BackupRestoreSettingsFragment : AbstractSettingsFragment(), MultiItemSelectDialog.OnMultiItemSelectedListener,
-    ImportCourseConflictDialog.OnConfirmImportCourseConflictListener<BatchResult> {
+    ImportCourseConflictDialog.OnReadImportCourseConflictListener {
     companion object {
+        private const val EXTRA_BATCH_RESULT = "EXTRA_BATCH_RESULT"
         private const val PREFERENCE_BACKUP_SCHEDULE = "backupSchedule"
         private const val PREFERENCE_RESTORE_SCHEDULE = "restoreSchedule"
     }
@@ -75,15 +77,17 @@ class BackupRestoreSettingsFragment : AbstractSettingsFragment(), MultiItemSelec
         }
         viewModel.restoreScheduleFromUriResult.observeEvent(this) {
             if (it.second) {
-                ImportCourseConflictDialog.showDialog(childFragmentManager, it.first)
+                ImportCourseConflictDialog.showDialog(childFragmentManager, bundleOf(
+                    EXTRA_BATCH_RESULT to it.first
+                ))
             } else {
                 showRestoreResult(it.first)
             }
         }
     }
 
-    override fun onConfirmImportCourseConflict(value: BatchResult?) {
-        value?.let(::showRestoreResult)
+    override fun onReadImportCourseConflict(value: Bundle?) {
+        value?.getParcelable<BatchResult>(EXTRA_BATCH_RESULT)?.let(::showRestoreResult)
     }
 
     override fun onMultiItemSelected(tag: String?, idArr: LongArray, selectedArr: BooleanArray) {

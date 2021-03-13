@@ -2,14 +2,14 @@ package tool.xfy9326.schedule.ui.vm
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.sync.Mutex
+import lib.xfy9326.io.IOManager
 import tool.xfy9326.schedule.beans.NetworkCourseImportParams
 import tool.xfy9326.schedule.beans.NetworkLoginParams
 import tool.xfy9326.schedule.content.base.LoginCourseProvider
 import tool.xfy9326.schedule.content.base.NetworkCourseParser
 import tool.xfy9326.schedule.content.base.NetworkCourseProvider
-import tool.xfy9326.schedule.io.GlobalIO
-import tool.xfy9326.schedule.kt.MutableEventLiveData
-import tool.xfy9326.schedule.kt.postEvent
+import tool.xfy9326.schedule.tools.livedata.MutableEventLiveData
+import tool.xfy9326.schedule.tools.livedata.postEvent
 import tool.xfy9326.schedule.ui.vm.base.CourseProviderViewModel
 
 class NetworkCourseProviderViewModel : CourseProviderViewModel<NetworkCourseImportParams, NetworkCourseProvider<*>, NetworkCourseParser<*>>() {
@@ -31,7 +31,7 @@ class NetworkCourseProviderViewModel : CourseProviderViewModel<NetworkCourseImpo
                 val options = if (optionsRes == null) {
                     courseProvider.loadImportOptions()
                 } else {
-                    GlobalIO.resources.getStringArray(optionsRes)
+                    IOManager.resources.getStringArray(optionsRes)
                 }
                 val enableCaptcha = it !is LoginCourseProvider || it.enableCaptcha
 

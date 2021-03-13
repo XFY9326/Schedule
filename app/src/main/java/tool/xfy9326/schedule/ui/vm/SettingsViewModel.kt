@@ -7,24 +7,25 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import lib.xfy9326.io.IOManager
+import lib.xfy9326.io.copyTo
+import lib.xfy9326.io.processor.textReader
+import lib.xfy9326.io.target.asTarget
+import lib.xfy9326.io.utils.asParentOf
 import tool.xfy9326.schedule.beans.BatchResult
 import tool.xfy9326.schedule.beans.Schedule
 import tool.xfy9326.schedule.beans.ScheduleSync
 import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.data.ScheduleDataStore
 import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
-import tool.xfy9326.schedule.io.BaseIO
-import tool.xfy9326.schedule.io.GlobalIO
-import tool.xfy9326.schedule.io.TextIO
-import tool.xfy9326.schedule.kt.MutableEventLiveData
-import tool.xfy9326.schedule.kt.asParentOf
-import tool.xfy9326.schedule.kt.postEvent
+import tool.xfy9326.schedule.tools.livedata.MutableEventLiveData
+import tool.xfy9326.schedule.tools.livedata.postEvent
 import tool.xfy9326.schedule.tools.DisposableValue
 import tool.xfy9326.schedule.tools.ExceptionHandler
 import tool.xfy9326.schedule.tools.ImageHelper
 import tool.xfy9326.schedule.ui.vm.base.AbstractViewModel
 import tool.xfy9326.schedule.utils.BackupUtils
-import tool.xfy9326.schedule.utils.DirUtils
+import tool.xfy9326.schedule.utils.file.PathManager
 import tool.xfy9326.schedule.utils.ScheduleSyncHelper
 
 class SettingsViewModel : AbstractViewModel() {
@@ -139,12 +140,12 @@ class SettingsViewModel : AbstractViewModel() {
     fun importScheduleImage(uri: Uri) {
         viewModelScope.launch(Dispatchers.Default) {
             val quality = ScheduleDataStore.scheduleBackgroundImageQualityFlow.first()
-            val imageName = ImageHelper.importImageFromUri(uri, DirUtils.PictureAppDir, quality)
+            val imageName = ImageHelper.importImageFromUri(uri, PathManager.PictureAppDir, quality)
             if (imageName == null) {
                 importScheduleImage.postEvent(false)
             } else {
                 ScheduleDataStore.scheduleBackgroundImageFlow.firstOrNull()?.let {
-                    DirUtils.PictureAppDir.asParentOf(it).delete()
+                    PathManager.PictureAppDir.asParentOf(it).delete()
                 }
                 ScheduleDataStore.setScheduleBackgroundImage(imageName)
                 importScheduleImage.postEvent(true)
@@ -156,7 +157,7 @@ class SettingsViewModel : AbstractViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             val logName = waitCreateLogFileName.read()
             if (logName != null) {
-                outputLogFileToUriResult.postEvent(BaseIO.writeFileToUri(outputUri, DirUtils.LogDir.asParentOf(logName)))
+                outputLogFileToUriResult.postEvent(PathManager.LogDir.asParentOf(logName).asTarget().copyTo(outputUri.asTarget()).start() != null)
             } else {
                 outputLogFileToUriResult.postEvent(false)
             }
@@ -165,7 +166,7 @@ class SettingsViewModel : AbstractViewModel() {
 
     fun showDebugLog(log: String) {
         viewModelScope.launch {
-            TextIO.readText(DirUtils.LogDir.asParentOf(log))?.let {
+            PathManager.LogDir.asParentOf(log).textReader().read()?.let {
                 showDebugLog.postEvent(it)
             }
         }
@@ -179,13 +180,13 @@ class SettingsViewModel : AbstractViewModel() {
 
     fun clearCache() {
         viewModelScope.launch {
-            GlobalIO.clearAllCache()
+            IOManager.clearAllCache()
         }
     }
 
     fun clearLogs() {
         viewModelScope.launch {
-            DirUtils.LogDir.deleteRecursively()
+            PathManager.LogDir.deleteRecursively()
         }
     }
 
