@@ -13,13 +13,13 @@ import tool.xfy9326.schedule.beans.CourseTime
 import tool.xfy9326.schedule.databinding.ActivityCourseEditBinding
 import tool.xfy9326.schedule.kt.getText
 import tool.xfy9326.schedule.kt.hideKeyboard
-import tool.xfy9326.schedule.kt.observeEvent
+import tool.xfy9326.schedule.tools.livedata.observeEvent
 import tool.xfy9326.schedule.kt.showShortSnackBar
 import tool.xfy9326.schedule.ui.activity.base.ViewModelActivity
 import tool.xfy9326.schedule.ui.adapter.CourseTimeAdapter
 import tool.xfy9326.schedule.ui.dialog.CourseTimeEditDialog
 import tool.xfy9326.schedule.ui.vm.CourseEditViewModel
-import tool.xfy9326.schedule.utils.DialogUtils
+import tool.xfy9326.schedule.utils.view.DialogUtils
 import kotlin.properties.Delegates
 
 class CourseEditActivity : ViewModelActivity<CourseEditViewModel, ActivityCourseEditBinding>(), CourseTimeEditDialog.OnCourseTimeEditListener,

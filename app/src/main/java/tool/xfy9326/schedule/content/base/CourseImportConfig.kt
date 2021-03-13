@@ -16,7 +16,6 @@ import kotlin.reflect.KClass
  * NetworkCourseProvider -- NetworkCourseParser
  * WebCourseProvider -- WebCourseParser
  *
- * KClass不可序列化，此处只能使用Java的Class
  */
 abstract class CourseImportConfig<P1 : Serializable, T1 : AbstractCourseProvider<P1>, P2 : Serializable, T2 : AbstractCourseParser<P2>>(
     @StringRes
@@ -27,23 +26,23 @@ abstract class CourseImportConfig<P1 : Serializable, T1 : AbstractCourseProvider
     val systemNameResId: Int,
     @ArrayRes
     val staticImportOptionsResId: Int? = null,
-    private val providerClass: Class<T1>,
-    private val parserClass: Class<T2>,
+    private val providerClass: KClass<T1>,
+    private val parserClass: KClass<T2>,
     private val providerParams: P1? = null,
     private val parserParams: P2? = null,
     sortingBasis: String,
-) : Serializable {
+) {
     val lowerCaseSortingBasis = sortingBasis.toLowerCase(Locale.getDefault())
 
-    fun newProvider(): T1 = providerClass.newInstance().also {
+    fun newProvider(): T1 = providerClass.java.newInstance().also {
         it.params = providerParams?.clone()
     }
 
-    fun newParser(): T2 = parserClass.newInstance().also {
+    fun newParser(): T2 = parserClass.java.newInstance().also {
         it.params = parserParams?.clone()
     }
 
-    fun validateProviderType(clazz: KClass<out AbstractCourseProvider<*>>) = clazz.java.isAssignableFrom(providerClass)
+    fun validateProviderType(clazz: KClass<out AbstractCourseProvider<*>>) = clazz.java.isAssignableFrom(providerClass.java)
 
-    fun validateParserType(clazz: KClass<out AbstractCourseParser<*>>) = clazz.java.isAssignableFrom(parserClass)
+    fun validateParserType(clazz: KClass<out AbstractCourseParser<*>>) = clazz.java.isAssignableFrom(parserClass.java)
 }

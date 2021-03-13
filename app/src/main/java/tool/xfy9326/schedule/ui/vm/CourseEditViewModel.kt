@@ -10,12 +10,12 @@ import tool.xfy9326.schedule.beans.CourseTime
 import tool.xfy9326.schedule.beans.EditError
 import tool.xfy9326.schedule.beans.Schedule
 import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
-import tool.xfy9326.schedule.kt.MutableEventLiveData
-import tool.xfy9326.schedule.kt.postEvent
+import tool.xfy9326.schedule.tools.livedata.MutableEventLiveData
+import tool.xfy9326.schedule.tools.livedata.postEvent
 import tool.xfy9326.schedule.ui.dialog.CourseTimeEditDialog
 import tool.xfy9326.schedule.ui.vm.base.AbstractViewModel
-import tool.xfy9326.schedule.utils.CourseTimeUtils
-import tool.xfy9326.schedule.utils.CourseUtils
+import tool.xfy9326.schedule.utils.schedule.CourseTimeUtils
+import tool.xfy9326.schedule.utils.schedule.CourseUtils
 
 class CourseEditViewModel : AbstractViewModel() {
     private var isEdit = false

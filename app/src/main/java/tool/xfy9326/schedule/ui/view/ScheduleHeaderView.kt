@@ -15,7 +15,7 @@ import tool.xfy9326.schedule.beans.Day
 import tool.xfy9326.schedule.beans.SchedulePredefine
 import tool.xfy9326.schedule.beans.ScheduleViewData
 import tool.xfy9326.schedule.kt.getStringArray
-import tool.xfy9326.schedule.utils.ViewUtils
+import tool.xfy9326.schedule.utils.view.ViewUtils
 import kotlin.math.max
 
 @SuppressLint("ViewConstructor")

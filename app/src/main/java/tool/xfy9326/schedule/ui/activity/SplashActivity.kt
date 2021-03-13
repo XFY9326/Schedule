@@ -7,12 +7,11 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.data.AppDataStore
-import tool.xfy9326.schedule.io.TextIO
 import tool.xfy9326.schedule.kt.showGlobalShortToast
 import tool.xfy9326.schedule.kt.startActivity
 import tool.xfy9326.schedule.ui.activity.base.AbstractActivity
-import tool.xfy9326.schedule.utils.DialogUtils
-import tool.xfy9326.schedule.utils.DirUtils
+import tool.xfy9326.schedule.utils.view.DialogUtils
+import tool.xfy9326.schedule.utils.file.RawManager
 
 class SplashActivity : AbstractActivity() {
     companion object {
@@ -52,7 +51,7 @@ class SplashActivity : AbstractActivity() {
             if (AppDataStore.acceptEULAFlow.first()) {
                 startMainActivity()
             } else {
-                showEULA(TextIO.readAssetText(DirUtils.ASSETS_EULA_FILE)!!)
+                showEULA(RawManager.readEULA())
             }
         }
     }

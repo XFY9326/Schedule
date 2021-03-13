@@ -122,7 +122,7 @@ class ScheduleGridView(
         }
     }
 
-    fun addScheduleCellWithoutLayout(cellView: ScheduleCellView) {
+    fun addScheduleCellPreventLayout(cellView: ScheduleCellView) {
         if (cellView.row in 0 until rowAmount && cellView.column in 0 until columnAmount) {
             addViewPreventLayout(cellView)
             if (!cellView.isTimeColumn) cellView.setOnCourseCellClickListener(internalCellClickListener)

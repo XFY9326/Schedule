@@ -3,15 +3,16 @@ package tool.xfy9326.schedule.utils
 import android.content.Context
 import android.net.Uri
 import kotlinx.coroutines.flow.first
-import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import lib.xfy9326.io.processor.jsonReader
+import lib.xfy9326.io.processor.jsonWriter
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.*
 import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
 import tool.xfy9326.schedule.db.utils.DBTypeConverter
-import tool.xfy9326.schedule.io.TextIO
 import tool.xfy9326.schedule.json.backup.*
+import tool.xfy9326.schedule.utils.schedule.CourseUtils
+import tool.xfy9326.schedule.utils.schedule.ScheduleUtils
 
 object BackupUtils {
     private val JSON by lazy {
@@ -25,17 +26,14 @@ object BackupUtils {
 
     suspend fun backupSchedules(uri: Uri, scheduleIds: List<Long>): Boolean {
         try {
-            ScheduleDBProvider.db.scheduleDAO.apply {
-                val allBundles = Array(scheduleIds.size) {
+            val allBundles = ScheduleDBProvider.db.scheduleDAO.run {
+                Array(scheduleIds.size) {
                     val schedule = getSchedule(scheduleIds[it]).first()!!
                     val courses = getScheduleCourses(scheduleIds[it]).first()
                     ScheduleCourseBundle(schedule, courses)
                 }
-                encode(*allBundles)?.let {
-                    TextIO.writeText(it, uri)
-                }
             }
-            return true
+            return uri.jsonWriter<BackupWrapperJSON>(JSON).write(getParsableClass(allBundles))
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -47,8 +45,9 @@ object BackupUtils {
         var errorAmount = 0
         var hasConflicts = false
         try {
-            TextIO.readText(uri)?.let(::decode)?.let {
-                for (bundle in it) {
+            uri.jsonReader<BackupWrapperJSON>(JSON).read()?.let {
+                val originalData = fromParsableClass(it)
+                for (bundle in originalData) {
                     totalAmount++
                     val scheduleTimeValid = ScheduleUtils.validateScheduleTime(bundle.schedule.times)
                     if (!scheduleTimeValid) {
@@ -64,26 +63,6 @@ object BackupUtils {
             e.printStackTrace()
         }
         return BatchResult(false) to hasConflicts
-    }
-
-    private fun encode(vararg schedules: ScheduleCourseBundle): String? {
-        try {
-            val data = getParsableClass(schedules)
-            return JSON.encodeToString(data)
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-        return null
-    }
-
-    private fun decode(jsonText: String): List<ScheduleCourseBundle>? {
-        try {
-            val data = JSON.decodeFromString<BackupWrapperJSON>(jsonText)
-            return fromParsableClass(data)
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-        return null
     }
 
     private fun getParsableClass(data: Array<out ScheduleCourseBundle>): BackupWrapperJSON {

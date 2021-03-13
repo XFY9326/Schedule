@@ -8,12 +8,14 @@ import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
 import androidx.core.content.FileProvider
+import lib.xfy9326.io.IOManager
+import lib.xfy9326.io.processor.bitmapReader
+import lib.xfy9326.io.processor.bitmapWriter
+import lib.xfy9326.io.utils.asParentOf
+import lib.xfy9326.io.utils.isWEBP
 import tool.xfy9326.schedule.App
-import tool.xfy9326.schedule.io.GlobalIO
-import tool.xfy9326.schedule.io.ImageIO
-import tool.xfy9326.schedule.kt.asParentOf
-import tool.xfy9326.schedule.utils.DirUtils
 import tool.xfy9326.schedule.utils.IntentUtils
+import tool.xfy9326.schedule.utils.file.PathManager
 import java.io.File
 import java.util.*
 
@@ -27,7 +29,9 @@ object ImageHelper {
 
     suspend fun importImageFromUri(fromUri: Uri, toDir: File, quality: Int): String? {
         val imageFile = generateNewImageFile(toDir, PRIVATE_STORAGE_BITMAP_COMPRESS_FORMAT)
-        if (ImageIO.importImageFromUri(fromUri, imageFile, PRIVATE_STORAGE_BITMAP_COMPRESS_FORMAT, quality)) {
+
+        fromUri.bitmapReader().read()?.let {
+            imageFile.bitmapWriter(PRIVATE_STORAGE_BITMAP_COMPRESS_FORMAT, quality).write(it)
             return imageFile.name
         }
         return null
@@ -36,8 +40,8 @@ object ImageHelper {
     suspend fun outputImageToAlbum(bitmap: Bitmap, recycle: Boolean = true): Uri? {
         val newFileName = getNewFileNameByBitmapCompressFormat(UUID.randomUUID().toString(), OUTPUT_BITMAP_COMPRESS_FORMAT)
         val imageContentValues = createImageContentValues(newFileName, OUTPUT_BITMAP_COMPRESS_FORMAT, bitmap.width, bitmap.height)
-        val uri = GlobalIO.contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, imageContentValues)
-        return if (uri != null && ImageIO.saveImage(uri, bitmap, OUTPUT_BITMAP_COMPRESS_FORMAT, recycle = recycle)) {
+        val uri = IOManager.contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, imageContentValues)
+        return if (uri != null && uri.bitmapWriter(OUTPUT_BITMAP_COMPRESS_FORMAT, recycle = recycle).write(bitmap)) {
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
                 @Suppress("DEPRECATION")
                 App.instance.sendBroadcast(Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri))
@@ -50,8 +54,8 @@ object ImageHelper {
 
     suspend fun createShareCacheImage(bitmap: Bitmap, recycle: Boolean = true): Uri? {
         val newFileName = getNewFileNameByBitmapCompressFormat(UUID.randomUUID().toString(), OUTPUT_BITMAP_COMPRESS_FORMAT)
-        val newImageFile = DirUtils.SharedFileDir.asParentOf(newFileName)
-        return if (ImageIO.saveImage(newImageFile, bitmap, OUTPUT_BITMAP_COMPRESS_FORMAT, recycle = recycle)) {
+        val newImageFile = PathManager.SharedFileDir.asParentOf(newFileName)
+        return if (newImageFile.bitmapWriter(OUTPUT_BITMAP_COMPRESS_FORMAT, recycle = recycle).write(bitmap)) {
             FileProvider.getUriForFile(App.instance, IntentUtils.FILE_PROVIDER_AUTH, newImageFile)
         } else {
             null
@@ -82,9 +86,9 @@ object ImageHelper {
                 @Suppress("DEPRECATION")
                 "${Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).absolutePath}${File.separator}"
             } + if (subDirName == null) {
-                "${DirUtils.DIR_SCHEDULE}${File.separator}"
+                "${PathManager.DIR_SCHEDULE}${File.separator}"
             } else {
-                "${DirUtils.DIR_SCHEDULE}${File.separator}$subDirName${File.separator}"
+                "${PathManager.DIR_SCHEDULE}${File.separator}$subDirName${File.separator}"
             }
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -115,17 +119,12 @@ object ImageHelper {
             Bitmap.CompressFormat.WEBP
         }
 
-    @Suppress("DEPRECATION")
-    private fun isWEBP(format: Bitmap.CompressFormat?) =
-        format == Bitmap.CompressFormat.WEBP || Build.VERSION.SDK_INT >= Build.VERSION_CODES.R &&
-                (format == Bitmap.CompressFormat.WEBP_LOSSY || format == Bitmap.CompressFormat.WEBP_LOSSLESS)
-
     private fun getNewFileNameByBitmapCompressFormat(fileName: String, compressFormat: Bitmap.CompressFormat): String {
         val pureFileName = fileName.substringBeforeLast('.')
         val newExtension = when {
             compressFormat == Bitmap.CompressFormat.JPEG -> IMAGE_JPEG
             compressFormat == Bitmap.CompressFormat.PNG -> IMAGE_PNG
-            isWEBP(compressFormat) -> IMAGE_WEBP
+            compressFormat.isWEBP() -> IMAGE_WEBP
             else -> error("Unknown bitmap compress format! $compressFormat")
         }
         return "$pureFileName.$newExtension"
@@ -135,7 +134,7 @@ object ImageHelper {
         when {
             compressFormat == Bitmap.CompressFormat.JPEG -> MIMEConst.MIME_IMAGE_JPEG
             compressFormat == Bitmap.CompressFormat.PNG -> MIMEConst.MIME_IMAGE_PNG
-            isWEBP(compressFormat) -> MIMEConst.MIME_IMAGE_WEBP
+            compressFormat.isWEBP() -> MIMEConst.MIME_IMAGE_WEBP
             else -> error("Unknown bitmap compress format! $compressFormat")
         }
 }

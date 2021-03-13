@@ -1,7 +1,7 @@
 package tool.xfy9326.schedule.beans
 
 import tool.xfy9326.schedule.utils.CalendarUtils
-import tool.xfy9326.schedule.utils.CourseTimeUtils
+import tool.xfy9326.schedule.utils.schedule.CourseTimeUtils
 
 class ScheduleCalculateTimes(schedule: Schedule) {
     val weekStart = schedule.weekStart
