@@ -10,8 +10,8 @@ import tool.xfy9326.schedule.data.AppDataStore
 import tool.xfy9326.schedule.kt.showGlobalShortToast
 import tool.xfy9326.schedule.kt.startActivity
 import tool.xfy9326.schedule.ui.activity.base.AbstractActivity
-import tool.xfy9326.schedule.utils.view.DialogUtils
 import tool.xfy9326.schedule.utils.file.RawManager
+import tool.xfy9326.schedule.utils.view.DialogUtils
 
 class SplashActivity : AbstractActivity() {
     companion object {

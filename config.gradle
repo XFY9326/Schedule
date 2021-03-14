@@ -8,8 +8,8 @@ ext {
             targetSdkVersion : 30,
             minSdkVersion    : 23,
             applicationId    : "tool.xfy9326.schedule",
-            versionCode      : 9,
-            versionName      : "1.1.7"
+            versionCode      : 10,
+            versionName      : "1.1.8"
     ]
 
     dependencies = [

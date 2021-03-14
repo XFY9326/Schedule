@@ -5,9 +5,9 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import tool.xfy9326.schedule.beans.Course
 import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
+import tool.xfy9326.schedule.kt.asDistinctLiveData
 import tool.xfy9326.schedule.tools.livedata.MutableNotifyLiveData
 import tool.xfy9326.schedule.tools.livedata.addAsSource
-import tool.xfy9326.schedule.kt.asDistinctLiveData
 import tool.xfy9326.schedule.tools.livedata.notify
 import tool.xfy9326.schedule.ui.vm.base.AbstractViewModel
 

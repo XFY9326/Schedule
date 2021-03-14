@@ -8,10 +8,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.core.os.bundleOf
+import androidx.core.view.children
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import tool.xfy9326.schedule.beans.CourseCell
 import tool.xfy9326.schedule.beans.ScheduleBuildBundle
@@ -30,6 +33,7 @@ class TableFragment : Fragment(), Observer<ScheduleBuildBundle> {
         }
     }
 
+    private val scheduleViewLiveData = MutableLiveData<View>()
     private val viewModel by activityViewModels<ScheduleViewModel>()
     private var weekNum by Delegates.notNull<Int>()
 
@@ -47,20 +51,26 @@ class TableFragment : Fragment(), Observer<ScheduleBuildBundle> {
         }
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        scheduleViewLiveData.observe(viewLifecycleOwner, ::updateScheduleView)
+    }
+
     override fun onChanged(scheduleBuildBundle: ScheduleBuildBundle) {
         context?.let {
-            lifecycleScope.launch {
-                val scheduleView = ScheduleViewHelper.buildScheduleView(it, weekNum, scheduleBuildBundle, ::onCourseCellClick)
-                lifecycleScope.launchWhenStarted {
-                    updateScheduleView(scheduleView)
-                }
+            lifecycleScope.launch(Dispatchers.Default) {
+                scheduleViewLiveData.postValue(
+                    ScheduleViewHelper.buildScheduleView(it, weekNum, scheduleBuildBundle, ::onCourseCellClick)
+                )
             }
         }
     }
 
     private fun updateScheduleView(view: View) {
-        (requireView() as ViewGroup).apply {
-            if (childCount > 0) removeAllViewsInLayout()
+        (requireView() as? ViewGroup)?.apply {
+            if (childCount > 0) {
+                if (view == children.first()) return
+                removeAllViewsInLayout()
+            }
             addView(view)
         }
     }
