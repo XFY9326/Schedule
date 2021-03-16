@@ -1,8 +1,9 @@
 package tool.xfy9326.schedule.beans
 
+import android.os.Parcelable
 import androidx.room.*
+import kotlinx.parcelize.Parcelize
 import tool.xfy9326.schedule.db.DBConst
-import java.io.Serializable
 import kotlin.math.min
 
 @Entity(
@@ -19,6 +20,7 @@ import kotlin.math.min
         unique = true
     )]
 )
+@Parcelize
 data class CourseTime(
     @ColumnInfo(name = DBConst.COLUMN_TIME_ID)
     @PrimaryKey(autoGenerate = true)
@@ -30,7 +32,7 @@ data class CourseTime(
     @Embedded
     var classTime: ClassTime,
     var location: String? = null,
-) : Serializable {
+) : Parcelable {
 
     constructor(weekNum: BooleanArray, weekDay: WeekDay, classStartTime: Int, classDuration: Int, location: String? = null) :
             this(DBConst.DEFAULT_ID, DBConst.DEFAULT_ID, weekNum, ClassTime(weekDay, classStartTime, classDuration), location)

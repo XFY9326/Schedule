@@ -2,7 +2,6 @@ package tool.xfy9326.schedule.beans
 
 import androidx.annotation.IntRange
 import tool.xfy9326.schedule.utils.CalendarUtils
-import java.io.Serializable
 import java.util.*
 
 data class ScheduleTime(
@@ -14,7 +13,7 @@ data class ScheduleTime(
     var endHour: Int,
     @IntRange(from = 0, to = 59)
     var endMinute: Int,
-) : Serializable {
+) {
     companion object {
         private const val HOUR_MINUTE_DIVIDE = ":"
         private const val TIME_DIVIDE = "~"

@@ -8,7 +8,10 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
-import tool.xfy9326.schedule.beans.*
+import tool.xfy9326.schedule.beans.BatchResult
+import tool.xfy9326.schedule.beans.Schedule
+import tool.xfy9326.schedule.beans.ScheduleBuildBundle
+import tool.xfy9326.schedule.beans.WeekNumType
 import tool.xfy9326.schedule.data.AppDataStore
 import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.data.ScheduleDataStore
@@ -54,7 +57,7 @@ class ScheduleViewModel : AbstractViewModel() {
     val scrollToWeek = MutableEventLiveData<Int>()
     val showWeekChanged = MutableEventLiveData<Pair<Int, WeekNumType>>()
     val showScheduleControlPanel = MutableEventLiveData<Pair<Int, Int>>()
-    val showCourseDetailDialog = MutableEventLiveData<Triple<List<ScheduleTime>, Course, Long>>()
+    val showCourseDetailDialog = MutableEventLiveData<Pair<Long, Long>>()
     val openCourseManageActivity = MutableEventLiveData<Long>()
     val exitAppDirectly = MutableEventLiveData<Boolean>()
     val toolBarTintColor = ScheduleDataStore.toolBarTintColorFlow.asDistinctLiveData()
@@ -165,7 +168,7 @@ class ScheduleViewModel : AbstractViewModel() {
                     schedule.times to course
                 }
             }.first()?.let {
-                showCourseDetailDialog.postEvent(Triple(it.first, it.second, timeId))
+                showCourseDetailDialog.postEvent(courseId to timeId)
             }
         }
     }

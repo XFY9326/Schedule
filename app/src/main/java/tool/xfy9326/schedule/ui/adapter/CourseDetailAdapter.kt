@@ -21,7 +21,7 @@ import tool.xfy9326.schedule.ui.viewholder.ViewBindingViewHolder
 class CourseDetailAdapter(
     courseTimes: List<CourseTime>,
     timeId: Long,
-    private var scheduleTimes: Array<ScheduleTime>,
+    private var scheduleTimes: List<ScheduleTime>,
     private val weekDayStrArray: Array<String>,
     initShowMore: Boolean,
 ) : BaseViewBindingAdapter<ViewBinding, ViewBindingViewHolder<ViewBinding>>() {
@@ -114,7 +114,7 @@ class CourseDetailAdapter(
                 R.string.course_detail_class_time,
                 holder.viewContext.getString(R.string.weekday, weekDayStrArray[courseTime.classTime.weekDay.ordinal]),
                 courseTime.classTime.classTimeDescription(),
-                courseTime.classTime.classTimeDescription(scheduleTimes)
+                courseTime.classTime.scheduleTimeDescription(scheduleTimes)
             )
             val location = courseTime.location
             if (location == null) {

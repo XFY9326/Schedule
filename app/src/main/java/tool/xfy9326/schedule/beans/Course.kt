@@ -4,7 +4,6 @@ import androidx.annotation.ColorInt
 import androidx.room.*
 import tool.xfy9326.schedule.db.DBConst
 import tool.xfy9326.schedule.tools.MaterialColorHelper
-import java.io.Serializable
 
 @Entity(
     tableName = DBConst.TABLE_COURSE,
@@ -28,7 +27,7 @@ data class Course(
     var color: Int,
     @Ignore
     var times: List<CourseTime>,
-) : Serializable {
+) {
 
     constructor(courseId: Long, scheduleId: Long, name: String, teacher: String?, color: Int = MaterialColorHelper.random()) :
             this(courseId, scheduleId, name, teacher, color, emptyList())

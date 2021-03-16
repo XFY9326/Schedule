@@ -1,9 +1,13 @@
 package tool.xfy9326.schedule.beans
 
+import android.os.Parcelable
+import kotlinx.parcelize.IgnoredOnParcel
+import kotlinx.parcelize.Parcelize
 import java.util.*
 
 @Suppress("unused")
-enum class WeekDay(val shortName: String, val calWeekDay: Int) {
+@Parcelize
+enum class WeekDay(val shortName: String, val calWeekDay: Int) : Parcelable {
     MONDAY(WeekDay.SHORT_NAME_MO, Calendar.MONDAY),
     TUESDAY(WeekDay.SHORT_NAME_TU, Calendar.TUESDAY),
     WEDNESDAY(WeekDay.SHORT_NAME_WE, Calendar.WEDNESDAY),
@@ -53,6 +57,7 @@ enum class WeekDay(val shortName: String, val calWeekDay: Int) {
             }
     }
 
+    @IgnoredOnParcel
     val value: Int = ordinal + 1
 
     val isWeekend: Boolean

@@ -81,12 +81,13 @@ object UpgradeUtils {
     }
 
     private suspend fun getUpdateData(currentVersionCode: Int): UpdateInfo? = withContext(Dispatchers.IO) {
-        val client = getDefaultClient()
-        val latest = getLatestVersion(client)
-        if (latest.versionCode > currentVersionCode) {
-            val index = getIndex(client)
-            val forceUpdate = validateForceUpdate(currentVersionCode, latest, index)
-            return@withContext latest.copy(forceUpdate = forceUpdate)
+        getDefaultClient().use {
+            val latest = getLatestVersion(it)
+            if (latest.versionCode > currentVersionCode) {
+                val index = getIndex(it)
+                val forceUpdate = validateForceUpdate(currentVersionCode, latest, index)
+                return@withContext latest.copy(forceUpdate = forceUpdate)
+            }
         }
         return@withContext null
     }

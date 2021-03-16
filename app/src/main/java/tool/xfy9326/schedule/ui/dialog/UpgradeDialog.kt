@@ -54,7 +54,7 @@ class UpgradeDialog : AppCompatDialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        updateInfo = requireArguments().getSerializable(UPDATE_INFO) as UpdateInfo
+        updateInfo = requireArguments().getParcelable(UPDATE_INFO)!!
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?) = MaterialAlertDialogBuilder(requireContext()).apply {

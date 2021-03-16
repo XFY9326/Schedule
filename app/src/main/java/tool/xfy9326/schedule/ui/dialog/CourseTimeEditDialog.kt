@@ -63,12 +63,12 @@ class CourseTimeEditDialog : AppCompatDialogFragment() {
         super.onCreate(savedInstanceState)
         maxWeekNum = requireArguments().getInt(EXTRA_MAX_WEEK_NUM)
         maxCourseNum = requireArguments().getInt(EXTRA_MAX_COURSE_NUM)
-        editCourseTime = (requireArguments().getSerializable(EXTRA_COURSE_TIME) as? CourseTime?) ?: CourseUtils.createNewCourseTime(maxWeekNum)
+        editCourseTime = (requireArguments().getParcelable(EXTRA_COURSE_TIME)) ?: CourseUtils.createNewCourseTime(maxWeekNum)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         updateEditData()
-        arguments?.putSerializable(EXTRA_COURSE_TIME, editCourseTime)
+        arguments?.putParcelable(EXTRA_COURSE_TIME, editCourseTime)
         super.onSaveInstanceState(outState)
     }
 
