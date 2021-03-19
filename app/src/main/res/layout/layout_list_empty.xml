@@ -14,5 +14,4 @@
     android:textSize="17sp"
     android:textStyle="bold"
     app:drawableTopCompat="@drawable/ic_inbox_80"
-    app:layout_gravity="center"
     tools:ignore="ObsoleteLayoutParam" />
