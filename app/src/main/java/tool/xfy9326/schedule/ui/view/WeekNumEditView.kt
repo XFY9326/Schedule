@@ -31,8 +31,8 @@ class WeekNumEditView @JvmOverloads constructor(context: Context, attrs: Attribu
     private var maxWeekNum = 1
 
     private val weekNumCellSize = resources.getDimensionPixelSize(R.dimen.circle_number_button_size)
-    private val weekNumCellMargin = resources.getDimensionPixelSize(R.dimen.circle_number_button_margin)
-    private val fullWeekNumCellSize = weekNumCellSize + weekNumCellMargin * 2
+    private val childMinMargin = resources.getDimensionPixelSize(R.dimen.circle_number_button_min_margin)
+    private val childMinSize = weekNumCellSize + childMinMargin * 2
     private val weekNumCellMeasureSpec = MeasureSpec.makeMeasureSpec(weekNumCellSize, MeasureSpec.EXACTLY)
 
     fun setWeekNum(weekNumArray: BooleanArray, maxWeekNum: Int) {
@@ -84,7 +84,7 @@ class WeekNumEditView @JvmOverloads constructor(context: Context, attrs: Attribu
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         val width = MeasureSpec.getSize(widthMeasureSpec)
-        val column = floor(1f * width / fullWeekNumCellSize).toInt()
+        val column = floor(1f * width / childMinSize).toInt()
         columnAmount = when {
             column <= 1 -> 1
             column.isOdd() -> column - 1
@@ -96,27 +96,25 @@ class WeekNumEditView @JvmOverloads constructor(context: Context, attrs: Attribu
             child.measure(weekNumCellMeasureSpec, weekNumCellMeasureSpec)
         }
 
-        val viewHeight = fullWeekNumCellSize * rowAmount
-
-        super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(viewHeight, MeasureSpec.EXACTLY))
+        super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(childMinSize * rowAmount, MeasureSpec.EXACTLY))
     }
 
     override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
         val width = r - l
-        val centerOffset = (((1f * width / columnAmount) - fullWeekNumCellSize) / 2f).roundToInt()
+        val xCenterOffset = ((1f * width / columnAmount - weekNumCellSize) / 2f).roundToInt()
         val leftToRight = layoutDirection == LAYOUT_DIRECTION_LTR
-        var childLeft = getCellStartX(leftToRight, width) + getCellXOffset(true, leftToRight, centerOffset)
+        var childLeft = getCellStartX(leftToRight, width) + getCellXOffset(true, leftToRight, xCenterOffset)
         var childTop = getCellYOffset(true)
 
         for ((i, child) in children.withIndex()) {
             if (i != 0 && i % columnAmount == 0) {
-                childLeft = getCellStartX(leftToRight, width) + getCellXOffset(true, leftToRight, centerOffset)
+                childLeft = getCellStartX(leftToRight, width) + getCellXOffset(true, leftToRight, xCenterOffset)
                 childTop += getCellYOffset(false)
             }
 
             child.layout(childLeft, childTop, childLeft + weekNumCellSize, childTop + weekNumCellSize)
 
-            childLeft += getCellXOffset(false, leftToRight, centerOffset)
+            childLeft += getCellXOffset(false, leftToRight, xCenterOffset)
         }
     }
 
@@ -125,20 +123,20 @@ class WeekNumEditView @JvmOverloads constructor(context: Context, attrs: Attribu
     private fun getCellXOffset(startColumn: Boolean, leftToRight: Boolean, centerOffset: Int) =
         if (leftToRight) {
             if (startColumn) {
-                weekNumCellMargin + centerOffset
+                centerOffset
             } else {
-                fullWeekNumCellSize + centerOffset * 2
+                weekNumCellSize + centerOffset * 2
             }
         } else {
             if (startColumn) {
-                -weekNumCellSize - weekNumCellMargin - centerOffset
+                -weekNumCellSize - centerOffset
             } else {
-                -fullWeekNumCellSize - centerOffset * 2
+                -weekNumCellSize - centerOffset * 2
             }
         }
 
     private fun getCellYOffset(startRow: Boolean) =
-        if (startRow) weekNumCellMargin else fullWeekNumCellSize
+        if (startRow) childMinMargin else weekNumCellSize + childMinMargin * 2
 
     override fun addView(child: View?, index: Int, params: LayoutParams?) {}
 }
