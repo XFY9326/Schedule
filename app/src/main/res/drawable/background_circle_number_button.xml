@@ -5,14 +5,14 @@
             <item>
                 <shape android:shape="oval">
                     <solid android:color="@color/circle_num_button" />
-                    <size android:width="26dp" android:height="26dp" />
+                    <size android:width="@dimen/circle_number_button_size" android:height="@dimen/circle_number_button_size" />
                 </shape>
             </item>
 
             <item android:id="@android:id/mask">
                 <shape android:shape="oval">
                     <solid android:color="@color/circle_num_button_ripple" />
-                    <size android:width="26dp" android:height="26dp" />
+                    <size android:width="@dimen/circle_number_button_size" android:height="@dimen/circle_number_button_size" />
                 </shape>
             </item>
         </ripple>
@@ -22,14 +22,14 @@
             <item>
                 <shape android:shape="oval">
                     <solid android:color="@color/circle_num_button_checked" />
-                    <size android:width="26dp" android:height="26dp" />
+                    <size android:width="@dimen/circle_number_button_size" android:height="@dimen/circle_number_button_size" />
                 </shape>
             </item>
 
             <item android:id="@android:id/mask">
                 <shape android:shape="oval">
                     <solid android:color="@color/circle_num_button_ripple" />
-                    <size android:width="26dp" android:height="26dp" />
+                    <size android:width="@dimen/circle_number_button_size" android:height="@dimen/circle_number_button_size" />
                 </shape>
             </item>
         </ripple>

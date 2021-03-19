@@ -22,6 +22,15 @@ fun BooleanArray.arrangeWeekNum(): BooleanArray {
     }
 }
 
+fun BooleanArray.hasCourse(num: Int): Boolean {
+    val index = num - 1
+    return if (index in indices) {
+        this[index]
+    } else {
+        false
+    }
+}
+
 fun List<Course>.arrangeWeekNum() {
     this.forEach {
         it.times.forEach { time ->

@@ -1,24 +1,17 @@
 package tool.xfy9326.schedule.ui.dialog
 
-import android.content.Context
 import android.os.Bundle
-import android.view.Gravity
 import android.view.HapticFeedbackConstants
 import android.view.Window
-import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatDialogFragment
 import androidx.core.os.bundleOf
-import androidx.core.view.setMargins
 import androidx.fragment.app.FragmentManager
-import androidx.gridlayout.widget.GridLayout
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.CourseTime
 import tool.xfy9326.schedule.beans.WeekDay
-import tool.xfy9326.schedule.content.utils.arrangeWeekNum
 import tool.xfy9326.schedule.databinding.DialogCourseTimeEditBinding
 import tool.xfy9326.schedule.kt.*
-import tool.xfy9326.schedule.ui.view.CircleNumberButton
 import tool.xfy9326.schedule.utils.schedule.CourseUtils
 import kotlin.properties.Delegates
 
@@ -30,7 +23,6 @@ class CourseTimeEditDialog : AppCompatDialogFragment() {
         private const val EXTRA_MAX_COURSE_NUM = "EXTRA_MAX_COURSE_NUM"
 
         private const val WINDOW_WIDTH_PERCENT = 1.0
-        private const val DEFAULT_BUTTON_COUNT_IN_ROW = 4
 
         fun showDialog(fragmentManager: FragmentManager, editBundle: EditBundle) {
             CourseTimeEditDialog().apply {
@@ -55,9 +47,6 @@ class CourseTimeEditDialog : AppCompatDialogFragment() {
     private lateinit var editCourseTime: CourseTime
     private var maxWeekNum by Delegates.notNull<Int>()
     private var maxCourseNum by Delegates.notNull<Int>()
-    private val weekNumButtonViews = ArrayList<CircleNumberButton>()
-    private var weekNumCellSize by Delegates.notNull<Int>()
-    private var weekNumCellMargin by Delegates.notNull<Int>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,34 +61,17 @@ class CourseTimeEditDialog : AppCompatDialogFragment() {
         super.onSaveInstanceState(outState)
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        weekNumCellSize = resources.getDimensionPixelSize(R.dimen.circle_number_button_size)
-        weekNumCellMargin = resources.getDimensionPixelSize(R.dimen.circle_number_button_margin)
-    }
-
     override fun onCreateDialog(savedInstanceState: Bundle?) =
         MaterialAlertDialogBuilder(requireContext()).apply {
             setTitle(R.string.course_time_edit)
             setView(DialogCourseTimeEditBinding.inflate(layoutInflater).apply {
                 viewBinding = this
 
-                buildWeekNumGrid(this)
+                viewWeekNumEdit.setWeekNum(editCourseTime.weekNum, maxWeekNum)
+
                 buildWeekNumModeButton(this)
                 buildCourseTimeWheel(this)
                 editTextCourseLocation.setText(editCourseTime.location.orEmpty())
-
-                gridLayoutCourseWeeks.addOnMeasureChangedListener {
-                    val count = gridLayoutCourseWeeks.measuredWidth / (weekNumCellSize + weekNumCellMargin * 2)
-                    val newColumnCount = when {
-                        count <= 1 -> 1
-                        count.isOdd() -> count - 1
-                        else -> count
-                    }
-                    if (newColumnCount != gridLayoutCourseWeeks.columnCount) {
-                        gridLayoutCourseWeeks.columnCount = newColumnCount
-                    }
-                }
             }.root)
 
             setPositiveButton(android.R.string.ok) { _, _ ->
@@ -130,57 +102,25 @@ class CourseTimeEditDialog : AppCompatDialogFragment() {
             editCourseTime.classTime.weekDay = WeekDay.from(pickerCourseTimeWeekDay.value)
             editCourseTime.classTime.classStartTime = pickerCourseStartTime.value
             editCourseTime.classTime.classDuration = pickerCourseEndTime.value - pickerCourseStartTime.value + 1
-            editCourseTime.weekNum = weekNumButtonViews.map {
-                it.isChecked
-            }.toBooleanArray().arrangeWeekNum()
+            editCourseTime.weekNum = viewWeekNumEdit.getWeekNumArray()
         }
     }
 
     private fun buildWeekNumModeButton(viewBinding: DialogCourseTimeEditBinding) {
         viewBinding.buttonOddWeeksMode.setOnClickListener {
             it.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
-            for (v in weekNumButtonViews) v.isChecked = v.showNum.isOdd()
+            viewBinding.viewWeekNumEdit.checkAllOddWeekNum()
+
         }
         viewBinding.buttonEvenWeeksMode.setOnClickListener {
             it.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
-            for (v in weekNumButtonViews) v.isChecked = v.showNum.isEven()
+            viewBinding.viewWeekNumEdit.checkAllEvenWeekNum()
         }
         viewBinding.buttonOppositeWeeks.setOnClickListener {
             it.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
-            for (v in weekNumButtonViews) v.isChecked = !v.isChecked
+            viewBinding.viewWeekNumEdit.checkAllOppositeWeekNum()
         }
     }
-
-    private fun buildWeekNumGrid(viewBinding: DialogCourseTimeEditBinding) {
-        weekNumButtonViews.clear()
-        viewBinding.gridLayoutCourseWeeks.apply {
-            columnCount = DEFAULT_BUTTON_COUNT_IN_ROW
-
-            if (childCount > 0) removeAllViewsInLayout()
-
-            for (i in 1..maxWeekNum) {
-                addView(createGridCell(i, weekNumCellSize, weekNumCellMargin, editCourseTime.hasThisWeekCourse(i)))
-            }
-        }
-    }
-
-    private fun createGridCell(num: Int, size: Int, margin: Int, checked: Boolean) =
-        FrameLayout(requireContext()).apply {
-            layoutParams = GridLayout.LayoutParams().apply {
-                rowSpec = GridLayout.spec(GridLayout.UNDEFINED, 1, 1f)
-                columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1, 1f)
-            }
-            addView(CircleNumberButton(requireContext()).apply {
-                showNum = num
-                isChecked = checked
-                layoutParams = FrameLayout.LayoutParams(size, size).apply {
-                    this.gravity = Gravity.CENTER
-                    setMargins(margin)
-                }
-            }.also {
-                weekNumButtonViews.add(it)
-            })
-        }
 
     private fun buildCourseTimeWheel(viewBinding: DialogCourseTimeEditBinding) {
         val weekDayStrArr = requireContext().getStringArray(R.array.weekday).map {

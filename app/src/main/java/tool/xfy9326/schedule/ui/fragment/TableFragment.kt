@@ -67,10 +67,8 @@ class TableFragment : Fragment(), Observer<ScheduleBuildBundle> {
 
     private fun updateScheduleView(view: View) {
         (requireView() as? ViewGroup)?.apply {
-            if (childCount > 0) {
-                if (view == children.first()) return
-                removeAllViewsInLayout()
-            }
+            if (view == children.firstOrNull()) return
+            removeAllViewsInLayout()
             addView(view)
         }
     }

@@ -5,6 +5,7 @@ import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.*
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
 import tool.xfy9326.schedule.content.utils.arrangeWeekNum
+import tool.xfy9326.schedule.content.utils.hasCourse
 import tool.xfy9326.schedule.kt.forEachTwo
 import tool.xfy9326.schedule.kt.intersect
 import tool.xfy9326.schedule.kt.iterateAll
@@ -60,7 +61,7 @@ object CourseUtils {
         endWeekDay: WeekDay,
         weekStart: WeekDay,
     ) =
-        if (courseTime.hasThisWeekCourse(weekNum)) {
+        if (courseTime.weekNum.hasCourse(weekNum)) {
             when (weekNum) {
                 1 -> startWeekDay.orderedValue(weekStart) <= courseTime.classTime.weekDay.orderedValue(weekStart)
                 maxWeekNum -> endWeekDay.orderedValue(weekStart) >= courseTime.classTime.weekDay.orderedValue(weekStart)

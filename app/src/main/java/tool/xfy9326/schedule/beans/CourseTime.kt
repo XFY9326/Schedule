@@ -37,15 +37,6 @@ data class CourseTime(
     constructor(weekNum: BooleanArray, weekDay: WeekDay, classStartTime: Int, classDuration: Int, location: String? = null) :
             this(DBConst.DEFAULT_ID, DBConst.DEFAULT_ID, weekNum, ClassTime(weekDay, classStartTime, classDuration), location)
 
-    fun hasThisWeekCourse(num: Int): Boolean {
-        val index = num - 1
-        return if (index in weekNum.indices) {
-            weekNum[index]
-        } else {
-            false
-        }
-    }
-
     operator fun compareTo(courseTime: CourseTime): Int {
         for (i in 0 until min(weekNum.size, courseTime.weekNum.size)) {
             if (weekNum[i] && !courseTime.weekNum[i]) {
