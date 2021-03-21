@@ -15,6 +15,7 @@ import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.CourseCell
 import tool.xfy9326.schedule.beans.ScheduleBuildBundle
 import tool.xfy9326.schedule.beans.SchedulePredefine
+import tool.xfy9326.schedule.beans.ScheduleViewData
 import tool.xfy9326.schedule.data.ScheduleDataStore
 import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
 import tool.xfy9326.schedule.kt.getColorCompat
@@ -29,13 +30,10 @@ object ScheduleViewHelper {
 
     suspend fun buildScheduleView(
         context: Context,
-        weekNum: Int,
-        scheduleBuildBundle: ScheduleBuildBundle,
+        viewData: ScheduleViewData,
         listener: ((CourseCell) -> Unit)? = null,
         noScroll: Boolean = false,
     ): View = withContext(Dispatchers.Default + SupervisorJob()) {
-        val viewData = CourseUtils.getScheduleViewDataByWeek(weekNum, scheduleBuildBundle)
-
         val schedulePredefine = SchedulePredefine.load(context)
         val showWeekend = viewData.styles.forceShowWeekendColumn || viewData.hasWeekendCourse
 
@@ -79,7 +77,8 @@ object ScheduleViewHelper {
         val context = App.instance
 
         val backgroundColor = context.getDefaultBackgroundColor()
-        val scheduleView = buildScheduleView(context, weekNum, ScheduleBuildBundle(schedule, courses, styles), noScroll = true)
+        val viewData = CourseUtils.getScheduleViewDataByWeek(weekNum, ScheduleBuildBundle(schedule, courses, styles))
+        val scheduleView = buildScheduleView(context, viewData, noScroll = true)
 
         val widthSpec = View.MeasureSpec.makeMeasureSpec(targetWidth, View.MeasureSpec.AT_MOST)
         val heightSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
