@@ -19,8 +19,8 @@ object CalendarUtils {
             if (weekStart != null) this.firstDayOfWeek = weekStart.calWeekDay
         }
 
-    fun getDay(date: Date? = null, weekStart: WeekDay): Day =
-        getCalendar(date, weekStart).let {
+    fun getDay(date: Date? = null): Day =
+        getCalendar(date).let {
             Day(it.get(Calendar.MONTH) + 1, it.get(Calendar.DATE), it.getWeekDay())
         }
 

@@ -2,16 +2,14 @@ package tool.xfy9326.schedule.ui.vm
 
 import android.graphics.Bitmap
 import android.net.Uri
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
-import tool.xfy9326.schedule.beans.BatchResult
-import tool.xfy9326.schedule.beans.Schedule
-import tool.xfy9326.schedule.beans.ScheduleBuildBundle
-import tool.xfy9326.schedule.beans.WeekNumType
+import tool.xfy9326.schedule.beans.*
 import tool.xfy9326.schedule.data.AppDataStore
 import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.data.ScheduleDataStore
@@ -47,13 +45,9 @@ class ScheduleViewModel : AbstractViewModel() {
         transform = { pair, courses ->
             ScheduleBuildBundle(pair.first, courses, pair.second)
         }
-    ).distinctUntilChanged().shareIn(GlobalScope, SharingStarted.Eagerly, 1).asDistinctLiveData()
+    ).shareIn(GlobalScope, SharingStarted.Eagerly, 1).asDistinctLiveData()
 
-    var currentScrollPosition: Int? = null
-
-    val nowDay = ScheduleUtils.currentScheduleFlow.map {
-        CalendarUtils.getDay(weekStart = it.weekStart)
-    }.asDistinctLiveData()
+    val nowDay = MutableLiveData<Day>()
     val scrollToWeek = MutableEventLiveData<Int>()
     val showWeekChanged = MutableEventLiveData<Pair<Int, WeekNumType>>()
     val showScheduleControlPanel = MutableEventLiveData<Pair<Int, Int>>()
@@ -73,7 +67,19 @@ class ScheduleViewModel : AbstractViewModel() {
     val nightModeChanging = AtomicBoolean(false)
     val waitExportScheduleId = DisposableValue<Long>()
 
+    var currentScrollPosition: Int? = null
+
     private val scheduleSharedMutex = Mutex()
+
+    override fun onViewInitialized(firstInitialized: Boolean) {
+        if (firstInitialized) {
+            updateNowDay()
+        }
+    }
+
+    private fun updateNowDay() {
+        nowDay.value = CalendarUtils.getDay()
+    }
 
     fun scrollToCurrentWeekNum() {
         viewModelScope.launch(Dispatchers.IO) {

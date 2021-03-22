@@ -153,4 +153,7 @@ dependencies {
     testImplementation "androidx.room:room-testing:$androidxVersion.room"
     androidTestImplementation "androidx.test.ext:junit:$androidxVersion.test.junit"
     androidTestImplementation "androidx.test.espresso:espresso-core:$androidxVersion.test.espresso"
+
+    // Debug
+    // debugImplementation "com.squareup.leakcanary:leakcanary-android:2.6"
 }

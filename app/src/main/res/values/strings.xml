@@ -120,7 +120,8 @@
     <string name="user_pw_empty">密码为空！</string>
     <string name="options_empty">选项为空！</string>
     <string name="course_import_success_title">课程导入成功</string>
-    <string name="course_import_success_attention">\u3000\u3000是否立即前往课表编辑页面？\n\u3000\u3000您可能需要\"手动调整课表的学期开始与结束时间以调整当前周数的计算\"，当然您也可以稍后在\'课表管理\'页面选择导入的课表进行编辑。\n\u3000\u3000若要启用导入的课表，请在\'课表管理\'页面长按需要使用的课表以切换到该课表。</string>
+    <string name="course_import_success_attention">\u3000\u3000是否立即前往课表编辑页面？\n\u3000\u3000您可能需要\"%1$s\"，当然您也可以稍后在\"课表管理\"页面选择导入的课表进行编辑。\n\u3000\u3000若要启用导入的课表，请在\"课表管理\"页面长按需要使用的课表以切换到该课表。</string>
+    <string name="course_import_success_attention_highlight">手动调整课表的学期开始与结束时间以调整当前周数的计算</string>
     <string name="edit_schedule_now">立即前往</string>
     <string name="edit_schedule_later">稍后再说</string>
     <string name="import_course_to_current_schedule_msg">导入课程到当前课表后，所有此课表下原有的所有课程都将会被覆盖，请慎重操作！</string>

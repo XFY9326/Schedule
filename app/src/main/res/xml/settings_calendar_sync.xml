@@ -82,7 +82,7 @@
 
         <androidx.preference.CheckBoxPreference
             app:defaultValue="false"
-            app:iconSpaceReserved="false"
+            app:iconSpaceReserved="true"
             app:key="calendarSyncAddReminderDefault"
             app:summary="@string/add_calendar_reminder_sum"
             app:title="@string/add_calendar_reminder" />
