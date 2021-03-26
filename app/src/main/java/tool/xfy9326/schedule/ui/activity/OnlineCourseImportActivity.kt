@@ -8,7 +8,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import tool.xfy9326.schedule.R
-import tool.xfy9326.schedule.content.base.CourseImportConfig
+import tool.xfy9326.schedule.content.base.AbstractCourseImportConfig
 import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.databinding.ActivityOnlineCourseImportBinding
 import tool.xfy9326.schedule.kt.show
@@ -85,7 +85,7 @@ class OnlineCourseImportActivity : ViewModelActivity<OnlineCourseImportViewModel
         }.show(this)
     }
 
-    private fun onCourseImport(config: CourseImportConfig<*, *, *, *>) {
+    private fun onCourseImport(config: AbstractCourseImportConfig<*, *, *, *>) {
         val importMethod = CourseImportUtils.getCourseImportMethod(config,
             onInterfaceProviderError = {
                 requireViewBinding().layoutCourseImport.showShortSnackBar(R.string.interface_provider_error)

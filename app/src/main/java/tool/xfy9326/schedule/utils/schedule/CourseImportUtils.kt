@@ -10,7 +10,7 @@ object CourseImportUtils {
     }
 
     fun getCourseImportMethod(
-        config: CourseImportConfig<*, *, *, *>,
+        config: AbstractCourseImportConfig<*, *, *, *>,
         onInvalidParser: () -> Unit,
         onInterfaceProviderError: () -> Unit,
         onUnknownProviderError: () -> Unit,

@@ -22,7 +22,7 @@ import java.net.UnknownHostException
 import java.util.concurrent.atomic.AtomicBoolean
 
 abstract class CourseProviderViewModel<I, T1 : AbstractCourseProvider<*>, T2 : AbstractCourseParser<*>> : AbstractViewModel() {
-    protected lateinit var internalImportConfig: CourseImportConfig<*, T1, *, T2>
+    protected lateinit var internalImportConfig: AbstractCourseImportConfig<*, T1, *, T2>
         private set
     private lateinit var _courseProvider: T1
     private lateinit var _courseParser: T2
@@ -45,7 +45,7 @@ abstract class CourseProviderViewModel<I, T1 : AbstractCourseProvider<*>, T2 : A
     val importConfig
         get() = internalImportConfig
 
-    fun registerConfig(config: Class<CourseImportConfig<*, T1, *, T2>>) {
+    fun registerConfig(config: Class<AbstractCourseImportConfig<*, T1, *, T2>>) {
         if (!::internalImportConfig.isInitialized) {
             internalImportConfig = config.newConfigInstance()
             _courseProvider = internalImportConfig.newProvider()

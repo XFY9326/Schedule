@@ -100,6 +100,8 @@ android {
 
 dependencies {
     implementation project(path: ":IO")
+    implementation project(path: ":Annotation")
+    kapt project(path: ":AnnotationProcessor")
 
     // Kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"

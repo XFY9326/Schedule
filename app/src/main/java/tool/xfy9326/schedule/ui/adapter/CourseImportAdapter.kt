@@ -2,16 +2,16 @@ package tool.xfy9326.schedule.ui.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import tool.xfy9326.schedule.content.base.CourseImportConfig
+import tool.xfy9326.schedule.content.base.AbstractCourseImportConfig
 import tool.xfy9326.schedule.databinding.ItemCourseImportBinding
 import tool.xfy9326.schedule.ui.recyclerview.BaseViewBindingAdapter
 import tool.xfy9326.schedule.ui.viewholder.ViewBindingViewHolder
 
 class CourseImportAdapter : BaseViewBindingAdapter<ItemCourseImportBinding, ViewBindingViewHolder<ItemCourseImportBinding>>() {
-    private var sortedConfigs = ArrayList<CourseImportConfig<*, *, *, *>>()
-    private var onCourseImportItemClickListener: ((CourseImportConfig<*, *, *, *>) -> Unit)? = null
+    private var sortedConfigs = ArrayList<AbstractCourseImportConfig<*, *, *, *>>()
+    private var onCourseImportItemClickListener: ((AbstractCourseImportConfig<*, *, *, *>) -> Unit)? = null
 
-    fun updateConfigs(configs: List<CourseImportConfig<*, *, *, *>>) {
+    fun updateConfigs(configs: List<AbstractCourseImportConfig<*, *, *, *>>) {
         sortedConfigs.clear()
         sortedConfigs.addAll(configs)
         notifyDataSetChanged()
@@ -34,7 +34,7 @@ class CourseImportAdapter : BaseViewBindingAdapter<ItemCourseImportBinding, View
         }
     }
 
-    fun setOnCourseImportItemClickListener(onCourseImportItemClickListener: ((CourseImportConfig<*, *, *, *>) -> Unit)?) {
+    fun setOnCourseImportItemClickListener(onCourseImportItemClickListener: ((AbstractCourseImportConfig<*, *, *, *>) -> Unit)?) {
         this.onCourseImportItemClickListener = onCourseImportItemClickListener
     }
 

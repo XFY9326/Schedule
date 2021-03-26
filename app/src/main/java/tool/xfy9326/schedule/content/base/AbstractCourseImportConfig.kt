@@ -17,7 +17,7 @@ import kotlin.reflect.KClass
  * WebCourseProvider -- WebCourseParser
  *
  */
-abstract class CourseImportConfig<P1 : Serializable, T1 : AbstractCourseProvider<P1>, P2 : Serializable, T2 : AbstractCourseParser<P2>>(
+abstract class AbstractCourseImportConfig<P1 : Serializable, T1 : AbstractCourseProvider<P1>, P2 : Serializable, T2 : AbstractCourseParser<P2>>(
     @StringRes
     val schoolNameResId: Int,
     @StringRes

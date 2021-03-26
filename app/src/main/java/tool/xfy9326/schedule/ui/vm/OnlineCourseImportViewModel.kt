@@ -6,7 +6,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import tool.xfy9326.schedule.content.CourseAdapterManager
-import tool.xfy9326.schedule.content.base.CourseImportConfig
+import tool.xfy9326.schedule.content.base.AbstractCourseImportConfig
 import tool.xfy9326.schedule.data.AppDataStore
 import tool.xfy9326.schedule.tools.livedata.MutableNotifyLiveData
 import tool.xfy9326.schedule.tools.livedata.notify
@@ -14,7 +14,7 @@ import tool.xfy9326.schedule.ui.vm.base.AbstractViewModel
 
 class OnlineCourseImportViewModel : AbstractViewModel() {
     val onlineImportAttention = MutableNotifyLiveData()
-    val sortedConfigs = MutableLiveData<List<CourseImportConfig<*, *, *, *>>>()
+    val sortedConfigs = MutableLiveData<List<AbstractCourseImportConfig<*, *, *, *>>>()
 
     override fun onViewInitialized(firstInitialized: Boolean) {
         if (firstInitialized) loadAllConfigs()

@@ -3,11 +3,13 @@
 package tool.xfy9326.schedule.content.adapters.config
 
 import tool.xfy9326.schedule.R
+import tool.xfy9326.schedule.annotation.CourseImportConfig
 import tool.xfy9326.schedule.content.adapters.parser.NAUCourseParser
 import tool.xfy9326.schedule.content.adapters.provider.NAUSSOCourseProvider
-import tool.xfy9326.schedule.content.base.CourseImportConfig
+import tool.xfy9326.schedule.content.base.AbstractCourseImportConfig
 
-class NAUSSOImportConfig : CourseImportConfig<Nothing, NAUSSOCourseProvider, Nothing, NAUCourseParser>(
+@CourseImportConfig
+class NAUSSOImportConfig : AbstractCourseImportConfig<Nothing, NAUSSOCourseProvider, Nothing, NAUCourseParser>(
     schoolNameResId = R.string.school_nanjing_audit_university,
     authorNameResId = R.string.adapter_author_xfy9326,
     systemNameResId = R.string.system_nau_sso,

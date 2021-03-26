@@ -5,9 +5,9 @@ import android.os.Bundle
 import androidx.annotation.CallSuper
 import androidx.core.os.bundleOf
 import androidx.viewbinding.ViewBinding
+import tool.xfy9326.schedule.content.base.AbstractCourseImportConfig
 import tool.xfy9326.schedule.content.base.AbstractCourseParser
 import tool.xfy9326.schedule.content.base.AbstractCourseProvider
-import tool.xfy9326.schedule.content.base.CourseImportConfig
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
 import tool.xfy9326.schedule.kt.castNonNull
 import tool.xfy9326.schedule.kt.startActivity
@@ -27,7 +27,7 @@ abstract class CourseProviderActivity<I, P1 : AbstractCourseProvider<*>, P2 : Ab
 
         const val EXTRA_COURSE_IMPORT_CONFIG_CLASS = "EXTRA_COURSE_IMPORT_CONFIG_CLASS"
 
-        inline fun <reified T : CourseProviderActivity<*, *, *, *, *>> startProviderActivity(context: Context, config: CourseImportConfig<*, *, *, *>) {
+        inline fun <reified T : CourseProviderActivity<*, *, *, *, *>> startProviderActivity(context: Context, config: AbstractCourseImportConfig<*, *, *, *>) {
             context.startActivity<T> { putExtra(EXTRA_COURSE_IMPORT_CONFIG_CLASS, config.javaClass) }
         }
     }
