@@ -5,14 +5,13 @@ import kotlinx.coroutines.flow.conflate
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
-import lib.xfy9326.io.utils.asParentOf
 import tool.xfy9326.schedule.beans.ImageScareType
 import tool.xfy9326.schedule.beans.NotThisWeekCourseShowStyle
 import tool.xfy9326.schedule.beans.ScheduleStyles
 import tool.xfy9326.schedule.beans.WeekDay
 import tool.xfy9326.schedule.data.base.AbstractDataStore
+import tool.xfy9326.schedule.io.FileManager
 import tool.xfy9326.schedule.kt.tryEnumValueOf
-import tool.xfy9326.schedule.utils.file.PathManager
 import java.io.File
 
 object ScheduleDataStore : AbstractDataStore("ScheduleSettings") {
@@ -33,7 +32,7 @@ object ScheduleDataStore : AbstractDataStore("ScheduleSettings") {
     private val enableScheduleBackground by booleanPreferencesKey()
     private val scheduleBackgroundScareType by stringPreferencesKey()
     private val useLightColorSystemBarColor by booleanPreferencesKey()
-    private val scheduleBackgroundFadeAnim by booleanPreferencesKey()
+    private val scheduleBackgroundUseAnim by booleanPreferencesKey()
     private val showScheduleTimes by booleanPreferencesKey()
     private val horizontalCourseCellText by booleanPreferencesKey()
     private val verticalCourseCellText by booleanPreferencesKey()
@@ -87,9 +86,9 @@ object ScheduleDataStore : AbstractDataStore("ScheduleSettings") {
         } else {
             null
         }
-    }.flowOn(Dispatchers.IO).map {
+    }.map {
         if (it != null) {
-            val file = PathManager.PictureAppDir.asParentOf(it.second)
+            val file = FileManager.getAppPictureFile(it.second)
             if (file.isFile) {
                 it.first to file
             } else {
@@ -105,17 +104,17 @@ object ScheduleDataStore : AbstractDataStore("ScheduleSettings") {
                 file = it.second,
                 scareType = tryEnumValueOf<ImageScareType>(it.first[scheduleBackgroundScareType]) ?: ImageScareType.CENTER_CROP,
                 alpha = (it.first[scheduleBackgroundImageAlpha] ?: 100) / 100f,
-                fadeAnim = it.first[scheduleBackgroundFadeAnim] ?: true
+                useAnim = it.first[scheduleBackgroundUseAnim] ?: true
             )
         } else {
             null
         }
-    }.conflate()
+    }.flowOn(Dispatchers.IO).conflate()
 
     data class ScheduleBackgroundBuildBundle(
         val file: File,
         val scareType: ImageScareType,
         val alpha: Float,
-        val fadeAnim: Boolean,
+        val useAnim: Boolean,
     )
 }

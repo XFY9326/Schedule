@@ -1,25 +1,20 @@
-package tool.xfy9326.schedule.tools
+package tool.xfy9326.schedule.io.utils
 
 import android.content.ContentValues
-import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
-import androidx.core.content.FileProvider
-import lib.xfy9326.io.IOManager
-import lib.xfy9326.io.processor.bitmapReader
-import lib.xfy9326.io.processor.bitmapWriter
-import lib.xfy9326.io.utils.asParentOf
-import lib.xfy9326.io.utils.isWEBP
-import tool.xfy9326.schedule.App
-import tool.xfy9326.schedule.utils.IntentUtils
-import tool.xfy9326.schedule.utils.file.PathManager
+import tool.xfy9326.schedule.io.FileManager
+import tool.xfy9326.schedule.io.PathManager
+import tool.xfy9326.schedule.io.kt.asParentOf
+import tool.xfy9326.schedule.io.kt.isWEBP
+import tool.xfy9326.schedule.tools.MIMEConst
 import java.io.File
 import java.util.*
 
-object ImageHelper {
+object ImageUtils {
     private const val IMAGE_PNG = "png"
     private const val IMAGE_JPEG = "jpeg"
     private const val IMAGE_WEBP = "webp"
@@ -30,36 +25,22 @@ object ImageHelper {
     suspend fun importImageFromUri(fromUri: Uri, toDir: File, quality: Int): String? {
         val imageFile = generateNewImageFile(toDir, PRIVATE_STORAGE_BITMAP_COMPRESS_FORMAT)
 
-        fromUri.bitmapReader().read()?.let {
-            imageFile.bitmapWriter(PRIVATE_STORAGE_BITMAP_COMPRESS_FORMAT, quality).write(it)
-            return imageFile.name
+        return if (FileManager.copyBitmap(fromUri, imageFile, PRIVATE_STORAGE_BITMAP_COMPRESS_FORMAT, quality)) {
+            imageFile.name
+        } else {
+            null
         }
-        return null
     }
 
     suspend fun outputImageToAlbum(bitmap: Bitmap, recycle: Boolean = true): Uri? {
         val newFileName = getNewFileNameByBitmapCompressFormat(UUID.randomUUID().toString(), OUTPUT_BITMAP_COMPRESS_FORMAT)
         val imageContentValues = createImageContentValues(newFileName, OUTPUT_BITMAP_COMPRESS_FORMAT, bitmap.width, bitmap.height)
-        val uri = IOManager.contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, imageContentValues)
-        return if (uri != null && uri.bitmapWriter(OUTPUT_BITMAP_COMPRESS_FORMAT, recycle = recycle).write(bitmap)) {
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
-                @Suppress("DEPRECATION")
-                App.instance.sendBroadcast(Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri))
-            }
-            uri
-        } else {
-            null
-        }
+        return FileManager.writeBitmapToAlbum(bitmap, imageContentValues, OUTPUT_BITMAP_COMPRESS_FORMAT, recycle = recycle)
     }
 
     suspend fun createShareCacheImage(bitmap: Bitmap, recycle: Boolean = true): Uri? {
         val newFileName = getNewFileNameByBitmapCompressFormat(UUID.randomUUID().toString(), OUTPUT_BITMAP_COMPRESS_FORMAT)
-        val newImageFile = PathManager.SharedFileDir.asParentOf(newFileName)
-        return if (newImageFile.bitmapWriter(OUTPUT_BITMAP_COMPRESS_FORMAT, recycle = recycle).write(bitmap)) {
-            FileProvider.getUriForFile(App.instance, IntentUtils.FILE_PROVIDER_AUTH, newImageFile)
-        } else {
-            null
-        }
+        return FileManager.createShareImage(newFileName, bitmap, OUTPUT_BITMAP_COMPRESS_FORMAT, recycle = recycle)
     }
 
     private fun createImageContentValues(

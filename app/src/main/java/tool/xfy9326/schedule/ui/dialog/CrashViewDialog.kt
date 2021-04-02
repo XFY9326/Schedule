@@ -9,12 +9,10 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import lib.xfy9326.io.processor.textWriter
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.databinding.DialogCrashViewBinding
+import tool.xfy9326.schedule.io.FileManager
 import tool.xfy9326.schedule.kt.APP_ID
 import tool.xfy9326.schedule.kt.setWindowWidthPercent
 import tool.xfy9326.schedule.kt.showGlobalShortToast
@@ -43,9 +41,7 @@ class CrashViewDialog : AppCompatDialogFragment() {
     private val outputLogFile = registerForActivityResult(ActivityResultContracts.CreateDocument()) {
         if (it != null) {
             lifecycleScope.launch {
-                val result = withContext(Dispatchers.IO) {
-                    it.textWriter().write(requireArguments().getString(ARGUMENT_CRASH_LOG, null))
-                }
+                val result = FileManager.writeText(it, requireArguments().getString(ARGUMENT_CRASH_LOG, null))
                 showShortToast(if (result) R.string.output_file_success else R.string.output_file_failed)
                 dismissAllowingStateLoss()
             }

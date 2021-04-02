@@ -1,9 +1,11 @@
 package tool.xfy9326.schedule.content.base
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import io.ktor.client.*
 import io.ktor.client.request.*
-import io.ktor.client.statement.*
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
+import java.io.InputStream
 import java.io.Serializable
 
 abstract class LoginCourseProvider<P : Serializable> : NetworkCourseProvider<P>() {
@@ -37,6 +39,10 @@ abstract class LoginCourseProvider<P : Serializable> : NetworkCourseProvider<P>(
 
     protected abstract suspend fun onLogin(httpClient: HttpClient, userId: String, userPw: String, captchaCode: String?, importOption: Int)
 
-    protected open suspend fun onDownloadCaptchaImage(httpClient: HttpClient, captchaUrl: String, importOption: Int): ByteArray =
-        httpClient.get<HttpResponse>(captchaUrl).readBytes()
+    protected open suspend fun onDownloadCaptchaImage(httpClient: HttpClient, captchaUrl: String, importOption: Int): Bitmap? =
+        try {
+            httpClient.get<InputStream>(captchaUrl).use(BitmapFactory::decodeStream)
+        } catch (e: Exception) {
+            CourseAdapterException.Error.CAPTCHA_DOWNLOAD_ERROR.report(e)
+        }
 }

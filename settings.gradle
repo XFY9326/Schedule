@@ -1,5 +1,4 @@
 include ':AnnotationProcessor'
 include ':Annotation'
-include ':IO'
 include ':app'
 rootProject.name = "Schedule"

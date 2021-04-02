@@ -184,7 +184,7 @@
             app:defaultValue="true"
             app:dependency="enableScheduleBackground"
             app:iconSpaceReserved="false"
-            app:key="scheduleBackgroundFadeAnim"
+            app:key="scheduleBackgroundUseAnim"
             app:summary="@string/schedule_background_fade_anim_sum"
             app:title="@string/schedule_background_fade_anim" />
 

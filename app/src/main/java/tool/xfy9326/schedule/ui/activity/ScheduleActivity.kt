@@ -88,6 +88,7 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
             refreshToolBarTime(it.first)
         }
         viewModel.nowDay.observe(this, ::updateDate)
+        viewModel.scheduleBackground.observe(this, ::onChangeScheduleBackground)
         viewModel.showWeekChanged.observeEvent(this) {
             updateShowWeekNum(it.first, it.second)
         }
@@ -130,7 +131,6 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
                 viewBinding.layoutSchedule.showShortSnackBar(R.string.calendar_sync_error)
             }
         }
-        viewModel.scheduleBackground.observe(this, ::onChangeScheduleBackground)
         viewModel.toolBarTintColor.observe(this, ::setToolBarTintColor)
         viewModel.useLightColorSystemBarColor.observe(this) {
             // Light status bar in Android Window means status bar that used in light background, so the status bar color is black.
@@ -244,7 +244,7 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
                         ImageScareType.CENTER_INSIDE -> centerInside()
                     }
                 }.apply {
-                    if (bundle.fadeAnim) transition(DrawableTransitionOptions.withCrossFade())
+                    if (bundle.useAnim) transition(DrawableTransitionOptions.withCrossFade())
                 }.into(this)
             }
         }

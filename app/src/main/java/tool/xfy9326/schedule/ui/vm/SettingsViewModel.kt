@@ -7,26 +7,24 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import lib.xfy9326.io.IOManager
-import lib.xfy9326.io.copyTo
-import lib.xfy9326.io.processor.textReader
-import lib.xfy9326.io.target.asTarget
-import lib.xfy9326.io.utils.asParentOf
 import tool.xfy9326.schedule.beans.BatchResult
 import tool.xfy9326.schedule.beans.Schedule
 import tool.xfy9326.schedule.beans.ScheduleSync
 import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.data.ScheduleDataStore
 import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
+import tool.xfy9326.schedule.io.FileManager
+import tool.xfy9326.schedule.io.IOManager
+import tool.xfy9326.schedule.io.PathManager
+import tool.xfy9326.schedule.io.kt.asParentOf
+import tool.xfy9326.schedule.io.utils.ImageUtils
 import tool.xfy9326.schedule.tools.DisposableValue
 import tool.xfy9326.schedule.tools.ExceptionHandler
-import tool.xfy9326.schedule.tools.ImageHelper
 import tool.xfy9326.schedule.tools.livedata.MutableEventLiveData
 import tool.xfy9326.schedule.tools.livedata.postEvent
 import tool.xfy9326.schedule.ui.vm.base.AbstractViewModel
 import tool.xfy9326.schedule.utils.BackupUtils
 import tool.xfy9326.schedule.utils.ScheduleSyncHelper
-import tool.xfy9326.schedule.utils.file.PathManager
 
 class SettingsViewModel : AbstractViewModel() {
     private val scheduleSyncFlow = ScheduleDBProvider.db.scheduleSyncDao.getScheduleSyncsInfo().map {
@@ -140,7 +138,7 @@ class SettingsViewModel : AbstractViewModel() {
     fun importScheduleImage(uri: Uri) {
         viewModelScope.launch(Dispatchers.Default) {
             val quality = ScheduleDataStore.scheduleBackgroundImageQualityFlow.first()
-            val imageName = ImageHelper.importImageFromUri(uri, PathManager.PictureAppDir, quality)
+            val imageName = ImageUtils.importImageFromUri(uri, PathManager.PictureAppDir, quality)
             if (imageName == null) {
                 importScheduleImage.postEvent(false)
             } else {
@@ -157,7 +155,7 @@ class SettingsViewModel : AbstractViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             val logName = waitCreateLogFileName.read()
             if (logName != null) {
-                outputLogFileToUriResult.postEvent(PathManager.LogDir.asParentOf(logName).asTarget().copyTo(outputUri.asTarget()).start() != null)
+                outputLogFileToUriResult.postEvent(FileManager.copyLogFile(logName, outputUri))
             } else {
                 outputLogFileToUriResult.postEvent(false)
             }
@@ -166,7 +164,7 @@ class SettingsViewModel : AbstractViewModel() {
 
     fun showDebugLog(log: String) {
         viewModelScope.launch {
-            PathManager.LogDir.asParentOf(log).textReader().read()?.let {
+            FileManager.readCrashLog(log)?.let {
                 showDebugLog.postEvent(it)
             }
         }

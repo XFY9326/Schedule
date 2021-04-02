@@ -5,7 +5,6 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.shareIn
-import lib.xfy9326.io.IOManager
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.Course
 import tool.xfy9326.schedule.beans.EditError
@@ -14,6 +13,7 @@ import tool.xfy9326.schedule.beans.ScheduleTime
 import tool.xfy9326.schedule.data.AppDataStore
 import tool.xfy9326.schedule.data.ScheduleDataStore
 import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
+import tool.xfy9326.schedule.io.IOManager
 import tool.xfy9326.schedule.kt.combine
 import tool.xfy9326.schedule.kt.intersect
 import tool.xfy9326.schedule.kt.iterateAll

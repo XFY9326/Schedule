@@ -2,16 +2,11 @@
 
 package tool.xfy9326.schedule.kt
 
-import android.content.Context
-import android.net.Uri
-import androidx.documentfile.provider.DocumentFile
 import androidx.preference.Preference
 import tool.xfy9326.schedule.beans.*
 import tool.xfy9326.schedule.ui.fragment.base.AbstractSettingsFragment
 import java.util.*
 import kotlin.math.min
-
-fun Uri.deleteFile(context: Context) = DocumentFile.fromSingleUri(context, this)?.delete() == true
 
 fun Calendar.getWeekDay() = WeekDay.valueOfCalWeekDay(get(Calendar.DAY_OF_WEEK))
 

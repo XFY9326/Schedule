@@ -14,11 +14,11 @@ import tool.xfy9326.schedule.data.AppDataStore
 import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.data.ScheduleDataStore
 import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
+import tool.xfy9326.schedule.io.utils.ImageUtils
 import tool.xfy9326.schedule.kt.asDistinctLiveData
 import tool.xfy9326.schedule.kt.combineTransform
 import tool.xfy9326.schedule.kt.withTryLock
 import tool.xfy9326.schedule.tools.DisposableValue
-import tool.xfy9326.schedule.tools.ImageHelper
 import tool.xfy9326.schedule.tools.livedata.MutableEventLiveData
 import tool.xfy9326.schedule.tools.livedata.postEvent
 import tool.xfy9326.schedule.ui.vm.base.AbstractViewModel
@@ -148,9 +148,9 @@ class ScheduleViewModel : AbstractViewModel() {
                 val bitmap = ScheduleViewHelper.generateScheduleImageByWeekNum(scheduleId, weekNum, targetWidth, waterMark)
                 if (bitmap != null) {
                     val uri = if (AppSettingsDataStore.saveImageWhileSharingFlow.first()) {
-                        ImageHelper.outputImageToAlbum(bitmap)
+                        ImageUtils.outputImageToAlbum(bitmap)
                     } else {
-                        ImageHelper.createShareCacheImage(bitmap)
+                        ImageUtils.createShareCacheImage(bitmap)
                     }
 
                     if (uri != null) {

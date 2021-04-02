@@ -1,5 +1,6 @@
 package tool.xfy9326.schedule.ui.activity
 
+import android.graphics.Bitmap
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -207,11 +208,13 @@ class NetworkCourseProviderActivity :
         }
     }
 
-    private fun setCaptcha(captcha: ByteArray?) {
-        if (captcha == null) {
-            requireViewBinding().imageViewCaptcha.setImageResource(R.drawable.ic_broken_image_24)
-        } else {
-            Glide.with(this).load(captcha).error(R.drawable.ic_broken_image_24).into(requireViewBinding().imageViewCaptcha)
+    private fun setCaptcha(captcha: Bitmap?) {
+        requireViewBinding().imageViewCaptcha.apply {
+            if (captcha == null) {
+                setImageResource(R.drawable.ic_broken_image_24)
+            } else {
+                Glide.with(this).load(captcha).error(R.drawable.ic_broken_image_24).into(this)
+            }
         }
     }
 }

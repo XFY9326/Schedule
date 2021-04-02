@@ -13,7 +13,6 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/Annotation" />
             <option value="$PROJECT_DIR$/AnnotationProcessor" />
-            <option value="$PROJECT_DIR$/IO" />
             <option value="$PROJECT_DIR$/app" />
           </set>
         </option>

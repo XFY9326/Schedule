@@ -18,6 +18,7 @@
       <w>jcenter</w>
       <w>jetpack</w>
       <w>jsoup</w>
+      <w>kapt</w>
       <w>kotlinx</w>
       <w>ktor</w>
       <w>leakcanary</w>
@@ -27,6 +28,7 @@
       <w>miui</w>
       <w>mtrl</w>
       <w>noninteractive</w>
+      <w>okio</w>
       <w>parceler</w>
       <w>prodid</w>
       <w>rrule</w>

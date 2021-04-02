@@ -2,11 +2,11 @@ package tool.xfy9326.schedule.utils.ics
 
 import android.content.Context
 import android.net.Uri
-import lib.xfy9326.io.IOManager
-import lib.xfy9326.io.processor.textWriter
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.*
 import tool.xfy9326.schedule.beans.WeekNumPattern.PatternType.*
+import tool.xfy9326.schedule.io.FileManager
+import tool.xfy9326.schedule.io.IOManager
 import tool.xfy9326.schedule.kt.iterateAll
 import tool.xfy9326.schedule.utils.schedule.CourseTimeUtils
 
@@ -23,7 +23,7 @@ class ScheduleICSHelper constructor(schedule: Schedule, private val courses: Lis
             courses.iterateAll { course, courseTime ->
                 createCourseTimeVEvent(iCal, course, courseTime)
             }
-            return uri.textWriter().write(iCal.build())
+            return FileManager.writeText(uri, iCal.build())
         } catch (e: Exception) {
             e.printStackTrace()
         }

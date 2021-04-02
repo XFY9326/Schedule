@@ -4,12 +4,11 @@ import android.content.Context
 import android.net.Uri
 import kotlinx.coroutines.flow.first
 import kotlinx.serialization.json.Json
-import lib.xfy9326.io.processor.jsonReader
-import lib.xfy9326.io.processor.jsonWriter
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.*
 import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
 import tool.xfy9326.schedule.db.utils.DBTypeConverter
+import tool.xfy9326.schedule.io.FileManager
 import tool.xfy9326.schedule.json.backup.*
 import tool.xfy9326.schedule.utils.schedule.CourseUtils
 import tool.xfy9326.schedule.utils.schedule.ScheduleUtils
@@ -33,7 +32,7 @@ object BackupUtils {
                     ScheduleCourseBundle(schedule, courses)
                 }
             }
-            return uri.jsonWriter<BackupWrapperJSON>(JSON).write(getParsableClass(allBundles))
+            return FileManager.writeJSON(uri, getParsableClass(allBundles), JSON)
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -45,7 +44,7 @@ object BackupUtils {
         var errorAmount = 0
         var hasConflicts = false
         try {
-            uri.jsonReader<BackupWrapperJSON>(JSON).read()?.let {
+            FileManager.readJSON<BackupWrapperJSON>(uri, JSON)?.let {
                 val originalData = fromParsableClass(it)
                 for (bundle in originalData) {
                     totalAmount++

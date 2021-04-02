@@ -5,16 +5,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
-import lib.xfy9326.io.processor.textReader
-import lib.xfy9326.io.processor.textWriter
-import lib.xfy9326.io.utils.asParentOf
 import tool.xfy9326.schedule.App
 import tool.xfy9326.schedule.BuildConfig
 import tool.xfy9326.schedule.data.AppSettingsDataStore
+import tool.xfy9326.schedule.io.FileManager
+import tool.xfy9326.schedule.io.PathManager
 import tool.xfy9326.schedule.kt.appErrorRelaunch
 import tool.xfy9326.schedule.kt.crashRelaunch
-import tool.xfy9326.schedule.utils.file.PathManager
-import java.io.File
 import java.util.*
 
 object ExceptionHandler : Thread.UncaughtExceptionHandler {
@@ -22,8 +19,6 @@ object ExceptionHandler : Thread.UncaughtExceptionHandler {
     private const val CRASH_LOG_FILE_EXTENSION = "log"
     private const val CRASH_LOG_FILE_PREFIX = "Crash"
     private const val CRASH_LOG_FILE_CONNECT_SYMBOL = "_"
-    private const val CRASH_RECORD_FILE_NAME = "LastCrashMills.record"
-    private val CRASH_RECORD_FILE = File(PathManager.LogDir, CRASH_RECORD_FILE_NAME)
 
     private var defaultExceptionHandler: Thread.UncaughtExceptionHandler? = null
 
@@ -60,7 +55,7 @@ object ExceptionHandler : Thread.UncaughtExceptionHandler {
             val crashFileName = getNewCrashFileName()
 
             runBlocking {
-                saveCrashDetail(crashFileName, e)
+                FileManager.writeCrashLog(crashFileName, generateCrashLog(e))
                 runCrashLogCleaner(AppSettingsDataStore.debugLogsMaxStoreAmountFlow.first())
 
                 if (AppSettingsDataStore.handleExceptionFlow.first()) {
@@ -76,16 +71,10 @@ object ExceptionHandler : Thread.UncaughtExceptionHandler {
         }
     }
 
-    private suspend fun saveCrashMills(mills: Long) =
-        CRASH_RECORD_FILE.textWriter().write(mills.toString())
-
-    private suspend fun readCrashMills(): Long =
-        CRASH_RECORD_FILE.textReader().read()?.toLongOrNull() ?: 0
-
     private suspend fun isAppErrorCrash(): Boolean {
-        val lastCrashMills = readCrashMills()
+        val lastCrashMills = FileManager.readCrashRecord()
         val currentCrashMills = System.currentTimeMillis()
-        saveCrashMills(currentCrashMills)
+        FileManager.writeCrashRecord(currentCrashMills)
         return currentCrashMills - lastCrashMills <= CRASH_RELAUNCH_PERIOD_MILLS
     }
 
@@ -98,9 +87,6 @@ object ExceptionHandler : Thread.UncaughtExceptionHandler {
         append(".")
         append(CRASH_LOG_FILE_EXTENSION)
     }
-
-    private suspend fun saveCrashDetail(fileName: String, throwable: Throwable) =
-        PathManager.LogDir.asParentOf(fileName).textWriter().write(generateCrashLog(throwable))
 
     private fun generateCrashLog(throwable: Throwable) = buildString {
         appendLine(Date().toString())

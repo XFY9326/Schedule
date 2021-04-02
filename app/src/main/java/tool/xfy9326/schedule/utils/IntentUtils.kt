@@ -4,12 +4,12 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import androidx.core.content.FileProvider
-import lib.xfy9326.io.utils.asParentOf
 import tool.xfy9326.schedule.BuildConfig
 import tool.xfy9326.schedule.R
+import tool.xfy9326.schedule.io.PathManager
+import tool.xfy9326.schedule.io.kt.asParentOf
 import tool.xfy9326.schedule.kt.tryStartActivity
 import tool.xfy9326.schedule.tools.MIMEConst
-import tool.xfy9326.schedule.utils.file.PathManager
 import java.util.*
 
 object IntentUtils {
