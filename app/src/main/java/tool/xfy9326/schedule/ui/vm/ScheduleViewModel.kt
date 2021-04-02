@@ -46,6 +46,7 @@ class ScheduleViewModel : AbstractViewModel() {
             ScheduleBuildBundle(pair.first, courses, pair.second)
         }
     ).shareIn(GlobalScope, SharingStarted.Eagerly, 1).asDistinctLiveData()
+    val scheduleBackground = ScheduleDataStore.scheduleBackgroundBuildBundleFlow.shareIn(GlobalScope, SharingStarted.Eagerly, 1).asDistinctLiveData()
 
     val nowDay = MutableLiveData<Day>()
     val scrollToWeek = MutableEventLiveData<Int>()
@@ -56,7 +57,7 @@ class ScheduleViewModel : AbstractViewModel() {
     val exitAppDirectly = MutableEventLiveData<Boolean>()
     val toolBarTintColor = ScheduleDataStore.toolBarTintColorFlow.asDistinctLiveData()
     val useLightColorSystemBarColor = ScheduleDataStore.useLightColorSystemBarColorFlow.asDistinctLiveData()
-    val scheduleBackground = ScheduleDataStore.scheduleBackgroundBuildBundleFlow.asDistinctLiveData()
+
     val scheduleShared = MutableEventLiveData<Uri?>()
     val selectScheduleForExportingICS = MutableEventLiveData<List<Schedule.Min>>()
     val iceExportStatus = MutableEventLiveData<Boolean>()

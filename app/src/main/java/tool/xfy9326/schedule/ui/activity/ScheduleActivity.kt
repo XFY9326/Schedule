@@ -5,6 +5,7 @@ import android.graphics.PorterDuffColorFilter
 import android.os.Bundle
 import android.view.*
 import android.view.animation.AccelerateInterpolator
+import android.widget.ImageView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.DrawableRes
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -16,8 +17,7 @@ import androidx.core.os.bundleOf
 import androidx.core.view.*
 import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.widget.ViewPager2
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import coil.load
 import com.google.android.material.navigation.NavigationView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -236,16 +236,14 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
             if (bundle == null) {
                 setImageDrawable(null)
             } else {
-                alpha = bundle.alpha
-                Glide.with(this).load(bundle.file).apply {
-                    when (bundle.scareType) {
-                        ImageScareType.FIT_CENTER -> fitCenter()
-                        ImageScareType.CENTER_CROP -> centerCrop()
-                        ImageScareType.CENTER_INSIDE -> centerInside()
-                    }
-                }.apply {
-                    if (bundle.useAnim) transition(DrawableTransitionOptions.withCrossFade())
-                }.into(this)
+                scaleType = when (bundle.scareType) {
+                    ImageScareType.FIT_CENTER -> ImageView.ScaleType.FIT_CENTER
+                    ImageScareType.CENTER_CROP -> ImageView.ScaleType.CENTER_CROP
+                    ImageScareType.CENTER_INSIDE -> ImageView.ScaleType.CENTER_INSIDE
+                }
+                load(bundle.file) {
+                    if (bundle.useAnim) crossfade(true)
+                }
             }
         }
     }

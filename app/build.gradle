@@ -37,6 +37,7 @@ android {
             exclude "main/java/androidx/datastore/preferences/PreferencesProto.java"
             exclude "META-INF/CHANGES"
             exclude "META-INF/README.md"
+            exclude "okhttp3/internal/publicsuffix/NOTICE"
         }
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -137,14 +138,17 @@ dependencies {
     // Material Design
     implementation "com.google.android.material:material:1.3.0"
 
-    // Glide
-    implementation "com.github.bumptech.glide:glide:4.12.0"
+    // Coil
+    implementation "io.coil-kt:coil:1.1.1"
 
     // Okio
     implementation "com.squareup.okio:okio:2.10.0"
 
+    // OkHttp
+    implementation "com.squareup.okhttp3:okhttp:4.9.0"
+
     // Ktor
-    implementation "io.ktor:ktor-client-android:$dependenciesVersion.ktor"
+    implementation "io.ktor:ktor-client-okhttp:$dependenciesVersion.ktor"
     implementation "io.ktor:ktor-client-serialization:$dependenciesVersion.ktor"
 
     // Jsoup

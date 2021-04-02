@@ -1,6 +1,7 @@
 package tool.xfy9326.schedule.ui.vm
 
-import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
+import androidx.core.graphics.drawable.toDrawable
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.sync.Mutex
 import tool.xfy9326.schedule.beans.NetworkCourseImportParams
@@ -15,7 +16,7 @@ import tool.xfy9326.schedule.ui.vm.base.CourseProviderViewModel
 
 class NetworkCourseProviderViewModel : CourseProviderViewModel<NetworkCourseImportParams, NetworkCourseProvider<*>, NetworkCourseParser<*>>() {
     val loginParams = MutableEventLiveData<NetworkLoginParams?>()
-    val refreshCaptcha = MutableEventLiveData<Bitmap?>()
+    val refreshCaptcha = MutableEventLiveData<BitmapDrawable?>()
 
     private val captchaLock = Mutex()
     private val loginParamsLock = Mutex()
@@ -49,7 +50,7 @@ class NetworkCourseProviderViewModel : CourseProviderViewModel<NetworkCourseImpo
             onRun = {
                 refreshCaptcha.postEvent(
                     if (it is LoginCourseProvider && it.enableCaptcha) {
-                        it.loadCaptchaImage(importOption)
+                        it.loadCaptchaImage(importOption)?.toDrawable(IOManager.resources)
                     } else {
                         null
                     }

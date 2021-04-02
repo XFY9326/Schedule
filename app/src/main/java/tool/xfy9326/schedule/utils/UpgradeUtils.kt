@@ -3,7 +3,7 @@ package tool.xfy9326.schedule.utils
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import io.ktor.client.*
-import io.ktor.client.engine.android.*
+import io.ktor.client.engine.okhttp.*
 import io.ktor.client.features.*
 import io.ktor.client.features.json.*
 import io.ktor.client.features.json.serializer.*
@@ -106,7 +106,7 @@ object UpgradeUtils {
 
     private suspend fun getIndex(client: HttpClient) = client.get<List<UpdateIndex>>(INDEX_VERSION_URL)
 
-    private fun getDefaultClient() = HttpClient(Android) {
+    private fun getDefaultClient() = HttpClient(OkHttp) {
         install(JsonFeature) {
             serializer = KotlinxSerializer()
         }

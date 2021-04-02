@@ -1,10 +1,8 @@
 package tool.xfy9326.schedule.data
 
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.conflate
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.map
 import tool.xfy9326.schedule.beans.ImageScareType
 import tool.xfy9326.schedule.beans.NotThisWeekCourseShowStyle
 import tool.xfy9326.schedule.beans.ScheduleStyles
@@ -82,34 +80,15 @@ object ScheduleDataStore : AbstractDataStore("ScheduleSettings") {
         val enabled = it[enableScheduleBackground] ?: false
         val fileName = it[scheduleBackgroundImage]
         if (enabled && fileName != null) {
-            it to fileName
-        } else {
-            null
-        }
-    }.map {
-        if (it != null) {
-            val file = FileManager.getAppPictureFile(it.second)
-            if (file.isFile) {
-                it.first to file
-            } else {
-                setScheduleBackgroundImage(null)
-                null
-            }
-        } else {
-            null
-        }
-    }.map {
-        if (it != null) {
-            ScheduleBackgroundBuildBundle(
-                file = it.second,
-                scareType = tryEnumValueOf<ImageScareType>(it.first[scheduleBackgroundScareType]) ?: ImageScareType.CENTER_CROP,
-                alpha = (it.first[scheduleBackgroundImageAlpha] ?: 100) / 100f,
-                useAnim = it.first[scheduleBackgroundUseAnim] ?: true
+            return@read ScheduleBackgroundBuildBundle(
+                file = FileManager.getAppPictureFile(fileName),
+                scareType = tryEnumValueOf<ImageScareType>(it[scheduleBackgroundScareType]) ?: ImageScareType.CENTER_CROP,
+                alpha = (it[scheduleBackgroundImageAlpha] ?: 100) / 100f,
+                useAnim = it[scheduleBackgroundUseAnim] ?: true
             )
-        } else {
-            null
         }
-    }.flowOn(Dispatchers.IO).conflate()
+        null
+    }.flowOn(Dispatchers.IO)
 
     data class ScheduleBackgroundBuildBundle(
         val file: File,

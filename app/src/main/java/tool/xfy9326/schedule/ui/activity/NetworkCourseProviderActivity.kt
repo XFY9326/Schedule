@@ -1,6 +1,6 @@
 package tool.xfy9326.schedule.ui.activity
 
-import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -8,7 +8,7 @@ import android.widget.EditText
 import android.widget.Spinner
 import androidx.annotation.StringRes
 import androidx.core.view.isVisible
-import com.bumptech.glide.Glide
+import coil.load
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.NetworkCourseImportParams
 import tool.xfy9326.schedule.beans.NetworkLoginParams
@@ -208,13 +208,9 @@ class NetworkCourseProviderActivity :
         }
     }
 
-    private fun setCaptcha(captcha: Bitmap?) {
-        requireViewBinding().imageViewCaptcha.apply {
-            if (captcha == null) {
-                setImageResource(R.drawable.ic_broken_image_24)
-            } else {
-                Glide.with(this).load(captcha).error(R.drawable.ic_broken_image_24).into(this)
-            }
+    private fun setCaptcha(captcha: BitmapDrawable?) {
+        requireViewBinding().imageViewCaptcha.load(captcha) {
+            error(R.drawable.ic_broken_image_24)
         }
     }
 }
