@@ -81,8 +81,8 @@
             app:title="@string/calendar_sync_schedule_editable_list" />
 
         <androidx.preference.CheckBoxPreference
-            app:defaultValue="false"
-            app:iconSpaceReserved="true"
+            app:defaultValue="true"
+            app:iconSpaceReserved="false"
             app:key="calendarSyncAddReminderDefault"
             app:summary="@string/add_calendar_reminder_sum"
             app:title="@string/add_calendar_reminder" />
