@@ -8,7 +8,6 @@ import android.view.MenuItem
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.webkit.*
-import androidx.annotation.Keep
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
@@ -28,6 +27,7 @@ import tool.xfy9326.schedule.ui.dialog.FullScreenLoadingDialog
 import tool.xfy9326.schedule.ui.dialog.WebCourseProviderBottomPanel
 import tool.xfy9326.schedule.ui.vm.WebCourseProviderViewModel
 import tool.xfy9326.schedule.ui.vm.base.CourseProviderViewModel
+import tool.xfy9326.schedule.utils.JSBridge
 import tool.xfy9326.schedule.utils.view.DialogUtils
 import tool.xfy9326.schedule.utils.view.ViewUtils
 
@@ -39,28 +39,17 @@ class WebCourseProviderActivity :
     companion object {
         private const val EXTRA_WEB_VIEW = "EXTRA_WEB_VIEW"
 
-        private const val HTML_PRINT_JAVASCRIPT_INTERFACE_NAME = "HtmlPrint"
-        private const val HTML_PRINT_JAVASCRIPT_METHOD_NAME = "printHTML"
-        private const val HTML_PRINT_JAVASCRIPT =
+        private const val JS_INTERFACE_NAME = "WebCourseProvider"
+        private const val JS_METHOD_NAME = "onReadHtmlContent"
+        private const val JS_INSERT =
             """
                 javascript:
-                var isCurrentSchedule = %s;
                 
-                var htmlContent = document.getElementsByTagName("html")[0].outerHTML;
+                ${JSBridge.FUNCTION_HTML_LOADER}
                 
-                var iframeTags = document.getElementsByTagName("iframe");
-                var iframeList = [];
-                for (var i = 0; i < iframeTags.length; i++) {
-                    iframeList.push(iframeTags[i].contentDocument.body.parentElement.outerHTML);
-                }
+                let htmlContent = ${JSBridge.FUNCTION_NAME_HTML_LOADER}();
                 
-                var frameTags = document.getElementsByTagName("frame");
-                var frameList = [];
-                for (var i = 0; i < frameTags.length; i++) {
-                    frameList.push(frameTags[i].contentDocument.body.parentElement.outerHTML);
-                }
-                
-                window.$HTML_PRINT_JAVASCRIPT_INTERFACE_NAME.$HTML_PRINT_JAVASCRIPT_METHOD_NAME(htmlContent, iframeList, frameList, isCurrentSchedule);
+                window.$JS_INTERFACE_NAME.$JS_METHOD_NAME(htmlContent["html"], htmlContent["iframe"], htmlContent["frame"], %s);
             """
     }
 
@@ -117,12 +106,12 @@ class WebCourseProviderActivity :
                     handler?.proceed()
                 }
             }
-            addJavascriptInterface(object : HTMLPrinterJavaScriptInterface {
+            addJavascriptInterface(object : JSBridge.WebCourseProviderJSInterface {
                 @JavascriptInterface
-                override fun printHTML(htmlContent: String, iframeContent: Array<String>, frameContent: Array<String>, isCurrentSchedule: Boolean) {
+                override fun onReadHtmlContent(htmlContent: String, iframeContent: Array<String>, frameContent: Array<String>, isCurrentSchedule: Boolean) {
                     onGetCurrentHTML(htmlContent, iframeContent, frameContent, isCurrentSchedule)
                 }
-            }, HTML_PRINT_JAVASCRIPT_INTERFACE_NAME)
+            }, JS_INTERFACE_NAME)
         }
 
         viewBinding.buttonWebCourseProviderPanel.setOnClickListener {
@@ -212,7 +201,7 @@ class WebCourseProviderActivity :
     }
 
     override fun onImportCourseToSchedule(isCurrentSchedule: Boolean) {
-        requireViewBinding().webViewWebCourseProvider.evaluateJavascript(HTML_PRINT_JAVASCRIPT.format(isCurrentSchedule.toString()), null)
+        requireViewBinding().webViewWebCourseProvider.evaluateJavascript(JS_INSERT.format(isCurrentSchedule.toString()), null)
     }
 
     private fun onGetCurrentHTML(htmlContent: String, iframeContent: Array<String>, frameContent: Array<String>, isCurrentSchedule: Boolean) {
@@ -245,12 +234,5 @@ class WebCourseProviderActivity :
             flush()
         }
         WebStorage.getInstance().deleteAllData()
-    }
-
-    @Keep
-    @Suppress("unused")
-    private interface HTMLPrinterJavaScriptInterface {
-        @Keep
-        fun printHTML(htmlContent: String, iframeContent: Array<String>, frameContent: Array<String>, isCurrentSchedule: Boolean)
     }
 }
