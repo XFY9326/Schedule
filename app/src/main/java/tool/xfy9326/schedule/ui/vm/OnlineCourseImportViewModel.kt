@@ -16,8 +16,8 @@ class OnlineCourseImportViewModel : AbstractViewModel() {
     val onlineImportAttention = MutableNotifyLiveData()
     val sortedConfigs = MutableLiveData<List<AbstractCourseImportConfig<*, *, *, *>>>()
 
-    override fun onViewInitialized(firstInitialized: Boolean) {
-        if (firstInitialized) loadAllConfigs()
+    override fun onViewInitialized(firstInitialize: Boolean) {
+        if (sortedConfigs.value == null) loadAllConfigs()
         tryShowOnlineImportAttention()
     }
 

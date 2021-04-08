@@ -72,8 +72,8 @@ class ScheduleViewModel : AbstractViewModel() {
 
     private val scheduleSharedMutex = Mutex()
 
-    override fun onViewInitialized(firstInitialized: Boolean) {
-        if (firstInitialized) {
+    override fun onViewInitialized(firstInitialize: Boolean) {
+        if (firstInitialize) {
             updateNowDay()
         }
     }

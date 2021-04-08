@@ -61,7 +61,7 @@ abstract class ViewModelFragment<M : AbstractViewModel, V : ViewBinding> : Fragm
         onBindLiveData(requireViewBinding(), requireViewModel())
         onInitView(requireViewBinding(), requireViewModel())
 
-        requireViewModel().onViewInitialized(savedInstanceState == null)
+        requireViewModel().initViewModel(savedInstanceState == null)
     }
 
     override fun onDestroyView() {

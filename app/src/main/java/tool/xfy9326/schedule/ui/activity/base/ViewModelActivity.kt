@@ -48,7 +48,7 @@ abstract class ViewModelActivity<M : AbstractViewModel, V : ViewBinding> : Abstr
 
         onHandleSavedInstanceState(savedInstanceState, viewBinding, viewModel)
 
-        viewModel.onViewInitialized(savedInstanceState == null)
+        viewModel.initViewModel(savedInstanceState == null)
     }
 
     fun requireViewModel(): M = viewModel
