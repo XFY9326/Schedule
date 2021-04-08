@@ -10,7 +10,10 @@ import android.graphics.drawable.*
 import android.os.Build
 import android.text.Editable
 import android.util.TypedValue
-import android.view.*
+import android.view.Menu
+import android.view.View
+import android.view.ViewGroup
+import android.view.Window
 import androidx.annotation.ColorInt
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
@@ -152,20 +155,4 @@ fun Menu.setIconTint(@ColorInt colorTint: Int?) {
             it.icon?.setTint(colorTint)
         }
     }
-}
-
-fun <V : View> V.addOnMeasureChangedListener(block: V.() -> Unit) {
-    viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
-        private var lastMeasuredWidth = 0
-        private var lastMeasuredHeight = 0
-
-        override fun onGlobalLayout() {
-            if (measuredWidth != lastMeasuredWidth || measuredHeight != lastMeasuredHeight) {
-                lastMeasuredWidth = measuredWidth
-                lastMeasuredHeight = measuredHeight
-
-                block()
-            }
-        }
-    })
 }

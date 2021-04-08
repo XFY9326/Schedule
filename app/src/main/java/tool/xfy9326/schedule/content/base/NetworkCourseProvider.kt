@@ -1,3 +1,5 @@
+@file:Suppress("MemberVisibilityCanBePrivate")
+
 package tool.xfy9326.schedule.content.base
 
 import io.ktor.client.*
@@ -6,44 +8,46 @@ import tool.xfy9326.schedule.content.utils.CourseAdapterUtils
 import java.io.Serializable
 
 abstract class NetworkCourseProvider<P : Serializable> : AbstractCourseProvider<P>() {
-    private var httpClient: HttpClient? = null
+    private lateinit var internalHttpClient: HttpClient
+    protected val httpClient
+        get() = internalHttpClient
 
-    suspend fun init() {
+
+    fun init() {
         try {
-            httpClient = onPrepareClient()
+            internalHttpClient = onPrepareClient()
         } catch (e: Exception) {
             CourseAdapterException.Error.INIT_ERROR.report(e)
         }
     }
 
-    fun requireHttpClient() = httpClient!!
-
     suspend fun loadImportOptions() = try {
-        onLoadImportOptions(requireHttpClient())
+        onLoadImportOptions()
     } catch (e: Exception) {
         CourseAdapterException.Error.IMPORT_OPTION_GET_ERROR.report(e)
     }
 
-    suspend fun loadScheduleTimesHtml(importOption: Int) = onLoadScheduleTimesHtml(requireHttpClient(), importOption)
+    suspend fun loadScheduleTimesHtml(importOption: Int) = onLoadScheduleTimesHtml(importOption)
 
-    suspend fun loadCoursesHtml(importOption: Int) = onLoadCoursesHtml(requireHttpClient(), importOption)
+    suspend fun loadCoursesHtml(importOption: Int) = onLoadCoursesHtml(importOption)
 
     suspend fun close() {
         try {
-            onClearConnection(requireHttpClient())
-            httpClient?.close()
+            onClearConnection()
+            internalHttpClient.close()
         } catch (e: Exception) {
             CourseAdapterException.Error.CLOSE_ERROR.report(e)
         }
     }
 
-    protected open suspend fun onLoadImportOptions(httpClient: HttpClient): Array<String>? = null
 
-    protected open suspend fun onPrepareClient(): HttpClient = CourseAdapterUtils.getDefaultHttpClient()
+    protected open fun onPrepareClient(): HttpClient = CourseAdapterUtils.buildSimpleHttpClient()
 
-    protected open suspend fun onLoadScheduleTimesHtml(httpClient: HttpClient, importOption: Int): String? = null
+    protected open suspend fun onLoadImportOptions(): Array<String>? = null
 
-    protected abstract suspend fun onLoadCoursesHtml(httpClient: HttpClient, importOption: Int): String
+    protected open suspend fun onLoadScheduleTimesHtml(importOption: Int): String? = null
 
-    protected open suspend fun onClearConnection(httpClient: HttpClient) {}
+    protected abstract suspend fun onLoadCoursesHtml(importOption: Int): String
+
+    protected open suspend fun onClearConnection() {}
 }

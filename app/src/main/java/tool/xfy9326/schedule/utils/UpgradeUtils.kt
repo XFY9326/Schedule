@@ -28,8 +28,6 @@ object UpgradeUtils {
     private const val UPDATE_LATEST = "Latest"
     private const val UPDATE_INDEX = "Index"
 
-    private const val REQUEST_TIME_OUT = 3000L
-
     private const val LATEST_VERSION_CHECK_URL = "https://$UPDATE_SERVER/$UPDATE_PRODUCT/$UPDATE_LATEST"
     private const val INDEX_VERSION_URL = "https://$UPDATE_SERVER/$UPDATE_PRODUCT/$UPDATE_INDEX"
 
@@ -110,8 +108,12 @@ object UpgradeUtils {
         install(JsonFeature) {
             serializer = KotlinxSerializer()
         }
-        install(HttpTimeout) {
-            requestTimeoutMillis = REQUEST_TIME_OUT
+        engine {
+            config {
+                followRedirects(true)
+                followSslRedirects(true)
+                retryOnConnectionFailure(true)
+            }
         }
     }
 }

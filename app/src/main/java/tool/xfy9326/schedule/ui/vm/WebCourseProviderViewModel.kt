@@ -20,23 +20,25 @@ class WebCourseProviderViewModel : CourseProviderViewModel<WebCourseImportParams
     private val validatePageLock = Mutex()
 
     fun validateHtmlPage(importParams: WebCourseImportParams, isCurrentSchedule: Boolean) {
-        providerFunctionRunner(validatePageLock, Dispatchers.Default,
-            onRun = {
-                val pageInfo = it.validateCourseImportPage(
-                    importParams.htmlContent,
-                    importParams.iframeContent,
-                    importParams.frameContent
-                )
-                if (pageInfo.isValidPage) {
-                    validateHtmlPage.postEvent(CourseProviderActivity.ImportRequestParams(isCurrentSchedule, importParams, pageInfo.asImportOption))
-                } else {
+        if (!isImportingCourses) {
+            providerFunctionRunner(validatePageLock, Dispatchers.Default,
+                onRun = {
+                    val pageInfo = it.validateCourseImportPage(
+                        importParams.htmlContent,
+                        importParams.iframeContent,
+                        importParams.frameContent
+                    )
+                    if (pageInfo.isValidPage) {
+                        validateHtmlPage.postEvent(CourseProviderActivity.ImportRequestParams(isCurrentSchedule, importParams, pageInfo.asImportOption))
+                    } else {
+                        validateHtmlPage.postEvent(null)
+                    }
+                },
+                onFailed = {
                     validateHtmlPage.postEvent(null)
                 }
-            },
-            onFailed = {
-                validateHtmlPage.postEvent(null)
-            }
-        )
+            )
+        }
     }
 
     override suspend fun onImportCourse(

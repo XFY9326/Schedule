@@ -21,6 +21,7 @@ class CourseAdapterException : Exception {
         ACCOUNT_ERROR(R.string.adapter_exception_login_account_error),
         INCOMPLETE_COURSE_INFO_ERROR(R.string.adapter_exception_incomplete_course_info),
         UNKNOWN_ERROR(R.string.adapter_exception_unknown_error),
+        CAPTCHA_CODE_ERROR(R.string.adapter_exception_captcha_code_error),
 
         // 课程导入时会自动判断该错误
         CONNECTION_ERROR(R.string.adapter_exception_login_connection_error),

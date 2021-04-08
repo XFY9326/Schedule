@@ -2,6 +2,7 @@
 
 package tool.xfy9326.schedule.ui.vm.base
 
+import androidx.annotation.CallSuper
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.first
@@ -50,8 +51,12 @@ abstract class CourseProviderViewModel<I, T1 : AbstractCourseProvider<*>, T2 : A
             internalImportConfig = config.newConfigInstance()
             _courseProvider = internalImportConfig.newProvider()
             _courseParser = internalImportConfig.newParser()
+
+            onProviderCreate()
         }
     }
+
+    protected open fun onProviderCreate() {}
 
     protected abstract suspend fun onImportCourse(
         importParams: I,
@@ -65,12 +70,13 @@ abstract class CourseProviderViewModel<I, T1 : AbstractCourseProvider<*>, T2 : A
         dispatcher: CoroutineDispatcher = Dispatchers.Default,
         onRun: suspend (T1) -> Unit,
         onFailed: (suspend () -> Unit)? = null,
-    ) {
-        viewModelScope.launch(dispatcher) {
-            if (mutex == null || mutex.tryLock()) {
+    ): Boolean {
+        if (mutex == null || mutex.tryLock()) {
+            viewModelScope.launch(dispatcher) {
                 try {
                     onRun(_courseProvider)
                 } catch (e: CourseAdapterException) {
+                    onFailed?.invoke()
                     reportError(e, false)
                 } catch (e: Exception) {
                     onFailed?.invoke()
@@ -79,7 +85,9 @@ abstract class CourseProviderViewModel<I, T1 : AbstractCourseProvider<*>, T2 : A
                     mutex?.unlock()
                 }
             }
+            return true
         }
+        return false
     }
 
     fun importCourse(importParams: I, importOption: Int, currentSchedule: Boolean, newScheduleName: String? = null) {
@@ -134,7 +142,7 @@ abstract class CourseProviderViewModel<I, T1 : AbstractCourseProvider<*>, T2 : A
         }
     }
 
-    protected fun reportError(err: CourseAdapterException, isImportFinish: Boolean) {
+    protected fun reportError(err: CourseAdapterException, isImportFinish: Boolean = false) {
         if (isImportFinish) reportFinishResult(ImportResult.FAILED)
         providerError.postEvent(err)
     }
@@ -156,7 +164,11 @@ abstract class CourseProviderViewModel<I, T1 : AbstractCourseProvider<*>, T2 : A
         SUCCESS_WITH_IGNORABLE_CONFLICTS
     }
 
+    @CallSuper
     override fun onCleared() {
         finishImport()
+        onProviderDestroy()
     }
+
+    protected open fun onProviderDestroy() {}
 }

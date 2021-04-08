@@ -4,8 +4,8 @@
     <string name="school_nanjing_audit_university">南京审计大学</string>
 
     <!-- System Field -->
-    <string name="system_nau_sso">统一身份认证登陆系统</string>
-    <string name="system_nau_jwc_web">南京审计大学教务信息管理系统-网页端</string>
+    <string name="system_nau_jwc">教务信息管理系统</string>
+    <string name="system_nau_jwc_web">教务信息管理系统-网页端</string>
 
     <!-- Author Field -->
     <string name="adapter_author_xfy9326" translatable="false">XFY9326</string>
@@ -30,6 +30,7 @@
     <string name="adapter_exception_parse_page_error">课程导入页面错误</string>
     <string name="adapter_exception_parse_info_not_enough_error">课程信息不完整</string>
     <string name="adapter_exception_captcha_download_error">验证码加载时出现错误</string>
+    <string name="adapter_exception_captcha_code_error">验证码错误</string>
     <string name="adapter_exception_init_error">初始化错误</string>
     <string name="adapter_exception_close_error">资源关闭错误</string>
     <string name="adapter_exception_incomplete_course_info">课程信息不完整</string>
