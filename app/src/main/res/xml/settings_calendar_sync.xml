@@ -6,7 +6,7 @@
         app:iconSpaceReserved="false"
         app:key="syncCalendarAttention"
         app:persistent="false"
-        app:summary="@string/sync_calendar_attention" />
+        app:summary="@string/calendar_sync_attention" />
 
     <androidx.preference.PreferenceCategory
         app:iconSpaceReserved="false"

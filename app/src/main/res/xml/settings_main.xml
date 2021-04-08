@@ -19,7 +19,7 @@
         app:icon="@drawable/ic_sync_24"
         app:persistent="false"
         app:summary="@string/calendar_sync_settings_sum"
-        app:title="@string/calendar_sync_settings" />
+        app:title="@string/calendar_sync" />
 
     <androidx.preference.Preference
         app:fragment="tool.xfy9326.schedule.ui.fragment.OnlineCourseImportSettingsFragment"

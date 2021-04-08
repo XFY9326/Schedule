@@ -28,6 +28,7 @@ import tool.xfy9326.schedule.beans.Day
 import tool.xfy9326.schedule.beans.ImageScareType
 import tool.xfy9326.schedule.beans.NightMode
 import tool.xfy9326.schedule.beans.WeekNumType
+import tool.xfy9326.schedule.data.AppDataStore
 import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.data.ScheduleDataStore
 import tool.xfy9326.schedule.databinding.ActivityScheduleBinding
@@ -208,13 +209,15 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        var delayCloseDrawer = true
         when (item.itemId) {
             R.id.menu_navOnlineCourseImport -> startActivity<OnlineCourseImportActivity>()
             R.id.menu_navCourseExportICS -> requireViewModel().selectScheduleForExportingICS()
-            R.id.menu_navSyncToCalendar -> lifecycleScope.launch {
-                if (PermissionUtils.checkCalendarPermission(this@ScheduleActivity, requestCalendarPermission)) {
-                    requireViewModel().syncToCalendar()
+            R.id.menu_navSyncToCalendar -> {
+                withShownCalendarSyncAttention {
+                    syncScheduleToCalendar()
                 }
+                delayCloseDrawer = false
             }
             R.id.menu_navScheduleManage -> startActivity<ScheduleManageActivity>()
             R.id.menu_navCourseManage -> requireViewModel().openCurrentScheduleCourseManageActivity()
@@ -225,10 +228,30 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
             }
         }
         lifecycleScope.launch {
-            delay(resources.getInteger(R.integer.drawer_close_anim_time).toLong())
+            if (delayCloseDrawer) delay(resources.getInteger(R.integer.drawer_close_anim_time).toLong())
             requireViewBinding().drawerSchedule.closeDrawers()
         }
         return true
+    }
+
+    private fun withShownCalendarSyncAttention(block: () -> Unit) {
+        lifecycleScope.launch {
+            if (AppDataStore.hasShownCalendarSyncAttention()) {
+                block()
+            } else {
+                DialogUtils.showCalendarSyncAttentionDialog(this@ScheduleActivity) {
+                    block()
+                }
+            }
+        }
+    }
+
+    private fun syncScheduleToCalendar() {
+        lifecycleScope.launch {
+            if (PermissionUtils.checkCalendarPermission(this@ScheduleActivity, requestCalendarPermission)) {
+                requireViewModel().syncToCalendar()
+            }
+        }
     }
 
     private fun onChangeScheduleBackground(bundle: ScheduleDataStore.ScheduleBackgroundBuildBundle?) {

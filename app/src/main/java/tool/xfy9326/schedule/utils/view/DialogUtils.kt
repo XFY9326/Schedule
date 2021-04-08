@@ -13,6 +13,17 @@ import tool.xfy9326.schedule.kt.showShortToast
 import tool.xfy9326.schedule.tools.MaterialColorHelper
 
 object DialogUtils {
+    fun showCalendarSyncAttentionDialog(activity: AppCompatActivity, onConfirm: () -> Unit) {
+        MaterialAlertDialogBuilder(activity).apply {
+            setTitle(R.string.calendar_sync)
+            setMessage(R.string.calendar_sync_attention)
+            setPositiveButton(android.R.string.ok) { _, _ ->
+                onConfirm()
+            }
+            setCancelable(false)
+        }.show(activity)
+    }
+
     fun showNewScheduleNameDialog(activity: AppCompatActivity, onConfirm: (String) -> Unit) {
         val dialogViewBinding = DialogEditTextBinding.inflate(activity.layoutInflater)
         dialogViewBinding.layoutDialogText.setHint(R.string.new_schedule_name_title)

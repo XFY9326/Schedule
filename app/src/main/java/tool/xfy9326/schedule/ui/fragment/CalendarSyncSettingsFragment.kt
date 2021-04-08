@@ -32,7 +32,7 @@ class CalendarSyncSettingsFragment : AbstractSettingsFragment(), MultiItemSelect
         private const val REQUEST_CODE_CALENDAR_PERMISSION = 1
     }
 
-    override val titleName: Int = R.string.calendar_sync_settings
+    override val titleName: Int = R.string.calendar_sync
     override val preferenceResId: Int = R.xml.settings_calendar_sync
     override val preferenceDataStore: PreferenceDataStore = AppSettingsDataStore.getPreferenceDataStore(lifecycleScope)
     private val requestCalendarPermission = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {

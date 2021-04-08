@@ -270,14 +270,14 @@
     <string name="calendar_sync_success">同步成功！</string>
     <string name="calendar_sync_failed">同步失败！ 共%1$d个课表，失败%2$d个！</string>
     <string name="calendar_sync_error">同步时出现错误！</string>
-    <string name="calendar_sync_settings">日历同步</string>
+    <string name="calendar_sync">日历同步</string>
     <string name="calendar_sync_settings_sum">课表与日历同步相关的配置</string>
     <string name="clear_calendar">清空日历同步的数据</string>
     <string name="clear_calendar_sum">清空包括日历账户与日程相关的所有同步数据</string>
     <string name="clear_calendar_msg">是否清空所有的日历同步数据？</string>
     <string name="clear_calendar_success">日历数据清空成功！</string>
     <string name="sync_operation">同步操作</string>
-    <string name="sync_calendar_attention">注意事项：\n1. 所有数据修改后必须同步一次到日历方可生效\n2. 如果同步的数据出现错误建议清空同步数据后重试\n3. App卸载后日历数据依然存在且账户无法直接删除\n4. 建议卸载App前手动清空一次数据删除账户\n5. 课程提醒可以在日历中单独设置或者此处整体配置</string>
+    <string name="calendar_sync_attention">注意事项：\n1. 所有数据修改后必须同步一次到日历方可生效\n2. 如果同步的数据出现错误建议清空同步数据后重试\n3. App卸载后日历数据依然存在且账户无法直接删除\n4. 建议卸载App前手动清空一次数据删除账户\n5. 课程提醒可以在日历中单独设置或者此处整体配置</string>
     <string name="sync_settings">同步设置</string>
     <string name="calendar_sync_schedule">新增同步的课表默认允许同步</string>
     <string name="calendar_sync_schedule_sum">不进行同步的课表将不会同步到日历</string>
