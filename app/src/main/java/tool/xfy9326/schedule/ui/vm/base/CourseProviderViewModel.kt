@@ -126,14 +126,20 @@ abstract class CourseProviderViewModel<I, T1 : AbstractCourseProvider<*>, T2 : A
                     } else {
                         reportFinishResult(ImportResult.SUCCESS, editScheduleId)
                     }
+                } catch (e: CancellationException) {
+                    // Ignore
                 } catch (e: CourseAdapterException) {
                     reportError(e, true)
+                } catch (e: SocketTimeoutException) {
+                    reportError(CourseAdapterException.Error.CONNECTION_ERROR.make(e), true)
+                } catch (e: SocketException) {
+                    reportError(CourseAdapterException.Error.CONNECTION_ERROR.make(e), true)
+                } catch (e: ConnectException) {
+                    reportError(CourseAdapterException.Error.CONNECTION_ERROR.make(e), true)
+                } catch (e: UnknownHostException) {
+                    reportError(CourseAdapterException.Error.CONNECTION_ERROR.make(e), true)
                 } catch (e: Exception) {
-                    if (e is SocketTimeoutException || e is SocketException || e is ConnectException || e is UnknownHostException) {
-                        reportError(CourseAdapterException.Error.CONNECTION_ERROR.make(e), true)
-                    } else if (e !is CancellationException) {
-                        reportError(CourseAdapterException.Error.UNKNOWN_ERROR.make(e), true)
-                    }
+                    reportError(CourseAdapterException.Error.UNKNOWN_ERROR.make(e), true)
                 } finally {
                     internalIsImportingCourses.set(false)
                     importCourseJob = null

@@ -17,8 +17,10 @@ class CourseParseResult private constructor(val courses: List<Course>, val ignor
         fun add(skipErrorCourse: Boolean = true, action: () -> Course?) {
             try {
                 action()?.let(courses::add)
+            } catch (e: CourseAdapterException) {
+                throw e
             } catch (e: Exception) {
-                if (skipErrorCourse && e !is CourseAdapterException) {
+                if (skipErrorCourse) {
                     error = CourseAdapterException.Error.FAILED_TO_IMPORT_SOME_COURSE.make(e)
                 } else {
                     throw e
