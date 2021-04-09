@@ -1,6 +1,7 @@
 package tool.xfy9326.schedule.ui.vm
 
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import tool.xfy9326.schedule.data.AppDataStore
@@ -22,7 +23,7 @@ class ScheduleManageViewModel : AbstractViewModel() {
     val setCurrentScheduleSuccess = MutableNotifyLiveData()
 
     fun setCurrentSchedule(scheduleId: Long) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             AppDataStore.setCurrentScheduleId(scheduleId)
             setCurrentScheduleSuccess.notify()
         }

@@ -34,7 +34,7 @@ object ScheduleViewHelper {
         listener: ((CourseCell) -> Unit)? = null,
         noScroll: Boolean = false,
     ): View = withContext(Dispatchers.Default + SupervisorJob()) {
-        val schedulePredefine = SchedulePredefine.load(context)
+        val schedulePredefine = SchedulePredefine.content
         val showWeekend = viewData.styles.forceShowWeekendColumn || viewData.hasWeekendCourse
 
         val cellsDeferred = ArrayList<Deferred<ScheduleCellView>>(viewData.times.size + viewData.cells.size)

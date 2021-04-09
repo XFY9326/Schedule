@@ -108,6 +108,7 @@ object UpgradeUtils {
         install(JsonFeature) {
             serializer = KotlinxSerializer()
         }
+        install(HttpRedirect)
         engine {
             config {
                 followRedirects(true)

@@ -22,7 +22,7 @@ class OnlineCourseImportViewModel : AbstractViewModel() {
     }
 
     private fun tryShowOnlineImportAttention() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             if (!AppDataStore.readOnlineImportAttentionFlow.first()) onlineImportAttention.notify()
         }
     }
@@ -34,7 +34,7 @@ class OnlineCourseImportViewModel : AbstractViewModel() {
     }
 
     private fun loadAllConfigs() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             sortedConfigs.postValue(CourseAdapterManager.getSortedConfigs())
         }
     }

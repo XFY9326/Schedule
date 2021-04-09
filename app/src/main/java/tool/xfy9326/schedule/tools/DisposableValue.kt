@@ -1,30 +1,34 @@
 package tool.xfy9326.schedule.tools
 
+import java.lang.ref.WeakReference
+
 class DisposableValue<T>(initialValue: T? = null, private val sync: Boolean = false) {
-    private var value = initialValue
+    private var value = WeakReference(initialValue)
 
     fun write(value: T) {
         if (sync) {
             synchronized(this) {
-                this.value = value
+                this.value = WeakReference(value)
             }
         } else {
-            this.value = value
+            this.value = WeakReference(value)
         }
     }
 
     fun read(): T? {
         if (sync) {
             synchronized(this) {
-                val temp = this.value
-                this.value = null
-                return temp
+                return internalRead()
             }
         } else {
-            val temp = this.value
-            this.value = null
-            return temp
+            return internalRead()
         }
+    }
+
+    private fun internalRead(): T? {
+        val temp = this.value.get()
+        this.value.clear()
+        return temp
     }
 
     fun consume() {

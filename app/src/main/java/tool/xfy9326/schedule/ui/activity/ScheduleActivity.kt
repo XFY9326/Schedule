@@ -303,7 +303,6 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
 
                 scheduleViewPagerAdapter = ScheduleViewPagerAdapter(this@ScheduleActivity, maxWeekNum)
                 adapter = scheduleViewPagerAdapter
-
                 setCurrentItem(requireViewModel().currentScrollPosition ?: position, false)
             } else {
                 scheduleViewPagerAdapter?.updateMaxWeekNum(maxWeekNum)

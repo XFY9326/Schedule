@@ -2,6 +2,7 @@ package tool.xfy9326.schedule.ui.vm
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
@@ -46,7 +47,7 @@ class ScheduleEditViewModel : AbstractViewModel() {
         isEdit = scheduleId != 0L
 
         if (!::editSchedule.isInitialized) {
-            viewModelScope.launch {
+            viewModelScope.launch(Dispatchers.IO) {
                 if (isEdit) {
                     ScheduleDBProvider.db.scheduleDAO.getSchedule(scheduleId).firstOrNull()?.let {
                         editSchedule = it
@@ -66,14 +67,14 @@ class ScheduleEditViewModel : AbstractViewModel() {
     fun hasDataChanged() = originalScheduleHashCode != editSchedule.hashCode()
 
     fun deleteSchedule(schedule: Schedule) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             ScheduleDBProvider.db.scheduleDAO.deleteSchedule(schedule)
         }
     }
 
     fun saveSchedule() {
         val cache = editSchedule
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             val errorMsg = ScheduleUtils.validateSchedule(cache, ScheduleDBProvider.db.scheduleDAO.getScheduleCourses(cache.scheduleId).first())
             if (errorMsg == null) {
                 val newId = if (isEdit) {
@@ -94,7 +95,7 @@ class ScheduleEditViewModel : AbstractViewModel() {
     }
 
     fun loadAllSchedules() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             var schedules = ScheduleDBProvider.db.scheduleDAO.getScheduleMin().first()
             if (isEdit) {
                 schedules = schedules.filter {
@@ -106,7 +107,7 @@ class ScheduleEditViewModel : AbstractViewModel() {
     }
 
     fun importScheduleTimes(scheduleId: Long) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             importScheduleTimes.postEvent(ScheduleDBProvider.db.scheduleDAO.getSchedule(scheduleId).firstOrNull()?.times)
         }
     }

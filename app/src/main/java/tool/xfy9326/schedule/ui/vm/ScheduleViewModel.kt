@@ -5,18 +5,20 @@ import android.net.Uri
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
-import tool.xfy9326.schedule.beans.*
+import tool.xfy9326.schedule.beans.BatchResult
+import tool.xfy9326.schedule.beans.Day
+import tool.xfy9326.schedule.beans.Schedule
+import tool.xfy9326.schedule.beans.WeekNumType
 import tool.xfy9326.schedule.data.AppDataStore
 import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.data.ScheduleDataStore
 import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
 import tool.xfy9326.schedule.io.utils.ImageUtils
 import tool.xfy9326.schedule.kt.asDistinctLiveData
-import tool.xfy9326.schedule.kt.combineTransform
 import tool.xfy9326.schedule.kt.withTryLock
 import tool.xfy9326.schedule.tools.DisposableValue
 import tool.xfy9326.schedule.tools.livedata.MutableEventLiveData
@@ -25,28 +27,15 @@ import tool.xfy9326.schedule.ui.vm.base.AbstractViewModel
 import tool.xfy9326.schedule.utils.CalendarUtils
 import tool.xfy9326.schedule.utils.ScheduleSyncHelper
 import tool.xfy9326.schedule.utils.ics.ScheduleICSHelper
-import tool.xfy9326.schedule.utils.schedule.CourseTimeUtils
 import tool.xfy9326.schedule.utils.schedule.ScheduleUtils
+import tool.xfy9326.schedule.utils.view.ScheduleViewDataProcessor
 import tool.xfy9326.schedule.utils.view.ScheduleViewHelper
 import java.util.concurrent.atomic.AtomicBoolean
 
 class ScheduleViewModel : AbstractViewModel() {
-    private val weekNumInfoFlow = ScheduleUtils.currentScheduleFlow.map {
-        CourseTimeUtils.getWeekNum(it) to CourseTimeUtils.getMaxWeekNum(it.startDate, it.endDate, it.weekStart)
-    }.shareIn(GlobalScope, SharingStarted.Eagerly, 1)
-
-    val weekNumInfo = weekNumInfoFlow.asDistinctLiveData()
-    val scheduleBuildData = ScheduleUtils.currentScheduleFlow.combine(ScheduleDataStore.scheduleStylesFlow) { schedule, styles ->
-        schedule to styles
-    }.combineTransform(
-        combineTransform = {
-            ScheduleDBProvider.db.scheduleDAO.getScheduleCourses(it.first.scheduleId)
-        },
-        transform = { pair, courses ->
-            ScheduleBuildBundle(pair.first, courses, pair.second)
-        }
-    ).shareIn(GlobalScope, SharingStarted.Eagerly, 1).asDistinctLiveData()
-    val scheduleBackground = ScheduleDataStore.scheduleBackgroundBuildBundleFlow.shareIn(GlobalScope, SharingStarted.Eagerly, 1).asDistinctLiveData()
+    val weekNumInfo = ScheduleViewDataProcessor.weekNumInfoFlow.asDistinctLiveData()
+    val scheduleBuildData = ScheduleViewDataProcessor.scheduleBuildDataFlow.asDistinctLiveData()
+    val scheduleBackground = ScheduleViewDataProcessor.scheduleBackgroundFlow.asDistinctLiveData()
 
     val nowDay = MutableLiveData<Day>()
     val scrollToWeek = MutableEventLiveData<Int>()
@@ -84,7 +73,7 @@ class ScheduleViewModel : AbstractViewModel() {
 
     fun scrollToCurrentWeekNum() {
         viewModelScope.launch(Dispatchers.IO) {
-            scrollToWeek.postEvent(weekNumInfoFlow.first().first)
+            scrollToWeek.postEvent(ScheduleViewDataProcessor.weekNumFlow.first())
         }
     }
 
@@ -96,13 +85,13 @@ class ScheduleViewModel : AbstractViewModel() {
 
     fun showScheduleControlPanel() {
         viewModelScope.launch(Dispatchers.IO) {
-            showScheduleControlPanel.postEvent(weekNumInfoFlow.first())
+            showScheduleControlPanel.postEvent(ScheduleViewDataProcessor.weekNumInfoFlow.first())
         }
     }
 
     fun notifyShowWeekChanged(weekNum: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            showWeekChanged.postEvent(weekNum to WeekNumType.create(weekNum, weekNumInfoFlow.first().first))
+            showWeekChanged.postEvent(weekNum to WeekNumType.create(weekNum, ScheduleViewDataProcessor.weekNumFlow.first()))
         }
     }
 
@@ -167,7 +156,7 @@ class ScheduleViewModel : AbstractViewModel() {
     }
 
     fun showCourseDetailDialog(courseId: Long, timeId: Long) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             ScheduleUtils.currentScheduleFlow.combine(ScheduleDBProvider.db.scheduleDAO.getScheduleCourse(courseId)) { schedule, course ->
                 if (course == null) {
                     null

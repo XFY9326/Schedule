@@ -50,7 +50,7 @@ class SettingsViewModel : AbstractViewModel() {
     val waitBackupScheduleId by lazy { DisposableValue<List<Long>>() }
 
     fun getScheduleBackupList() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             scheduleBackupList.postEvent(ScheduleDBProvider.db.scheduleDAO.getScheduleMin().first())
         }
     }
@@ -73,7 +73,7 @@ class SettingsViewModel : AbstractViewModel() {
     }
 
     fun getScheduleSyncEditList(key: String) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             scheduleSyncEdit.postEvent(key to scheduleSyncFlow.first())
         }
     }
@@ -103,7 +103,7 @@ class SettingsViewModel : AbstractViewModel() {
     }
 
     private fun editSyncInfo(scheduleIds: LongArray, enabledArr: BooleanArray, edit: (ScheduleSync, Boolean) -> Unit) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             ScheduleDBProvider.db.scheduleSyncDao.apply {
                 for (i in scheduleIds.indices) {
                     val syncInfo = getScheduleSync(scheduleIds[i]).first()
@@ -118,13 +118,13 @@ class SettingsViewModel : AbstractViewModel() {
     }
 
     fun clearCalendar() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             ScheduleSyncHelper.removeAllCalendar()
         }
     }
 
     fun clearCalendarSettings() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             ScheduleDBProvider.db.scheduleSyncDao.clearAll()
         }
     }
@@ -163,7 +163,7 @@ class SettingsViewModel : AbstractViewModel() {
     }
 
     fun showDebugLog(log: String) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             FileManager.readCrashLog(log)?.let {
                 showDebugLog.postEvent(it)
             }
@@ -171,25 +171,25 @@ class SettingsViewModel : AbstractViewModel() {
     }
 
     fun getAllLogs(action: String) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             allDebugLogs.postEvent(action to ExceptionHandler.getAllDebugLogs())
         }
     }
 
     fun clearCache() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             IOManager.clearAllCache()
         }
     }
 
     fun clearLogs() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             PathManager.LogDir.deleteRecursively()
         }
     }
 
     fun restoreSettings() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             AppSettingsDataStore.clear()
             ScheduleDataStore.clear()
             ScheduleDBProvider.db.scheduleSyncDao.clearAll()
