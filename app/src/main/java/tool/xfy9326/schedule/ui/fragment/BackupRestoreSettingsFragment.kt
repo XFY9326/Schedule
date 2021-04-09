@@ -63,7 +63,7 @@ class BackupRestoreSettingsFragment : AbstractSettingsFragment(), MultiItemSelec
                 idArr = it.map { min ->
                     min.scheduleId
                 }.toLongArray(),
-                selectedArr = BooleanArray(it.size) { false }
+                selectedArr = BooleanArray(it.size) { true }
             )
         }
         viewModel.backupScheduleToUriResult.observeEvent(this) {
