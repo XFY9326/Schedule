@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/menu_scheduleEditImport"
-        android:icon="@drawable/ic_more_time_24"
+        android:icon="@drawable/ic_transform_24"
         android:title="@string/import_times_from_other_schedule"
         app:showAsAction="ifRoom" />
     <item
