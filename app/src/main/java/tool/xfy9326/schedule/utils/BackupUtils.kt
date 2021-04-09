@@ -58,8 +58,8 @@ object BackupUtils {
                     hasConflicts = CourseUtils.solveConflicts(bundle.schedule.times, bundle.courses)
                     ScheduleUtils.saveNewSchedule(bundle.schedule, bundle.courses)
                 }
+                return BatchResult(true, totalAmount, errorAmount) to hasConflicts
             }
-            return BatchResult(true, totalAmount, errorAmount) to hasConflicts
         } catch (e: Exception) {
             e.printStackTrace()
         }
