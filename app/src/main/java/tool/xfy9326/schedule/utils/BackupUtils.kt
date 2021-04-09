@@ -12,6 +12,8 @@ import tool.xfy9326.schedule.io.FileManager
 import tool.xfy9326.schedule.json.backup.*
 import tool.xfy9326.schedule.utils.schedule.CourseUtils
 import tool.xfy9326.schedule.utils.schedule.ScheduleUtils
+import java.util.*
+import kotlin.collections.ArrayList
 
 object BackupUtils {
     private val JSON by lazy {
@@ -92,6 +94,8 @@ object BackupUtils {
                 times = datum.schedule.times.map { ScheduleTimeJSON.fromScheduleTime(it) },
                 color = datum.schedule.color,
                 weekStart = datum.schedule.weekStart.shortName,
+                startDate = datum.schedule.startDate.time,
+                endDate = datum.schedule.endDate.time,
                 courses = jsonCourses
             ))
         }
@@ -103,11 +107,14 @@ object BackupUtils {
         val scheduleList = ArrayList<ScheduleCourseBundle>(data.data.size)
 
         for (scheduleJson in data.data) {
+            val scheduleDatePair = getFixedScheduleDate(scheduleJson)
             val schedule = Schedule(
                 name = scheduleJson.name,
                 times = scheduleJson.times.map { it.toScheduleTime() },
                 color = scheduleJson.color,
-                weekStart = WeekDay.valueOfShortName(scheduleJson.weekStart)
+                weekStart = WeekDay.valueOfShortName(scheduleJson.weekStart),
+                startDate = scheduleDatePair.first,
+                endDate = scheduleDatePair.second,
             )
             val courses = ArrayList<Course>(scheduleJson.courses.size)
             for (courseJson in scheduleJson.courses) {
@@ -133,4 +140,11 @@ object BackupUtils {
 
         return scheduleList
     }
+
+    private fun getFixedScheduleDate(scheduleJson: ScheduleJSON) =
+        if (scheduleJson.startDate == 0L || scheduleJson.endDate == 0L || scheduleJson.startDate >= scheduleJson.endDate) {
+            ScheduleUtils.getDefaultTermDate()
+        } else {
+            Date(scheduleJson.startDate) to Date(scheduleJson.endDate)
+        }
 }

@@ -23,8 +23,6 @@ data class Schedule(
     var color: Int,
     var weekStart: WeekDay,
 ) {
-    constructor(name: String, times: List<ScheduleTime>, color: Int, weekStart: WeekDay) :
-            this(DBConst.DEFAULT_ID, name, Date(), Date(), times, color, weekStart)
 
     constructor(
         name: String,

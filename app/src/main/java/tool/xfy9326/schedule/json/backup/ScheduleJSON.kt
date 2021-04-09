@@ -9,6 +9,8 @@ data class ScheduleJSON(
     val times: List<ScheduleTimeJSON>,
     val color: Int,
     val weekStart: String,
+    val startDate: Long = 0,
+    val endDate: Long = 0,
     val courses: List<CourseJSON>,
 ) {
     init {

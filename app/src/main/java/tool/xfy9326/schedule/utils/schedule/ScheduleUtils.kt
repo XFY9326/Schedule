@@ -45,7 +45,7 @@ object ScheduleUtils {
         )
     }
 
-    private fun getDefaultTermDate(): Pair<Date, Date> {
+    fun getDefaultTermDate(): Pair<Date, Date> {
         CalendarUtils.getCalendar(clearToDate = true).apply {
             val startDate: Date
             val endDate: Date
