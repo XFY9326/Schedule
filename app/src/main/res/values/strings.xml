@@ -277,7 +277,9 @@
     <string name="clear_calendar_msg">是否清空所有的日历同步数据？</string>
     <string name="clear_calendar_success">日历数据清空成功！</string>
     <string name="sync_operation">同步操作</string>
-    <string name="calendar_sync_attention">注意事项：\n1. 所有数据修改后必须同步一次到日历方可生效\n2. 如果同步的数据出现错误建议清空同步数据后重试\n3. App卸载后日历数据依然存在且账户无法直接删除\n4. 建议卸载App前手动清空一次数据删除账户\n5. 课程提醒可以在日历中单独设置或者此处整体配置</string>
+    <string name="calendar_sync_attention">注意事项：\n1. 所有数据修改后必须同步一次到日历方可生效\n2. 如果同步的数据出现错误建议清空同步数据后重试\n3. App卸载后日历数据依然存在且账户无法直接删除\n4. 建议卸载App前手动清空数据删除日历账户\n5. 课程提醒可以在日历中单独设置或者此处整体配置</string>
+    <string name="calendar_sync_attention_dialog_title">日历同步注意事项</string>
+    <string name="calendar_sync_attention_dialog_msg">\u3000\u3000所有数据修改后必须同步一次到日历方可生效，如果同步的数据出现错误建议清空同步数据后重试。\n\u3000\u3000App卸载后日历数据依然存在且账户无法直接删除，建议卸载App前手动清空数据删除日历账户。</string>
     <string name="sync_settings">同步设置</string>
     <string name="calendar_sync_schedule">新增同步的课表默认允许同步</string>
     <string name="calendar_sync_schedule_sum">不进行同步的课表将不会同步到日历</string>

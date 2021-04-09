@@ -15,8 +15,8 @@ import tool.xfy9326.schedule.tools.MaterialColorHelper
 object DialogUtils {
     fun showCalendarSyncAttentionDialog(activity: AppCompatActivity, onConfirm: () -> Unit) {
         MaterialAlertDialogBuilder(activity).apply {
-            setTitle(R.string.calendar_sync)
-            setMessage(R.string.calendar_sync_attention)
+            setTitle(R.string.calendar_sync_attention_dialog_title)
+            setMessage(R.string.calendar_sync_attention_dialog_msg)
             setPositiveButton(android.R.string.ok) { _, _ ->
                 onConfirm()
             }
