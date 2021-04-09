@@ -143,7 +143,6 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/class_location"
                     android:inputType="text"
-                    android:maxLength="20"
                     android:singleLine="true"
                     android:textSize="14sp" />
 

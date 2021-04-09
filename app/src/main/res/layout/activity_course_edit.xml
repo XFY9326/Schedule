@@ -96,7 +96,6 @@
                                 android:layout_height="wrap_content"
                                 android:hint="@string/course_name"
                                 android:inputType="text"
-                                android:maxLength="20"
                                 android:singleLine="true"
                                 android:textSize="13sp" />
 
@@ -112,7 +111,6 @@
                                 android:layout_height="wrap_content"
                                 android:hint="@string/teacher_name"
                                 android:inputType="text"
-                                android:maxLength="20"
                                 android:singleLine="true"
                                 android:textSize="13sp" />
 

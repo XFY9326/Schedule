@@ -119,7 +119,6 @@
                             android:layout_height="wrap_content"
                             android:hint="@string/user_id"
                             android:inputType="text"
-                            android:maxLength="20"
                             android:singleLine="true"
                             android:textSize="13sp" />
 
@@ -136,7 +135,6 @@
                             android:layout_height="wrap_content"
                             android:hint="@string/user_pw"
                             android:inputType="textPassword"
-                            android:maxLength="20"
                             android:singleLine="true"
                             android:textSize="13sp" />
 
@@ -161,7 +159,6 @@
                                 android:layout_height="wrap_content"
                                 android:hint="@string/captcha"
                                 android:inputType="text"
-                                android:maxLength="20"
                                 android:singleLine="true"
                                 android:textSize="13sp" />
 
