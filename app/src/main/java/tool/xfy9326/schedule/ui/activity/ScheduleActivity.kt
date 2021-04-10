@@ -98,7 +98,7 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
             ScheduleControlPanel.showDialog(supportFragmentManager, getCurrentShowWeekNum(), it.first, it.second)
         }
         viewModel.showCourseDetailDialog.observeEvent(this) {
-            CourseDetailDialog.showDialog(supportFragmentManager, it.first, it.second)
+            CourseDetailDialog.showDialog(supportFragmentManager, it)
         }
         viewModel.openCourseManageActivity.observeEvent(this) {
             startActivity<CourseManageActivity> {

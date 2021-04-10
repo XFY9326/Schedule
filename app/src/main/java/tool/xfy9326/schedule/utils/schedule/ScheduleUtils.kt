@@ -26,6 +26,11 @@ object ScheduleUtils {
             ScheduleDBProvider.db.scheduleDAO.getSchedule(it).filterNotNull()
         }.shareIn(GlobalScope, SharingStarted.Eagerly, 1)
 
+    val currentScheduleTimesFlow =
+        AppDataStore.currentScheduleIdFlow.combine {
+            ScheduleDBProvider.db.scheduleDAO.getScheduleTimes(it).filterNotNull()
+        }.shareIn(GlobalScope, SharingStarted.Eagerly, 1)
+
     private val DEFAULT_SCHEDULE_TIMES by lazy {
         listOf(
             ScheduleTime(8, 0, 8, 45),

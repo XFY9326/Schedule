@@ -1,7 +1,9 @@
 package tool.xfy9326.schedule.beans
 
+import android.os.Parcelable
 import androidx.annotation.ColorInt
 import androidx.room.*
+import kotlinx.parcelize.Parcelize
 import tool.xfy9326.schedule.db.DBConst
 import tool.xfy9326.schedule.tools.MaterialColorHelper
 
@@ -15,6 +17,7 @@ import tool.xfy9326.schedule.tools.MaterialColorHelper
         onDelete = ForeignKey.CASCADE
     )]
 )
+@Parcelize
 data class Course(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = DBConst.COLUMN_COURSE_ID)
@@ -27,7 +30,7 @@ data class Course(
     var color: Int,
     @Ignore
     var times: List<CourseTime>,
-) {
+) : Parcelable {
 
     constructor(courseId: Long, scheduleId: Long, name: String, teacher: String?, color: Int = MaterialColorHelper.random()) :
             this(courseId, scheduleId, name, teacher, color, emptyList())

@@ -1,9 +1,12 @@
 package tool.xfy9326.schedule.beans
 
+import android.os.Parcelable
 import androidx.annotation.IntRange
+import kotlinx.parcelize.Parcelize
 import tool.xfy9326.schedule.utils.CalendarUtils
 import java.util.*
 
+@Parcelize
 data class ScheduleTime(
     @IntRange(from = 0, to = 23)
     var startHour: Int,
@@ -13,7 +16,7 @@ data class ScheduleTime(
     var endHour: Int,
     @IntRange(from = 0, to = 59)
     var endMinute: Int,
-) {
+) : Parcelable {
     companion object {
         private const val HOUR_MINUTE_DIVIDE = ":"
         private const val TIME_DIVIDE = "~"

@@ -108,7 +108,7 @@ class ScheduleEditViewModel : AbstractViewModel() {
 
     fun importScheduleTimes(scheduleId: Long) {
         viewModelScope.launch(Dispatchers.IO) {
-            importScheduleTimes.postEvent(ScheduleDBProvider.db.scheduleDAO.getSchedule(scheduleId).firstOrNull()?.times)
+            importScheduleTimes.postEvent(ScheduleDBProvider.db.scheduleDAO.getScheduleTimes(scheduleId).firstOrNull()?.times)
         }
     }
 }

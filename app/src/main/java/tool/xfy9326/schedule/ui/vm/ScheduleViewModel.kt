@@ -7,12 +7,10 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
-import tool.xfy9326.schedule.beans.BatchResult
-import tool.xfy9326.schedule.beans.Day
-import tool.xfy9326.schedule.beans.Schedule
-import tool.xfy9326.schedule.beans.WeekNumType
+import tool.xfy9326.schedule.beans.*
 import tool.xfy9326.schedule.data.AppDataStore
 import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.data.ScheduleDataStore
@@ -41,7 +39,7 @@ class ScheduleViewModel : AbstractViewModel() {
     val scrollToWeek = MutableEventLiveData<Int>()
     val showWeekChanged = MutableEventLiveData<Pair<Int, WeekNumType>>()
     val showScheduleControlPanel = MutableEventLiveData<Pair<Int, Int>>()
-    val showCourseDetailDialog = MutableEventLiveData<Pair<Long, Long>>()
+    val showCourseDetailDialog = MutableEventLiveData<CourseDetail>()
     val openCourseManageActivity = MutableEventLiveData<Long>()
     val exitAppDirectly = MutableEventLiveData<Boolean>()
     val toolBarTintColor = ScheduleDataStore.toolBarTintColorFlow.asDistinctLiveData()
@@ -157,14 +155,14 @@ class ScheduleViewModel : AbstractViewModel() {
 
     fun showCourseDetailDialog(courseId: Long, timeId: Long) {
         viewModelScope.launch(Dispatchers.IO) {
-            ScheduleUtils.currentScheduleFlow.combine(ScheduleDBProvider.db.scheduleDAO.getScheduleCourse(courseId)) { schedule, course ->
+            ScheduleUtils.currentScheduleTimesFlow.combine(ScheduleDBProvider.db.scheduleDAO.getScheduleCourse(courseId)) { times, course ->
                 if (course == null) {
                     null
                 } else {
-                    schedule.times to course
+                    CourseDetail(timeId, course, times)
                 }
-            }.first()?.let {
-                showCourseDetailDialog.postEvent(courseId to timeId)
+            }.firstOrNull()?.let {
+                showCourseDetailDialog.postEvent(it)
             }
         }
     }
