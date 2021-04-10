@@ -3,9 +3,9 @@ package tool.xfy9326.schedule.utils
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import androidx.core.content.FileProvider
 import tool.xfy9326.schedule.BuildConfig
 import tool.xfy9326.schedule.R
+import tool.xfy9326.schedule.io.IOManager.getUriByFileProvider
 import tool.xfy9326.schedule.io.PathManager
 import tool.xfy9326.schedule.io.kt.asParentOf
 import tool.xfy9326.schedule.kt.tryStartActivity
@@ -13,8 +13,6 @@ import tool.xfy9326.schedule.tools.MIMEConst
 import java.util.*
 
 object IntentUtils {
-    const val FILE_PROVIDER_AUTH = BuildConfig.APPLICATION_ID + ".file.provider"
-
     fun openUrlInBrowser(context: Context, url: String) {
         context.tryStartActivity(Intent(Intent.ACTION_VIEW).apply {
             data = Uri.parse(url)
@@ -31,7 +29,7 @@ object IntentUtils {
         }, context.getString(R.string.share_image))
 
     fun sendCrashReport(context: Context, crashLogFileName: String) {
-        val uri = FileProvider.getUriForFile(context, FILE_PROVIDER_AUTH, PathManager.LogDir.asParentOf(crashLogFileName))
+        val uri = PathManager.LogDir.asParentOf(crashLogFileName).getUriByFileProvider()
         val mailAddress = context.getString(R.string.email)
         val mailTitle = context.getString(R.string.crash_report_email_title, context.getString(R.string.app_name))
         val mailContent = context.getString(

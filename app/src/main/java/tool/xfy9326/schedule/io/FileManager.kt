@@ -10,8 +10,8 @@ import kotlinx.serialization.json.Json
 import okio.sink
 import okio.source
 import tool.xfy9326.schedule.R
+import tool.xfy9326.schedule.io.IOManager.getUriByFileProvider
 import tool.xfy9326.schedule.io.kt.*
-import tool.xfy9326.schedule.utils.IntentUtils
 import java.io.File
 
 object FileManager {
@@ -100,7 +100,7 @@ object FileManager {
             }
             if (recycle) bitmap.tryRecycle()
             if (result) {
-                return@runSafeIOJob IOManager.getUriForFile(IntentUtils.FILE_PROVIDER_AUTH, imageFile)
+                return@runSafeIOJob imageFile.getUriByFileProvider()
             }
         }
         null

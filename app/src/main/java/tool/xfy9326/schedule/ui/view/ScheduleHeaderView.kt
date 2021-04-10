@@ -26,10 +26,7 @@ class ScheduleHeaderView(
     private val days: Array<Day>,
     private val predefine: SchedulePredefine,
 ) : ViewGroup(context) {
-    companion object {
-        private val unspecifiedHeightSpec = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)
-    }
-
+    private val unspecifiedHeightSpec = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)
     private val styles = scheduleViewData.styles
     private val weekDayStrArr = context.getStringArray(R.array.weekday)
     private val monthView = buildMonthView(days[0].month).also {

@@ -23,6 +23,9 @@ suspend fun <T> runUnsafeIOJob(block: suspend CoroutineScope.() -> T) =
 suspend fun <T> runSafeIOJob(block: suspend CoroutineScope.() -> T) =
     runIOJob { runCatching { block() }.onFailure { it.printStackTrace() }.getOrNull() }
 
+suspend fun runSimpleIOJob(block: suspend CoroutineScope.() -> Unit): Unit =
+    runIOJob { runCatching { block() }.onFailure { it.printStackTrace() } }
+
 suspend fun <T> runSafeIOJob(defaultValue: T, block: suspend CoroutineScope.() -> T) =
     runIOJob { runCatching { block() }.onFailure { it.printStackTrace() }.getOrDefault(defaultValue) }
 

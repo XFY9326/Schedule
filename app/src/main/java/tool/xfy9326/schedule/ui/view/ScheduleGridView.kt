@@ -20,10 +20,7 @@ class ScheduleGridView(
     private val columnAmount: Int,
     private val predefine: SchedulePredefine,
 ) : ViewGroup(context) {
-    companion object {
-        private val unspecifiedHeightSpec = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)
-    }
-
+    private val unspecifiedHeightSpec = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)
     private val styles = viewData.styles
     private val rowAmount = viewData.times.size
 
