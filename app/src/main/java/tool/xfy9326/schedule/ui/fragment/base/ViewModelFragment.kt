@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.viewbinding.ViewBinding
+import tool.xfy9326.schedule.kt.removeSelf
 import tool.xfy9326.schedule.ui.vm.base.AbstractViewModel
 import kotlin.reflect.KClass
 
@@ -28,11 +29,13 @@ abstract class ViewModelFragment<M : AbstractViewModel, V : ViewBinding> : Fragm
 
     protected abstract fun onBindViewBinding(view: View): V
 
-    protected open fun beforeBindLiveData(viewBinding: V, viewModel: M) {}
+    protected open fun onPrepare(viewBinding: V, viewModel: M) {}
 
     protected open fun onBindLiveData(viewBinding: V, viewModel: M) {}
 
     protected open fun onInitView(viewBinding: V, viewModel: M) {}
+
+    protected open fun onHandleSavedInstanceState(bundle: Bundle?, viewBinding: V, viewModel: M) {}
 
     @CallSuper
     override fun onAttach(context: Context) {
@@ -47,7 +50,7 @@ abstract class ViewModelFragment<M : AbstractViewModel, V : ViewBinding> : Fragm
             }.root
         } else {
             val oldView = requireView()
-            (oldView.parent as? ViewGroup?)?.removeView(oldView)
+            oldView.removeSelf()
             viewBinding = onBindViewBinding(oldView)
             oldView
         }
@@ -57,11 +60,13 @@ abstract class ViewModelFragment<M : AbstractViewModel, V : ViewBinding> : Fragm
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        beforeBindLiveData(requireViewBinding(), requireViewModel())
-        onBindLiveData(requireViewBinding(), requireViewModel())
-        onInitView(requireViewBinding(), requireViewModel())
+        onPrepare(requireViewBinding(), viewModel)
+        onBindLiveData(requireViewBinding(), viewModel)
+        onInitView(requireViewBinding(), viewModel)
 
-        requireViewModel().initViewModel(savedInstanceState == null)
+        onHandleSavedInstanceState(savedInstanceState, requireViewBinding(), viewModel)
+
+        viewModel.initViewModel(savedInstanceState == null)
     }
 
     override fun onDestroyView() {

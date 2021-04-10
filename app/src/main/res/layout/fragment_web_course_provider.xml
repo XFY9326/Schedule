@@ -1,21 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/layout_webCourseProvider"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.activity.WebCourseProviderActivity"
-    tools:keep="@layout/activity_web_course_provider">
-
-    <include
-        android:id="@+id/toolBar_webCourseProvider"
-        layout="@layout/layout_toolbar_general" />
+    tools:keep="@layout/fragment_web_course_provider">
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="?attr/actionBarSize"
-        android:fitsSystemWindows="true"
         android:orientation="vertical">
 
         <ProgressBar
@@ -48,4 +40,4 @@
         android:elevation="5dp"
         android:src="@drawable/ic_from_bottom_24" />
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</FrameLayout>

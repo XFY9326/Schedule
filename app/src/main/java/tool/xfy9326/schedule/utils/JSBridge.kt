@@ -5,8 +5,8 @@ package tool.xfy9326.schedule.utils
 import androidx.annotation.Keep
 
 object JSBridge {
-    const val FUNCTION_NAME_HTML_LOADER = "htmlContentLoader"
-    const val FUNCTION_HTML_LOADER = """
+    private const val FUNCTION_NAME_HTML_LOADER = "htmlContentLoader"
+    private const val FUNCTION_HTML_LOADER = """
         function $FUNCTION_NAME_HTML_LOADER(){
             let htmlContent = document.getElementsByTagName("html")[0].outerHTML;
             
@@ -29,6 +29,18 @@ object JSBridge {
             };
         }
     """
+
+    const val WEB_COURSE_PROVIDER_JS_INTERFACE_NAME = "WebCourseProvider"
+    private const val WEB_COURSE_PROVIDER_JS_FUNCTION_NAME = "onReadHtmlContent"
+    const val WEB_COURSE_PROVIDER_FUNCTION_NAME_SCHEDULE_LOADER = "PureSchedule_ScheduleLoader"
+    const val WEB_COURSE_PROVIDER_FUNCTION_SCHEDULE_LOADER = """
+        function $WEB_COURSE_PROVIDER_FUNCTION_NAME_SCHEDULE_LOADER(isCurrentSchedule) {
+            $FUNCTION_HTML_LOADER
+            let htmlContent = $FUNCTION_NAME_HTML_LOADER();
+            
+            window.$WEB_COURSE_PROVIDER_JS_INTERFACE_NAME.$WEB_COURSE_PROVIDER_JS_FUNCTION_NAME(htmlContent["html"], htmlContent["iframe"], htmlContent["frame"], isCurrentSchedule);
+        }
+        """
 
     @Keep
     interface WebCourseProviderJSInterface {

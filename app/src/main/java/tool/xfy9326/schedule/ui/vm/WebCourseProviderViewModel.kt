@@ -11,8 +11,6 @@ import tool.xfy9326.schedule.ui.activity.base.CourseProviderActivity
 import tool.xfy9326.schedule.ui.vm.base.CourseProviderViewModel
 
 class WebCourseProviderViewModel : CourseProviderViewModel<WebCourseImportParams, WebCourseProvider<*>, WebCourseParser<*>>() {
-    var isBottomPanelInitShowed = false
-
     val validateHtmlPage = MutableEventLiveData<CourseProviderActivity.ImportRequestParams<WebCourseImportParams>?>()
     val initPageUrl
         get() = courseProvider.initPageUrl

@@ -14,7 +14,6 @@ import android.widget.Toast
 import androidx.annotation.*
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
-import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import kotlinx.coroutines.*
 import tool.xfy9326.schedule.App
@@ -95,7 +94,7 @@ fun Context.getDefaultBackgroundColor(): Int {
 }
 
 @Suppress("UNCHECKED_CAST")
-fun <T> DialogFragment.requireOwner() = (parentFragment ?: requireActivity()) as? T
+fun <T> Fragment.requireOwner() = (parentFragment ?: requireActivity()) as? T
 
 fun BroadcastReceiver.goAsync(
     coroutineScope: CoroutineScope = GlobalScope,

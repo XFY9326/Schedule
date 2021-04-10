@@ -18,10 +18,10 @@ import tool.xfy9326.schedule.BuildConfig
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.data.AppDataStore
 import tool.xfy9326.schedule.databinding.ActivityFeedbackBinding
+import tool.xfy9326.schedule.kt.bindLifeCycle
 import tool.xfy9326.schedule.ui.activity.base.ViewBindingActivity
 import tool.xfy9326.schedule.utils.IntentUtils
 
-@SuppressLint("SetJavaScriptEnabled")
 class FeedbackActivity : ViewBindingActivity<ActivityFeedbackBinding>() {
     companion object {
         private const val EXTRA_WEB_VIEW = "EXTRA_WEB_VIEW"
@@ -33,6 +33,7 @@ class FeedbackActivity : ViewBindingActivity<ActivityFeedbackBinding>() {
 
     override fun onCreateViewBinding() = ActivityFeedbackBinding.inflate(layoutInflater)
 
+    @SuppressLint("SetJavaScriptEnabled")
     override fun onInitView(viewBinding: ActivityFeedbackBinding) {
         setSupportActionBar(viewBinding.toolBarFeedback.toolBarGeneral)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -64,6 +65,7 @@ class FeedbackActivity : ViewBindingActivity<ActivityFeedbackBinding>() {
                     return super.shouldOverrideUrlLoading(view, request)
                 }
             }
+            bindLifeCycle(this@FeedbackActivity)
         }
 
         tryShowFeedbackNotificationMsg()

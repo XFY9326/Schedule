@@ -14,6 +14,9 @@ import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
+import android.webkit.CookieManager
+import android.webkit.WebStorage
+import android.webkit.WebView
 import androidx.annotation.ColorInt
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
@@ -154,5 +157,51 @@ fun Menu.setIconTint(@ColorInt colorTint: Int?) {
         } else {
             it.icon?.setTint(colorTint)
         }
+    }
+}
+
+fun View.removeSelf() = (parent as? ViewGroup)?.removeView(this)
+
+fun WebView.bindLifeCycle(lifecycleOwner: LifecycleOwner) {
+    lifecycleOwner.lifecycle.addObserver(object : DefaultLifecycleObserver {
+        override fun onResume(owner: LifecycleOwner) {
+            onResume()
+            resumeTimers()
+        }
+
+        override fun onPause(owner: LifecycleOwner) {
+            pauseTimers()
+            onPause()
+        }
+
+        override fun onDestroy(owner: LifecycleOwner) {
+            try {
+                removeSelf()
+                stopLoading()
+                settings.javaScriptEnabled = false
+                removeAllViews()
+                destroy()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    })
+}
+
+fun WebView.clearAll(cookies: Boolean = true, webStorage: Boolean = true) {
+    settings.javaScriptEnabled = false
+    clearHistory()
+    clearFormData()
+    clearMatches()
+    clearSslPreferences()
+    clearCache(true)
+    if (cookies) {
+        CookieManager.getInstance().apply {
+            removeAllCookies(null)
+            flush()
+        }
+    }
+    if (webStorage) {
+        WebStorage.getInstance().deleteAllData()
     }
 }

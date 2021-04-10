@@ -1,30 +1,21 @@
 package tool.xfy9326.schedule.ui.activity
 
-import android.annotation.SuppressLint
-import android.net.http.SslError
-import android.os.Bundle
-import android.view.Menu
 import android.view.MenuItem
-import android.view.View
-import android.view.animation.AnimationUtils
-import android.webkit.*
-import androidx.core.view.isVisible
-import androidx.lifecycle.lifecycleScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
+import android.webkit.JavascriptInterface
+import android.webkit.WebView
+import androidx.core.os.bundleOf
+import androidx.fragment.app.commit
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.WebCourseImportParams
 import tool.xfy9326.schedule.content.base.WebCourseParser
 import tool.xfy9326.schedule.content.base.WebCourseProvider
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
-import tool.xfy9326.schedule.data.AppSettingsDataStore
-import tool.xfy9326.schedule.databinding.ActivityWebCourseProviderBinding
-import tool.xfy9326.schedule.kt.*
+import tool.xfy9326.schedule.databinding.ActivityFragmentContainerBinding
+import tool.xfy9326.schedule.kt.showShortSnackBar
 import tool.xfy9326.schedule.tools.livedata.observeEvent
 import tool.xfy9326.schedule.ui.activity.base.CourseProviderActivity
 import tool.xfy9326.schedule.ui.dialog.FullScreenLoadingDialog
-import tool.xfy9326.schedule.ui.dialog.WebCourseProviderBottomPanel
+import tool.xfy9326.schedule.ui.fragment.WebCourseProviderFragment
 import tool.xfy9326.schedule.ui.vm.WebCourseProviderViewModel
 import tool.xfy9326.schedule.ui.vm.base.CourseProviderViewModel
 import tool.xfy9326.schedule.utils.JSBridge
@@ -32,130 +23,61 @@ import tool.xfy9326.schedule.utils.view.DialogUtils
 import tool.xfy9326.schedule.utils.view.ViewUtils
 
 class WebCourseProviderActivity :
-    CourseProviderActivity<WebCourseImportParams, WebCourseProvider<*>, WebCourseParser<*>, WebCourseProviderViewModel, ActivityWebCourseProviderBinding>(),
-    WebCourseProviderBottomPanel.OnWebCourseProviderBottomPanelOperateListener,
-    FullScreenLoadingDialog.OnRequestCancelListener {
-
-    companion object {
-        private const val EXTRA_WEB_VIEW = "EXTRA_WEB_VIEW"
-
-        private const val JS_INTERFACE_NAME = "WebCourseProvider"
-        private const val JS_METHOD_NAME = "onReadHtmlContent"
-        private const val JS_INSERT =
-            """
-                javascript:
-                
-                ${JSBridge.FUNCTION_HTML_LOADER}
-                
-                let htmlContent = ${JSBridge.FUNCTION_NAME_HTML_LOADER}();
-                
-                window.$JS_INTERFACE_NAME.$JS_METHOD_NAME(htmlContent["html"], htmlContent["iframe"], htmlContent["frame"], %s);
-            """
-    }
-
-    override val exitIfImportSuccess = false
-
-    override val vmClass = WebCourseProviderViewModel::class
+    CourseProviderActivity<WebCourseImportParams, WebCourseProvider<*>, WebCourseParser<*>, WebCourseProviderViewModel, ActivityFragmentContainerBinding>(),
+    FullScreenLoadingDialog.OnRequestCancelListener, WebCourseProviderFragment.Companion.IActivityContact {
 
     private val loadingDialogController = FullScreenLoadingDialog.createControllerInstance(this)
+    private lateinit var webCourseProviderFragment: WebCourseProviderFragment
 
-    override fun onCreateViewBinding() = ActivityWebCourseProviderBinding.inflate(layoutInflater)
+    override val exitIfImportSuccess = false
+    override val vmClass = WebCourseProviderViewModel::class
+    override fun onCreateViewBinding() = ActivityFragmentContainerBinding.inflate(layoutInflater)
 
-    override fun onPrepare(viewBinding: ActivityWebCourseProviderBinding, viewModel: WebCourseProviderViewModel) {
+    override fun onPrepare(viewBinding: ActivityFragmentContainerBinding, viewModel: WebCourseProviderViewModel) {
         super.onPrepare(viewBinding, viewModel)
 
-        setSupportActionBar(viewBinding.toolBarWebCourseProvider.toolBarGeneral)
+        setSupportActionBar(viewBinding.toolBarFragmentContainer.toolBarGeneral)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
-        lifecycleScope.launch(Dispatchers.Main) { if (!AppSettingsDataStore.keepWebProviderCacheFlow.first()) clearAll() }
     }
 
-    override fun onBindLiveData(viewBinding: ActivityWebCourseProviderBinding, viewModel: WebCourseProviderViewModel) {
+    override fun onBindLiveData(viewBinding: ActivityFragmentContainerBinding, viewModel: WebCourseProviderViewModel) {
         super.onBindLiveData(viewBinding, viewModel)
 
         viewModel.validateHtmlPage.observeEvent(this) {
             if (it == null) {
-                viewBinding.layoutWebCourseProvider.showShortSnackBar(R.string.invalid_course_import_page)
+                viewBinding.layoutFragmentContainer.showShortSnackBar(R.string.invalid_course_import_page)
             } else {
                 requestImportCourse(it)
             }
         }
     }
 
-    @SuppressLint("SetJavaScriptEnabled")
-    override fun onInitView(viewBinding: ActivityWebCourseProviderBinding, viewModel: WebCourseProviderViewModel) {
-        viewBinding.webViewWebCourseProvider.apply {
-            settings.apply {
-                javaScriptEnabled = true
-                domStorageEnabled = true
-                javaScriptCanOpenWindowsAutomatically = true
-                setSupportZoom(true)
-                builtInZoomControls = true
-                displayZoomControls = false
-                mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
-                useWideViewPort = true
-                loadWithOverviewMode = true
-            }
-            webChromeClient = object : WebChromeClient() {
-                override fun onProgressChanged(view: WebView?, newProgress: Int) {
-                    changeProgressBar(newProgress)
-                }
-            }
-            webViewClient = object : WebViewClient() {
-                override fun onReceivedSslError(view: WebView?, handler: SslErrorHandler?, error: SslError?) {
-                    handler?.proceed()
-                }
-            }
-            addJavascriptInterface(object : JSBridge.WebCourseProviderJSInterface {
-                @JavascriptInterface
-                override fun onReadHtmlContent(htmlContent: String, iframeContent: Array<String>, frameContent: Array<String>, isCurrentSchedule: Boolean) {
-                    onGetCurrentHTML(htmlContent, iframeContent, frameContent, isCurrentSchedule)
-                }
-            }, JS_INTERFACE_NAME)
+    override fun onInitView(viewBinding: ActivityFragmentContainerBinding, viewModel: WebCourseProviderViewModel) {
+        val authorName = getString(viewModel.importConfig.authorNameResId)
+        webCourseProviderFragment = WebCourseProviderFragment().apply {
+            arguments = bundleOf(
+                WebCourseProviderFragment.EXTRA_INIT_PAGE_URL to viewModel.initPageUrl,
+                WebCourseProviderFragment.EXTRA_AUTHOR_NAME to authorName
+            )
         }
-
-        viewBinding.buttonWebCourseProviderPanel.setOnClickListener {
-            showBottomPanel()
-        }
-
-        if (!viewModel.isBottomPanelInitShowed) {
-            showBottomPanel()
-            viewModel.isBottomPanelInitShowed = true
+        supportFragmentManager.commit {
+            replace(R.id.fragmentContainer, webCourseProviderFragment)
         }
     }
 
-    override fun onHandleSavedInstanceState(bundle: Bundle?, viewBinding: ActivityWebCourseProviderBinding, viewModel: WebCourseProviderViewModel) {
-        if (bundle == null) {
-            viewBinding.webViewWebCourseProvider.loadUrl(viewModel.initPageUrl)
-        } else {
-            if (WebCourseProviderBottomPanel.isShowing(supportFragmentManager)) {
-                viewBinding.buttonWebCourseProviderPanel.isVisible = false
+    override fun onSetupWebView(webView: WebView) {
+        webView.addJavascriptInterface(object : JSBridge.WebCourseProviderJSInterface {
+            @JavascriptInterface
+            override fun onReadHtmlContent(htmlContent: String, iframeContent: Array<String>, frameContent: Array<String>, isCurrentSchedule: Boolean) {
+                onGetCurrentHTML(htmlContent, iframeContent, frameContent, isCurrentSchedule)
             }
-            bundle.getBundle(EXTRA_WEB_VIEW)?.let {
-                viewBinding.webViewWebCourseProvider.restoreState(it)
-            }
-        }
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        outState.putBundle(EXTRA_WEB_VIEW, Bundle().apply {
-            requireViewBinding().webViewWebCourseProvider.saveState(this)
-        })
-        super.onSaveInstanceState(outState)
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu_web_course_provider, menu)
-        return super.onCreateOptionsMenu(menu)
+        }, JSBridge.WEB_COURSE_PROVIDER_JS_INTERFACE_NAME)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            android.R.id.home -> {
-                finish()
-                return true
-            }
-            R.id.menu_webCourseProviderRefresh -> requireViewBinding().webViewWebCourseProvider.reload()
+        if (item.itemId == android.R.id.home) {
+            finish()
+            return true
         }
         return super.onOptionsItemSelected(item)
     }
@@ -169,39 +91,19 @@ class WebCourseProviderActivity :
     }
 
     override fun onBackPressed() {
-        requireViewBinding().webViewWebCourseProvider.apply {
-            if (canGoBack()) {
-                goBack()
-            } else {
-                super.onBackPressed()
-            }
-        }
-    }
-
-    private fun changeProgressBar(newProgress: Int) {
-        requireViewBinding().progressBarWebCourseProvider.apply {
-            visibility = if (newProgress != 100) View.VISIBLE else View.INVISIBLE
-            progress = newProgress
-        }
-    }
-
-    private fun showBottomPanel() {
-        requireViewBinding().buttonWebCourseProviderPanel.apply {
-            isVisible = false
-            startAnimation(AnimationUtils.loadAnimation(this@WebCourseProviderActivity, R.anim.anim_bottom_button_out))
-        }
-        WebCourseProviderBottomPanel.showDialog(supportFragmentManager, getString(requireViewModel().importConfig.authorNameResId))
-    }
-
-    override fun onWebCourseProviderBottomPanelDismiss() {
-        requireViewBinding().buttonWebCourseProviderPanel.apply {
-            isVisible = true
-            startAnimation(AnimationUtils.loadAnimation(this@WebCourseProviderActivity, R.anim.anim_bottom_button_in))
+        if (!webCourseProviderFragment.onBackPressed()) {
+            super.onBackPressed()
         }
     }
 
     override fun onImportCourseToSchedule(isCurrentSchedule: Boolean) {
-        requireViewBinding().webViewWebCourseProvider.evaluateJavascript(JS_INSERT.format(isCurrentSchedule.toString()), null)
+        webCourseProviderFragment.evaluateJavascript("""
+            javascript:
+            {
+                ${JSBridge.WEB_COURSE_PROVIDER_FUNCTION_SCHEDULE_LOADER}
+                ${JSBridge.WEB_COURSE_PROVIDER_FUNCTION_NAME_SCHEDULE_LOADER}($isCurrentSchedule);
+            }
+        """.trimIndent())
     }
 
     private fun onGetCurrentHTML(htmlContent: String, iframeContent: Array<String>, frameContent: Array<String>, isCurrentSchedule: Boolean) {
@@ -217,22 +119,6 @@ class WebCourseProviderActivity :
     }
 
     override fun onShowCourseAdapterError(exception: CourseAdapterException) {
-        ViewUtils.showCourseAdapterErrorSnackBar(this, requireViewBinding().layoutWebCourseProvider, exception)
-    }
-
-    private fun clearAll() {
-        requireViewBinding().webViewWebCourseProvider.apply {
-            settings.javaScriptEnabled = false
-            clearHistory()
-            clearFormData()
-            clearMatches()
-            clearSslPreferences()
-            clearCache(true)
-        }
-        CookieManager.getInstance().apply {
-            removeAllCookies(null)
-            flush()
-        }
-        WebStorage.getInstance().deleteAllData()
+        ViewUtils.showCourseAdapterErrorSnackBar(this, requireViewBinding().layoutFragmentContainer, exception)
     }
 }

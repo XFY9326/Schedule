@@ -161,9 +161,9 @@ class FullScreenLoadingDialog : AppCompatDialogFragment() {
             hideJob = null
             mPostedHide = false
             if (!mPostedShow) {
-                showJob = lifeCycleScope.launch(Dispatchers.Default) {
+                showJob = lifeCycleScope.launch(Dispatchers.IO) {
                     delay(MIN_DELAY_MS)
-                    launch(Dispatchers.Main) {
+                    launch(Dispatchers.Main.immediate) {
                         delayedShow(showCancel)
                         showJob = null
                     }
@@ -183,9 +183,9 @@ class FullScreenLoadingDialog : AppCompatDialogFragment() {
                 closeDialog(fragmentManager)
             } else {
                 if (!mPostedHide) {
-                    hideJob = lifeCycleScope.launch(Dispatchers.Default) {
+                    hideJob = lifeCycleScope.launch(Dispatchers.IO) {
                         delay(MIN_SHOW_TIME_MS - diff)
-                        launch(Dispatchers.Main) {
+                        launch(Dispatchers.Main.immediate) {
                             delayedHide()
                             hideJob = null
                         }
