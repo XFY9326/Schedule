@@ -4,7 +4,7 @@ import android.view.MenuItem
 import android.webkit.JavascriptInterface
 import android.webkit.WebView
 import androidx.core.os.bundleOf
-import androidx.fragment.app.commit
+import androidx.fragment.app.commitNow
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.WebCourseImportParams
 import tool.xfy9326.schedule.content.base.WebCourseParser
@@ -16,6 +16,7 @@ import tool.xfy9326.schedule.tools.livedata.observeEvent
 import tool.xfy9326.schedule.ui.activity.base.CourseProviderActivity
 import tool.xfy9326.schedule.ui.dialog.FullScreenLoadingDialog
 import tool.xfy9326.schedule.ui.fragment.WebCourseProviderFragment
+import tool.xfy9326.schedule.ui.fragment.base.IWebCourseProvider
 import tool.xfy9326.schedule.ui.vm.WebCourseProviderViewModel
 import tool.xfy9326.schedule.ui.vm.base.CourseProviderViewModel
 import tool.xfy9326.schedule.utils.JSBridge
@@ -24,10 +25,10 @@ import tool.xfy9326.schedule.utils.view.ViewUtils
 
 class WebCourseProviderActivity :
     CourseProviderActivity<WebCourseImportParams, WebCourseProvider<*>, WebCourseParser<*>, WebCourseProviderViewModel, ActivityFragmentContainerBinding>(),
-    FullScreenLoadingDialog.OnRequestCancelListener, WebCourseProviderFragment.Companion.IActivityContact {
+    FullScreenLoadingDialog.OnRequestCancelListener, IWebCourseProvider.IActivityContact {
 
     private val loadingDialogController = FullScreenLoadingDialog.createControllerInstance(this)
-    private lateinit var webCourseProviderFragment: WebCourseProviderFragment
+    private lateinit var iFragmentContact: IWebCourseProvider.IFragmentContact
 
     override val exitIfImportSuccess = false
     override val vmClass = WebCourseProviderViewModel::class
@@ -53,15 +54,14 @@ class WebCourseProviderActivity :
     }
 
     override fun onInitView(viewBinding: ActivityFragmentContainerBinding, viewModel: WebCourseProviderViewModel) {
-        val authorName = getString(viewModel.importConfig.authorNameResId)
-        webCourseProviderFragment = WebCourseProviderFragment().apply {
+        iFragmentContact = WebCourseProviderFragment().apply {
             arguments = bundleOf(
                 WebCourseProviderFragment.EXTRA_INIT_PAGE_URL to viewModel.initPageUrl,
-                WebCourseProviderFragment.EXTRA_AUTHOR_NAME to authorName
+                WebCourseProviderFragment.EXTRA_AUTHOR_NAME to viewModel.importConfigInstance.authorName
             )
-        }
-        supportFragmentManager.commit {
-            replace(R.id.fragmentContainer, webCourseProviderFragment)
+            supportFragmentManager.commitNow {
+                replace(R.id.fragmentContainer, this@apply)
+            }
         }
     }
 
@@ -91,13 +91,13 @@ class WebCourseProviderActivity :
     }
 
     override fun onBackPressed() {
-        if (!webCourseProviderFragment.onBackPressed()) {
+        if (!iFragmentContact.onBackPressed()) {
             super.onBackPressed()
         }
     }
 
     override fun onImportCourseToSchedule(isCurrentSchedule: Boolean) {
-        webCourseProviderFragment.evaluateJavascript("""
+        iFragmentContact.evaluateJavascript("""
             javascript:
             {
                 ${JSBridge.WEB_COURSE_PROVIDER_FUNCTION_SCHEDULE_LOADER}

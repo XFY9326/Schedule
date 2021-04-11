@@ -32,7 +32,7 @@
 
     <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/button_webCourseProviderPanel"
-        android:layout_width="190dp"
+        android:layout_width="180dp"
         android:layout_height="@dimen/bottom_button_height"
         android:layout_gravity="bottom|center"
         android:alpha="0.8"

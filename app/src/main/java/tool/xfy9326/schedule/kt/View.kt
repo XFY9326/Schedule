@@ -184,6 +184,7 @@ fun WebView.bindLifeCycle(lifecycleOwner: LifecycleOwner) {
             } catch (e: Exception) {
                 e.printStackTrace()
             }
+            lifecycleOwner.lifecycle.removeObserver(this)
         }
     })
 }

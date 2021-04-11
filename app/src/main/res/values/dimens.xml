@@ -21,7 +21,7 @@
     <dimen name="circle_number_button_min_margin">4dp</dimen>
     <dimen name="full_screen_loading_dialog_loading_size">100dp</dimen>
     <dimen name="full_screen_loading_dialog_button_margin_top">50dp</dimen>
-    <dimen name="bottom_button_height">30dp</dimen>
+    <dimen name="bottom_button_height">28dp</dimen>
     <dimen name="course_detail_dialog_bottom_button_height">28dp</dimen>
     <dimen name="divider_margin_course_detail_time">12dp</dimen>
     <dimen name="water_mark_text_size">14dp</dimen>

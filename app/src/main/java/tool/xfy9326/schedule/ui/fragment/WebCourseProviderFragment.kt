@@ -17,21 +17,17 @@ import tool.xfy9326.schedule.kt.bindLifeCycle
 import tool.xfy9326.schedule.kt.clearAll
 import tool.xfy9326.schedule.kt.requireOwner
 import tool.xfy9326.schedule.ui.dialog.WebCourseProviderBottomPanel
+import tool.xfy9326.schedule.ui.fragment.base.IWebCourseProvider
 import tool.xfy9326.schedule.ui.fragment.base.ViewBindingFragment
 
-class WebCourseProviderFragment : ViewBindingFragment<FragmentWebCourseProviderBinding>(), WebCourseProviderBottomPanel.BottomPanelActionListener {
+class WebCourseProviderFragment : ViewBindingFragment<FragmentWebCourseProviderBinding>(), WebCourseProviderBottomPanel.BottomPanelActionListener,
+    IWebCourseProvider.IFragmentContact {
     companion object {
         const val EXTRA_INIT_PAGE_URL = "EXTRA_INIT_PAGE_URL"
         const val EXTRA_AUTHOR_NAME = "EXTRA_AUTHOR_NAME"
 
         private const val EXTRA_WEB_VIEW = "EXTRA_WEB_VIEW"
         private const val EXTRA_IS_BOTTOM_PANEL_INIT_SHOWED = "EXTRA_IS_BOTTOM_PANEL_INIT_SHOWED"
-
-        interface IActivityContact {
-            fun onSetupWebView(webView: WebView)
-
-            fun onImportCourseToSchedule(isCurrentSchedule: Boolean)
-        }
     }
 
     private var isBottomPanelInitShowed = false
@@ -74,7 +70,7 @@ class WebCourseProviderFragment : ViewBindingFragment<FragmentWebCourseProviderB
                     handler?.proceed()
                 }
             }
-            requireOwner<IActivityContact>()?.onSetupWebView(this)
+            requireOwner<IWebCourseProvider.IActivityContact>()?.onSetupWebView(this)
             bindLifeCycle(this@WebCourseProviderFragment)
         }
 
@@ -142,7 +138,7 @@ class WebCourseProviderFragment : ViewBindingFragment<FragmentWebCourseProviderB
     }
 
     override fun onImportCourseToSchedule(isCurrentSchedule: Boolean) {
-        requireOwner<IActivityContact>()?.onImportCourseToSchedule(isCurrentSchedule)
+        requireOwner<IWebCourseProvider.IActivityContact>()?.onImportCourseToSchedule(isCurrentSchedule)
     }
 
     override fun onBottomPanelDismiss() {
@@ -154,7 +150,7 @@ class WebCourseProviderFragment : ViewBindingFragment<FragmentWebCourseProviderB
         }
     }
 
-    fun onBackPressed(): Boolean {
+    override fun onBackPressed(): Boolean {
         if (isAdded) {
             requireViewBinding().webViewWebCourseProvider.apply {
                 if (canGoBack()) {
@@ -166,7 +162,7 @@ class WebCourseProviderFragment : ViewBindingFragment<FragmentWebCourseProviderB
         return false
     }
 
-    fun evaluateJavascript(content: String, callback: ((String) -> Unit)? = null) {
+    override fun evaluateJavascript(content: String, callback: ((String) -> Unit)?) {
         if (isAdded) {
             requireViewBinding().webViewWebCourseProvider.evaluateJavascript(content, callback)
         }

@@ -21,13 +21,27 @@ class ScheduleView(
     init {
         orientation = VERTICAL
 
-        addViewPreventLayout(scheduleHeaderView)
+        scheduleHeaderView.apply {
+            layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
+            addViewPreventLayout(this)
+        }
+
         if (scheduleStyles.enableScheduleGridScroll) {
             layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
-            addViewPreventLayout(ScheduleScrollLayout(context, scheduleGridView))
+            addViewPreventLayout(
+                ScheduleScrollView(context).apply {
+                    scheduleGridView.apply {
+                        layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
+                        addInnerView(this)
+                    }
+                }
+            )
         } else {
             layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
-            addViewPreventLayout(scheduleGridView)
+            scheduleGridView.apply {
+                layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
+                addViewPreventLayout(this)
+            }
         }
     }
 

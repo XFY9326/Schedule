@@ -2,7 +2,6 @@ package tool.xfy9326.schedule.ui.vm
 
 import android.graphics.Bitmap
 import androidx.lifecycle.MutableLiveData
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.sync.Mutex
 import tool.xfy9326.schedule.beans.NetworkCourseImportParams
 import tool.xfy9326.schedule.beans.NetworkProviderParams
@@ -10,7 +9,6 @@ import tool.xfy9326.schedule.content.base.LoginCourseProvider
 import tool.xfy9326.schedule.content.base.NetworkCourseParser
 import tool.xfy9326.schedule.content.base.NetworkCourseProvider
 import tool.xfy9326.schedule.content.beans.LoginPageInfo
-import tool.xfy9326.schedule.io.IOManager
 import tool.xfy9326.schedule.io.kt.tryRecycle
 import tool.xfy9326.schedule.ui.vm.base.CourseProviderViewModel
 
@@ -37,15 +35,9 @@ class NetworkCourseProviderViewModel : CourseProviderViewModel<NetworkCourseImpo
     }
 
     private fun loadImportOptions() {
-        providerFunctionRunner(dispatcher = Dispatchers.IO,
+        providerFunctionRunner(
             onRun = {
-                val optionsRes = importConfig.staticImportOptionsResId
-                val options = if (optionsRes == null) {
-                    it.loadImportOptions()
-                } else {
-                    IOManager.resources.getStringArray(optionsRes)
-                }
-
+                val options = importConfigInstance.staticImportOptions ?: it.loadImportOptions()
                 importOptions.postValue(options)
             },
             onFailed = {
@@ -55,7 +47,7 @@ class NetworkCourseProviderViewModel : CourseProviderViewModel<NetworkCourseImpo
     }
 
     fun refreshLoginPageInfo(importOption: Int): Boolean =
-        providerFunctionRunner(loginPageInfoLock, Dispatchers.IO,
+        providerFunctionRunner(loginPageInfoLock,
             onRun = {
                 refreshProviderParams(importOption, it)
             },
@@ -85,7 +77,7 @@ class NetworkCourseProviderViewModel : CourseProviderViewModel<NetworkCourseImpo
     }
 
     fun refreshCaptcha(importOption: Int) {
-        providerFunctionRunner(loginPageInfoLock, Dispatchers.IO,
+        providerFunctionRunner(loginPageInfoLock,
             onRun = {
                 getCaptchaImage(importOption, it)
             },

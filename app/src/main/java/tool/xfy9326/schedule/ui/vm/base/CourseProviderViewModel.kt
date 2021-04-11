@@ -10,6 +10,7 @@ import kotlinx.coroutines.sync.Mutex
 import tool.xfy9326.schedule.beans.ScheduleTime
 import tool.xfy9326.schedule.content.CourseAdapterManager.newConfigInstance
 import tool.xfy9326.schedule.content.base.*
+import tool.xfy9326.schedule.content.beans.CourseImportInstance
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
 import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.tools.livedata.MutableEventLiveData
@@ -23,15 +24,13 @@ import java.net.UnknownHostException
 import java.util.concurrent.atomic.AtomicBoolean
 
 abstract class CourseProviderViewModel<I, T1 : AbstractCourseProvider<*>, T2 : AbstractCourseParser<*>> : AbstractViewModel() {
-    protected lateinit var internalImportConfig: AbstractCourseImportConfig<*, T1, *, T2>
+    protected lateinit var internalImportConfigInstance: CourseImportInstance<T1, T2>
         private set
-    private lateinit var _courseProvider: T1
-    private lateinit var _courseParser: T2
 
     protected val courseProvider
-        get() = _courseProvider
+        get() = internalImportConfigInstance.provider
     protected val courseParser
-        get() = _courseParser
+        get() = internalImportConfigInstance.parser
 
     val providerError = MutableEventLiveData<CourseAdapterException>()
     val courseImportFinish = MutableEventLiveData<Pair<ImportResult, Long?>>()
@@ -43,15 +42,12 @@ abstract class CourseProviderViewModel<I, T1 : AbstractCourseProvider<*>, T2 : A
 
     val isImportingCourses
         get() = internalIsImportingCourses.get()
-    val importConfig
-        get() = internalImportConfig
+    val importConfigInstance
+        get() = internalImportConfigInstance
 
     fun registerConfig(config: Class<AbstractCourseImportConfig<*, T1, *, T2>>) {
-        if (!::internalImportConfig.isInitialized) {
-            internalImportConfig = config.newConfigInstance()
-            _courseProvider = internalImportConfig.newProvider()
-            _courseParser = internalImportConfig.newParser()
-
+        if (!::internalImportConfigInstance.isInitialized) {
+            internalImportConfigInstance = config.newConfigInstance().getInstance()
             onProviderCreate()
         }
     }
@@ -67,14 +63,14 @@ abstract class CourseProviderViewModel<I, T1 : AbstractCourseProvider<*>, T2 : A
 
     protected fun providerFunctionRunner(
         mutex: Mutex? = null,
-        dispatcher: CoroutineDispatcher = Dispatchers.Default,
+        dispatcher: CoroutineDispatcher = Dispatchers.IO,
         onRun: suspend (T1) -> Unit,
         onFailed: (suspend () -> Unit)? = null,
     ): Boolean {
         if (mutex == null || mutex.tryLock()) {
             viewModelScope.launch(dispatcher) {
                 try {
-                    onRun(_courseProvider)
+                    onRun(courseProvider)
                 } catch (e: CourseAdapterException) {
                     onFailed?.invoke()
                     reportError(e, false)
@@ -94,7 +90,7 @@ abstract class CourseProviderViewModel<I, T1 : AbstractCourseProvider<*>, T2 : A
         if (internalIsImportingCourses.compareAndSet(false, true)) {
             importCourseJob = viewModelScope.launch(Dispatchers.Default) {
                 try {
-                    val content = onImportCourse(importParams, importOption, _courseProvider, _courseParser)
+                    val content = onImportCourse(importParams, importOption, courseProvider, courseParser)
 
                     if (content.coursesParserResult.ignorableError != null && !AppSettingsDataStore.allowImportIncompleteScheduleFlow.first()) {
                         reportError(content.coursesParserResult.ignorableError, true)

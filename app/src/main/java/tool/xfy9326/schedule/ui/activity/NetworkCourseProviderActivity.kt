@@ -52,13 +52,13 @@ class NetworkCourseProviderActivity :
     override fun onInitView(viewBinding: ActivityNetworkCourseProviderBinding, viewModel: NetworkCourseProviderViewModel) {
         viewBinding.textViewCourseAdapterSchool.apply {
             isSelected = true
-            text = getString(viewModel.importConfig.schoolNameResId)
+            text = viewModel.importConfigInstance.schoolName
         }
         viewBinding.textViewCourseAdapterSystem.apply {
             isSelected = true
-            text = getString(viewModel.importConfig.systemNameResId)
+            text = viewModel.importConfigInstance.systemName
         }
-        viewBinding.textViewCourseAdapterAuthor.text = getString(R.string.adapter_author, getString(viewModel.importConfig.authorNameResId))
+        viewBinding.textViewCourseAdapterAuthor.text = getString(R.string.adapter_author, viewModel.importConfigInstance.authorName)
         viewBinding.imageViewCaptcha.setOnClickListener {
             if (!viewModel.isImportingCourses) {
                 withImportOption {
