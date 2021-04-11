@@ -35,7 +35,7 @@ class OnlineCourseImportViewModel : AbstractViewModel() {
 
     private fun loadAllConfigs() {
         viewModelScope.launch(Dispatchers.IO) {
-            sortedConfigs.postValue(CourseAdapterManager.getSortedConfigs())
+            sortedConfigs.postValue(CourseAdapterManager.getLocalSortedConfigs())
         }
     }
 }

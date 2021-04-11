@@ -7,7 +7,7 @@ import tool.xfy9326.schedule.content.base.AbstractCourseParser
 import tool.xfy9326.schedule.content.base.AbstractCourseProvider
 
 object CourseAdapterManager {
-    suspend fun getSortedConfigs() = withContext(Dispatchers.Default) {
+    suspend fun getLocalSortedConfigs() = withContext(Dispatchers.Default) {
         CourseImportConfigRegistry.configs.map {
             it.java.newConfigInstance()
         }.sortedBy {
