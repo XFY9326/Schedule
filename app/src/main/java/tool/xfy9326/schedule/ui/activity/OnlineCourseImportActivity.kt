@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.content.base.AbstractCourseImportConfig
+import tool.xfy9326.schedule.content.beans.JSConfig
 import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.databinding.ActivityOnlineCourseImportBinding
 import tool.xfy9326.schedule.kt.show
@@ -21,7 +22,8 @@ import tool.xfy9326.schedule.ui.recyclerview.AdvancedDividerItemDecoration
 import tool.xfy9326.schedule.ui.vm.OnlineCourseImportViewModel
 import tool.xfy9326.schedule.utils.schedule.CourseImportUtils
 
-class OnlineCourseImportActivity : ViewModelActivity<OnlineCourseImportViewModel, ActivityOnlineCourseImportBinding>() {
+class OnlineCourseImportActivity : ViewModelActivity<OnlineCourseImportViewModel, ActivityOnlineCourseImportBinding>(),
+    CourseImportAdapter.OnCourseImportItemListener {
     private lateinit var courseImportAdapter: CourseImportAdapter
 
     override val vmClass = OnlineCourseImportViewModel::class
@@ -40,13 +42,13 @@ class OnlineCourseImportActivity : ViewModelActivity<OnlineCourseImportViewModel
             showOnlineImportAttentionDialog(true)
         }
         viewModel.sortedConfigs.observe(this) {
-            courseImportAdapter.updateConfigs(it)
+            courseImportAdapter.submitList(it)
         }
     }
 
     override fun onInitView(viewBinding: ActivityOnlineCourseImportBinding, viewModel: OnlineCourseImportViewModel) {
         courseImportAdapter = CourseImportAdapter()
-        courseImportAdapter.setOnCourseImportItemClickListener(::onCourseImport)
+        courseImportAdapter.setOnCourseImportItemListener(this)
         viewBinding.recyclerViewCourseImportList.adapter = courseImportAdapter
         viewBinding.recyclerViewCourseImportList.addItemDecoration(AdvancedDividerItemDecoration(this, DividerItemDecoration.VERTICAL))
     }
@@ -85,7 +87,7 @@ class OnlineCourseImportActivity : ViewModelActivity<OnlineCourseImportViewModel
         }.show(this)
     }
 
-    private fun onCourseImport(config: AbstractCourseImportConfig<*, *, *, *>) {
+    private fun openCourseImportActivity(config: AbstractCourseImportConfig<*, *, *, *>) {
         val importMethod = CourseImportUtils.getCourseImportMethod(config,
             onInterfaceProviderError = {
                 requireViewBinding().layoutCourseImport.showShortSnackBar(R.string.interface_provider_error)
@@ -101,6 +103,19 @@ class OnlineCourseImportActivity : ViewModelActivity<OnlineCourseImportViewModel
             CourseImportUtils.ImportMethod.LOGIN_IMPORT, CourseImportUtils.ImportMethod.NETWORK_IMPORT ->
                 CourseProviderActivity.startProviderActivity<NetworkCourseProviderActivity>(this, config)
             CourseImportUtils.ImportMethod.WEB_IMPORT -> CourseProviderActivity.startProviderActivity<WebCourseProviderActivity>(this, config)
+            CourseImportUtils.ImportMethod.WEB_JS_IMPORT -> TODO("Add Activity")
         }
+    }
+
+    override fun onCourseImportConfigClick(config: AbstractCourseImportConfig<*, *, *, *>) {
+        openCourseImportActivity(config)
+    }
+
+    override fun onJSConfigClick(jsConfig: JSConfig) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onJSConfigDelete(jsConfig: JSConfig) {
+        TODO("Not yet implemented")
     }
 }

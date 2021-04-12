@@ -76,20 +76,20 @@ class NAUCourseParser : NetworkCourseParser<Nothing>() {
     }
 
     override fun onParseScheduleTimes(importOption: Int, htmlContent: String?) =
-        listOf(
-            ScheduleTime(8, 30, 9, 10),
-            ScheduleTime(9, 20, 10, 0),
-            ScheduleTime(10, 20, 11, 0),
-            ScheduleTime(11, 10, 11, 50),
-            ScheduleTime(12, 0, 12, 40),
-            ScheduleTime(13, 30, 14, 10),
-            ScheduleTime(14, 20, 15, 0),
-            ScheduleTime(15, 20, 16, 0),
-            ScheduleTime(16, 10, 16, 50),
-            ScheduleTime(17, 0, 17, 40),
-            ScheduleTime(18, 30, 19, 10),
-            ScheduleTime(19, 20, 20, 0),
-            ScheduleTime(20, 10, 20, 50)
+        ScheduleTime.listOf(
+            8, 30, 9, 10,
+            9, 20, 10, 0,
+            10, 20, 11, 0,
+            11, 10, 11, 50,
+            12, 0, 12, 40,
+            13, 30, 14, 10,
+            14, 20, 15, 0,
+            15, 20, 16, 0,
+            16, 10, 16, 50,
+            17, 0, 17, 40,
+            18, 30, 19, 10,
+            19, 20, 20, 0,
+            20, 10, 20, 50
         )
 
     override fun onParseCourses(importOption: Int, htmlContent: String): CourseParseResult {

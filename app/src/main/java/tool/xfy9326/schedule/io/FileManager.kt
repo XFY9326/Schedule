@@ -67,13 +67,11 @@ object FileManager {
         val input = from.source()?.useBuffer {
             readBitmap()
         } ?: error("Can't read bitmap from $from")
-        val writeResult = if (to.createParentFolder()) {
+        val writeResult = to.withPreparedDir {
             to.sink().useBuffer {
                 writeBitmap(input, format, quality)
             }
-        } else {
-            false
-        }
+        } ?: false
         input.recycle()
         writeResult
     }
@@ -94,16 +92,17 @@ object FileManager {
 
     suspend fun createShareImage(name: String, bitmap: Bitmap, format: Bitmap.CompressFormat, quality: Int = 100, recycle: Boolean = true) = runSafeIOJob {
         val imageFile = PathManager.SharedFileDir.asParentOf(name)
-        if (imageFile.createParentFolder()) {
+        imageFile.withPreparedDir {
             val result = imageFile.sink().useBuffer {
                 writeBitmap(bitmap, format, quality)
             }
             if (recycle) bitmap.tryRecycle()
             if (result) {
-                return@runSafeIOJob imageFile.getUriByFileProvider()
+                imageFile.getUriByFileProvider()
+            } else {
+                null
             }
         }
-        null
     }
 
     suspend fun writeText(uri: Uri, text: String?) = runOnlyResultIOJob {

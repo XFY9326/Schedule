@@ -4,17 +4,16 @@ package tool.xfy9326.schedule.io.kt
 
 import java.io.File
 
-fun File.asParentOf(path: String) = File(this, path)
+fun File.asParentOf(vararg path: String) = if (path.isEmpty()) this else File(this, path.joinToString(File.separator))
 
-fun File.deleteAll() = when {
-    isFile -> delete()
-    isDirectory -> deleteRecursively()
-    else -> true
-}
+fun Collection<File>.deleteRecursively() = forEach { it.deleteRecursively() }
 
-fun List<File>.deleteAll() = forEach { it.deleteAll() }
-
-fun File.createParentFolder(): Boolean {
+fun <T> File.withPreparedDir(block: (File) -> T): T? {
     val parent = parentFile
-    return if (parent?.exists() == false) parent.mkdirs() else true
+    if (parent == null || parent.exists() || parent.mkdirs()) {
+        return block(this)
+    }
+    return null
 }
+
+fun File.takeIfExists() = takeIf { it.exists() }

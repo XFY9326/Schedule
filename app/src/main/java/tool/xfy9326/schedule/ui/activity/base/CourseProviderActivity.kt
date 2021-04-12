@@ -28,7 +28,9 @@ abstract class CourseProviderActivity<I, P1 : AbstractCourseProvider<*>, P2 : Ab
         const val EXTRA_COURSE_IMPORT_CONFIG_CLASS = "EXTRA_COURSE_IMPORT_CONFIG_CLASS"
 
         inline fun <reified T : CourseProviderActivity<*, *, *, *, *>> startProviderActivity(context: Context, config: AbstractCourseImportConfig<*, *, *, *>) {
-            context.startActivity<T> { putExtra(EXTRA_COURSE_IMPORT_CONFIG_CLASS, config.javaClass) }
+            context.startActivity<T> {
+                putExtra(EXTRA_COURSE_IMPORT_CONFIG_CLASS, config)
+            }
         }
     }
 

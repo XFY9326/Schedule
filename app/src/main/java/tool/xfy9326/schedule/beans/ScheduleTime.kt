@@ -5,6 +5,7 @@ import androidx.annotation.IntRange
 import kotlinx.parcelize.Parcelize
 import tool.xfy9326.schedule.utils.CalendarUtils
 import java.util.*
+import kotlin.collections.ArrayList
 
 @Parcelize
 data class ScheduleTime(
@@ -20,6 +21,16 @@ data class ScheduleTime(
     companion object {
         private const val HOUR_MINUTE_DIVIDE = ":"
         private const val TIME_DIVIDE = "~"
+
+        fun listOf(vararg numArr: Int): List<ScheduleTime> {
+            require(numArr.size % 4 == 0)
+
+            val result = ArrayList<ScheduleTime>(numArr.size / 4)
+            for (i in numArr.indices step 4) {
+                result.add(ScheduleTime(numArr[i], numArr[i + 1], numArr[i + 2], numArr[i + 3]))
+            }
+            return result
+        }
 
         fun serialize(arr: List<ScheduleTime>) =
             buildString {

@@ -4,7 +4,6 @@ package tool.xfy9326.schedule.annotation.processor
 
 import com.squareup.kotlinpoet.*
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
-import com.squareup.kotlinpoet.jvm.jvmStatic
 import java.io.File
 import java.io.Serializable
 import javax.annotation.processing.*
@@ -23,11 +22,14 @@ class CourseImportConfigProcessor : AbstractProcessor() {
 
         private const val TARGET_PACKAGE_NAME = "tool.xfy9326.schedule.content"
         private const val TARGET_CLASS_NAME = "CourseImportConfigRegistry"
-        private const val TARGET_PROPERTY_CONFIGS = "configs"
+        private const val TARGET_PROPERTY_CONFIG_CLASSES = "configClasses"
+        private const val TARGET_FUNCTION_GET_CONFIGS = "getConfigs"
 
         private val WILDCARD_SERIALIZABLE = WildcardTypeName.producerOf(Serializable::class)
         private val KOTLIN_LIST = List::class.asClassName()
         private val KOTLIN_CLASS = KClass::class.asClassName()
+        private val KOTLIN_COROUTINES_WITH_CONTEXT = MemberName("kotlinx.coroutines", "withContext")
+        private val KOTLIN_COROUTINES_DISPATCHERS_IO = MemberName("kotlinx.coroutines.Dispatchers", "IO")
 
         private const val BASE_COURSE_ADAPTER_CLASS_PACKAGE = "tool.xfy9326.schedule.content.base"
         private val ABSTRACT_IMPORT_PROVIDER =
@@ -42,7 +44,7 @@ class CourseImportConfigProcessor : AbstractProcessor() {
                 WildcardTypeName.producerOf(ABSTRACT_IMPORT_PARSER)
             )
 
-        private val TARGET_PROPERTY_CONFIGS_CLASS =
+        private val TARGET_PROPERTY_CONFIG_CLASSES_CLASS =
             KOTLIN_LIST.parameterizedBy(KOTLIN_CLASS.parameterizedBy(WildcardTypeName.producerOf(ABSTRACT_IMPORT_CONFIG)))
 
         private fun getParametersString(size: Int, codeStr: String) =
@@ -60,12 +62,23 @@ class CourseImportConfigProcessor : AbstractProcessor() {
             val generateFile = FileSpec.builder(TARGET_PACKAGE_NAME, TARGET_CLASS_NAME)
             val generateClass = TypeSpec.objectBuilder(TARGET_CLASS_NAME)
 
-            val configProperty = PropertySpec.builder(TARGET_PROPERTY_CONFIGS, TARGET_PROPERTY_CONFIGS_CLASS, KModifier.PUBLIC)
-                .jvmStatic()
+            val configProperty = PropertySpec.builder(TARGET_PROPERTY_CONFIG_CLASSES, TARGET_PROPERTY_CONFIG_CLASSES_CLASS)
                 .initializer("listOf(${getParametersString(configClasses.size, "%T::class")})", *configClasses)
                 .build()
 
+            val sortedConfigFunction = FunSpec.builder(TARGET_FUNCTION_GET_CONFIGS)
+                .addModifiers(KModifier.SUSPEND)
+                .addStatement("""
+                    return %M(%M) {
+                        ${TARGET_PROPERTY_CONFIG_CLASSES}.map {
+                            it.java.newInstance()
+                        }
+                    }
+                """.trimIndent(), KOTLIN_COROUTINES_WITH_CONTEXT, KOTLIN_COROUTINES_DISPATCHERS_IO)
+                .build()
+
             generateClass.addProperty(configProperty)
+            generateClass.addFunction(sortedConfigFunction)
             generateFile
                 .addType(generateClass.build())
                 .build()

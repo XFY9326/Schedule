@@ -11,7 +11,7 @@ import android.os.Build
 import androidx.core.content.FileProvider
 import tool.xfy9326.schedule.App
 import tool.xfy9326.schedule.BuildConfig
-import tool.xfy9326.schedule.io.kt.deleteAll
+import tool.xfy9326.schedule.io.kt.deleteRecursively
 import tool.xfy9326.schedule.io.kt.runSimpleIOJob
 import tool.xfy9326.schedule.io.utils.DirUtils
 import java.io.File
@@ -41,9 +41,9 @@ object IOManager {
 
     suspend fun clearAllCache() {
         runSimpleIOJob {
-            DirUtils.cacheDir.deleteAll()
-            DirUtils.codeCacheDir.deleteAll()
-            DirUtils.externalCacheDirs.deleteAll()
+            DirUtils.cacheDir.deleteRecursively()
+            DirUtils.codeCacheDir.deleteRecursively()
+            DirUtils.externalCacheDirs.deleteRecursively()
         }
     }
 }

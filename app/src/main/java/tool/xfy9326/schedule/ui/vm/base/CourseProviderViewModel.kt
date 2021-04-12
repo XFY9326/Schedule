@@ -8,7 +8,6 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.sync.Mutex
 import tool.xfy9326.schedule.beans.ScheduleTime
-import tool.xfy9326.schedule.content.CourseAdapterManager.newConfigInstance
 import tool.xfy9326.schedule.content.base.*
 import tool.xfy9326.schedule.content.beans.CourseImportInstance
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
@@ -45,9 +44,9 @@ abstract class CourseProviderViewModel<I, T1 : AbstractCourseProvider<*>, T2 : A
     val importConfigInstance
         get() = internalImportConfigInstance
 
-    fun registerConfig(config: Class<AbstractCourseImportConfig<*, T1, *, T2>>) {
+    fun registerConfig(config: AbstractCourseImportConfig<*, T1, *, T2>) {
         if (!::internalImportConfigInstance.isInitialized) {
-            internalImportConfigInstance = config.newConfigInstance().getInstance()
+            internalImportConfigInstance = config.getInstance()
             onProviderCreate()
         }
     }
