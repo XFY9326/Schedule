@@ -37,6 +37,13 @@ class NAUJwcCourseProvider : LoginCourseProvider<Nothing>() {
         private const val USERNAME_ERROR = "账户不存在"
         private const val PASSWORD_ERROR = "密码错误"
         private const val LOGIN_SUCCESS = "登陆成功"
+
+        @Serializable
+        private data class JwcLoginResponse(
+            val Success: String,
+            val Message: String,
+            val RedirectPath: String,
+        )
     }
 
     override val enableCaptcha = true
@@ -89,11 +96,4 @@ class NAUJwcCourseProvider : LoginCourseProvider<Nothing>() {
     override suspend fun onClearConnection() {
         logout()
     }
-
-    @Serializable
-    data class JwcLoginResponse(
-        val Success: String,
-        val Message: String,
-        val RedirectPath: String,
-    )
 }
