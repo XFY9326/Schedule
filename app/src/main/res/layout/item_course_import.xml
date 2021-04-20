@@ -7,9 +7,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center"
-    android:paddingStart="12dp"
+    android:paddingStart="15dp"
     android:paddingTop="12dp"
-    android:paddingEnd="12dp"
+    android:paddingEnd="15dp"
     android:paddingBottom="12dp">
 
     <LinearLayout
@@ -47,8 +47,9 @@
         android:id="@+id/textView_courseImportJSConfig"
         android:layout_width="15dp"
         android:layout_height="15dp"
-        android:layout_marginStart="12dp"
+        android:layout_marginStart="15dp"
         android:background="@drawable/shape_round_square_15"
+        android:padding="1dp"
         android:text="@string/javascript"
         android:textAlignment="center"
         android:textColor="@android:color/white"

@@ -34,15 +34,12 @@ class CourseImportAdapter : ListViewBindingAdapter<ICourseImportConfig, ViewBind
     }
 
     override fun onCreateViewHolder(layoutInflater: LayoutInflater, parent: ViewGroup, viewType: Int): ViewBindingViewHolder<out ViewBinding> {
-        if (viewType == 0) {
-            return ViewBindingViewHolder(ItemCourseImportBinding.inflate(layoutInflater, parent, false))
-        } else {
-            LayoutSwipeItemBinding.inflate(layoutInflater, parent, false).apply {
-                ItemCourseImportBinding.inflate(layoutInflater, layoutSwipeForeground, false).also {
-                    layoutSwipeForeground.addView(it.root)
-                    return SwipeItemViewHolder(it, this)
-                }
+        return when (viewType) {
+            0 -> ViewBindingViewHolder(ItemCourseImportBinding.inflate(layoutInflater, parent, false))
+            1 -> LayoutSwipeItemBinding.inflate(layoutInflater, parent, false).run {
+                SwipeItemViewHolder(ItemCourseImportBinding.inflate(layoutInflater, layoutSwipeForeground, true), this)
             }
+            else -> error("Invalid element type! ViewType: $viewType")
         }
     }
 

@@ -1,11 +1,14 @@
-@file:Suppress("BlockingMethodInNonBlockingContext", "MemberVisibilityCanBePrivate")
+@file:Suppress("BlockingMethodInNonBlockingContext")
 
 package tool.xfy9326.schedule.io
 
+import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import okio.sink
 import okio.source
 import tool.xfy9326.schedule.content.beans.JSConfig
+import tool.xfy9326.schedule.content.utils.JSConfigException
+import tool.xfy9326.schedule.content.utils.JSConfigException.Companion.report
 import tool.xfy9326.schedule.content.utils.md5
 import tool.xfy9326.schedule.io.kt.*
 
@@ -40,9 +43,14 @@ object JSFileManager {
             val file = it.asParentOf(FILE_NAME_JS_CONFIG)
             if (file.exists()) {
                 val config = file.source().useBuffer {
-                    readJSON<JSConfig>(JSON)
+                    try {
+                        readJSON<JSConfig>(JSON)
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                        null
+                    }
                 }
-                if (config.uuid != uuid) {
+                if (config == null || config.uuid != uuid) {
                     file.parentFile?.deleteRecursively()
                     null
                 } else {
@@ -52,6 +60,11 @@ object JSFileManager {
                 file.parentFile?.deleteRecursively()
                 null
             }
+        }?.map {
+            if (!checkLocalJSConfigFiles(it)) {
+                deleteJSConfigFiles(it.uuid, true)
+            }
+            it
         } ?: emptyList()
     }
 
@@ -114,7 +127,7 @@ object JSFileManager {
     suspend fun readJSDependencies(uuid: String) = runSafeIOJob {
         getJSDependenciesDir(uuid).listFiles { file ->
             file.isFile
-        }?.map {
+        }?.mapNotNull {
             it.source().useBuffer {
                 readUtf8()
             }.takeIf { str ->
@@ -132,8 +145,16 @@ object JSFileManager {
         } ?: false
     }
 
-    suspend fun saveJSConfig(jsConfig: JSConfig) = runOnlyResultIOJob {
-        deleteJSConfigFiles(jsConfig.uuid)
+    suspend fun parserJSConfig(content: String) = runUnsafeIOJob {
+        try {
+            JSON.decodeFromString<JSConfig>(content)
+        } catch (e: Exception) {
+            JSConfigException.Error.INVALID.report(e)
+        }
+    }
+
+    suspend fun addNewJSConfig(jsConfig: JSConfig) = runOnlyResultIOJob {
+        deleteJSConfigFiles(jsConfig.uuid, false)
         PathManager.JSConfigs.asParentOf(jsConfig.uuid, FILE_NAME_JS_CONFIG).withPreparedDir {
             it.sink().useBuffer {
                 writeJSON(JSON, jsConfig)
@@ -142,7 +163,14 @@ object JSFileManager {
         } ?: false
     }
 
-    suspend fun deleteJSConfigFiles(uuid: String) = runOnlyResultIOJob {
-        PathManager.JSConfigs.asParentOf(uuid).takeIfExists()?.deleteRecursively() ?: true
+    suspend fun deleteJSConfigFiles(uuid: String, keepConfig: Boolean) = runSimpleIOJob {
+        PathManager.JSConfigs.asParentOf(uuid).takeIfExists()?.let {
+            if (keepConfig) {
+                PathManager.JSConfigs.asParentOf(uuid, DIR_SRC).takeIfExists()?.deleteRecursively()
+                getJSDependenciesDir(uuid).takeIfExists()?.deleteRecursively()
+            } else {
+                it.deleteRecursively()
+            }
+        }
     }
 }

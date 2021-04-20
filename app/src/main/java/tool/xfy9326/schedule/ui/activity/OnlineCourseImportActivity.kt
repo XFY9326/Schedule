@@ -2,6 +2,7 @@ package tool.xfy9326.schedule.ui.activity
 
 import android.view.Menu
 import android.view.MenuItem
+import androidx.annotation.StringRes
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -14,16 +15,18 @@ import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.databinding.ActivityOnlineCourseImportBinding
 import tool.xfy9326.schedule.kt.show
 import tool.xfy9326.schedule.kt.showShortSnackBar
+import tool.xfy9326.schedule.tools.livedata.observeEvent
 import tool.xfy9326.schedule.tools.livedata.observeNotify
 import tool.xfy9326.schedule.ui.activity.base.CourseProviderActivity
 import tool.xfy9326.schedule.ui.activity.base.ViewModelActivity
 import tool.xfy9326.schedule.ui.adapter.CourseImportAdapter
+import tool.xfy9326.schedule.ui.dialog.JSConfigImportDialog
 import tool.xfy9326.schedule.ui.recyclerview.AdvancedDividerItemDecoration
 import tool.xfy9326.schedule.ui.vm.OnlineCourseImportViewModel
 import tool.xfy9326.schedule.utils.schedule.CourseImportUtils
 
 class OnlineCourseImportActivity : ViewModelActivity<OnlineCourseImportViewModel, ActivityOnlineCourseImportBinding>(),
-    CourseImportAdapter.OnCourseImportItemListener {
+    CourseImportAdapter.OnCourseImportItemListener, JSConfigImportDialog.OnJSConfigImportListener {
     private lateinit var courseImportAdapter: CourseImportAdapter
 
     override val vmClass = OnlineCourseImportViewModel::class
@@ -41,8 +44,17 @@ class OnlineCourseImportActivity : ViewModelActivity<OnlineCourseImportViewModel
         viewModel.onlineImportAttention.observeNotify(this) {
             showOnlineImportAttentionDialog(true)
         }
-        viewModel.sortedConfigs.observe(this) {
+        viewModel.courseImportConfigs.observe(this) {
             courseImportAdapter.submitList(it)
+        }
+        viewModel.preparedJSConfig.observeEvent(this) {
+            openCourseImportActivity(it)
+        }
+        viewModel.configOperationAttention.observeEvent(this) {
+            showAttention(it.getText(this))
+        }
+        viewModel.configOperationError.observeEvent(this) {
+            showAttention(it.getText(this))
         }
     }
 
@@ -51,6 +63,9 @@ class OnlineCourseImportActivity : ViewModelActivity<OnlineCourseImportViewModel
         courseImportAdapter.setOnCourseImportItemListener(this)
         viewBinding.recyclerViewCourseImportList.adapter = courseImportAdapter
         viewBinding.recyclerViewCourseImportList.addItemDecoration(AdvancedDividerItemDecoration(this, DividerItemDecoration.VERTICAL))
+        viewBinding.fabAddCourseImport.setOnClickListener {
+
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -90,13 +105,13 @@ class OnlineCourseImportActivity : ViewModelActivity<OnlineCourseImportViewModel
     private fun openCourseImportActivity(config: AbstractCourseImportConfig<*, *, *, *>) {
         val importMethod = CourseImportUtils.getCourseImportMethod(config,
             onInterfaceProviderError = {
-                requireViewBinding().layoutCourseImport.showShortSnackBar(R.string.interface_provider_error)
+                showAttention(R.string.interface_provider_error)
             },
             onInvalidParser = {
-                requireViewBinding().layoutCourseImport.showShortSnackBar(R.string.invalid_parser_error)
+                showAttention(R.string.invalid_parser_error)
             },
             onUnknownProviderError = {
-                requireViewBinding().layoutCourseImport.showShortSnackBar(R.string.unknown_provider_error)
+                showAttention(R.string.unknown_provider_error)
             }
         )
         when (importMethod) {
@@ -107,6 +122,10 @@ class OnlineCourseImportActivity : ViewModelActivity<OnlineCourseImportViewModel
         }
     }
 
+    private fun showAttention(@StringRes id: Int) = requireViewBinding().layoutCourseImport.showShortSnackBar(id)
+
+    private fun showAttention(msg: String) = requireViewBinding().layoutCourseImport.showShortSnackBar(msg)
+
     override fun onCourseImportConfigClick(config: AbstractCourseImportConfig<*, *, *, *>) {
         openCourseImportActivity(config)
     }
@@ -116,6 +135,14 @@ class OnlineCourseImportActivity : ViewModelActivity<OnlineCourseImportViewModel
     }
 
     override fun onJSConfigDelete(jsConfig: JSConfig) {
+        requireViewModel().deleteJSConfig(jsConfig)
+    }
+
+    override fun onJSConfigUrlImport(url: String) {
+        requireViewModel().addJSConfig(url)
+    }
+
+    override fun onJSConfigFileImport() {
         TODO("Not yet implemented")
     }
 }

@@ -99,7 +99,7 @@
     <string name="course_name_empty">课程名称不能为空！</string>
     <string name="course_time_inner_conflict">课程第%1$d个与第%2$d个时间段存在冲突！</string>
     <string name="course_time_others_conflict">课程第%1$d个时间段与\"%2$s\"存在冲突！</string>
-    <string name="online_course_import">在线课程导入</string>
+    <string name="online_course_import">课程导入</string>
     <string name="interface_provider_error">该课程提供器接口不可用！</string>
     <string name="unknown_provider_error">未知课程提供器接口！</string>
     <string name="invalid_parser_error">不支持的课程解析器接口！</string>
@@ -263,7 +263,7 @@
     <string name="ics_description_teacher">教师名称：%1$s</string>
     <string name="import_and_export">导入与导出</string>
     <string name="sync_to_calendar">同步到日历</string>
-    <string name="export_to_ics">导出为ICS文件</string>
+    <string name="export_to_ics">导出ICS文件</string>
     <string name="agree">同意</string>
     <string name="disagree">不同意</string>
     <string name="calendar_permission_get_failed">日历相关权限获取失败！</string>
@@ -340,7 +340,7 @@
     <string name="app_update_settings">应用更新设置</string>
     <string name="use_browser_download_upgrade_file">默认使用浏览器下载更新文件</string>
     <string name="use_browser_download_upgrade_file_sum">避免直接下载更新文件时出现错误</string>
-    <string name="online_course_import_sum">课表与课程在线导入相关的设定</string>
+    <string name="online_course_import_sum">在线课表与课程导入相关的设定</string>
     <string name="online_course_import_attention">\u3000\u3000在线课程导入是通过解析课程网页或者模拟登陆的方式实现的，本APP承诺未经允许不将用户的数据上传至非校方服务器。\n\u3000\u3000如果您对该功能的信息安全存在质疑可以查看APP源码并自行编译，或者停用该功能。\n\u3000\u3000本功能可能由于校方网页变动而失效，或者存在导入错误的情况。因此请务必自行核对校方原始课表，出现任何由于导入信息错误导致的问题本APP不负任何责任。\n\u3000\u3000若导入课程存在问题，请及时在错误反馈中上报，谢谢。</string>
     <string name="allow_import_empty_schedule">允许导入空课表</string>
     <string name="allow_import_empty_schedule_sum">允许在无任何导入课程时保存该课表</string>
@@ -358,6 +358,32 @@
     <string name="schedule_import_strict_mode_msg">\u3000\u3000由于启用了课表导入的严格检查功能，该课表在该情况下无法导入。\n\n错误原因：%1$s\n\n\u3000\u3000启用严格的课表检查将保证课程导入的完整性，如果依然需要导入该课表，请在\'设置-在线课程导入\'中进行更改。</string>
     <string name="send_debug_log">发送错误日志</string>
     <string name="javascript" translatable="false">JS</string>
+    <string name="swipe_to_delete_js_import">Tips：标有[JS]的选项可以侧滑删除</string>
+    <string name="add_course_import">添加课程导入选项</string>
+    <string name="add">添加</string>
+    <string name="from_file">从文件中选择</string>
+    <string name="add_course_import_attention">\u3000\u3000</string>
+
+    <string name="js_config_read_failed">配置文件读取错误！</string>
+    <string name="js_config_invalid">导入的配置文件不合法！</string>
+    <string name="js_config_uuid_error">配置文件UUID错误！</string>
+    <string name="js_config_js_type_error">配置文件JS类型错误！</string>
+    <string name="js_config_provider_url_empty">配置文件课程提供器为空！</string>
+    <string name="js_config_parser_url_empty">配置文件课程解析器为空！</string>
+    <string name="js_config_config_delete_error">配置文件删除错误！</string>
+    <string name="js_config_update_failed">更新检查失败！</string>
+    <string name="js_config_provider_download_error">课程提供器下载失败！</string>
+    <string name="js_config_parser_download_error">课程解析器下载失败！</string>
+    <string name="js_config_dependencies_download_error">运行环境依赖下载失败！</string>
+    <string name="js_config_prepare_error">运行环境准备失败！</string>
+
+    <string name="js_config_unknown_error">配置文件未知错误！</string>
+    <string name="js_config_config_add_success">配置文件添加成功</string>
+    <string name="js_config_config_remove_success">配置文件删除成功</string>
+    <string name="js_config_check_update">检查配置文件更新</string>
+    <string name="js_config_prepare_provider">准备课程提供器</string>
+    <string name="js_config_prepare_parser">准备课程解析器</string>
+    <string name="js_config_prepare_dependencies">准备运行环境依赖</string>
 
     <string name="scare_type_fit_center">等比缩放，从中间开始填充满</string>
     <string name="scare_type_center_crop">等比缩放直到完全填充</string>

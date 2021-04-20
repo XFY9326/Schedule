@@ -42,13 +42,23 @@ class SwipeItemCallback : ItemTouchHelper.Callback() {
     override fun isItemViewSwipeEnabled(): Boolean = true
     override fun isLongPressDragEnabled(): Boolean = false
     override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean = false
-    override fun getMovementFlags(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder): Int = makeMovementFlags(0, ItemTouchHelper.START)
+    override fun getMovementFlags(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder) =
+        if (viewHolder is SwipeItemViewHolder<*>) {
+            makeMovementFlags(0, ItemTouchHelper.START)
+        } else {
+            makeMovementFlags(0, 0)
+        }
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
         if (viewHolder is SwipeItemViewHolder<*>) listener?.invoke(viewHolder.adapterPosition)
     }
 
-    override fun getSwipeThreshold(viewHolder: RecyclerView.ViewHolder): Float = swipeThreshold
+    override fun getSwipeThreshold(viewHolder: RecyclerView.ViewHolder): Float =
+        if (viewHolder is SwipeItemViewHolder<*>) {
+            swipeThreshold
+        } else {
+            super.getSwipeThreshold(viewHolder)
+        }
 
     override fun getSwipeVelocityThreshold(defaultValue: Float): Float = swipeVelocityThreshold
 

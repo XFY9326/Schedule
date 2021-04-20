@@ -3,6 +3,8 @@ package tool.xfy9326.schedule.content.beans
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import tool.xfy9326.schedule.content.base.ICourseImportConfig
+import tool.xfy9326.schedule.content.utils.JSConfigException
+import tool.xfy9326.schedule.content.utils.JSConfigException.Companion.report
 import java.util.*
 
 @Serializable
@@ -38,13 +40,10 @@ data class JSConfig(
     override val lowerCaseSortingBasis = sortingBasis.toLowerCase(Locale.getDefault())
 
     init {
-        require(uuid.isUUID()) { "JSCourseImportConfig UUID error! UUID: $uuid" }
-        require(schoolName.isNotBlank()) { "JSCourseImportConfig school name empty!" }
-        require(authorName.isNotBlank()) { "JSCourseImportConfig author name empty!" }
-        require(systemName.isNotBlank()) { "JSCourseImportConfig system name empty!" }
-        require(jsType == TYPE_AI_SCHEDULE || jsType == TYPE_PURE_SCHEDULE) { "JSCourseImportConfig type error! Type: $jsType" }
-        require(providerJSUrl.isNotBlank()) { "JSCourseImportConfig provider js empty!" }
-        require(parserJSUrl.isNotBlank()) { "JSCourseImportConfig parser js empty!" }
+        if (!uuid.isUUID()) JSConfigException.Error.UUID_ERROR.report()
+        if (jsType != TYPE_AI_SCHEDULE && jsType != TYPE_PURE_SCHEDULE) JSConfigException.Error.JS_TYPE_ERROR.report()
+        if (providerJSUrl.isBlank()) JSConfigException.Error.PROVIDER_URL_EMPTY.report()
+        if (parserJSUrl.isBlank()) JSConfigException.Error.PARSER_URL_EMPTY.report()
     }
 
     fun getJSParams() = JSParams(uuid, jsType)

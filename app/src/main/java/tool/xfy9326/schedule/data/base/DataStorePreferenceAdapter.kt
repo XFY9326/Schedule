@@ -6,13 +6,12 @@ import androidx.preference.PreferenceDataStore
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 
-open class DataStorePreferenceAdapter(private val dataStore: DataStore<Preferences>, scope: CoroutineScope) : PreferenceDataStore() {
-    private val prefScope = CoroutineScope(scope.coroutineContext + SupervisorJob() + Dispatchers.IO)
-
-    private val dsData = dataStore.data.shareIn(prefScope, SharingStarted.Eagerly, 1)
+open class DataStorePreferenceAdapter(private val dataStore: DataStore<Preferences>, scope: CoroutineScope) : PreferenceDataStore(),
+    CoroutineScope by CoroutineScope(scope.coroutineContext + SupervisorJob() + Dispatchers.IO) {
+    private val dsData = dataStore.data.shareIn(scope, SharingStarted.Eagerly, 1)
 
     private fun <T> putData(key: Preferences.Key<T>, value: T?) {
-        prefScope.launch {
+        launch {
             dataStore.edit {
                 if (value != null) it[key] = value else it.remove(key)
             }
@@ -20,7 +19,7 @@ open class DataStorePreferenceAdapter(private val dataStore: DataStore<Preferenc
     }
 
     private fun <T> readNullableData(key: Preferences.Key<T>, defValue: T?): T? {
-        return runBlocking(prefScope.coroutineContext) {
+        return runBlocking(coroutineContext) {
             dsData.map {
                 it[key] ?: defValue
             }.firstOrNull()
@@ -28,7 +27,7 @@ open class DataStorePreferenceAdapter(private val dataStore: DataStore<Preferenc
     }
 
     private fun <T> readNonNullData(key: Preferences.Key<T>, defValue: T): T {
-        return runBlocking(prefScope.coroutineContext) {
+        return runBlocking(coroutineContext) {
             dsData.map {
                 it[key] ?: defValue
             }.first()
