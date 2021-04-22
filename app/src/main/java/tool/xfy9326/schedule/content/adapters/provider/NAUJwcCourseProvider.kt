@@ -12,6 +12,7 @@ import org.jsoup.Jsoup
 import tool.xfy9326.schedule.content.base.LoginCourseProvider
 import tool.xfy9326.schedule.content.beans.LoginPageInfo
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
+import tool.xfy9326.schedule.content.utils.CourseAdapterException.Companion.report
 import tool.xfy9326.schedule.content.utils.CourseAdapterUtils
 import tool.xfy9326.schedule.content.utils.md5
 

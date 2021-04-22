@@ -2,6 +2,7 @@ package tool.xfy9326.schedule.content.base
 
 import tool.xfy9326.schedule.beans.Course
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
+import tool.xfy9326.schedule.content.utils.CourseAdapterException.Companion.make
 
 class CourseParseResult private constructor(val courses: List<Course>, val ignorableError: CourseAdapterException?) {
 

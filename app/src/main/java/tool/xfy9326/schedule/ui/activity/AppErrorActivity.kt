@@ -1,11 +1,11 @@
 package tool.xfy9326.schedule.ui.activity
 
 import androidx.core.view.isVisible
+import lib.xfy9326.livedata.observeEvent
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.databinding.ActivityAppErrorBinding
 import tool.xfy9326.schedule.kt.showShortSnackBar
 import tool.xfy9326.schedule.kt.startActivity
-import tool.xfy9326.schedule.tools.livedata.observeEvent
 import tool.xfy9326.schedule.ui.activity.base.ViewModelActivity
 import tool.xfy9326.schedule.ui.dialog.CrashViewDialog
 import tool.xfy9326.schedule.ui.dialog.UpgradeDialog

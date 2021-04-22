@@ -1,9 +1,14 @@
 @file:Suppress("unused")
 
-package tool.xfy9326.schedule.tools.livedata
+package lib.xfy9326.livedata
 
 import java.lang.ref.WeakReference
 
+/**
+ * 可消费的事件，通过tag可以区分消费对象
+ * 1. 传递数据是弱引用
+ * 2. 可以防止LiveData数据倒灌
+ */
 open class Event<out T>(content: T) {
     private val weakContentReference = WeakReference(Wrapper(content))
     private val consumedList = ArrayList<Int>()

@@ -7,6 +7,7 @@ import android.view.Menu
 import android.view.MenuItem
 import com.google.android.material.snackbar.Snackbar
 import com.jaredrummler.android.colorpicker.ColorPickerDialogListener
+import lib.xfy9326.livedata.observeEvent
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.Course
 import tool.xfy9326.schedule.beans.CourseTime
@@ -14,7 +15,6 @@ import tool.xfy9326.schedule.databinding.ActivityCourseEditBinding
 import tool.xfy9326.schedule.kt.getText
 import tool.xfy9326.schedule.kt.hideKeyboard
 import tool.xfy9326.schedule.kt.showShortSnackBar
-import tool.xfy9326.schedule.tools.livedata.observeEvent
 import tool.xfy9326.schedule.ui.activity.base.ViewModelActivity
 import tool.xfy9326.schedule.ui.adapter.CourseTimeAdapter
 import tool.xfy9326.schedule.ui.dialog.CourseTimeEditDialog

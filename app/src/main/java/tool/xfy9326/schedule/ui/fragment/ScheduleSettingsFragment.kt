@@ -6,6 +6,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.preference.MultiSelectListPreference
 import androidx.preference.PreferenceDataStore
 import com.jaredrummler.android.colorpicker.ColorPreferenceCompat
+import lib.xfy9326.livedata.observeEvent
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.data.ScheduleDataStore
 import tool.xfy9326.schedule.data.base.DataStorePreferenceAdapter
@@ -14,7 +15,6 @@ import tool.xfy9326.schedule.kt.setOnPrefClickListener
 import tool.xfy9326.schedule.kt.showShortSnackBar
 import tool.xfy9326.schedule.tools.MIMEConst
 import tool.xfy9326.schedule.tools.MaterialColorHelper
-import tool.xfy9326.schedule.tools.livedata.observeEvent
 import tool.xfy9326.schedule.ui.dialog.FullScreenLoadingDialog
 import tool.xfy9326.schedule.ui.fragment.base.AbstractSettingsFragment
 import tool.xfy9326.schedule.ui.vm.SettingsViewModel

@@ -12,6 +12,13 @@ ext {
             versionName      : "1.1.8"
     ]
 
+    library = [
+            LiveDataTools: [
+                    versionCode: 1,
+                    versionName: "1.0"
+            ]
+    ]
+
     dependencies = [
             kotlinx : [
                     coroutines   : "1.4.3",

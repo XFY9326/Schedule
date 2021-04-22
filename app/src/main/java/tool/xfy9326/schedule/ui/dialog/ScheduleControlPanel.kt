@@ -10,11 +10,11 @@ import androidx.lifecycle.lifecycleScope
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import lib.xfy9326.livedata.postEvent
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.databinding.DialogScheduleControlPanelBinding
 import tool.xfy9326.schedule.kt.enableLightSystemBar
 import tool.xfy9326.schedule.kt.isUsingNightMode
-import tool.xfy9326.schedule.tools.livedata.postEvent
 import tool.xfy9326.schedule.ui.vm.ScheduleViewModel
 
 class ScheduleControlPanel : BottomSheetDialogFragment() {

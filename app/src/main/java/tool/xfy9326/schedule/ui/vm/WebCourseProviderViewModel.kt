@@ -2,11 +2,11 @@ package tool.xfy9326.schedule.ui.vm
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.sync.Mutex
+import lib.xfy9326.livedata.MutableEventLiveData
+import lib.xfy9326.livedata.postEvent
 import tool.xfy9326.schedule.beans.WebCourseImportParams
 import tool.xfy9326.schedule.content.base.WebCourseParser
 import tool.xfy9326.schedule.content.base.WebCourseProvider
-import tool.xfy9326.schedule.tools.livedata.MutableEventLiveData
-import tool.xfy9326.schedule.tools.livedata.postEvent
 import tool.xfy9326.schedule.ui.activity.base.CourseProviderActivity
 import tool.xfy9326.schedule.ui.vm.base.CourseProviderViewModel
 

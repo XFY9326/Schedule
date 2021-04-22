@@ -4,6 +4,7 @@ package tool.xfy9326.schedule.content.base
 
 import io.ktor.client.*
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
+import tool.xfy9326.schedule.content.utils.CourseAdapterException.Companion.report
 import tool.xfy9326.schedule.content.utils.CourseAdapterUtils
 import java.io.Serializable
 

@@ -4,11 +4,11 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
+import lib.xfy9326.livedata.MutableNotifyLiveData
+import lib.xfy9326.livedata.postNotify
 import tool.xfy9326.schedule.data.AppDataStore
 import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
 import tool.xfy9326.schedule.kt.asDistinctLiveData
-import tool.xfy9326.schedule.tools.livedata.MutableNotifyLiveData
-import tool.xfy9326.schedule.tools.livedata.notify
 import tool.xfy9326.schedule.ui.vm.base.AbstractViewModel
 
 class ScheduleManageViewModel : AbstractViewModel() {
@@ -25,7 +25,7 @@ class ScheduleManageViewModel : AbstractViewModel() {
     fun setCurrentSchedule(scheduleId: Long) {
         viewModelScope.launch(Dispatchers.IO) {
             AppDataStore.setCurrentScheduleId(scheduleId)
-            setCurrentScheduleSuccess.notify()
+            setCurrentScheduleSuccess.postNotify()
         }
     }
 }

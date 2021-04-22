@@ -4,6 +4,7 @@ import tool.xfy9326.schedule.beans.ScheduleTime
 import tool.xfy9326.schedule.content.base.CourseParseResult
 import tool.xfy9326.schedule.content.base.WebCourseParser
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
+import tool.xfy9326.schedule.content.utils.CourseAdapterException.Companion.report
 
 class NAUCourseWebParser : WebCourseParser<Nothing>() {
     companion object {

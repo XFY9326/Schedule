@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory
 import io.ktor.client.request.*
 import tool.xfy9326.schedule.content.beans.LoginPageInfo
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
+import tool.xfy9326.schedule.content.utils.CourseAdapterException.Companion.report
 import java.io.InputStream
 import java.io.Serializable
 

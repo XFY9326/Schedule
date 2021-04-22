@@ -1,9 +1,9 @@
 package tool.xfy9326.schedule.ui.activity
 
+import lib.xfy9326.livedata.observeEvent
 import tool.xfy9326.schedule.BuildConfig
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.databinding.ActivityAboutBinding
-import tool.xfy9326.schedule.tools.livedata.observeEvent
 import tool.xfy9326.schedule.ui.activity.base.ViewModelActivity
 import tool.xfy9326.schedule.ui.vm.AboutViewModel
 import tool.xfy9326.schedule.utils.view.DialogUtils

@@ -1,3 +1,4 @@
+include ':LiveDataTools'
 include ':AnnotationProcessor'
 include ':Annotation'
 include ':app'

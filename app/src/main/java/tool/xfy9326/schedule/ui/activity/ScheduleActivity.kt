@@ -23,6 +23,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import lib.xfy9326.livedata.observeEvent
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.Day
 import tool.xfy9326.schedule.beans.ImageScareType
@@ -34,7 +35,6 @@ import tool.xfy9326.schedule.data.ScheduleDataStore
 import tool.xfy9326.schedule.databinding.ActivityScheduleBinding
 import tool.xfy9326.schedule.databinding.LayoutNavHeaderBinding
 import tool.xfy9326.schedule.kt.*
-import tool.xfy9326.schedule.tools.livedata.observeEvent
 import tool.xfy9326.schedule.ui.activity.base.ViewModelActivity
 import tool.xfy9326.schedule.ui.adapter.ScheduleViewPagerAdapter
 import tool.xfy9326.schedule.ui.dialog.CourseDetailDialog

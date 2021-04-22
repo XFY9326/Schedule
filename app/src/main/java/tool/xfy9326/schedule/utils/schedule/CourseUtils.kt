@@ -3,6 +3,7 @@ package tool.xfy9326.schedule.utils.schedule
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.*
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
+import tool.xfy9326.schedule.content.utils.CourseAdapterException.Companion.report
 import tool.xfy9326.schedule.content.utils.arrangeWeekNum
 import tool.xfy9326.schedule.content.utils.hasCourse
 import tool.xfy9326.schedule.io.IOManager

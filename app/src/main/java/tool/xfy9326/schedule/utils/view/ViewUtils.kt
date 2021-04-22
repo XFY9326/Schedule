@@ -12,6 +12,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout
 import com.google.android.material.snackbar.Snackbar
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
+import tool.xfy9326.schedule.kt.getDeepStackTraceString
 import tool.xfy9326.schedule.ui.dialog.CrashViewDialog
 
 object ViewUtils {

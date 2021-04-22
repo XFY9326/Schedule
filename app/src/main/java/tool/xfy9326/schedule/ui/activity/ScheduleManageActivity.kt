@@ -1,11 +1,11 @@
 package tool.xfy9326.schedule.ui.activity
 
+import lib.xfy9326.livedata.observeNotify
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.ScheduleWrapper
 import tool.xfy9326.schedule.databinding.ActivityScheduleManageBinding
 import tool.xfy9326.schedule.kt.showShortSnackBar
 import tool.xfy9326.schedule.kt.startActivity
-import tool.xfy9326.schedule.tools.livedata.observeNotify
 import tool.xfy9326.schedule.ui.activity.base.ViewModelActivity
 import tool.xfy9326.schedule.ui.adapter.ScheduleManageAdapter
 import tool.xfy9326.schedule.ui.adapter.ScheduleManageAdapter.ScheduleOperation.*

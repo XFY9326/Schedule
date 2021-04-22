@@ -5,13 +5,14 @@ import android.os.Bundle
 import androidx.annotation.CallSuper
 import androidx.core.os.bundleOf
 import androidx.viewbinding.ViewBinding
+import lib.xfy9326.livedata.observeEvent
 import tool.xfy9326.schedule.content.base.AbstractCourseImportConfig
 import tool.xfy9326.schedule.content.base.AbstractCourseParser
 import tool.xfy9326.schedule.content.base.AbstractCourseProvider
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
 import tool.xfy9326.schedule.kt.castNonNull
+import tool.xfy9326.schedule.kt.getDeepStackTraceString
 import tool.xfy9326.schedule.kt.startActivity
-import tool.xfy9326.schedule.tools.livedata.observeEvent
 import tool.xfy9326.schedule.ui.activity.ScheduleEditActivity
 import tool.xfy9326.schedule.ui.dialog.ImportCourseConflictDialog
 import tool.xfy9326.schedule.ui.dialog.ScheduleImportSuccessDialog
