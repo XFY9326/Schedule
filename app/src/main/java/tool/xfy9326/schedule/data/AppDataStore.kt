@@ -8,6 +8,7 @@ object AppDataStore : AbstractDataStore("App") {
     private val acceptEULA by booleanPreferencesKey()
     private val shownFeedbackAttention by booleanPreferencesKey()
     private val shownCalendarSyncAttention by booleanPreferencesKey()
+    private val agreeCourseImportPolicy by booleanPreferencesKey()
     private val ignoreUpdateVersionCode by intPreferencesKey()
     private val readOnlineImportAttention by booleanPreferencesKey()
 
@@ -21,11 +22,15 @@ object AppDataStore : AbstractDataStore("App") {
 
     val readOnlineImportAttentionFlow = readOnlineImportAttention.readAsFlow(false)
 
+    val agreeCourseImportPolicyFlow = agreeCourseImportPolicy.readAsFlow(false)
+
     suspend fun setReadOnlineImportAttention(data: Boolean) = readOnlineImportAttention.saveData(data)
 
     suspend fun hasShownFeedbackAttention() = shownFeedbackAttention.readAsShownOnce()
 
     suspend fun hasShownCalendarSyncAttention() = shownCalendarSyncAttention.readAsShownOnce()
+
+    suspend fun setAgreeCourseImportPolicy() = agreeCourseImportPolicy.saveData(true)
 
     suspend fun setAcceptEULA(data: Boolean) = acceptEULA.saveData(data)
 

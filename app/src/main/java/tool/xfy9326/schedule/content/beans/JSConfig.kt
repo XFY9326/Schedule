@@ -1,5 +1,8 @@
 package tool.xfy9326.schedule.content.beans
 
+import android.os.Parcelable
+import kotlinx.parcelize.IgnoredOnParcel
+import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import tool.xfy9326.schedule.content.base.ICourseImportConfig
@@ -7,6 +10,7 @@ import tool.xfy9326.schedule.content.utils.JSConfigException
 import tool.xfy9326.schedule.content.utils.JSConfigException.Companion.report
 import java.util.*
 
+@Parcelize
 @Serializable
 data class JSConfig(
     val uuid: String,
@@ -20,7 +24,7 @@ data class JSConfig(
     val parserJSUrl: String,
     val updateUrl: String? = null,
     val sortingBasis: String,
-) : ICourseImportConfig {
+) : Parcelable, ICourseImportConfig {
     companion object {
         private const val VERSION = 1
 
@@ -37,6 +41,7 @@ data class JSConfig(
     }
 
     @Transient
+    @IgnoredOnParcel
     override val lowerCaseSortingBasis = sortingBasis.toLowerCase(Locale.getDefault())
 
     init {

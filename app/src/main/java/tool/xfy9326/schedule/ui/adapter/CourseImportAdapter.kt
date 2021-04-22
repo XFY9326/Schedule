@@ -76,7 +76,7 @@ class CourseImportAdapter : ListViewBindingAdapter<ICourseImportConfig, ViewBind
     private fun onSwipe(position: Int) {
         val element = getItem(position)
         if (element is JSConfig) {
-            onCourseImportItemListener?.onJSConfigClick(element)
+            onCourseImportItemListener?.onJSConfigDelete(element)
         }
     }
 

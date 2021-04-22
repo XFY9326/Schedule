@@ -16,6 +16,7 @@ import kotlinx.coroutines.sync.withLock
 import lib.xfy9326.livedata.EventLiveData
 import lib.xfy9326.livedata.MutableEventLiveData
 import lib.xfy9326.livedata.postEvent
+import okhttp3.internal.closeQuietly
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.content.base.AbstractCourseImportConfig
 import tool.xfy9326.schedule.content.base.AbstractCourseImportConfig.Companion.toCourseImportConfig
@@ -39,6 +40,7 @@ class CourseImportConfigManager(scope: CoroutineScope) : CoroutineScope by scope
     private val prepareConfigProgress = MutableEventLiveData<Type>()
     private val operationError = MutableEventLiveData<JSConfigException>()
     private val operationAttention = MutableEventLiveData<Type>()
+    private val configWarning = MutableEventLiveData<JSConfigException>()
     val courseImportConfigs: LiveData<List<ICourseImportConfig>>
         get() = importConfigs
     val preparedJSConfig: EventLiveData<AbstractCourseImportConfig<*, *, *, *>>
@@ -49,6 +51,8 @@ class CourseImportConfigManager(scope: CoroutineScope) : CoroutineScope by scope
         get() = operationError
     val configOperationAttention: EventLiveData<Type>
         get() = operationAttention
+    val configIgnorableWarning: EventLiveData<JSConfigException>
+        get() = configWarning
 
     private val httpClient = HttpClient(OkHttp) {
         install(HttpCookies)
@@ -123,7 +127,12 @@ class CourseImportConfigManager(scope: CoroutineScope) : CoroutineScope by scope
 
     fun prepareJSConfig(jsConfig: JSConfig): Job = runConfigOperation {
         if (jsConfig.updateUrl != null) prepareConfigProgress.postEvent(Type.CHECK_UPDATE)
-        val latestConfig = getLatestConfig(jsConfig)
+        val latestConfig = try {
+            getLatestConfig(jsConfig)
+        } catch (e: JSConfigException) {
+            configWarning.postEvent(e)
+            jsConfig
+        }
         if (!JSFileManager.checkLocalJSConfigFiles(latestConfig)) {
             JSFileManager.deleteJSConfigFiles(latestConfig.uuid, true)
             prepareConfigProgress.postEvent(Type.PREPARE_PROVIDER)
@@ -144,6 +153,7 @@ class CourseImportConfigManager(scope: CoroutineScope) : CoroutineScope by scope
                 JSConfigException.Error.PREPARE_ERROR.report()
             }
         }
+        prepareConfigProgress.postEvent(Type.PREPARE_FINISH)
         preparedConfig.postEvent(latestConfig.toCourseImportConfig())
     }
 
@@ -220,13 +230,19 @@ class CourseImportConfigManager(scope: CoroutineScope) : CoroutineScope by scope
         }
     }
 
+    fun clearConnection() {
+        httpClient.closeQuietly()
+    }
+
     enum class Type(@StringRes val msgId: Int) {
         ADD_SUCCESS(R.string.js_config_config_add_success),
         REMOVE_SUCCESS(R.string.js_config_config_remove_success),
+
         CHECK_UPDATE(R.string.js_config_check_update),
         PREPARE_PROVIDER(R.string.js_config_prepare_provider),
         PREPARE_PARSER(R.string.js_config_prepare_parser),
-        PREPARE_DEPENDENCIES(R.string.js_config_prepare_dependencies);
+        PREPARE_DEPENDENCIES(R.string.js_config_prepare_dependencies),
+        PREPARE_FINISH(R.string.js_config_prepare_finish);
 
         fun getText(context: Context) = context.getString(msgId)
     }

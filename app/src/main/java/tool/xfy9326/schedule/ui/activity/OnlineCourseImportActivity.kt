@@ -2,6 +2,7 @@ package tool.xfy9326.schedule.ui.activity
 
 import android.view.Menu
 import android.view.MenuItem
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.StringRes
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -13,21 +14,36 @@ import lib.xfy9326.livedata.observeNotify
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.content.base.AbstractCourseImportConfig
 import tool.xfy9326.schedule.content.beans.JSConfig
+import tool.xfy9326.schedule.data.AppDataStore
 import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.databinding.ActivityOnlineCourseImportBinding
 import tool.xfy9326.schedule.kt.show
+import tool.xfy9326.schedule.kt.showGlobalToast
 import tool.xfy9326.schedule.kt.showShortSnackBar
+import tool.xfy9326.schedule.tools.MIMEConst
 import tool.xfy9326.schedule.ui.activity.base.CourseProviderActivity
 import tool.xfy9326.schedule.ui.activity.base.ViewModelActivity
 import tool.xfy9326.schedule.ui.adapter.CourseImportAdapter
+import tool.xfy9326.schedule.ui.dialog.FullScreenLoadingDialog
 import tool.xfy9326.schedule.ui.dialog.JSConfigImportDialog
+import tool.xfy9326.schedule.ui.dialog.JSConfigPrepareDialog
 import tool.xfy9326.schedule.ui.recyclerview.AdvancedDividerItemDecoration
 import tool.xfy9326.schedule.ui.vm.OnlineCourseImportViewModel
 import tool.xfy9326.schedule.utils.schedule.CourseImportUtils
+import tool.xfy9326.schedule.utils.view.DialogUtils
+import tool.xfy9326.schedule.utils.view.ViewUtils
 
 class OnlineCourseImportActivity : ViewModelActivity<OnlineCourseImportViewModel, ActivityOnlineCourseImportBinding>(),
     CourseImportAdapter.OnCourseImportItemListener, JSConfigImportDialog.OnJSConfigImportListener {
     private lateinit var courseImportAdapter: CourseImportAdapter
+    private val loadingController = FullScreenLoadingDialog.createControllerInstance(this)
+    private val selectJSConfig = registerForActivityResult(ActivityResultContracts.GetContent()) {
+        if (it != null) {
+            requireViewModel().addJSConfig(it)
+        } else {
+            requireViewBinding().layoutCourseImport.showShortSnackBar(R.string.input_file_cancel)
+        }
+    }
 
     override val vmClass = OnlineCourseImportViewModel::class
 
@@ -51,10 +67,21 @@ class OnlineCourseImportActivity : ViewModelActivity<OnlineCourseImportViewModel
             openCourseImportActivity(it)
         }
         viewModel.configOperationAttention.observeEvent(this) {
-            showAttention(it.getText(this))
+            if (!JSConfigPrepareDialog.isShowing(supportFragmentManager)) {
+                loadingController.hide()
+                showAttention(it.getText(this))
+            }
         }
-        viewModel.configOperationError.observeEvent(this) {
-            showAttention(it.getText(this))
+        viewModel.configOperationError.observeEvent(this, javaClass.simpleName) {
+            if (!JSConfigPrepareDialog.isShowing(supportFragmentManager)) {
+                loadingController.hide()
+                ViewUtils.showJSConfigErrorSnackBar(this, viewBinding.layoutCourseImport, it)
+            }
+        }
+        viewModel.configIgnorableWarning.observeEvent(this, javaClass.simpleName) {
+            if (!JSConfigPrepareDialog.isShowing(supportFragmentManager)) {
+                ViewUtils.showJSConfigErrorSnackBar(this, viewBinding.layoutCourseImport, it)
+            }
         }
     }
 
@@ -64,7 +91,18 @@ class OnlineCourseImportActivity : ViewModelActivity<OnlineCourseImportViewModel
         viewBinding.recyclerViewCourseImportList.adapter = courseImportAdapter
         viewBinding.recyclerViewCourseImportList.addItemDecoration(AdvancedDividerItemDecoration(this, DividerItemDecoration.VERTICAL))
         viewBinding.fabAddCourseImport.setOnClickListener {
-
+            lifecycleScope.launch {
+                if (!AppDataStore.agreeCourseImportPolicyFlow.first()) {
+                    DialogUtils.showAddCourseImportAttentionDialog(this@OnlineCourseImportActivity) {
+                        lifecycleScope.launch {
+                            AppDataStore.setAgreeCourseImportPolicy()
+                        }
+                        JSConfigImportDialog.showDialog(supportFragmentManager)
+                    }
+                } else {
+                    JSConfigImportDialog.showDialog(supportFragmentManager)
+                }
+            }
         }
     }
 
@@ -118,7 +156,7 @@ class OnlineCourseImportActivity : ViewModelActivity<OnlineCourseImportViewModel
             CourseImportUtils.ImportMethod.LOGIN_IMPORT, CourseImportUtils.ImportMethod.NETWORK_IMPORT ->
                 CourseProviderActivity.startProviderActivity<NetworkCourseProviderActivity>(this, config)
             CourseImportUtils.ImportMethod.WEB_IMPORT -> CourseProviderActivity.startProviderActivity<WebCourseProviderActivity>(this, config)
-            CourseImportUtils.ImportMethod.WEB_JS_IMPORT -> TODO("Add Activity")
+            CourseImportUtils.ImportMethod.WEB_JS_IMPORT -> showGlobalToast(config.toString())
         }
     }
 
@@ -131,7 +169,7 @@ class OnlineCourseImportActivity : ViewModelActivity<OnlineCourseImportViewModel
     }
 
     override fun onJSConfigClick(jsConfig: JSConfig) {
-        TODO("Not yet implemented")
+        JSConfigPrepareDialog.showDialog(supportFragmentManager, jsConfig)
     }
 
     override fun onJSConfigDelete(jsConfig: JSConfig) {
@@ -139,10 +177,12 @@ class OnlineCourseImportActivity : ViewModelActivity<OnlineCourseImportViewModel
     }
 
     override fun onJSConfigUrlImport(url: String) {
+        loadingController.show(false)
         requireViewModel().addJSConfig(url)
     }
 
     override fun onJSConfigFileImport() {
-        TODO("Not yet implemented")
+        loadingController.show(false)
+        selectJSConfig.launch(MIMEConst.MIME_APPLICATION_JSON)
     }
 }

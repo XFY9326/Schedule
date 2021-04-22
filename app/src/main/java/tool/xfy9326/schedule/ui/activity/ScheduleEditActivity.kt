@@ -401,7 +401,7 @@ class ScheduleEditActivity : ViewModelActivity<ScheduleEditViewModel, ActivitySc
                     setMessage(getString(R.string.ask_whether_delete_schedule_msg))
                     setPositiveButton(R.string.delete) { _, _ ->
                         requireViewModel().deleteSchedule(schedule)
-                        showShortToast(R.string.delete_success)
+                        showToast(R.string.delete_success)
                         finish()
                     }
                     setNegativeButton(android.R.string.cancel, null)

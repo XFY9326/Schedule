@@ -329,7 +329,7 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
                             AppSettingsDataStore.setNightModeType(mode)
                         }.modeInt
                         launch(Dispatchers.Main.immediate) {
-                            if (manuallyChangeNightMode) showShortToast(R.string.manually_change_night_mode)
+                            if (manuallyChangeNightMode) showToast(R.string.manually_change_night_mode)
                             window.setWindowAnimations(R.style.AppTheme_NightModeTransitionAnimation)
                             AppCompatDelegate.setDefaultNightMode(newMode)
                         }

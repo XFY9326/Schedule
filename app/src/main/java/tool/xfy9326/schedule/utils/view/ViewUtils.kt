@@ -12,11 +12,20 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout
 import com.google.android.material.snackbar.Snackbar
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
+import tool.xfy9326.schedule.content.utils.JSConfigException
 import tool.xfy9326.schedule.kt.getDeepStackTraceString
 import tool.xfy9326.schedule.ui.dialog.CrashViewDialog
 
 object ViewUtils {
     fun showCourseAdapterErrorSnackBar(activity: AppCompatActivity, coordinatorLayout: CoordinatorLayout, exception: CourseAdapterException) {
+        Snackbar.make(coordinatorLayout, exception.getText(activity), Snackbar.LENGTH_LONG)
+            .setActionTextColor(Color.RED)
+            .setAction(R.string.details) {
+                CrashViewDialog.showDialog(activity.supportFragmentManager, exception.getDeepStackTraceString(), false)
+            }.show()
+    }
+
+    fun showJSConfigErrorSnackBar(activity: AppCompatActivity, coordinatorLayout: CoordinatorLayout, exception: JSConfigException) {
         Snackbar.make(coordinatorLayout, exception.getText(activity), Snackbar.LENGTH_LONG)
             .setActionTextColor(Color.RED)
             .setAction(R.string.details) {

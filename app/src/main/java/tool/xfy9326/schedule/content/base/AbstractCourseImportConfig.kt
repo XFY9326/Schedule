@@ -18,6 +18,7 @@ import kotlin.reflect.KClass
  * LoginCourseProvider -- NetworkCourseParser
  * NetworkCourseProvider -- NetworkCourseParser
  * WebCourseProvider -- WebCourseParser
+ * JSCourseProvider -- JSCourseParser  仅限内部使用
  *
  */
 abstract class AbstractCourseImportConfig<P1 : Serializable, T1 : AbstractCourseProvider<P1>, P2 : Serializable, T2 : AbstractCourseParser<P2>> private constructor(
@@ -90,5 +91,9 @@ abstract class AbstractCourseImportConfig<P1 : Serializable, T1 : AbstractCourse
 
     private fun createParserInstance() = parserClass.newInstance().apply {
         setParams(parserParams)
+    }
+
+    override fun toString(): String {
+        return "AbstractCourseImportConfig(schoolName='$schoolName', authorName='$authorName', systemName='$systemName', staticImportOptions=${staticImportOptions?.contentToString()}, providerClass=$providerClass, parserClass=$parserClass, providerParams=$providerParams, parserParams=$parserParams)"
     }
 }

@@ -15,8 +15,8 @@ import tool.xfy9326.schedule.databinding.DialogCrashViewBinding
 import tool.xfy9326.schedule.io.FileManager
 import tool.xfy9326.schedule.kt.APP_ID
 import tool.xfy9326.schedule.kt.setWindowWidthPercent
-import tool.xfy9326.schedule.kt.showGlobalShortToast
-import tool.xfy9326.schedule.kt.showShortToast
+import tool.xfy9326.schedule.kt.showGlobalToast
+import tool.xfy9326.schedule.kt.showToast
 
 class CrashViewDialog : AppCompatDialogFragment() {
     companion object {
@@ -42,11 +42,11 @@ class CrashViewDialog : AppCompatDialogFragment() {
         if (it != null) {
             lifecycleScope.launch {
                 val result = FileManager.writeText(it, requireArguments().getString(ARGUMENT_CRASH_LOG, null))
-                showShortToast(if (result) R.string.output_file_success else R.string.output_file_failed)
+                showToast(if (result) R.string.output_file_success else R.string.output_file_failed)
                 dismissAllowingStateLoss()
             }
         } else {
-            showShortToast(R.string.output_file_cancel)
+            showToast(R.string.output_file_cancel)
         }
     }
 
@@ -54,7 +54,7 @@ class CrashViewDialog : AppCompatDialogFragment() {
         super.onCreate(savedInstanceState)
         val crashLog = requireArguments().getString(ARGUMENT_CRASH_LOG, null)
         if (crashLog == null) {
-            showGlobalShortToast(R.string.crash_detail_not_found)
+            showGlobalToast(R.string.crash_detail_not_found)
             dismiss()
             return
         } else {

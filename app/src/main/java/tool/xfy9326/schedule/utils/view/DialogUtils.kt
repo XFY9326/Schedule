@@ -9,7 +9,7 @@ import tool.xfy9326.schedule.beans.Schedule
 import tool.xfy9326.schedule.databinding.DialogEditTextBinding
 import tool.xfy9326.schedule.kt.getText
 import tool.xfy9326.schedule.kt.show
-import tool.xfy9326.schedule.kt.showShortToast
+import tool.xfy9326.schedule.kt.showToast
 import tool.xfy9326.schedule.tools.MaterialColorHelper
 
 object DialogUtils {
@@ -20,6 +20,18 @@ object DialogUtils {
             setPositiveButton(android.R.string.ok) { _, _ ->
                 onConfirm()
             }
+            setCancelable(false)
+        }.show(activity)
+    }
+
+    fun showAddCourseImportAttentionDialog(activity: AppCompatActivity, onConfirm: () -> Unit) {
+        MaterialAlertDialogBuilder(activity).apply {
+            setTitle(R.string.add_course_import_attention_title)
+            setMessage(R.string.add_course_import_attention)
+            setPositiveButton(R.string.agree_policy) { _, _ ->
+                onConfirm()
+            }
+            setNegativeButton(android.R.string.cancel, null)
             setCancelable(false)
         }.show(activity)
     }
@@ -36,7 +48,7 @@ object DialogUtils {
                 dialogViewBinding.editTextDialogText.clearFocus()
                 val text = dialogViewBinding.editTextDialogText.text.getText()
                 if (text == null) {
-                    activity.showShortToast(R.string.schedule_name_empty_error)
+                    activity.showToast(R.string.schedule_name_empty_error)
                 } else {
                     onConfirm(text)
                 }
