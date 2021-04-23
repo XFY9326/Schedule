@@ -15,9 +15,24 @@ class CourseParseResult private constructor(val courses: List<Course>, val ignor
             }
         private var error: CourseAdapterException? = null
 
-        fun add(skipErrorCourse: Boolean = true, action: () -> Course?) {
+        fun add(skipErrorCourse: Boolean = true, combineSameNameCourse: Boolean = false, action: () -> Course?) {
             try {
-                action()?.let(courses::add)
+                action()?.let {
+                    if (combineSameNameCourse) {
+                        val found = courses.find { existCourse ->
+                            it.name == existCourse.name && it.teacher == existCourse.teacher
+                        }
+                        if (found == null) {
+                            courses.add(it)
+                        } else {
+                            val times = found.times.toMutableSet()
+                            times.addAll(it.times)
+                            found.times = times.toList()
+                        }
+                    } else {
+                        courses.add(it)
+                    }
+                }
             } catch (e: CourseAdapterException) {
                 throw e
             } catch (e: Exception) {

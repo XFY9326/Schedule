@@ -45,14 +45,14 @@ abstract class CourseProviderActivity<I, P1 : AbstractCourseProvider<*>, P2 : Ab
 
     @CallSuper
     override fun onBindLiveData(viewBinding: V, viewModel: M) {
-        viewModel.providerError.observeEvent(this) {
+        viewModel.providerError.observeEvent(this, CourseProviderActivity::class.simpleName!!) {
             if (it.type.strictMode) {
                 StrictImportModeWarningDialog.showDialog(supportFragmentManager, it.getText(this), it.getDeepStackTraceString())
             } else {
                 onShowCourseAdapterError(it)
             }
         }
-        viewModel.courseImportFinish.observeEvent(this) {
+        viewModel.courseImportFinish.observeEvent(this, CourseProviderActivity::class.simpleName!!) {
             onCourseImportFinish(it.first, it.second)
             internalCourseImportFinish(it.first, it.second)
         }
@@ -108,5 +108,5 @@ abstract class CourseProviderActivity<I, P1 : AbstractCourseProvider<*>, P2 : Ab
 
     protected open fun onReadyImportCourse() {}
 
-    class ImportRequestParams<I>(val isCurrentSchedule: Boolean, val importParams: I, val importOption: Int)
+    class ImportRequestParams<I>(val isCurrentSchedule: Boolean, val importParams: I, val importOption: Int = 0)
 }

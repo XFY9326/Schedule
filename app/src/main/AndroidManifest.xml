@@ -80,6 +80,10 @@
             android:label="@string/web_page_import_course" />
 
         <activity
+            android:name=".ui.activity.JSCourseProviderActivity"
+            android:label="@string/web_page_js_import_course" />
+
+        <activity
             android:name=".ui.activity.FeedbackActivity"
             android:label="@string/online_feedback" />
 

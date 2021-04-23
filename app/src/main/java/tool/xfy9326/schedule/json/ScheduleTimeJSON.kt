@@ -1,11 +1,13 @@
-package tool.xfy9326.schedule.json.backup
+package tool.xfy9326.schedule.json
 
 import kotlinx.serialization.Serializable
 import tool.xfy9326.schedule.beans.ScheduleTime
 
 @Serializable
 data class ScheduleTimeJSON(
+    // HH:mm
     val start: String,
+    // HH:mm
     val end: String,
 ) {
     init {

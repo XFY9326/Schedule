@@ -112,6 +112,7 @@
     <string name="login_to_import_course">登录以导入课程</string>
     <string name="direct_import_course">直接导入课程</string>
     <string name="web_page_import_course">通过网页导入课程</string>
+    <string name="web_page_js_import_course">通过网页导入课程 - JS</string>
     <string name="details">详情</string>
     <string name="error_details">错误详情</string>
     <string name="loading_failed">加载错误</string>
@@ -372,10 +373,12 @@
 
     <string name="js_config_read_failed">配置文件读取错误！</string>
     <string name="js_config_invalid">导入的配置文件不合法！</string>
-    <string name="js_config_uuid_error">配置文件UUID错误！</string>
-    <string name="js_config_js_type_error">配置文件JS类型错误！</string>
-    <string name="js_config_provider_url_empty">配置文件课程提供器为空！</string>
-    <string name="js_config_parser_url_empty">配置文件课程解析器为空！</string>
+    <string name="js_config_uuid_error">UUID错误！</string>
+    <string name="js_config_js_type_error">JS类型错误！</string>
+    <string name="js_config_provider_url_error">课程提供器地址错误！</string>
+    <string name="js_config_parser_url_error">课程解析器地址错误！</string>
+    <string name="js_config_init_page_url_error">初始化页面地址错误！</string>
+    <string name="js_config_dependency_url_error">运行环境依赖地址错误！</string>
     <string name="js_config_config_delete_error">配置文件删除错误！</string>
     <string name="js_config_update_failed">更新检查失败！</string>
     <string name="js_config_provider_download_error">课程提供器下载失败！</string>

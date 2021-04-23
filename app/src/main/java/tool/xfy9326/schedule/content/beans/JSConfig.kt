@@ -1,6 +1,7 @@
 package tool.xfy9326.schedule.content.beans
 
 import android.os.Parcelable
+import android.webkit.URLUtil
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
@@ -20,6 +21,7 @@ data class JSConfig(
     override val authorName: String,
     override val systemName: String,
     val jsType: String = TYPE_PURE_SCHEDULE,
+    val initPageUrl: String,
     val dependenciesJSUrls: List<String> = emptyList(),
     val providerJSUrl: String,
     val parserJSUrl: String,
@@ -49,9 +51,13 @@ data class JSConfig(
     init {
         if (!uuid.isUUID()) JSConfigException.Error.UUID_ERROR.report()
         if (jsType != TYPE_AI_SCHEDULE && jsType != TYPE_PURE_SCHEDULE) JSConfigException.Error.JS_TYPE_ERROR.report()
-        if (providerJSUrl.isBlank()) JSConfigException.Error.PROVIDER_URL_EMPTY.report()
-        if (parserJSUrl.isBlank()) JSConfigException.Error.PARSER_URL_EMPTY.report()
+        if (providerJSUrl.isBlank() || !URLUtil.isValidUrl(providerJSUrl)) JSConfigException.Error.PROVIDER_URL_ERROR.report()
+        if (parserJSUrl.isBlank() || !URLUtil.isValidUrl(parserJSUrl)) JSConfigException.Error.PARSER_URL_ERROR.report()
+        if (initPageUrl.isBlank() || !URLUtil.isValidUrl(initPageUrl)) JSConfigException.Error.INIT_PAGE_URL_ERROR.report()
+        for (dependenciesJSUrl in dependenciesJSUrls) {
+            if (dependenciesJSUrl.isBlank() || !URLUtil.isValidUrl(dependenciesJSUrl)) JSConfigException.Error.DEPENDENCY_URL_ERROR.report()
+        }
     }
 
-    fun getJSParams() = JSParams(uuid, jsType)
+    fun getJSParams() = JSParams(uuid, jsType, initPageUrl)
 }

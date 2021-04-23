@@ -35,7 +35,10 @@ data class CourseTime(
 ) : Parcelable {
 
     constructor(weekNum: BooleanArray, weekDay: WeekDay, classStartTime: Int, classDuration: Int, location: String? = null) :
-            this(DBConst.DEFAULT_ID, DBConst.DEFAULT_ID, weekNum, ClassTime(weekDay, classStartTime, classDuration), location)
+            this(weekNum, ClassTime(weekDay, classStartTime, classDuration), location)
+
+    constructor(weekNum: BooleanArray, classTime: ClassTime, location: String? = null) :
+            this(DBConst.DEFAULT_ID, DBConst.DEFAULT_ID, weekNum, classTime, location)
 
     operator fun compareTo(courseTime: CourseTime): Int {
         for (i in 0 until min(weekNum.size, courseTime.weekNum.size)) {

@@ -8,14 +8,13 @@ import tool.xfy9326.schedule.beans.WebCourseImportParams
 import tool.xfy9326.schedule.content.base.WebCourseParser
 import tool.xfy9326.schedule.content.base.WebCourseProvider
 import tool.xfy9326.schedule.ui.activity.base.CourseProviderActivity
-import tool.xfy9326.schedule.ui.vm.base.CourseProviderViewModel
+import tool.xfy9326.schedule.ui.vm.base.AbstractWebCourseProviderViewModel
 
-class WebCourseProviderViewModel : CourseProviderViewModel<WebCourseImportParams, WebCourseProvider<*>, WebCourseParser<*>>() {
+class WebCourseProviderViewModel : AbstractWebCourseProviderViewModel<WebCourseImportParams, WebCourseProvider<*>, WebCourseParser<*>>() {
     val validateHtmlPage = MutableEventLiveData<CourseProviderActivity.ImportRequestParams<WebCourseImportParams>?>()
-    val initPageUrl
-        get() = courseProvider.initPageUrl
-
     private val validatePageLock = Mutex()
+
+    override val initPageUrl = courseProvider.initPageUrl
 
     fun validateHtmlPage(importParams: WebCourseImportParams, isCurrentSchedule: Boolean) {
         if (!isImportingCourses) {

@@ -28,8 +28,10 @@ class JSConfigException : Exception {
         INVALID(R.string.js_config_invalid),
         UUID_ERROR(R.string.js_config_uuid_error),
         JS_TYPE_ERROR(R.string.js_config_js_type_error),
-        PROVIDER_URL_EMPTY(R.string.js_config_provider_url_empty),
-        PARSER_URL_EMPTY(R.string.js_config_parser_url_empty),
+        PROVIDER_URL_ERROR(R.string.js_config_provider_url_error),
+        PARSER_URL_ERROR(R.string.js_config_parser_url_error),
+        INIT_PAGE_URL_ERROR(R.string.js_config_init_page_url_error),
+        DEPENDENCY_URL_ERROR(R.string.js_config_dependency_url_error),
 
         UNKNOWN_ERROR(R.string.js_config_unknown_error),
         CONFIG_DELETE_ERROR(R.string.js_config_config_delete_error),

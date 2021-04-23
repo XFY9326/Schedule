@@ -20,6 +20,8 @@ fun <T> LiveData<T>.asNotifyLiveData(): NotifyLiveData =
         Notify()
     }
 
+fun <T> MutableEventLiveData<T>.getEventValue(): T? = value?.valueWrapper?.value
+
 fun <T> MutableEventLiveData<T>.postEvent(value: T) {
     postValue(Event(value))
 }

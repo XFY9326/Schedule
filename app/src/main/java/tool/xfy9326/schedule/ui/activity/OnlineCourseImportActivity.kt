@@ -18,7 +18,6 @@ import tool.xfy9326.schedule.data.AppDataStore
 import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.databinding.ActivityOnlineCourseImportBinding
 import tool.xfy9326.schedule.kt.show
-import tool.xfy9326.schedule.kt.showGlobalToast
 import tool.xfy9326.schedule.kt.showShortSnackBar
 import tool.xfy9326.schedule.tools.MIMEConst
 import tool.xfy9326.schedule.ui.activity.base.CourseProviderActivity
@@ -156,7 +155,7 @@ class OnlineCourseImportActivity : ViewModelActivity<OnlineCourseImportViewModel
             CourseImportUtils.ImportMethod.LOGIN_IMPORT, CourseImportUtils.ImportMethod.NETWORK_IMPORT ->
                 CourseProviderActivity.startProviderActivity<NetworkCourseProviderActivity>(this, config)
             CourseImportUtils.ImportMethod.WEB_IMPORT -> CourseProviderActivity.startProviderActivity<WebCourseProviderActivity>(this, config)
-            CourseImportUtils.ImportMethod.WEB_JS_IMPORT -> showGlobalToast(config.toString())
+            CourseImportUtils.ImportMethod.WEB_JS_IMPORT -> CourseProviderActivity.startProviderActivity<JSCourseProviderActivity>(this, config)
         }
     }
 

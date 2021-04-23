@@ -65,6 +65,9 @@ class CourseAdapterException : Exception {
         SCHEDULE_COURSE_IMPORT_EMPTY(R.string.adapter_exception_schedule_course_empty, true),
         FAILED_TO_IMPORT_SOME_COURSE(R.string.adapter_exception_failed_to_import_some_course, true),
 
+        // 只给JSConfigException使用
+        JS_HANDLE_ERROR(R.string.adapter_exception_js_handle_error),
+
         // 如果可以添加固定的报错内容，就不要使用该报错类型
         CUSTOM_ERROR(null);
     }

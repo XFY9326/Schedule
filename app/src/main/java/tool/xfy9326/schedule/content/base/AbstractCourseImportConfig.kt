@@ -33,16 +33,18 @@ abstract class AbstractCourseImportConfig<P1 : Serializable, T1 : AbstractCourse
     sortingBasis: String,
 ) : ICourseImportConfig, Serializable {
     companion object {
-        fun JSConfig.toCourseImportConfig() = object : AbstractCourseImportConfig<JSParams, JSCourseProvider, JSParams, JSCourseParser>(
-            schoolName = schoolName,
-            authorName = authorName,
-            systemName = systemName,
+        fun JSConfig.toCourseImportConfig() = JSCourseImportConfig(this)
+
+        class JSCourseImportConfig(jsConfig: JSConfig) : AbstractCourseImportConfig<JSParams, JSCourseProvider, JSParams, JSCourseParser>(
+            schoolName = jsConfig.schoolName,
+            authorName = jsConfig.authorName,
+            systemName = jsConfig.systemName,
             providerClass = JSCourseProvider::class.java,
             parserClass = JSCourseParser::class.java,
-            providerParams = getJSParams(),
-            parserParams = getJSParams(),
-            sortingBasis = sortingBasis
-        ) {}
+            providerParams = jsConfig.getJSParams(),
+            parserParams = jsConfig.getJSParams(),
+            sortingBasis = jsConfig.sortingBasis
+        )
     }
 
     constructor(
