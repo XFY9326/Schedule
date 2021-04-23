@@ -38,7 +38,7 @@ object DialogUtils {
 
     fun showNewScheduleNameDialog(activity: AppCompatActivity, onConfirm: (String) -> Unit) {
         val dialogViewBinding = DialogEditTextBinding.inflate(activity.layoutInflater)
-        dialogViewBinding.layoutDialogText.setHint(R.string.new_schedule_name_title)
+        dialogViewBinding.editTextDialogText.setHint(R.string.new_schedule_name_title)
         dialogViewBinding.editTextDialogText.setText(R.string.new_schedule_name)
 
         MaterialAlertDialogBuilder(activity).apply {

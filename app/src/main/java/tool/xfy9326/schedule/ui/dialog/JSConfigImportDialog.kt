@@ -3,6 +3,7 @@ package tool.xfy9326.schedule.ui.dialog
 import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
+import android.text.InputType
 import android.webkit.URLUtil
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
@@ -29,7 +30,8 @@ class JSConfigImportDialog : DialogFragment() {
 
             setTitle(R.string.add_course_import)
             setView(binding.root)
-            binding.layoutDialogText.setHint(R.string.please_input_course_import_config_url)
+            binding.editTextDialogText.setHint(R.string.please_input_course_import_config_url)
+            binding.editTextDialogText.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_MULTI_LINE
 
             setPositiveButton(R.string.add, null)
             setNegativeButton(android.R.string.cancel, null)

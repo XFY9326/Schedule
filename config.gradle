@@ -9,7 +9,7 @@ ext {
             minSdkVersion    : 23,
             applicationId    : "tool.xfy9326.schedule",
             versionCode      : 10,
-            versionName      : "1.1.8"
+            versionName      : "1.2.0"
     ]
 
     library = [

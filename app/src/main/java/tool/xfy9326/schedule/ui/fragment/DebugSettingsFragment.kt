@@ -4,9 +4,11 @@ import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.StringRes
 import androidx.lifecycle.lifecycleScope
+import androidx.preference.CheckBoxPreference
 import androidx.preference.PreferenceDataStore
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import lib.xfy9326.livedata.observeEvent
+import tool.xfy9326.schedule.BuildConfig
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.kt.setOnPrefClickListener
@@ -24,6 +26,7 @@ class DebugSettingsFragment : AbstractSettingsFragment() {
         private const val KEY_OUTPUT_DEBUG_LOGS = "outputDebugLogs"
         private const val KEY_CLEAR_DEBUG_LOGS = "clearDebugLogs"
         private const val KEY_SEND_DEBUG_LOG = "sendDebugLog"
+        private const val KEY_HANDLE_EXCEPTION = "handleException"
     }
 
     override val titleName: Int = R.string.debug_settings
@@ -39,6 +42,7 @@ class DebugSettingsFragment : AbstractSettingsFragment() {
     }
 
     override fun onPrefInit(savedInstanceState: Bundle?) {
+        findPreference<CheckBoxPreference>(KEY_HANDLE_EXCEPTION)?.isEnabled = !BuildConfig.DEBUG
         setOnPrefClickListener(KEY_READ_DEBUG_LOGS) {
             requireSettingsViewModel()?.getAllLogs(KEY_READ_DEBUG_LOGS)
         }

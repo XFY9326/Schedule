@@ -369,7 +369,7 @@
     <string name="add_course_import_attention_title">添加课程导入须知</string>
     <string name="add_course_import_attention">\u3000\u3000您可以通过自定义的方式快速添加需要的课程解析器，但是由于该功能依赖于JS并且来自未经审核的第三方，因此可能会造成安全问题。\n\u3000\u3000请在了解以上风险并愿意承担由于导入JS导致的一切问题的基础上，再使用本功能！</string>
     <string name="agree_policy">我同意并愿意承担风险</string>
-    <string name="please_input_course_import_config_url">请输入课程导入配置文件Url</string>
+    <string name="please_input_course_import_config_url">配置文件Url</string>
 
     <string name="js_config_read_failed">配置文件读取错误！</string>
     <string name="js_config_invalid">导入的配置文件不合法！</string>
