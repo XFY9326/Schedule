@@ -13,5 +13,7 @@ class IWebCourseProvider {
         fun onBackPressed(): Boolean
 
         fun evaluateJavascript(content: String, callback: ((String) -> Unit)? = null)
+
+        fun refresh()
     }
 }

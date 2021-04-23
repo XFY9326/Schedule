@@ -79,7 +79,7 @@ class JSConfigPrepareDialog : DialogFragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        viewModel.jsConfigPrepareProgress.observeEvent(viewLifecycleOwner) {
+        viewModel.jsConfigPrepareProgress.observeEvent(viewLifecycleOwner, javaClass.simpleName) {
             when (it) {
                 CHECK_UPDATE, PREPARE_PROVIDER, PREPARE_PARSER, PREPARE_DEPENDENCIES -> updateProgressText(it)
                 PREPARE_FINISH -> {

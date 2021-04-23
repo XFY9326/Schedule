@@ -42,7 +42,7 @@ object ExceptionHandler : Thread.UncaughtExceptionHandler {
             name.startsWith(CRASH_LOG_FILE_PREFIX) && name.endsWith(CRASH_LOG_FILE_EXTENSION)
         }
         if (files != null && files.size - 1 > cleanSize + 1) {
-            files.sortedBy {
+            files.sortedByDescending {
                 it.lastModified()
             }.take(files.size - cleanSize).forEach {
                 it.delete()
@@ -58,7 +58,7 @@ object ExceptionHandler : Thread.UncaughtExceptionHandler {
                 FileManager.writeCrashLog(crashFileName, generateCrashLog(e))
                 runCrashLogCleaner(AppSettingsDataStore.debugLogsMaxStoreAmountFlow.first())
 
-                if (AppSettingsDataStore.handleExceptionFlow.first()) {
+                if (!BuildConfig.DEBUG && AppSettingsDataStore.handleExceptionFlow.first()) {
                     if (isAppErrorCrash()) {
                         App.instance.appErrorRelaunch(crashFileName)
                     } else {

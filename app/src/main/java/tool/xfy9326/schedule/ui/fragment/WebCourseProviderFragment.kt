@@ -167,4 +167,8 @@ class WebCourseProviderFragment : ViewBindingFragment<FragmentWebCourseProviderB
             requireViewBinding().webViewWebCourseProvider.evaluateJavascript(content, callback)
         }
     }
+
+    override fun refresh() {
+        requireViewBinding().webViewWebCourseProvider.reload()
+    }
 }

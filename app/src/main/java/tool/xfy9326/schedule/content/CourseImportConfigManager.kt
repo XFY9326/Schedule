@@ -18,8 +18,8 @@ import lib.xfy9326.livedata.postEvent
 import okhttp3.internal.closeQuietly
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.content.base.AbstractCourseImportConfig
-import tool.xfy9326.schedule.content.base.AbstractCourseImportConfig.Companion.toCourseImportConfig
 import tool.xfy9326.schedule.content.base.ICourseImportConfig
+import tool.xfy9326.schedule.content.base.JSCourseImportConfig.Companion.toCourseImportConfig
 import tool.xfy9326.schedule.content.beans.JSConfig
 import tool.xfy9326.schedule.content.utils.JSConfigException
 import tool.xfy9326.schedule.content.utils.JSConfigException.Companion.make

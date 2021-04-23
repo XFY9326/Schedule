@@ -12,13 +12,14 @@ class JSCourseProvider : AbstractCourseProvider<JSParams>() {
     private var parserCache: String? = null
     private var providerCache: String? = null
     private var dependenciesCache: List<String>? = null
-    val initPageUrl = requireParams().initUrl
 
-    val providerFunctionCallGenerator: (htmlParam: String, iframeListParam: String, frameListParam: String) -> String =
-        when (requireParams().jsType) {
-            // String String String
+    fun getInitUrl() = requireParams().initUrl
+
+    fun getProviderFunctionCallGenerator(): (htmlParam: String, iframeListParam: String, frameListParam: String) -> String {
+        return when (requireParams().jsType) {
+            // String String Document
             JSConfig.TYPE_AI_SCHEDULE -> {
-                { p0, p1, p2 -> "scheduleHtmlProvider(${p0.trim()}, ${p1.trim()}.join(\"\"), ${p2.trim()}.join(\"\"));" }
+                { _, p1, p2 -> "scheduleHtmlProvider(${p1.trim()}.join(\"\"), ${p2.trim()}.join(\"\"), document);" }
             }
             // String String[] String[]
             JSConfig.TYPE_PURE_SCHEDULE -> {
@@ -26,9 +27,10 @@ class JSCourseProvider : AbstractCourseProvider<JSParams>() {
             }
             else -> error("Unsupported JS Type! ${requireParams().jsType}")
         }
+    }
 
-    val parserFunctionCallGenerator: (html: String) -> String =
-        when (requireParams().jsType) {
+    fun getParserFunctionCallGenerator(): (html: String) -> String {
+        return when (requireParams().jsType) {
             // String
             JSConfig.TYPE_AI_SCHEDULE -> {
                 { "scheduleHtmlParser(${it.trim()});" }
@@ -39,6 +41,7 @@ class JSCourseProvider : AbstractCourseProvider<JSParams>() {
             }
             else -> error("Unsupported JS Type! ${requireParams().jsType}")
         }
+    }
 
     suspend fun getJSParser() = runJSLoad { uuid ->
         parserCache ?: JSFileManager.readJSParser(uuid)?.also {

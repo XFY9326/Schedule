@@ -68,13 +68,15 @@ class CrashViewDialog : AppCompatDialogFragment() {
         binding.textViewCrashDetail.text = crashLog
         setView(binding.root)
         setNeutralButton(R.string.export, null)
-        setPositiveButton(R.string.print_error_log) { _, _ ->
-            Log.e(LOG_TAG, crashLog)
-        }
+        setNegativeButton(android.R.string.cancel, null)
+        setPositiveButton(R.string.print_error_log, null)
     }.create().also { dialog ->
         dialog.setOnShowListener {
             dialog.getButton(DialogInterface.BUTTON_NEUTRAL).setOnClickListener {
                 outputLogFile.launch(DEFAULT_EXPORT_LOG_NAME.format(System.currentTimeMillis()))
+            }
+            dialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener {
+                Log.e(LOG_TAG, crashLog)
             }
         }
     }

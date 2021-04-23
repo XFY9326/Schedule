@@ -14,7 +14,9 @@ class WebCourseProviderViewModel : AbstractWebCourseProviderViewModel<WebCourseI
     val validateHtmlPage = MutableEventLiveData<CourseProviderActivity.ImportRequestParams<WebCourseImportParams>?>()
     private val validatePageLock = Mutex()
 
-    override val initPageUrl = courseProvider.initPageUrl
+    override fun getInitUrl(): String {
+        return courseProvider.initPageUrl
+    }
 
     fun validateHtmlPage(importParams: WebCourseImportParams, isCurrentSchedule: Boolean) {
         if (!isImportingCourses) {

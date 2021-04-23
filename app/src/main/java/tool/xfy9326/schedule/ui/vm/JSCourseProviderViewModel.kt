@@ -16,7 +16,9 @@ class JSCourseProviderViewModel : AbstractWebCourseProviderViewModel<String, JSC
     private val jsLoadLock = Mutex()
     val jsContent = MutableEventLiveData<String>()
 
-    override val initPageUrl = courseProvider.initPageUrl
+    override fun getInitUrl(): String {
+        return courseProvider.getInitUrl()
+    }
 
     fun requestJSContent(isCurrentSchedule: Boolean) {
         if (!isImportingCourses) {

@@ -59,12 +59,12 @@ object JSBridge {
            {
                 let ${funHead}LoadJSResult = {
                     "isSuccess": false,
-                    "data": "JS Start failed!"
+                    "data": "JS launch failed!"
                 }
                 
                 try {
                     ${jsCourseProvider.getJSDependencies().joinToString("\n")}
-                
+                    
                     ${jsCourseProvider.getJSProvider()}
                 
                     ${jsCourseProvider.getJSParser()}
@@ -72,9 +72,9 @@ object JSBridge {
                     $FUNCTION_HTML_LOADER
                     let $htmlContent = $FUNCTION_NAME_HTML_LOADER();
                     
-                    let ${funHead}ProviderResult = ${jsCourseProvider.providerFunctionCallGenerator.invoke(htmlParam, iframeListParam, frameListParam)};
+                    let ${funHead}ProviderResult = ${jsCourseProvider.getProviderFunctionCallGenerator().invoke(htmlParam, iframeListParam, frameListParam)};
                     
-                    let ${funHead}ParserResult = ${jsCourseProvider.parserFunctionCallGenerator.invoke("${funHead}ProviderResult")};
+                    let ${funHead}ParserResult = ${jsCourseProvider.getParserFunctionCallGenerator().invoke("${funHead}ProviderResult")};
                     
                     ${funHead}LoadJSResult["isSuccess"] = true;
                     ${funHead}LoadJSResult["data"] = JSON.stringify(${funHead}ParserResult);
@@ -83,7 +83,7 @@ object JSBridge {
                     ${funHead}LoadJSResult["data"] = err.toString();
                 }
                 
-                window.$JS_COURSE_PROVIDER_JS_INTERFACE_NAME.$JS_COURSE_PROVIDER_JS_FUNCTION_NAME(${funHead}LoadJSResult, $isCurrentSchedule)
+                window.$JS_COURSE_PROVIDER_JS_INTERFACE_NAME.$JS_COURSE_PROVIDER_JS_FUNCTION_NAME(JSON.stringify(${funHead}LoadJSResult), $isCurrentSchedule)
            }
         """.trimIndent()
     }

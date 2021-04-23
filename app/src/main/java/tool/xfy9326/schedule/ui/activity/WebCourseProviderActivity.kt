@@ -2,6 +2,8 @@ package tool.xfy9326.schedule.ui.activity
 
 import android.webkit.JavascriptInterface
 import android.webkit.WebView
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
 import lib.xfy9326.livedata.observeEvent
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.WebCourseImportParams
@@ -40,6 +42,9 @@ class WebCourseProviderActivity :
             @JavascriptInterface
             override fun onReadHtmlContent(htmlContent: String, iframeContent: Array<String>, frameContent: Array<String>, isCurrentSchedule: Boolean) {
                 onGetCurrentHTML(htmlContent, iframeContent, frameContent, isCurrentSchedule)
+                lifecycleScope.launch {
+                    fragmentContact.refresh()
+                }
             }
         }, JSBridge.WEB_COURSE_PROVIDER_JS_INTERFACE_NAME)
     }

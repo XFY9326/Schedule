@@ -5,8 +5,6 @@ package tool.xfy9326.schedule.content.base
 import androidx.annotation.ArrayRes
 import androidx.annotation.StringRes
 import tool.xfy9326.schedule.content.beans.CourseImportInstance
-import tool.xfy9326.schedule.content.beans.JSConfig
-import tool.xfy9326.schedule.content.beans.JSParams
 import tool.xfy9326.schedule.io.IOManager
 import java.io.Serializable
 import java.util.*
@@ -21,7 +19,7 @@ import kotlin.reflect.KClass
  * JSCourseProvider -- JSCourseParser  仅限内部使用
  *
  */
-abstract class AbstractCourseImportConfig<P1 : Serializable, T1 : AbstractCourseProvider<P1>, P2 : Serializable, T2 : AbstractCourseParser<P2>> private constructor(
+abstract class AbstractCourseImportConfig<P1 : Serializable, T1 : AbstractCourseProvider<P1>, P2 : Serializable, T2 : AbstractCourseParser<P2>>(
     override val schoolName: String,
     override val authorName: String,
     override val systemName: String,
@@ -32,21 +30,6 @@ abstract class AbstractCourseImportConfig<P1 : Serializable, T1 : AbstractCourse
     private val parserParams: P2? = null,
     sortingBasis: String,
 ) : ICourseImportConfig, Serializable {
-    companion object {
-        fun JSConfig.toCourseImportConfig() = JSCourseImportConfig(this)
-
-        class JSCourseImportConfig(jsConfig: JSConfig) : AbstractCourseImportConfig<JSParams, JSCourseProvider, JSParams, JSCourseParser>(
-            schoolName = jsConfig.schoolName,
-            authorName = jsConfig.authorName,
-            systemName = jsConfig.systemName,
-            providerClass = JSCourseProvider::class.java,
-            parserClass = JSCourseParser::class.java,
-            providerParams = jsConfig.getJSParams(),
-            parserParams = jsConfig.getJSParams(),
-            sortingBasis = jsConfig.sortingBasis
-        )
-    }
-
     constructor(
         @StringRes schoolNameResId: Int,
         @StringRes authorNameResId: Int,

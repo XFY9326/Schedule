@@ -2,6 +2,8 @@ package tool.xfy9326.schedule.ui.activity
 
 import android.webkit.JavascriptInterface
 import android.webkit.WebView
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
 import lib.xfy9326.livedata.observeEvent
 import tool.xfy9326.schedule.content.base.JSCourseParser
 import tool.xfy9326.schedule.content.base.JSCourseProvider
@@ -22,7 +24,7 @@ class JSCourseProviderActivity : AbstractWebCourseProviderActivity<String, JSCou
     override fun onBindLiveData(viewBinding: ActivityFragmentContainerBinding, viewModel: JSCourseProviderViewModel) {
         super.onBindLiveData(viewBinding, viewModel)
         viewModel.jsContent.observeEvent(this, observer = ::onJSLoaded)
-        viewModel.providerError.observeEvent(this, JSCourseProviderActivity::class.simpleName!!) {
+        viewModel.providerError.observeEvent(this, javaClass.simpleName) {
             loadingController.hide()
         }
     }
@@ -31,18 +33,24 @@ class JSCourseProviderActivity : AbstractWebCourseProviderActivity<String, JSCou
         webView.addJavascriptInterface(object : JSBridge.JSCourseProviderJSInterface {
             @JavascriptInterface
             override fun onGetJSResult(resultJSON: String, isCurrentSchedule: Boolean) {
-                requestImportCourse(ImportRequestParams(isCurrentSchedule, resultJSON))
+                lifecycleScope.launch {
+                    requestImportCourse(ImportRequestParams(isCurrentSchedule, resultJSON))
+                    fragmentContact.refresh()
+                }
             }
         }, JSBridge.JS_COURSE_PROVIDER_JS_INTERFACE_NAME)
     }
 
     override fun onImportCourseToSchedule(isCurrentSchedule: Boolean) {
-        loadingController.show()
         requireViewModel().requestJSContent(isCurrentSchedule)
     }
 
     private fun onJSLoaded(jsContent: String) {
         fragmentContact.evaluateJavascript(jsContent)
+    }
+
+    override fun onReadyImportCourse() {
+        loadingController.show()
     }
 
     override fun onCourseImportFinish(result: CourseProviderViewModel.ImportResult, editScheduleId: Long?) {

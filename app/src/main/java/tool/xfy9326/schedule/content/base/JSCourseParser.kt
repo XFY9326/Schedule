@@ -56,7 +56,7 @@ class JSCourseParser : AbstractCourseParser<JSParams>() {
         for (info in scheduleData.courseInfos) {
             val classTimes = getSeriesClassTimeList(info)
             for (classTime in classTimes) {
-                builder.add(combineSameNameCourse = true) {
+                builder.add(combineSameCourse = true) {
                     val courseTime = CourseTime(getWeeksArray(info.weeks), classTime, info.position?.takeIf { it.isNotBlank() })
                     Course(info.name, info.teacher?.takeIf { it.isNotBlank() }, listOf(courseTime))
                 }
