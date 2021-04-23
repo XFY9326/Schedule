@@ -8,7 +8,6 @@ import androidx.lifecycle.MutableLiveData
 import io.ktor.client.*
 import io.ktor.client.engine.okhttp.*
 import io.ktor.client.features.*
-import io.ktor.client.features.cookies.*
 import io.ktor.client.request.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.sync.Mutex
@@ -55,7 +54,6 @@ class CourseImportConfigManager(scope: CoroutineScope) : CoroutineScope by scope
         get() = configWarning
 
     private val httpClient = HttpClient(OkHttp) {
-        install(HttpCookies)
         install(HttpRedirect)
         BrowserUserAgent()
         engine {
@@ -76,25 +74,21 @@ class CourseImportConfigManager(scope: CoroutineScope) : CoroutineScope by scope
         }
     }
 
-    fun addJSConfig(uri: Uri) {
-        launch {
-            try {
-                val content = uri.source()?.useBuffer { readUtf8() } ?: error("Empty uri! Uri $uri")
-                addJSConfigContent(content)
-            } catch (e: Exception) {
-                operationError.postEvent(JSConfigException.Error.READ_FAILED.make(e))
-            }
+    fun addJSConfig(uri: Uri) = launch {
+        try {
+            val content = uri.source()?.useBuffer { readUtf8() } ?: error("Empty uri! Uri $uri")
+            addJSConfigContent(content)
+        } catch (e: Exception) {
+            operationError.postEvent(JSConfigException.Error.READ_FAILED.make(e))
         }
     }
 
-    fun addJSConfig(url: String) {
-        launch {
-            try {
-                val content = httpClient.get<String>(url)
-                addJSConfigContent(content)
-            } catch (e: Exception) {
-                operationError.postEvent(JSConfigException.Error.READ_FAILED.make(e))
-            }
+    fun addJSConfig(url: String) = launch {
+        try {
+            val content = httpClient.get<String>(url)
+            addJSConfigContent(content)
+        } catch (e: Exception) {
+            operationError.postEvent(JSConfigException.Error.READ_FAILED.make(e))
         }
     }
 
@@ -136,18 +130,12 @@ class CourseImportConfigManager(scope: CoroutineScope) : CoroutineScope by scope
         if (!JSFileManager.checkLocalJSConfigFiles(latestConfig)) {
             JSFileManager.deleteJSConfigFiles(latestConfig.uuid, true)
             prepareConfigProgress.postEvent(Type.PREPARE_PROVIDER)
-            downloadJS(latestConfig.providerJSUrl, JSConfigException.Error.PROVIDER_DOWNLOAD_ERROR) {
-                JSFileManager.writeJSProvider(latestConfig.uuid, it)
-            }
+            downloadJS(latestConfig.uuid, latestConfig.providerJSUrl, JSConfigException.Error.PROVIDER_DOWNLOAD_ERROR, JSFileManager.SaveType.PROVIDER)
             prepareConfigProgress.postEvent(Type.PREPARE_PARSER)
-            downloadJS(latestConfig.parserJSUrl, JSConfigException.Error.PARSER_DOWNLOAD_ERROR) {
-                JSFileManager.writeJSParser(latestConfig.uuid, it)
-            }
+            downloadJS(latestConfig.uuid, latestConfig.parserJSUrl, JSConfigException.Error.PARSER_DOWNLOAD_ERROR, JSFileManager.SaveType.PARSER)
             prepareConfigProgress.postEvent(Type.PREPARE_DEPENDENCIES)
             for (dependenciesJSUrl in latestConfig.dependenciesJSUrls) {
-                downloadJS(dependenciesJSUrl, JSConfigException.Error.DEPENDENCIES_DOWNLOAD_ERROR) {
-                    JSFileManager.writeJSDependencies(latestConfig.uuid, dependenciesJSUrl, it)
-                }
+                downloadJS(latestConfig.uuid, dependenciesJSUrl, JSConfigException.Error.DEPENDENCIES_DOWNLOAD_ERROR, JSFileManager.SaveType.DEPENDENCY)
             }
             if (!JSFileManager.checkLocalJSConfigFiles(latestConfig)) {
                 JSConfigException.Error.PREPARE_ERROR.report()
@@ -157,22 +145,8 @@ class CourseImportConfigManager(scope: CoroutineScope) : CoroutineScope by scope
         preparedConfig.postEvent(latestConfig.toCourseImportConfig())
     }
 
-    private suspend fun downloadJS(url: String, errorType: JSConfigException.Error, onSave: suspend (String) -> Boolean) {
-        try {
-            val content = httpClient.get<String>(url)
-            if (content.isBlank()) {
-                error("JS content empty!")
-            } else {
-                if (!onSave(content)) {
-                    errorType.make()
-                }
-            }
-        } catch (e: JSConfigException) {
-            throw e
-        } catch (e: Exception) {
-            errorType.report(e)
-        }
-    }
+    private suspend fun downloadJS(uuid: String, url: String, errorType: JSConfigException.Error, saveType: JSFileManager.SaveType) =
+        JSFileManager.downloadJS(httpClient, uuid, url, errorType, saveType)
 
     private suspend fun getLatestConfig(jsConfig: JSConfig): JSConfig {
         if (jsConfig.updateUrl == null) {
@@ -230,8 +204,10 @@ class CourseImportConfigManager(scope: CoroutineScope) : CoroutineScope by scope
         }
     }
 
-    fun clearConnection() {
+    fun close() {
+        httpClient.cancel()
         httpClient.closeQuietly()
+        cancel()
     }
 
     enum class Type(@StringRes val msgId: Int) {

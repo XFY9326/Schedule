@@ -84,6 +84,7 @@ class JSConfigPrepareDialog : DialogFragment() {
                 CHECK_UPDATE, PREPARE_PROVIDER, PREPARE_PARSER, PREPARE_DEPENDENCIES -> updateProgressText(it)
                 PREPARE_FINISH -> {
                     isRunning = false
+                    requireDialog().setCancelable(true)
                     dismiss()
                 }
                 else -> {
@@ -96,6 +97,7 @@ class JSConfigPrepareDialog : DialogFragment() {
             setShowView(true)
             lastRunException = it
             showToast(it.getText(requireContext()))
+            requireDialog().setCancelable(true)
         }
         viewModel.configIgnorableWarning.observeEvent(viewLifecycleOwner, javaClass.simpleName) {
             showToast(it.getText(requireContext()))
@@ -106,15 +108,13 @@ class JSConfigPrepareDialog : DialogFragment() {
 
     override fun onStart() {
         super.onStart()
-        requireDialog().apply {
-            setCancelable(false)
-            setWindowWidthPercent(WINDOW_WIDTH_PERCENT)
-        }
+        requireDialog().setWindowWidthPercent(WINDOW_WIDTH_PERCENT)
     }
 
     private fun runPreparing() {
         if (!isRunning) {
             isRunning = true
+            requireDialog().setCancelable(false)
             lastRunException = null
             setShowView(false)
             viewModel.prepareJSConfig(jsConfig)

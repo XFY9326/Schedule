@@ -34,7 +34,7 @@ import tool.xfy9326.schedule.utils.view.DialogUtils
 import tool.xfy9326.schedule.utils.view.ViewUtils
 
 class OnlineCourseImportActivity : ViewModelActivity<OnlineCourseImportViewModel, ActivityOnlineCourseImportBinding>(),
-    CourseImportAdapter.OnCourseImportItemListener, JSConfigImportDialog.OnJSConfigImportListener {
+    CourseImportAdapter.OnCourseImportItemListener, JSConfigImportDialog.OnJSConfigImportListener, FullScreenLoadingDialog.OnRequestCancelListener {
     private lateinit var courseImportAdapter: CourseImportAdapter
     private val loadingController = FullScreenLoadingDialog.createControllerInstance(this)
     private val selectJSConfig = registerForActivityResult(ActivityResultContracts.GetContent()) {
@@ -177,12 +177,17 @@ class OnlineCourseImportActivity : ViewModelActivity<OnlineCourseImportViewModel
     }
 
     override fun onJSConfigUrlImport(url: String) {
-        loadingController.show(false)
+        loadingController.show()
         requireViewModel().addJSConfig(url)
     }
 
     override fun onJSConfigFileImport() {
-        loadingController.show(false)
+        loadingController.show()
         selectJSConfig.launch(MIMEConst.MIME_APPLICATION_JSON)
+    }
+
+    override fun onFullScreenLoadingDialogRequestCancel(): Boolean {
+        requireViewModel().cancelJSConfigAdd()
+        return true
     }
 }

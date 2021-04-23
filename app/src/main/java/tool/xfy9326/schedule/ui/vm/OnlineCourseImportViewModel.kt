@@ -16,6 +16,7 @@ import tool.xfy9326.schedule.ui.vm.base.AbstractViewModel
 class OnlineCourseImportViewModel : AbstractViewModel() {
     private val configManager = CourseImportConfigManager(viewModelScope)
     private var jsPrepareJob: Job? = null
+    private var jsAddJob: Job? = null
 
     val courseImportConfigs = configManager.courseImportConfigs
     val preparedJSConfig = configManager.preparedJSConfig
@@ -47,15 +48,22 @@ class OnlineCourseImportViewModel : AbstractViewModel() {
     }
 
     fun addJSConfig(uri: Uri) {
-        configManager.addJSConfig(uri)
+        jsAddJob?.cancel()
+        jsAddJob = configManager.addJSConfig(uri)
     }
 
     fun addJSConfig(url: String) {
-        configManager.addJSConfig(url)
+        jsAddJob?.cancel()
+        jsAddJob = configManager.addJSConfig(url)
     }
 
     fun prepareJSConfig(jsConfig: JSConfig) {
         jsPrepareJob = configManager.prepareJSConfig(jsConfig)
+    }
+
+    fun cancelJSConfigAdd() {
+        jsAddJob?.takeIf { !it.isCompleted }?.cancel()
+        jsAddJob = null
     }
 
     fun cancelPrepareJSConfig() {
@@ -64,6 +72,8 @@ class OnlineCourseImportViewModel : AbstractViewModel() {
     }
 
     override fun onCleared() {
-        configManager.clearConnection()
+        cancelJSConfigAdd()
+        cancelPrepareJSConfig()
+        configManager.close()
     }
 }

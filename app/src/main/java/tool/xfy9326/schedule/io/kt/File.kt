@@ -8,7 +8,7 @@ fun File.asParentOf(vararg path: String) = if (path.isEmpty()) this else File(th
 
 fun Collection<File>.deleteRecursively() = forEach { it.deleteRecursively() }
 
-fun <T> File.withPreparedDir(block: (File) -> T): T? {
+suspend fun <T> File.withPreparedDir(block: suspend (File) -> T): T? {
     val parent = parentFile
     if (parent == null || parent.exists() || parent.mkdirs()) {
         return block(this)

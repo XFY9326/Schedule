@@ -14,6 +14,7 @@ import java.util.*
 @Serializable
 data class JSConfig(
     val uuid: String,
+    val config: Int = CONFIG,
     val version: Int = VERSION,
     override val schoolName: String,
     override val authorName: String,
@@ -26,6 +27,7 @@ data class JSConfig(
     val sortingBasis: String,
 ) : Parcelable, ICourseImportConfig {
     companion object {
+        private const val CONFIG = 1
         private const val VERSION = 1
 
         const val TYPE_AI_SCHEDULE = "AiSchedule"
