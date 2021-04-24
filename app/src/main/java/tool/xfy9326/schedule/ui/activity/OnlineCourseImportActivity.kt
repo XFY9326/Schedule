@@ -6,7 +6,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.StringRes
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import lib.xfy9326.livedata.observeEvent
@@ -17,7 +16,6 @@ import tool.xfy9326.schedule.content.beans.JSConfig
 import tool.xfy9326.schedule.data.AppDataStore
 import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.databinding.ActivityOnlineCourseImportBinding
-import tool.xfy9326.schedule.kt.show
 import tool.xfy9326.schedule.kt.showShortSnackBar
 import tool.xfy9326.schedule.tools.MIMEConst
 import tool.xfy9326.schedule.ui.activity.base.CourseProviderActivity
@@ -28,6 +26,7 @@ import tool.xfy9326.schedule.ui.dialog.JSConfigImportDialog
 import tool.xfy9326.schedule.ui.dialog.JSConfigPrepareDialog
 import tool.xfy9326.schedule.ui.recyclerview.AdvancedDividerItemDecoration
 import tool.xfy9326.schedule.ui.vm.OnlineCourseImportViewModel
+import tool.xfy9326.schedule.utils.IntentUtils
 import tool.xfy9326.schedule.utils.schedule.CourseImportUtils
 import tool.xfy9326.schedule.utils.view.DialogUtils
 import tool.xfy9326.schedule.utils.view.ViewUtils
@@ -57,7 +56,19 @@ class OnlineCourseImportActivity : ViewModelActivity<OnlineCourseImportViewModel
 
     override fun onBindLiveData(viewBinding: ActivityOnlineCourseImportBinding, viewModel: OnlineCourseImportViewModel) {
         viewModel.onlineImportAttention.observeNotify(this) {
-            showOnlineImportAttentionDialog(true)
+            DialogUtils.showOnlineImportAttentionDialog(this, true,
+                onPositive = {
+                    requireViewModel().hasReadOnlineImportAttention()
+                },
+                onNegative = {
+                    finish()
+                },
+                onNeutral = {
+                    lifecycleScope.launch {
+                        AppSettingsDataStore.setEnableOnlineCourseImportFlow(false)
+                        finish()
+                    }
+                })
         }
         viewModel.courseImportConfigs.observe(this) {
             courseImportAdapter.submitList(it)
@@ -112,31 +123,12 @@ class OnlineCourseImportActivity : ViewModelActivity<OnlineCourseImportViewModel
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.menu_onlineCourseImportAttention) {
-            showOnlineImportAttentionDialog(false)
+            DialogUtils.showOnlineImportAttentionDialog(this, false,
+                onNeutral = {
+                    IntentUtils.openUrlInBrowser(this, IntentUtils.COURSE_IMPORT_WIKI_URL)
+                })
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    private fun showOnlineImportAttentionDialog(enableControls: Boolean) {
-        MaterialAlertDialogBuilder(this).apply {
-            setTitle(R.string.online_course_import)
-            setMessage(R.string.online_course_import_attention)
-            if (enableControls) {
-                setCancelable(false)
-                setPositiveButton(R.string.has_read) { _, _ ->
-                    requireViewModel().hasReadOnlineImportAttention()
-                }
-                setNegativeButton(android.R.string.cancel) { _, _ ->
-                    finish()
-                }
-                setNeutralButton(R.string.disable_function) { _, _ ->
-                    lifecycleScope.launch {
-                        AppSettingsDataStore.setEnableOnlineCourseImportFlow(false)
-                        finish()
-                    }
-                }
-            }
-        }.show(this)
     }
 
     private fun openCourseImportActivity(config: AbstractCourseImportConfig<*, *, *, *>) {

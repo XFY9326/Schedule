@@ -13,6 +13,8 @@ import tool.xfy9326.schedule.tools.MIMEConst
 import java.util.*
 
 object IntentUtils {
+    const val COURSE_IMPORT_WIKI_URL = "https://github.com/XFY9326/Schedule/wiki"
+
     fun openUrlInBrowser(context: Context, url: String) {
         context.tryStartActivity(Intent(Intent.ACTION_VIEW).apply {
             data = Uri.parse(url)

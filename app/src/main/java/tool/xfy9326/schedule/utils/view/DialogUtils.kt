@@ -7,12 +7,47 @@ import com.jaredrummler.android.colorpicker.ColorPickerDialog
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.Schedule
 import tool.xfy9326.schedule.databinding.DialogEditTextBinding
+import tool.xfy9326.schedule.kt.NEW_LINE
 import tool.xfy9326.schedule.kt.getText
 import tool.xfy9326.schedule.kt.show
 import tool.xfy9326.schedule.kt.showToast
 import tool.xfy9326.schedule.tools.MaterialColorHelper
 
 object DialogUtils {
+    fun showOnlineImportAttentionDialog(
+        activity: AppCompatActivity,
+        isStaticAttention: Boolean,
+        onPositive: (() -> Unit)? = null,
+        onNegative: (() -> Unit)? = null,
+        onNeutral: (() -> Unit)? = null,
+    ) {
+        MaterialAlertDialogBuilder(activity).apply {
+            setTitle(R.string.online_course_import)
+            if (isStaticAttention) {
+                setMessage(R.string.online_course_import_attention)
+            } else {
+                setMessage(activity.getString(R.string.online_course_import_attention) + NEW_LINE + NEW_LINE + activity.getString(R.string.add_course_import_attention))
+            }
+            if (isStaticAttention) {
+                setCancelable(false)
+                setPositiveButton(R.string.has_read) { _, _ ->
+                    onPositive?.invoke()
+                }
+                setNegativeButton(android.R.string.cancel) { _, _ ->
+                    onNegative?.invoke()
+                }
+                setNeutralButton(R.string.disable_function) { _, _ ->
+                    onNeutral?.invoke()
+                }
+            } else {
+                setPositiveButton(android.R.string.ok, null)
+                setNeutralButton(R.string.add_course_import_wiki) { _, _ ->
+                    onNeutral?.invoke()
+                }
+            }
+        }.show(activity)
+    }
+
     fun showCalendarSyncAttentionDialog(activity: AppCompatActivity, onConfirm: () -> Unit) {
         MaterialAlertDialogBuilder(activity).apply {
             setTitle(R.string.calendar_sync_attention_dialog_title)
