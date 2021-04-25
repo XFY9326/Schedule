@@ -39,6 +39,9 @@ class NAUJwcCourseProvider : LoginCourseProvider<Nothing>() {
         private const val PASSWORD_ERROR = "密码错误"
         private const val LOGIN_SUCCESS = "登陆成功"
 
+        const val IMPORT_OPTION_THIS_TERM = 0
+        const val IMPORT_OPTION_NEXT_TERM = 1
+
         @Serializable
         private data class JwcLoginResponse(
             val Success: String,
@@ -93,15 +96,15 @@ class NAUJwcCourseProvider : LoginCourseProvider<Nothing>() {
 
     override suspend fun onLoadCoursesHtml(importOption: Int): String =
         when (importOption) {
-            0 -> httpClient.get(JWC_COURSE_THIS_TERM_URL)
-            1 -> httpClient.get(JWC_COURSE_NEXT_TERM_URL)
+            IMPORT_OPTION_THIS_TERM -> httpClient.get(JWC_COURSE_THIS_TERM_URL)
+            IMPORT_OPTION_NEXT_TERM -> httpClient.get(JWC_COURSE_NEXT_TERM_URL)
             else -> CourseAdapterException.Error.IMPORT_SELECT_OPTION_ERROR.report()
         }
 
     override suspend fun onLoadTermHtml(importOption: Int): String? =
         when (importOption) {
-            0 -> studentDefaultPageUrl?.let { httpClient.get(it) }
-            1 -> null
+            IMPORT_OPTION_THIS_TERM -> studentDefaultPageUrl?.let { httpClient.get(it) }
+            IMPORT_OPTION_NEXT_TERM -> null
             else -> CourseAdapterException.Error.IMPORT_SELECT_OPTION_ERROR.report()
         }
 

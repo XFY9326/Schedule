@@ -5,6 +5,7 @@ import tool.xfy9326.schedule.beans.Course
 import tool.xfy9326.schedule.beans.CourseTime
 import tool.xfy9326.schedule.beans.ScheduleTime
 import tool.xfy9326.schedule.beans.WeekDay
+import tool.xfy9326.schedule.content.adapters.provider.NAUJwcCourseProvider
 import tool.xfy9326.schedule.content.base.CourseParseResult
 import tool.xfy9326.schedule.content.base.NetworkCourseParser
 import tool.xfy9326.schedule.content.utils.CourseAdapterUtils
@@ -135,7 +136,7 @@ class NAUCourseParser : NetworkCourseParser<Nothing>() {
     }
 
     override fun onParseTerm(importOption: Int, htmlContent: String?): Pair<Date, Date>? {
-        if (htmlContent != null) {
+        if (importOption == NAUJwcCourseProvider.IMPORT_OPTION_THIS_TERM && htmlContent != null) {
             try {
                 val body = Jsoup.parse(htmlContent).body()
                 val termStartStr = body.selectFirst(TERM_START_SELECTOR).text().trim()
