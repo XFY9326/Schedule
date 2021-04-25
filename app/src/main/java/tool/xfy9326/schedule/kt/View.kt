@@ -38,10 +38,10 @@ fun Float.spToPx() = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, this,
 
 fun Int.spToPx() = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, this.toFloat(), Resources.getSystem().displayMetrics).toInt()
 
-fun CoordinatorLayout.showShortSnackBar(@StringRes strId: Int, vararg params: Any, showLong: Boolean = false) =
+fun CoordinatorLayout.showSnackBar(@StringRes strId: Int, vararg params: Any, showLong: Boolean = false) =
     Snackbar.make(this, context.getString(strId, *params), if (showLong) Snackbar.LENGTH_LONG else Snackbar.LENGTH_SHORT).show()
 
-fun CoordinatorLayout.showShortSnackBar(str: String, showLong: Boolean = false) =
+fun CoordinatorLayout.showSnackBar(str: String, showLong: Boolean = false) =
     Snackbar.make(this, str, if (showLong) Snackbar.LENGTH_LONG else Snackbar.LENGTH_SHORT).show()
 
 fun Dialog.setWindowWidthPercent(widthPercent: Double): Int? {

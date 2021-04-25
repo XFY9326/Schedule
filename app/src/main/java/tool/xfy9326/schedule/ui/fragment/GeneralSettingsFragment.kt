@@ -11,7 +11,7 @@ import tool.xfy9326.schedule.beans.NightMode
 import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.kt.setOnPrefClickListener
 import tool.xfy9326.schedule.kt.show
-import tool.xfy9326.schedule.kt.showShortSnackBar
+import tool.xfy9326.schedule.kt.showSnackBar
 import tool.xfy9326.schedule.kt.tryEnumValueOf
 import tool.xfy9326.schedule.ui.fragment.base.AbstractSettingsFragment
 
@@ -37,7 +37,7 @@ class GeneralSettingsFragment : AbstractSettingsFragment() {
                 setMessage(R.string.clear_cache_msg)
                 setPositiveButton(android.R.string.ok) { _, _ ->
                     requireSettingsViewModel()?.clearCache()
-                    requireRootLayout()?.showShortSnackBar(R.string.clear_cache_success)
+                    requireRootLayout()?.showSnackBar(R.string.clear_cache_success)
                 }
                 setNegativeButton(android.R.string.cancel, null)
             }.show(viewLifecycleOwner)
@@ -65,6 +65,6 @@ class GeneralSettingsFragment : AbstractSettingsFragment() {
     private fun restoreSettings() {
         requireSettingsViewModel()?.restoreSettings()
         requestBack()
-        requireRootLayout()?.showShortSnackBar(R.string.restore_settings_success)
+        requireRootLayout()?.showSnackBar(R.string.restore_settings_success)
     }
 }

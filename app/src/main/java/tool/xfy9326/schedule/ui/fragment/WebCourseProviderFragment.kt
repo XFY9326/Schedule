@@ -8,17 +8,17 @@ import android.view.animation.AnimationUtils
 import android.webkit.*
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.databinding.FragmentWebCourseProviderBinding
-import tool.xfy9326.schedule.kt.bindLifeCycle
-import tool.xfy9326.schedule.kt.clearAll
-import tool.xfy9326.schedule.kt.requireOwner
+import tool.xfy9326.schedule.kt.*
 import tool.xfy9326.schedule.ui.dialog.WebCourseProviderBottomPanel
 import tool.xfy9326.schedule.ui.fragment.base.IWebCourseProvider
 import tool.xfy9326.schedule.ui.fragment.base.ViewBindingFragment
+import java.lang.ref.WeakReference
 
 class WebCourseProviderFragment : ViewBindingFragment<FragmentWebCourseProviderBinding>(), WebCourseProviderBottomPanel.BottomPanelActionListener,
     IWebCourseProvider.IFragmentContact {
@@ -63,6 +63,23 @@ class WebCourseProviderFragment : ViewBindingFragment<FragmentWebCourseProviderB
             webChromeClient = object : WebChromeClient() {
                 override fun onProgressChanged(view: WebView?, newProgress: Int) {
                     changeProgressBar(newProgress)
+                }
+
+                override fun onJsAlert(view: WebView?, url: String?, message: String?, result: JsResult?): Boolean {
+                    if (message != null && result != null) {
+                        showToast(message)
+                        result.confirm()
+                        return true
+                    }
+                    return super.onJsAlert(view, url, message, result)
+                }
+
+                override fun onJsConfirm(view: WebView?, url: String?, message: String?, result: JsResult?): Boolean {
+                    if (message != null && result != null) {
+                        showJSConfirmDialog(message, result)
+                        return true
+                    }
+                    return super.onJsConfirm(view, url, message, result)
                 }
             }
             webViewClient = object : WebViewClient() {
@@ -116,6 +133,22 @@ class WebCourseProviderFragment : ViewBindingFragment<FragmentWebCourseProviderB
             requireViewBinding().webViewWebCourseProvider.reload()
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun showJSConfirmDialog(msg: String, jsResult: JsResult) {
+        val weakRef = WeakReference(jsResult)
+        MaterialAlertDialogBuilder(requireContext()).apply {
+            setTitle(R.string.js_confirm_title)
+            setMessage(msg)
+            setPositiveButton(android.R.string.ok) { _, _ ->
+                weakRef.get()?.confirm()
+            }
+            setNegativeButton(android.R.string.cancel, null)
+            setOnDismissListener {
+                weakRef.get()?.cancel()
+            }
+            setCancelable(false)
+        }.show(this)
     }
 
     private fun changeProgressBar(newProgress: Int) {

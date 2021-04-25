@@ -64,7 +64,7 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
         if (PermissionUtils.checkGrantResults(it)) {
             requireViewModel().syncToCalendar()
         } else {
-            requireViewBinding().layoutSchedule.showShortSnackBar(R.string.calendar_permission_get_failed)
+            requireViewBinding().layoutSchedule.showSnackBar(R.string.calendar_permission_get_failed)
         }
     }
     private val exportICSFile = registerForActivityResult(ActivityResultContracts.CreateDocument()) {
@@ -72,7 +72,7 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
             requireViewModel().exportICS(it)
         } else {
             requireViewModel().waitExportScheduleId.consume()
-            requireViewBinding().layoutSchedule.showShortSnackBar(R.string.output_file_cancel)
+            requireViewBinding().layoutSchedule.showSnackBar(R.string.output_file_cancel)
         }
     }
 
@@ -119,17 +119,17 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
             }
         }
         viewModel.iceExportStatus.observeEvent(this) {
-            viewBinding.layoutSchedule.showShortSnackBar(if (it) R.string.output_file_success else R.string.output_file_failed)
+            viewBinding.layoutSchedule.showSnackBar(if (it) R.string.output_file_success else R.string.output_file_failed)
         }
         viewModel.syncToCalendarStatus.observeEvent(this) {
             if (it.success) {
                 if (it.failedAmount == 0) {
-                    viewBinding.layoutSchedule.showShortSnackBar(R.string.calendar_sync_success)
+                    viewBinding.layoutSchedule.showSnackBar(R.string.calendar_sync_success)
                 } else {
-                    viewBinding.layoutSchedule.showShortSnackBar(R.string.calendar_sync_failed, it.total, it.failedAmount)
+                    viewBinding.layoutSchedule.showSnackBar(R.string.calendar_sync_failed, it.total, it.failedAmount)
                 }
             } else {
-                viewBinding.layoutSchedule.showShortSnackBar(R.string.calendar_sync_error)
+                viewBinding.layoutSchedule.showSnackBar(R.string.calendar_sync_error)
             }
         }
         viewModel.toolBarTintColor.observe(this, ::setToolBarTintColor)
@@ -140,7 +140,7 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
         }
         viewModel.scheduleShared.observeEvent(this) {
             if (it == null) {
-                viewBinding.layoutSchedule.showShortSnackBar(R.string.generate_share_schedule_failed)
+                viewBinding.layoutSchedule.showSnackBar(R.string.generate_share_schedule_failed)
             } else {
                 startActivity(IntentUtils.getShareImageIntent(this, it))
             }
@@ -193,7 +193,7 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
         when (item.itemId) {
             R.id.menu_scheduleControlPanel -> requireViewModel().showScheduleControlPanel()
             R.id.menu_scheduleShare -> {
-                requireViewBinding().layoutSchedule.showShortSnackBar(R.string.generating_share_schedule)
+                requireViewBinding().layoutSchedule.showSnackBar(R.string.generating_share_schedule)
                 requireViewModel().shareScheduleImage(getCurrentShowWeekNum(), resources.displayMetrics.widthPixels)
             }
         }

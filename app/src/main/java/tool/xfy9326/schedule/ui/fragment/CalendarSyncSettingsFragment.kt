@@ -11,7 +11,7 @@ import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.kt.setOnPrefClickListener
 import tool.xfy9326.schedule.kt.show
-import tool.xfy9326.schedule.kt.showShortSnackBar
+import tool.xfy9326.schedule.kt.showSnackBar
 import tool.xfy9326.schedule.ui.dialog.MultiItemSelectDialog
 import tool.xfy9326.schedule.ui.fragment.base.AbstractSettingsFragment
 import tool.xfy9326.schedule.ui.vm.SettingsViewModel
@@ -39,7 +39,7 @@ class CalendarSyncSettingsFragment : AbstractSettingsFragment(), MultiItemSelect
         if (PermissionUtils.checkGrantResults(it)) {
             requireSettingsViewModel()?.syncToCalendar()
         } else {
-            requireRootLayout()?.showShortSnackBar(R.string.calendar_permission_get_failed)
+            requireRootLayout()?.showSnackBar(R.string.calendar_permission_get_failed)
         }
     }
 
@@ -58,7 +58,7 @@ class CalendarSyncSettingsFragment : AbstractSettingsFragment(), MultiItemSelect
                 setNegativeButton(android.R.string.cancel, null)
                 setPositiveButton(android.R.string.ok) { _, _ ->
                     requireSettingsViewModel()?.clearCalendar()
-                    requireRootLayout()?.showShortSnackBar(R.string.clear_calendar_success)
+                    requireRootLayout()?.showSnackBar(R.string.clear_calendar_success)
                 }
             }.show(viewLifecycleOwner)
         }
@@ -69,7 +69,7 @@ class CalendarSyncSettingsFragment : AbstractSettingsFragment(), MultiItemSelect
                 setNegativeButton(android.R.string.cancel, null)
                 setPositiveButton(android.R.string.ok) { _, _ ->
                     requireSettingsViewModel()?.clearCalendarSettings()
-                    requireRootLayout()?.showShortSnackBar(R.string.clear_calendar_settings_success)
+                    requireRootLayout()?.showSnackBar(R.string.clear_calendar_settings_success)
                 }
             }.show(viewLifecycleOwner)
         }
@@ -91,12 +91,12 @@ class CalendarSyncSettingsFragment : AbstractSettingsFragment(), MultiItemSelect
         viewModel.syncToCalendarStatus.observeEvent(this) {
             if (it.success) {
                 if (it.failedAmount == 0) {
-                    requireRootLayout()?.showShortSnackBar(R.string.calendar_sync_success)
+                    requireRootLayout()?.showSnackBar(R.string.calendar_sync_success)
                 } else {
-                    requireRootLayout()?.showShortSnackBar(R.string.calendar_sync_failed, it.total, it.failedAmount)
+                    requireRootLayout()?.showSnackBar(R.string.calendar_sync_failed, it.total, it.failedAmount)
                 }
             } else {
-                requireRootLayout()?.showShortSnackBar(R.string.calendar_sync_error)
+                requireRootLayout()?.showSnackBar(R.string.calendar_sync_error)
             }
         }
         viewModel.scheduleSyncEdit.observeEvent(this) {

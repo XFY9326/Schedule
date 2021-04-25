@@ -161,7 +161,7 @@ class NetworkCourseProviderActivity :
     private fun getTextWithCheck(editText: EditText, @StringRes errorMsg: Int) =
         editText.text.getText().let {
             if (it == null) {
-                requireViewBinding().layoutLoginCourseProvider.showShortSnackBar(errorMsg)
+                requireViewBinding().layoutLoginCourseProvider.showSnackBar(errorMsg)
                 null
             } else {
                 it
@@ -173,7 +173,7 @@ class NetworkCourseProviderActivity :
             if (layoutImportOptions.isVisible) {
                 spinnerCourseImportOptions.selectedItemPosition.also {
                     if (it == Spinner.INVALID_POSITION) {
-                        if (warning) layoutLoginCourseProvider.showShortSnackBar(R.string.options_empty)
+                        if (warning) layoutLoginCourseProvider.showSnackBar(R.string.options_empty)
                     } else {
                         block(it)
                     }

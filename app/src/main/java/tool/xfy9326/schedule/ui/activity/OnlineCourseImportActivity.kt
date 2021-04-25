@@ -16,7 +16,7 @@ import tool.xfy9326.schedule.content.beans.JSConfig
 import tool.xfy9326.schedule.data.AppDataStore
 import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.databinding.ActivityOnlineCourseImportBinding
-import tool.xfy9326.schedule.kt.showShortSnackBar
+import tool.xfy9326.schedule.kt.showSnackBar
 import tool.xfy9326.schedule.tools.MIMEConst
 import tool.xfy9326.schedule.ui.activity.base.CourseProviderActivity
 import tool.xfy9326.schedule.ui.activity.base.ViewModelActivity
@@ -39,7 +39,7 @@ class OnlineCourseImportActivity : ViewModelActivity<OnlineCourseImportViewModel
         if (it != null) {
             requireViewModel().addJSConfig(it)
         } else {
-            requireViewBinding().layoutCourseImport.showShortSnackBar(R.string.input_file_cancel)
+            requireViewBinding().layoutCourseImport.showSnackBar(R.string.input_file_cancel)
         }
     }
 
@@ -151,9 +151,9 @@ class OnlineCourseImportActivity : ViewModelActivity<OnlineCourseImportViewModel
         }
     }
 
-    private fun showAttention(@StringRes id: Int) = requireViewBinding().layoutCourseImport.showShortSnackBar(id)
+    private fun showAttention(@StringRes id: Int) = requireViewBinding().layoutCourseImport.showSnackBar(id)
 
-    private fun showAttention(msg: String) = requireViewBinding().layoutCourseImport.showShortSnackBar(msg)
+    private fun showAttention(msg: String) = requireViewBinding().layoutCourseImport.showSnackBar(msg)
 
     override fun onCourseImportConfigClick(config: AbstractCourseImportConfig<*, *, *, *>) {
         openCourseImportActivity(config)

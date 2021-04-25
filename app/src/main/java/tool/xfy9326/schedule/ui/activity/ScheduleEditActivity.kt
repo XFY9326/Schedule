@@ -67,11 +67,11 @@ class ScheduleEditActivity : ViewModelActivity<ScheduleEditViewModel, ActivitySc
             )
         }
         viewModel.scheduleSaveFailed.observeEvent(this) {
-            viewBinding.layoutScheduleEdit.showShortSnackBar(it.getText(this))
+            viewBinding.layoutScheduleEdit.showSnackBar(it.getText(this))
         }
         viewModel.loadAllSchedules.observeEvent(this) {
             if (it.isEmpty()) {
-                viewBinding.layoutScheduleEdit.showShortSnackBar(R.string.empty_schedule_list)
+                viewBinding.layoutScheduleEdit.showSnackBar(R.string.empty_schedule_list)
             } else {
                 DialogUtils.showScheduleSelectDialog(this, R.string.import_times_from_other_schedule, it) { _, id ->
                     viewModel.importScheduleTimes(id)
@@ -80,11 +80,11 @@ class ScheduleEditActivity : ViewModelActivity<ScheduleEditViewModel, ActivitySc
         }
         viewModel.importScheduleTimes.observeEvent(this) {
             if (it == null) {
-                viewBinding.layoutScheduleEdit.showShortSnackBar(R.string.schedule_time_import_failed)
+                viewBinding.layoutScheduleEdit.showSnackBar(R.string.schedule_time_import_failed)
             } else {
                 viewModel.editSchedule.times = it
                 scheduleTimeAdapter.submitList(it.toList())
-                viewBinding.layoutScheduleEdit.showShortSnackBar(R.string.schedule_time_import_success)
+                viewBinding.layoutScheduleEdit.showSnackBar(R.string.schedule_time_import_success)
             }
         }
     }
@@ -151,7 +151,7 @@ class ScheduleEditActivity : ViewModelActivity<ScheduleEditViewModel, ActivitySc
             }
             intent.putExtra(INTENT_EXTRA_SCHEDULE_ID, newScheduleId)
         }
-        requireViewBinding().layoutScheduleEdit.showShortSnackBar(R.string.save_success)
+        requireViewBinding().layoutScheduleEdit.showSnackBar(R.string.save_success)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -333,7 +333,7 @@ class ScheduleEditActivity : ViewModelActivity<ScheduleEditViewModel, ActivitySc
 
     private fun selectScheduleTime(index: Int, hour: Int, minute: Int, isStart: Boolean) {
         if (!isStart && requireViewModel().scheduleTimeCourseTimeSame) {
-            requireViewBinding().layoutScheduleEdit.showShortSnackBar(R.string.course_cost_time_same_mode_warning)
+            requireViewBinding().layoutScheduleEdit.showSnackBar(R.string.course_cost_time_same_mode_warning)
         } else {
             TimePickerDialog.showDialog(
                 supportFragmentManager,
@@ -392,7 +392,7 @@ class ScheduleEditActivity : ViewModelActivity<ScheduleEditViewModel, ActivitySc
 
     private fun deleteScheduleAttention() {
         if (intent.getBooleanExtra(INTENT_EXTRA_IS_CURRENT_SCHEDULE, false)) {
-            requireViewBinding().layoutScheduleEdit.showShortSnackBar(R.string.unable_to_delete_using_schedule)
+            requireViewBinding().layoutScheduleEdit.showSnackBar(R.string.unable_to_delete_using_schedule)
         } else {
             if (requireViewModel().isEdit) {
                 val schedule = requireViewModel().editSchedule

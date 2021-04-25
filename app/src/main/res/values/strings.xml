@@ -371,6 +371,9 @@
     <string name="agree_policy">我同意并愿意承担风险</string>
     <string name="please_input_course_import_config_url">配置文件Url</string>
     <string name="add_course_import_wiki">适配文档</string>
+    <string name="refresh_web_page_after_import_course">尝试导入课程后刷新网页</string>
+    <string name="refresh_web_page_after_import_course_sum">可以解决JS注入的环境变化导致的问题</string>
+    <string name="js_confirm_title">来自网页的消息</string>
 
     <string name="js_config_read_failed">配置文件读取错误！</string>
     <string name="js_config_invalid">导入的配置文件不合法！</string>

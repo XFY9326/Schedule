@@ -4,7 +4,7 @@ import lib.xfy9326.livedata.observeNotify
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.ScheduleWrapper
 import tool.xfy9326.schedule.databinding.ActivityScheduleManageBinding
-import tool.xfy9326.schedule.kt.showShortSnackBar
+import tool.xfy9326.schedule.kt.showSnackBar
 import tool.xfy9326.schedule.kt.startActivity
 import tool.xfy9326.schedule.ui.activity.base.ViewModelActivity
 import tool.xfy9326.schedule.ui.adapter.ScheduleManageAdapter
@@ -32,7 +32,7 @@ class ScheduleManageActivity : ViewModelActivity<ScheduleManageViewModel, Activi
             viewBinding.recyclerViewScheduleManageList.setOnlyOneAdapter(scheduleManageAdapter)
         }
         viewModel.setCurrentScheduleSuccess.observeNotify(this) {
-            viewBinding.layoutScheduleManage.showShortSnackBar(R.string.current_schedule_set_success)
+            viewBinding.layoutScheduleManage.showSnackBar(R.string.current_schedule_set_success)
         }
     }
 
@@ -53,7 +53,7 @@ class ScheduleManageActivity : ViewModelActivity<ScheduleManageViewModel, Activi
             }
             SET_AS_CURRENT -> {
                 if (scheduleWrapper.inUsing) {
-                    requireViewBinding().layoutScheduleManage.showShortSnackBar(R.string.schedule_has_set_as_current)
+                    requireViewBinding().layoutScheduleManage.showSnackBar(R.string.schedule_has_set_as_current)
                 } else {
                     requireViewModel().setCurrentSchedule(scheduleWrapper.schedule.scheduleId)
                 }

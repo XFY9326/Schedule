@@ -12,7 +12,7 @@ import tool.xfy9326.schedule.data.ScheduleDataStore
 import tool.xfy9326.schedule.data.base.DataStorePreferenceAdapter
 import tool.xfy9326.schedule.kt.getColorCompat
 import tool.xfy9326.schedule.kt.setOnPrefClickListener
-import tool.xfy9326.schedule.kt.showShortSnackBar
+import tool.xfy9326.schedule.kt.showSnackBar
 import tool.xfy9326.schedule.tools.MIMEConst
 import tool.xfy9326.schedule.tools.MaterialColorHelper
 import tool.xfy9326.schedule.ui.dialog.FullScreenLoadingDialog
@@ -28,7 +28,7 @@ class ScheduleSettingsFragment : AbstractSettingsFragment() {
     private lateinit var loadingDialogController: FullScreenLoadingDialog.Controller
     private val selectBackgroundImage = registerForActivityResult(ActivityResultContracts.GetContent()) {
         if (it == null) {
-            requireRootLayout()?.showShortSnackBar(R.string.schedule_background_set_cancel)
+            requireRootLayout()?.showSnackBar(R.string.schedule_background_set_cancel)
         } else {
             loadingDialogController.show(false)
             requireSettingsViewModel()?.importScheduleImage(it)
@@ -60,7 +60,7 @@ class ScheduleSettingsFragment : AbstractSettingsFragment() {
         findPreference<MultiSelectListPreference>(ScheduleDataStore.notThisWeekCourseShowStyle.name)?.setOnPreferenceChangeListener { _, newValue ->
             newValue as Set<*>
             if (newValue.isEmpty()) {
-                requireRootLayout()?.showShortSnackBar(R.string.keep_at_least_one_style)
+                requireRootLayout()?.showSnackBar(R.string.keep_at_least_one_style)
                 false
             } else {
                 true
@@ -73,7 +73,7 @@ class ScheduleSettingsFragment : AbstractSettingsFragment() {
     override fun onBindLiveDataFromSettingsViewMode(viewModel: SettingsViewModel) {
         viewModel.importScheduleImage.observeEvent(this) {
             loadingDialogController.hide()
-            requireRootLayout()?.showShortSnackBar(if (it) R.string.schedule_background_set_success else R.string.schedule_background_set_failed)
+            requireRootLayout()?.showSnackBar(if (it) R.string.schedule_background_set_success else R.string.schedule_background_set_failed)
         }
     }
 }

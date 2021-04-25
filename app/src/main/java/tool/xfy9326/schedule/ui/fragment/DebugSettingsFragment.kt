@@ -13,7 +13,7 @@ import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.kt.setOnPrefClickListener
 import tool.xfy9326.schedule.kt.show
-import tool.xfy9326.schedule.kt.showShortSnackBar
+import tool.xfy9326.schedule.kt.showSnackBar
 import tool.xfy9326.schedule.ui.dialog.CrashViewDialog
 import tool.xfy9326.schedule.ui.fragment.base.AbstractSettingsFragment
 import tool.xfy9326.schedule.ui.vm.SettingsViewModel
@@ -37,7 +37,7 @@ class DebugSettingsFragment : AbstractSettingsFragment() {
             requireSettingsViewModel()?.outputLogFileToUri(it)
         } else {
             requireSettingsViewModel()?.waitCreateLogFileName?.consume()
-            requireRootLayout()?.showShortSnackBar(R.string.output_file_cancel)
+            requireRootLayout()?.showSnackBar(R.string.output_file_cancel)
         }
     }
 
@@ -58,7 +58,7 @@ class DebugSettingsFragment : AbstractSettingsFragment() {
                 setMessage(R.string.clear_debug_logs_msg)
                 setPositiveButton(android.R.string.ok) { _, _ ->
                     requireSettingsViewModel()?.clearLogs()
-                    requireRootLayout()?.showShortSnackBar(R.string.clear_debug_logs_success)
+                    requireRootLayout()?.showSnackBar(R.string.clear_debug_logs_success)
                 }
                 setNegativeButton(android.R.string.cancel, null)
             }.show(viewLifecycleOwner)
@@ -84,7 +84,7 @@ class DebugSettingsFragment : AbstractSettingsFragment() {
             CrashViewDialog.showDialog(childFragmentManager, it)
         }
         viewModel.outputLogFileToUriResult.observeEvent(this) {
-            requireRootLayout()?.showShortSnackBar(
+            requireRootLayout()?.showSnackBar(
                 if (it) {
                     R.string.output_file_success
                 } else {
@@ -96,7 +96,7 @@ class DebugSettingsFragment : AbstractSettingsFragment() {
 
     private fun showDebugLogsSelectDialog(logs: Array<String>, @StringRes titleId: Int, onSelect: (String) -> Unit) {
         if (logs.isEmpty()) {
-            requireRootLayout()?.showShortSnackBar(R.string.no_debug_logs)
+            requireRootLayout()?.showSnackBar(R.string.no_debug_logs)
         } else {
             MaterialAlertDialogBuilder(requireContext()).apply {
                 setTitle(titleId)
