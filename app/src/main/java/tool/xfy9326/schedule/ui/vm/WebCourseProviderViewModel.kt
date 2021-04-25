@@ -4,6 +4,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.sync.Mutex
 import lib.xfy9326.livedata.MutableEventLiveData
 import lib.xfy9326.livedata.postEvent
+import tool.xfy9326.schedule.beans.ScheduleImportContent
 import tool.xfy9326.schedule.beans.WebCourseImportParams
 import tool.xfy9326.schedule.content.base.WebCourseParser
 import tool.xfy9326.schedule.content.base.WebCourseProvider
@@ -45,14 +46,10 @@ class WebCourseProviderViewModel : AbstractWebCourseProviderViewModel<WebCourseI
         importOption: Int,
         courseProvider: WebCourseProvider<*>,
         courseParser: WebCourseParser<*>,
-    ): ImportContent {
-        val scheduleTimes = courseParser.loadScheduleTimes(importOption)
-        val coursesParseResult = courseParser.parseCourses(
-            importOption,
-            importParams.htmlContent,
-            importParams.iframeContent,
-            importParams.frameContent
-        )
-        return ImportContent(scheduleTimes, coursesParseResult)
+    ): ScheduleImportContent {
+        val scheduleTimes = courseParser.parseScheduleTimes(importOption, importParams.htmlContent, importParams.iframeContent, importParams.frameContent)
+        val coursesParseResult = courseParser.parseCourses(importOption, importParams.htmlContent, importParams.iframeContent, importParams.frameContent)
+        val term = courseParser.parseTerm(importOption, importParams.htmlContent, importParams.iframeContent, importParams.frameContent)
+        return ScheduleImportContent(scheduleTimes, coursesParseResult, term)
     }
 }

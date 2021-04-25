@@ -5,6 +5,7 @@ import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import lib.xfy9326.livedata.MutableEventLiveData
 import lib.xfy9326.livedata.postEvent
+import tool.xfy9326.schedule.beans.ScheduleImportContent
 import tool.xfy9326.schedule.content.base.JSCourseParser
 import tool.xfy9326.schedule.content.base.JSCourseProvider
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
@@ -34,11 +35,10 @@ class JSCourseProviderViewModel : AbstractWebCourseProviderViewModel<String, JSC
         importOption: Int,
         courseProvider: JSCourseProvider,
         courseParser: JSCourseParser,
-    ): ImportContent {
+    ): ScheduleImportContent {
         val resultJSON = Json.decodeFromString<JSBridge.JSResult>(importParams)
         if (resultJSON.isSuccess) {
-            val result = courseParser.processJSResult(resultJSON.data)
-            return ImportContent(result.first, result.second)
+            return courseParser.processJSResult(resultJSON.data)
         } else {
             CourseAdapterException.Error.JS_HANDLE_ERROR.report(resultJSON.data)
         }

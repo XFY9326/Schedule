@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import kotlinx.coroutines.sync.Mutex
 import tool.xfy9326.schedule.beans.NetworkCourseImportParams
 import tool.xfy9326.schedule.beans.NetworkProviderParams
+import tool.xfy9326.schedule.beans.ScheduleImportContent
 import tool.xfy9326.schedule.content.base.LoginCourseProvider
 import tool.xfy9326.schedule.content.base.NetworkCourseParser
 import tool.xfy9326.schedule.content.base.NetworkCourseProvider
@@ -101,18 +102,20 @@ class NetworkCourseProviderViewModel : CourseProviderViewModel<NetworkCourseImpo
         importOption: Int,
         courseProvider: NetworkCourseProvider<*>,
         courseParser: NetworkCourseParser<*>,
-    ): ImportContent {
+    ): ScheduleImportContent {
         if (courseProvider is LoginCourseProvider) {
             courseProvider.login(importParams.userId, importParams.userPw, importParams.captchaCode, importParams.loginPageInfo, importOption)
         }
 
         val scheduleTimesHtml = courseProvider.loadScheduleTimesHtml(importOption)
         val coursesHtml = courseProvider.loadCoursesHtml(importOption)
+        val termHtml = courseProvider.loadCoursesHtml(importOption)
 
         val scheduleTimes = courseParser.parseScheduleTimes(importOption, scheduleTimesHtml)
         val coursesParseResult = courseParser.parseCourses(importOption, coursesHtml)
+        val term = courseParser.parseTerm(importOption, termHtml)
 
-        return ImportContent(scheduleTimes, coursesParseResult)
+        return ScheduleImportContent(scheduleTimes, coursesParseResult, term)
     }
 
     override fun onProviderDestroy() {

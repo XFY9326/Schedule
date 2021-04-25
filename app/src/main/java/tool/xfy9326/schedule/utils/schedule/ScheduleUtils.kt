@@ -113,7 +113,7 @@ object ScheduleUtils {
             ScheduleDataStore.defaultFirstDayOfWeekFlow.first())
     }
 
-    suspend fun createNewSchedule() = getDefaultTermDate().let {
+    suspend fun createNewSchedule(term: Pair<Date, Date>? = null) = (term ?: getDefaultTermDate()).let {
         Schedule(IOManager.resources.getString(R.string.new_schedule_name),
             it.first,
             it.second,
@@ -129,8 +129,8 @@ object ScheduleUtils {
         return ScheduleDBProvider.db.scheduleDAO.updateScheduleCourses(schedule, courses)
     }
 
-    suspend fun saveNewSchedule(newScheduleName: String?, scheduleTimes: List<ScheduleTime>, courses: List<Course>): Long {
-        val schedule = createNewSchedule().also {
+    suspend fun saveNewSchedule(newScheduleName: String?, scheduleTimes: List<ScheduleTime>, courses: List<Course>, term: Pair<Date, Date>? = null): Long {
+        val schedule = createNewSchedule(term).also {
             it.times = scheduleTimes
             adjustScheduleDateByCourses(it, courses)
         }

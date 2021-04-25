@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.sync.Mutex
 import lib.xfy9326.livedata.MutableEventLiveData
 import lib.xfy9326.livedata.postEvent
-import tool.xfy9326.schedule.beans.ScheduleTime
+import tool.xfy9326.schedule.beans.ScheduleImportContent
 import tool.xfy9326.schedule.content.base.*
 import tool.xfy9326.schedule.content.beans.CourseImportInstance
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
@@ -21,6 +21,7 @@ import java.net.ConnectException
 import java.net.SocketException
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
+import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
 
 abstract class CourseProviderViewModel<I, T1 : AbstractCourseProvider<*>, T2 : AbstractCourseParser<*>> : AbstractViewModel() {
@@ -59,7 +60,7 @@ abstract class CourseProviderViewModel<I, T1 : AbstractCourseProvider<*>, T2 : A
         importOption: Int,
         courseProvider: T1,
         courseParser: T2,
-    ): ImportContent
+    ): ScheduleImportContent
 
     protected fun providerFunctionRunner(
         mutex: Mutex? = null,
@@ -114,7 +115,7 @@ abstract class CourseProviderViewModel<I, T1 : AbstractCourseProvider<*>, T2 : A
                     val editScheduleId = if (currentSchedule) {
                         ScheduleUtils.saveCurrentSchedule(content.scheduleTimes, courses)
                     } else {
-                        ScheduleUtils.saveNewSchedule(newScheduleName, content.scheduleTimes, courses)
+                        ScheduleUtils.saveNewSchedule(newScheduleName, content.scheduleTimes, courses, content.term)
                     }
 
                     if (hasConflicts) {
@@ -157,8 +158,6 @@ abstract class CourseProviderViewModel<I, T1 : AbstractCourseProvider<*>, T2 : A
         importCourseJob?.cancel()
         internalIsImportingCourses.set(false)
     }
-
-    protected class ImportContent(val scheduleTimes: List<ScheduleTime>, val coursesParserResult: CourseParseResult)
 
     enum class ImportResult {
         SUCCESS,

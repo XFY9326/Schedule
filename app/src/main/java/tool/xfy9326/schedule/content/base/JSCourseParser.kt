@@ -10,6 +10,9 @@ import tool.xfy9326.schedule.content.utils.CourseAdapterException.Companion.repo
 import tool.xfy9326.schedule.json.parser.ai.AiScheduleResult
 import tool.xfy9326.schedule.json.parser.ai.CourseInfos
 import tool.xfy9326.schedule.json.parser.pure.ScheduleImportJSON
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 class JSCourseParser : AbstractCourseParser<JSParams>() {
     companion object {
@@ -26,6 +29,7 @@ class JSCourseParser : AbstractCourseParser<JSParams>() {
         }
     }
 
+    private val termDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
     private val json = Json {
         ignoreUnknownKeys = true
     }
@@ -41,7 +45,7 @@ class JSCourseParser : AbstractCourseParser<JSParams>() {
             CourseAdapterException.Error.PARSER_ERROR.report(e)
         }
 
-    private fun processAiScheduleResult(data: String): Pair<List<ScheduleTime>, CourseParseResult> {
+    private fun processAiScheduleResult(data: String): ScheduleImportContent {
         val scheduleData = json.decodeFromString<AiScheduleResult>(data)
 
         val scheduleTimes = ArrayList<ScheduleTime>(scheduleData.sectionTimes.size)
@@ -63,7 +67,7 @@ class JSCourseParser : AbstractCourseParser<JSParams>() {
             }
         }
 
-        return scheduleTimes to builder.build()
+        return ScheduleImportContent(scheduleTimes, builder.build())
     }
 
     private fun getSeriesClassTimeList(info: CourseInfos): List<ClassTime> {
@@ -94,7 +98,7 @@ class JSCourseParser : AbstractCourseParser<JSParams>() {
         }
     }
 
-    private fun processPureScheduleResult(data: String): Pair<List<ScheduleTime>, CourseParseResult> {
+    private fun processPureScheduleResult(data: String): ScheduleImportContent {
         val scheduleData = json.decodeFromString<ScheduleImportJSON>(data)
 
         val scheduleTimes = ArrayList<ScheduleTime>(scheduleData.times.size)
@@ -112,6 +116,18 @@ class JSCourseParser : AbstractCourseParser<JSParams>() {
             }
         }
 
-        return scheduleTimes to builder.build()
+        val termStart = scheduleData.termStart?.let { termDateFormat.parse(it) }
+        val termEnd = scheduleData.termEnd?.let { termDateFormat.parse(it) }
+        val term = if (termStart == null && termEnd != null) {
+            termEnd to termEnd
+        } else if (termStart != null && termEnd == null) {
+            termStart to termStart
+        } else if (termStart != null && termEnd != null) {
+            termStart to termEnd
+        } else {
+            null
+        }
+
+        return ScheduleImportContent(scheduleTimes, builder.build(), term)
     }
 }

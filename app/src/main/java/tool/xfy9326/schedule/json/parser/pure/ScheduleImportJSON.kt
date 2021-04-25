@@ -7,4 +7,8 @@ import tool.xfy9326.schedule.json.ScheduleTimeJSON
 data class ScheduleImportJSON(
     val times: List<ScheduleTimeJSON>,
     val courses: List<CourseImportJSON>,
+    // yyyy-MM-dd
+    val termStart: String? = null,
+    // yyyy-MM-dd
+    val termEnd: String? = null,
 )

@@ -1,6 +1,5 @@
 package tool.xfy9326.schedule.content.adapters.parser
 
-import tool.xfy9326.schedule.beans.ScheduleTime
 import tool.xfy9326.schedule.content.base.CourseParseResult
 import tool.xfy9326.schedule.content.base.WebCourseParser
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
@@ -13,7 +12,8 @@ class NAUCourseWebParser : WebCourseParser<Nothing>() {
 
     private val loginParser = NAUCourseParser()
 
-    override fun onLoadScheduleTimes(importOption: Int): List<ScheduleTime> = loginParser.parseScheduleTimes(importOption)
+    override fun onParseScheduleTimes(importOption: Int, htmlContent: String, iframeContent: Array<String>, frameContent: Array<String>) =
+        loginParser.parseScheduleTimes(importOption)
 
     override fun onParseCourses(
         importOption: Int,

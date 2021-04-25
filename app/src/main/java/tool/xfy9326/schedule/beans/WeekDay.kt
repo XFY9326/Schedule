@@ -49,10 +49,10 @@ enum class WeekDay(val shortName: String, val calWeekDay: Int) : Parcelable {
                 } ?: error("Value error!")
             }
 
-        private fun getOrderedValue(weekDay: WeekDay, weekStart: WeekDay) =
+        fun WeekDay.orderedValue(weekStart: WeekDay) =
             when (weekStart) {
-                MONDAY -> weekDay.value
-                SUNDAY -> if (weekDay == SUNDAY) 1 else weekDay.value + 1
+                MONDAY -> value
+                SUNDAY -> if (this == SUNDAY) 1 else value + 1
                 else -> error("First day of week must be MONDAY or SUNDAY")
             }
     }
@@ -62,6 +62,4 @@ enum class WeekDay(val shortName: String, val calWeekDay: Int) : Parcelable {
 
     val isWeekend: Boolean
         get() = (this == SATURDAY || this == SUNDAY)
-
-    fun orderedValue(weekStart: WeekDay) = getOrderedValue(this, weekStart)
 }

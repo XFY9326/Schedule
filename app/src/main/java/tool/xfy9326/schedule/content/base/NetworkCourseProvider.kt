@@ -32,6 +32,8 @@ abstract class NetworkCourseProvider<P : Serializable> : AbstractCourseProvider<
 
     suspend fun loadCoursesHtml(importOption: Int) = onLoadCoursesHtml(importOption)
 
+    suspend fun loadTermHtml(importOption: Int) = onLoadTermHtml(importOption)
+
     suspend fun close() {
         try {
             onClearConnection()
@@ -47,6 +49,8 @@ abstract class NetworkCourseProvider<P : Serializable> : AbstractCourseProvider<
     protected open suspend fun onLoadImportOptions(): Array<String>? = null
 
     protected open suspend fun onLoadScheduleTimesHtml(importOption: Int): String? = null
+
+    protected open suspend fun onLoadTermHtml(importOption: Int): String? = null
 
     protected abstract suspend fun onLoadCoursesHtml(importOption: Int): String
 

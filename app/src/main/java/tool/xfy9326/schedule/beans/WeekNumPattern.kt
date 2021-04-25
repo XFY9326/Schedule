@@ -2,6 +2,7 @@ package tool.xfy9326.schedule.beans
 
 import android.content.Context
 import tool.xfy9326.schedule.R
+import tool.xfy9326.schedule.beans.WeekDay.Companion.orderedValue
 import tool.xfy9326.schedule.beans.WeekNumPattern.PatternType.*
 import tool.xfy9326.schedule.kt.isEven
 import tool.xfy9326.schedule.utils.CalendarUtils
