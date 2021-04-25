@@ -7,12 +7,10 @@ import tool.xfy9326.schedule.content.beans.JSConfig
 import tool.xfy9326.schedule.content.beans.JSParams
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
 import tool.xfy9326.schedule.content.utils.CourseAdapterException.Companion.report
+import tool.xfy9326.schedule.content.utils.CourseAdapterUtils
 import tool.xfy9326.schedule.json.parser.ai.AiScheduleResult
 import tool.xfy9326.schedule.json.parser.ai.CourseInfos
 import tool.xfy9326.schedule.json.parser.pure.ScheduleImportJSON
-import java.text.SimpleDateFormat
-import java.util.*
-import kotlin.collections.ArrayList
 
 class JSCourseParser : AbstractCourseParser<JSParams>() {
     companion object {
@@ -29,7 +27,7 @@ class JSCourseParser : AbstractCourseParser<JSParams>() {
         }
     }
 
-    private val termDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+    private val termDateFormat = CourseAdapterUtils.newDateFormat()
     private val json = Json {
         ignoreUnknownKeys = true
     }
@@ -118,16 +116,6 @@ class JSCourseParser : AbstractCourseParser<JSParams>() {
 
         val termStart = scheduleData.termStart?.let { termDateFormat.parse(it) }
         val termEnd = scheduleData.termEnd?.let { termDateFormat.parse(it) }
-        val term = if (termStart == null && termEnd != null) {
-            termEnd to termEnd
-        } else if (termStart != null && termEnd == null) {
-            termStart to termStart
-        } else if (termStart != null && termEnd != null) {
-            termStart to termEnd
-        } else {
-            null
-        }
-
-        return ScheduleImportContent(scheduleTimes, builder.build(), term)
+        return ScheduleImportContent(scheduleTimes, builder.build(), CourseAdapterUtils.simpleTermFix(termStart, termEnd))
     }
 }

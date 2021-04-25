@@ -109,7 +109,7 @@ class NetworkCourseProviderViewModel : CourseProviderViewModel<NetworkCourseImpo
 
         val scheduleTimesHtml = courseProvider.loadScheduleTimesHtml(importOption)
         val coursesHtml = courseProvider.loadCoursesHtml(importOption)
-        val termHtml = courseProvider.loadCoursesHtml(importOption)
+        val termHtml = courseProvider.loadTermHtml(importOption)
 
         val scheduleTimes = courseParser.parseScheduleTimes(importOption, scheduleTimesHtml)
         val coursesParseResult = courseParser.parseCourses(importOption, coursesHtml)

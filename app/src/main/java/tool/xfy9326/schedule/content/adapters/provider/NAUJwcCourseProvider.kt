@@ -47,6 +47,8 @@ class NAUJwcCourseProvider : LoginCourseProvider<Nothing>() {
         )
     }
 
+    private var studentDefaultPageUrl: Url? = null
+
     override val enableCaptcha = true
 
     override fun onPrepareClient(): HttpClient = CourseAdapterUtils.buildSimpleHttpClient(supportJson = true)
@@ -73,6 +75,8 @@ class NAUJwcCourseProvider : LoginCourseProvider<Nothing>() {
             val homeResponse = httpClient.get<HttpResponse>("$JWC_URL/${loginResponse.RedirectPath}")
             if (homeResponse.request.url.parameters[JWC_URL_PARAM_D] == null) {
                 CourseAdapterException.Error.LOGIN_SERVER_ERROR.report()
+            } else {
+                studentDefaultPageUrl = homeResponse.request.url
             }
         } else {
             when {
@@ -91,6 +95,13 @@ class NAUJwcCourseProvider : LoginCourseProvider<Nothing>() {
         when (importOption) {
             0 -> httpClient.get(JWC_COURSE_THIS_TERM_URL)
             1 -> httpClient.get(JWC_COURSE_NEXT_TERM_URL)
+            else -> CourseAdapterException.Error.IMPORT_SELECT_OPTION_ERROR.report()
+        }
+
+    override suspend fun onLoadTermHtml(importOption: Int): String? =
+        when (importOption) {
+            0 -> studentDefaultPageUrl?.let { httpClient.get(it) }
+            1 -> null
             else -> CourseAdapterException.Error.IMPORT_SELECT_OPTION_ERROR.report()
         }
 

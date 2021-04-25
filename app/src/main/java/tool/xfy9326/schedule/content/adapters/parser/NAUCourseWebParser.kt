@@ -15,6 +15,9 @@ class NAUCourseWebParser : WebCourseParser<Nothing>() {
     override fun onParseScheduleTimes(importOption: Int, htmlContent: String, iframeContent: Array<String>, frameContent: Array<String>) =
         loginParser.parseScheduleTimes(importOption)
 
+    override fun onParseTerm(importOption: Int, htmlContent: String, iframeContent: Array<String>, frameContent: Array<String>) =
+        loginParser.parseTerm(importOption, htmlContent)
+
     override fun onParseCourses(
         importOption: Int,
         htmlContent: String,

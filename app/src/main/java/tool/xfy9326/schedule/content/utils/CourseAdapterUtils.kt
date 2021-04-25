@@ -8,6 +8,8 @@ import io.ktor.client.features.*
 import io.ktor.client.features.cookies.*
 import io.ktor.client.features.json.*
 import io.ktor.client.features.json.serializer.*
+import java.text.SimpleDateFormat
+import java.util.*
 
 object CourseAdapterUtils {
 
@@ -35,4 +37,17 @@ object CourseAdapterUtils {
             }
         }
     }
+
+    fun newDateFormat(format: String = "yyyy-MM-dd"): SimpleDateFormat {
+        return SimpleDateFormat(format, Locale.getDefault())
+    }
+
+    fun simpleTermFix(termStart: Date?, termEnd: Date?) =
+        if (termStart != null && termEnd == null) {
+            termStart to termStart
+        } else if (termStart != null && termEnd != null) {
+            termStart to termEnd
+        } else {
+            null
+        }
 }

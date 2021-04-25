@@ -7,12 +7,17 @@ import tool.xfy9326.schedule.beans.ScheduleTime
 import tool.xfy9326.schedule.beans.WeekDay
 import tool.xfy9326.schedule.content.base.CourseParseResult
 import tool.xfy9326.schedule.content.base.NetworkCourseParser
+import tool.xfy9326.schedule.content.utils.CourseAdapterUtils
 import tool.xfy9326.schedule.kt.isEven
 import tool.xfy9326.schedule.kt.isOdd
+import java.util.*
+import kotlin.collections.ArrayList
 
 class NAUCourseParser : NetworkCourseParser<Nothing>() {
     companion object {
         private const val INIT_WEEK_NUM = 20
+        private const val TERM_START_SELECTOR = "#TermInfo > div:nth-child(4) > span"
+        private const val TERM_END_SELECTOR = "#TermInfo > div:nth-child(5) > span"
         private const val COURSE_TR_TAGS = "#content > tbody > tr[align='center']"
         private val WEEKDAY_COURSE_REG = "周 (\\d+) 第 (\\d+)-(\\d+)节".toRegex()
 
@@ -75,6 +80,8 @@ class NAUCourseParser : NetworkCourseParser<Nothing>() {
         }
     }
 
+    private val termDateFormat = CourseAdapterUtils.newDateFormat()
+
     override fun onParseScheduleTimes(importOption: Int, htmlContent: String?) =
         ScheduleTime.listOf(
             8, 30, 9, 10,
@@ -125,5 +132,23 @@ class NAUCourseParser : NetworkCourseParser<Nothing>() {
         }
 
         return builder.build()
+    }
+
+    override fun onParseTerm(importOption: Int, htmlContent: String?): Pair<Date, Date>? {
+        if (htmlContent != null) {
+            try {
+                val body = Jsoup.parse(htmlContent).body()
+                val termStartStr = body.selectFirst(TERM_START_SELECTOR).text().trim()
+                val termEndStr = body.selectFirst(TERM_END_SELECTOR).text().trim()
+                val termStart = termDateFormat.parse(termStartStr)
+                val termEnd = termDateFormat.parse(termEndStr)
+                if (termStart != null && termEnd != null) {
+                    return termStart to termEnd
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+        return null
     }
 }
