@@ -36,7 +36,7 @@ class JSCourseProviderViewModel : AbstractWebCourseProviderViewModel<String, JSC
         courseProvider: JSCourseProvider,
         courseParser: JSCourseParser,
     ): ScheduleImportContent {
-        val resultJSON = Json.decodeFromString<JSBridge.JSResult>(importParams)
+        val resultJSON = Json.decodeFromString<JSBridge.JSProviderResponse>(importParams)
         if (resultJSON.isSuccess) {
             return courseParser.processJSResult(resultJSON.data)
         } else {

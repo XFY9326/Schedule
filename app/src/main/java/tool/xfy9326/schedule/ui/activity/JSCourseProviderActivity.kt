@@ -34,7 +34,7 @@ class JSCourseProviderActivity : AbstractWebCourseProviderActivity<String, JSCou
     override fun onSetupWebView(webView: WebView) {
         webView.addJavascriptInterface(object : JSBridge.JSCourseProviderJSInterface {
             @JavascriptInterface
-            override fun onGetJSResult(resultJSON: String, isCurrentSchedule: Boolean) {
+            override fun onJSProviderResponse(resultJSON: String, isCurrentSchedule: Boolean) {
                 lifecycleScope.launch {
                     requestImportCourse(ImportRequestParams(isCurrentSchedule, resultJSON))
                     if (AppSettingsDataStore.refreshWebPageAfterImportCourseFlow.first()) {

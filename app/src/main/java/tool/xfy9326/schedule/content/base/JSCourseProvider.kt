@@ -19,11 +19,11 @@ class JSCourseProvider : AbstractCourseProvider<JSParams>() {
         return when (requireParams().jsType) {
             // String String Document
             JSConfig.TYPE_AI_SCHEDULE -> {
-                { _, p1, p2 -> "scheduleHtmlProvider(${p1.trim()}.join(\"\"), ${p2.trim()}.join(\"\"), document);" }
+                { _, p1, p2 -> "scheduleHtmlProvider(${p1.trim()}.join(\"\"), ${p2.trim()}.join(\"\"), document)" }
             }
             // String String[] String[]
             JSConfig.TYPE_PURE_SCHEDULE -> {
-                { p0, p1, p2 -> "pureScheduleProvider(${p0.trim()}, ${p1.trim()}, ${p2.trim()});" }
+                { p0, p1, p2 -> "pureScheduleProvider(${p0.trim()}, ${p1.trim()}, ${p2.trim()})" }
             }
             else -> error("Unsupported JS Type! ${requireParams().jsType}")
         }
@@ -33,11 +33,11 @@ class JSCourseProvider : AbstractCourseProvider<JSParams>() {
         return when (requireParams().jsType) {
             // String
             JSConfig.TYPE_AI_SCHEDULE -> {
-                { "scheduleHtmlParser(${it.trim()});" }
+                { "scheduleHtmlParser(${it.trim()})" }
             }
             // String
             JSConfig.TYPE_PURE_SCHEDULE -> {
-                { "pureScheduleParser(${it.trim()});" }
+                { "pureScheduleParser(${it.trim()})" }
             }
             else -> error("Unsupported JS Type! ${requireParams().jsType}")
         }

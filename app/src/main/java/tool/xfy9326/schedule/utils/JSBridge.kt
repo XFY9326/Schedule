@@ -16,7 +16,7 @@ object JSBridge {
             PURE_SCHEDULE_ENV_BACKUP_LIST[PURE_SCHEDULE_ENV_BACKUP_NAME] = this[PURE_SCHEDULE_ENV_BACKUP_NAME];
         }
     """
-    private const val JS_ENV_RESTORE =
+    private const val JS_ENV_RECOVER =
         """
         for (var PURE_SCHEDULE_ENV_BACKUP_NAME in PURE_SCHEDULE_ENV_BACKUP_LIST) {
             if (this[PURE_SCHEDULE_ENV_BACKUP_NAME] !== PURE_SCHEDULE_ENV_BACKUP_LIST[PURE_SCHEDULE_ENV_BACKUP_NAME]) {
@@ -61,19 +61,19 @@ object JSBridge {
         return """
             javascript:
             $JS_ENV_BACKUP
-            (function (window) {
+            (function (window, undefined) {
                 $FUNCTION_HTML_LOADER
                 
                 let $htmlContent = $FUNCTION_NAME_HTML_LOADER();
                 
                 window.$WEB_COURSE_PROVIDER_JS_INTERFACE_NAME.$WEB_COURSE_PROVIDER_JS_FUNCTION_NAME($htmlParam, $iframeListParam, $frameListParam, $isCurrentSchedule);
             })(window);
-            $JS_ENV_RESTORE
+            $JS_ENV_RECOVER
         """.trimIndent()
     }
 
     const val JS_COURSE_PROVIDER_JS_INTERFACE_NAME = "JSCourseProvider"
-    private const val JS_COURSE_PROVIDER_JS_FUNCTION_NAME = "onGetJSResult"
+    private const val JS_COURSE_PROVIDER_JS_FUNCTION_NAME = "onJSProviderResponse"
 
     suspend fun buildJSCourseProviderJS(isCurrentSchedule: Boolean, jsCourseProvider: JSCourseProvider): String {
         val htmlContent = "${FUN_HEAD}HtmlContent"
@@ -83,7 +83,7 @@ object JSBridge {
         return """
            javascript:
            $JS_ENV_BACKUP
-           (function (window) {
+           (function (window, undefined) {
                 let ${FUN_HEAD}LoadJSResult = {
                     "isSuccess": false,
                     "data": "JS launch failed!"
@@ -113,12 +113,12 @@ object JSBridge {
                 
                 window.$JS_COURSE_PROVIDER_JS_INTERFACE_NAME.$JS_COURSE_PROVIDER_JS_FUNCTION_NAME(JSON.stringify(${FUN_HEAD}LoadJSResult), $isCurrentSchedule)
            })(window);
-           $JS_ENV_RESTORE
+           $JS_ENV_RECOVER
         """.trimIndent()
     }
 
     @Serializable
-    data class JSResult(val isSuccess: Boolean, val data: String)
+    class JSProviderResponse(val isSuccess: Boolean, val data: String)
 
     @Keep
     interface WebCourseProviderJSInterface {
@@ -129,6 +129,6 @@ object JSBridge {
     @Keep
     interface JSCourseProviderJSInterface {
         @Keep
-        fun onGetJSResult(resultJSON: String, isCurrentSchedule: Boolean)
+        fun onJSProviderResponse(resultJSON: String, isCurrentSchedule: Boolean)
     }
 }
