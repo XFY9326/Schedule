@@ -141,7 +141,7 @@ fun Window.enableLightSystemBar(context: Context, enabled: Boolean) {
                 navigationBarColor = context.getColorCompat(R.color.light_navigation_bar)
             } else {
                 decorView.systemUiVisibility = decorView.systemUiVisibility and View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR.inv()
-                context.getColorCompat(R.color.not_light_navigation_bar)
+                navigationBarColor = context.getColorCompat(R.color.not_light_navigation_bar)
             }
         }
     }
