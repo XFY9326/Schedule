@@ -14,7 +14,6 @@ import android.widget.Toast
 import androidx.annotation.*
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
-import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import kotlinx.coroutines.*
 import tool.xfy9326.schedule.App
@@ -22,14 +21,20 @@ import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.ui.activity.SplashActivity
 import kotlin.system.exitProcess
 
-inline fun showGlobalShortToast(@StringRes resId: Int, vararg params: Any, showLong: Boolean = false) =
+inline fun showGlobalToast(@StringRes resId: Int, vararg params: Any, showLong: Boolean = false) =
     Toast.makeText(App.instance, App.instance.getString(resId, *params), if (showLong) Toast.LENGTH_LONG else Toast.LENGTH_SHORT).show()
 
-inline fun Context.showShortToast(@StringRes resId: Int, vararg params: Any, showLong: Boolean = false) =
+inline fun showGlobalToast(text: String, showLong: Boolean = false) =
+    Toast.makeText(App.instance, text, if (showLong) Toast.LENGTH_LONG else Toast.LENGTH_SHORT).show()
+
+inline fun Context.showToast(@StringRes resId: Int, vararg params: Any, showLong: Boolean = false) =
     Toast.makeText(this, getString(resId, *params), if (showLong) Toast.LENGTH_LONG else Toast.LENGTH_SHORT).show()
 
-inline fun Fragment.showShortToast(@StringRes resId: Int, vararg params: Any, showLong: Boolean = false) =
+inline fun Fragment.showToast(@StringRes resId: Int, vararg params: Any, showLong: Boolean = false) =
     Toast.makeText(requireContext(), getString(resId, *params), if (showLong) Toast.LENGTH_LONG else Toast.LENGTH_SHORT).show()
+
+inline fun Fragment.showToast(text: String, showLong: Boolean = false) =
+    Toast.makeText(requireContext(), text, if (showLong) Toast.LENGTH_LONG else Toast.LENGTH_SHORT).show()
 
 inline fun <reified A : Activity> Context.startActivity(intentBlock: Intent.() -> Unit = {}) {
     startActivity(Intent(this, A::class.java).apply(intentBlock))
@@ -78,7 +83,7 @@ fun Context.tryStartActivity(intent: Intent, options: Bundle? = null, showToast:
         ContextCompat.startActivity(this, intent, options)
         return true
     } else {
-        if (showToast) showShortToast(R.string.application_launch_failed)
+        if (showToast) showToast(R.string.application_launch_failed)
     }
     return false
 }
@@ -95,7 +100,7 @@ fun Context.getDefaultBackgroundColor(): Int {
 }
 
 @Suppress("UNCHECKED_CAST")
-fun <T> DialogFragment.requireOwner() = (parentFragment ?: requireActivity()) as? T
+fun <T> Fragment.requireOwner() = (parentFragment ?: requireActivity()) as? T
 
 fun BroadcastReceiver.goAsync(
     coroutineScope: CoroutineScope = GlobalScope,

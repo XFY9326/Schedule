@@ -17,11 +17,11 @@
     <dimen name="slider_tracker_height">18dp</dimen>
     <dimen name="collapse_tool_bar_height">180dp</dimen>
     <dimen name="circle_number_button_elevation">2dp</dimen>
-    <dimen name="circle_number_button_size">35dp</dimen>
-    <dimen name="circle_number_button_margin">5dp</dimen>
+    <dimen name="circle_number_button_size">34dp</dimen>
+    <dimen name="circle_number_button_min_margin">4dp</dimen>
     <dimen name="full_screen_loading_dialog_loading_size">100dp</dimen>
     <dimen name="full_screen_loading_dialog_button_margin_top">50dp</dimen>
-    <dimen name="bottom_button_height">30dp</dimen>
+    <dimen name="bottom_button_height">28dp</dimen>
     <dimen name="course_detail_dialog_bottom_button_height">28dp</dimen>
     <dimen name="divider_margin_course_detail_time">12dp</dimen>
     <dimen name="water_mark_text_size">14dp</dimen>

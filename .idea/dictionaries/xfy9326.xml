@@ -18,18 +18,23 @@
       <w>jcenter</w>
       <w>jetpack</w>
       <w>jsoup</w>
+      <w>kapt</w>
+      <w>kotlinx</w>
       <w>ktor</w>
+      <w>leakcanary</w>
       <w>loginout</w>
       <w>mdd</w>
       <w>meth</w>
       <w>miui</w>
       <w>mtrl</w>
       <w>noninteractive</w>
+      <w>okio</w>
       <w>parceler</w>
       <w>prodid</w>
       <w>rrule</w>
       <w>sdkmanager</w>
       <w>snackbar</w>
+      <w>squareup</w>
       <w>tbody</w>
       <w>tencent</w>
       <w>tsinghua</w>

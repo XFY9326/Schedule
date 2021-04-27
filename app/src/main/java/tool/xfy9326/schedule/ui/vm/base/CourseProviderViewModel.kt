@@ -2,35 +2,36 @@
 
 package tool.xfy9326.schedule.ui.vm.base
 
+import androidx.annotation.CallSuper
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.sync.Mutex
-import tool.xfy9326.schedule.beans.ScheduleTime
-import tool.xfy9326.schedule.content.CourseAdapterManager.newConfigInstance
+import lib.xfy9326.livedata.MutableEventLiveData
+import lib.xfy9326.livedata.postEvent
+import tool.xfy9326.schedule.beans.ScheduleImportContent
 import tool.xfy9326.schedule.content.base.*
+import tool.xfy9326.schedule.content.beans.CourseImportInstance
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
+import tool.xfy9326.schedule.content.utils.CourseAdapterException.Companion.make
 import tool.xfy9326.schedule.data.AppSettingsDataStore
-import tool.xfy9326.schedule.tools.livedata.MutableEventLiveData
-import tool.xfy9326.schedule.tools.livedata.postEvent
 import tool.xfy9326.schedule.utils.schedule.CourseUtils
 import tool.xfy9326.schedule.utils.schedule.ScheduleUtils
 import java.net.ConnectException
 import java.net.SocketException
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
+import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
 
 abstract class CourseProviderViewModel<I, T1 : AbstractCourseProvider<*>, T2 : AbstractCourseParser<*>> : AbstractViewModel() {
-    protected lateinit var internalImportConfig: CourseImportConfig<*, T1, *, T2>
+    protected lateinit var internalImportConfigInstance: CourseImportInstance<T1, T2>
         private set
-    private lateinit var _courseProvider: T1
-    private lateinit var _courseParser: T2
 
     protected val courseProvider
-        get() = _courseProvider
+        get() = internalImportConfigInstance.provider
     protected val courseParser
-        get() = _courseParser
+        get() = internalImportConfigInstance.parser
 
     val providerError = MutableEventLiveData<CourseAdapterException>()
     val courseImportFinish = MutableEventLiveData<Pair<ImportResult, Long?>>()
@@ -42,35 +43,37 @@ abstract class CourseProviderViewModel<I, T1 : AbstractCourseProvider<*>, T2 : A
 
     val isImportingCourses
         get() = internalIsImportingCourses.get()
-    val importConfig
-        get() = internalImportConfig
+    val importConfigInstance
+        get() = internalImportConfigInstance
 
-    fun registerConfig(config: Class<CourseImportConfig<*, T1, *, T2>>) {
-        if (!::internalImportConfig.isInitialized) {
-            internalImportConfig = config.newConfigInstance()
-            _courseProvider = internalImportConfig.newProvider()
-            _courseParser = internalImportConfig.newParser()
+    fun registerConfig(config: AbstractCourseImportConfig<*, T1, *, T2>) {
+        if (!::internalImportConfigInstance.isInitialized) {
+            internalImportConfigInstance = config.getInstance()
+            onProviderCreate()
         }
     }
+
+    protected open fun onProviderCreate() {}
 
     protected abstract suspend fun onImportCourse(
         importParams: I,
         importOption: Int,
         courseProvider: T1,
         courseParser: T2,
-    ): ImportContent
+    ): ScheduleImportContent
 
     protected fun providerFunctionRunner(
         mutex: Mutex? = null,
-        dispatcher: CoroutineDispatcher = Dispatchers.Default,
+        dispatcher: CoroutineDispatcher = Dispatchers.IO,
         onRun: suspend (T1) -> Unit,
         onFailed: (suspend () -> Unit)? = null,
-    ) {
-        viewModelScope.launch(dispatcher) {
-            if (mutex == null || mutex.tryLock()) {
+    ): Boolean {
+        if (mutex == null || mutex.tryLock()) {
+            viewModelScope.launch(dispatcher) {
                 try {
-                    onRun(_courseProvider)
+                    onRun(courseProvider)
                 } catch (e: CourseAdapterException) {
+                    onFailed?.invoke()
                     reportError(e, false)
                 } catch (e: Exception) {
                     onFailed?.invoke()
@@ -79,14 +82,16 @@ abstract class CourseProviderViewModel<I, T1 : AbstractCourseProvider<*>, T2 : A
                     mutex?.unlock()
                 }
             }
+            return true
         }
+        return false
     }
 
     fun importCourse(importParams: I, importOption: Int, currentSchedule: Boolean, newScheduleName: String? = null) {
         if (internalIsImportingCourses.compareAndSet(false, true)) {
             importCourseJob = viewModelScope.launch(Dispatchers.Default) {
                 try {
-                    val content = onImportCourse(importParams, importOption, _courseProvider, _courseParser)
+                    val content = onImportCourse(importParams, importOption, courseProvider, courseParser)
 
                     if (content.coursesParserResult.ignorableError != null && !AppSettingsDataStore.allowImportIncompleteScheduleFlow.first()) {
                         reportError(content.coursesParserResult.ignorableError, true)
@@ -110,7 +115,7 @@ abstract class CourseProviderViewModel<I, T1 : AbstractCourseProvider<*>, T2 : A
                     val editScheduleId = if (currentSchedule) {
                         ScheduleUtils.saveCurrentSchedule(content.scheduleTimes, courses)
                     } else {
-                        ScheduleUtils.saveNewSchedule(newScheduleName, content.scheduleTimes, courses)
+                        ScheduleUtils.saveNewSchedule(newScheduleName, content.scheduleTimes, courses, content.term)
                     }
 
                     if (hasConflicts) {
@@ -118,14 +123,20 @@ abstract class CourseProviderViewModel<I, T1 : AbstractCourseProvider<*>, T2 : A
                     } else {
                         reportFinishResult(ImportResult.SUCCESS, editScheduleId)
                     }
+                } catch (e: CancellationException) {
+                    // Ignore
                 } catch (e: CourseAdapterException) {
                     reportError(e, true)
+                } catch (e: SocketTimeoutException) {
+                    reportError(CourseAdapterException.Error.CONNECTION_ERROR.make(e), true)
+                } catch (e: SocketException) {
+                    reportError(CourseAdapterException.Error.CONNECTION_ERROR.make(e), true)
+                } catch (e: ConnectException) {
+                    reportError(CourseAdapterException.Error.CONNECTION_ERROR.make(e), true)
+                } catch (e: UnknownHostException) {
+                    reportError(CourseAdapterException.Error.CONNECTION_ERROR.make(e), true)
                 } catch (e: Exception) {
-                    if (e is SocketTimeoutException || e is SocketException || e is ConnectException || e is UnknownHostException) {
-                        reportError(CourseAdapterException.Error.CONNECTION_ERROR.make(e), true)
-                    } else if (e !is CancellationException) {
-                        reportError(CourseAdapterException.Error.UNKNOWN_ERROR.make(e), true)
-                    }
+                    reportError(CourseAdapterException.Error.UNKNOWN_ERROR.make(e), true)
                 } finally {
                     internalIsImportingCourses.set(false)
                     importCourseJob = null
@@ -134,7 +145,7 @@ abstract class CourseProviderViewModel<I, T1 : AbstractCourseProvider<*>, T2 : A
         }
     }
 
-    protected fun reportError(err: CourseAdapterException, isImportFinish: Boolean) {
+    protected fun reportError(err: CourseAdapterException, isImportFinish: Boolean = false) {
         if (isImportFinish) reportFinishResult(ImportResult.FAILED)
         providerError.postEvent(err)
     }
@@ -148,15 +159,17 @@ abstract class CourseProviderViewModel<I, T1 : AbstractCourseProvider<*>, T2 : A
         internalIsImportingCourses.set(false)
     }
 
-    protected class ImportContent(val scheduleTimes: List<ScheduleTime>, val coursesParserResult: CourseParseResult)
-
     enum class ImportResult {
         SUCCESS,
         FAILED,
         SUCCESS_WITH_IGNORABLE_CONFLICTS
     }
 
+    @CallSuper
     override fun onCleared() {
         finishImport()
+        onProviderDestroy()
     }
+
+    protected open fun onProviderDestroy() {}
 }

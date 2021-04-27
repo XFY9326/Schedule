@@ -1,10 +1,12 @@
 package tool.xfy9326.schedule.beans
 
+import android.os.Parcelable
 import androidx.annotation.IntRange
 import androidx.room.ColumnInfo
+import kotlinx.parcelize.Parcelize
 import tool.xfy9326.schedule.db.DBConst
-import java.io.Serializable
 
+@Parcelize
 data class ClassTime(
     @ColumnInfo(name = DBConst.COLUMN_WEEK_DAY)
     var weekDay: WeekDay,
@@ -14,7 +16,7 @@ data class ClassTime(
     @IntRange(from = 1)
     @ColumnInfo(name = DBConst.COLUMN_CLASS_DURATION)
     var classDuration: Int,
-) : Serializable {
+) : Parcelable {
     val classEndTime
         get() = classStartTime + classDuration - 1
 
@@ -36,14 +38,13 @@ data class ClassTime(
         return 0
     }
 
-    fun classTimeDescription(scheduleTimes: Array<ScheduleTime>? = null) =
-        if (scheduleTimes == null) {
-            if (classDuration > 1) {
-                "$classStartTime$CLASS_TIME_PERIOD_SYMBOL$classEndTime"
-            } else {
-                classStartTime.toString()
-            }
+    fun classTimeDescription() =
+        if (classDuration > 1) {
+            "$classStartTime$CLASS_TIME_PERIOD_SYMBOL$classEndTime"
         } else {
-            "${scheduleTimes[classStartTime - 1].startTimeStr}$TIME_DIVIDE${scheduleTimes[classEndTime - 1].endTimeStr}"
+            classStartTime.toString()
         }
+
+    fun scheduleTimeDescription(scheduleTimes: List<ScheduleTime>) =
+        "${scheduleTimes[classStartTime - 1].startTimeStr}$TIME_DIVIDE${scheduleTimes[classEndTime - 1].endTimeStr}"
 }

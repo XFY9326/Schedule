@@ -15,6 +15,7 @@ import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.CourseCell
 import tool.xfy9326.schedule.beans.ScheduleBuildBundle
 import tool.xfy9326.schedule.beans.SchedulePredefine
+import tool.xfy9326.schedule.beans.ScheduleViewData
 import tool.xfy9326.schedule.data.ScheduleDataStore
 import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
 import tool.xfy9326.schedule.kt.getColorCompat
@@ -29,14 +30,11 @@ object ScheduleViewHelper {
 
     suspend fun buildScheduleView(
         context: Context,
-        weekNum: Int,
-        scheduleBuildBundle: ScheduleBuildBundle,
+        viewData: ScheduleViewData,
         listener: ((CourseCell) -> Unit)? = null,
         noScroll: Boolean = false,
-    ): View = withContext(Dispatchers.Default + SupervisorJob()) {
-        val viewData = CourseUtils.getScheduleViewDataByWeek(weekNum, scheduleBuildBundle)
-
-        val schedulePredefine = SchedulePredefine.load(context)
+    ): View = withContext(Dispatchers.Default + SupervisorJob() + CoroutineName("schedule-view-builder-${viewData.weekNum}")) {
+        val schedulePredefine = SchedulePredefine.content
         val showWeekend = viewData.styles.forceShowWeekendColumn || viewData.hasWeekendCourse
 
         val cellsDeferred = ArrayList<Deferred<ScheduleCellView>>(viewData.times.size + viewData.cells.size)
@@ -49,12 +47,21 @@ object ScheduleViewHelper {
             cellsDeferred.add(async { ScheduleCellView(context, showWeekend, cell, schedulePredefine, viewData.styles, viewData.weekStart) })
         }
 
-        val days = CourseTimeUtils.getDayInWeek(viewData.weekNum, viewData.startDate, viewData.weekStart, showWeekend)
-
-        val scheduleHeaderViewDeferred = async { ScheduleHeaderView(context, viewData, days, schedulePredefine) }
+        val scheduleHeaderViewDeferred = async {
+            val days = CourseTimeUtils.getDayInWeek(viewData.weekNum, viewData.startDate, viewData.weekStart, showWeekend)
+            ScheduleHeaderView(context).apply {
+                setSchedulePredefine(schedulePredefine)
+                setScheduleViewData(viewData)
+                setDays(days)
+            }
+        }
 
         val columnAmount = if (showWeekend) MAX_SCHEDULE_COLUMN_COUNT else MIN_SCHEDULE_COLUMN_COUNT
-        val scheduleGridView = ScheduleGridView(context, viewData, columnAmount, schedulePredefine)
+        val scheduleGridView = ScheduleGridView(context).apply {
+            setSchedulePredefine(schedulePredefine)
+            setScheduleViewData(viewData)
+            setColumnAmount(columnAmount)
+        }
 
         for (viewDeferred in cellsDeferred) {
             scheduleGridView.addScheduleCellPreventLayout(viewDeferred.await())
@@ -63,7 +70,13 @@ object ScheduleViewHelper {
         val scheduleView = ScheduleView(context, viewData.styles, columnAmount, scheduleHeaderViewDeferred.await(), scheduleGridView)
         if (listener != null) scheduleView.setOnCourseClickListener(listener)
 
-        return@withContext if (viewData.styles.enableScheduleGridScroll || noScroll) scheduleView else ScheduleScrollLayout(context, scheduleView)
+        return@withContext if (viewData.styles.enableScheduleGridScroll || noScroll) {
+            scheduleView
+        } else {
+            ScheduleScrollView(context).apply {
+                addInnerView(scheduleView)
+            }
+        }
     }
 
     suspend fun generateScheduleImageByWeekNum(scheduleId: Long, weekNum: Int, @Px targetWidth: Int, waterMark: Boolean) = withContext(Dispatchers.Default) {
@@ -79,7 +92,8 @@ object ScheduleViewHelper {
         val context = App.instance
 
         val backgroundColor = context.getDefaultBackgroundColor()
-        val scheduleView = buildScheduleView(context, weekNum, ScheduleBuildBundle(schedule, courses, styles), noScroll = true)
+        val viewData = CourseUtils.getScheduleViewDataByWeek(weekNum, ScheduleBuildBundle(schedule, courses, styles))
+        val scheduleView = buildScheduleView(context, viewData, noScroll = true)
 
         val widthSpec = View.MeasureSpec.makeMeasureSpec(targetWidth, View.MeasureSpec.AT_MOST)
         val heightSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)

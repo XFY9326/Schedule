@@ -1,7 +1,7 @@
 package tool.xfy9326.schedule.ui.view
 
-import android.annotation.SuppressLint
 import android.content.Context
+import android.util.AttributeSet
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.Px
@@ -9,23 +9,20 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.children
 import tool.xfy9326.schedule.beans.CourseCell
 import tool.xfy9326.schedule.beans.SchedulePredefine
+import tool.xfy9326.schedule.beans.ScheduleStyles
 import tool.xfy9326.schedule.beans.ScheduleViewData
 import kotlin.math.ceil
 import kotlin.math.max
 
-@SuppressLint("ViewConstructor")
-class ScheduleGridView(
-    context: Context,
-    viewData: ScheduleViewData,
-    private val columnAmount: Int,
-    private val predefine: SchedulePredefine,
-) : ViewGroup(context) {
-    companion object {
-        private val unspecifiedHeightSpec = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)
-    }
+class ScheduleGridView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0, defStyleRes: Int = 0) :
+    ViewGroup(context, attrs, defStyleAttr, defStyleRes) {
 
-    private val styles = viewData.styles
-    private val rowAmount = viewData.times.size
+    private var styles: ScheduleStyles? = null
+    private var rowAmount = 0
+    private var columnAmount = 0
+    private var predefine: SchedulePredefine? = null
+
+    private val unspecifiedHeightSpec = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)
 
     private var timeColumnWidth = 0
     private var courseColumnWidth = 0
@@ -37,8 +34,26 @@ class ScheduleGridView(
         courseCellClickListener?.invoke(it)
     }
 
-    init {
-        layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
+    fun setSchedulePredefine(schedulePredefine: SchedulePredefine) {
+        if (predefine != schedulePredefine) {
+            predefine = schedulePredefine
+            requestLayout()
+        }
+    }
+
+    fun setScheduleViewData(viewData: ScheduleViewData) {
+        if (styles != viewData.styles || rowAmount != viewData.times.size) {
+            styles = viewData.styles
+            rowAmount = viewData.times.size
+            requestLayout()
+        }
+    }
+
+    fun setColumnAmount(num: Int) {
+        if (columnAmount != num) {
+            columnAmount = num
+            requestLayout()
+        }
     }
 
     fun setMeasureConfig(timeColumnWidth: Int, courseColumnWidth: Int, xRecords: IntArray) {
@@ -64,6 +79,9 @@ class ScheduleGridView(
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        val enableScreenCornerMargin = styles?.cornerScreenMargin ?: false
+        val screenCornerMargin = predefine?.gridBottomCornerScreenMargin ?: 0
+
         val timeColumnWidthSpec = MeasureSpec.makeMeasureSpec(timeColumnWidth, MeasureSpec.EXACTLY)
         val courseColumnWidthSpec = MeasureSpec.makeMeasureSpec(courseColumnWidth, MeasureSpec.EXACTLY)
 
@@ -94,12 +112,13 @@ class ScheduleGridView(
             } ?: 0
 
         val actualHeight =
-            if (styles.cornerScreenMargin) {
-                rowHeight * rowAmount + max(predefine.gridBottomCornerScreenMargin, bottomInset)
+            if (enableScreenCornerMargin) {
+                rowHeight * rowAmount + max(screenCornerMargin, bottomInset)
             } else {
                 rowHeight * rowAmount + bottomInset
             }
         val actualHeightSpec = MeasureSpec.makeMeasureSpec(actualHeight, MeasureSpec.EXACTLY)
+
         super.onMeasure(widthMeasureSpec, actualHeightSpec)
     }
 
@@ -133,5 +152,15 @@ class ScheduleGridView(
 
     fun setOnCourseClickListener(listener: ((CourseCell) -> Unit)?) {
         this.courseCellClickListener = listener
+    }
+
+    override fun addView(child: View?, index: Int, params: LayoutParams?) {
+        require(child is ScheduleCellView)
+        super.addView(child, index, params)
+    }
+
+    override fun addViewInLayout(child: View?, index: Int, params: LayoutParams?, preventRequestLayout: Boolean): Boolean {
+        require(child is ScheduleCellView)
+        return super.addViewInLayout(child, index, params, preventRequestLayout)
     }
 }

@@ -24,7 +24,7 @@ import tool.xfy9326.schedule.json.upgrade.DownloadSource
 import tool.xfy9326.schedule.json.upgrade.UpdateInfo
 import tool.xfy9326.schedule.kt.APP_ID
 import tool.xfy9326.schedule.kt.setWindowWidthPercent
-import tool.xfy9326.schedule.kt.showShortToast
+import tool.xfy9326.schedule.kt.showToast
 import tool.xfy9326.schedule.tools.MIMEConst
 import tool.xfy9326.schedule.utils.DownloadUtils
 
@@ -54,7 +54,7 @@ class UpgradeDialog : AppCompatDialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        updateInfo = requireArguments().getSerializable(UPDATE_INFO) as UpdateInfo
+        updateInfo = requireArguments().getParcelable(UPDATE_INFO)!!
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?) = MaterialAlertDialogBuilder(requireContext()).apply {
@@ -91,7 +91,7 @@ class UpgradeDialog : AppCompatDialogFragment() {
                     val source = updateInfo.downloadSource.first()
                     downloadFile(source)
                 }
-                else -> showShortToast(R.string.no_update_source)
+                else -> showToast(R.string.no_update_source)
             }
         }
     }
@@ -119,10 +119,10 @@ class UpgradeDialog : AppCompatDialogFragment() {
                 val downloadId =
                     DownloadUtils.requestDownloadFileDirectly(requireContext(), downloadSource.url, fileName, title, description, MIMEConst.MIME_APK)
                 if (downloadId == null) {
-                    showShortToast(R.string.directly_download_failed)
+                    showToast(R.string.directly_download_failed)
                     DownloadUtils.requestDownloadFileByBrowser(requireContext(), downloadSource.url)
                 } else {
-                    showShortToast(R.string.start_download_update)
+                    showToast(R.string.start_download_update)
                 }
             } else {
                 DownloadUtils.requestDownloadFileByBrowser(requireContext(), downloadSource.url)

@@ -22,6 +22,8 @@
     <color name="anim_slider_tracker_active">#2196F3</color>
     <color name="anim_slider_tracker_inactive">#CBE1F3</color>
 
+    <color name="icon_javascript_background">#FFA000</color>
+
     <color name="dark_icon">#000000</color>
     <color name="gray_icon">#858585</color>
     <color name="dark_gray_icon">#6A6A6A</color>

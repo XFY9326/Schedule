@@ -6,38 +6,46 @@ object CourseImportUtils {
     enum class ImportMethod {
         LOGIN_IMPORT,
         NETWORK_IMPORT,
-        WEB_IMPORT
+        WEB_IMPORT,
+        WEB_JS_IMPORT
     }
 
     fun getCourseImportMethod(
-        config: CourseImportConfig<*, *, *, *>,
+        config: AbstractCourseImportConfig<*, *, *, *>,
         onInvalidParser: () -> Unit,
         onInterfaceProviderError: () -> Unit,
         onUnknownProviderError: () -> Unit,
     ): ImportMethod? {
         when {
-            config.validateProviderType(LoginCourseProvider::class) -> {
-                if (config.validateParserType(NetworkCourseParser::class)) {
+            config.isProviderType(LoginCourseProvider::class) -> {
+                if (config.isParserType(NetworkCourseParser::class)) {
                     return ImportMethod.LOGIN_IMPORT
                 } else {
                     onInvalidParser()
                 }
             }
-            config.validateProviderType(WebCourseProvider::class) -> {
-                if (config.validateParserType(WebCourseParser::class)) {
+            config.isProviderType(WebCourseProvider::class) -> {
+                if (config.isParserType(WebCourseParser::class)) {
                     return ImportMethod.WEB_IMPORT
                 } else {
                     onInvalidParser()
                 }
             }
-            config.validateProviderType(NetworkCourseProvider::class) -> {
-                if (config.validateParserType(NetworkCourseParser::class)) {
+            config.isProviderType(JSCourseProvider::class) -> {
+                if (config.isParserType(JSCourseParser::class)) {
+                    return ImportMethod.WEB_JS_IMPORT
+                } else {
+                    onInvalidParser()
+                }
+            }
+            config.isProviderType(NetworkCourseProvider::class) -> {
+                if (config.isParserType(NetworkCourseParser::class)) {
                     return ImportMethod.NETWORK_IMPORT
                 } else {
                     onInvalidParser()
                 }
             }
-            config.validateProviderType(AbstractCourseProvider::class) -> onInterfaceProviderError()
+            config.isProviderType(AbstractCourseProvider::class) -> onInterfaceProviderError()
             else -> onUnknownProviderError()
         }
         return null

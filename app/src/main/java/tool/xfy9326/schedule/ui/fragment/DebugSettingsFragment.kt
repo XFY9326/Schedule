@@ -4,14 +4,16 @@ import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.StringRes
 import androidx.lifecycle.lifecycleScope
+import androidx.preference.CheckBoxPreference
 import androidx.preference.PreferenceDataStore
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import lib.xfy9326.livedata.observeEvent
+import tool.xfy9326.schedule.BuildConfig
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.data.AppSettingsDataStore
-import tool.xfy9326.schedule.tools.livedata.observeEvent
 import tool.xfy9326.schedule.kt.setOnPrefClickListener
 import tool.xfy9326.schedule.kt.show
-import tool.xfy9326.schedule.kt.showShortSnackBar
+import tool.xfy9326.schedule.kt.showSnackBar
 import tool.xfy9326.schedule.ui.dialog.CrashViewDialog
 import tool.xfy9326.schedule.ui.fragment.base.AbstractSettingsFragment
 import tool.xfy9326.schedule.ui.vm.SettingsViewModel
@@ -24,6 +26,7 @@ class DebugSettingsFragment : AbstractSettingsFragment() {
         private const val KEY_OUTPUT_DEBUG_LOGS = "outputDebugLogs"
         private const val KEY_CLEAR_DEBUG_LOGS = "clearDebugLogs"
         private const val KEY_SEND_DEBUG_LOG = "sendDebugLog"
+        private const val KEY_HANDLE_EXCEPTION = "handleException"
     }
 
     override val titleName: Int = R.string.debug_settings
@@ -34,11 +37,12 @@ class DebugSettingsFragment : AbstractSettingsFragment() {
             requireSettingsViewModel()?.outputLogFileToUri(it)
         } else {
             requireSettingsViewModel()?.waitCreateLogFileName?.consume()
-            requireRootLayout()?.showShortSnackBar(R.string.output_file_cancel)
+            requireRootLayout()?.showSnackBar(R.string.output_file_cancel)
         }
     }
 
     override fun onPrefInit(savedInstanceState: Bundle?) {
+        findPreference<CheckBoxPreference>(KEY_HANDLE_EXCEPTION)?.isEnabled = !BuildConfig.DEBUG
         setOnPrefClickListener(KEY_READ_DEBUG_LOGS) {
             requireSettingsViewModel()?.getAllLogs(KEY_READ_DEBUG_LOGS)
         }
@@ -54,7 +58,7 @@ class DebugSettingsFragment : AbstractSettingsFragment() {
                 setMessage(R.string.clear_debug_logs_msg)
                 setPositiveButton(android.R.string.ok) { _, _ ->
                     requireSettingsViewModel()?.clearLogs()
-                    requireRootLayout()?.showShortSnackBar(R.string.clear_debug_logs_success)
+                    requireRootLayout()?.showSnackBar(R.string.clear_debug_logs_success)
                 }
                 setNegativeButton(android.R.string.cancel, null)
             }.show(viewLifecycleOwner)
@@ -80,7 +84,7 @@ class DebugSettingsFragment : AbstractSettingsFragment() {
             CrashViewDialog.showDialog(childFragmentManager, it)
         }
         viewModel.outputLogFileToUriResult.observeEvent(this) {
-            requireRootLayout()?.showShortSnackBar(
+            requireRootLayout()?.showSnackBar(
                 if (it) {
                     R.string.output_file_success
                 } else {
@@ -92,7 +96,7 @@ class DebugSettingsFragment : AbstractSettingsFragment() {
 
     private fun showDebugLogsSelectDialog(logs: Array<String>, @StringRes titleId: Int, onSelect: (String) -> Unit) {
         if (logs.isEmpty()) {
-            requireRootLayout()?.showShortSnackBar(R.string.no_debug_logs)
+            requireRootLayout()?.showSnackBar(R.string.no_debug_logs)
         } else {
             MaterialAlertDialogBuilder(requireContext()).apply {
                 setTitle(titleId)

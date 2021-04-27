@@ -8,31 +8,31 @@ import androidx.fragment.app.commit
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import tool.xfy9326.schedule.R
-import tool.xfy9326.schedule.databinding.ActivitySettingsBinding
+import tool.xfy9326.schedule.databinding.ActivityFragmentContainerBinding
 import tool.xfy9326.schedule.ui.fragment.base.AbstractSettingsFragment
 
-abstract class AbstractSettingsActivity : ViewBindingActivity<ActivitySettingsBinding>(), PreferenceFragmentCompat.OnPreferenceStartFragmentCallback {
+abstract class AbstractSettingsActivity : ViewBindingActivity<ActivityFragmentContainerBinding>(), PreferenceFragmentCompat.OnPreferenceStartFragmentCallback {
     val rootLayout by lazy {
-        requireViewBinding().layoutSettings
+        requireViewBinding().layoutFragmentContainer
     }
 
     protected abstract fun onCreateMainSettingsFragment(): AbstractSettingsFragment
 
-    override fun onCreateViewBinding() = ActivitySettingsBinding.inflate(layoutInflater)
+    override fun onCreateViewBinding() = ActivityFragmentContainerBinding.inflate(layoutInflater)
 
-    override fun onInitView(viewBinding: ActivitySettingsBinding) {
-        setSupportActionBar(viewBinding.toolBarSettings.toolBarGeneral)
+    override fun onInitView(viewBinding: ActivityFragmentContainerBinding) {
+        setSupportActionBar(viewBinding.toolBarFragmentContainer.toolBarGeneral)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
-    override fun onHandleSavedInstanceState(bundle: Bundle?, viewBinding: ActivitySettingsBinding) {
+    override fun onHandleSavedInstanceState(bundle: Bundle?, viewBinding: ActivityFragmentContainerBinding) {
         setupBaseSettingsFragment(bundle)
     }
 
     private fun setupBaseSettingsFragment(savedInstanceState: Bundle?) {
         if (savedInstanceState == null) {
             supportFragmentManager.commit {
-                replace(R.id.fragmentContainer_settingsContent, onCreateMainSettingsFragment())
+                replace(R.id.fragmentContainer, onCreateMainSettingsFragment())
             }
         }
     }
@@ -60,7 +60,7 @@ abstract class AbstractSettingsActivity : ViewBindingActivity<ActivitySettingsBi
                 R.anim.anim_scroll_in_left,
                 R.anim.anim_scroll_out_right
             )
-            replace(R.id.fragmentContainer_settingsContent, fragment)
+            replace(R.id.fragmentContainer, fragment)
             addToBackStack(null)
         }
         return true

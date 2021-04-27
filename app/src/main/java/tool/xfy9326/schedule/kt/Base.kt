@@ -63,3 +63,5 @@ inline fun <T> Mutex.withTryLock(owner: Any? = null, action: () -> T): T? {
     }
     return null
 }
+
+fun Exception.getDeepStackTraceString() = cause?.stackTraceToString() ?: stackTraceToString()

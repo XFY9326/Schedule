@@ -36,7 +36,7 @@ abstract class AbstractDataStore(val name: String) {
         it[this] ?: defaultValue
     }
 
-    protected suspend fun Preferences.Key<Boolean>.readAsShowOnce() = read {
+    protected suspend fun Preferences.Key<Boolean>.readAsShownOnce() = read {
         val value = it[this] ?: false
         if (!value) {
             edit { editPref ->

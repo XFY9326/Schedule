@@ -3,7 +3,7 @@ package tool.xfy9326.schedule.ui.fragment
 import android.os.Bundle
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.kt.setOnPrefClickListener
-import tool.xfy9326.schedule.kt.showShortSnackBar
+import tool.xfy9326.schedule.kt.showSnackBar
 import tool.xfy9326.schedule.kt.startActivity
 import tool.xfy9326.schedule.ui.activity.AboutActivity
 import tool.xfy9326.schedule.ui.activity.FeedbackActivity
@@ -30,8 +30,8 @@ class MainSettingsFragment : AbstractSettingsFragment() {
         }
         setOnPrefClickListener(PREFERENCE_CHECK_UPGRADE) {
             UpgradeUtils.checkUpgrade(this, true,
-                onFailed = { requireRootLayout()?.showShortSnackBar(R.string.update_check_failed) },
-                onNoUpgrade = { requireRootLayout()?.showShortSnackBar(R.string.no_new_update) },
+                onFailed = { requireRootLayout()?.showSnackBar(R.string.update_check_failed) },
+                onNoUpgrade = { requireRootLayout()?.showSnackBar(R.string.no_new_update) },
                 onFoundUpgrade = { UpgradeDialog.showDialog(childFragmentManager, it) }
             )
         }

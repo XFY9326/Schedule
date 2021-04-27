@@ -2,6 +2,7 @@ package tool.xfy9326.schedule.json.backup
 
 import kotlinx.serialization.Serializable
 import tool.xfy9326.schedule.beans.WeekDay
+import tool.xfy9326.schedule.json.ScheduleTimeJSON
 
 @Serializable
 data class ScheduleJSON(
@@ -9,6 +10,8 @@ data class ScheduleJSON(
     val times: List<ScheduleTimeJSON>,
     val color: Int,
     val weekStart: String,
+    val startDate: Long = 0,
+    val endDate: Long = 0,
     val courses: List<CourseJSON>,
 ) {
     init {

@@ -37,6 +37,7 @@ android {
             exclude "main/java/androidx/datastore/preferences/PreferencesProto.java"
             exclude "META-INF/CHANGES"
             exclude "META-INF/README.md"
+            exclude "okhttp3/internal/publicsuffix/NOTICE"
         }
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -55,11 +56,26 @@ android {
         viewBinding true
     }
 
+    signingConfigs {
+        debug {
+            storeFile file("${config.projectName}_debug.keystore")
+            storePassword "debug_key"
+            keyAlias "${config.projectName}"
+            keyPassword "debug_key"
+            v1SigningEnabled true
+            v2SigningEnabled true
+        }
+    }
+
     buildTypes {
         debug {
             versionNameSuffix "-$config.gitCommitId"
             applicationIdSuffix ".debug"
             manifestPlaceholders = ["ApplicationId": androidConfig.applicationId + applicationIdSuffix]
+
+//            minifyEnabled true
+//            shrinkResources true
+//            proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
         }
         release {
             minifyEnabled true
@@ -88,7 +104,10 @@ android {
 }
 
 dependencies {
-    implementation project(path: ":IO")
+    implementation project(path: ":Annotation")
+    kapt project(path: ":AnnotationProcessor")
+
+    implementation project(path: ":LiveDataTools")
 
     // Kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
@@ -103,16 +122,16 @@ dependencies {
     implementation "androidx.appcompat:appcompat:$androidxVersion.appcompat"
     implementation "androidx.appcompat:appcompat-resources:$androidxVersion.appcompat"
 
-    implementation "androidx.activity:activity-ktx:1.2.1"
-    implementation "androidx.fragment:fragment-ktx:1.3.1"
+    implementation "androidx.activity:activity-ktx:1.2.2"
+    implementation "androidx.fragment:fragment-ktx:1.3.2"
 
-    implementation "androidx.gridlayout:gridlayout:1.0.0"
     implementation "androidx.constraintlayout:constraintlayout:2.0.4"
 
     implementation "androidx.preference:preference-ktx:1.1.1"
-    implementation "androidx.datastore:datastore-preferences:1.0.0-alpha08"
+    implementation "androidx.datastore:datastore-preferences:1.0.0-beta01"
 
     // LifeCycle, ViewModel, LiveData
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$androidxVersion.lifecycle"
     implementation "androidx.lifecycle:lifecycle-common-java8:$androidxVersion.lifecycle"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$androidxVersion.lifecycle"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$androidxVersion.lifecycle"
@@ -125,11 +144,17 @@ dependencies {
     // Material Design
     implementation "com.google.android.material:material:1.3.0"
 
-    // Glide
-    implementation "com.github.bumptech.glide:glide:4.12.0"
+    // Coil
+    implementation "io.coil-kt:coil:1.1.1"
+
+    // Okio
+    implementation "com.squareup.okio:okio:2.10.0"
+
+    // OkHttp
+    implementation "com.squareup.okhttp3:okhttp:4.9.0"
 
     // Ktor
-    implementation "io.ktor:ktor-client-android:$dependenciesVersion.ktor"
+    implementation "io.ktor:ktor-client-okhttp:$dependenciesVersion.ktor"
     implementation "io.ktor:ktor-client-serialization:$dependenciesVersion.ktor"
 
     // Jsoup
@@ -143,4 +168,7 @@ dependencies {
     testImplementation "androidx.room:room-testing:$androidxVersion.room"
     androidTestImplementation "androidx.test.ext:junit:$androidxVersion.test.junit"
     androidTestImplementation "androidx.test.espresso:espresso-core:$androidxVersion.test.espresso"
+
+    // Debug
+    // debugImplementation "com.squareup.leakcanary:leakcanary-android:2.6"
 }

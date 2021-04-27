@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.viewbinding.ViewBinding
 import tool.xfy9326.schedule.ui.viewholder.ViewBindingViewHolder
 
-abstract class ListViewBindingAdapter<E, V : ViewBinding, VH : ViewBindingViewHolder<V>>(callBack: DiffUtil.ItemCallback<E>? = null) :
+abstract class ListViewBindingAdapter<E, V : ViewBinding, VH : ViewBindingViewHolder<out V>>(callBack: DiffUtil.ItemCallback<E>? = null) :
     ListAdapter<E, VH>(callBack ?: BaseDifferItemCallBack<E>()), IViewBindingAdapter<V, VH> {
 
     final override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH =

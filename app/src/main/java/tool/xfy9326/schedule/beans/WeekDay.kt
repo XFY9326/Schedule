@@ -1,9 +1,13 @@
 package tool.xfy9326.schedule.beans
 
+import android.os.Parcelable
+import kotlinx.parcelize.IgnoredOnParcel
+import kotlinx.parcelize.Parcelize
 import java.util.*
 
 @Suppress("unused")
-enum class WeekDay(val shortName: String, val calWeekDay: Int) {
+@Parcelize
+enum class WeekDay(val shortName: String, val calWeekDay: Int) : Parcelable {
     MONDAY(WeekDay.SHORT_NAME_MO, Calendar.MONDAY),
     TUESDAY(WeekDay.SHORT_NAME_TU, Calendar.TUESDAY),
     WEDNESDAY(WeekDay.SHORT_NAME_WE, Calendar.WEDNESDAY),
@@ -45,18 +49,17 @@ enum class WeekDay(val shortName: String, val calWeekDay: Int) {
                 } ?: error("Value error!")
             }
 
-        private fun getOrderedValue(weekDay: WeekDay, weekStart: WeekDay) =
+        fun WeekDay.orderedValue(weekStart: WeekDay) =
             when (weekStart) {
-                MONDAY -> weekDay.value
-                SUNDAY -> if (weekDay == SUNDAY) 1 else weekDay.value + 1
+                MONDAY -> value
+                SUNDAY -> if (this == SUNDAY) 1 else value + 1
                 else -> error("First day of week must be MONDAY or SUNDAY")
             }
     }
 
+    @IgnoredOnParcel
     val value: Int = ordinal + 1
 
     val isWeekend: Boolean
         get() = (this == SATURDAY || this == SUNDAY)
-
-    fun orderedValue(weekStart: WeekDay) = getOrderedValue(this, weekStart)
 }

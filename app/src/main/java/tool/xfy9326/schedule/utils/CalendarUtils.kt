@@ -2,6 +2,7 @@ package tool.xfy9326.schedule.utils
 
 import tool.xfy9326.schedule.beans.Day
 import tool.xfy9326.schedule.beans.WeekDay
+import tool.xfy9326.schedule.beans.WeekDay.Companion.orderedValue
 import tool.xfy9326.schedule.kt.getWeekDay
 import java.util.*
 import kotlin.math.floor
@@ -19,8 +20,8 @@ object CalendarUtils {
             if (weekStart != null) this.firstDayOfWeek = weekStart.calWeekDay
         }
 
-    fun getDay(date: Date? = null, weekStart: WeekDay): Day =
-        getCalendar(date, weekStart).let {
+    fun getDay(date: Date? = null): Day =
+        getCalendar(date).let {
             Day(it.get(Calendar.MONTH) + 1, it.get(Calendar.DATE), it.getWeekDay())
         }
 

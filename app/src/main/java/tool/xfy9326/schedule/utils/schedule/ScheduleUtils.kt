@@ -5,7 +5,6 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.shareIn
-import lib.xfy9326.io.IOManager
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.Course
 import tool.xfy9326.schedule.beans.EditError
@@ -14,6 +13,7 @@ import tool.xfy9326.schedule.beans.ScheduleTime
 import tool.xfy9326.schedule.data.AppDataStore
 import tool.xfy9326.schedule.data.ScheduleDataStore
 import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
+import tool.xfy9326.schedule.io.IOManager
 import tool.xfy9326.schedule.kt.combine
 import tool.xfy9326.schedule.kt.intersect
 import tool.xfy9326.schedule.kt.iterateAll
@@ -24,6 +24,11 @@ object ScheduleUtils {
     val currentScheduleFlow =
         AppDataStore.currentScheduleIdFlow.combine {
             ScheduleDBProvider.db.scheduleDAO.getSchedule(it).filterNotNull()
+        }.shareIn(GlobalScope, SharingStarted.Eagerly, 1)
+
+    val currentScheduleTimesFlow =
+        AppDataStore.currentScheduleIdFlow.combine {
+            ScheduleDBProvider.db.scheduleDAO.getScheduleTimes(it).filterNotNull()
         }.shareIn(GlobalScope, SharingStarted.Eagerly, 1)
 
     private val DEFAULT_SCHEDULE_TIMES by lazy {
@@ -45,7 +50,7 @@ object ScheduleUtils {
         )
     }
 
-    private fun getDefaultTermDate(): Pair<Date, Date> {
+    fun getDefaultTermDate(): Pair<Date, Date> {
         CalendarUtils.getCalendar(clearToDate = true).apply {
             val startDate: Date
             val endDate: Date
@@ -108,7 +113,7 @@ object ScheduleUtils {
             ScheduleDataStore.defaultFirstDayOfWeekFlow.first())
     }
 
-    suspend fun createNewSchedule() = getDefaultTermDate().let {
+    suspend fun createNewSchedule(term: Pair<Date, Date>? = null) = (term ?: getDefaultTermDate()).let {
         Schedule(IOManager.resources.getString(R.string.new_schedule_name),
             it.first,
             it.second,
@@ -124,8 +129,8 @@ object ScheduleUtils {
         return ScheduleDBProvider.db.scheduleDAO.updateScheduleCourses(schedule, courses)
     }
 
-    suspend fun saveNewSchedule(newScheduleName: String?, scheduleTimes: List<ScheduleTime>, courses: List<Course>): Long {
-        val schedule = createNewSchedule().also {
+    suspend fun saveNewSchedule(newScheduleName: String?, scheduleTimes: List<ScheduleTime>, courses: List<Course>, term: Pair<Date, Date>? = null): Long {
+        val schedule = createNewSchedule(term).also {
             it.times = scheduleTimes
             adjustScheduleDateByCourses(it, courses)
         }

@@ -5,6 +5,7 @@ package tool.xfy9326.schedule.content.utils
 import tool.xfy9326.schedule.beans.Course
 import tool.xfy9326.schedule.kt.tryCast
 import java.io.*
+import java.security.MessageDigest
 
 fun BooleanArray.arrangeWeekNum(): BooleanArray {
     var newSize = size
@@ -22,12 +23,25 @@ fun BooleanArray.arrangeWeekNum(): BooleanArray {
     }
 }
 
+fun BooleanArray.hasCourse(num: Int): Boolean {
+    val index = num - 1
+    return if (index in indices) {
+        this[index]
+    } else {
+        false
+    }
+}
+
 fun List<Course>.arrangeWeekNum() {
     this.forEach {
         it.times.forEach { time ->
             time.weekNum = time.weekNum.arrangeWeekNum()
         }
     }
+}
+
+fun String.md5(): String {
+    return MessageDigest.getInstance("MD5").digest(this.toByteArray()).toHex()
 }
 
 fun ByteArray.toHex(): String {

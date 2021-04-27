@@ -5,14 +5,20 @@ import tool.xfy9326.schedule.beans.Course
 import tool.xfy9326.schedule.beans.CourseTime
 import tool.xfy9326.schedule.beans.ScheduleTime
 import tool.xfy9326.schedule.beans.WeekDay
+import tool.xfy9326.schedule.content.adapters.provider.NAUJwcCourseProvider
 import tool.xfy9326.schedule.content.base.CourseParseResult
 import tool.xfy9326.schedule.content.base.NetworkCourseParser
+import tool.xfy9326.schedule.content.utils.CourseAdapterUtils
 import tool.xfy9326.schedule.kt.isEven
 import tool.xfy9326.schedule.kt.isOdd
+import java.util.*
+import kotlin.collections.ArrayList
 
 class NAUCourseParser : NetworkCourseParser<Nothing>() {
     companion object {
         private const val INIT_WEEK_NUM = 20
+        private const val TERM_START_SELECTOR = "#TermInfo > div:nth-child(4) > span"
+        private const val TERM_END_SELECTOR = "#TermInfo > div:nth-child(5) > span"
         private const val COURSE_TR_TAGS = "#content > tbody > tr[align='center']"
         private val WEEKDAY_COURSE_REG = "周 (\\d+) 第 (\\d+)-(\\d+)节".toRegex()
 
@@ -75,21 +81,23 @@ class NAUCourseParser : NetworkCourseParser<Nothing>() {
         }
     }
 
+    private val termDateFormat = CourseAdapterUtils.newDateFormat()
+
     override fun onParseScheduleTimes(importOption: Int, htmlContent: String?) =
-        listOf(
-            ScheduleTime(8, 30, 9, 10),
-            ScheduleTime(9, 20, 10, 0),
-            ScheduleTime(10, 20, 11, 0),
-            ScheduleTime(11, 10, 11, 50),
-            ScheduleTime(12, 0, 12, 40),
-            ScheduleTime(13, 30, 14, 10),
-            ScheduleTime(14, 20, 15, 0),
-            ScheduleTime(15, 20, 16, 0),
-            ScheduleTime(16, 10, 16, 50),
-            ScheduleTime(17, 0, 17, 40),
-            ScheduleTime(18, 30, 19, 10),
-            ScheduleTime(19, 20, 20, 0),
-            ScheduleTime(20, 10, 20, 50)
+        ScheduleTime.listOf(
+            8, 30, 9, 10,
+            9, 20, 10, 0,
+            10, 20, 11, 0,
+            11, 10, 11, 50,
+            12, 0, 12, 40,
+            13, 30, 14, 10,
+            14, 20, 15, 0,
+            15, 20, 16, 0,
+            16, 10, 16, 50,
+            17, 0, 17, 40,
+            18, 30, 19, 10,
+            19, 20, 20, 0,
+            20, 10, 20, 50
         )
 
     override fun onParseCourses(importOption: Int, htmlContent: String): CourseParseResult {
@@ -125,5 +133,23 @@ class NAUCourseParser : NetworkCourseParser<Nothing>() {
         }
 
         return builder.build()
+    }
+
+    override fun onParseTerm(importOption: Int, htmlContent: String?): Pair<Date, Date>? {
+        if (importOption == NAUJwcCourseProvider.IMPORT_OPTION_THIS_TERM && htmlContent != null) {
+            try {
+                val body = Jsoup.parse(htmlContent).body()
+                val termStartStr = body.selectFirst(TERM_START_SELECTOR).text().trim()
+                val termEndStr = body.selectFirst(TERM_END_SELECTOR).text().trim()
+                val termStart = termDateFormat.parse(termStartStr)
+                val termEnd = termDateFormat.parse(termEndStr)
+                if (termStart != null && termEnd != null) {
+                    return termStart to termEnd
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+        return null
     }
 }

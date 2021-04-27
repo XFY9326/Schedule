@@ -10,7 +10,13 @@ import android.graphics.drawable.*
 import android.os.Build
 import android.text.Editable
 import android.util.TypedValue
-import android.view.*
+import android.view.Menu
+import android.view.View
+import android.view.ViewGroup
+import android.view.Window
+import android.webkit.CookieManager
+import android.webkit.WebStorage
+import android.webkit.WebView
 import androidx.annotation.ColorInt
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
@@ -32,10 +38,10 @@ fun Float.spToPx() = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, this,
 
 fun Int.spToPx() = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, this.toFloat(), Resources.getSystem().displayMetrics).toInt()
 
-fun CoordinatorLayout.showShortSnackBar(@StringRes strId: Int, vararg params: Any, showLong: Boolean = false) =
+fun CoordinatorLayout.showSnackBar(@StringRes strId: Int, vararg params: Any, showLong: Boolean = false) =
     Snackbar.make(this, context.getString(strId, *params), if (showLong) Snackbar.LENGTH_LONG else Snackbar.LENGTH_SHORT).show()
 
-fun CoordinatorLayout.showShortSnackBar(str: String, showLong: Boolean = false) =
+fun CoordinatorLayout.showSnackBar(str: String, showLong: Boolean = false) =
     Snackbar.make(this, str, if (showLong) Snackbar.LENGTH_LONG else Snackbar.LENGTH_SHORT).show()
 
 fun Dialog.setWindowWidthPercent(widthPercent: Double): Int? {
@@ -135,7 +141,7 @@ fun Window.enableLightSystemBar(context: Context, enabled: Boolean) {
                 navigationBarColor = context.getColorCompat(R.color.light_navigation_bar)
             } else {
                 decorView.systemUiVisibility = decorView.systemUiVisibility and View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR.inv()
-                context.getColorCompat(R.color.not_light_navigation_bar)
+                navigationBarColor = context.getColorCompat(R.color.not_light_navigation_bar)
             }
         }
     }
@@ -154,18 +160,49 @@ fun Menu.setIconTint(@ColorInt colorTint: Int?) {
     }
 }
 
-fun <V : View> V.addOnMeasureChangedListener(block: V.() -> Unit) {
-    viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
-        private var lastMeasuredWidth = 0
-        private var lastMeasuredHeight = 0
+fun View.removeSelf() = (parent as? ViewGroup)?.removeView(this)
 
-        override fun onGlobalLayout() {
-            if (measuredWidth != lastMeasuredWidth || measuredHeight != lastMeasuredHeight) {
-                lastMeasuredWidth = measuredWidth
-                lastMeasuredHeight = measuredHeight
+fun WebView.bindLifeCycle(lifecycleOwner: LifecycleOwner) {
+    lifecycleOwner.lifecycle.addObserver(object : DefaultLifecycleObserver {
+        override fun onResume(owner: LifecycleOwner) {
+            onResume()
+            resumeTimers()
+        }
 
-                block()
+        override fun onPause(owner: LifecycleOwner) {
+            pauseTimers()
+            onPause()
+        }
+
+        override fun onDestroy(owner: LifecycleOwner) {
+            try {
+                removeSelf()
+                stopLoading()
+                settings.javaScriptEnabled = false
+                removeAllViews()
+                destroy()
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
+            lifecycleOwner.lifecycle.removeObserver(this)
         }
     })
+}
+
+fun WebView.clearAll(cookies: Boolean = true, webStorage: Boolean = true) {
+    settings.javaScriptEnabled = false
+    clearHistory()
+    clearFormData()
+    clearMatches()
+    clearSslPreferences()
+    clearCache(true)
+    if (cookies) {
+        CookieManager.getInstance().apply {
+            removeAllCookies(null)
+            flush()
+        }
+    }
+    if (webStorage) {
+        WebStorage.getInstance().deleteAllData()
+    }
 }

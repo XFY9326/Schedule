@@ -2,41 +2,89 @@ package tool.xfy9326.schedule.ui.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import tool.xfy9326.schedule.content.base.CourseImportConfig
+import androidx.core.view.isVisible
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.RecyclerView
+import androidx.viewbinding.ViewBinding
+import tool.xfy9326.schedule.content.base.AbstractCourseImportConfig
+import tool.xfy9326.schedule.content.base.ICourseImportConfig
+import tool.xfy9326.schedule.content.beans.JSConfig
 import tool.xfy9326.schedule.databinding.ItemCourseImportBinding
-import tool.xfy9326.schedule.ui.recyclerview.BaseViewBindingAdapter
+import tool.xfy9326.schedule.databinding.LayoutSwipeItemBinding
+import tool.xfy9326.schedule.ui.recyclerview.ListViewBindingAdapter
+import tool.xfy9326.schedule.ui.recyclerview.SwipeItemCallback
+import tool.xfy9326.schedule.ui.recyclerview.SwipeItemViewHolder
 import tool.xfy9326.schedule.ui.viewholder.ViewBindingViewHolder
 
-class CourseImportAdapter : BaseViewBindingAdapter<ItemCourseImportBinding, ViewBindingViewHolder<ItemCourseImportBinding>>() {
-    private var sortedConfigs = ArrayList<CourseImportConfig<*, *, *, *>>()
-    private var onCourseImportItemClickListener: ((CourseImportConfig<*, *, *, *>) -> Unit)? = null
+class CourseImportAdapter : ListViewBindingAdapter<ICourseImportConfig, ViewBinding, ViewBindingViewHolder<out ViewBinding>>() {
+    private var onCourseImportItemListener: OnCourseImportItemListener? = null
 
-    fun updateConfigs(configs: List<CourseImportConfig<*, *, *, *>>) {
-        sortedConfigs.clear()
-        sortedConfigs.addAll(configs)
-        notifyDataSetChanged()
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+        ItemTouchHelper(SwipeItemCallback().apply {
+            setOnItemSwipedListener(::onSwipe)
+        }).attachToRecyclerView(recyclerView)
     }
 
-    override fun onCreateViewHolder(layoutInflater: LayoutInflater, parent: ViewGroup, viewType: Int) =
-        ViewBindingViewHolder(ItemCourseImportBinding.inflate(layoutInflater, parent, false))
+    override fun getItemViewType(position: Int): Int {
+        return when (getItem(position)) {
+            is AbstractCourseImportConfig<*, *, *, *> -> 0
+            is JSConfig -> 1
+            else -> error("Invalid element type! Class: ${getItem(position).javaClass}")
+        }
+    }
 
-    override fun onBindViewHolder(holder: ViewBindingViewHolder<ItemCourseImportBinding>, position: Int) {
-        holder.viewBinding.textViewCourseImportSchoolName.apply {
+    override fun onCreateViewHolder(layoutInflater: LayoutInflater, parent: ViewGroup, viewType: Int): ViewBindingViewHolder<out ViewBinding> {
+        return when (viewType) {
+            0 -> ViewBindingViewHolder(ItemCourseImportBinding.inflate(layoutInflater, parent, false))
+            1 -> LayoutSwipeItemBinding.inflate(layoutInflater, parent, false).run {
+                SwipeItemViewHolder(ItemCourseImportBinding.inflate(layoutInflater, layoutSwipeForeground, true), this)
+            }
+            else -> error("Invalid element type! ViewType: $viewType")
+        }
+    }
+
+    override fun onBindViewHolder(holder: ViewBindingViewHolder<out ViewBinding>, position: Int, element: ICourseImportConfig) {
+        val viewBinding = if (holder is SwipeItemViewHolder<*> && holder.binding is ItemCourseImportBinding) {
+            holder.binding
+        } else if (holder.viewBinding is ItemCourseImportBinding) {
+            holder.viewBinding
+        } else {
+            error("Invalid view holder! Class: ${holder.javaClass}")
+        }
+        viewBinding.textViewCourseImportSchoolName.apply {
             isSelected = true
-            text = holder.viewContext.getString(sortedConfigs[position].schoolNameResId)
+            text = element.schoolName
         }
-        holder.viewBinding.textViewCourseImportSystemName.apply {
+        viewBinding.textViewCourseImportSystemName.apply {
             isSelected = true
-            text = holder.viewContext.getString(sortedConfigs[position].systemNameResId)
+            text = element.systemName
         }
-        holder.viewBinding.layoutCourseImportItem.setOnClickListener {
-            onCourseImportItemClickListener?.invoke(sortedConfigs[holder.adapterPosition])
+        viewBinding.textViewCourseImportJSConfig.isVisible = element is JSConfig
+        viewBinding.layoutCourseImportItem.setOnClickListener {
+            if (element is AbstractCourseImportConfig<*, *, *, *>) {
+                onCourseImportItemListener?.onCourseImportConfigClick(element)
+            } else if (element is JSConfig) {
+                onCourseImportItemListener?.onJSConfigClick(element)
+            }
         }
     }
 
-    fun setOnCourseImportItemClickListener(onCourseImportItemClickListener: ((CourseImportConfig<*, *, *, *>) -> Unit)?) {
-        this.onCourseImportItemClickListener = onCourseImportItemClickListener
+    fun setOnCourseImportItemListener(onCourseImportItemListener: OnCourseImportItemListener?) {
+        this.onCourseImportItemListener = onCourseImportItemListener
     }
 
-    override fun getItemCount(): Int = sortedConfigs.size
+    private fun onSwipe(position: Int) {
+        val element = getItem(position)
+        if (element is JSConfig) {
+            onCourseImportItemListener?.onJSConfigDelete(element)
+        }
+    }
+
+    interface OnCourseImportItemListener {
+        fun onCourseImportConfigClick(config: AbstractCourseImportConfig<*, *, *, *>)
+
+        fun onJSConfigClick(jsConfig: JSConfig)
+
+        fun onJSConfigDelete(jsConfig: JSConfig)
+    }
 }

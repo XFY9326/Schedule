@@ -1,21 +1,21 @@
 package tool.xfy9326.schedule.ui.activity
 
-import android.view.View
-import android.widget.AdapterView
+import android.graphics.Bitmap
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.Spinner
 import androidx.annotation.StringRes
 import androidx.core.view.isVisible
-import com.bumptech.glide.Glide
+import coil.load
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.NetworkCourseImportParams
-import tool.xfy9326.schedule.beans.NetworkLoginParams
+import tool.xfy9326.schedule.beans.NetworkProviderParams
 import tool.xfy9326.schedule.content.base.*
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
 import tool.xfy9326.schedule.databinding.ActivityNetworkCourseProviderBinding
 import tool.xfy9326.schedule.kt.*
-import tool.xfy9326.schedule.tools.livedata.observeEvent
 import tool.xfy9326.schedule.ui.activity.base.CourseProviderActivity
 import tool.xfy9326.schedule.ui.vm.NetworkCourseProviderViewModel
 import tool.xfy9326.schedule.ui.vm.base.CourseProviderViewModel
@@ -44,49 +44,72 @@ class NetworkCourseProviderActivity :
     override fun onBindLiveData(viewBinding: ActivityNetworkCourseProviderBinding, viewModel: NetworkCourseProviderViewModel) {
         super.onBindLiveData(viewBinding, viewModel)
 
-        viewModel.loginParams.observeEvent(this, observer = ::applyLoginParams)
-        viewModel.refreshCaptcha.observeEvent(this, observer = ::setCaptcha)
+        viewModel.loginCaptcha.observe(this, ::setCaptcha)
+        viewModel.providerParams.observe(this, ::applyProviderParams)
+        viewModel.importOptions.observe(this, ::setupOptions)
     }
 
     override fun onInitView(viewBinding: ActivityNetworkCourseProviderBinding, viewModel: NetworkCourseProviderViewModel) {
-        if (!viewModel.isImportingCourses) {
-            viewModel.initLoginParams()
-        }
         viewBinding.textViewCourseAdapterSchool.apply {
             isSelected = true
-            text = getString(viewModel.importConfig.schoolNameResId)
+            text = viewModel.importConfigInstance.schoolName
         }
         viewBinding.textViewCourseAdapterSystem.apply {
             isSelected = true
-            text = getString(viewModel.importConfig.systemNameResId)
+            text = viewModel.importConfigInstance.systemName
         }
-        viewBinding.textViewCourseAdapterAuthor.text = getString(R.string.adapter_author, getString(viewModel.importConfig.authorNameResId))
-        viewBinding.spinnerCourseImportOptions.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                viewModel.refreshCaptcha(position)
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-        }
+        viewBinding.textViewCourseAdapterAuthor.text = getString(R.string.adapter_author, viewModel.importConfigInstance.authorName)
         viewBinding.imageViewCaptcha.setOnClickListener {
-            viewModel.refreshCaptcha(viewBinding.spinnerCourseImportOptions.selectedItemPosition)
+            if (!viewModel.isImportingCourses) {
+                withImportOption {
+                    viewModel.refreshCaptcha(it)
+                }
+            }
         }
         viewBinding.buttonCourseImportReload.setOnClickListener {
-            viewBinding.progressBarLoadingCourseImportInit.isIndeterminate = true
-            it.isVisible = false
-            viewModel.initLoginParams()
+            if (!viewModel.isImportingCourses) {
+                withImportOption {
+                    withLoadingView {
+                        viewModel.refreshLoginPageInfo(it)
+                    }
+                }
+            }
         }
 
         viewBinding.buttonImportCourseToCurrentSchedule.setOnClickListener {
-            getCurrentOption()?.let {
-                requestImportCourse(ImportRequestParams(true, getImportCourseParams(), it))
+            withImportOption {
+                withImportCourseParams { params ->
+                    requestImportCourse(ImportRequestParams(true, params, it))
+                }
             }
         }
         viewBinding.buttonImportCourseToNewSchedule.setOnClickListener {
-            getCurrentOption()?.let {
-                requestImportCourse(ImportRequestParams(false, getImportCourseParams(), it))
+            withImportOption {
+                withImportCourseParams { params ->
+                    requestImportCourse(ImportRequestParams(false, params, it))
+                }
             }
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_network_course_provider, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.menu_networkCourseProviderRefresh -> {
+                if (!requireViewModel().isImportingCourses) {
+                    withImportOption {
+                        withLoadingView {
+                            requireViewModel().refreshLoginPageInfo(it)
+                        }
+                    }
+                }
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onBackPressed() {
@@ -109,35 +132,28 @@ class NetworkCourseProviderActivity :
     override fun onCourseImportFinish(result: CourseProviderViewModel.ImportResult, editScheduleId: Long?) {
         if (result == CourseProviderViewModel.ImportResult.FAILED) {
             requireViewBinding().layoutCourseImportContent.setAllEnable(true)
-            requireViewModel().initLoginParams()
+            withImportOption(false) {
+                requireViewModel().refreshLoginPageInfo(it)
+            }
         }
     }
 
     override fun onReadyImportCourse() {
         requireViewBinding().apply {
             layoutCourseImportContent.setAllEnable(false)
-            progressBarLoadingCourseImportInit.isIndeterminate = true
-            buttonCourseImportReload.isVisible = false
-            layoutCourseImportLoading.isVisible = true
-            layoutCourseImportContent.isVisible = false
+            setLoadingView(true)
         }
     }
 
-    private fun getImportCourseParams(): NetworkCourseImportParams {
+    private fun withImportCourseParams(block: (NetworkCourseImportParams) -> Unit) {
         requireViewBinding().apply {
             layoutCourseImportContent.clearFocus()
+            if (requireViewModel().isLoginCourseProvider) {
+                val userId = getTextWithCheck(editTextUserId, R.string.user_id_empty) ?: return
+                val userPw = getTextWithCheck(editTextUserPw, R.string.user_pw_empty) ?: return
+                val captchaCode = (if (layoutCaptcha.isVisible) getTextWithCheck(editTextCaptcha, R.string.captcha_empty) else null) ?: return
 
-            return if (requireViewModel().isLoginCourseProvider) {
-                val userId = getTextWithCheck(editTextUserId, R.string.user_id_empty)
-                val userPw = getTextWithCheck(editTextUserPw, R.string.user_pw_empty)
-                val captchaCode = if (layoutCaptcha.isVisible) {
-                    getTextWithCheck(editTextCaptcha, R.string.captcha_empty)
-                } else {
-                    null
-                }
-                NetworkCourseImportParams(userId, userPw, captchaCode)
-            } else {
-                NetworkCourseImportParams(null, null, null)
+                block(NetworkCourseImportParams(userId, userPw, captchaCode = captchaCode))
             }
         }
     }
@@ -145,73 +161,91 @@ class NetworkCourseProviderActivity :
     private fun getTextWithCheck(editText: EditText, @StringRes errorMsg: Int) =
         editText.text.getText().let {
             if (it == null) {
-                requireViewBinding().layoutLoginCourseProvider.showShortSnackBar(errorMsg)
+                requireViewBinding().layoutLoginCourseProvider.showSnackBar(errorMsg)
                 null
             } else {
                 it
             }
         }
 
-    private fun getCurrentOption(): Int? {
+    private fun withImportOption(warning: Boolean = true, block: (Int) -> Unit) {
         requireViewBinding().apply {
-            return if (layoutImportOptions.isVisible) {
+            if (layoutImportOptions.isVisible) {
                 spinnerCourseImportOptions.selectedItemPosition.also {
                     if (it == Spinner.INVALID_POSITION) {
-                        layoutLoginCourseProvider.showShortSnackBar(R.string.options_empty)
-                        return null
+                        if (warning) layoutLoginCourseProvider.showSnackBar(R.string.options_empty)
+                    } else {
+                        block(it)
                     }
                 }
             } else {
-                0
+                block(0)
             }
         }
     }
 
-    private fun applyLoginParams(params: NetworkLoginParams?) {
+    private fun applyProviderParams(params: NetworkProviderParams?) {
         requireViewBinding().apply {
             if (params != null) {
-                if (params.options == null) {
-                    layoutImportOptions.isVisible = false
-                } else {
-                    setupOptions(params.options)
-                }
-
-                layoutUserId.isVisible = params.allowLogin
-                layoutUserPw.isVisible = params.allowLogin
+                layoutUserId.isVisible = params.enableLogin
+                layoutUserPw.isVisible = params.enableLogin
                 layoutCaptcha.isVisible = params.enableCaptcha
-
-                layoutCourseImportLoading.isVisible = false
-                layoutCourseImportContent.isVisible = true
+                if (params.enableCaptcha) {
+                    editTextCaptcha.text = null
+                }
+                setLoadingView(false)
             } else {
-                progressBarLoadingCourseImportInit.isIndeterminate = false
-                buttonCourseImportReload.isVisible = true
+                setLoadingView(isLoading = false, enableReload = true)
+            }
+        }
+    }
+
+    private fun withLoadingView(block: () -> Boolean) {
+        setLoadingView(true)
+        if (!block()) {
+            setLoadingView(false)
+        }
+    }
+
+    private fun setLoadingView(isLoading: Boolean, enableReload: Boolean = false) {
+        requireViewBinding().apply {
+            if (enableReload || isLoading) {
+                progressBarLoadingCourseImportInit.isIndeterminate = isLoading
+                buttonCourseImportReload.isVisible = enableReload
 
                 layoutCourseImportLoading.isVisible = true
                 layoutCourseImportContent.isVisible = false
+            } else {
+                layoutCourseImportLoading.isVisible = false
+                layoutCourseImportContent.isVisible = true
             }
         }
     }
 
-    private fun setupOptions(array: Array<String>) {
+    private fun setupOptions(options: Array<String>?) {
         requireViewBinding().apply {
-            val adapter = ArrayAdapter(
-                this@NetworkCourseProviderActivity,
-                android.R.layout.simple_list_item_1,
-                array
-            ).apply {
-                setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            if (options == null) {
+                layoutImportOptions.isVisible = false
+            } else {
+                val adapter = ArrayAdapter(
+                    this@NetworkCourseProviderActivity,
+                    android.R.layout.simple_list_item_1,
+                    options
+                ).apply {
+                    setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                }
+                spinnerCourseImportOptions.adapter = adapter
+                if (spinnerCourseImportOptions.selectedItemPosition == Spinner.INVALID_POSITION) {
+                    spinnerCourseImportOptions.setSelection(0)
+                }
+                layoutImportOptions.isVisible = true
             }
-            spinnerCourseImportOptions.adapter = adapter
-            spinnerCourseImportOptions.setSelection(0)
-            layoutImportOptions.isVisible = true
         }
     }
 
-    private fun setCaptcha(captcha: ByteArray?) {
-        if (captcha == null) {
-            requireViewBinding().imageViewCaptcha.setImageResource(R.drawable.ic_broken_image_24)
-        } else {
-            Glide.with(this).load(captcha).error(R.drawable.ic_broken_image_24).into(requireViewBinding().imageViewCaptcha)
+    private fun setCaptcha(captcha: Bitmap?) {
+        requireViewBinding().imageViewCaptcha.load(captcha) {
+            error(R.drawable.ic_broken_image_24)
         }
     }
 }

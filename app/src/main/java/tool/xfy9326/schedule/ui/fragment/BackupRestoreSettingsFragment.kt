@@ -3,12 +3,12 @@ package tool.xfy9326.schedule.ui.fragment
 import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.os.bundleOf
+import lib.xfy9326.livedata.observeEvent
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.BatchResult
 import tool.xfy9326.schedule.kt.setOnPrefClickListener
-import tool.xfy9326.schedule.kt.showShortSnackBar
+import tool.xfy9326.schedule.kt.showSnackBar
 import tool.xfy9326.schedule.tools.MIMEConst
-import tool.xfy9326.schedule.tools.livedata.observeEvent
 import tool.xfy9326.schedule.ui.dialog.ImportCourseConflictDialog
 import tool.xfy9326.schedule.ui.dialog.MultiItemSelectDialog
 import tool.xfy9326.schedule.ui.fragment.base.AbstractSettingsFragment
@@ -31,14 +31,14 @@ class BackupRestoreSettingsFragment : AbstractSettingsFragment(), MultiItemSelec
             requireSettingsViewModel()?.backupScheduleToUri(it)
         } else {
             requireSettingsViewModel()?.waitBackupScheduleId?.consume()
-            requireRootLayout()?.showShortSnackBar(R.string.output_file_cancel)
+            requireRootLayout()?.showSnackBar(R.string.output_file_cancel)
         }
     }
     private val restoreSchedule = registerForActivityResult(ActivityResultContracts.GetContent()) {
         if (it != null) {
             requireSettingsViewModel()?.restoreScheduleFromUri(it)
         } else {
-            requireRootLayout()?.showShortSnackBar(R.string.input_file_cancel)
+            requireRootLayout()?.showSnackBar(R.string.input_file_cancel)
         }
     }
 
@@ -63,11 +63,11 @@ class BackupRestoreSettingsFragment : AbstractSettingsFragment(), MultiItemSelec
                 idArr = it.map { min ->
                     min.scheduleId
                 }.toLongArray(),
-                selectedArr = BooleanArray(it.size) { false }
+                selectedArr = BooleanArray(it.size) { true }
             )
         }
         viewModel.backupScheduleToUriResult.observeEvent(this) {
-            requireRootLayout()?.showShortSnackBar(
+            requireRootLayout()?.showSnackBar(
                 if (it) {
                     R.string.output_file_success
                 } else {
@@ -95,7 +95,7 @@ class BackupRestoreSettingsFragment : AbstractSettingsFragment(), MultiItemSelec
             selectedArr[i]
         }
         if (idList.isEmpty()) {
-            requireRootLayout()?.showShortSnackBar(R.string.schedule_choose_empty)
+            requireRootLayout()?.showSnackBar(R.string.schedule_choose_empty)
         } else {
             requireSettingsViewModel()?.waitBackupScheduleId?.write(idList)
             backupSchedule.launch(BackupUtils.createBackupFileName(requireContext()))
@@ -105,12 +105,12 @@ class BackupRestoreSettingsFragment : AbstractSettingsFragment(), MultiItemSelec
     private fun showRestoreResult(batchResult: BatchResult) {
         if (batchResult.success) {
             if (batchResult.failedAmount == 0) {
-                requireRootLayout()?.showShortSnackBar(R.string.restore_schedule_success)
+                requireRootLayout()?.showSnackBar(R.string.restore_schedule_success)
             } else {
-                requireRootLayout()?.showShortSnackBar(R.string.restore_schedule_failed, batchResult.total, batchResult.failedAmount)
+                requireRootLayout()?.showSnackBar(R.string.restore_schedule_failed, batchResult.total, batchResult.failedAmount)
             }
         } else {
-            requireRootLayout()?.showShortSnackBar(R.string.restore_schedule_error)
+            requireRootLayout()?.showSnackBar(R.string.restore_schedule_error)
         }
     }
 }

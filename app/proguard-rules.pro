@@ -25,16 +25,17 @@
 -allowaccessmodification
 
 -repackageclasses pkg
--keepattributes SourceFile,LineNumberTable
--keepattributes *Annotation*,InnerClasses
+-keepattributes SourceFile, LineNumberTable
+-keepattributes *Annotation*, InnerClasses
 -keepattributes Signature
 
 # App
 -keep public class * extends tool.xfy9326.schedule.ui.fragment.base.AbstractSettingsFragment
 
 # Kotlin Serialization
--dontnote kotlinx.serialization.AnnotationsKt
-# noinspection ShrinkerUnresolvedReference
+-dontnote kotlinx.serialization.AnnotationsKt # core serialization annotations
+
+#noinspection ShrinkerUnresolvedReference
 -keepclassmembers class kotlinx.serialization.json.** {
     *** Companion;
 }
@@ -42,23 +43,20 @@
     kotlinx.serialization.KSerializer serializer(...);
 }
 
--keep,includedescriptorclasses class tool.xfy9326.schedule.json.**$$serializer { *; }
--keepclassmembers class tool.xfy9326.schedule.json.** {
+# Kotlinx Serialization Custum
+-keep, includedescriptorclasses class tool.xfy9326.schedule.**$$serializer { *; }
+-keepclassmembers @kotlinx.serialization.Serializable class tool.xfy9326.schedule.** {
     *** Companion;
 }
--keepclasseswithmembers class tool.xfy9326.schedule.json.** {
+-keepclasseswithmembers @kotlinx.serialization.Serializable class tool.xfy9326.schedule.** {
     kotlinx.serialization.KSerializer serializer(...);
 }
 
-# Glide
--keep public class * implements com.bumptech.glide.module.GlideModule
--keep class * extends com.bumptech.glide.module.AppGlideModule {
-    <init>(...);
-}
--keep public enum com.bumptech.glide.load.ImageHeaderParser$** {
-    **[] $VALUES;
-    public *;
-}
--keep class com.bumptech.glide.load.data.ParcelFileDescriptorRewinder$InternalRewinder {
-    *** rewind();
+# Okio
+# Animal Sniffer compileOnly dependency to ensure APIs are compatible with older versions of Java.
+-dontwarn org.codehaus.mojo.animal_sniffer.*
+
+# JavascriptInterface
+-keepclassmembers class * {
+    @android.webkit.JavascriptInterface <methods>;
 }

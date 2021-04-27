@@ -1,0 +1,49 @@
+plugins {
+    id 'com.android.library'
+    id 'kotlin-android'
+}
+
+def config = rootProject.ext
+def androidConfig = config.android
+def dependenciesVersion = config.dependencies
+def androidxVersion = dependenciesVersion.androidx
+
+android {
+    compileSdkVersion androidConfig.compileSdkVersion
+    buildToolsVersion androidConfig.buildToolsVersion
+
+    defaultConfig {
+        minSdkVersion androidConfig.minSdkVersion
+        targetSdkVersion androidConfig.targetSDKVersion
+        versionCode config.library.LiveDataTools.versionCode
+        versionName config.library.LiveDataTools.versionName
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+    }
+}
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$androidxVersion.lifecycle"
+
+    testImplementation "junit:junit:$dependenciesVersion.junit"
+    androidTestImplementation "androidx.test.ext:junit:$androidxVersion.test.junit"
+}

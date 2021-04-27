@@ -7,14 +7,14 @@ import android.view.Menu
 import android.view.MenuItem
 import com.google.android.material.snackbar.Snackbar
 import com.jaredrummler.android.colorpicker.ColorPickerDialogListener
+import lib.xfy9326.livedata.observeEvent
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.Course
 import tool.xfy9326.schedule.beans.CourseTime
 import tool.xfy9326.schedule.databinding.ActivityCourseEditBinding
 import tool.xfy9326.schedule.kt.getText
 import tool.xfy9326.schedule.kt.hideKeyboard
-import tool.xfy9326.schedule.tools.livedata.observeEvent
-import tool.xfy9326.schedule.kt.showShortSnackBar
+import tool.xfy9326.schedule.kt.showSnackBar
 import tool.xfy9326.schedule.ui.activity.base.ViewModelActivity
 import tool.xfy9326.schedule.ui.adapter.CourseTimeAdapter
 import tool.xfy9326.schedule.ui.dialog.CourseTimeEditDialog
@@ -52,18 +52,18 @@ class CourseEditActivity : ViewModelActivity<CourseEditViewModel, ActivityCourse
         viewModel.courseData.observe(this, ::applyCourseToView)
         viewModel.courseSaveComplete.observeEvent(this, observer = ::onCourseSaved)
         viewModel.courseSaveFailed.observeEvent(this) {
-            viewBinding.layoutCourseEdit.showShortSnackBar(it.getText(this))
+            viewBinding.layoutCourseEdit.showSnackBar(it.getText(this))
         }
         viewModel.copyToOtherSchedule.observeEvent(this) {
             if (it == null) {
-                viewBinding.layoutCourseEdit.showShortSnackBar(R.string.course_copy_success)
+                viewBinding.layoutCourseEdit.showSnackBar(R.string.course_copy_success)
             } else {
-                viewBinding.layoutCourseEdit.showShortSnackBar(R.string.course_copy_failed, it.getText(this))
+                viewBinding.layoutCourseEdit.showSnackBar(R.string.course_copy_failed, it.getText(this))
             }
         }
         viewModel.loadAllSchedules.observeEvent(this) {
             if (it.isEmpty()) {
-                viewBinding.layoutCourseEdit.showShortSnackBar(R.string.empty_schedule_list)
+                viewBinding.layoutCourseEdit.showSnackBar(R.string.empty_schedule_list)
             } else {
                 DialogUtils.showScheduleSelectDialog(this, R.string.copy_to_other_schedule, it) { _, id ->
                     viewModel.copyToOtherSchedule(id)
@@ -193,12 +193,12 @@ class CourseEditActivity : ViewModelActivity<CourseEditViewModel, ActivityCourse
                     times = newList
                     courseTimeAdapter.submitList(newList)
                 }
-                requireViewBinding().layoutCourseEdit.showShortSnackBar(R.string.recovered_success)
+                requireViewBinding().layoutCourseEdit.showSnackBar(R.string.recovered_success)
             }.show()
     }
 
     private fun onCourseSaved(newCourseId: Long) {
         intent.putExtra(INTENT_EXTRA_COURSE_ID, newCourseId)
-        requireViewBinding().layoutCourseEdit.showShortSnackBar(R.string.save_success)
+        requireViewBinding().layoutCourseEdit.showSnackBar(R.string.save_success)
     }
 }

@@ -99,7 +99,7 @@
     <string name="course_name_empty">课程名称不能为空！</string>
     <string name="course_time_inner_conflict">课程第%1$d个与第%2$d个时间段存在冲突！</string>
     <string name="course_time_others_conflict">课程第%1$d个时间段与\"%2$s\"存在冲突！</string>
-    <string name="online_course_import">在线课程导入</string>
+    <string name="online_course_import">课程导入</string>
     <string name="interface_provider_error">该课程提供器接口不可用！</string>
     <string name="unknown_provider_error">未知课程提供器接口！</string>
     <string name="invalid_parser_error">不支持的课程解析器接口！</string>
@@ -112,7 +112,10 @@
     <string name="login_to_import_course">登录以导入课程</string>
     <string name="direct_import_course">直接导入课程</string>
     <string name="web_page_import_course">通过网页导入课程</string>
+    <string name="web_page_js_import_course">通过网页导入课程 - JS</string>
     <string name="details">详情</string>
+    <string name="error_details">错误详情</string>
+    <string name="loading_failed">加载错误</string>
     <string name="reload">重新加载</string>
     <string name="adapter_author" translatable="false">\@%1$s</string>
     <string name="captcha_empty">验证码为空！</string>
@@ -120,7 +123,8 @@
     <string name="user_pw_empty">密码为空！</string>
     <string name="options_empty">选项为空！</string>
     <string name="course_import_success_title">课程导入成功</string>
-    <string name="course_import_success_attention">\u3000\u3000是否立即前往课表编辑页面？\n\u3000\u3000您可能需要\"手动调整课表的学期开始与结束时间以调整当前周数的计算\"，当然您也可以稍后在\'课表管理\'页面选择导入的课表进行编辑。\n\u3000\u3000若要启用导入的课表，请在\'课表管理\'页面长按需要使用的课表以切换到该课表。</string>
+    <string name="course_import_success_attention">\u3000\u3000是否立即前往课表编辑页面？\n\u3000\u3000您可能需要\"%1$s\"，当然您也可以稍后在\"课表管理\"页面选择导入的课表进行编辑。\n\u3000\u3000若要启用导入的课表，请在\"课表管理\"页面长按需要使用的课表以切换到该课表。</string>
+    <string name="course_import_success_attention_highlight">手动调整课表的学期开始与结束时间以调整当前周数的计算</string>
     <string name="edit_schedule_now">立即前往</string>
     <string name="edit_schedule_later">稍后再说</string>
     <string name="import_course_to_current_schedule_msg">导入课程到当前课表后，所有此课表下原有的所有课程都将会被覆盖，请慎重操作！</string>
@@ -262,21 +266,23 @@
     <string name="ics_description_teacher">教师名称：%1$s</string>
     <string name="import_and_export">导入与导出</string>
     <string name="sync_to_calendar">同步到日历</string>
-    <string name="export_to_ics">导出为ICS文件</string>
+    <string name="export_to_ics">导出ICS文件</string>
     <string name="agree">同意</string>
     <string name="disagree">不同意</string>
     <string name="calendar_permission_get_failed">日历相关权限获取失败！</string>
     <string name="calendar_sync_success">同步成功！</string>
     <string name="calendar_sync_failed">同步失败！ 共%1$d个课表，失败%2$d个！</string>
     <string name="calendar_sync_error">同步时出现错误！</string>
-    <string name="calendar_sync_settings">日历同步</string>
+    <string name="calendar_sync">日历同步</string>
     <string name="calendar_sync_settings_sum">课表与日历同步相关的配置</string>
     <string name="clear_calendar">清空日历同步的数据</string>
     <string name="clear_calendar_sum">清空包括日历账户与日程相关的所有同步数据</string>
     <string name="clear_calendar_msg">是否清空所有的日历同步数据？</string>
     <string name="clear_calendar_success">日历数据清空成功！</string>
     <string name="sync_operation">同步操作</string>
-    <string name="sync_calendar_attention">注意事项：\n1. 所有数据修改后必须同步一次到日历方可生效\n2. 如果同步的数据出现错误建议清空同步数据后重试\n3. App卸载后日历数据依然存在且账户无法直接删除\n4. 建议卸载App前手动清空一次数据删除账户\n5. 课程提醒可以在日历中单独设置或者此处整体配置</string>
+    <string name="calendar_sync_attention">注意事项：\n1. 所有数据修改后必须同步一次到日历方可生效\n2. 如果同步的数据出现错误建议清空同步数据后重试\n3. App卸载后日历数据依然存在且账户无法直接删除\n4. 建议卸载App前手动清空数据删除日历账户\n5. 课程提醒可以在日历中单独设置或者此处整体配置</string>
+    <string name="calendar_sync_attention_dialog_title">日历同步注意事项</string>
+    <string name="calendar_sync_attention_dialog_msg">\u3000\u3000所有数据修改后必须同步一次到日历方可生效，如果同步的数据出现错误建议清空同步数据后重试。\n\u3000\u3000App卸载后日历数据依然存在且账户无法直接删除，建议卸载App前手动清空数据删除日历账户。</string>
     <string name="sync_settings">同步设置</string>
     <string name="calendar_sync_schedule">新增同步的课表默认允许同步</string>
     <string name="calendar_sync_schedule_sum">不进行同步的课表将不会同步到日历</string>
@@ -312,7 +318,7 @@
     <string name="restore_schedule_sum">从本地文件恢复所有课表</string>
     <string name="restore_schedule_success">课表恢复成功！</string>
     <string name="restore_schedule_failed">课表恢复失败！ 共%1$d个课表，失败%2$d个！</string>
-    <string name="restore_schedule_error">课表时出现错误！</string>
+    <string name="restore_schedule_error">恢复课表时出现错误！</string>
     <string name="backup_schedule_attention">注意事项：\n1. 将会备份选定课表的除学期外所有信息\n2. 备份导出的文件不建议手动修改，可能导致无法恢复\n3. 备份导出的文件可以直接分享给他人导入</string>
     <string name="restore_schedule_attention">注意事项：\n1. 将会恢复选定文件中所有课表信息\n2. 恢复后的课表学期信息将会自适应设定\n3. 如果需要设定正确的学期时间请前往课表编辑界面</string>
     <string name="schedule_week_start">设定每周的第一天</string>
@@ -337,8 +343,8 @@
     <string name="app_update_settings">应用更新设置</string>
     <string name="use_browser_download_upgrade_file">默认使用浏览器下载更新文件</string>
     <string name="use_browser_download_upgrade_file_sum">避免直接下载更新文件时出现错误</string>
-    <string name="online_course_import_sum">课表与课程在线导入相关的设定</string>
-    <string name="online_course_import_attention">\u3000\u3000在线课程导入是通过解析课程网页或者模拟登陆的方式实现的，本APP承诺未经允许不将用户的数据上传至非校方服务器。\n\u3000\u3000如果您对该功能的信息安全存在质疑可以查看APP源码并自行编译，或者停用该功能。\n\u3000\u3000本功能可能由于校方网页变动而失效，或者存在导入错误的情况。因此请务必自行核对校方原始课表，出现任何由于导入信息错误导致的问题本APP不负任何责任。\n\u3000\u3000若导入课程存在问题，请及时在错误反馈中上报，谢谢。</string>
+    <string name="online_course_import_sum">在线课表与课程导入相关的设定</string>
+    <string name="online_course_import_attention">\u3000\u3000在线课程导入是通过解析课程网页或者模拟登陆的方式实现的，本APP承诺非第三方的本地课程导入未经允许不将用户的数据上传至非校方服务器。\n\u3000\u3000如果您对该功能的信息安全存在质疑可以查看APP源码并自行编译，或者停用该功能。\n\u3000\u3000本功能可能由于校方网页变动而失效，或者存在导入错误的情况。因此请务必自行核对校方原始课表，出现任何由于导入信息错误导致的问题本APP不负任何责任。\n\u3000\u3000若本地课程导入功能导入的课程存在问题，请及时在\'设置-在线反馈\'中上报，谢谢。</string>
     <string name="allow_import_empty_schedule">允许导入空课表</string>
     <string name="allow_import_empty_schedule_sum">允许在无任何导入课程时保存该课表</string>
     <string name="enable_online_course_import">启用在线导入功能</string>
@@ -354,6 +360,44 @@
     <string name="schedule_import_strict_mode">课表导入严格模式警告</string>
     <string name="schedule_import_strict_mode_msg">\u3000\u3000由于启用了课表导入的严格检查功能，该课表在该情况下无法导入。\n\n错误原因：%1$s\n\n\u3000\u3000启用严格的课表检查将保证课程导入的完整性，如果依然需要导入该课表，请在\'设置-在线课程导入\'中进行更改。</string>
     <string name="send_debug_log">发送错误日志</string>
+    <string name="javascript" translatable="false">JS</string>
+    <string name="swipe_to_delete_js_import">Tips：标有[JS]的选项可以侧滑删除</string>
+    <string name="add_course_import">添加课程导入选项</string>
+    <string name="add">添加</string>
+    <string name="from_file">从文件中选择</string>
+    <string name="url_invalid">错误的Url格式！</string>
+    <string name="add_course_import_attention_title">添加课程导入须知</string>
+    <string name="add_course_import_attention">\u3000\u3000本APP支持自定义的方式快速添加需要的课程解析器，但是由于该功能依赖于JS并且来自未经审核的第三方，因此可能会造成安全问题。\n\u3000\u3000目前支持Pure课程表自有的JS接口与小爱课表JS接口，您可以快速定义或接入课程解析方式。\n\u3000\u3000请在了解以上风险并愿意承担由于导入JS导致的一切问题的基础上，再使用自定义课程解析功能！</string>
+    <string name="agree_policy">我同意并愿意承担风险</string>
+    <string name="please_input_course_import_config_url">配置文件Url</string>
+    <string name="add_course_import_wiki">适配文档</string>
+    <string name="refresh_web_page_after_import_course">尝试导入课程后刷新网页</string>
+    <string name="refresh_web_page_after_import_course_sum">可以解决JS注入的环境变化导致的问题</string>
+    <string name="js_confirm_title">来自网页的消息</string>
+
+    <string name="js_config_read_failed">配置文件读取错误！</string>
+    <string name="js_config_invalid">导入的配置文件不合法！</string>
+    <string name="js_config_uuid_error">UUID错误！</string>
+    <string name="js_config_js_type_error">JS类型错误！</string>
+    <string name="js_config_provider_url_error">课程提供器地址错误！</string>
+    <string name="js_config_parser_url_error">课程解析器地址错误！</string>
+    <string name="js_config_init_page_url_error">初始化页面地址错误！</string>
+    <string name="js_config_dependency_url_error">运行环境依赖地址错误！</string>
+    <string name="js_config_config_delete_error">配置文件删除错误！</string>
+    <string name="js_config_update_failed">更新检查失败！</string>
+    <string name="js_config_provider_download_error">课程提供器下载失败！</string>
+    <string name="js_config_parser_download_error">课程解析器下载失败！</string>
+    <string name="js_config_dependencies_download_error">运行环境依赖下载失败！</string>
+    <string name="js_config_prepare_error">运行环境准备失败！</string>
+
+    <string name="js_config_unknown_error">配置文件未知错误！</string>
+    <string name="js_config_config_add_success">配置文件添加成功</string>
+    <string name="js_config_config_remove_success">配置文件删除成功</string>
+    <string name="js_config_check_update">检查配置文件更新</string>
+    <string name="js_config_prepare_provider">准备课程提供器</string>
+    <string name="js_config_prepare_parser">准备课程解析器</string>
+    <string name="js_config_prepare_dependencies">准备运行环境依赖</string>
+    <string name="js_config_prepare_finish">准备完成</string>
 
     <string name="scare_type_fit_center">等比缩放，从中间开始填充满</string>
     <string name="scare_type_center_crop">等比缩放直到完全填充</string>

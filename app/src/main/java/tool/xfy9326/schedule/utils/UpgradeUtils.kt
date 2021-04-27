@@ -3,7 +3,7 @@ package tool.xfy9326.schedule.utils
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import io.ktor.client.*
-import io.ktor.client.engine.android.*
+import io.ktor.client.engine.okhttp.*
 import io.ktor.client.features.*
 import io.ktor.client.features.json.*
 import io.ktor.client.features.json.serializer.*
@@ -27,8 +27,6 @@ object UpgradeUtils {
     private const val UPDATE_PRODUCT = "Schedule"
     private const val UPDATE_LATEST = "Latest"
     private const val UPDATE_INDEX = "Index"
-
-    private const val REQUEST_TIME_OUT = 3000L
 
     private const val LATEST_VERSION_CHECK_URL = "https://$UPDATE_SERVER/$UPDATE_PRODUCT/$UPDATE_LATEST"
     private const val INDEX_VERSION_URL = "https://$UPDATE_SERVER/$UPDATE_PRODUCT/$UPDATE_INDEX"
@@ -81,12 +79,13 @@ object UpgradeUtils {
     }
 
     private suspend fun getUpdateData(currentVersionCode: Int): UpdateInfo? = withContext(Dispatchers.IO) {
-        val client = getDefaultClient()
-        val latest = getLatestVersion(client)
-        if (latest.versionCode > currentVersionCode) {
-            val index = getIndex(client)
-            val forceUpdate = validateForceUpdate(currentVersionCode, latest, index)
-            return@withContext latest.copy(forceUpdate = forceUpdate)
+        getDefaultClient().use {
+            val latest = getLatestVersion(it)
+            if (latest.versionCode > currentVersionCode) {
+                val index = getIndex(it)
+                val forceUpdate = validateForceUpdate(currentVersionCode, latest, index)
+                return@withContext latest.copy(forceUpdate = forceUpdate)
+            }
         }
         return@withContext null
     }
@@ -105,12 +104,17 @@ object UpgradeUtils {
 
     private suspend fun getIndex(client: HttpClient) = client.get<List<UpdateIndex>>(INDEX_VERSION_URL)
 
-    private fun getDefaultClient() = HttpClient(Android) {
+    private fun getDefaultClient() = HttpClient(OkHttp) {
         install(JsonFeature) {
             serializer = KotlinxSerializer()
         }
-        install(HttpTimeout) {
-            requestTimeoutMillis = REQUEST_TIME_OUT
+        install(HttpRedirect)
+        engine {
+            config {
+                followRedirects(true)
+                followSslRedirects(true)
+                retryOnConnectionFailure(true)
+            }
         }
     }
 }

@@ -9,14 +9,16 @@
         android:id="@+id/layout_courseTimeEdit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="10dp">
+        android:orientation="vertical">
 
         <com.google.android.material.card.MaterialCardView
             style="@style/AppTheme.CardView.SelectableItemBackground"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp">
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="5dp">
 
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
@@ -67,8 +69,8 @@
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <androidx.gridlayout.widget.GridLayout
-                    android:id="@+id/gridLayout_courseWeeks"
+                <tool.xfy9326.schedule.ui.view.WeekNumEditView
+                    android:id="@+id/view_weekNumEdit"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp" />
@@ -81,7 +83,10 @@
             style="@style/AppTheme.CardView.SelectableItemBackground"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp">
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="5dp">
 
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
@@ -130,7 +135,10 @@
             style="@style/AppTheme.CardView.SelectableItemBackground"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp">
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp">
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
@@ -143,7 +151,6 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/class_location"
                     android:inputType="text"
-                    android:maxLength="20"
                     android:singleLine="true"
                     android:textSize="14sp" />
 

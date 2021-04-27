@@ -1,9 +1,11 @@
 package tool.xfy9326.schedule.beans
 
+import android.os.Parcelable
 import androidx.annotation.ColorInt
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import kotlinx.parcelize.Parcelize
 import tool.xfy9326.schedule.db.DBConst
 import tool.xfy9326.schedule.tools.MaterialColorHelper
 import java.util.*
@@ -18,13 +20,12 @@ data class Schedule(
     var name: String,
     var startDate: Date,
     var endDate: Date,
+    @ColumnInfo(name = DBConst.COLUMN_SCHEDULE_TIMES)
     var times: List<ScheduleTime>,
     @ColorInt
     var color: Int,
     var weekStart: WeekDay,
 ) {
-    constructor(name: String, times: List<ScheduleTime>, color: Int, weekStart: WeekDay) :
-            this(DBConst.DEFAULT_ID, name, Date(), Date(), times, color, weekStart)
 
     constructor(
         name: String,
@@ -42,4 +43,10 @@ data class Schedule(
     ) {
         override fun toString() = name
     }
+
+    @Parcelize
+    data class Times(
+        @ColumnInfo(name = DBConst.COLUMN_SCHEDULE_TIMES)
+        val times: List<ScheduleTime>,
+    ) : Parcelable
 }

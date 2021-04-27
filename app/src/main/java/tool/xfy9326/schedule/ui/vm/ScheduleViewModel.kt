@@ -2,64 +2,49 @@ package tool.xfy9326.schedule.ui.vm
 
 import android.graphics.Bitmap
 import android.net.Uri
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
+import lib.xfy9326.livedata.MutableEventLiveData
+import lib.xfy9326.livedata.postEvent
 import tool.xfy9326.schedule.beans.*
 import tool.xfy9326.schedule.data.AppDataStore
 import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.data.ScheduleDataStore
 import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
+import tool.xfy9326.schedule.io.utils.ImageUtils
 import tool.xfy9326.schedule.kt.asDistinctLiveData
-import tool.xfy9326.schedule.kt.combineTransform
 import tool.xfy9326.schedule.kt.withTryLock
 import tool.xfy9326.schedule.tools.DisposableValue
-import tool.xfy9326.schedule.tools.ImageHelper
-import tool.xfy9326.schedule.tools.livedata.MutableEventLiveData
-import tool.xfy9326.schedule.tools.livedata.postEvent
 import tool.xfy9326.schedule.ui.vm.base.AbstractViewModel
 import tool.xfy9326.schedule.utils.CalendarUtils
 import tool.xfy9326.schedule.utils.ScheduleSyncHelper
 import tool.xfy9326.schedule.utils.ics.ScheduleICSHelper
-import tool.xfy9326.schedule.utils.schedule.CourseTimeUtils
 import tool.xfy9326.schedule.utils.schedule.ScheduleUtils
+import tool.xfy9326.schedule.utils.view.ScheduleViewDataProcessor
 import tool.xfy9326.schedule.utils.view.ScheduleViewHelper
 import java.util.concurrent.atomic.AtomicBoolean
 
 class ScheduleViewModel : AbstractViewModel() {
-    private val weekNumInfoFlow = ScheduleUtils.currentScheduleFlow.map {
-        CourseTimeUtils.getWeekNum(it) to CourseTimeUtils.getMaxWeekNum(it.startDate, it.endDate, it.weekStart)
-    }.shareIn(GlobalScope, SharingStarted.Eagerly, 1)
+    val weekNumInfo = ScheduleViewDataProcessor.weekNumInfoFlow.asDistinctLiveData()
+    val scheduleBuildData = ScheduleViewDataProcessor.scheduleBuildDataFlow.asDistinctLiveData()
+    val scheduleBackground = ScheduleViewDataProcessor.scheduleBackgroundFlow.asDistinctLiveData()
 
-    val weekNumInfo = weekNumInfoFlow.asDistinctLiveData()
-    val scheduleBuildData = ScheduleUtils.currentScheduleFlow.combine(ScheduleDataStore.scheduleStylesFlow) { schedule, styles ->
-        schedule to styles
-    }.combineTransform(
-        combineTransform = {
-            ScheduleDBProvider.db.scheduleDAO.getScheduleCourses(it.first.scheduleId)
-        },
-        transform = { pair, courses ->
-            ScheduleBuildBundle(pair.first, courses, pair.second)
-        }
-    ).distinctUntilChanged().shareIn(GlobalScope, SharingStarted.Eagerly, 1).asDistinctLiveData()
-
-    var currentScrollPosition: Int? = null
-
-    val nowDay = ScheduleUtils.currentScheduleFlow.map {
-        CalendarUtils.getDay(weekStart = it.weekStart)
-    }.asDistinctLiveData()
+    val nowDay = MutableLiveData<Day>()
     val scrollToWeek = MutableEventLiveData<Int>()
     val showWeekChanged = MutableEventLiveData<Pair<Int, WeekNumType>>()
     val showScheduleControlPanel = MutableEventLiveData<Pair<Int, Int>>()
-    val showCourseDetailDialog = MutableEventLiveData<Triple<List<ScheduleTime>, Course, Long>>()
+    val showCourseDetailDialog = MutableEventLiveData<CourseDetail>()
     val openCourseManageActivity = MutableEventLiveData<Long>()
     val exitAppDirectly = MutableEventLiveData<Boolean>()
     val toolBarTintColor = ScheduleDataStore.toolBarTintColorFlow.asDistinctLiveData()
     val useLightColorSystemBarColor = ScheduleDataStore.useLightColorSystemBarColorFlow.asDistinctLiveData()
-    val scheduleBackground = ScheduleDataStore.scheduleBackgroundBuildBundleFlow.asDistinctLiveData()
+
     val scheduleShared = MutableEventLiveData<Uri?>()
     val selectScheduleForExportingICS = MutableEventLiveData<List<Schedule.Min>>()
     val iceExportStatus = MutableEventLiveData<Boolean>()
@@ -70,11 +55,23 @@ class ScheduleViewModel : AbstractViewModel() {
     val nightModeChanging = AtomicBoolean(false)
     val waitExportScheduleId = DisposableValue<Long>()
 
+    var currentScrollPosition: Int? = null
+
     private val scheduleSharedMutex = Mutex()
+
+    override fun onViewInitialized(firstInitialize: Boolean) {
+        if (firstInitialize) {
+            updateNowDay()
+        }
+    }
+
+    private fun updateNowDay() {
+        nowDay.value = CalendarUtils.getDay()
+    }
 
     fun scrollToCurrentWeekNum() {
         viewModelScope.launch(Dispatchers.IO) {
-            scrollToWeek.postEvent(weekNumInfoFlow.first().first)
+            scrollToWeek.postEvent(ScheduleViewDataProcessor.weekNumFlow.first())
         }
     }
 
@@ -86,13 +83,13 @@ class ScheduleViewModel : AbstractViewModel() {
 
     fun showScheduleControlPanel() {
         viewModelScope.launch(Dispatchers.IO) {
-            showScheduleControlPanel.postEvent(weekNumInfoFlow.first())
+            showScheduleControlPanel.postEvent(ScheduleViewDataProcessor.weekNumInfoFlow.first())
         }
     }
 
     fun notifyShowWeekChanged(weekNum: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            showWeekChanged.postEvent(weekNum to WeekNumType.create(weekNum, weekNumInfoFlow.first().first))
+            showWeekChanged.postEvent(weekNum to WeekNumType.create(weekNum, ScheduleViewDataProcessor.weekNumFlow.first()))
         }
     }
 
@@ -139,9 +136,9 @@ class ScheduleViewModel : AbstractViewModel() {
                 val bitmap = ScheduleViewHelper.generateScheduleImageByWeekNum(scheduleId, weekNum, targetWidth, waterMark)
                 if (bitmap != null) {
                     val uri = if (AppSettingsDataStore.saveImageWhileSharingFlow.first()) {
-                        ImageHelper.outputImageToAlbum(bitmap)
+                        ImageUtils.outputImageToAlbum(bitmap)
                     } else {
-                        ImageHelper.createShareCacheImage(bitmap)
+                        ImageUtils.createShareCacheImage(bitmap)
                     }
 
                     if (uri != null) {
@@ -157,15 +154,15 @@ class ScheduleViewModel : AbstractViewModel() {
     }
 
     fun showCourseDetailDialog(courseId: Long, timeId: Long) {
-        viewModelScope.launch {
-            ScheduleUtils.currentScheduleFlow.combine(ScheduleDBProvider.db.scheduleDAO.getScheduleCourse(courseId)) { schedule, course ->
+        viewModelScope.launch(Dispatchers.IO) {
+            ScheduleUtils.currentScheduleTimesFlow.combine(ScheduleDBProvider.db.scheduleDAO.getScheduleCourse(courseId)) { times, course ->
                 if (course == null) {
                     null
                 } else {
-                    schedule.times to course
+                    CourseDetail(timeId, course, times)
                 }
-            }.first()?.let {
-                showCourseDetailDialog.postEvent(Triple(it.first, it.second, timeId))
+            }.firstOrNull()?.let {
+                showCourseDetailDialog.postEvent(it)
             }
         }
     }

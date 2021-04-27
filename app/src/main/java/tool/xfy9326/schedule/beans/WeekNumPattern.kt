@@ -2,8 +2,8 @@ package tool.xfy9326.schedule.beans
 
 import android.content.Context
 import tool.xfy9326.schedule.R
-import tool.xfy9326.schedule.beans.WeekNumPattern.PatternType.EMPTY
-import tool.xfy9326.schedule.beans.WeekNumPattern.PatternType.SERIAL
+import tool.xfy9326.schedule.beans.WeekDay.Companion.orderedValue
+import tool.xfy9326.schedule.beans.WeekNumPattern.PatternType.*
 import tool.xfy9326.schedule.kt.isEven
 import tool.xfy9326.schedule.utils.CalendarUtils
 
@@ -152,7 +152,7 @@ class WeekNumPattern(weekNum: BooleanArray) {
                 interval = -1
                 amount = -1
                 timePeriodArray = parseTimePeriodArray(weekNum)
-                PatternType.MESSY
+                MESSY
             }
             !metFirst -> {
                 start = -1
@@ -168,7 +168,7 @@ class WeekNumPattern(weekNum: BooleanArray) {
                 interval = -1
                 amount = 1
                 timePeriodArray = arrayOf(TimePeriod(start))
-                PatternType.SINGLE
+                SINGLE
             }
             indexInterval == 1 -> {
                 start = startIndex
@@ -184,7 +184,7 @@ class WeekNumPattern(weekNum: BooleanArray) {
                 interval = indexInterval
                 amount = ((endIndex - startIndex) / (indexInterval + 1)) + 1
                 timePeriodArray = parseSpacedTimePeriodArray(start, end, interval)
-                PatternType.SPACED
+                SPACED
             }
         }
     }
@@ -192,9 +192,9 @@ class WeekNumPattern(weekNum: BooleanArray) {
     fun getText(context: Context) =
         when {
             type == EMPTY -> ""
-            type == PatternType.SINGLE -> (start + 1).toString()
+            type == SINGLE -> (start + 1).toString()
             type == SERIAL -> "${start + 1}-${end + 1}"
-            type == PatternType.SPACED && interval == 2 -> context.getString(
+            type == SPACED && interval == 2 -> context.getString(
                 // Index count from 0
                 if (start.isEven()) {
                     R.string.odd_week_description

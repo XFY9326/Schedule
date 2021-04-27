@@ -1,5 +1,3 @@
-@file:Suppress("MemberVisibilityCanBePrivate")
-
 package tool.xfy9326.schedule.ui.recyclerview
 
 import android.content.Context
@@ -23,10 +21,10 @@ abstract class SwipeListViewBindingAdapter<E, V : ViewBinding>(callBack: DiffUti
     }
 
     final override fun onCreateViewHolder(layoutInflater: LayoutInflater, parent: ViewGroup, viewType: Int): SwipeItemViewHolder<V> {
-        LayoutSwipeItemBinding.inflate(layoutInflater, parent, false).apply {
-            onCreateContentViewBinding(layoutInflater, layoutSwipeForeground, viewType).also {
+        return LayoutSwipeItemBinding.inflate(layoutInflater, parent, false).run {
+            onCreateContentViewBinding(layoutInflater, layoutSwipeForeground, viewType).let {
                 layoutSwipeForeground.addView(it.root)
-                return SwipeItemViewHolder(it, this)
+                SwipeItemViewHolder(it, this)
             }
         }
     }

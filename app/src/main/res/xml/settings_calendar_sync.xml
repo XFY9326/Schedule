@@ -6,7 +6,7 @@
         app:iconSpaceReserved="false"
         app:key="syncCalendarAttention"
         app:persistent="false"
-        app:summary="@string/sync_calendar_attention" />
+        app:summary="@string/calendar_sync_attention" />
 
     <androidx.preference.PreferenceCategory
         app:iconSpaceReserved="false"
@@ -24,13 +24,6 @@
             app:persistent="false"
             app:summary="@string/clear_calendar_sum"
             app:title="@string/clear_calendar" />
-
-        <androidx.preference.Preference
-            app:icon="@drawable/ic_clear_24"
-            app:key="clearSyncSettings"
-            app:persistent="false"
-            app:summary="@string/clear_calendar_settings_sum"
-            app:title="@string/clear_calendar_settings" />
 
     </androidx.preference.PreferenceCategory>
 
@@ -81,7 +74,7 @@
             app:title="@string/calendar_sync_schedule_editable_list" />
 
         <androidx.preference.CheckBoxPreference
-            app:defaultValue="false"
+            app:defaultValue="true"
             app:iconSpaceReserved="false"
             app:key="calendarSyncAddReminderDefault"
             app:summary="@string/add_calendar_reminder_sum"
@@ -104,6 +97,13 @@
             app:showSeekBarValue="true"
             app:summary="@string/calendar_reminder_minutes_sum"
             app:title="@string/calendar_reminder_minutes" />
+
+        <androidx.preference.Preference
+            app:iconSpaceReserved="false"
+            app:key="clearSyncSettings"
+            app:persistent="false"
+            app:summary="@string/clear_calendar_settings_sum"
+            app:title="@string/clear_calendar_settings" />
 
     </androidx.preference.PreferenceCategory>
 

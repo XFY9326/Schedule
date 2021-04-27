@@ -9,16 +9,14 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import lib.xfy9326.io.processor.textWriter
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.databinding.DialogCrashViewBinding
+import tool.xfy9326.schedule.io.FileManager
 import tool.xfy9326.schedule.kt.APP_ID
 import tool.xfy9326.schedule.kt.setWindowWidthPercent
-import tool.xfy9326.schedule.kt.showGlobalShortToast
-import tool.xfy9326.schedule.kt.showShortToast
+import tool.xfy9326.schedule.kt.showGlobalToast
+import tool.xfy9326.schedule.kt.showToast
 
 class CrashViewDialog : AppCompatDialogFragment() {
     companion object {
@@ -43,14 +41,12 @@ class CrashViewDialog : AppCompatDialogFragment() {
     private val outputLogFile = registerForActivityResult(ActivityResultContracts.CreateDocument()) {
         if (it != null) {
             lifecycleScope.launch {
-                val result = withContext(Dispatchers.IO) {
-                    it.textWriter().write(requireArguments().getString(ARGUMENT_CRASH_LOG, null))
-                }
-                showShortToast(if (result) R.string.output_file_success else R.string.output_file_failed)
+                val result = FileManager.writeText(it, requireArguments().getString(ARGUMENT_CRASH_LOG, null))
+                showToast(if (result) R.string.output_file_success else R.string.output_file_failed)
                 dismissAllowingStateLoss()
             }
         } else {
-            showShortToast(R.string.output_file_cancel)
+            showToast(R.string.output_file_cancel)
         }
     }
 
@@ -58,7 +54,7 @@ class CrashViewDialog : AppCompatDialogFragment() {
         super.onCreate(savedInstanceState)
         val crashLog = requireArguments().getString(ARGUMENT_CRASH_LOG, null)
         if (crashLog == null) {
-            showGlobalShortToast(R.string.crash_detail_not_found)
+            showGlobalToast(R.string.crash_detail_not_found)
             dismiss()
             return
         } else {
@@ -72,13 +68,15 @@ class CrashViewDialog : AppCompatDialogFragment() {
         binding.textViewCrashDetail.text = crashLog
         setView(binding.root)
         setNeutralButton(R.string.export, null)
-        setPositiveButton(R.string.print_error_log) { _, _ ->
-            Log.e(LOG_TAG, crashLog)
-        }
+        setNegativeButton(android.R.string.cancel, null)
+        setPositiveButton(R.string.print_error_log, null)
     }.create().also { dialog ->
         dialog.setOnShowListener {
             dialog.getButton(DialogInterface.BUTTON_NEUTRAL).setOnClickListener {
                 outputLogFile.launch(DEFAULT_EXPORT_LOG_NAME.format(System.currentTimeMillis()))
+            }
+            dialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener {
+                Log.e(LOG_TAG, crashLog)
             }
         }
     }

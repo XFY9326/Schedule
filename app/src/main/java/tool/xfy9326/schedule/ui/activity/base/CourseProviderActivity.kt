@@ -5,13 +5,14 @@ import android.os.Bundle
 import androidx.annotation.CallSuper
 import androidx.core.os.bundleOf
 import androidx.viewbinding.ViewBinding
+import lib.xfy9326.livedata.observeEvent
+import tool.xfy9326.schedule.content.base.AbstractCourseImportConfig
 import tool.xfy9326.schedule.content.base.AbstractCourseParser
 import tool.xfy9326.schedule.content.base.AbstractCourseProvider
-import tool.xfy9326.schedule.content.base.CourseImportConfig
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
 import tool.xfy9326.schedule.kt.castNonNull
+import tool.xfy9326.schedule.kt.getDeepStackTraceString
 import tool.xfy9326.schedule.kt.startActivity
-import tool.xfy9326.schedule.tools.livedata.observeEvent
 import tool.xfy9326.schedule.ui.activity.ScheduleEditActivity
 import tool.xfy9326.schedule.ui.dialog.ImportCourseConflictDialog
 import tool.xfy9326.schedule.ui.dialog.ScheduleImportSuccessDialog
@@ -27,8 +28,10 @@ abstract class CourseProviderActivity<I, P1 : AbstractCourseProvider<*>, P2 : Ab
 
         const val EXTRA_COURSE_IMPORT_CONFIG_CLASS = "EXTRA_COURSE_IMPORT_CONFIG_CLASS"
 
-        inline fun <reified T : CourseProviderActivity<*, *, *, *, *>> startProviderActivity(context: Context, config: CourseImportConfig<*, *, *, *>) {
-            context.startActivity<T> { putExtra(EXTRA_COURSE_IMPORT_CONFIG_CLASS, config.javaClass) }
+        inline fun <reified T : CourseProviderActivity<*, *, *, *, *>> startProviderActivity(context: Context, config: AbstractCourseImportConfig<*, *, *, *>) {
+            context.startActivity<T> {
+                putExtra(EXTRA_COURSE_IMPORT_CONFIG_CLASS, config)
+            }
         }
     }
 
@@ -42,14 +45,14 @@ abstract class CourseProviderActivity<I, P1 : AbstractCourseProvider<*>, P2 : Ab
 
     @CallSuper
     override fun onBindLiveData(viewBinding: V, viewModel: M) {
-        viewModel.providerError.observeEvent(this) {
+        viewModel.providerError.observeEvent(this, javaClass.simpleName) {
             if (it.type.strictMode) {
                 StrictImportModeWarningDialog.showDialog(supportFragmentManager, it.getText(this), it.getDeepStackTraceString())
             } else {
                 onShowCourseAdapterError(it)
             }
         }
-        viewModel.courseImportFinish.observeEvent(this) {
+        viewModel.courseImportFinish.observeEvent(this, CourseProviderActivity::class.simpleName!!) {
             onCourseImportFinish(it.first, it.second)
             internalCourseImportFinish(it.first, it.second)
         }
@@ -105,5 +108,5 @@ abstract class CourseProviderActivity<I, P1 : AbstractCourseProvider<*>, P2 : Ab
 
     protected open fun onReadyImportCourse() {}
 
-    class ImportRequestParams<I>(val isCurrentSchedule: Boolean, val importParams: I, val importOption: Int)
+    class ImportRequestParams<I>(val isCurrentSchedule: Boolean, val importParams: I, val importOption: Int = 0)
 }

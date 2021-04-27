@@ -1,10 +1,10 @@
 package tool.xfy9326.schedule.ui.activity
 
 import androidx.core.view.isVisible
+import lib.xfy9326.livedata.observeEvent
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.databinding.ActivityAppErrorBinding
-import tool.xfy9326.schedule.tools.livedata.observeEvent
-import tool.xfy9326.schedule.kt.showShortSnackBar
+import tool.xfy9326.schedule.kt.showSnackBar
 import tool.xfy9326.schedule.kt.startActivity
 import tool.xfy9326.schedule.ui.activity.base.ViewModelActivity
 import tool.xfy9326.schedule.ui.dialog.CrashViewDialog
@@ -25,7 +25,7 @@ class AppErrorActivity : ViewModelActivity<AppErrorViewModel, ActivityAppErrorBi
     override fun onBindLiveData(viewBinding: ActivityAppErrorBinding, viewModel: AppErrorViewModel) {
         viewModel.crashLog.observeEvent(this) {
             if (it == null) {
-                viewBinding.layoutAppError.showShortSnackBar(R.string.crash_detail_not_found)
+                viewBinding.layoutAppError.showSnackBar(R.string.crash_detail_not_found)
             } else {
                 CrashViewDialog.showDialog(supportFragmentManager, it)
             }
@@ -38,8 +38,8 @@ class AppErrorActivity : ViewModelActivity<AppErrorViewModel, ActivityAppErrorBi
         val crashLogFileName = intent.getStringExtra(INTENT_EXTRA_CRASH_LOG)
         viewBinding.cardViewAppErrorCheckUpdate.setOnClickListener {
             UpgradeUtils.checkUpgrade(this, true,
-                onFailed = { viewBinding.layoutAppError.showShortSnackBar(R.string.update_check_failed) },
-                onNoUpgrade = { viewBinding.layoutAppError.showShortSnackBar(R.string.no_new_update) },
+                onFailed = { viewBinding.layoutAppError.showSnackBar(R.string.update_check_failed) },
+                onNoUpgrade = { viewBinding.layoutAppError.showSnackBar(R.string.no_new_update) },
                 onFoundUpgrade = { UpgradeDialog.showDialog(supportFragmentManager, it) }
             )
         }

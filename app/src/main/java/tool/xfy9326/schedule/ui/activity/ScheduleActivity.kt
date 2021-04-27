@@ -5,6 +5,7 @@ import android.graphics.PorterDuffColorFilter
 import android.os.Bundle
 import android.view.*
 import android.view.animation.AccelerateInterpolator
+import android.widget.ImageView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.DrawableRes
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -16,24 +17,24 @@ import androidx.core.os.bundleOf
 import androidx.core.view.*
 import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.widget.ViewPager2
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import coil.load
 import com.google.android.material.navigation.NavigationView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import lib.xfy9326.livedata.observeEvent
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.Day
 import tool.xfy9326.schedule.beans.ImageScareType
 import tool.xfy9326.schedule.beans.NightMode
 import tool.xfy9326.schedule.beans.WeekNumType
+import tool.xfy9326.schedule.data.AppDataStore
 import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.data.ScheduleDataStore
 import tool.xfy9326.schedule.databinding.ActivityScheduleBinding
 import tool.xfy9326.schedule.databinding.LayoutNavHeaderBinding
 import tool.xfy9326.schedule.kt.*
-import tool.xfy9326.schedule.tools.livedata.observeEvent
 import tool.xfy9326.schedule.ui.activity.base.ViewModelActivity
 import tool.xfy9326.schedule.ui.adapter.ScheduleViewPagerAdapter
 import tool.xfy9326.schedule.ui.dialog.CourseDetailDialog
@@ -63,7 +64,7 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
         if (PermissionUtils.checkGrantResults(it)) {
             requireViewModel().syncToCalendar()
         } else {
-            requireViewBinding().layoutSchedule.showShortSnackBar(R.string.calendar_permission_get_failed)
+            requireViewBinding().layoutSchedule.showSnackBar(R.string.calendar_permission_get_failed)
         }
     }
     private val exportICSFile = registerForActivityResult(ActivityResultContracts.CreateDocument()) {
@@ -71,7 +72,7 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
             requireViewModel().exportICS(it)
         } else {
             requireViewModel().waitExportScheduleId.consume()
-            requireViewBinding().layoutSchedule.showShortSnackBar(R.string.output_file_cancel)
+            requireViewBinding().layoutSchedule.showSnackBar(R.string.output_file_cancel)
         }
     }
 
@@ -88,6 +89,7 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
             refreshToolBarTime(it.first)
         }
         viewModel.nowDay.observe(this, ::updateDate)
+        viewModel.scheduleBackground.observe(this, ::onChangeScheduleBackground)
         viewModel.showWeekChanged.observeEvent(this) {
             updateShowWeekNum(it.first, it.second)
         }
@@ -96,7 +98,7 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
             ScheduleControlPanel.showDialog(supportFragmentManager, getCurrentShowWeekNum(), it.first, it.second)
         }
         viewModel.showCourseDetailDialog.observeEvent(this) {
-            CourseDetailDialog.showDialog(supportFragmentManager, it.second, it.first, it.third)
+            CourseDetailDialog.showDialog(supportFragmentManager, it)
         }
         viewModel.openCourseManageActivity.observeEvent(this) {
             startActivity<CourseManageActivity> {
@@ -117,20 +119,19 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
             }
         }
         viewModel.iceExportStatus.observeEvent(this) {
-            viewBinding.layoutSchedule.showShortSnackBar(if (it) R.string.output_file_success else R.string.output_file_failed)
+            viewBinding.layoutSchedule.showSnackBar(if (it) R.string.output_file_success else R.string.output_file_failed)
         }
         viewModel.syncToCalendarStatus.observeEvent(this) {
             if (it.success) {
                 if (it.failedAmount == 0) {
-                    viewBinding.layoutSchedule.showShortSnackBar(R.string.calendar_sync_success)
+                    viewBinding.layoutSchedule.showSnackBar(R.string.calendar_sync_success)
                 } else {
-                    viewBinding.layoutSchedule.showShortSnackBar(R.string.calendar_sync_failed, it.total, it.failedAmount)
+                    viewBinding.layoutSchedule.showSnackBar(R.string.calendar_sync_failed, it.total, it.failedAmount)
                 }
             } else {
-                viewBinding.layoutSchedule.showShortSnackBar(R.string.calendar_sync_error)
+                viewBinding.layoutSchedule.showSnackBar(R.string.calendar_sync_error)
             }
         }
-        viewModel.scheduleBackground.observe(this, ::onChangeScheduleBackground)
         viewModel.toolBarTintColor.observe(this, ::setToolBarTintColor)
         viewModel.useLightColorSystemBarColor.observe(this) {
             // Light status bar in Android Window means status bar that used in light background, so the status bar color is black.
@@ -139,7 +140,7 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
         }
         viewModel.scheduleShared.observeEvent(this) {
             if (it == null) {
-                viewBinding.layoutSchedule.showShortSnackBar(R.string.generate_share_schedule_failed)
+                viewBinding.layoutSchedule.showSnackBar(R.string.generate_share_schedule_failed)
             } else {
                 startActivity(IntentUtils.getShareImageIntent(this, it))
             }
@@ -192,7 +193,7 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
         when (item.itemId) {
             R.id.menu_scheduleControlPanel -> requireViewModel().showScheduleControlPanel()
             R.id.menu_scheduleShare -> {
-                requireViewBinding().layoutSchedule.showShortSnackBar(R.string.generating_share_schedule)
+                requireViewBinding().layoutSchedule.showSnackBar(R.string.generating_share_schedule)
                 requireViewModel().shareScheduleImage(getCurrentShowWeekNum(), resources.displayMetrics.widthPixels)
             }
         }
@@ -208,13 +209,15 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        var delayCloseDrawer = true
         when (item.itemId) {
             R.id.menu_navOnlineCourseImport -> startActivity<OnlineCourseImportActivity>()
             R.id.menu_navCourseExportICS -> requireViewModel().selectScheduleForExportingICS()
-            R.id.menu_navSyncToCalendar -> lifecycleScope.launch {
-                if (PermissionUtils.checkCalendarPermission(this@ScheduleActivity, requestCalendarPermission)) {
-                    requireViewModel().syncToCalendar()
+            R.id.menu_navSyncToCalendar -> {
+                withShownCalendarSyncAttention {
+                    syncScheduleToCalendar()
                 }
+                delayCloseDrawer = false
             }
             R.id.menu_navScheduleManage -> startActivity<ScheduleManageActivity>()
             R.id.menu_navCourseManage -> requireViewModel().openCurrentScheduleCourseManageActivity()
@@ -225,10 +228,30 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
             }
         }
         lifecycleScope.launch {
-            delay(resources.getInteger(R.integer.drawer_close_anim_time).toLong())
+            if (delayCloseDrawer) delay(resources.getInteger(R.integer.drawer_close_anim_time).toLong())
             requireViewBinding().drawerSchedule.closeDrawers()
         }
         return true
+    }
+
+    private fun withShownCalendarSyncAttention(block: () -> Unit) {
+        lifecycleScope.launch {
+            if (AppDataStore.hasShownCalendarSyncAttention()) {
+                block()
+            } else {
+                DialogUtils.showCalendarSyncAttentionDialog(this@ScheduleActivity) {
+                    block()
+                }
+            }
+        }
+    }
+
+    private fun syncScheduleToCalendar() {
+        lifecycleScope.launch {
+            if (PermissionUtils.checkCalendarPermission(this@ScheduleActivity, requestCalendarPermission)) {
+                requireViewModel().syncToCalendar()
+            }
+        }
     }
 
     private fun onChangeScheduleBackground(bundle: ScheduleDataStore.ScheduleBackgroundBuildBundle?) {
@@ -236,16 +259,14 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
             if (bundle == null) {
                 setImageDrawable(null)
             } else {
-                alpha = bundle.alpha
-                Glide.with(this).load(bundle.file).apply {
-                    when (bundle.scareType) {
-                        ImageScareType.FIT_CENTER -> fitCenter()
-                        ImageScareType.CENTER_CROP -> centerCrop()
-                        ImageScareType.CENTER_INSIDE -> centerInside()
-                    }
-                }.apply {
-                    if (bundle.fadeAnim) transition(DrawableTransitionOptions.withCrossFade())
-                }.into(this)
+                scaleType = when (bundle.scareType) {
+                    ImageScareType.FIT_CENTER -> ImageView.ScaleType.FIT_CENTER
+                    ImageScareType.CENTER_CROP -> ImageView.ScaleType.CENTER_CROP
+                    ImageScareType.CENTER_INSIDE -> ImageView.ScaleType.CENTER_INSIDE
+                }
+                load(bundle.file) {
+                    if (bundle.useAnim) crossfade(true)
+                }
             }
         }
     }
@@ -282,7 +303,6 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
 
                 scheduleViewPagerAdapter = ScheduleViewPagerAdapter(this@ScheduleActivity, maxWeekNum)
                 adapter = scheduleViewPagerAdapter
-
                 setCurrentItem(requireViewModel().currentScrollPosition ?: position, false)
             } else {
                 scheduleViewPagerAdapter?.updateMaxWeekNum(maxWeekNum)
@@ -309,7 +329,7 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
                             AppSettingsDataStore.setNightModeType(mode)
                         }.modeInt
                         launch(Dispatchers.Main.immediate) {
-                            if (manuallyChangeNightMode) showShortToast(R.string.manually_change_night_mode)
+                            if (manuallyChangeNightMode) showToast(R.string.manually_change_night_mode)
                             window.setWindowAnimations(R.style.AppTheme_NightModeTransitionAnimation)
                             AppCompatDelegate.setDefaultNightMode(newMode)
                         }

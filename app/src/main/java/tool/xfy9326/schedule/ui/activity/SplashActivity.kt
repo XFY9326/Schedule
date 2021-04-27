@@ -7,11 +7,12 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.data.AppDataStore
-import tool.xfy9326.schedule.kt.showGlobalShortToast
+import tool.xfy9326.schedule.io.FileManager
+import tool.xfy9326.schedule.kt.showGlobalToast
 import tool.xfy9326.schedule.kt.startActivity
 import tool.xfy9326.schedule.ui.activity.base.AbstractActivity
 import tool.xfy9326.schedule.utils.view.DialogUtils
-import tool.xfy9326.schedule.utils.file.RawManager
+import tool.xfy9326.schedule.utils.view.ScheduleViewDataProcessor
 
 class SplashActivity : AbstractActivity() {
     companion object {
@@ -46,12 +47,13 @@ class SplashActivity : AbstractActivity() {
         intent.getBooleanExtra(INTENT_EXTRA_CRASH_RELAUNCH, false)
 
     private fun standardLaunch() {
-        if (validateCrashRelaunch()) showGlobalShortToast(R.string.crash_relaunch_attention)
+        if (validateCrashRelaunch()) showGlobalToast(R.string.crash_relaunch_attention)
         lifecycleScope.launch {
+            ScheduleViewDataProcessor.preload()
             if (AppDataStore.acceptEULAFlow.first()) {
                 startMainActivity()
             } else {
-                showEULA(RawManager.readEULA())
+                showEULA(FileManager.readEULA())
             }
         }
     }

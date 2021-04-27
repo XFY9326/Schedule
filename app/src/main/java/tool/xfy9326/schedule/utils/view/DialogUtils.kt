@@ -7,15 +7,73 @@ import com.jaredrummler.android.colorpicker.ColorPickerDialog
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.Schedule
 import tool.xfy9326.schedule.databinding.DialogEditTextBinding
+import tool.xfy9326.schedule.kt.NEW_LINE
 import tool.xfy9326.schedule.kt.getText
 import tool.xfy9326.schedule.kt.show
-import tool.xfy9326.schedule.kt.showShortToast
+import tool.xfy9326.schedule.kt.showToast
 import tool.xfy9326.schedule.tools.MaterialColorHelper
 
 object DialogUtils {
+    fun showOnlineImportAttentionDialog(
+        activity: AppCompatActivity,
+        isStaticAttention: Boolean,
+        onPositive: (() -> Unit)? = null,
+        onNegative: (() -> Unit)? = null,
+        onNeutral: (() -> Unit)? = null,
+    ) {
+        MaterialAlertDialogBuilder(activity).apply {
+            setTitle(R.string.online_course_import)
+            if (isStaticAttention) {
+                setMessage(R.string.online_course_import_attention)
+            } else {
+                setMessage(activity.getString(R.string.online_course_import_attention) + NEW_LINE + NEW_LINE + activity.getString(R.string.add_course_import_attention))
+            }
+            if (isStaticAttention) {
+                setCancelable(false)
+                setPositiveButton(R.string.has_read) { _, _ ->
+                    onPositive?.invoke()
+                }
+                setNegativeButton(android.R.string.cancel) { _, _ ->
+                    onNegative?.invoke()
+                }
+                setNeutralButton(R.string.disable_function) { _, _ ->
+                    onNeutral?.invoke()
+                }
+            } else {
+                setPositiveButton(android.R.string.ok, null)
+                setNeutralButton(R.string.add_course_import_wiki) { _, _ ->
+                    onNeutral?.invoke()
+                }
+            }
+        }.show(activity)
+    }
+
+    fun showCalendarSyncAttentionDialog(activity: AppCompatActivity, onConfirm: () -> Unit) {
+        MaterialAlertDialogBuilder(activity).apply {
+            setTitle(R.string.calendar_sync_attention_dialog_title)
+            setMessage(R.string.calendar_sync_attention_dialog_msg)
+            setPositiveButton(android.R.string.ok) { _, _ ->
+                onConfirm()
+            }
+            setCancelable(false)
+        }.show(activity)
+    }
+
+    fun showAddCourseImportAttentionDialog(activity: AppCompatActivity, onConfirm: () -> Unit) {
+        MaterialAlertDialogBuilder(activity).apply {
+            setTitle(R.string.add_course_import_attention_title)
+            setMessage(R.string.add_course_import_attention)
+            setPositiveButton(R.string.agree_policy) { _, _ ->
+                onConfirm()
+            }
+            setNegativeButton(android.R.string.cancel, null)
+            setCancelable(false)
+        }.show(activity)
+    }
+
     fun showNewScheduleNameDialog(activity: AppCompatActivity, onConfirm: (String) -> Unit) {
         val dialogViewBinding = DialogEditTextBinding.inflate(activity.layoutInflater)
-        dialogViewBinding.layoutDialogText.setHint(R.string.new_schedule_name_title)
+        dialogViewBinding.editTextDialogText.setHint(R.string.new_schedule_name_title)
         dialogViewBinding.editTextDialogText.setText(R.string.new_schedule_name)
 
         MaterialAlertDialogBuilder(activity).apply {
@@ -25,7 +83,7 @@ object DialogUtils {
                 dialogViewBinding.editTextDialogText.clearFocus()
                 val text = dialogViewBinding.editTextDialogText.text.getText()
                 if (text == null) {
-                    activity.showShortToast(R.string.schedule_name_empty_error)
+                    activity.showToast(R.string.schedule_name_empty_error)
                 } else {
                     onConfirm(text)
                 }

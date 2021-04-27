@@ -15,6 +15,7 @@ import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.core.view.setPadding
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.*
+import tool.xfy9326.schedule.beans.WeekDay.Companion.orderedValue
 import tool.xfy9326.schedule.kt.NEW_LINE
 import tool.xfy9326.schedule.tools.MaterialColorHelper
 import tool.xfy9326.schedule.utils.view.ViewUtils
@@ -151,6 +152,7 @@ class ScheduleCellView private constructor(context: Context, private val predefi
                 setTextColor(timeTextColor)
                 setPadding(0, predefine.timeCellVerticalPadding, 0, predefine.timeCellVerticalPadding)
 
+                textAlignment = View.TEXT_ALIGNMENT_INHERIT
                 gravity = Gravity.CENTER
 
                 layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
@@ -166,6 +168,7 @@ class ScheduleCellView private constructor(context: Context, private val predefi
                     setTextColor(timeTextColor)
                     setPadding(0, predefine.timeCellTimeDivideTopMargin, 0, 0)
 
+                    textAlignment = View.TEXT_ALIGNMENT_INHERIT
                     gravity = Gravity.CENTER
 
                     layoutParams = LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply {

@@ -2,16 +2,17 @@ package tool.xfy9326.schedule.ui.vm
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
+import lib.xfy9326.livedata.MutableEventLiveData
+import lib.xfy9326.livedata.postEvent
 import tool.xfy9326.schedule.beans.Course
 import tool.xfy9326.schedule.beans.CourseTime
 import tool.xfy9326.schedule.beans.EditError
 import tool.xfy9326.schedule.beans.Schedule
 import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
-import tool.xfy9326.schedule.tools.livedata.MutableEventLiveData
-import tool.xfy9326.schedule.tools.livedata.postEvent
 import tool.xfy9326.schedule.ui.dialog.CourseTimeEditDialog
 import tool.xfy9326.schedule.ui.vm.base.AbstractViewModel
 import tool.xfy9326.schedule.utils.schedule.CourseTimeUtils
@@ -34,7 +35,7 @@ class CourseEditViewModel : AbstractViewModel() {
         isEdit = courseId != 0L
 
         if (!::editCourse.isInitialized) {
-            viewModelScope.launch {
+            viewModelScope.launch(Dispatchers.IO) {
                 if (isEdit) {
                     ScheduleDBProvider.db.scheduleDAO.getScheduleCourse(courseId).firstOrNull()?.let {
                         editCourse = it
@@ -52,7 +53,7 @@ class CourseEditViewModel : AbstractViewModel() {
     }
 
     fun editCourseTime(scheduleId: Long, courseTime: CourseTime? = null, position: Int? = null) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             ScheduleDBProvider.db.scheduleDAO.getSchedule(scheduleId).firstOrNull()?.let {
                 editCourseTime.postEvent(
                     // Deep copy course time
@@ -68,7 +69,7 @@ class CourseEditViewModel : AbstractViewModel() {
     }
 
     fun loadAllSchedules(currentScheduleId: Long) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             loadAllSchedules.postEvent(ScheduleDBProvider.db.scheduleDAO.getScheduleMin().first().filter {
                 it.scheduleId != currentScheduleId
             })
@@ -76,7 +77,7 @@ class CourseEditViewModel : AbstractViewModel() {
     }
 
     fun copyToOtherSchedule(scheduleId: Long) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             val cache = editCourse.clone(scheduleId)
             val otherCourses = ScheduleDBProvider.db.scheduleDAO.getScheduleCoursesWithoutId(scheduleId, cache.courseId).first()
             val errorMsg = CourseUtils.validateCourse(cache, otherCourses)
@@ -93,7 +94,7 @@ class CourseEditViewModel : AbstractViewModel() {
 
     fun saveCourse(scheduleId: Long) {
         val cache = editCourse
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             val otherCourses = ScheduleDBProvider.db.scheduleDAO.getScheduleCoursesWithoutId(scheduleId, cache.courseId).first()
             val errorMsg = CourseUtils.validateCourse(cache, otherCourses)
             if (errorMsg == null) {
