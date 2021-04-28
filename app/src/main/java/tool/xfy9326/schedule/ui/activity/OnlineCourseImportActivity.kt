@@ -6,6 +6,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.StringRes
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import lib.xfy9326.livedata.observeEvent
@@ -16,6 +17,7 @@ import tool.xfy9326.schedule.content.beans.JSConfig
 import tool.xfy9326.schedule.data.AppDataStore
 import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.databinding.ActivityOnlineCourseImportBinding
+import tool.xfy9326.schedule.kt.show
 import tool.xfy9326.schedule.kt.showSnackBar
 import tool.xfy9326.schedule.tools.MIMEConst
 import tool.xfy9326.schedule.ui.activity.base.CourseProviderActivity
@@ -73,10 +75,10 @@ class OnlineCourseImportActivity : ViewModelActivity<OnlineCourseImportViewModel
         viewModel.courseImportConfigs.observe(this) {
             courseImportAdapter.submitList(it)
         }
-        viewModel.preparedJSConfig.observeEvent(this) {
+        viewModel.preparedJSConfig.observeEvent(this, javaClass.simpleName) {
             openCourseImportActivity(it)
         }
-        viewModel.configOperationAttention.observeEvent(this) {
+        viewModel.configOperationAttention.observeEvent(this, javaClass.simpleName) {
             if (!JSConfigPrepareDialog.isShowing(supportFragmentManager)) {
                 loadingController.hide()
                 showAttention(it.getText(this))
@@ -92,6 +94,9 @@ class OnlineCourseImportActivity : ViewModelActivity<OnlineCourseImportViewModel
             if (!JSConfigPrepareDialog.isShowing(supportFragmentManager)) {
                 ViewUtils.showJSConfigErrorSnackBar(this, viewBinding.layoutCourseImport, it)
             }
+        }
+        viewModel.jsConfigExistWarning.observeEvent(this, javaClass.simpleName) {
+            showJSConfigExistWarningDialog(it.first, it.second)
         }
     }
 
@@ -129,6 +134,25 @@ class OnlineCourseImportActivity : ViewModelActivity<OnlineCourseImportViewModel
                 })
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun showJSConfigExistWarningDialog(importConfig: JSConfig, existConfig: JSConfig) {
+        loadingController.hide()
+        val updateUrlChanged = importConfig.updateUrl != existConfig.updateUrl
+        MaterialAlertDialogBuilder(this)
+            .setTitle(R.string.js_config_exist_title)
+            .setMessage(getString(R.string.js_config_exist_msg,
+                importConfig.schoolName,
+                importConfig.authorName,
+                existConfig.schoolName,
+                existConfig.authorName,
+                if (updateUrlChanged) getString(R.string.js_config_update_url_changed) else getString(R.string.js_config_update_url_not_changed)))
+            .setPositiveButton(android.R.string.ok) { _, _ ->
+                requireViewModel().forceAddJSConfig(importConfig)
+                loadingController.show()
+            }
+            .setNegativeButton(android.R.string.cancel, null)
+            .show(this)
     }
 
     private fun openCourseImportActivity(config: AbstractCourseImportConfig<*, *, *, *>) {

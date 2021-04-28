@@ -40,6 +40,7 @@ class CourseImportConfigManager(scope: CoroutineScope) : CoroutineScope by scope
     private val operationError = MutableEventLiveData<JSConfigException>()
     private val operationAttention = MutableEventLiveData<Type>()
     private val configWarning = MutableEventLiveData<JSConfigException>()
+    private val jsConfigExist = MutableEventLiveData<Pair<JSConfig, JSConfig>>()
     val courseImportConfigs: LiveData<List<ICourseImportConfig>>
         get() = importConfigs
     val preparedJSConfig: EventLiveData<AbstractCourseImportConfig<*, *, *, *>>
@@ -52,6 +53,8 @@ class CourseImportConfigManager(scope: CoroutineScope) : CoroutineScope by scope
         get() = operationAttention
     val configIgnorableWarning: EventLiveData<JSConfigException>
         get() = configWarning
+    val jsConfigExistWarning: EventLiveData<Pair<JSConfig, JSConfig>> // Need import / Current exist
+        get() = jsConfigExist
 
     private val httpClient = HttpClient(OkHttp) {
         install(HttpRedirect)
@@ -77,7 +80,7 @@ class CourseImportConfigManager(scope: CoroutineScope) : CoroutineScope by scope
     fun addJSConfig(uri: Uri) = launch {
         try {
             val content = uri.source()?.useBuffer { readUtf8() } ?: error("Empty uri! Uri $uri")
-            addJSConfigContent(content)
+            addJSConfig(JSFileManager.parserJSConfig(content), false)
         } catch (e: Exception) {
             operationError.postEvent(JSConfigException.Error.READ_FAILED.make(e))
         }
@@ -86,24 +89,25 @@ class CourseImportConfigManager(scope: CoroutineScope) : CoroutineScope by scope
     fun addJSConfig(url: String) = launch {
         try {
             val content = httpClient.get<String>(url)
-            addJSConfigContent(content)
+            addJSConfig(JSFileManager.parserJSConfig(content), false)
         } catch (e: Exception) {
             operationError.postEvent(JSConfigException.Error.READ_FAILED.make(e))
         }
     }
 
-    private fun addJSConfigContent(content: String) {
-        runConfigOperation {
-            val jsConfig = JSFileManager.parserJSConfig(content)
-            JSFileManager.addNewJSConfig(jsConfig)
-            val existConfig = currentImportConfigList.filterIsInstance<JSConfig>().find { it.uuid == jsConfig.uuid }
-            if (existConfig != null) {
-                currentImportConfigList.remove(existConfig)
-            }
-            currentImportConfigList.add(jsConfig)
-            notifyListUpdate()
-            operationAttention.postEvent(Type.ADD_SUCCESS)
+    fun addJSConfig(jsConfig: JSConfig, force: Boolean) = runConfigOperation {
+        val existConfig = currentImportConfigList.filterIsInstance<JSConfig>().find { it.uuid == jsConfig.uuid }
+        if (!force && existConfig != null) {
+            jsConfigExist.postEvent(jsConfig to existConfig)
+            return@runConfigOperation
         }
+        JSFileManager.addNewJSConfig(jsConfig)
+        if (existConfig != null) {
+            currentImportConfigList.remove(existConfig)
+        }
+        currentImportConfigList.add(jsConfig)
+        notifyListUpdate()
+        operationAttention.postEvent(Type.ADD_SUCCESS)
     }
 
     fun removeJSConfig(jsConfig: JSConfig) {

@@ -24,6 +24,7 @@ class OnlineCourseImportViewModel : AbstractViewModel() {
     val configOperationError = configManager.configOperationError
     val configOperationAttention = configManager.configOperationAttention
     val configIgnorableWarning = configManager.configIgnorableWarning
+    val jsConfigExistWarning = configManager.jsConfigExistWarning
 
     val onlineImportAttention = MutableNotifyLiveData()
 
@@ -55,6 +56,11 @@ class OnlineCourseImportViewModel : AbstractViewModel() {
     fun addJSConfig(url: String) {
         jsAddJob?.cancel()
         jsAddJob = configManager.addJSConfig(url)
+    }
+
+    fun forceAddJSConfig(jsConfig: JSConfig) {
+        jsAddJob?.cancel()
+        jsAddJob = configManager.addJSConfig(jsConfig, true)
     }
 
     fun prepareJSConfig(jsConfig: JSConfig) {
