@@ -7,10 +7,9 @@ import android.view.*
 import android.view.animation.AnimationUtils
 import android.webkit.*
 import androidx.core.view.isVisible
-import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.databinding.FragmentWebCourseProviderBinding
@@ -18,6 +17,7 @@ import tool.xfy9326.schedule.kt.*
 import tool.xfy9326.schedule.ui.dialog.WebCourseProviderBottomPanel
 import tool.xfy9326.schedule.ui.fragment.base.IWebCourseProvider
 import tool.xfy9326.schedule.ui.fragment.base.ViewBindingFragment
+import tool.xfy9326.schedule.utils.JSBridge
 import java.lang.ref.WeakReference
 
 class WebCourseProviderFragment : ViewBindingFragment<FragmentWebCourseProviderBinding>(), WebCourseProviderBottomPanel.BottomPanelActionListener,
@@ -42,9 +42,12 @@ class WebCourseProviderFragment : ViewBindingFragment<FragmentWebCourseProviderB
     override fun onInitView(viewBinding: FragmentWebCourseProviderBinding) {
         setHasOptionsMenu(true)
 
-        lifecycleScope.launch {
+        val enableDebug = runBlocking {
             if (!AppSettingsDataStore.keepWebProviderCacheFlow.first()) {
                 viewBinding.webViewWebCourseProvider.clearAll()
+            }
+            AppSettingsDataStore.enableWebCourseProviderConsoleDebugFlow.first().also {
+                WebView.setWebContentsDebuggingEnabled(it)
             }
         }
 
@@ -85,6 +88,13 @@ class WebCourseProviderFragment : ViewBindingFragment<FragmentWebCourseProviderB
             webViewClient = object : WebViewClient() {
                 override fun onReceivedSslError(view: WebView?, handler: SslErrorHandler?, error: SslError?) {
                     handler?.proceed()
+                }
+
+                override fun onPageFinished(view: WebView?, url: String?) {
+                    if (enableDebug) {
+                        view?.evaluateJavascript(JSBridge.V_CONSOLE_INJECT, null)
+                    }
+                    super.onPageFinished(view, url)
                 }
             }
             requireOwner<IWebCourseProvider.IActivityContact>()?.onSetupWebView(this)
