@@ -5,6 +5,7 @@ package tool.xfy9326.schedule.content.base
 import androidx.annotation.ArrayRes
 import androidx.annotation.StringRes
 import tool.xfy9326.schedule.content.beans.CourseImportInstance
+import tool.xfy9326.schedule.content.utils.clone
 import tool.xfy9326.schedule.io.IOManager
 import java.io.Serializable
 import java.util.*
@@ -71,11 +72,11 @@ abstract class AbstractCourseImportConfig<P1 : Serializable, T1 : AbstractCourse
     }
 
     private fun createProviderInstance() = providerClass.newInstance().apply {
-        setParams(providerParams)
+        setParams(providerParams?.clone())
     }
 
     private fun createParserInstance() = parserClass.newInstance().apply {
-        setParams(parserParams)
+        setParams(parserParams?.clone())
     }
 
     override fun toString(): String {
