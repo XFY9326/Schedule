@@ -23,8 +23,8 @@ object AppSettingsDataStore : AbstractDataStore("Settings") {
     private val allowImportEmptySchedule by booleanPreferencesKey()
     private val allowImportIncompleteSchedule by booleanPreferencesKey()
     private val drawWaterMarkOnScheduleImage by booleanPreferencesKey()
-    private val refreshWebPageAfterImportCourse by booleanPreferencesKey()
     private val enableWebCourseProviderConsoleDebug by booleanPreferencesKey()
+    private val jsCourseImportEnableNetwork by booleanPreferencesKey()
     val enableOnlineCourseImport by booleanPreferencesKey()
 
     suspend fun setNightModeType(nightMode: NightMode) = nightModeType.saveData(nightMode.name)
@@ -69,7 +69,7 @@ object AppSettingsDataStore : AbstractDataStore("Settings") {
 
     val debugLogsMaxStoreAmountFlow = debugLogsMaxStoreAmount.readAsFlow(5)
 
-    val refreshWebPageAfterImportCourseFlow = refreshWebPageAfterImportCourse.readAsFlow(false)
-
     val enableWebCourseProviderConsoleDebugFlow = enableWebCourseProviderConsoleDebug.readAsFlow(false)
+
+    val jsCourseImportEnableNetworkFlow = jsCourseImportEnableNetwork.readAsFlow(false)
 }

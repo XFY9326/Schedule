@@ -371,9 +371,12 @@
     <string name="agree_policy">我同意并愿意承担风险</string>
     <string name="please_input_course_import_config_url">配置文件Url</string>
     <string name="add_course_import_wiki">适配文档</string>
-    <string name="refresh_web_page_after_import_course">尝试导入课程后刷新网页</string>
-    <string name="refresh_web_page_after_import_course_sum">可以解决JS注入的环境变化导致的问题</string>
     <string name="js_confirm_title">来自网页的消息</string>
+    <string name="advanced_settings">高级设置</string>
+    <string name="js_course_import_enable_network">允许基于JS的课程导入脚本联网</string>
+    <string name="js_course_import_enable_network_sum">注：开启后将可能导致安全问题，慎用！</string>
+    <string name="advanced_function_alert">是否启用高级功能</string>
+    <string name="advanced_function_alert_msg">\u3000\u3000开启此功能表示您已经知晓\"该功能可能会导致的安全问题\"。若您继续开启此功能，所导致的任何问题本软件不负任何责任！</string>
 
     <string name="js_config_read_failed">配置文件读取错误！</string>
     <string name="js_config_invalid">导入的配置文件不合法！</string>

@@ -2,15 +2,11 @@ package tool.xfy9326.schedule.ui.activity
 
 import android.webkit.JavascriptInterface
 import android.webkit.WebView
-import androidx.lifecycle.lifecycleScope
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
 import lib.xfy9326.livedata.observeEvent
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.WebCourseImportParams
 import tool.xfy9326.schedule.content.base.WebCourseParser
 import tool.xfy9326.schedule.content.base.WebCourseProvider
-import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.databinding.ActivityFragmentContainerBinding
 import tool.xfy9326.schedule.kt.showSnackBar
 import tool.xfy9326.schedule.ui.activity.base.AbstractWebCourseProviderActivity
@@ -44,11 +40,6 @@ class WebCourseProviderActivity :
             @JavascriptInterface
             override fun onReadHtmlContent(htmlContent: String, iframeContent: Array<String>, frameContent: Array<String>, isCurrentSchedule: Boolean) {
                 onGetCurrentHTML(htmlContent, iframeContent, frameContent, isCurrentSchedule)
-                lifecycleScope.launch {
-                    if (AppSettingsDataStore.refreshWebPageAfterImportCourseFlow.first()) {
-                        fragmentContact.refresh()
-                    }
-                }
             }
         }, JSBridge.WEB_COURSE_PROVIDER_JS_INTERFACE_NAME)
     }

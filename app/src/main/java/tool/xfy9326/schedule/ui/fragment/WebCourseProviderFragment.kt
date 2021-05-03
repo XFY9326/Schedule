@@ -28,8 +28,10 @@ class WebCourseProviderFragment : ViewBindingFragment<FragmentWebCourseProviderB
 
         private const val EXTRA_WEB_VIEW = "EXTRA_WEB_VIEW"
         private const val EXTRA_IS_BOTTOM_PANEL_INIT_SHOWED = "EXTRA_IS_BOTTOM_PANEL_INIT_SHOWED"
+        private const val EXTRA_IS_WEB_VIEW_CONNECTION_ENABLED = "EXTRA_IS_WEB_VIEW_CONNECTION_ENABLED"
     }
 
+    private var isWebViewConnectionEnabled = true
     private var isBottomPanelInitShowed = false
     private val hideBottomPanelAnimation by lazy { AnimationUtils.loadAnimation(requireContext(), R.anim.anim_bottom_button_out) }
     private val showBottomPanelAnimation by lazy { AnimationUtils.loadAnimation(requireContext(), R.anim.anim_bottom_button_in) }
@@ -62,6 +64,7 @@ class WebCourseProviderFragment : ViewBindingFragment<FragmentWebCourseProviderB
                 mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
                 useWideViewPort = true
                 loadWithOverviewMode = true
+                blockNetworkLoads = !isWebViewConnectionEnabled
             }
             webChromeClient = object : WebChromeClient() {
                 override fun onProgressChanged(view: WebView?, newProgress: Int) {
@@ -96,6 +99,15 @@ class WebCourseProviderFragment : ViewBindingFragment<FragmentWebCourseProviderB
                     }
                     super.onPageFinished(view, url)
                 }
+
+                @Suppress("DEPRECATION")
+                override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
+                    return false
+                }
+
+                override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
+                    return false
+                }
             }
             requireOwner<IWebCourseProvider.IActivityContact>()?.onSetupWebView(this)
             bindLifeCycle(this@WebCourseProviderFragment)
@@ -121,6 +133,7 @@ class WebCourseProviderFragment : ViewBindingFragment<FragmentWebCourseProviderB
         }
 
         isBottomPanelInitShowed = bundle?.getBoolean(EXTRA_IS_BOTTOM_PANEL_INIT_SHOWED, false) ?: false
+        isWebViewConnectionEnabled = bundle?.getBoolean(EXTRA_IS_WEB_VIEW_CONNECTION_ENABLED, true) ?: true
         if (!isBottomPanelInitShowed) {
             showBottomPanel()
             isBottomPanelInitShowed = true
@@ -129,6 +142,7 @@ class WebCourseProviderFragment : ViewBindingFragment<FragmentWebCourseProviderB
 
     override fun onSaveInstanceState(outState: Bundle) {
         outState.putBoolean(EXTRA_IS_BOTTOM_PANEL_INIT_SHOWED, isBottomPanelInitShowed)
+        outState.putBoolean(EXTRA_IS_WEB_VIEW_CONNECTION_ENABLED, isWebViewConnectionEnabled)
         outState.putBundle(EXTRA_WEB_VIEW, Bundle().apply {
             requireViewBinding().webViewWebCourseProvider.saveState(this)
         })
@@ -213,5 +227,15 @@ class WebCourseProviderFragment : ViewBindingFragment<FragmentWebCourseProviderB
 
     override fun refresh() {
         requireViewBinding().webViewWebCourseProvider.reload()
+    }
+
+    override fun setWebViewConnection(enabled: Boolean, autoRefresh: Boolean) {
+        isWebViewConnectionEnabled = enabled
+        requireViewBinding().webViewWebCourseProvider.apply {
+            settings.blockNetworkLoads = !enabled
+            if (autoRefresh) {
+                reload()
+            }
+        }
     }
 }

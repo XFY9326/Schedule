@@ -36,13 +36,19 @@
             app:summary="@string/keep_web_browser_cache_sum"
             app:title="@string/keep_web_browser_cache" />
 
+    </androidx.preference.PreferenceCategory>
+
+    <androidx.preference.PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="@string/advanced_settings">
+
         <androidx.preference.CheckBoxPreference
             app:defaultValue="false"
             app:dependency="enableOnlineCourseImport"
             app:iconSpaceReserved="false"
-            app:key="refreshWebPageAfterImportCourse"
-            app:summary="@string/refresh_web_page_after_import_course_sum"
-            app:title="@string/refresh_web_page_after_import_course" />
+            app:key="jsCourseImportEnableNetwork"
+            app:summary="@string/js_course_import_enable_network_sum"
+            app:title="@string/js_course_import_enable_network" />
 
     </androidx.preference.PreferenceCategory>
 
