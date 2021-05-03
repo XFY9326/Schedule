@@ -1,7 +1,9 @@
 package tool.xfy9326.schedule.utils.view
 
+import android.content.Context
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.LifecycleOwner
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.jaredrummler.android.colorpicker.ColorPickerDialog
 import tool.xfy9326.schedule.R
@@ -14,6 +16,17 @@ import tool.xfy9326.schedule.kt.showToast
 import tool.xfy9326.schedule.tools.MaterialColorHelper
 
 object DialogUtils {
+    fun showAdvancedFunctionDialog(context: Context, lifecycleOwner: LifecycleOwner, onConfirm: () -> Unit) {
+        MaterialAlertDialogBuilder(context).apply {
+            setTitle(R.string.advanced_function_alert)
+            setMessage(R.string.advanced_function_alert_msg)
+            setNegativeButton(android.R.string.cancel, null)
+            setPositiveButton(android.R.string.ok) { _, _ ->
+                onConfirm()
+            }
+        }.show(lifecycleOwner)
+    }
+
     fun showOnlineImportAttentionDialog(
         activity: AppCompatActivity,
         isStaticAttention: Boolean,

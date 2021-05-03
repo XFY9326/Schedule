@@ -5,6 +5,7 @@ import android.webkit.WebView
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import lib.xfy9326.livedata.observeEvent
 import tool.xfy9326.schedule.content.base.JSCourseParser
 import tool.xfy9326.schedule.content.base.JSCourseProvider
@@ -20,6 +21,7 @@ import tool.xfy9326.schedule.utils.view.DialogUtils
 class JSCourseProviderActivity : AbstractWebCourseProviderActivity<String, JSCourseProvider, JSCourseParser, JSCourseProviderViewModel>(),
     FullScreenLoadingDialog.OnRequestCancelListener {
     private val loadingController = FullScreenLoadingDialog.createControllerInstance(this)
+    private val enableJSNetwork = runBlocking { AppSettingsDataStore.jsCourseImportEnableNetworkFlow.first() }
 
     override val vmClass = JSCourseProviderViewModel::class
 
@@ -37,9 +39,6 @@ class JSCourseProviderActivity : AbstractWebCourseProviderActivity<String, JSCou
             override fun onJSProviderResponse(resultJSON: String, isCurrentSchedule: Boolean) {
                 lifecycleScope.launch {
                     requestImportCourse(ImportRequestParams(isCurrentSchedule, resultJSON))
-                    if (AppSettingsDataStore.refreshWebPageAfterImportCourseFlow.first()) {
-                        fragmentContact.refresh()
-                    }
                 }
             }
         }, JSBridge.JS_COURSE_PROVIDER_JS_INTERFACE_NAME)
@@ -55,9 +54,17 @@ class JSCourseProviderActivity : AbstractWebCourseProviderActivity<String, JSCou
 
     override fun onReadyImportCourse() {
         loadingController.show()
+        if (!enableJSNetwork) {
+            fragmentContact.setWebViewConnection(false)
+        }
     }
 
     override fun onCourseImportFinish(result: CourseProviderViewModel.ImportResult, editScheduleId: Long?) {
+        if (!enableJSNetwork) {
+            fragmentContact.setWebViewConnection(true)
+        } else {
+            fragmentContact.refresh()
+        }
         loadingController.hide()
     }
 

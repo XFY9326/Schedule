@@ -38,6 +38,19 @@
 
     <androidx.preference.PreferenceCategory
         app:iconSpaceReserved="false"
+        app:title="@string/web_page_debug">
+
+        <androidx.preference.CheckBoxPreference
+            app:defaultValue="false"
+            app:iconSpaceReserved="false"
+            app:key="enableWebCourseProviderConsoleDebug"
+            app:summary="@string/web_course_provider_console_debug_sum"
+            app:title="@string/web_course_provider_console_debug" />
+
+    </androidx.preference.PreferenceCategory>
+
+    <androidx.preference.PreferenceCategory
+        app:iconSpaceReserved="false"
         app:title="@string/others">
 
         <androidx.preference.Preference

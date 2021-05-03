@@ -1,11 +1,13 @@
-package tool.xfy9326.schedule.beans
+package tool.xfy9326.schedule.utils.schedule
 
 import android.content.Context
 import tool.xfy9326.schedule.R
+import tool.xfy9326.schedule.beans.CourseTime
+import tool.xfy9326.schedule.beans.ScheduleCalculateTimes
 import tool.xfy9326.schedule.beans.WeekDay.Companion.orderedValue
-import tool.xfy9326.schedule.beans.WeekNumPattern.PatternType.*
 import tool.xfy9326.schedule.kt.isEven
 import tool.xfy9326.schedule.utils.CalendarUtils
+import tool.xfy9326.schedule.utils.schedule.WeekNumPattern.PatternType.*
 
 class WeekNumPattern(weekNum: BooleanArray) {
 
@@ -67,6 +69,7 @@ class WeekNumPattern(weekNum: BooleanArray) {
     }
 
     companion object {
+        // 根据课表学期时间修正该周是否需要上课
         private fun fixWeekNumBySchedule(courseTime: CourseTime, scheduleCalculateTimes: ScheduleCalculateTimes): BooleanArray {
             val tempWeekNum = courseTime.weekNum
             val maxWeekNum = scheduleCalculateTimes.maxWeekNum

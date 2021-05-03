@@ -18,6 +18,7 @@ import tool.xfy9326.schedule.kt.iterateAll
 import tool.xfy9326.schedule.kt.withTryLock
 import tool.xfy9326.schedule.utils.ics.ScheduleICSWriter
 import tool.xfy9326.schedule.utils.schedule.CourseTimeUtils
+import tool.xfy9326.schedule.utils.schedule.WeekNumPattern
 import java.util.*
 
 object ScheduleSyncHelper {

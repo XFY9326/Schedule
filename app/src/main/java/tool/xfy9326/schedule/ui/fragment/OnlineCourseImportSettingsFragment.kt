@@ -9,9 +9,14 @@ import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.data.AppDataStore
 import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.ui.fragment.base.AbstractSettingsFragment
+import tool.xfy9326.schedule.utils.view.DialogUtils
 
 @Suppress("unused")
 class OnlineCourseImportSettingsFragment : AbstractSettingsFragment() {
+    companion object {
+        private const val KEY_JS_COURSE_IMPORT_ENABLE_NETWORK = "jsCourseImportEnableNetwork"
+    }
+
     override val titleName: Int = R.string.online_course_import
     override val preferenceResId: Int = R.xml.settings_online_course_import
     override val preferenceDataStore: PreferenceDataStore = AppSettingsDataStore.getPreferenceDataStore(lifecycleScope)
@@ -22,6 +27,16 @@ class OnlineCourseImportSettingsFragment : AbstractSettingsFragment() {
                 lifecycleScope.launch { AppDataStore.setReadOnlineImportAttention(false) }
             }
             true
+        }
+        findPreference<CheckBoxPreference>(KEY_JS_COURSE_IMPORT_ENABLE_NETWORK)?.setOnPreferenceChangeListener { pref, newValue ->
+            if (newValue == true) {
+                DialogUtils.showAdvancedFunctionDialog(requireContext(), viewLifecycleOwner) {
+                    (pref as? CheckBoxPreference?)?.isChecked = true
+                }
+                false
+            } else {
+                true
+            }
         }
     }
 }

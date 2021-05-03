@@ -10,13 +10,13 @@ import androidx.viewbinding.ViewBinding
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.CourseTime
 import tool.xfy9326.schedule.beans.ScheduleTime
-import tool.xfy9326.schedule.beans.WeekNumPattern
 import tool.xfy9326.schedule.databinding.ItemCourseDetailTimeBinding
 import tool.xfy9326.schedule.databinding.ItemCourseDetailTimeExpandBinding
 import tool.xfy9326.schedule.kt.getDrawableCompat
 import tool.xfy9326.schedule.ui.recyclerview.AdvancedDividerItemDecoration
 import tool.xfy9326.schedule.ui.recyclerview.BaseViewBindingAdapter
 import tool.xfy9326.schedule.ui.viewholder.ViewBindingViewHolder
+import tool.xfy9326.schedule.utils.schedule.WeekNumPattern
 
 class CourseDetailAdapter(
     courseTimes: List<CourseTime>,

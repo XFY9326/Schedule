@@ -29,6 +29,7 @@
       <w>mtrl</w>
       <w>noninteractive</w>
       <w>okio</w>
+      <w>onload</w>
       <w>parceler</w>
       <w>prodid</w>
       <w>rrule</w>

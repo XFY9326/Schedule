@@ -371,9 +371,12 @@
     <string name="agree_policy">我同意并愿意承担风险</string>
     <string name="please_input_course_import_config_url">配置文件Url</string>
     <string name="add_course_import_wiki">适配文档</string>
-    <string name="refresh_web_page_after_import_course">尝试导入课程后刷新网页</string>
-    <string name="refresh_web_page_after_import_course_sum">可以解决JS注入的环境变化导致的问题</string>
     <string name="js_confirm_title">来自网页的消息</string>
+    <string name="advanced_settings">高级设置</string>
+    <string name="js_course_import_enable_network">允许基于JS的课程导入脚本联网</string>
+    <string name="js_course_import_enable_network_sum">注：开启后将可能导致安全问题，慎用！</string>
+    <string name="advanced_function_alert">是否启用高级功能</string>
+    <string name="advanced_function_alert_msg">\u3000\u3000开启此功能表示您已经知晓\"该功能可能会导致的安全问题\"。若您继续开启此功能，所导致的任何问题本软件不负任何责任！</string>
 
     <string name="js_config_read_failed">配置文件读取错误！</string>
     <string name="js_config_invalid">导入的配置文件不合法！</string>
@@ -389,6 +392,13 @@
     <string name="js_config_parser_download_error">课程解析器下载失败！</string>
     <string name="js_config_dependencies_download_error">运行环境依赖下载失败！</string>
     <string name="js_config_prepare_error">运行环境准备失败！</string>
+    <string name="js_config_exist_title">配置文件已存在</string>
+    <string name="js_config_exist_msg">同UUID的配置文件已经存在！\n\n将要导入：\n\u3000学校：%1$s\n\u3000作者：%2$s\n已经存在：\n\u3000学校：%3$s\n\u3000作者：%4$s\n\n%5$s\n\n是否替换该配置文件？</string>
+    <string name="js_config_update_url_changed">配置文件更新地址发生变化！</string>
+    <string name="js_config_update_url_not_changed">配置文件更新地址未发生变化！</string>
+    <string name="web_page_debug">网页调试</string>
+    <string name="web_course_provider_console_debug">课程导入网页调试功能</string>
+    <string name="web_course_provider_console_debug_sum">启用vConsole与WebContentsDebugging</string>
 
     <string name="js_config_unknown_error">配置文件未知错误！</string>
     <string name="js_config_config_add_success">配置文件添加成功</string>

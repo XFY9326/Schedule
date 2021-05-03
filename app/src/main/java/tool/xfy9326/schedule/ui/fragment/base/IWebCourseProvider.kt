@@ -15,5 +15,7 @@ class IWebCourseProvider {
         fun evaluateJavascript(content: String, callback: ((String) -> Unit)? = null)
 
         fun refresh()
+
+        fun setWebViewConnection(enabled: Boolean, autoRefresh: Boolean = true)
     }
 }

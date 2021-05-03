@@ -9,12 +9,28 @@ import tool.xfy9326.schedule.kt.NEW_LINE
 
 object JSBridge {
     private const val FUN_HEAD = "pureSchedule_"
+
+    private const val V_CONSOLE_URL = "https://cdn.bootcdn.net/ajax/libs/vConsole/3.4.1/vconsole.min.js"
+    const val V_CONSOLE_INJECT =
+        """
+        javascript:
+        (function (window, undefined) {
+            let ${FUN_HEAD}CONSOLE_ELEMENT = document.createElement("script");
+            ${FUN_HEAD}CONSOLE_ELEMENT.src = "$V_CONSOLE_URL";
+            ${FUN_HEAD}CONSOLE_ELEMENT.onload = function() { 
+                 window.vConsole = new VConsole();
+             };
+             document.body.appendChild(${FUN_HEAD}CONSOLE_ELEMENT);
+         })(window);
+    """
+
     private const val JS_ENV_BACKUP =
         """
         var PURE_SCHEDULE_ENV_BACKUP_LIST = [];
         for (var PURE_SCHEDULE_ENV_BACKUP_NAME in this) {
             PURE_SCHEDULE_ENV_BACKUP_LIST[PURE_SCHEDULE_ENV_BACKUP_NAME] = this[PURE_SCHEDULE_ENV_BACKUP_NAME];
         }
+        var PURE_SCHEDULE_ENV_BACKUP_NAME = undefined;
     """
     private const val JS_ENV_RECOVER =
         """
@@ -24,7 +40,9 @@ object JSBridge {
             }
         }
         var PURE_SCHEDULE_ENV_BACKUP_LIST = [];
+        var PURE_SCHEDULE_ENV_BACKUP_NAME = undefined;
     """
+
     private const val FUNCTION_NAME_HTML_LOADER = "${FUN_HEAD}htmlContentLoader"
     private const val FUNCTION_HTML_LOADER = """
         function $FUNCTION_NAME_HTML_LOADER() {
@@ -88,7 +106,7 @@ object JSBridge {
                     "isSuccess": false,
                     "data": "JS launch failed!"
                 }
-                
+     
                 try {
                     ${jsCourseProvider.getJSDependencies().joinToString(NEW_LINE)}
                     
