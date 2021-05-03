@@ -30,6 +30,7 @@ object JSBridge {
         for (var PURE_SCHEDULE_ENV_BACKUP_NAME in this) {
             PURE_SCHEDULE_ENV_BACKUP_LIST[PURE_SCHEDULE_ENV_BACKUP_NAME] = this[PURE_SCHEDULE_ENV_BACKUP_NAME];
         }
+        var PURE_SCHEDULE_ENV_BACKUP_NAME = undefined;
     """
     private const val JS_ENV_RECOVER =
         """
@@ -39,6 +40,7 @@ object JSBridge {
             }
         }
         var PURE_SCHEDULE_ENV_BACKUP_LIST = [];
+        var PURE_SCHEDULE_ENV_BACKUP_NAME = undefined;
     """
 
     private const val FUNCTION_NAME_HTML_LOADER = "${FUN_HEAD}htmlContentLoader"

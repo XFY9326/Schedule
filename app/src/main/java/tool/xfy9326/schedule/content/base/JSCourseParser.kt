@@ -108,14 +108,14 @@ class JSCourseParser : AbstractCourseParser<JSParams>() {
 
         for (course in scheduleData.courses) {
             builder.add {
-                Course(course.name, course.teacher, course.times.map {
-                    CourseTime(getWeeksArray(it.weekNum), WeekDay.of(it.weekDay), it.start, it.duration, it.location)
+                Course(course.name.trim(), course.teacher?.trim(), course.times.map {
+                    CourseTime(getWeeksArray(it.weekNum), WeekDay.of(it.weekDay), it.start, it.duration, it.location?.trim())
                 })
             }
         }
 
-        val termStart = scheduleData.termStart?.let { termDateFormat.parse(it) }
-        val termEnd = scheduleData.termEnd?.let { termDateFormat.parse(it) }
+        val termStart = scheduleData.termStart?.let { termDateFormat.parse(it.trim()) }
+        val termEnd = scheduleData.termEnd?.let { termDateFormat.parse(it.trim()) }
         return ScheduleImportContent(scheduleTimes, builder.build(), CourseAdapterUtils.simpleTermFix(termStart, termEnd))
     }
 }

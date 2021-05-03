@@ -20,5 +20,5 @@ data class ScheduleTimeJSON(
     }
 
     fun toScheduleTime() =
-        ScheduleTime.fromTimeStr(start, end)
+        ScheduleTime.fromTimeStr(start.trim(), end.trim())
 }
