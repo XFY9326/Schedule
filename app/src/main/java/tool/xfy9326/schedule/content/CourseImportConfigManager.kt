@@ -96,7 +96,7 @@ class CourseImportConfigManager(scope: CoroutineScope) : CoroutineScope by scope
     }
 
     fun addJSConfig(jsConfig: JSConfig, force: Boolean) = runConfigOperation {
-        val existConfig = currentImportConfigList.filterIsInstance<JSConfig>().find { it.uuid == jsConfig.uuid }
+        val existConfig = currentImportConfigList.filterIsInstance<JSConfig>().find { it.id == jsConfig.id }
         if (!force && existConfig != null) {
             jsConfigExist.postEvent(jsConfig to existConfig)
             return@runConfigOperation
@@ -113,7 +113,7 @@ class CourseImportConfigManager(scope: CoroutineScope) : CoroutineScope by scope
     fun removeJSConfig(jsConfig: JSConfig) {
         runConfigOperation {
             if (jsConfig in currentImportConfigList) {
-                JSFileManager.deleteJSConfigFiles(jsConfig.uuid, false)
+                JSFileManager.deleteJSConfigFiles(jsConfig.id, false)
                 currentImportConfigList.remove(jsConfig)
                 notifyListUpdate()
                 operationAttention.postEvent(Type.REMOVE_SUCCESS)
@@ -132,14 +132,14 @@ class CourseImportConfigManager(scope: CoroutineScope) : CoroutineScope by scope
             jsConfig
         }
         if (!JSFileManager.checkLocalJSConfigFiles(latestConfig)) {
-            JSFileManager.deleteJSConfigFiles(latestConfig.uuid, true)
+            JSFileManager.deleteJSConfigFiles(latestConfig.id, true)
             prepareConfigProgress.postEvent(Type.PREPARE_PROVIDER)
-            downloadJS(latestConfig.uuid, latestConfig.providerJSUrl, JSConfigException.Error.PROVIDER_DOWNLOAD_ERROR, JSFileManager.SaveType.PROVIDER)
+            downloadJS(latestConfig.id, latestConfig.providerJSUrl, JSConfigException.Error.PROVIDER_DOWNLOAD_ERROR, JSFileManager.SaveType.PROVIDER)
             prepareConfigProgress.postEvent(Type.PREPARE_PARSER)
-            downloadJS(latestConfig.uuid, latestConfig.parserJSUrl, JSConfigException.Error.PARSER_DOWNLOAD_ERROR, JSFileManager.SaveType.PARSER)
+            downloadJS(latestConfig.id, latestConfig.parserJSUrl, JSConfigException.Error.PARSER_DOWNLOAD_ERROR, JSFileManager.SaveType.PARSER)
             prepareConfigProgress.postEvent(Type.PREPARE_DEPENDENCIES)
             for (dependenciesJSUrl in latestConfig.dependenciesJSUrls) {
-                downloadJS(latestConfig.uuid, dependenciesJSUrl, JSConfigException.Error.DEPENDENCIES_DOWNLOAD_ERROR, JSFileManager.SaveType.DEPENDENCY)
+                downloadJS(latestConfig.id, dependenciesJSUrl, JSConfigException.Error.DEPENDENCIES_DOWNLOAD_ERROR, JSFileManager.SaveType.DEPENDENCY)
             }
             if (!JSFileManager.checkLocalJSConfigFiles(latestConfig)) {
                 JSConfigException.Error.PREPARE_ERROR.report()
@@ -161,7 +161,7 @@ class CourseImportConfigManager(scope: CoroutineScope) : CoroutineScope by scope
                 val config = JSFileManager.parserJSConfig(content)
                 return when {
                     config == jsConfig -> jsConfig
-                    config.uuid != jsConfig.uuid -> error("JSConfig UUID changed! Old: ${jsConfig.uuid}  New: ${config.uuid}")
+                    config.id != jsConfig.id -> error("JSConfig UUID changed! Old: ${jsConfig.id}  New: ${config.id}")
                     else -> {
                         JSFileManager.addNewJSConfig(config)
                         currentImportConfigList.remove(jsConfig)

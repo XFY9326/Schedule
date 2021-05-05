@@ -4,7 +4,6 @@ import android.os.Parcelable
 import android.webkit.URLUtil
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import tool.xfy9326.schedule.content.base.ICourseImportConfig
@@ -15,8 +14,7 @@ import java.util.*
 @Parcelize
 @Serializable
 data class JSConfig(
-    @SerialName("uuid")
-    private var _uuid: String,
+    private var uuid: String,
     val config: Int = CONFIG,
     val version: Int = VERSION,
     override val schoolName: String,
@@ -47,16 +45,16 @@ data class JSConfig(
     }
 
     @IgnoredOnParcel
-    val uuid: String
-        get() = _uuid
+    val id: String
+        get() = uuid
 
     @Transient
     @IgnoredOnParcel
     override val lowerCaseSortingBasis = sortingBasis.toLowerCase(Locale.getDefault())
 
     init {
-        if (!_uuid.isUUID()) JSConfigException.Error.UUID_ERROR.report()
-        _uuid = _uuid.toLowerCase(Locale.getDefault())
+        if (!uuid.isUUID()) JSConfigException.Error.UUID_ERROR.report()
+        uuid = uuid.toLowerCase(Locale.getDefault())
         if (jsType != TYPE_AI_SCHEDULE && jsType != TYPE_PURE_SCHEDULE) JSConfigException.Error.JS_TYPE_ERROR.report()
         if (providerJSUrl.isBlank() || !URLUtil.isValidUrl(providerJSUrl)) JSConfigException.Error.PROVIDER_URL_ERROR.report()
         if (parserJSUrl.isBlank() || !URLUtil.isValidUrl(parserJSUrl)) JSConfigException.Error.PARSER_URL_ERROR.report()
@@ -66,5 +64,5 @@ data class JSConfig(
         }
     }
 
-    fun getJSParams() = JSParams(uuid, jsType, initPageUrl)
+    fun getJSParams() = JSParams(id, jsType, initPageUrl)
 }
