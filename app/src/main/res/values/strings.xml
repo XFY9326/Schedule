@@ -63,7 +63,7 @@
     <string name="course_list_num">第%1$d节课</string>
     <string name="course_list_num_simple">第%1$d节</string>
     <string name="save">保存</string>
-    <string name="schedule_time_list">所有课程时间</string>
+    <string name="schedule_time_list">所有课程时间（点击时间开始编辑）</string>
     <string name="long_click_to_set_current_schedule">Tips：长按以切换到该课表</string>
     <string name="swipe_to_delete_course">Tips：侧滑以删除课程</string>
     <string name="course_cost_time_same_mode">所有课程上课时间相等</string>

@@ -115,6 +115,9 @@ class ScheduleEditActivity : ViewModelActivity<ScheduleEditViewModel, ActivitySc
         viewBinding.sliderScheduleTimeNum.setOnSlideValueSetListener {
             updateCourseNum(it.toInt(), false)
         }
+        viewBinding.layoutScheduleTimeCourseTimeSame.setOnClickListener {
+            viewBinding.checkBoxScheduleTimeCourseTimeSame.toggle()
+        }
         viewBinding.checkBoxScheduleTimeCourseTimeSame.setOnCheckedChangeListener { _, isChecked ->
             viewModel.scheduleTimeCourseTimeSame = isChecked
         }
