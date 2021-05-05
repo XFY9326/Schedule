@@ -7,7 +7,6 @@ import kotlinx.serialization.json.Json
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.*
 import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
-import tool.xfy9326.schedule.db.utils.DBTypeConverter
 import tool.xfy9326.schedule.io.FileManager
 import tool.xfy9326.schedule.json.ScheduleTimeJSON
 import tool.xfy9326.schedule.json.backup.BackupWrapperJSON
@@ -16,8 +15,6 @@ import tool.xfy9326.schedule.json.backup.CourseTimeJSON
 import tool.xfy9326.schedule.json.backup.ScheduleJSON
 import tool.xfy9326.schedule.utils.schedule.CourseUtils
 import tool.xfy9326.schedule.utils.schedule.ScheduleUtils
-import java.util.*
-import kotlin.collections.ArrayList
 
 object BackupUtils {
     private val JSON by lazy {
@@ -79,8 +76,8 @@ object BackupUtils {
                 val jsonCourseTimes = ArrayList<CourseTimeJSON>(course.times.size)
                 for (time in course.times) {
                     jsonCourseTimes.add(CourseTimeJSON(
-                        weekNum = DBTypeConverter.instance.booleanArrayToString(time.weekNum)!!,
-                        weekDay = time.classTime.weekDay.shortName,
+                        weekNum = time.weekNum,
+                        weekDay = time.classTime.weekDay,
                         start = time.classTime.classStartTime,
                         duration = time.classTime.classDuration,
                         location = time.location
@@ -97,9 +94,9 @@ object BackupUtils {
                 name = datum.schedule.name,
                 times = datum.schedule.times.map { ScheduleTimeJSON.fromScheduleTime(it) },
                 color = datum.schedule.color,
-                weekStart = datum.schedule.weekStart.shortName,
-                startDate = datum.schedule.startDate.time,
-                endDate = datum.schedule.endDate.time,
+                weekStart = datum.schedule.weekStart,
+                startDate = datum.schedule.startDate,
+                endDate = datum.schedule.endDate,
                 courses = jsonCourses
             ))
         }
@@ -116,7 +113,7 @@ object BackupUtils {
                 name = scheduleJson.name,
                 times = scheduleJson.times.map { it.toScheduleTime() },
                 color = scheduleJson.color,
-                weekStart = WeekDay.valueOfShortName(scheduleJson.weekStart),
+                weekStart = scheduleJson.weekStart,
                 startDate = scheduleDatePair.first,
                 endDate = scheduleDatePair.second,
             )
@@ -125,8 +122,8 @@ object BackupUtils {
                 val courseTimes = ArrayList<CourseTime>(courseJson.times.size)
                 for (timeJson in courseJson.times) {
                     courseTimes.add(CourseTime(
-                        weekNum = DBTypeConverter.instance.stringToBooleanArray(timeJson.weekNum)!!,
-                        weekDay = WeekDay.valueOfShortName(timeJson.weekDay),
+                        weekNum = timeJson.weekNum,
+                        weekDay = timeJson.weekDay,
                         classStartTime = timeJson.start,
                         classDuration = timeJson.duration,
                         location = timeJson.location
@@ -146,9 +143,9 @@ object BackupUtils {
     }
 
     private fun getFixedScheduleDate(scheduleJson: ScheduleJSON) =
-        if (scheduleJson.startDate == 0L || scheduleJson.endDate == 0L || scheduleJson.startDate >= scheduleJson.endDate) {
+        if (scheduleJson.startDate == null || scheduleJson.endDate == null || scheduleJson.startDate >= scheduleJson.endDate) {
             ScheduleUtils.getDefaultTermDate()
         } else {
-            Date(scheduleJson.startDate) to Date(scheduleJson.endDate)
+            scheduleJson.startDate to scheduleJson.endDate
         }
 }

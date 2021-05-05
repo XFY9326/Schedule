@@ -1,12 +1,14 @@
 package tool.xfy9326.schedule.json.parser.pure
 
 import kotlinx.serialization.Serializable
+import tool.xfy9326.schedule.beans.WeekDay
+import tool.xfy9326.schedule.json.serializer.WeekDayIntSerializer
 
 @Serializable
 data class CourseTimeImportJSON(
     val weekNum: List<Int> = emptyList(),
-    // Mon -> 1 ~ Sun -> 7
-    val weekDay: Int,
+    @Serializable(WeekDayIntSerializer::class)
+    val weekDay: WeekDay,
     // From 1
     val start: Int,
     // From 1
@@ -14,7 +16,6 @@ data class CourseTimeImportJSON(
     val location: String? = null,
 ) {
     init {
-        require(weekDay in 1..7) { "Week day empty!" }
         require(start > 0) { "Start error!" }
         require(duration > 0) { "Duration error!" }
     }

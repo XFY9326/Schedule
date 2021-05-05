@@ -3,18 +3,11 @@ package tool.xfy9326.schedule.db.utils
 import androidx.room.TypeConverter
 import tool.xfy9326.schedule.beans.ScheduleTime
 import tool.xfy9326.schedule.beans.WeekDay
+import tool.xfy9326.schedule.content.utils.deserializeToBooleanArray
+import tool.xfy9326.schedule.content.utils.serializeToString
 import java.util.*
 
 class DBTypeConverter {
-    companion object {
-        val instance by lazy {
-            DBTypeConverter()
-        }
-
-        private const val CHAR_ZERO = '0'
-        private const val CHAR_ONE = '1'
-    }
-
     @TypeConverter
     fun timestampToDate(value: Long?): Date? {
         return value?.let { Date(it) }
@@ -27,22 +20,12 @@ class DBTypeConverter {
 
     @TypeConverter
     fun stringToBooleanArray(value: String?): BooleanArray? {
-        return value?.let {
-            BooleanArray(it.length) { p ->
-                value[p] == CHAR_ONE
-            }
-        }
+        return value?.deserializeToBooleanArray()
     }
 
     @TypeConverter
     fun booleanArrayToString(booleanArray: BooleanArray?): String? {
-        return booleanArray?.let {
-            buildString(it.size) {
-                it.forEach { b ->
-                    append(if (b) CHAR_ONE else CHAR_ZERO)
-                }
-            }
-        }
+        return booleanArray?.serializeToString()
     }
 
     @TypeConverter
