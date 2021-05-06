@@ -50,11 +50,11 @@ data class JSConfig(
 
     @Transient
     @IgnoredOnParcel
-    override val lowerCaseSortingBasis = sortingBasis.toLowerCase(Locale.getDefault())
+    override val lowerCaseSortingBasis = sortingBasis.lowercase(Locale.getDefault())
 
     init {
         if (!uuid.isUUID()) JSConfigException.Error.UUID_ERROR.report()
-        uuid = uuid.toLowerCase(Locale.getDefault())
+        uuid = uuid.lowercase(Locale.getDefault())
         if (jsType != TYPE_AI_SCHEDULE && jsType != TYPE_PURE_SCHEDULE) JSConfigException.Error.JS_TYPE_ERROR.report()
         if (providerJSUrl.isBlank() || !URLUtil.isValidUrl(providerJSUrl)) JSConfigException.Error.PROVIDER_URL_ERROR.report()
         if (parserJSUrl.isBlank() || !URLUtil.isValidUrl(parserJSUrl)) JSConfigException.Error.PARSER_URL_ERROR.report()

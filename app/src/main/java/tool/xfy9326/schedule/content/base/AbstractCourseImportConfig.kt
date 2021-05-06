@@ -54,7 +54,7 @@ abstract class AbstractCourseImportConfig<P1 : Serializable, T1 : AbstractCourse
     )
 
     @Transient
-    override val lowerCaseSortingBasis = sortingBasis.toLowerCase(Locale.getDefault())
+    override val lowerCaseSortingBasis = sortingBasis.lowercase(Locale.getDefault())
 
     fun isProviderType(clazz: KClass<out AbstractCourseProvider<*>>) = clazz.java.isAssignableFrom(providerClass)
 
