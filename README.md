@@ -2,8 +2,10 @@
 [![codebeat badge](https://codebeat.co/badges/78a08756-e6af-4d82-993e-060a7ad6a3aa)](https://codebeat.co/projects/github-com-xfy9326-schedule-master)  
 PureSchedule open source code  
 
+Download: [CoolAPK](https://coolapk.com/apk/tool.xfy9326.schedule)  
 Coding Mirror: [Coding.net](https://xfy9326.coding.net/public/Schedule/Schedule/git/files)  
 Course Adapter Wiki: [Wiki](https://github.com/XFY9326/Schedule/wiki)  
+
 
 ### Features:  
 - Data driven view

@@ -51,7 +51,7 @@ class WebCourseProviderBottomPanel : BottomSheetDialogFragment() {
 
     override fun onStart() {
         super.onStart()
-        dialog?.window?.setDimAmount(0f)
+        requireDialog().window?.setDimAmount(0f)
     }
 
     override fun onDismiss(dialog: DialogInterface) {

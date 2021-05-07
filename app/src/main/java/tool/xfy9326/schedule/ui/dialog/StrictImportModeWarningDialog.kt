@@ -38,7 +38,7 @@ class StrictImportModeWarningDialog : AppCompatDialogFragment() {
 
     override fun onStart() {
         super.onStart()
-        dialog?.apply {
+        requireDialog().apply {
             setCancelable(false)
             setCanceledOnTouchOutside(false)
         }

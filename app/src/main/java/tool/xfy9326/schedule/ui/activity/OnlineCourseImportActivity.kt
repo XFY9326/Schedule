@@ -36,7 +36,7 @@ import tool.xfy9326.schedule.utils.view.ViewUtils
 class OnlineCourseImportActivity : ViewModelActivity<OnlineCourseImportViewModel, ActivityOnlineCourseImportBinding>(),
     CourseImportAdapter.OnCourseImportItemListener, JSConfigImportDialog.OnJSConfigImportListener, FullScreenLoadingDialog.OnRequestCancelListener {
     private lateinit var courseImportAdapter: CourseImportAdapter
-    private val loadingController = FullScreenLoadingDialog.createControllerInstance(this)
+    private val loadingController by lazy { FullScreenLoadingDialog.createControllerInstance(this, supportFragmentManager) }
     private val selectJSConfig = registerForActivityResult(ActivityResultContracts.GetContent()) {
         if (it != null) {
             requireViewModel().addJSConfig(it)

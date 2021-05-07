@@ -19,7 +19,7 @@ import tool.xfy9326.schedule.utils.view.DialogUtils
 class WebCourseProviderActivity :
     AbstractWebCourseProviderActivity<WebCourseImportParams, WebCourseProvider<*>, WebCourseParser<*>, WebCourseProviderViewModel>(),
     FullScreenLoadingDialog.OnRequestCancelListener {
-    private val loadingController = FullScreenLoadingDialog.createControllerInstance(this)
+    private val loadingController by lazy { FullScreenLoadingDialog.createControllerInstance(this, supportFragmentManager) }
 
     override val vmClass = WebCourseProviderViewModel::class
 
