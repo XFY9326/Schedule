@@ -4,11 +4,9 @@ import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.StringRes
 import androidx.lifecycle.lifecycleScope
-import androidx.preference.CheckBoxPreference
 import androidx.preference.PreferenceDataStore
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import lib.xfy9326.livedata.observeEvent
-import tool.xfy9326.schedule.BuildConfig
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.kt.setOnPrefClickListener
@@ -42,7 +40,6 @@ class DebugSettingsFragment : AbstractSettingsFragment() {
     }
 
     override fun onPrefInit(savedInstanceState: Bundle?) {
-        findPreference<CheckBoxPreference>(KEY_HANDLE_EXCEPTION)?.isEnabled = !BuildConfig.DEBUG
         setOnPrefClickListener(KEY_READ_DEBUG_LOGS) {
             requireSettingsViewModel()?.getAllLogs(KEY_READ_DEBUG_LOGS)
         }
@@ -94,14 +91,14 @@ class DebugSettingsFragment : AbstractSettingsFragment() {
         }
     }
 
-    private fun showDebugLogsSelectDialog(logs: Array<String>, @StringRes titleId: Int, onSelect: (String) -> Unit) {
-        if (logs.isEmpty()) {
+    private fun showDebugLogsSelectDialog(logNames: List<String>, @StringRes titleId: Int, onSelect: (String) -> Unit) {
+        if (logNames.isEmpty()) {
             requireRootLayout()?.showSnackBar(R.string.no_debug_logs)
         } else {
             MaterialAlertDialogBuilder(requireContext()).apply {
                 setTitle(titleId)
-                setItems(logs) { _, i ->
-                    onSelect(logs[i])
+                setItems(logNames.map { it.substringBeforeLast(".") }.toTypedArray()) { _, i ->
+                    onSelect(logNames[i])
                 }
                 setNegativeButton(android.R.string.cancel, null)
             }.show(viewLifecycleOwner)

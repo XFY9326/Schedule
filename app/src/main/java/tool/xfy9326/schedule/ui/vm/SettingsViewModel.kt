@@ -15,13 +15,12 @@ import tool.xfy9326.schedule.beans.ScheduleSync
 import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.data.ScheduleDataStore
 import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
-import tool.xfy9326.schedule.io.FileManager
+import tool.xfy9326.schedule.io.CrashFileManager
 import tool.xfy9326.schedule.io.IOManager
 import tool.xfy9326.schedule.io.PathManager
 import tool.xfy9326.schedule.io.kt.asParentOf
 import tool.xfy9326.schedule.io.utils.ImageUtils
 import tool.xfy9326.schedule.tools.DisposableValue
-import tool.xfy9326.schedule.tools.ExceptionHandler
 import tool.xfy9326.schedule.ui.vm.base.AbstractViewModel
 import tool.xfy9326.schedule.utils.BackupUtils
 import tool.xfy9326.schedule.utils.schedule.ScheduleSyncHelper
@@ -37,7 +36,7 @@ class SettingsViewModel : AbstractViewModel() {
     }
 
     val importScheduleImage by lazy { MutableEventLiveData<Boolean>() }
-    val allDebugLogs by lazy { MutableEventLiveData<Pair<String, Array<String>>>() }
+    val allDebugLogs by lazy { MutableEventLiveData<Pair<String, List<String>>>() }
     val showDebugLog by lazy { MutableEventLiveData<String>() }
     val outputLogFileToUriResult by lazy { MutableEventLiveData<Boolean>() }
     val backupScheduleToUriResult by lazy { MutableEventLiveData<Boolean>() }
@@ -155,16 +154,16 @@ class SettingsViewModel : AbstractViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             val logName = waitCreateLogFileName.read()
             if (logName != null) {
-                outputLogFileToUriResult.postEvent(FileManager.copyLogFile(logName, outputUri))
+                outputLogFileToUriResult.postEvent(CrashFileManager.copyLogFile(logName, outputUri))
             } else {
                 outputLogFileToUriResult.postEvent(false)
             }
         }
     }
 
-    fun showDebugLog(log: String) {
+    fun showDebugLog(logName: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            FileManager.readCrashLog(log)?.let {
+            CrashFileManager.readCrashLog(logName)?.let {
                 showDebugLog.postEvent(it)
             }
         }
@@ -172,7 +171,7 @@ class SettingsViewModel : AbstractViewModel() {
 
     fun getAllLogs(action: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            allDebugLogs.postEvent(action to ExceptionHandler.getAllDebugLogs())
+            allDebugLogs.postEvent(action to CrashFileManager.getAllDebugLogsName())
         }
     }
 

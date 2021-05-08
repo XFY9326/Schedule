@@ -41,24 +41,25 @@ inline fun <reified A : Activity> Context.startActivity(intentBlock: Intent.() -
 }
 
 fun Context.crashRelaunch() {
-    relaunchApp(true) {
+    relaunchApp {
         putExtra(SplashActivity.INTENT_EXTRA_CRASH_RELAUNCH, true)
     }
 }
 
 fun Context.appErrorRelaunch(crashLogName: String?) {
-    relaunchApp(true) {
+    relaunchApp {
         putExtra(SplashActivity.INTENT_EXTRA_APP_ERROR, true)
         putExtra(SplashActivity.INTENT_EXTRA_APP_ERROR_CRASH_LOG, crashLogName)
     }
 }
 
-fun Context.relaunchApp(killOldProcess: Boolean, intentBlock: Intent.() -> Unit = {}) {
+fun Context.relaunchApp(intentBlock: Intent.() -> Unit = {}) {
     startActivity(packageManager.getLaunchIntentForPackage(packageName)!!.apply {
+        addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
         addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         intentBlock.invoke(this)
     })
-    if (killOldProcess) exitProcess(0)
+    exitProcess(0)
 }
 
 inline fun Context.getColorCompat(@ColorRes id: Int) = ContextCompat.getColor(this, id)

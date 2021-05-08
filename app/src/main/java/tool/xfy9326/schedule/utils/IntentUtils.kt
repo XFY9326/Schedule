@@ -30,8 +30,8 @@ object IntentUtils {
             putExtra(Intent.EXTRA_MIME_TYPES, MIMEConst.MIME_IMAGE)
         }, context.getString(R.string.share_image))
 
-    fun sendCrashReport(context: Context, crashLogFileName: String) {
-        val uri = PathManager.LogDir.asParentOf(crashLogFileName).getUriByFileProvider()
+    fun sendCrashReport(context: Context, logName: String) {
+        val uri = PathManager.LogDir.asParentOf(logName).getUriByFileProvider()
         val mailAddress = context.getString(R.string.email)
         val mailTitle = context.getString(R.string.crash_report_email_title, context.getString(R.string.app_name))
         val mailContent = context.getString(

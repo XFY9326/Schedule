@@ -35,7 +35,6 @@ class AppErrorActivity : ViewModelActivity<AppErrorViewModel, ActivityAppErrorBi
     override fun onInitView(viewBinding: ActivityAppErrorBinding, viewModel: AppErrorViewModel) {
         setSupportActionBar(viewBinding.toolBarAppError.toolBarGeneral)
 
-        val crashLogFileName = intent.getStringExtra(INTENT_EXTRA_CRASH_LOG)
         viewBinding.cardViewAppErrorCheckUpdate.setOnClickListener {
             UpgradeUtils.checkUpgrade(this, true,
                 onFailed = { viewBinding.layoutAppError.showSnackBar(R.string.update_check_failed) },
@@ -43,18 +42,20 @@ class AppErrorActivity : ViewModelActivity<AppErrorViewModel, ActivityAppErrorBi
                 onFoundUpgrade = { UpgradeDialog.showDialog(supportFragmentManager, it) }
             )
         }
-        viewBinding.cardViewAppErrorDetail.setOnClickListener {
-            viewModel.loadCrashLogDetail(crashLogFileName)
-        }
         viewBinding.cardViewAppErrorFeedback.setOnClickListener {
             startActivity<FeedbackActivity>()
         }
 
+        val crashLogFileName = intent?.getStringExtra(INTENT_EXTRA_CRASH_LOG)
         if (crashLogFileName != null) {
+            viewBinding.cardViewAppErrorDetail.setOnClickListener {
+                viewModel.loadCrashLogDetail(crashLogFileName)
+            }
             viewBinding.cardViewAppErrorSend.setOnClickListener {
                 IntentUtils.sendCrashReport(this, crashLogFileName)
             }
         } else {
+            viewBinding.cardViewAppErrorDetail.isVisible = false
             viewBinding.cardViewAppErrorSend.isVisible = false
         }
     }

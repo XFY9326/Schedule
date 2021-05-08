@@ -15,11 +15,8 @@ import tool.xfy9326.schedule.io.kt.*
 import java.io.File
 
 object FileManager {
-    private const val FILE_NAME_CRASH_RECORD = "LastCrashMills.record"
-
     private val FILE_EULA = rawResFile(R.raw.eula)
     private val FILE_LICENSE = rawResFile(R.raw.license)
-    private val FILE_CRASH_RECORD = PathManager.LogDir.asParentOf(FILE_NAME_CRASH_RECORD)
 
     suspend fun readEULA() = runUnsafeIOJob {
         FILE_EULA.source().useBuffer {
@@ -34,34 +31,6 @@ object FileManager {
     }
 
     fun getAppPictureFile(name: String) = PathManager.PictureAppDir.asParentOf(name)
-
-    suspend fun readCrashLog(name: String) = runSafeIOJob {
-        PathManager.LogDir.asParentOf(name).source().useBuffer {
-            readUtf8()
-        }
-    }
-
-    suspend fun writeCrashLog(name: String, content: String) = runOnlyResultIOJob {
-        PathManager.LogDir.asParentOf(name).sink().useBuffer {
-            writeUtf8(content)
-        }
-        true
-    }
-
-    suspend fun copyLogFile(name: String, uri: Uri) = copyFileToUri(PathManager.LogDir.asParentOf(name), uri)
-
-    suspend fun readCrashRecord(): Long = runSafeIOJob(0L) {
-        FILE_CRASH_RECORD.source().useBuffer {
-            readUtf8().toLong()
-        }
-    }
-
-    suspend fun writeCrashRecord(mills: Long) = runOnlyResultIOJob {
-        FILE_CRASH_RECORD.sink().useBuffer {
-            writeUtf8(mills.toString())
-        }
-        true
-    }
 
     suspend fun copyBitmap(from: Uri, to: File, format: Bitmap.CompressFormat, quality: Int = 100) = runOnlyResultIOJob {
         val input = from.source()?.useBuffer {
