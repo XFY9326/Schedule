@@ -53,7 +53,7 @@ object ScheduleDataStore : AbstractDataStore("ScheduleSettings") {
             horizontalCourseCellText = it[horizontalCourseCellText] ?: false,
             verticalCourseCellText = it[verticalCourseCellText] ?: false,
             notThisWeekCourseShowStyle = tryEnumValueOf(it[notThisWeekCourseShowStyle])
-                ?: setOf(NotThisWeekCourseShowStyle.USE_TRANSPARENT_BACKGROUND),
+                ?: setOf(NotThisWeekCourseShowStyle.SHOW_NOT_THIS_WEEK_TEXT, NotThisWeekCourseShowStyle.USE_TRANSPARENT_BACKGROUND),
             enableScheduleGridScroll = it[enableScheduleGridScroll] ?: true
         )
     }.distinctUntilChanged()

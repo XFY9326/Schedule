@@ -23,8 +23,8 @@ import tool.xfy9326.schedule.kt.withTryLock
 import tool.xfy9326.schedule.tools.DisposableValue
 import tool.xfy9326.schedule.ui.vm.base.AbstractViewModel
 import tool.xfy9326.schedule.utils.CalendarUtils
-import tool.xfy9326.schedule.utils.ScheduleSyncHelper
 import tool.xfy9326.schedule.utils.ics.ScheduleICSHelper
+import tool.xfy9326.schedule.utils.schedule.ScheduleSyncHelper
 import tool.xfy9326.schedule.utils.schedule.ScheduleUtils
 import tool.xfy9326.schedule.utils.view.ScheduleViewDataProcessor
 import tool.xfy9326.schedule.utils.view.ScheduleViewHelper

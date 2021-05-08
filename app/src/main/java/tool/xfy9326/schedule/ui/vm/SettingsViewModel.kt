@@ -24,7 +24,7 @@ import tool.xfy9326.schedule.tools.DisposableValue
 import tool.xfy9326.schedule.tools.ExceptionHandler
 import tool.xfy9326.schedule.ui.vm.base.AbstractViewModel
 import tool.xfy9326.schedule.utils.BackupUtils
-import tool.xfy9326.schedule.utils.ScheduleSyncHelper
+import tool.xfy9326.schedule.utils.schedule.ScheduleSyncHelper
 
 class SettingsViewModel : AbstractViewModel() {
     private val scheduleSyncFlow = ScheduleDBProvider.db.scheduleSyncDao.getScheduleSyncsInfo().map {

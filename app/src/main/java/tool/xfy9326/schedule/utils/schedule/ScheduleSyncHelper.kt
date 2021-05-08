@@ -1,4 +1,4 @@
-package tool.xfy9326.schedule.utils
+package tool.xfy9326.schedule.utils.schedule
 
 import android.content.ContentResolver
 import android.content.ContentUris
@@ -17,8 +17,6 @@ import tool.xfy9326.schedule.kt.APP_ID
 import tool.xfy9326.schedule.kt.iterateAll
 import tool.xfy9326.schedule.kt.withTryLock
 import tool.xfy9326.schedule.utils.ics.ScheduleICSWriter
-import tool.xfy9326.schedule.utils.schedule.CourseTimeUtils
-import tool.xfy9326.schedule.utils.schedule.WeekNumPattern
 import java.util.*
 
 object ScheduleSyncHelper {
@@ -51,8 +49,8 @@ object ScheduleSyncHelper {
     }
 
     suspend fun syncCalendar(): BatchResult? = withContext(Dispatchers.Default) {
-        val contentResolver = IOManager.contentResolver
         syncLock.withTryLock {
+            val contentResolver = IOManager.contentResolver
             try {
                 clearAllCalendar(contentResolver)
 
@@ -159,10 +157,7 @@ object ScheduleSyncHelper {
                 if (!insertEvent(contentResolver, sync, reminderMinutes, ContentValues().apply {
                         put(
                             CalendarContract.Events.RRULE,
-                            ScheduleICSWriter.RRULE(weekNumPattern.interval,
-                                weekNumPattern.amount,
-                                courseTime.classTime.weekDay,
-                                scheduleCalculateTimes.weekStart).text
+                            ScheduleICSWriter.RRULE(weekNumPattern.interval, weekNumPattern.amount, courseTime.classTime.weekDay, scheduleCalculateTimes.weekStart).text
                         )
                         addBasicInfoToCalendarEvent(this, calId, time, course, courseTime)
                     })) return false
@@ -174,10 +169,7 @@ object ScheduleSyncHelper {
                             if (period.length > 1) {
                                 put(
                                     CalendarContract.Events.RRULE,
-                                    ScheduleICSWriter.RRULE(1,
-                                        period.length,
-                                        courseTime.classTime.weekDay,
-                                        scheduleCalculateTimes.weekStart).text
+                                    ScheduleICSWriter.RRULE(1, period.length, courseTime.classTime.weekDay, scheduleCalculateTimes.weekStart).text
                                 )
                             }
                             addBasicInfoToCalendarEvent(this, calId, time, course, courseTime)
