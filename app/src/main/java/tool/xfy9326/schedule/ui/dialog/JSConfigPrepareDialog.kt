@@ -79,7 +79,7 @@ class JSConfigPrepareDialog : DialogFragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        viewModel.jsConfigPrepareProgress.observeEvent(viewLifecycleOwner, javaClass.simpleName) {
+        viewModel.jsConfigPrepareProgress.observeEvent(this, javaClass.simpleName) {
             when (it) {
                 CHECK_UPDATE, PREPARE_PROVIDER, PREPARE_PARSER, PREPARE_DEPENDENCIES -> updateProgressText(it)
                 PREPARE_FINISH -> {
@@ -92,14 +92,14 @@ class JSConfigPrepareDialog : DialogFragment() {
                 }
             }
         }
-        viewModel.configOperationError.observeEvent(viewLifecycleOwner, javaClass.simpleName) {
+        viewModel.configOperationError.observeEvent(this, javaClass.simpleName) {
             isRunning = false
             setShowView(true)
             lastRunException = it
             showToast(it.getText(requireContext()))
             requireDialog().setCancelable(true)
         }
-        viewModel.configIgnorableWarning.observeEvent(viewLifecycleOwner, javaClass.simpleName) {
+        viewModel.configIgnorableWarning.observeEvent(this, javaClass.simpleName) {
             showToast(it.getText(requireContext()))
         }
 
