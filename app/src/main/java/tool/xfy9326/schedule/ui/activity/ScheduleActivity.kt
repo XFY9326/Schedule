@@ -46,6 +46,7 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
 
     override fun onPrepare(viewBinding: ActivityScheduleBinding, viewModel: ScheduleViewModel) {
         setSupportActionBar(viewBinding.toolBarSchedule)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
         viewBinding.viewPagerSchedulePanel.offscreenPageLimit = 1
     }
 
@@ -182,8 +183,10 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
             textViewScheduleTodayDate.setTextColor(tintColor)
             textViewScheduleNotCurrentWeek.setTextColor(tintColor)
             textViewScheduleNowShowWeekNum.setTextColor(tintColor)
-            toolBarSchedule.navigationIcon?.colorFilter = PorterDuffColorFilter(tintColor, PorterDuff.Mode.SRC)
             toolBarSchedule.menu.setIconTint(tintColor)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                toolBarSchedule.navigationIcon?.colorFilter = PorterDuffColorFilter(tintColor, PorterDuff.Mode.SRC)
+            }
         }
     }
 
@@ -226,11 +229,7 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
                 }
             }
         }
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
-            ActionBarDrawerToggle(this, viewBinding.drawerSchedule, R.string.open_drawer, R.string.close_drawer)
-        } else {
-            ActionBarDrawerToggle(this, viewBinding.drawerSchedule, viewBinding.toolBarSchedule, R.string.open_drawer, R.string.close_drawer)
-        }.apply {
+        ActionBarDrawerToggle(this, viewBinding.drawerSchedule, viewBinding.toolBarSchedule, R.string.open_drawer, R.string.close_drawer).apply {
             drawerArrowDrawable.color = getColorCompat(R.color.dark_icon)
             syncState()
             viewBinding.drawerSchedule.addDrawerListener(this)
