@@ -95,7 +95,7 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
 
         viewBinding.viewPagerSchedulePanel.registerOnPageChangeCallback(ScheduleViewPagerChangeCallback())
 
-        viewBinding.layoutScheduleDateInfoBar.setOnClickListener {
+        viewBinding.layoutScheduleDateInfoBar.setOnSingleClickListener {
             viewModel.scrollToCurrentWeekNum()
         }
 
@@ -218,8 +218,8 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
         viewBinding.navSchedule.apply {
             setNavigationItemSelectedListener(this@ScheduleActivity)
             getChildAt(0)?.isVerticalScrollBarEnabled = false
-            LayoutNavHeaderBinding.bind(getHeaderView(0)).buttonNightModeChange.setOnClickListener {
-                if (requireViewModel().nightModeChanging.compareAndSet(false, true)) {
+            LayoutNavHeaderBinding.bind(getHeaderView(0)).buttonNightModeChange.setOnSingleClickListener {
+                if (it != null && requireViewModel().nightModeChanging.compareAndSet(false, true)) {
                     it.performHapticFeedback(HapticFeedbackConstants.CONTEXT_CLICK)
                     NightModeViewUtils.requestNightModeChange(this@ScheduleActivity, viewBinding, viewModel, it)
                 }

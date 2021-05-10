@@ -17,6 +17,8 @@ import tool.xfy9326.schedule.kt.isUsingNightMode
 
 class ScheduleControlPanel : BottomSheetDialogFragment() {
     companion object {
+        private val DIALOG_TAG = ScheduleControlPanel::class.java.simpleName
+
         private const val EXTRA_SCROLL_TO_WEEK = "SCROLL_TO_WEEK"
         private const val ARGUMENT_CURRENT_SHOW_WEEK_NUM = "CURRENT_SHOW_WEEK_NUM"
         private const val ARGUMENT_NOW_WEEK_NUM = "NOW_WEEK_NUM"
@@ -24,6 +26,8 @@ class ScheduleControlPanel : BottomSheetDialogFragment() {
         private const val ARGUMENT_USE_LIGHT_SYSTEM_BAR = "USE_LIGHT_SYSTEM_BAR"
 
         fun showDialog(fragmentManager: FragmentManager, currentShowWeekNum: Int, nowWeekNum: Int, maxWeekNum: Int, useLightSystemBar: Boolean) {
+            if (fragmentManager.findFragmentByTag(DIALOG_TAG) != null) return
+
             ScheduleControlPanel().apply {
                 arguments = bundleOf(
                     ARGUMENT_CURRENT_SHOW_WEEK_NUM to currentShowWeekNum,
@@ -31,7 +35,7 @@ class ScheduleControlPanel : BottomSheetDialogFragment() {
                     ARGUMENT_MAX_WEEK_NUM to maxWeekNum,
                     ARGUMENT_USE_LIGHT_SYSTEM_BAR to useLightSystemBar
                 )
-            }.show(fragmentManager, null)
+            }.show(fragmentManager, DIALOG_TAG)
         }
 
         fun addScrollToWeekListener(fragmentManager: FragmentManager, lifecycleOwner: LifecycleOwner, block: (Int) -> Unit) {

@@ -12,10 +12,7 @@ import lib.xfy9326.livedata.observeEvent
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.Schedule
 import tool.xfy9326.schedule.databinding.ActivityScheduleEditBinding
-import tool.xfy9326.schedule.kt.hideKeyboard
-import tool.xfy9326.schedule.kt.show
-import tool.xfy9326.schedule.kt.showSnackBar
-import tool.xfy9326.schedule.kt.showToast
+import tool.xfy9326.schedule.kt.*
 import tool.xfy9326.schedule.ui.activity.base.ViewModelActivity
 import tool.xfy9326.schedule.ui.activity.module.ScheduleTermEditModule
 import tool.xfy9326.schedule.ui.activity.module.ScheduleTimeEditModule
@@ -75,7 +72,7 @@ class ScheduleEditActivity : ViewModelActivity<ScheduleEditViewModel, ActivitySc
     override fun onInitView(viewBinding: ActivityScheduleEditBinding, viewModel: ScheduleEditViewModel) {
         viewBinding.recyclerViewScheduleTimeList.itemAnimator = null
 
-        viewBinding.buttonScheduleColorEdit.setOnClickListener {
+        viewBinding.buttonScheduleColorEdit.setOnSingleClickListener {
             DialogUtils.showColorPickerDialog(this, R.string.schedule_color_edit, viewModel.editSchedule.color)
         }
     }

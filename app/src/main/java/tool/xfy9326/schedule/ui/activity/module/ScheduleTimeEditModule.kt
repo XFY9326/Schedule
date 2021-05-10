@@ -3,6 +3,7 @@ package tool.xfy9326.schedule.ui.activity.module
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.ScheduleTime
 import tool.xfy9326.schedule.databinding.ActivityScheduleEditBinding
+import tool.xfy9326.schedule.kt.setOnSingleClickListener
 import tool.xfy9326.schedule.kt.showSnackBar
 import tool.xfy9326.schedule.ui.activity.ScheduleEditActivity
 import tool.xfy9326.schedule.ui.activity.base.AbstractViewModelActivityModule
@@ -39,7 +40,7 @@ class ScheduleTimeEditModule(activity: ScheduleEditActivity) :
         requireViewBinding().sliderScheduleTimeNum.setOnSlideValueSetListener {
             updateCourseNum(it.toInt(), false)
         }
-        requireViewBinding().layoutScheduleTimeCourseTimeSame.setOnClickListener {
+        requireViewBinding().layoutScheduleTimeCourseTimeSame.setOnSingleClickListener {
             requireViewBinding().checkBoxScheduleTimeCourseTimeSame.toggle()
         }
         requireViewBinding().checkBoxScheduleTimeCourseTimeSame.setOnCheckedChangeListener { _, isChecked ->

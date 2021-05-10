@@ -10,6 +10,7 @@ import tool.xfy9326.schedule.beans.Schedule
 import tool.xfy9326.schedule.beans.ScheduleWrapper
 import tool.xfy9326.schedule.databinding.ItemScheduleBinding
 import tool.xfy9326.schedule.kt.getColorCompat
+import tool.xfy9326.schedule.kt.setOnSingleClickListener
 import tool.xfy9326.schedule.tools.MaterialColorHelper
 import tool.xfy9326.schedule.ui.recyclerview.BaseDifferItemCallBack
 import tool.xfy9326.schedule.ui.recyclerview.ListViewBindingAdapter
@@ -50,10 +51,10 @@ class ScheduleManageAdapter :
             it.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
             true
         }
-        holder.viewBinding.cardViewSchedule.setOnClickListener {
+        holder.viewBinding.cardViewSchedule.setOnSingleClickListener {
             onScheduleOperateListener?.invoke(element, ScheduleOperation.COURSE_EDIT)
         }
-        holder.viewBinding.buttonScheduleEdit.setOnClickListener {
+        holder.viewBinding.buttonScheduleEdit.setOnSingleClickListener {
             onScheduleOperateListener?.invoke(element, ScheduleOperation.EDIT)
         }
     }

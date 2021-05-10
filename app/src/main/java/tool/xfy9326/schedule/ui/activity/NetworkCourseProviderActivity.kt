@@ -59,14 +59,14 @@ class NetworkCourseProviderActivity :
             text = viewModel.importConfigInstance.systemName
         }
         viewBinding.textViewCourseAdapterAuthor.text = getString(R.string.adapter_author, viewModel.importConfigInstance.authorName)
-        viewBinding.imageViewCaptcha.setOnClickListener {
+        viewBinding.imageViewCaptcha.setOnSingleClickListener {
             if (!viewModel.isImportingCourses) {
                 withImportOption {
                     viewModel.refreshCaptcha(it)
                 }
             }
         }
-        viewBinding.buttonCourseImportReload.setOnClickListener {
+        viewBinding.buttonCourseImportReload.setOnSingleClickListener {
             if (!viewModel.isImportingCourses) {
                 withImportOption {
                     withLoadingView {
@@ -76,14 +76,14 @@ class NetworkCourseProviderActivity :
             }
         }
 
-        viewBinding.buttonImportCourseToCurrentSchedule.setOnClickListener {
+        viewBinding.buttonImportCourseToCurrentSchedule.setOnSingleClickListener {
             withImportOption {
                 withImportCourseParams { params ->
                     requestImportCourse(ImportRequestParams(true, params, it))
                 }
             }
         }
-        viewBinding.buttonImportCourseToNewSchedule.setOnClickListener {
+        viewBinding.buttonImportCourseToNewSchedule.setOnSingleClickListener {
             withImportOption {
                 withImportCourseParams { params ->
                     requestImportCourse(ImportRequestParams(false, params, it))

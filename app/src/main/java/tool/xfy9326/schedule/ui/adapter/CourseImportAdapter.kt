@@ -11,6 +11,7 @@ import tool.xfy9326.schedule.content.base.ICourseImportConfig
 import tool.xfy9326.schedule.content.beans.JSConfig
 import tool.xfy9326.schedule.databinding.ItemCourseImportBinding
 import tool.xfy9326.schedule.databinding.LayoutSwipeItemBinding
+import tool.xfy9326.schedule.kt.setOnSingleClickListener
 import tool.xfy9326.schedule.ui.recyclerview.ListViewBindingAdapter
 import tool.xfy9326.schedule.ui.recyclerview.SwipeItemCallback
 import tool.xfy9326.schedule.ui.recyclerview.SwipeItemViewHolder
@@ -60,7 +61,7 @@ class CourseImportAdapter : ListViewBindingAdapter<ICourseImportConfig, ViewBind
             text = element.systemName
         }
         viewBinding.textViewCourseImportJSConfig.isVisible = element is JSConfig
-        viewBinding.layoutCourseImportItem.setOnClickListener {
+        viewBinding.layoutCourseImportItem.setOnSingleClickListener {
             if (element is AbstractCourseImportConfig<*, *, *, *>) {
                 onCourseImportItemListener?.onCourseImportConfigClick(element)
             } else if (element is JSConfig) {

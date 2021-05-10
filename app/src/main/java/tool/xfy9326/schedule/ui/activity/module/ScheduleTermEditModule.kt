@@ -2,6 +2,7 @@ package tool.xfy9326.schedule.ui.activity.module
 
 import lib.xfy9326.livedata.observeEvent
 import tool.xfy9326.schedule.databinding.ActivityScheduleEditBinding
+import tool.xfy9326.schedule.kt.setOnSingleClickListener
 import tool.xfy9326.schedule.ui.activity.ScheduleEditActivity
 import tool.xfy9326.schedule.ui.activity.base.AbstractViewModelActivityModule
 import tool.xfy9326.schedule.ui.dialog.DatePickerDialog
@@ -28,10 +29,10 @@ class ScheduleTermEditModule(activity: ScheduleEditActivity) :
             )
         }
 
-        requireViewBinding().buttonScheduleStartDateEdit.setOnClickListener {
+        requireViewBinding().buttonScheduleStartDateEdit.setOnSingleClickListener {
             requireViewModel().selectScheduleDate(true, requireViewModel().editSchedule.startDate)
         }
-        requireViewBinding().buttonScheduleEndDateEdit.setOnClickListener {
+        requireViewBinding().buttonScheduleEndDateEdit.setOnSingleClickListener {
             requireViewModel().selectScheduleDate(false, requireViewModel().editSchedule.endDate)
         }
     }

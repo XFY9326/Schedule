@@ -140,6 +140,7 @@ class FullScreenLoadingDialog : AppCompatDialogFragment() {
         }
 
         private fun showDialog(fragmentManager: FragmentManager, showCancel: Boolean) {
+            if (fragmentManager.findFragmentByTag(FRAGMENT_TAG) != null) return
             FullScreenLoadingDialog().apply {
                 arguments = bundleOf(
                     EXTRA_SHOW_CANCEL_BUTTON to showCancel

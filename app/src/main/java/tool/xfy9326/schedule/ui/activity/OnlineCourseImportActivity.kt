@@ -17,6 +17,7 @@ import tool.xfy9326.schedule.content.beans.JSConfig
 import tool.xfy9326.schedule.data.AppDataStore
 import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.databinding.ActivityOnlineCourseImportBinding
+import tool.xfy9326.schedule.kt.setOnSingleClickListener
 import tool.xfy9326.schedule.kt.show
 import tool.xfy9326.schedule.kt.showSnackBar
 import tool.xfy9326.schedule.tools.MIMEConst
@@ -105,7 +106,7 @@ class OnlineCourseImportActivity : ViewModelActivity<OnlineCourseImportViewModel
         courseImportAdapter.setOnCourseImportItemListener(this)
         viewBinding.recyclerViewCourseImportList.adapter = courseImportAdapter
         viewBinding.recyclerViewCourseImportList.addItemDecoration(AdvancedDividerItemDecoration(this, DividerItemDecoration.VERTICAL))
-        viewBinding.fabAddCourseImport.setOnClickListener {
+        viewBinding.fabAddCourseImport.setOnSingleClickListener {
             lifecycleScope.launch {
                 if (!AppDataStore.agreeCourseImportPolicyFlow.first()) {
                     DialogUtils.showAddCourseImportAttentionDialog(this@OnlineCourseImportActivity) {
