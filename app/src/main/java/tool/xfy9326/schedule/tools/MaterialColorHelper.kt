@@ -44,12 +44,11 @@ object MaterialColorHelper {
         // material_deep_orange_300
         "#FF8A65"
     )
+    private val colorIntList by lazy { MATERIAL_COLORS.map { it.toColorInt() } }
 
-    fun all() = MATERIAL_COLORS.map {
-        it.toColorInt()
-    }.toTypedArray().toIntArray()
+    fun all() = colorIntList.toIntArray()
 
-    fun random() = MATERIAL_COLORS.random().toColorInt()
+    fun random() = colorIntList.random()
 
     fun isLightColor(color: Int) = ColorUtils.calculateLuminance(color) >= LUMINANCE_IS_LIGHT_COLOR
 }

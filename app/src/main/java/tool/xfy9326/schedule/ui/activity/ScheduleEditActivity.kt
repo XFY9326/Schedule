@@ -132,7 +132,7 @@ class ScheduleEditActivity : ViewModelActivity<ScheduleEditViewModel, ActivitySc
     override fun onBackPressed() {
         updateTextData()
         if (requireViewModel().hasDataChanged()) {
-            Snackbar.make(requireViewBinding().layoutScheduleEdit, R.string.ask_whether_exit_without_save, Snackbar.LENGTH_SHORT)
+            Snackbar.make(requireViewBinding().layoutScheduleEdit, R.string.ask_whether_exit_without_save, Snackbar.LENGTH_LONG)
                 .setActionTextColor(Color.RED)
                 .setAction(android.R.string.ok) {
                     super.onBackPressed()

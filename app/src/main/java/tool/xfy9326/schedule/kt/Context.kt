@@ -100,8 +100,7 @@ fun Context.getDefaultBackgroundColor(): Int {
     }
 }
 
-@Suppress("UNCHECKED_CAST")
-fun <T> Fragment.requireOwner() = (parentFragment ?: requireActivity()) as? T
+fun <T> Fragment.requireOwner() = (parentFragment ?: requireActivity()).tryCast<T>()
 
 fun BroadcastReceiver.goAsync(
     coroutineScope: CoroutineScope = GlobalScope,

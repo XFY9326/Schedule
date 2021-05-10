@@ -12,10 +12,6 @@ fun Int.isOdd(): Boolean = this % 2 != 0
 
 fun Int.isEven(): Boolean = this % 2 == 0
 
-fun <T> Iterable<T>?.nullableToList(): List<T> {
-    return this?.toList() ?: emptyList()
-}
-
 inline fun <reified E : Enum<E>> tryEnumValueOf(name: String?): E? {
     return if (name == null) {
         null
@@ -39,10 +35,6 @@ inline fun <reified E : Enum<E>> tryEnumValueOf(names: Set<String>?): Set<E>? {
             }
         }
     }
-}
-
-inline fun <E, I : Iterator<E>> I.iterate(action: I.(E) -> Unit) {
-    while (hasNext()) action.invoke(this, next())
 }
 
 inline fun <T> Array<out T>.forEachTwo(action: (Int, T, Int, T) -> Unit) {

@@ -49,8 +49,8 @@ fun Dialog.setWindowWidthPercent(widthPercent: Double): Int? {
         val width = (it.widthPixels * widthPercent).toInt()
         window?.apply {
             setLayout(width, ViewGroup.LayoutParams.WRAP_CONTENT)
+            return width
         }
-        return width
     }
     return null
 }
@@ -162,7 +162,7 @@ fun Menu.setIconTint(@ColorInt colorTint: Int?) {
     }
 }
 
-fun View.removeSelf() = (parent as? ViewGroup)?.removeView(this)
+fun View.removeSelf() = parent.tryCast<ViewGroup?>()?.removeView(this)
 
 fun WebView.bindLifeCycle(lifecycleOwner: LifecycleOwner) {
     lifecycleOwner.lifecycle.addObserver(object : DefaultLifecycleObserver {
