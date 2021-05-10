@@ -2,6 +2,7 @@ package tool.xfy9326.schedule.ui.activity
 
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
+import android.os.Build
 import android.os.Bundle
 import android.view.*
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -225,10 +226,12 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
                 }
             }
         }
-
-        ActionBarDrawerToggle(this, viewBinding.drawerSchedule, viewBinding.toolBarSchedule, R.string.open_drawer, R.string.close_drawer).apply {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
+            ActionBarDrawerToggle(this, viewBinding.drawerSchedule, R.string.open_drawer, R.string.close_drawer)
+        } else {
+            ActionBarDrawerToggle(this, viewBinding.drawerSchedule, viewBinding.toolBarSchedule, R.string.open_drawer, R.string.close_drawer)
+        }.apply {
             drawerArrowDrawable.color = getColorCompat(R.color.dark_icon)
-            isDrawerIndicatorEnabled = true
             syncState()
             viewBinding.drawerSchedule.addDrawerListener(this)
         }

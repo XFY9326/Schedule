@@ -8,8 +8,8 @@ ext {
             targetSdkVersion : 30,
             minSdkVersion    : 23,
             applicationId    : "tool.xfy9326.schedule",
-            versionCode      : 12,
-            versionName      : "1.2.2"
+            versionCode      : 13,
+            versionName      : "1.2.3"
     ]
 
     library = [
