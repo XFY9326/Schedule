@@ -43,7 +43,7 @@ enum class WeekDay(val shortName: String, val calWeekDay: Int) : Parcelable {
         }
 
         fun valueOfShortName(str: String) =
-            str.toUpperCase(Locale.getDefault()).let { shortName ->
+            str.uppercase(Locale.getDefault()).let { shortName ->
                 values().find {
                     it.shortName == shortName
                 } ?: error("Value error!")

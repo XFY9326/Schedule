@@ -17,6 +17,7 @@ import tool.xfy9326.schedule.content.beans.JSConfig
 import tool.xfy9326.schedule.data.AppDataStore
 import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.databinding.ActivityOnlineCourseImportBinding
+import tool.xfy9326.schedule.kt.setOnSingleClickListener
 import tool.xfy9326.schedule.kt.show
 import tool.xfy9326.schedule.kt.showSnackBar
 import tool.xfy9326.schedule.tools.MIMEConst
@@ -36,7 +37,7 @@ import tool.xfy9326.schedule.utils.view.ViewUtils
 class OnlineCourseImportActivity : ViewModelActivity<OnlineCourseImportViewModel, ActivityOnlineCourseImportBinding>(),
     CourseImportAdapter.OnCourseImportItemListener, JSConfigImportDialog.OnJSConfigImportListener, FullScreenLoadingDialog.OnRequestCancelListener {
     private lateinit var courseImportAdapter: CourseImportAdapter
-    private val loadingController = FullScreenLoadingDialog.createControllerInstance(this)
+    private val loadingController by lazy { FullScreenLoadingDialog.createControllerInstance(this, supportFragmentManager) }
     private val selectJSConfig = registerForActivityResult(ActivityResultContracts.GetContent()) {
         if (it != null) {
             requireViewModel().addJSConfig(it)
@@ -98,6 +99,21 @@ class OnlineCourseImportActivity : ViewModelActivity<OnlineCourseImportViewModel
         viewModel.jsConfigExistWarning.observeEvent(this, javaClass.simpleName) {
             showJSConfigExistWarningDialog(it.first, it.second)
         }
+        viewModel.launchJSConfig.observeEvent(this, javaClass.simpleName) {
+            if (it.first.requireNetwork && !it.second) {
+                showJSRequireNetworkWarning()
+            } else {
+                JSConfigPrepareDialog.showDialog(supportFragmentManager, it.first)
+            }
+        }
+    }
+
+    private fun showJSRequireNetworkWarning() {
+        MaterialAlertDialogBuilder(this).apply {
+            setTitle(R.string.js_course_import_enable_network_title)
+            setMessage(R.string.js_course_import_enable_network_msg)
+            setPositiveButton(android.R.string.ok, null)
+        }.show(this)
     }
 
     override fun onInitView(viewBinding: ActivityOnlineCourseImportBinding, viewModel: OnlineCourseImportViewModel) {
@@ -105,7 +121,7 @@ class OnlineCourseImportActivity : ViewModelActivity<OnlineCourseImportViewModel
         courseImportAdapter.setOnCourseImportItemListener(this)
         viewBinding.recyclerViewCourseImportList.adapter = courseImportAdapter
         viewBinding.recyclerViewCourseImportList.addItemDecoration(AdvancedDividerItemDecoration(this, DividerItemDecoration.VERTICAL))
-        viewBinding.fabAddCourseImport.setOnClickListener {
+        viewBinding.fabAddCourseImport.setOnSingleClickListener {
             lifecycleScope.launch {
                 if (!AppDataStore.agreeCourseImportPolicyFlow.first()) {
                     DialogUtils.showAddCourseImportAttentionDialog(this@OnlineCourseImportActivity) {
@@ -184,7 +200,7 @@ class OnlineCourseImportActivity : ViewModelActivity<OnlineCourseImportViewModel
     }
 
     override fun onJSConfigClick(jsConfig: JSConfig) {
-        JSConfigPrepareDialog.showDialog(supportFragmentManager, jsConfig)
+        requireViewModel().launchJSConfig(jsConfig)
     }
 
     override fun onJSConfigDelete(jsConfig: JSConfig) {

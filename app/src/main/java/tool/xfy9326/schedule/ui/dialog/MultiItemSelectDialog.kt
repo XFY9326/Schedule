@@ -37,25 +37,25 @@ class MultiItemSelectDialog : AppCompatDialogFragment() {
     }
 
     private lateinit var selectedArr: BooleanArray
+    private lateinit var showArr: Array<String>
+    private lateinit var idArr: LongArray
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        selectedArr = savedInstanceState?.getBooleanArray(EXTRA_SELECTED_ARR) ?: requireArguments().getBooleanArray(EXTRA_SELECTED_ARR)!!
+        selectedArr = savedInstanceState?.getBooleanArray(EXTRA_SELECTED_ARR) ?: requireArguments().getBooleanArray(EXTRA_SELECTED_ARR) ?: BooleanArray(0)
+        showArr = requireArguments().getStringArray(EXTRA_SHOW_ARR) ?: emptyArray()
+        idArr = requireArguments().getLongArray(EXTRA_ID_ARR) ?: LongArray(0)
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?) =
         MaterialAlertDialogBuilder(requireContext()).apply {
             setTitle(requireArguments().getString(EXTRA_TITLE))
-            setMultiChoiceItems(requireArguments().getStringArray(EXTRA_SHOW_ARR)!!, selectedArr) { _, which, isChecked ->
+            setMultiChoiceItems(showArr, selectedArr) { _, which, isChecked ->
                 selectedArr[which] = isChecked
             }
             setNegativeButton(android.R.string.cancel, null)
             setPositiveButton(android.R.string.ok) { _, _ ->
-                requireOwner<OnMultiItemSelectedListener>()?.onMultiItemSelected(
-                    requireArguments().getString(EXTRA_TAG),
-                    requireArguments().getLongArray(EXTRA_ID_ARR)!!,
-                    selectedArr
-                )
+                requireOwner<OnMultiItemSelectedListener>()?.onMultiItemSelected(requireArguments().getString(EXTRA_TAG), idArr, selectedArr)
             }
         }.create()
 

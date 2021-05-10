@@ -4,77 +4,42 @@ import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.os.Bundle
 import android.view.*
-import android.view.animation.AccelerateInterpolator
-import android.widget.ImageView
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.DrawableRes
 import androidx.appcompat.app.ActionBarDrawerToggle
-import androidx.appcompat.app.AppCompatDelegate
-import androidx.appcompat.widget.AppCompatImageButton
-import androidx.core.animation.doOnEnd
-import androidx.core.graphics.drawable.toDrawable
-import androidx.core.os.bundleOf
 import androidx.core.view.*
 import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.widget.ViewPager2
-import coil.load
 import com.google.android.material.navigation.NavigationView
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import lib.xfy9326.livedata.observeEvent
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.Day
-import tool.xfy9326.schedule.beans.ImageScareType
-import tool.xfy9326.schedule.beans.NightMode
 import tool.xfy9326.schedule.beans.WeekNumType
-import tool.xfy9326.schedule.data.AppDataStore
-import tool.xfy9326.schedule.data.AppSettingsDataStore
-import tool.xfy9326.schedule.data.ScheduleDataStore
 import tool.xfy9326.schedule.databinding.ActivityScheduleBinding
 import tool.xfy9326.schedule.databinding.LayoutNavHeaderBinding
 import tool.xfy9326.schedule.kt.*
 import tool.xfy9326.schedule.ui.activity.base.ViewModelActivity
+import tool.xfy9326.schedule.ui.activity.module.CalendarSyncModule
+import tool.xfy9326.schedule.ui.activity.module.ICSExportModule
+import tool.xfy9326.schedule.ui.activity.module.ScheduleBackgroundModule
+import tool.xfy9326.schedule.ui.activity.module.ScheduleShareModule
 import tool.xfy9326.schedule.ui.adapter.ScheduleViewPagerAdapter
 import tool.xfy9326.schedule.ui.dialog.CourseDetailDialog
 import tool.xfy9326.schedule.ui.dialog.ScheduleControlPanel
 import tool.xfy9326.schedule.ui.dialog.UpgradeDialog
 import tool.xfy9326.schedule.ui.vm.ScheduleViewModel
 import tool.xfy9326.schedule.utils.*
-import tool.xfy9326.schedule.utils.ics.ScheduleICSHelper
-import tool.xfy9326.schedule.utils.view.DialogUtils
-import kotlin.math.max
-import kotlin.math.sqrt
+import tool.xfy9326.schedule.utils.view.NightModeViewUtils
 
 class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBinding>(), NavigationView.OnNavigationItemSelectedListener {
-    companion object {
-        private const val EXTRA_ANIMATE_NIGHT_MODE_CHANGED_BUNDLE = "ANIMATE_NIGHT_MODE_CHANGED_BUNDLE"
-        private const val EXTRA_SET_NIGHT_MODE = "SET_NIGHT_MODE"
-        private const val EXTRA_START_X = "START_X"
-        private const val EXTRA_START_Y = "START_Y"
-        private const val EXTRA_FINAL_RADIUS = "FINAL_RADIUS"
-    }
-
     override val vmClass = ScheduleViewModel::class
 
     private var scheduleViewPagerAdapter: ScheduleViewPagerAdapter? = null
 
-    private val requestCalendarPermission = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
-        if (PermissionUtils.checkGrantResults(it)) {
-            requireViewModel().syncToCalendar()
-        } else {
-            requireViewBinding().layoutSchedule.showSnackBar(R.string.calendar_permission_get_failed)
-        }
-    }
-    private val exportICSFile = registerForActivityResult(ActivityResultContracts.CreateDocument()) {
-        if (it != null) {
-            requireViewModel().exportICS(it)
-        } else {
-            requireViewModel().waitExportScheduleId.consume()
-            requireViewBinding().layoutSchedule.showSnackBar(R.string.output_file_cancel)
-        }
-    }
+    private val icsExportModule = ICSExportModule(this)
+    private val scheduleBackgroundModule = ScheduleBackgroundModule(this)
+    private val calendarSyncModule = CalendarSyncModule(this)
+    private val scheduleShareModule = ScheduleShareModule(this)
 
     override fun onCreateViewBinding() = ActivityScheduleBinding.inflate(layoutInflater)
 
@@ -89,13 +54,13 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
             refreshToolBarTime(it.first)
         }
         viewModel.nowDay.observe(this, ::updateDate)
-        viewModel.scheduleBackground.observe(this, ::onChangeScheduleBackground)
         viewModel.showWeekChanged.observeEvent(this) {
             updateShowWeekNum(it.first, it.second)
         }
+        scheduleBackgroundModule.init()
         viewModel.scrollToWeek.observeEvent(this, observer = ::scrollToWeek)
         viewModel.showScheduleControlPanel.observeEvent(this) {
-            ScheduleControlPanel.showDialog(supportFragmentManager, getCurrentShowWeekNum(), it.first, it.second)
+            ScheduleControlPanel.showDialog(supportFragmentManager, getCurrentShowWeekNum(), it.first, it.second, !it.third)
         }
         viewModel.showCourseDetailDialog.observeEvent(this) {
             CourseDetailDialog.showDialog(supportFragmentManager, it)
@@ -112,51 +77,25 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
                 moveTaskToBack(false)
             }
         }
-        viewModel.selectScheduleForExportingICS.observeEvent(this) {
-            DialogUtils.showScheduleSelectDialog(this, R.string.export_to_ics, it) { name, id ->
-                viewModel.waitExportScheduleId.write(id)
-                exportICSFile.launch(ScheduleICSHelper.createICSFileName(this, name))
-            }
-        }
-        viewModel.iceExportStatus.observeEvent(this) {
-            viewBinding.layoutSchedule.showSnackBar(if (it) R.string.output_file_success else R.string.output_file_failed)
-        }
-        viewModel.syncToCalendarStatus.observeEvent(this) {
-            if (it.success) {
-                if (it.failedAmount == 0) {
-                    viewBinding.layoutSchedule.showSnackBar(R.string.calendar_sync_success)
-                } else {
-                    viewBinding.layoutSchedule.showSnackBar(R.string.calendar_sync_failed, it.total, it.failedAmount)
-                }
-            } else {
-                viewBinding.layoutSchedule.showSnackBar(R.string.calendar_sync_error)
-            }
-        }
         viewModel.toolBarTintColor.observe(this, ::setToolBarTintColor)
         viewModel.useLightColorSystemBarColor.observe(this) {
-            // Light status bar in Android Window means status bar that used in light background, so the status bar color is black.
-            // For default, it's true in app theme.
             window.enableLightSystemBar(this, !it && !isUsingNightMode())
-        }
-        viewModel.scheduleShared.observeEvent(this) {
-            if (it == null) {
-                viewBinding.layoutSchedule.showSnackBar(R.string.generate_share_schedule_failed)
-            } else {
-                startActivity(IntentUtils.getShareImageIntent(this, it))
-            }
         }
         viewModel.onlineCourseImportEnabled.observe(this) {
             viewBinding.navSchedule.menu.findItem(R.id.menu_navOnlineCourseImport)?.isVisible = it
         }
+        icsExportModule.init()
+        calendarSyncModule.init()
+        scheduleShareModule.init()
     }
 
     override fun onInitView(viewBinding: ActivityScheduleBinding, viewModel: ScheduleViewModel) {
-        setupDrawer(viewBinding)
-        checkNightModeChangedAnimation()
+        setupDrawer(viewBinding, viewModel)
+        NightModeViewUtils.checkNightModeChangedAnimation(this, viewBinding, viewModel)
 
         viewBinding.viewPagerSchedulePanel.registerOnPageChangeCallback(ScheduleViewPagerChangeCallback())
 
-        viewBinding.layoutScheduleDateInfoBar.setOnClickListener {
+        viewBinding.layoutScheduleDateInfoBar.setOnSingleClickListener {
             viewModel.scrollToCurrentWeekNum()
         }
 
@@ -169,6 +108,10 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
                     layoutParams.updateMargins(top = systemWindowInsetTop)
                 }
             }.consumeSystemWindowInsets().toWindowInsets()
+        }
+
+        ScheduleControlPanel.addScrollToWeekListener(supportFragmentManager, this) {
+            scrollToWeek(it)
         }
     }
 
@@ -192,10 +135,7 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.menu_scheduleControlPanel -> requireViewModel().showScheduleControlPanel()
-            R.id.menu_scheduleShare -> {
-                requireViewBinding().layoutSchedule.showSnackBar(R.string.generating_share_schedule)
-                requireViewModel().shareScheduleImage(getCurrentShowWeekNum(), resources.displayMetrics.widthPixels)
-            }
+            R.id.menu_scheduleShare -> scheduleShareModule.shareSchedule(getCurrentShowWeekNum())
         }
         return super.onOptionsItemSelected(item)
     }
@@ -212,11 +152,12 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
         var delayCloseDrawer = true
         when (item.itemId) {
             R.id.menu_navOnlineCourseImport -> startActivity<OnlineCourseImportActivity>()
-            R.id.menu_navCourseExportICS -> requireViewModel().selectScheduleForExportingICS()
+            R.id.menu_navCourseExportICS -> {
+                icsExportModule.requestExport()
+                delayCloseDrawer = false
+            }
             R.id.menu_navSyncToCalendar -> {
-                withShownCalendarSyncAttention {
-                    syncScheduleToCalendar()
-                }
+                calendarSyncModule.syncCalendar()
                 delayCloseDrawer = false
             }
             R.id.menu_navScheduleManage -> startActivity<ScheduleManageActivity>()
@@ -232,43 +173,6 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
             requireViewBinding().drawerSchedule.closeDrawers()
         }
         return true
-    }
-
-    private fun withShownCalendarSyncAttention(block: () -> Unit) {
-        lifecycleScope.launch {
-            if (AppDataStore.hasShownCalendarSyncAttention()) {
-                block()
-            } else {
-                DialogUtils.showCalendarSyncAttentionDialog(this@ScheduleActivity) {
-                    block()
-                }
-            }
-        }
-    }
-
-    private fun syncScheduleToCalendar() {
-        lifecycleScope.launch {
-            if (PermissionUtils.checkCalendarPermission(this@ScheduleActivity, requestCalendarPermission)) {
-                requireViewModel().syncToCalendar()
-            }
-        }
-    }
-
-    private fun onChangeScheduleBackground(bundle: ScheduleDataStore.ScheduleBackgroundBuildBundle?) {
-        requireViewBinding().imageViewScheduleBackground.apply {
-            if (bundle == null) {
-                setImageDrawable(null)
-            } else {
-                scaleType = when (bundle.scareType) {
-                    ImageScareType.FIT_CENTER -> ImageView.ScaleType.FIT_CENTER
-                    ImageScareType.CENTER_CROP -> ImageView.ScaleType.CENTER_CROP
-                    ImageScareType.CENTER_INSIDE -> ImageView.ScaleType.CENTER_INSIDE
-                }
-                load(bundle.file) {
-                    if (bundle.useAnim) crossfade(true)
-                }
-            }
-        }
     }
 
     private fun setToolBarTintColor(color: Int?) {
@@ -310,30 +214,14 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
         }
     }
 
-    private fun setupDrawer(viewBinding: ActivityScheduleBinding) {
+    private fun setupDrawer(viewBinding: ActivityScheduleBinding, viewModel: ScheduleViewModel) {
         viewBinding.navSchedule.apply {
             setNavigationItemSelectedListener(this@ScheduleActivity)
             getChildAt(0)?.isVerticalScrollBarEnabled = false
-            LayoutNavHeaderBinding.bind(getHeaderView(0)).buttonNightModeChange.setOnClickListener {
-                if (requireViewModel().nightModeChanging.compareAndSet(false, true)) {
+            LayoutNavHeaderBinding.bind(getHeaderView(0)).buttonNightModeChange.setOnSingleClickListener {
+                if (it != null && requireViewModel().nightModeChanging.compareAndSet(false, true)) {
                     it.performHapticFeedback(HapticFeedbackConstants.CONTEXT_CLICK)
-                    lifecycleScope.launch(Dispatchers.Default) {
-                        val manuallyChangeNightMode = AppSettingsDataStore.nightModeTypeFlow.first() == NightMode.FOLLOW_SYSTEM
-                        val newMode = if (isUsingNightMode()) {
-                            prepareAnimateNightModeChanged(it, false)
-                            NightMode.DISABLED
-                        } else {
-                            prepareAnimateNightModeChanged(it, true)
-                            NightMode.ENABLED
-                        }.also { mode ->
-                            AppSettingsDataStore.setNightModeType(mode)
-                        }.modeInt
-                        launch(Dispatchers.Main.immediate) {
-                            if (manuallyChangeNightMode) showToast(R.string.manually_change_night_mode)
-                            window.setWindowAnimations(R.style.AppTheme_NightModeTransitionAnimation)
-                            AppCompatDelegate.setDefaultNightMode(newMode)
-                        }
-                    }
+                    NightModeViewUtils.requestNightModeChange(this@ScheduleActivity, viewBinding, viewModel, it)
                 }
             }
         }
@@ -345,91 +233,6 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
             viewBinding.drawerSchedule.addDrawerListener(this)
         }
     }
-
-    private fun prepareAnimateNightModeChanged(animCenterView: View, setNightMode: Boolean) {
-        requireViewBinding().apply {
-            val startX = animCenterView.x + animCenterView.measuredWidth / 2f
-            val startY = animCenterView.y + animCenterView.measuredHeight / 2f
-            val viewWidth = layoutScheduleRoot.measuredWidth
-            val viewHeight = layoutScheduleRoot.measuredHeight
-
-            requireViewModel().nightModeChangeOldSurface.write(window.decorView.drawToBitmap())
-
-            val finalRadius =
-                max(sqrt((viewWidth - startX) * (viewWidth - startX) + (viewHeight - startY) * (viewHeight - startY)),
-                    sqrt(startX * startX + (viewHeight - startY) * (viewHeight - startY)))
-
-            intent.putExtra(EXTRA_ANIMATE_NIGHT_MODE_CHANGED_BUNDLE, bundleOf(
-                EXTRA_START_X to startX,
-                EXTRA_START_Y to startY,
-                EXTRA_FINAL_RADIUS to finalRadius,
-                EXTRA_SET_NIGHT_MODE to setNightMode
-            ))
-        }
-    }
-
-    private fun checkNightModeChangedAnimation() {
-        val animationParams = intent?.getBundleExtra(EXTRA_ANIMATE_NIGHT_MODE_CHANGED_BUNDLE)
-        val nightModeChangeButton = LayoutNavHeaderBinding.bind(requireViewBinding().navSchedule.getHeaderView(0)).buttonNightModeChange
-        if (animationParams != null) {
-            intent.removeExtra(EXTRA_ANIMATE_NIGHT_MODE_CHANGED_BUNDLE)
-            animateNightModeChanged(
-                nightModeChangeButton,
-                animationParams.getFloat(EXTRA_START_X),
-                animationParams.getFloat(EXTRA_START_Y),
-                animationParams.getFloat(EXTRA_FINAL_RADIUS),
-                animationParams.getBoolean(EXTRA_SET_NIGHT_MODE)
-            )
-        } else {
-            nightModeChangeButton.setImageResource(getNightModeIcon(isUsingNightMode()))
-        }
-    }
-
-    private fun animateNightModeChanged(button: AppCompatImageButton, startX: Float, startY: Float, finalRadius: Float, setNightMode: Boolean) {
-        requireViewModel().nightModeChangeOldSurface.read()?.let { oldSurface ->
-
-            requireViewBinding().apply {
-                imageViewNightModeChangeMask.setImageBitmap(oldSurface)
-                imageViewNightModeChangeMask.isVisible = true
-                drawerSchedule.isVisible = false
-                // Original button image
-                button.setImageResource(getNightModeIcon(!setNightMode))
-
-                val animationDuration = resources.getInteger(android.R.integer.config_mediumAnimTime).toLong()
-
-                layoutScheduleRoot.postOnAnimation {
-                    button.animate().scaleX(0f).scaleY(0f).setDuration(animationDuration / 2).withEndAction {
-                        button.setImageResource(getNightModeIcon(setNightMode))
-                        button.animate().scaleX(1f).scaleY(1f).setDuration(animationDuration / 2).start()
-                    }.start()
-
-                    ViewAnimationUtils.createCircularReveal(drawerSchedule, startX.toInt(), startY.toInt(), 0f, finalRadius).apply {
-                        duration = animationDuration
-                        interpolator = AccelerateInterpolator()
-
-                        doOnEnd {
-                            imageViewNightModeChangeMask.isVisible = false
-                            drawerSchedule.background = null
-                            imageViewNightModeChangeMask.setImageDrawable(null)
-                            oldSurface.recycle()
-                            requireViewModel().nightModeChanging.set(false)
-                        }
-
-                        drawerSchedule.background = getDefaultBackgroundColor().toDrawable()
-                        drawerSchedule.isVisible = true
-                    }.start()
-                }
-            }
-        }
-    }
-
-    @DrawableRes
-    private fun getNightModeIcon(nightMode: Boolean) =
-        if (nightMode) {
-            R.drawable.ic_day_24
-        } else {
-            R.drawable.ic_dark_mode_24
-        }
 
     private fun scrollToWeek(weekNum: Int) {
         requireViewBinding().viewPagerSchedulePanel.currentItem = weekNum - 1

@@ -6,11 +6,14 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import lib.xfy9326.livedata.MutableEventLiveData
 import lib.xfy9326.livedata.MutableNotifyLiveData
+import lib.xfy9326.livedata.postEvent
 import lib.xfy9326.livedata.postNotify
 import tool.xfy9326.schedule.content.CourseImportConfigManager
 import tool.xfy9326.schedule.content.beans.JSConfig
 import tool.xfy9326.schedule.data.AppDataStore
+import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.ui.vm.base.AbstractViewModel
 
 class OnlineCourseImportViewModel : AbstractViewModel() {
@@ -27,6 +30,7 @@ class OnlineCourseImportViewModel : AbstractViewModel() {
     val jsConfigExistWarning = configManager.jsConfigExistWarning
 
     val onlineImportAttention = MutableNotifyLiveData()
+    val launchJSConfig = MutableEventLiveData<Pair<JSConfig, Boolean>>()
 
     override fun onViewInitialized(firstInitialize: Boolean) {
         tryShowOnlineImportAttention()
@@ -41,6 +45,12 @@ class OnlineCourseImportViewModel : AbstractViewModel() {
     fun hasReadOnlineImportAttention() {
         viewModelScope.launch(Dispatchers.IO) {
             AppDataStore.setReadOnlineImportAttention(true)
+        }
+    }
+
+    fun launchJSConfig(jsConfig: JSConfig) {
+        viewModelScope.launch(Dispatchers.IO) {
+            launchJSConfig.postEvent(jsConfig to AppSettingsDataStore.jsCourseImportEnableNetworkFlow.first())
         }
     }
 

@@ -63,7 +63,7 @@
     <string name="course_list_num">第%1$d节课</string>
     <string name="course_list_num_simple">第%1$d节</string>
     <string name="save">保存</string>
-    <string name="schedule_time_list">所有课程时间</string>
+    <string name="schedule_time_list">所有课程时间（点击时间进行编辑）</string>
     <string name="long_click_to_set_current_schedule">Tips：长按以切换到该课表</string>
     <string name="swipe_to_delete_course">Tips：侧滑以删除课程</string>
     <string name="course_cost_time_same_mode">所有课程上课时间相等</string>
@@ -377,6 +377,8 @@
     <string name="js_course_import_enable_network_sum">注：开启后将可能导致安全问题，慎用！</string>
     <string name="advanced_function_alert">是否启用高级功能</string>
     <string name="advanced_function_alert_msg">\u3000\u3000开启此功能表示您已经知晓\"该功能可能会导致的安全问题\"。若您继续开启此功能，所导致的任何问题本软件不负任何责任！</string>
+    <string name="js_course_import_enable_network_title">该课程导入选项要求联网功能</string>
+    <string name="js_course_import_enable_network_msg">\u3000\u3000正常情况下JS课程导入脚本进行课程解析时并不需要联网运行，但是该脚本请求联网运行基于JS的课程解析，这有可能导致安全问题。\n\u3000\u3000若您了解以上风险并执意要启用JS的联网运行功能，请在\"设置-课程导入\"中启用\"允许基于JS的课程导入脚本联网\"功能！</string>
 
     <string name="js_config_read_failed">配置文件读取错误！</string>
     <string name="js_config_invalid">导入的配置文件不合法！</string>

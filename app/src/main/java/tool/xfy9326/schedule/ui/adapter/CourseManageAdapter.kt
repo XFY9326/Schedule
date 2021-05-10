@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import tool.xfy9326.schedule.beans.Course
 import tool.xfy9326.schedule.databinding.ItemCourseBinding
+import tool.xfy9326.schedule.kt.setOnSingleClickListener
 import tool.xfy9326.schedule.ui.recyclerview.AdvancedDividerItemDecoration
 import tool.xfy9326.schedule.ui.recyclerview.BaseDifferItemCallBack
 import tool.xfy9326.schedule.ui.recyclerview.SwipeListViewBindingAdapter
@@ -30,7 +31,7 @@ class CourseManageAdapter : SwipeListViewBindingAdapter<Course, ItemCourseBindin
             text = element.name
         }
         binding.imageViewCourseColor.imageTintList = ColorStateList.valueOf(element.color)
-        binding.layoutCourseItem.setOnClickListener {
+        binding.layoutCourseItem.setOnSingleClickListener {
             onCourseEditListener?.invoke(element)
         }
     }

@@ -4,6 +4,7 @@ import lib.xfy9326.livedata.observeNotify
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.ScheduleWrapper
 import tool.xfy9326.schedule.databinding.ActivityScheduleManageBinding
+import tool.xfy9326.schedule.kt.setOnSingleClickListener
 import tool.xfy9326.schedule.kt.showSnackBar
 import tool.xfy9326.schedule.kt.startActivity
 import tool.xfy9326.schedule.ui.activity.base.ViewModelActivity
@@ -37,7 +38,7 @@ class ScheduleManageActivity : ViewModelActivity<ScheduleManageViewModel, Activi
     }
 
     override fun onInitView(viewBinding: ActivityScheduleManageBinding, viewModel: ScheduleManageViewModel) {
-        viewBinding.fabAddSchedule.setOnClickListener {
+        viewBinding.fabAddSchedule.setOnSingleClickListener {
             startActivity<ScheduleEditActivity>()
         }
     }

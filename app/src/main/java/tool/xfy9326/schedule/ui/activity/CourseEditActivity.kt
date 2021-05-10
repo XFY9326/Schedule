@@ -14,6 +14,7 @@ import tool.xfy9326.schedule.beans.CourseTime
 import tool.xfy9326.schedule.databinding.ActivityCourseEditBinding
 import tool.xfy9326.schedule.kt.getText
 import tool.xfy9326.schedule.kt.hideKeyboard
+import tool.xfy9326.schedule.kt.setOnSingleClickListener
 import tool.xfy9326.schedule.kt.showSnackBar
 import tool.xfy9326.schedule.ui.activity.base.ViewModelActivity
 import tool.xfy9326.schedule.ui.adapter.CourseTimeAdapter
@@ -78,10 +79,10 @@ class CourseEditActivity : ViewModelActivity<CourseEditViewModel, ActivityCourse
     override fun onInitView(viewBinding: ActivityCourseEditBinding, viewModel: CourseEditViewModel) {
         courseTimeAdapter.setOnCourseTimeEditListener(::editCourseTime)
         courseTimeAdapter.setOnCourseTimeDeleteListener(::deleteCourseTime)
-        viewBinding.fabAddCourseTime.setOnClickListener {
+        viewBinding.fabAddCourseTime.setOnSingleClickListener {
             viewModel.editCourseTime(currentEditScheduleId)
         }
-        viewBinding.buttonCourseColorEdit.setOnClickListener {
+        viewBinding.buttonCourseColorEdit.setOnSingleClickListener {
             DialogUtils.showColorPickerDialog(this, R.string.course_color_edit, viewModel.editCourse.color)
         }
     }
@@ -127,7 +128,7 @@ class CourseEditActivity : ViewModelActivity<CourseEditViewModel, ActivityCourse
     override fun onBackPressed() {
         updateTextData()
         if (requireViewModel().hasDataChanged()) {
-            Snackbar.make(requireViewBinding().layoutCourseEdit, R.string.ask_whether_exit_without_save, Snackbar.LENGTH_SHORT)
+            Snackbar.make(requireViewBinding().layoutCourseEdit, R.string.ask_whether_exit_without_save, Snackbar.LENGTH_LONG)
                 .setActionTextColor(Color.RED)
                 .setAction(android.R.string.ok) {
                     super.onBackPressed()
@@ -184,7 +185,7 @@ class CourseEditActivity : ViewModelActivity<CourseEditViewModel, ActivityCourse
             courseTimeAdapter.submitList(newList)
         }
 
-        Snackbar.make(requireViewBinding().layoutCourseEdit, R.string.course_time_delete_success, Snackbar.LENGTH_SHORT)
+        Snackbar.make(requireViewBinding().layoutCourseEdit, R.string.course_time_delete_success, Snackbar.LENGTH_LONG)
             .setActionTextColor(Color.RED)
             .setAction(R.string.recover) {
                 requireViewModel().editCourse.apply {

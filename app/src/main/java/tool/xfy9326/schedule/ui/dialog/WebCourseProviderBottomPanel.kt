@@ -11,6 +11,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.databinding.DialogWebCourseProviderBottomPanelBinding
 import tool.xfy9326.schedule.kt.requireOwner
+import tool.xfy9326.schedule.kt.setOnSingleClickListener
 
 class WebCourseProviderBottomPanel : BottomSheetDialogFragment() {
     companion object {
@@ -36,11 +37,11 @@ class WebCourseProviderBottomPanel : BottomSheetDialogFragment() {
             setContentView(binding.root)
 
             binding.textViewCourseAdapterAuthor.text = getString(R.string.adapter_author, authorName)
-            binding.buttonImportCourseToNewSchedule.setOnClickListener {
+            binding.buttonImportCourseToNewSchedule.setOnSingleClickListener {
                 requireOwner<BottomPanelActionListener>()?.onImportCourseToSchedule(false)
                 dismiss()
             }
-            binding.buttonImportCourseToCurrentSchedule.setOnClickListener {
+            binding.buttonImportCourseToCurrentSchedule.setOnSingleClickListener {
                 requireOwner<BottomPanelActionListener>()?.onImportCourseToSchedule(true)
                 dismiss()
             }
@@ -51,7 +52,7 @@ class WebCourseProviderBottomPanel : BottomSheetDialogFragment() {
 
     override fun onStart() {
         super.onStart()
-        dialog?.window?.setDimAmount(0f)
+        requireDialog().window?.setDimAmount(0f)
     }
 
     override fun onDismiss(dialog: DialogInterface) {

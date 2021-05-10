@@ -49,8 +49,8 @@ fun Dialog.setWindowWidthPercent(widthPercent: Double): Int? {
         val width = (it.widthPixels * widthPercent).toInt()
         window?.apply {
             setLayout(width, ViewGroup.LayoutParams.WRAP_CONTENT)
+            return width
         }
-        return width
     }
     return null
 }
@@ -113,6 +113,8 @@ fun Editable?.getText(): String? {
     }
 }
 
+// Light status bar in Android Window means status bar that used in light background, so the status bar color is black.
+// For default, it's true in app theme.
 @Suppress("DEPRECATION")
 fun Window.enableLightSystemBar(context: Context, enabled: Boolean) {
     when {
@@ -160,17 +162,15 @@ fun Menu.setIconTint(@ColorInt colorTint: Int?) {
     }
 }
 
-fun View.removeSelf() = (parent as? ViewGroup)?.removeView(this)
+fun View.removeSelf() = parent.tryCast<ViewGroup?>()?.removeView(this)
 
 fun WebView.bindLifeCycle(lifecycleOwner: LifecycleOwner) {
     lifecycleOwner.lifecycle.addObserver(object : DefaultLifecycleObserver {
         override fun onResume(owner: LifecycleOwner) {
             onResume()
-            resumeTimers()
         }
 
         override fun onPause(owner: LifecycleOwner) {
-            pauseTimers()
             onPause()
         }
 

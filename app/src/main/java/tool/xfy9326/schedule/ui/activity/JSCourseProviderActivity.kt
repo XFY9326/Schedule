@@ -20,7 +20,7 @@ import tool.xfy9326.schedule.utils.view.DialogUtils
 
 class JSCourseProviderActivity : AbstractWebCourseProviderActivity<String, JSCourseProvider, JSCourseParser, JSCourseProviderViewModel>(),
     FullScreenLoadingDialog.OnRequestCancelListener {
-    private val loadingController = FullScreenLoadingDialog.createControllerInstance(this)
+    private val loadingController by lazy { FullScreenLoadingDialog.createControllerInstance(this, supportFragmentManager) }
     private val enableJSNetwork = runBlocking { AppSettingsDataStore.jsCourseImportEnableNetworkFlow.first() }
 
     override val vmClass = JSCourseProviderViewModel::class
@@ -54,13 +54,13 @@ class JSCourseProviderActivity : AbstractWebCourseProviderActivity<String, JSCou
 
     override fun onReadyImportCourse() {
         loadingController.show()
-        if (!enableJSNetwork) {
+        if (!(requireViewModel().isRequireNetwork && enableJSNetwork)) {
             fragmentContact.setWebViewConnection(false)
         }
     }
 
     override fun onCourseImportFinish(result: CourseProviderViewModel.ImportResult, editScheduleId: Long?) {
-        if (!enableJSNetwork) {
+        if (!(requireViewModel().isRequireNetwork && enableJSNetwork)) {
             fragmentContact.setWebViewConnection(true)
         } else {
             fragmentContact.refresh()

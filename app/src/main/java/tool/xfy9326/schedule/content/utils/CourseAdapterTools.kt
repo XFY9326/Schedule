@@ -7,6 +7,9 @@ import tool.xfy9326.schedule.kt.tryCast
 import java.io.*
 import java.security.MessageDigest
 
+private const val CHAR_ZERO = '0'
+private const val CHAR_ONE = '1'
+
 fun BooleanArray.arrangeWeekNum(): BooleanArray {
     var newSize = size
     for (i in size - 1 downTo 0) {
@@ -29,6 +32,20 @@ fun BooleanArray.hasCourse(num: Int): Boolean {
         this[index]
     } else {
         false
+    }
+}
+
+fun BooleanArray.serializeToString(): String {
+    return buildString(size) {
+        this@serializeToString.forEach { b ->
+            append(if (b) CHAR_ONE else CHAR_ZERO)
+        }
+    }
+}
+
+fun String.deserializeToBooleanArray(): BooleanArray {
+    return BooleanArray(length) { p ->
+        this[p] == CHAR_ONE
     }
 }
 

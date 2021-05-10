@@ -7,6 +7,7 @@ import android.view.*
 import android.view.animation.AnimationUtils
 import android.webkit.*
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
@@ -176,7 +177,7 @@ class WebCourseProviderFragment : ViewBindingFragment<FragmentWebCourseProviderB
     }
 
     private fun changeProgressBar(newProgress: Int) {
-        if (isAdded) {
+        lifecycleScope.launchWhenStarted {
             requireViewBinding().progressBarWebCourseProvider.apply {
                 visibility = if (newProgress != 100) View.VISIBLE else View.INVISIBLE
                 progress = newProgress
@@ -185,7 +186,7 @@ class WebCourseProviderFragment : ViewBindingFragment<FragmentWebCourseProviderB
     }
 
     private fun showBottomPanel() {
-        if (isAdded) {
+        lifecycleScope.launchWhenStarted {
             requireViewBinding().buttonWebCourseProviderPanel.apply {
                 isVisible = false
                 startAnimation(hideBottomPanelAnimation)
@@ -199,7 +200,7 @@ class WebCourseProviderFragment : ViewBindingFragment<FragmentWebCourseProviderB
     }
 
     override fun onBottomPanelDismiss() {
-        if (isAdded) {
+        lifecycleScope.launchWhenStarted {
             requireViewBinding().buttonWebCourseProviderPanel.apply {
                 isVisible = true
                 startAnimation(showBottomPanelAnimation)
@@ -220,21 +221,25 @@ class WebCourseProviderFragment : ViewBindingFragment<FragmentWebCourseProviderB
     }
 
     override fun evaluateJavascript(content: String, callback: ((String) -> Unit)?) {
-        if (isAdded) {
+        lifecycleScope.launchWhenStarted {
             requireViewBinding().webViewWebCourseProvider.evaluateJavascript(content, callback)
         }
     }
 
     override fun refresh() {
-        requireViewBinding().webViewWebCourseProvider.reload()
+        lifecycleScope.launchWhenStarted {
+            requireViewBinding().webViewWebCourseProvider.reload()
+        }
     }
 
     override fun setWebViewConnection(enabled: Boolean, autoRefresh: Boolean) {
-        isWebViewConnectionEnabled = enabled
-        requireViewBinding().webViewWebCourseProvider.apply {
-            settings.blockNetworkLoads = !enabled
-            if (autoRefresh) {
-                reload()
+        lifecycleScope.launchWhenStarted {
+            isWebViewConnectionEnabled = enabled
+            requireViewBinding().webViewWebCourseProvider.apply {
+                settings.blockNetworkLoads = !enabled
+                if (autoRefresh) {
+                    reload()
+                }
             }
         }
     }

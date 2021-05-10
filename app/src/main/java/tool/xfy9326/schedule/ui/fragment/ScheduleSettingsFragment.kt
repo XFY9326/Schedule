@@ -25,7 +25,7 @@ class ScheduleSettingsFragment : AbstractSettingsFragment() {
         private const val KEY_SELECT_SCHEDULE_BACKGROUND_IMAGE = "selectScheduleBackgroundImage"
     }
 
-    private lateinit var loadingDialogController: FullScreenLoadingDialog.Controller
+    private val loadingDialogController by lazy { FullScreenLoadingDialog.createControllerInstance(viewLifecycleOwner, childFragmentManager) }
     private val selectBackgroundImage = registerForActivityResult(ActivityResultContracts.GetContent()) {
         if (it == null) {
             requireRootLayout()?.showSnackBar(R.string.schedule_background_set_cancel)
@@ -52,8 +52,6 @@ class ScheduleSettingsFragment : AbstractSettingsFragment() {
     }
 
     override fun onPrefInit(savedInstanceState: Bundle?) {
-        loadingDialogController = FullScreenLoadingDialog.createControllerInstance(this)
-
         setOnPrefClickListener(KEY_SELECT_SCHEDULE_BACKGROUND_IMAGE) {
             selectBackgroundImage.launch(MIMEConst.MIME_IMAGE)
         }

@@ -11,17 +11,18 @@ import com.jaredrummler.android.colorpicker.ColorPickerDialogListener
 import lib.xfy9326.livedata.observeEvent
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.Schedule
-import tool.xfy9326.schedule.beans.ScheduleTime
-import tool.xfy9326.schedule.beans.WeekDay
 import tool.xfy9326.schedule.databinding.ActivityScheduleEditBinding
 import tool.xfy9326.schedule.kt.*
 import tool.xfy9326.schedule.ui.activity.base.ViewModelActivity
+import tool.xfy9326.schedule.ui.activity.module.ScheduleTermEditModule
+import tool.xfy9326.schedule.ui.activity.module.ScheduleTimeEditModule
+import tool.xfy9326.schedule.ui.activity.module.ScheduleTimeImportModule
+import tool.xfy9326.schedule.ui.activity.module.ScheduleWeekStartModule
 import tool.xfy9326.schedule.ui.adapter.ScheduleTimeAdapter
 import tool.xfy9326.schedule.ui.dialog.DatePickerDialog
 import tool.xfy9326.schedule.ui.dialog.TimePickerDialog
 import tool.xfy9326.schedule.ui.vm.ScheduleEditViewModel
 import tool.xfy9326.schedule.utils.view.DialogUtils
-import java.text.SimpleDateFormat
 import java.util.*
 
 class ScheduleEditActivity : ViewModelActivity<ScheduleEditViewModel, ActivityScheduleEditBinding>(),
@@ -30,17 +31,15 @@ class ScheduleEditActivity : ViewModelActivity<ScheduleEditViewModel, ActivitySc
     companion object {
         const val INTENT_EXTRA_SCHEDULE_ID = "EXTRA_SCHEDULE_ID"
         const val INTENT_EXTRA_IS_CURRENT_SCHEDULE = "EXTRA_IS_CURRENT_SCHEDULE"
-
-        private const val TAG_SCHEDULE_START_DATE = "SCHEDULE_START_DATE"
-        private const val TAG_SCHEDULE_END_DATE = "SCHEDULE_END_DATE"
-
-        private const val TAG_SCHEDULE_TIME_START_PREFIX = "TAG_SCHEDULE_TIME_START_"
-        private const val TAG_SCHEDULE_TIME_END_PREFIX = "TAG_SCHEDULE_TIME_END_"
     }
 
     override val vmClass = ScheduleEditViewModel::class
 
-    private val scheduleDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+    private val scheduleTimeImportModule = ScheduleTimeImportModule(this)
+    private val scheduleTermEditModule = ScheduleTermEditModule(this)
+    private val scheduleTimeEditModule = ScheduleTimeEditModule(this)
+    private val scheduleWeekStartModule = ScheduleWeekStartModule(this)
+
     private lateinit var scheduleTimeAdapter: ScheduleTimeAdapter
 
     override fun onCreateViewBinding() = ActivityScheduleEditBinding.inflate(layoutInflater)
@@ -51,6 +50,8 @@ class ScheduleEditActivity : ViewModelActivity<ScheduleEditViewModel, ActivitySc
 
         scheduleTimeAdapter = ScheduleTimeAdapter()
         viewBinding.recyclerViewScheduleTimeList.adapter = scheduleTimeAdapter
+        scheduleTimeImportModule.bindScheduleTimeAdapter(scheduleTimeAdapter)
+        scheduleTimeEditModule.bindScheduleTimeAdapter(scheduleTimeAdapter)
 
         viewModel.requestDBScheduleData(intent.getLongExtra(INTENT_EXTRA_SCHEDULE_ID, 0))
     }
@@ -58,67 +59,20 @@ class ScheduleEditActivity : ViewModelActivity<ScheduleEditViewModel, ActivitySc
     override fun onBindLiveData(viewBinding: ActivityScheduleEditBinding, viewModel: ScheduleEditViewModel) {
         viewModel.scheduleData.observe(this, ::applyScheduleToView)
         viewModel.scheduleSaveComplete.observeEvent(this, observer = ::onScheduleSaved)
-        viewModel.selectScheduleDate.observeEvent(this) {
-            DatePickerDialog.showDialog(
-                supportFragmentManager,
-                if (it.first) TAG_SCHEDULE_START_DATE else TAG_SCHEDULE_END_DATE,
-                it.second,
-                it.third.calWeekDay
-            )
-        }
         viewModel.scheduleSaveFailed.observeEvent(this) {
             viewBinding.layoutScheduleEdit.showSnackBar(it.getText(this))
         }
-        viewModel.loadAllSchedules.observeEvent(this) {
-            if (it.isEmpty()) {
-                viewBinding.layoutScheduleEdit.showSnackBar(R.string.empty_schedule_list)
-            } else {
-                DialogUtils.showScheduleSelectDialog(this, R.string.import_times_from_other_schedule, it) { _, id ->
-                    viewModel.importScheduleTimes(id)
-                }
-            }
-        }
-        viewModel.importScheduleTimes.observeEvent(this) {
-            if (it == null) {
-                viewBinding.layoutScheduleEdit.showSnackBar(R.string.schedule_time_import_failed)
-            } else {
-                viewModel.editSchedule.times = it
-                scheduleTimeAdapter.submitList(it.toList())
-                viewBinding.layoutScheduleEdit.showSnackBar(R.string.schedule_time_import_success)
-            }
-        }
+
+        scheduleTimeImportModule.init()
+        scheduleTimeEditModule.init()
+        scheduleTermEditModule.init()
+        scheduleWeekStartModule.init()
     }
 
     override fun onInitView(viewBinding: ActivityScheduleEditBinding, viewModel: ScheduleEditViewModel) {
         viewBinding.recyclerViewScheduleTimeList.itemAnimator = null
-        scheduleTimeAdapter.setOnScheduleTimeEditListener(::selectScheduleTime)
 
-        viewBinding.checkBoxScheduleTimeCourseTimeSame.isChecked = viewModel.scheduleTimeCourseTimeSame
-        viewBinding.sliderScheduleCourseCostTime.value = viewModel.courseCostTime.toFloat()
-        viewBinding.sliderScheduleBreakCostTime.value = viewModel.breakCostTime.toFloat()
-
-        viewBinding.layoutScheduleWeekStart.setOnClickListener {
-            showWeekStartSelectDialog()
-        }
-        viewBinding.buttonScheduleStartDateEdit.setOnClickListener {
-            viewModel.selectScheduleDate(true, viewModel.editSchedule.startDate)
-        }
-        viewBinding.buttonScheduleEndDateEdit.setOnClickListener {
-            viewModel.selectScheduleDate(false, viewModel.editSchedule.endDate)
-        }
-        viewBinding.sliderScheduleCourseCostTime.setOnSlideValueSetListener {
-            updateCourseCostTime(it.toInt(), false)
-        }
-        viewBinding.sliderScheduleBreakCostTime.setOnSlideValueSetListener {
-            updateBreakCostTime(it.toInt(), false)
-        }
-        viewBinding.sliderScheduleTimeNum.setOnSlideValueSetListener {
-            updateCourseNum(it.toInt(), false)
-        }
-        viewBinding.checkBoxScheduleTimeCourseTimeSame.setOnCheckedChangeListener { _, isChecked ->
-            viewModel.scheduleTimeCourseTimeSame = isChecked
-        }
-        viewBinding.buttonScheduleColorEdit.setOnClickListener {
+        viewBinding.buttonScheduleColorEdit.setOnSingleClickListener {
             DialogUtils.showColorPickerDialog(this, R.string.schedule_color_edit, viewModel.editSchedule.color)
         }
     }
@@ -165,7 +119,7 @@ class ScheduleEditActivity : ViewModelActivity<ScheduleEditViewModel, ActivitySc
                 saveSchedule()
             }
             R.id.menu_scheduleEditDelete -> deleteScheduleAttention()
-            R.id.menu_scheduleEditImport -> requireViewModel().loadAllSchedules()
+            R.id.menu_scheduleEditImport -> scheduleTimeImportModule.importScheduleTime()
         }
         return super.onOptionsItemSelected(item)
     }
@@ -178,7 +132,7 @@ class ScheduleEditActivity : ViewModelActivity<ScheduleEditViewModel, ActivitySc
     override fun onBackPressed() {
         updateTextData()
         if (requireViewModel().hasDataChanged()) {
-            Snackbar.make(requireViewBinding().layoutScheduleEdit, R.string.ask_whether_exit_without_save, Snackbar.LENGTH_SHORT)
+            Snackbar.make(requireViewBinding().layoutScheduleEdit, R.string.ask_whether_exit_without_save, Snackbar.LENGTH_LONG)
                 .setActionTextColor(Color.RED)
                 .setAction(android.R.string.ok) {
                     super.onBackPressed()
@@ -188,42 +142,8 @@ class ScheduleEditActivity : ViewModelActivity<ScheduleEditViewModel, ActivitySc
         }
     }
 
-    private fun showWeekStartSelectDialog() {
-        val selectedItem = when (requireViewModel().editSchedule.weekStart) {
-            WeekDay.MONDAY -> 0
-            WeekDay.SUNDAY -> 1
-            else -> error("Unsupported week start day")
-        }
-        var selectedWeekDay = requireViewModel().editSchedule.weekStart
-        MaterialAlertDialogBuilder(this).apply {
-            setTitle(R.string.schedule_week_start)
-            setSingleChoiceItems(R.array.first_day_of_week, selectedItem) { _, which ->
-                selectedWeekDay = when (which) {
-                    0 -> WeekDay.MONDAY
-                    1 -> WeekDay.SUNDAY
-                    else -> error("Unsupported week start day")
-                }
-            }
-            setNegativeButton(android.R.string.cancel, null)
-            setPositiveButton(android.R.string.ok) { _, _ ->
-                requireViewModel().editSchedule.weekStart = selectedWeekDay
-                updateWeekStartText(selectedWeekDay)
-            }
-        }.show(this)
-    }
-
     private fun updateTextData() {
         requireViewModel().editSchedule.name = requireViewBinding().editTextScheduleName.text.toString()
-    }
-
-    private fun updateWeekStartText(weekDay: WeekDay) {
-        requireViewBinding().textViewScheduleWeekStart.text = getStringArray(R.array.first_day_of_week)[
-                when (weekDay) {
-                    WeekDay.MONDAY -> 0
-                    WeekDay.SUNDAY -> 1
-                    else -> error("Unsupported week start day")
-                }
-        ]
     }
 
     private fun applyScheduleToView(schedule: Schedule) {
@@ -232,162 +152,30 @@ class ScheduleEditActivity : ViewModelActivity<ScheduleEditViewModel, ActivitySc
 
             editTextScheduleName.setText(schedule.name)
             sliderScheduleTimeNum.value = schedule.times.size.toFloat()
-            updateWeekStartText(schedule.weekStart)
+            scheduleWeekStartModule.updateWeekStartText(schedule.weekStart)
 
-            updateScheduleDate(true, schedule.startDate, false)
-            updateScheduleDate(false, schedule.endDate, false)
+            scheduleTermEditModule.updateScheduleDate(true, schedule.startDate, false)
+            scheduleTermEditModule.updateScheduleDate(false, schedule.endDate, false)
             updateScheduleColor(schedule.color)
 
             requireViewModel().apply {
-                updateCourseCostTime(courseCostTime, true)
-                updateBreakCostTime(breakCostTime, true)
-                updateCourseNum(schedule.times.size, true)
+                scheduleTimeEditModule.updateCourseCostTime(courseCostTime, true)
+                scheduleTimeEditModule.updateBreakCostTime(breakCostTime, true)
+                scheduleTimeEditModule.updateCourseNum(schedule.times.size, true)
             }
         }
     }
 
     override fun onDateSet(tag: String?, date: Date) {
-        if (tag == TAG_SCHEDULE_START_DATE) {
-            updateScheduleDate(true, date, true)
-        } else if (tag == TAG_SCHEDULE_END_DATE) {
-            updateScheduleDate(false, date, true)
-        }
+        scheduleTermEditModule.onDateSet(tag, date)
     }
 
     private fun updateScheduleColor(color: Int) {
         requireViewBinding().buttonScheduleColorEdit.imageTintList = ColorStateList.valueOf(color)
     }
 
-    private fun updateScheduleDate(isStart: Boolean, date: Date, updateEdit: Boolean) {
-        if (isStart) {
-            if (updateEdit) requireViewModel().editSchedule.startDate = date
-            requireViewBinding().textViewScheduleStartDate
-        } else {
-            if (updateEdit) requireViewModel().editSchedule.endDate = date
-            requireViewBinding().textViewScheduleEndDate
-        }.text = scheduleDateFormat.format(date)
-    }
-
-    private fun updateCourseCostTime(minute: Int, viewInit: Boolean) {
-        if (!viewInit) {
-            val breakCostTime = requireViewModel().breakCostTime
-            val times = requireViewModel().editSchedule.times
-            var last: ScheduleTime? = null
-            for (time in times) {
-                last?.endTimeMove(breakCostTime)?.let {
-                    time.startHour = it.first
-                    time.startMinute = it.second
-                }
-                time.setDuration(minute)
-                last = time
-            }
-            requireViewModel().courseCostTime = minute
-            scheduleTimeAdapter.notifyDataSetChanged()
-        }
-        requireViewBinding().textViewScheduleCourseCostTime.text = getString(R.string.minute, minute)
-    }
-
-    private fun updateBreakCostTime(minute: Int, viewInit: Boolean) {
-        if (!viewInit) {
-            val courseCostTime = requireViewModel().courseCostTime
-            val times = requireViewModel().editSchedule.times
-            var last: ScheduleTime? = null
-            for (time in times) {
-                last?.endTimeMove(minute)?.let {
-                    time.startHour = it.first
-                    time.startMinute = it.second
-                }
-                time.setDuration(courseCostTime)
-                last = time
-            }
-            requireViewModel().breakCostTime = minute
-            scheduleTimeAdapter.notifyDataSetChanged()
-        }
-        requireViewBinding().textViewScheduleBreakCostTime.text = getString(R.string.minute, minute)
-    }
-
-    private fun updateCourseNum(num: Int, viewInit: Boolean) {
-        if (!viewInit) {
-            val courseCostTime = requireViewModel().courseCostTime
-            val breakCostTime = requireViewModel().breakCostTime
-            val times = requireViewModel().editSchedule.times.toMutableList()
-            var differ = num - times.size
-            if (differ > 0) {
-                while (differ-- > 0) {
-                    times.add(times.last().createNew(breakCostTime, courseCostTime))
-                }
-            } else {
-                while (differ++ < 0) {
-                    times.removeLast()
-                }
-            }
-            times.let {
-                requireViewModel().editSchedule.times = it
-                scheduleTimeAdapter.submitList(it)
-            }
-            requireViewBinding().textViewScheduleTimeNum.text = getString(R.string.course_num, requireViewModel().editSchedule.times.size)
-        } else {
-            requireViewBinding().textViewScheduleTimeNum.text = getString(R.string.course_num, num)
-        }
-    }
-
-    private fun selectScheduleTime(index: Int, hour: Int, minute: Int, isStart: Boolean) {
-        if (!isStart && requireViewModel().scheduleTimeCourseTimeSame) {
-            requireViewBinding().layoutScheduleEdit.showSnackBar(R.string.course_cost_time_same_mode_warning)
-        } else {
-            TimePickerDialog.showDialog(
-                supportFragmentManager,
-                (if (isStart) TAG_SCHEDULE_TIME_START_PREFIX else TAG_SCHEDULE_TIME_END_PREFIX) + index,
-                hour, minute, true
-            )
-        }
-    }
-
     override fun onTimeSet(tag: String?, hourOfDay: Int, minute: Int) {
-        if (tag != null) {
-            if (tag.startsWith(TAG_SCHEDULE_TIME_START_PREFIX)) {
-                tag.substringAfter(TAG_SCHEDULE_TIME_START_PREFIX).toIntOrNull()?.let { i ->
-                    requireViewModel().apply {
-                        val times = editSchedule.times
-                        if (scheduleTimeCourseTimeSame) {
-                            val courseCostTime = courseCostTime
-                            val breakCostTime = breakCostTime
-                            var last: ScheduleTime? = null
-                            for (j in i until times.size) {
-                                if (last != null) {
-                                    last.endTimeMove(breakCostTime).let {
-                                        times[j].startHour = it.first
-                                        times[j].startMinute = it.second
-                                    }
-                                } else {
-                                    times[i].startHour = hourOfDay
-                                    times[i].startMinute = minute
-                                }
-                                last?.endTimeMove(breakCostTime)?.let {
-                                    times[j].startHour = it.first
-                                    times[j].startMinute = it.second
-                                }
-                                times[j].setDuration(courseCostTime)
-                                last = times[j]
-                            }
-                            scheduleTimeAdapter.notifyItemRangeChanged(i, times.size - i)
-                        } else {
-                            times[i].startHour = hourOfDay
-                            times[i].startMinute = minute
-                            scheduleTimeAdapter.notifyItemChanged(i)
-                        }
-                    }
-                }
-            } else if (tag.startsWith(TAG_SCHEDULE_TIME_END_PREFIX)) {
-                tag.substringAfter(TAG_SCHEDULE_TIME_END_PREFIX).toIntOrNull()?.let { i ->
-                    requireViewModel().editSchedule.times[i].apply {
-                        endHour = hourOfDay
-                        endMinute = minute
-                        scheduleTimeAdapter.notifyItemChanged(i)
-                    }
-                }
-            }
-        }
+        scheduleTimeEditModule.onTimeSet(tag, hourOfDay, minute)
     }
 
     private fun deleteScheduleAttention() {

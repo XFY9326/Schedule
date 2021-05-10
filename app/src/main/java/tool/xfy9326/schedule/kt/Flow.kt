@@ -34,5 +34,4 @@ fun <T1, T2, R> Flow<T1>.combineTransform(combineTransform: suspend (T1) -> Flow
         }
     }
 
-fun <T> Flow<T>.asDistinctLiveData(): LiveData<T> =
-    asLiveData().distinctUntilChanged()
+fun <T> Flow<T>.asDistinctLiveData(): LiveData<T> = asLiveData().distinctUntilChanged()

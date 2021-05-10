@@ -3,17 +3,21 @@ package tool.xfy9326.schedule.ui.dialog
 import android.os.Bundle
 import android.view.*
 import android.widget.ProgressBar
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDialogFragment
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.core.os.bundleOf
+import androidx.core.view.updateMargins
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.transition.Fade
 import com.google.android.material.button.MaterialButton
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.kt.getDrawableCompat
 import tool.xfy9326.schedule.kt.requireOwner
@@ -23,11 +27,8 @@ class FullScreenLoadingDialog : AppCompatDialogFragment() {
         private val FRAGMENT_TAG = FullScreenLoadingDialog::class.simpleName
         private const val EXTRA_SHOW_CANCEL_BUTTON = "SHOW_CANCEL_BUTTON"
 
-        fun createControllerInstance(activity: AppCompatActivity) =
-            Controller(activity.lifecycleScope, activity.supportFragmentManager)
-
-        fun createControllerInstance(fragment: Fragment) =
-            Controller(fragment.lifecycleScope, fragment.childFragmentManager)
+        fun createControllerInstance(lifecycleOwner: LifecycleOwner, fragmentManager: FragmentManager) =
+            Controller(lifecycleOwner.lifecycleScope, fragmentManager)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,7 +61,7 @@ class FullScreenLoadingDialog : AppCompatDialogFragment() {
                         LinearLayoutCompat.LayoutParams.WRAP_CONTENT,
                         LinearLayoutCompat.LayoutParams.WRAP_CONTENT
                     ).apply {
-                        setMargins(0, marginTop, 0, 0)
+                        updateMargins(top = marginTop)
                     }
                     setText(android.R.string.cancel)
                     setOnClickListener {
@@ -75,7 +76,7 @@ class FullScreenLoadingDialog : AppCompatDialogFragment() {
 
     override fun onStart() {
         super.onStart()
-        dialog?.apply {
+        requireDialog().apply {
             setCancelable(false)
             setCanceledOnTouchOutside(false)
             window?.apply {
@@ -89,10 +90,7 @@ class FullScreenLoadingDialog : AppCompatDialogFragment() {
         fun onFullScreenLoadingDialogRequestCancel(): Boolean
     }
 
-    class Controller constructor(
-        private val lifeCycleScope: CoroutineScope,
-        private val fragmentManager: FragmentManager,
-    ) {
+    class Controller constructor(lifeCycleScope: CoroutineScope, private val fragmentManager: FragmentManager) : CoroutineScope by lifeCycleScope {
         companion object {
             private const val MIN_SHOW_TIME_MS = 500L
             private const val MIN_DELAY_MS = 200L
@@ -142,6 +140,7 @@ class FullScreenLoadingDialog : AppCompatDialogFragment() {
         }
 
         private fun showDialog(fragmentManager: FragmentManager, showCancel: Boolean) {
+            if (fragmentManager.findFragmentByTag(FRAGMENT_TAG) != null) return
             FullScreenLoadingDialog().apply {
                 arguments = bundleOf(
                     EXTRA_SHOW_CANCEL_BUTTON to showCancel
@@ -161,12 +160,10 @@ class FullScreenLoadingDialog : AppCompatDialogFragment() {
             hideJob = null
             mPostedHide = false
             if (!mPostedShow) {
-                showJob = lifeCycleScope.launch(Dispatchers.IO) {
+                showJob = launch {
                     delay(MIN_DELAY_MS)
-                    launch(Dispatchers.Main.immediate) {
-                        delayedShow(showCancel)
-                        showJob = null
-                    }
+                    delayedShow(showCancel)
+                    showJob = null
                 }
                 mPostedShow = true
             }
@@ -183,12 +180,10 @@ class FullScreenLoadingDialog : AppCompatDialogFragment() {
                 closeDialog(fragmentManager)
             } else {
                 if (!mPostedHide) {
-                    hideJob = lifeCycleScope.launch(Dispatchers.IO) {
+                    hideJob = launch {
                         delay(MIN_SHOW_TIME_MS - diff)
-                        launch(Dispatchers.Main.immediate) {
-                            delayedHide()
-                            hideJob = null
-                        }
+                        delayedHide()
+                        hideJob = null
                     }
                     mPostedHide = true
                 }

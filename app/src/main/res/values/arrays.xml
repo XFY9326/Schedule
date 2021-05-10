@@ -59,6 +59,7 @@
     </string-array>
 
     <string-array name="not_this_week_course_show_style_value_default">
+        <item>SHOW_NOT_THIS_WEEK_TEXT</item>
         <item>USE_TRANSPARENT_BACKGROUND</item>
     </string-array>
 </resources>

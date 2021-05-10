@@ -1,16 +1,16 @@
 package tool.xfy9326.schedule.ui.activity
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.webkit.WebChromeClient
-import android.webkit.WebResourceRequest
-import android.webkit.WebView
-import android.webkit.WebViewClient
+import android.webkit.*
+import androidx.activity.result.contract.ActivityResultContract
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.launch
@@ -31,6 +31,15 @@ class FeedbackActivity : ViewBindingActivity<ActivityFeedbackBinding>() {
             "clientVersion=${BuildConfig.VERSION_NAME}(${BuildConfig.VERSION_CODE})&osVersion=${Build.VERSION.RELEASE}(${Build.VERSION.SDK_INT})&device=${Build.BRAND}-${Build.MODEL}".toByteArray()
     }
 
+    private var filePathCallback: ValueCallback<Array<Uri>>? = null
+    private val choseFile = registerForActivityResult(WebViewSelectFile()) {
+        if (it == null) {
+            filePathCallback?.onReceiveValue(null)
+        } else {
+            filePathCallback?.onReceiveValue(arrayOf(it))
+        }
+    }
+
     override fun onCreateViewBinding() = ActivityFeedbackBinding.inflate(layoutInflater)
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -46,6 +55,18 @@ class FeedbackActivity : ViewBindingActivity<ActivityFeedbackBinding>() {
             webChromeClient = object : WebChromeClient() {
                 override fun onProgressChanged(view: WebView?, newProgress: Int) {
                     changeProgressBar(newProgress)
+                }
+
+                override fun onShowFileChooser(webView: WebView?, filePathCallback: ValueCallback<Array<Uri>>?, fileChooserParams: FileChooserParams?): Boolean {
+                    if (filePathCallback != null && fileChooserParams != null) {
+                        val intent = fileChooserParams.createIntent()
+                        if (intent != null) {
+                            this@FeedbackActivity.filePathCallback = filePathCallback
+                            choseFile.launch(intent)
+                            return true
+                        }
+                    }
+                    return false
                 }
             }
             webViewClient = object : WebViewClient() {
@@ -131,6 +152,29 @@ class FeedbackActivity : ViewBindingActivity<ActivityFeedbackBinding>() {
                 goBack()
             } else {
                 super.onBackPressed()
+            }
+        }
+    }
+
+    override fun onDestroy() {
+        filePathCallback = null
+        super.onDestroy()
+    }
+
+    private class WebViewSelectFile : ActivityResultContract<Intent, Uri?>() {
+        override fun createIntent(context: Context, input: Intent?): Intent {
+            if (input != null) {
+                return Intent(input)
+            } else {
+                error("Input is null!")
+            }
+        }
+
+        override fun parseResult(resultCode: Int, intent: Intent?): Uri? {
+            return if (resultCode == RESULT_OK && intent != null) {
+                intent.data
+            } else {
+                null
             }
         }
     }

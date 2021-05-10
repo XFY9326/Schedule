@@ -311,12 +311,15 @@
                 android:valueTo="120" />
 
             <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/layout_scheduleTimeCourseTimeSame"
+                style="@style/AppTheme.SelectableItemBackground"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
                 android:gravity="center_vertical"
                 android:paddingStart="10dp"
-                android:paddingEnd="10dp">
+                android:paddingTop="5dp"
+                android:paddingEnd="10dp"
+                android:paddingBottom="5dp">
 
                 <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="0dp"
@@ -351,7 +354,7 @@
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="18dp"
+                android:layout_marginTop="12dp"
                 android:gravity="center_vertical"
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp">

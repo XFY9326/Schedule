@@ -27,12 +27,8 @@ object PermissionUtils {
     private suspend fun checkPermission(context: Context, launcher: ActivityResultLauncher<Array<String>>, permissions: Array<String>): Boolean =
         withContext(Dispatchers.Main.immediate) {
             permissionRequestLock.withTryLock {
-                val invalidPermissions = ArrayList<String>()
-                for (permission in permissions) {
-                    if (ContextCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED
-                    ) {
-                        invalidPermissions.add(permission)
-                    }
+                val invalidPermissions = permissions.filter {
+                    ContextCompat.checkSelfPermission(context, it) != PackageManager.PERMISSION_GRANTED
                 }
                 return@withTryLock if (invalidPermissions.isEmpty()) {
                     true

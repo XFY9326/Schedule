@@ -6,6 +6,7 @@ import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.CourseTime
 import tool.xfy9326.schedule.databinding.ItemCourseTimeBinding
 import tool.xfy9326.schedule.kt.getStringArray
+import tool.xfy9326.schedule.kt.setOnSingleClickListener
 import tool.xfy9326.schedule.ui.recyclerview.ListViewBindingAdapter
 import tool.xfy9326.schedule.ui.viewholder.ViewBindingViewHolder
 import tool.xfy9326.schedule.utils.schedule.WeekNumPattern
@@ -40,10 +41,10 @@ class CourseTimeAdapter : ListViewBindingAdapter<CourseTime, ItemCourseTimeBindi
                 R.string.course_detail_location,
                 element.location ?: holder.viewContext.getString(R.string.undefined)
             )
-        holder.viewBinding.cardViewCourseTime.setOnClickListener {
+        holder.viewBinding.cardViewCourseTime.setOnSingleClickListener {
             onCourseTimeEditListener?.invoke(holder.adapterPosition, element)
         }
-        holder.viewBinding.buttonDeleteCourseTime.setOnClickListener {
+        holder.viewBinding.buttonDeleteCourseTime.setOnSingleClickListener {
             onCourseTimeDeleteListener?.invoke(holder.adapterPosition, element)
         }
     }

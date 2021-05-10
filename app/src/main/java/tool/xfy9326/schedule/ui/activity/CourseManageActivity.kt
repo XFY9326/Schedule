@@ -6,6 +6,7 @@ import lib.xfy9326.livedata.observeNotify
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.Course
 import tool.xfy9326.schedule.databinding.ActivityCourseManageBinding
+import tool.xfy9326.schedule.kt.setOnSingleClickListener
 import tool.xfy9326.schedule.kt.showSnackBar
 import tool.xfy9326.schedule.kt.startActivity
 import tool.xfy9326.schedule.ui.activity.base.ViewModelActivity
@@ -49,7 +50,7 @@ class CourseManageActivity : ViewModelActivity<CourseManageViewModel, ActivityCo
     }
 
     override fun onInitView(viewBinding: ActivityCourseManageBinding, viewModel: CourseManageViewModel) {
-        viewBinding.fabAddCourse.setOnClickListener {
+        viewBinding.fabAddCourse.setOnSingleClickListener {
             startActivity<CourseEditActivity> {
                 putExtra(CourseEditActivity.INTENT_EXTRA_SCHEDULE_ID, currentEditCourseScheduleId)
             }

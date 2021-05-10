@@ -63,7 +63,7 @@ object JSFileManager {
                         null
                     }
                 }
-                if (config == null || config.uuid != uuid) {
+                if (config == null || config.id != uuid) {
                     file.parentFile?.deleteRecursively()
                     null
                 } else {
@@ -75,19 +75,19 @@ object JSFileManager {
             }
         }?.map {
             if (!checkLocalJSConfigFiles(it)) {
-                deleteJSConfigFiles(it.uuid, true)
+                deleteJSConfigFiles(it.id, true)
             }
             it
         } ?: emptyList()
     }
 
     suspend fun checkLocalJSConfigFiles(config: JSConfig) = runOnlyResultIOJob {
-        PathManager.JSConfigs.asParentOf(config.uuid).walkTopDown().forEach {
+        PathManager.JSConfigs.asParentOf(config.id).walkTopDown().forEach {
             if (it.isFile && EXTENSION_DOWNLOAD.equals(it.extension, true)) it.deleteOnExit()
         }
-        if (getJSProviderFile(config.uuid, false).exists() && getJSParserFile(config.uuid, false).exists()) {
+        if (getJSProviderFile(config.id, false).exists() && getJSParserFile(config.id, false).exists()) {
             val jsDependencies = config.dependenciesJSUrls.map { it.md5() }
-            val dependenciesDir = getJSDependenciesDir(config.uuid)
+            val dependenciesDir = getJSDependenciesDir(config.id)
             val localJSDependencies =
                 if (dependenciesDir.exists()) {
                     dependenciesDir.listFiles { file -> file.isFile }?.map { it.nameWithoutExtension } ?: emptyList()
@@ -197,8 +197,8 @@ object JSFileManager {
     }
 
     suspend fun addNewJSConfig(jsConfig: JSConfig) = runOnlyResultIOJob {
-        deleteJSConfigFiles(jsConfig.uuid, false)
-        PathManager.JSConfigs.asParentOf(jsConfig.uuid, FILE_NAME_JS_CONFIG).withPreparedDir {
+        deleteJSConfigFiles(jsConfig.id, false)
+        PathManager.JSConfigs.asParentOf(jsConfig.id, FILE_NAME_JS_CONFIG).withPreparedDir {
             it.sink().useBuffer {
                 writeJSON(JSON, jsConfig)
                 true

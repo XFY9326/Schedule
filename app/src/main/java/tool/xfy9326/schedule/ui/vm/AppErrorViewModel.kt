@@ -5,17 +5,20 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import lib.xfy9326.livedata.MutableEventLiveData
 import lib.xfy9326.livedata.postEvent
-import tool.xfy9326.schedule.io.FileManager
+import lib.xfy9326.livedata.setEvent
+import tool.xfy9326.schedule.io.CrashFileManager
 import tool.xfy9326.schedule.ui.vm.base.AbstractViewModel
 
 class AppErrorViewModel : AbstractViewModel() {
     val crashLog = MutableEventLiveData<String?>()
 
-    fun loadCrashLogDetail(crashLogFileName: String?) = viewModelScope.launch(Dispatchers.IO) {
+    fun loadCrashLogDetail(crashLogFileName: String?) {
         if (crashLogFileName == null) {
-            crashLog.postEvent(null)
+            crashLog.setEvent(null)
         } else {
-            crashLog.postEvent(FileManager.readCrashLog(crashLogFileName))
+            viewModelScope.launch(Dispatchers.IO) {
+                crashLog.postEvent(CrashFileManager.readCrashLog(crashLogFileName))
+            }
         }
     }
 }
