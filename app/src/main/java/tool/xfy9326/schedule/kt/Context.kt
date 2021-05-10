@@ -104,7 +104,7 @@ fun <T> Fragment.requireOwner() = (parentFragment ?: requireActivity()).tryCast<
 
 fun BroadcastReceiver.goAsync(
     coroutineScope: CoroutineScope = GlobalScope,
-    dispatcher: CoroutineDispatcher = Dispatchers.Default,
+    dispatcher: CoroutineDispatcher = Dispatchers.Main.immediate,
     block: suspend () -> Unit,
 ) {
     val result = goAsync()

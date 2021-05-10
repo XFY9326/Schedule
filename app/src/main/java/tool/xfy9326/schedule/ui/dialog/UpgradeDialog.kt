@@ -24,13 +24,17 @@ import tool.xfy9326.schedule.json.upgrade.DownloadSource
 import tool.xfy9326.schedule.json.upgrade.UpdateInfo
 import tool.xfy9326.schedule.kt.APP_ID
 import tool.xfy9326.schedule.kt.setWindowWidthPercent
+import tool.xfy9326.schedule.kt.show
 import tool.xfy9326.schedule.kt.showToast
 import tool.xfy9326.schedule.tools.MIMEConst
 import tool.xfy9326.schedule.utils.DownloadUtils
+import tool.xfy9326.schedule.utils.IntentUtils
+import tool.xfy9326.schedule.utils.PermissionUtils
 
 class UpgradeDialog : AppCompatDialogFragment() {
     companion object {
         const val UPDATE_INFO = "UPDATE_INFO"
+        private const val EXTRA_DOWNLOAD_SOURCE = "DOWNLOAD_SOURCE"
 
         private val UPDATE_FRAGMENT_TAG = UpgradeDialog::class.simpleName
         private const val CONTENT_WIDTH_PERCENT = 0.9
@@ -51,10 +55,26 @@ class UpgradeDialog : AppCompatDialogFragment() {
     }
 
     private lateinit var updateInfo: UpdateInfo
+    private var selectedSource: DownloadSource? = null
+
+    private val packageInstallPermission = registerForActivityResult(IntentUtils.PackageInstallPermissionContact()) {
+        if (PermissionUtils.canInstallPackage(requireContext())) {
+            selectedSource?.let(::downloadFile)
+            selectedSource = null
+        } else {
+            showToast(R.string.package_install_permission_denied)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         updateInfo = requireArguments().getParcelable(UPDATE_INFO)!!
+        selectedSource = savedInstanceState?.getParcelable(EXTRA_DOWNLOAD_SOURCE)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.putParcelable(EXTRA_DOWNLOAD_SOURCE, selectedSource)
+        super.onSaveInstanceState(outState)
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?) = MaterialAlertDialogBuilder(requireContext()).apply {
@@ -89,7 +109,7 @@ class UpgradeDialog : AppCompatDialogFragment() {
                 updateInfo.downloadSource.size > 1 -> buildDownloadSourceMenu(it).show()
                 updateInfo.downloadSource.isNotEmpty() -> {
                     val source = updateInfo.downloadSource.first()
-                    downloadFile(source)
+                    withPackageInstallPermission(source, ::downloadFile)
                 }
                 else -> showToast(R.string.no_update_source)
             }
@@ -105,7 +125,7 @@ class UpgradeDialog : AppCompatDialogFragment() {
 
             setOnMenuItemClickListener {
                 val source = updateInfo.downloadSource[it.order]
-                downloadFile(source)
+                withPackageInstallPermission(source, ::downloadFile)
                 return@setOnMenuItemClickListener true
             }
         }
@@ -116,18 +136,55 @@ class UpgradeDialog : AppCompatDialogFragment() {
                 val title = getString(R.string.app_name)
                 val description = getString(R.string.downloading_update_description, BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE)
                 val fileName = "${APP_ID}_v${BuildConfig.VERSION_NAME}_${BuildConfig.VERSION_CODE}.apk"
-                val downloadId =
-                    DownloadUtils.requestDownloadFileDirectly(requireContext(), downloadSource.url, fileName, title, description, MIMEConst.MIME_APK)
+                val downloadId = DownloadUtils.requestDownloadFileDirectly(requireContext(), downloadSource.url, fileName, title, description, MIMEConst.MIME_APK)
                 if (downloadId == null) {
                     showToast(R.string.directly_download_failed)
                     DownloadUtils.requestDownloadFileByBrowser(requireContext(), downloadSource.url)
                 } else {
                     showToast(R.string.start_download_update)
+                    AppDataStore.setApkUpdateDownloadId(downloadId)
                 }
             } else {
                 DownloadUtils.requestDownloadFileByBrowser(requireContext(), downloadSource.url)
             }
         }
+    }
+
+    private fun withPackageInstallPermission(downloadSource: DownloadSource, block: (DownloadSource) -> Unit) {
+        if (PermissionUtils.canInstallPackage(requireContext())) {
+            block(downloadSource)
+        } else {
+            lifecycleScope.launch {
+                if (AppDataStore.ignorePackageInstallPermissionFlow.first()) {
+                    block(downloadSource)
+                } else {
+                    showPackageInstallPermissionDialog(
+                        onConfirm = {
+                            selectedSource = downloadSource
+                            packageInstallPermission.launch(null)
+                        },
+                        onIgnore = { block(downloadSource) }
+                    )
+                }
+            }
+        }
+    }
+
+    private fun showPackageInstallPermissionDialog(onConfirm: () -> Unit, onIgnore: () -> Unit) {
+        MaterialAlertDialogBuilder(requireContext()).apply {
+            setTitle(R.string.require_package_install_permission_title)
+            setMessage(R.string.require_package_install_permission_msg)
+            setPositiveButton(R.string.grant_permission) { _, _ ->
+                onConfirm()
+            }
+            setNegativeButton(android.R.string.cancel, null)
+            setNeutralButton(R.string.never_alert) { _, _ ->
+                lifecycleScope.launch {
+                    AppDataStore.setIgnorePackageInstallPermission(true)
+                }
+                onIgnore()
+            }
+        }.show(this)
     }
 
     private fun setupIgnoreUpdate(ignoreButton: Button) {

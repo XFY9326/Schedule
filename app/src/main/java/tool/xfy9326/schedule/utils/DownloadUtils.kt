@@ -21,11 +21,11 @@ object DownloadUtils {
     ): Long? {
         val subPath = DOWNLOAD_SUB_DIR + File.separator + fileName
         try {
-            return context.getSystemService<DownloadManager>()?.enqueue(DownloadManager.Request(Uri.parse(url)).apply {
+            return context.applicationContext.getSystemService<DownloadManager>()?.enqueue(DownloadManager.Request(Uri.parse(url)).apply {
                 setTitle(title)
                 setDescription(description)
                 setMimeType(mimeType)
-                setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE)
+                setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
                 try {
                     setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, subPath)
                 } catch (e: Exception) {
