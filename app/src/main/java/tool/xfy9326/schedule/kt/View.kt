@@ -168,11 +168,9 @@ fun WebView.bindLifeCycle(lifecycleOwner: LifecycleOwner) {
     lifecycleOwner.lifecycle.addObserver(object : DefaultLifecycleObserver {
         override fun onResume(owner: LifecycleOwner) {
             onResume()
-            resumeTimers()
         }
 
         override fun onPause(owner: LifecycleOwner) {
-            pauseTimers()
             onPause()
         }
 
