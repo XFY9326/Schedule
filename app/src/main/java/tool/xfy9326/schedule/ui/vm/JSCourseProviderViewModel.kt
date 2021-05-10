@@ -16,6 +16,8 @@ import tool.xfy9326.schedule.utils.JSBridge
 class JSCourseProviderViewModel : AbstractWebCourseProviderViewModel<String, JSCourseProvider, JSCourseParser>() {
     private val jsLoadLock = Mutex()
     val jsContent = MutableEventLiveData<String>()
+    val isRequireNetwork
+        get() = courseProvider.isRequireNetwork()
 
     override fun getInitUrl(): String {
         return courseProvider.getInitUrl()

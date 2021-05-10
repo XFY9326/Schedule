@@ -54,13 +54,13 @@ class JSCourseProviderActivity : AbstractWebCourseProviderActivity<String, JSCou
 
     override fun onReadyImportCourse() {
         loadingController.show()
-        if (!enableJSNetwork) {
+        if (!(requireViewModel().isRequireNetwork && enableJSNetwork)) {
             fragmentContact.setWebViewConnection(false)
         }
     }
 
     override fun onCourseImportFinish(result: CourseProviderViewModel.ImportResult, editScheduleId: Long?) {
-        if (!enableJSNetwork) {
+        if (!(requireViewModel().isRequireNetwork && enableJSNetwork)) {
             fragmentContact.setWebViewConnection(true)
         } else {
             fragmentContact.refresh()

@@ -6,4 +6,5 @@ class JSParams(
     val uuid: String,
     val jsType: String,
     val initUrl: String,
+    val requireNetwork: Boolean,
 ) : Serializable

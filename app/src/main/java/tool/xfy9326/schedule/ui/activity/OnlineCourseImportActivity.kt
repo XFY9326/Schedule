@@ -99,6 +99,21 @@ class OnlineCourseImportActivity : ViewModelActivity<OnlineCourseImportViewModel
         viewModel.jsConfigExistWarning.observeEvent(this, javaClass.simpleName) {
             showJSConfigExistWarningDialog(it.first, it.second)
         }
+        viewModel.launchJSConfig.observeEvent(this, javaClass.simpleName) {
+            if (it.first.requireNetwork && !it.second) {
+                showJSRequireNetworkWarning()
+            } else {
+                JSConfigPrepareDialog.showDialog(supportFragmentManager, it.first)
+            }
+        }
+    }
+
+    private fun showJSRequireNetworkWarning() {
+        MaterialAlertDialogBuilder(this).apply {
+            setTitle(R.string.js_course_import_enable_network_title)
+            setMessage(R.string.js_course_import_enable_network_msg)
+            setPositiveButton(android.R.string.ok, null)
+        }.show(this)
     }
 
     override fun onInitView(viewBinding: ActivityOnlineCourseImportBinding, viewModel: OnlineCourseImportViewModel) {
@@ -185,7 +200,7 @@ class OnlineCourseImportActivity : ViewModelActivity<OnlineCourseImportViewModel
     }
 
     override fun onJSConfigClick(jsConfig: JSConfig) {
-        JSConfigPrepareDialog.showDialog(supportFragmentManager, jsConfig)
+        requireViewModel().launchJSConfig(jsConfig)
     }
 
     override fun onJSConfigDelete(jsConfig: JSConfig) {
