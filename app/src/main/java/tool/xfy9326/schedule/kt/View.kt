@@ -113,6 +113,8 @@ fun Editable?.getText(): String? {
     }
 }
 
+// Light status bar in Android Window means status bar that used in light background, so the status bar color is black.
+// For default, it's true in app theme.
 @Suppress("DEPRECATION")
 fun Window.enableLightSystemBar(context: Context, enabled: Boolean) {
     when {

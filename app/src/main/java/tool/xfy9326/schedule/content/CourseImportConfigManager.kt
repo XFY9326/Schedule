@@ -30,7 +30,7 @@ import tool.xfy9326.schedule.io.kt.useBuffer
 import kotlin.coroutines.CoroutineContext
 
 class CourseImportConfigManager(scope: CoroutineScope) : CoroutineScope by scope {
-    override val coroutineContext: CoroutineContext = Dispatchers.IO + SupervisorJob() + CoroutineName(CourseImportConfigManager::class.simpleName.orEmpty())
+    override val coroutineContext: CoroutineContext = Dispatchers.IO + SupervisorJob() + CoroutineName(javaClass.simpleName)
 
     private val configLock = Mutex()
     private val currentImportConfigList = ArrayList<ICourseImportConfig>()

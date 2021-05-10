@@ -1,49 +1,42 @@
 package tool.xfy9326.schedule.ui.dialog
 
 import android.app.Dialog
-import android.content.Context
 import android.os.Bundle
+import android.view.View
 import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
+import androidx.fragment.app.setFragmentResult
+import androidx.lifecycle.LifecycleOwner
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import lib.xfy9326.livedata.postEvent
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.databinding.DialogScheduleControlPanelBinding
 import tool.xfy9326.schedule.kt.enableLightSystemBar
 import tool.xfy9326.schedule.kt.isUsingNightMode
-import tool.xfy9326.schedule.ui.vm.ScheduleViewModel
 
 class ScheduleControlPanel : BottomSheetDialogFragment() {
     companion object {
+        private const val EXTRA_SCROLL_TO_WEEK = "SCROLL_TO_WEEK"
         private const val ARGUMENT_CURRENT_SHOW_WEEK_NUM = "CURRENT_SHOW_WEEK_NUM"
         private const val ARGUMENT_NOW_WEEK_NUM = "NOW_WEEK_NUM"
         private const val ARGUMENT_MAX_WEEK_NUM = "MAX_WEEK_NUM"
+        private const val ARGUMENT_USE_LIGHT_SYSTEM_BAR = "USE_LIGHT_SYSTEM_BAR"
 
-        fun showDialog(fragmentManager: FragmentManager, currentShowWeekNum: Int, nowWeekNum: Int, maxWeekNum: Int) {
+        fun showDialog(fragmentManager: FragmentManager, currentShowWeekNum: Int, nowWeekNum: Int, maxWeekNum: Int, useLightSystemBar: Boolean) {
             ScheduleControlPanel().apply {
                 arguments = bundleOf(
                     ARGUMENT_CURRENT_SHOW_WEEK_NUM to currentShowWeekNum,
                     ARGUMENT_NOW_WEEK_NUM to nowWeekNum,
-                    ARGUMENT_MAX_WEEK_NUM to maxWeekNum
+                    ARGUMENT_MAX_WEEK_NUM to maxWeekNum,
+                    ARGUMENT_USE_LIGHT_SYSTEM_BAR to useLightSystemBar
                 )
             }.show(fragmentManager, null)
         }
-    }
 
-    private lateinit var viewModel: ScheduleViewModel
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        viewModel = ViewModelProvider(requireActivity())[ScheduleViewModel::class.java]
-        viewModel.useLightColorSystemBarColor.observe(this) {
-            lifecycleScope.launchWhenStarted {
-                // Light status bar in Android Window means status bar that used in light background, so the status bar color is black.
-                // For default, it's true in app theme.
-                dialog?.window?.enableLightSystemBar(context, !it && !requireContext().isUsingNightMode())
+        fun addScrollToWeekListener(fragmentManager: FragmentManager, lifecycleOwner: LifecycleOwner, block: (Int) -> Unit) {
+            fragmentManager.setFragmentResultListener(ScheduleControlPanel::class.java.simpleName, lifecycleOwner) { _, bundle ->
+                block(bundle.getInt(EXTRA_SCROLL_TO_WEEK))
             }
         }
     }
@@ -74,7 +67,14 @@ class ScheduleControlPanel : BottomSheetDialogFragment() {
         }
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val enableLightSystemBar = requireArguments().getBoolean(ARGUMENT_USE_LIGHT_SYSTEM_BAR)
+        requireDialog().window?.enableLightSystemBar(requireContext(), !enableLightSystemBar && !requireContext().isUsingNightMode())
+    }
+
     private fun changeShowWeekNum(value: Float) {
-        viewModel.scrollToWeek.postEvent(value.toInt())
+        setFragmentResult(javaClass.simpleName, bundleOf(
+            EXTRA_SCROLL_TO_WEEK to value.toInt()
+        ))
     }
 }

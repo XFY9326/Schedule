@@ -17,10 +17,12 @@ import kotlin.reflect.KClass
 @SupportedOptions(CourseImportConfigProcessor.KAPT_KOTLIN_GENERATED_OPTION_NAME)
 class CourseImportConfigProcessor : AbstractProcessor() {
     companion object {
-        const val CODE_ANNOTATION_CLASS = "tool.xfy9326.schedule.annotation.CourseImportConfig"
+        private const val PACKAGE_NAME = "tool.xfy9326.schedule"
+
+        const val CODE_ANNOTATION_CLASS = "$PACKAGE_NAME.annotation.CourseImportConfig"
         const val KAPT_KOTLIN_GENERATED_OPTION_NAME = "kapt.kotlin.generated"
 
-        private const val TARGET_PACKAGE_NAME = "tool.xfy9326.schedule.content"
+        private const val TARGET_PACKAGE_NAME = "$PACKAGE_NAME.content"
         private const val TARGET_CLASS_NAME = "CourseImportConfigRegistry"
         private const val TARGET_PROPERTY_CONFIG_CLASSES = "configClasses"
         private const val TARGET_FUNCTION_GET_CONFIGS = "getConfigs"
@@ -31,7 +33,7 @@ class CourseImportConfigProcessor : AbstractProcessor() {
         private val KOTLIN_COROUTINES_WITH_CONTEXT = MemberName("kotlinx.coroutines", "withContext")
         private val KOTLIN_COROUTINES_DISPATCHERS_IO = MemberName("kotlinx.coroutines.Dispatchers", "IO")
 
-        private const val BASE_COURSE_ADAPTER_CLASS_PACKAGE = "tool.xfy9326.schedule.content.base"
+        private const val BASE_COURSE_ADAPTER_CLASS_PACKAGE = "$PACKAGE_NAME.content.base"
         private val ABSTRACT_IMPORT_PROVIDER =
             ClassName(BASE_COURSE_ADAPTER_CLASS_PACKAGE, "AbstractCourseProvider").parameterizedBy(WILDCARD_SERIALIZABLE)
         private val ABSTRACT_IMPORT_PARSER =

@@ -15,6 +15,7 @@ import com.google.android.material.navigation.NavigationView
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import lib.xfy9326.livedata.observeEvent
+import lib.xfy9326.livedata.postEvent
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.Day
 import tool.xfy9326.schedule.beans.ImageScareType
@@ -75,7 +76,7 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
         }
         viewModel.scrollToWeek.observeEvent(this, observer = ::scrollToWeek)
         viewModel.showScheduleControlPanel.observeEvent(this) {
-            ScheduleControlPanel.showDialog(supportFragmentManager, getCurrentShowWeekNum(), it.first, it.second)
+            ScheduleControlPanel.showDialog(supportFragmentManager, getCurrentShowWeekNum(), it.first, it.second, !it.third)
         }
         viewModel.showCourseDetailDialog.observeEvent(this) {
             CourseDetailDialog.showDialog(supportFragmentManager, it)
@@ -149,6 +150,10 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
                     layoutParams.updateMargins(top = systemWindowInsetTop)
                 }
             }.consumeSystemWindowInsets().toWindowInsets()
+        }
+
+        ScheduleControlPanel.addScrollToWeekListener(supportFragmentManager, this) {
+            viewModel.scrollToWeek.postEvent(it)
         }
     }
 
