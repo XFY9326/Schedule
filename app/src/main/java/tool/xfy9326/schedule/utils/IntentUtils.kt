@@ -3,6 +3,9 @@ package tool.xfy9326.schedule.utils
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
+import android.provider.Settings
+import androidx.activity.result.contract.ActivityResultContract
 import tool.xfy9326.schedule.BuildConfig
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.io.IOManager.getUriByFileProvider
@@ -14,6 +17,13 @@ import java.util.*
 
 object IntentUtils {
     const val COURSE_IMPORT_WIKI_URL = "https://github.com/XFY9326/Schedule/wiki"
+
+    fun installPackage(context: Context, uri: Uri) {
+        context.tryStartActivity(Intent(Intent.ACTION_VIEW).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_GRANT_READ_URI_PERMISSION
+            setDataAndType(uri, MIMEConst.MIME_APK)
+        })
+    }
 
     fun openUrlInBrowser(context: Context, url: String) {
         context.tryStartActivity(Intent(Intent.ACTION_VIEW).apply {
@@ -50,5 +60,18 @@ object IntentUtils {
             putExtra(Intent.EXTRA_TEXT, mailContent)
             putExtra(Intent.EXTRA_STREAM, uri)
         })
+    }
+
+    class PackageInstallPermissionContact : ActivityResultContract<Nothing, Nothing>() {
+        override fun createIntent(context: Context, input: Nothing?): Intent {
+            return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                val uri = Uri.parse("package:${BuildConfig.APPLICATION_ID}")
+                Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES, uri)
+            } else {
+                Intent(Settings.ACTION_SECURITY_SETTINGS)
+            }
+        }
+
+        override fun parseResult(resultCode: Int, intent: Intent?) = null
     }
 }

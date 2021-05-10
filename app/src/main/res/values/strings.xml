@@ -379,6 +379,12 @@
     <string name="advanced_function_alert_msg">\u3000\u3000开启此功能表示您已经知晓\"该功能可能会导致的安全问题\"。若您继续开启此功能，所导致的任何问题本软件不负任何责任！</string>
     <string name="js_course_import_enable_network_title">该课程导入选项要求联网功能</string>
     <string name="js_course_import_enable_network_msg">\u3000\u3000正常情况下JS课程导入脚本进行课程解析时并不需要联网运行，但是该脚本请求联网运行基于JS的课程解析，这有可能导致安全问题。\n\u3000\u3000若您了解以上风险并执意要启用JS的联网运行功能，请在\"设置-课程导入\"中启用\"允许基于JS的课程导入脚本联网\"功能！</string>
+    <string name="update_download_success">更新下载完成</string>
+    <string name="require_package_install_permission_title">需要应用安装权限</string>
+    <string name="require_package_install_permission_msg">\u3000\u3000您需要授予应用安装权限以自动弹出更新界面安装应用更新。\n\u3000\u3000若您希望手动更新而不是自动弹出更新界面，请点击\"不再提示\"。下载的更新文件在下载管理器中可见，您可以随时安装更新。</string>
+    <string name="never_alert">不再提示</string>
+    <string name="grant_permission">授予权限</string>
+    <string name="package_install_permission_denied">未授予应用安装权限！</string>
 
     <string name="js_config_read_failed">配置文件读取错误！</string>
     <string name="js_config_invalid">导入的配置文件不合法！</string>

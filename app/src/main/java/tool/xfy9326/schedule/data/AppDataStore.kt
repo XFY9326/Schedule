@@ -11,6 +11,8 @@ object AppDataStore : AbstractDataStore("App") {
     private val agreeCourseImportPolicy by booleanPreferencesKey()
     private val ignoreUpdateVersionCode by intPreferencesKey()
     private val readOnlineImportAttention by booleanPreferencesKey()
+    private val apkUpdateDownloadId by longPreferencesKey()
+    private val ignorePackageInstallPermission by booleanPreferencesKey()
 
     val currentScheduleIdFlow = currentScheduleId.readAndInitAsFlow {
         ScheduleDBProvider.db.scheduleDAO.tryInitDefaultSchedule()
@@ -23,6 +25,14 @@ object AppDataStore : AbstractDataStore("App") {
     val readOnlineImportAttentionFlow = readOnlineImportAttention.readAsFlow(false)
 
     val agreeCourseImportPolicyFlow = agreeCourseImportPolicy.readAsFlow(false)
+
+    val apkUpdateDownloadIdFlow = apkUpdateDownloadId.readAsFlow()
+
+    val ignorePackageInstallPermissionFlow = ignorePackageInstallPermission.readAsFlow(false)
+
+    suspend fun setIgnorePackageInstallPermission(data: Boolean) = ignorePackageInstallPermission.saveData(data)
+
+    suspend fun setApkUpdateDownloadId(data: Long) = apkUpdateDownloadId.saveData(data)
 
     suspend fun setReadOnlineImportAttention(data: Boolean) = readOnlineImportAttention.saveData(data)
 
