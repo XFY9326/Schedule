@@ -80,11 +80,18 @@ fun Context.hideKeyboard(windowToken: IBinder) {
 }
 
 fun Context.tryStartActivity(intent: Intent, options: Bundle? = null, showToast: Boolean = true): Boolean {
-    if (intent.resolveActivity(packageManager) != null) {
+    // 由于兼容性问题，部分系统无法查询到Intent是否可以被处理
+    val queryActivity = intent.resolveActivity(packageManager) != null
+    if (queryActivity) {
         ContextCompat.startActivity(this, intent, options)
         return true
     } else {
-        if (showToast) showToast(R.string.application_launch_failed)
+        runCatching {
+            ContextCompat.startActivity(this, intent, options)
+            return true
+        }.onFailure {
+            if (showToast) showToast(R.string.application_launch_failed)
+        }
     }
     return false
 }
