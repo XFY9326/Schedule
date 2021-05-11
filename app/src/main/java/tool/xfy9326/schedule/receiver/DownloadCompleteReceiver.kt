@@ -24,6 +24,7 @@ class DownloadCompleteReceiver : BroadcastReceiver() {
                         if (PermissionUtils.canInstallPackage(context)) {
                             IntentUtils.installPackage(context, it)
                         }
+                        AppDataStore.removeApkUpdateDownloadId()
                     }
                 }
             }

@@ -67,6 +67,10 @@ abstract class AbstractDataStore(val name: String) {
         it[this] = data
     }
 
+    protected suspend fun <T> Preferences.Key<T>.remove() = dataStore.edit {
+        it.remove(this)
+    }
+
     protected fun booleanPreferencesKey() =
         ReadOnlyProperty<Any, Preferences.Key<Boolean>> { _, property -> booleanPreferencesKey(property.name) }
 
