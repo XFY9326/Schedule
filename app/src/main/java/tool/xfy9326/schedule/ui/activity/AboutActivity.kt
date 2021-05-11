@@ -29,10 +29,10 @@ class AboutActivity : ViewModelActivity<AboutViewModel, ActivityAboutBinding>() 
 
     override fun onInitView(viewBinding: ActivityAboutBinding, viewModel: AboutViewModel) {
         viewBinding.textViewAppVersion.text = getString(R.string.version, BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE)
-        viewBinding.layoutEULA.setOnClickListener {
+        viewBinding.layoutEULA.setOnSingleClickListener {
             viewModel.showEULA()
         }
-        viewBinding.layoutOpenSourceLicense.setOnClickListener {
+        viewBinding.layoutOpenSourceLicense.setOnSingleClickListener {
             viewModel.showOpenSourceLicense()
         }
     }
