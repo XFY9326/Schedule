@@ -4,6 +4,7 @@ import androidx.core.view.isVisible
 import lib.xfy9326.livedata.observeEvent
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.databinding.ActivityAppErrorBinding
+import tool.xfy9326.schedule.kt.setOnSingleClickListener
 import tool.xfy9326.schedule.kt.showSnackBar
 import tool.xfy9326.schedule.kt.startActivity
 import tool.xfy9326.schedule.ui.activity.base.ViewModelActivity
@@ -42,16 +43,16 @@ class AppErrorActivity : ViewModelActivity<AppErrorViewModel, ActivityAppErrorBi
                 onFoundUpgrade = { UpgradeDialog.showDialog(supportFragmentManager, it) }
             )
         }
-        viewBinding.cardViewAppErrorFeedback.setOnClickListener {
+        viewBinding.cardViewAppErrorFeedback.setOnSingleClickListener {
             startActivity<FeedbackActivity>()
         }
 
         val crashLogFileName = intent?.getStringExtra(INTENT_EXTRA_CRASH_LOG)
         if (crashLogFileName != null) {
-            viewBinding.cardViewAppErrorDetail.setOnClickListener {
+            viewBinding.cardViewAppErrorDetail.setOnSingleClickListener {
                 viewModel.loadCrashLogDetail(crashLogFileName)
             }
-            viewBinding.cardViewAppErrorSend.setOnClickListener {
+            viewBinding.cardViewAppErrorSend.setOnSingleClickListener {
                 IntentUtils.sendCrashReport(this, crashLogFileName)
             }
         } else {

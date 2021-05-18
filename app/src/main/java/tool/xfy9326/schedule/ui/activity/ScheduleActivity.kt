@@ -35,6 +35,7 @@ import tool.xfy9326.schedule.utils.view.NightModeViewUtils
 class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBinding>(), NavigationView.OnNavigationItemSelectedListener {
     override val vmClass = ScheduleViewModel::class
 
+    private var actionBarDrawerToggle: ActionBarDrawerToggle? = null
     private var scheduleViewPagerAdapter: ScheduleViewPagerAdapter? = null
 
     private val icsExportModule = ICSExportModule(this)
@@ -103,11 +104,14 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
 
         window.decorView.setOnApplyWindowInsetsListener { _, insets ->
             WindowInsetsCompat.toWindowInsetsCompat(insets).apply {
-                val layoutParams = (viewBinding.layoutScheduleContent.layoutParams as? ViewGroup.MarginLayoutParams)
-                if (layoutParams == null) {
-                    viewBinding.layoutScheduleContent.updatePadding(top = systemWindowInsetTop)
-                } else {
-                    layoutParams.updateMargins(top = systemWindowInsetTop)
+                viewBinding.layoutScheduleContent.apply {
+                    if (layoutParams == null || layoutParams !is ViewGroup.MarginLayoutParams) {
+                        updatePadding(top = systemWindowInsetTop)
+                    } else {
+                        updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                            updateMargins(top = systemWindowInsetTop)
+                        }
+                    }
                 }
             }.consumeSystemWindowInsets().toWindowInsets()
         }
@@ -184,8 +188,11 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
             textViewScheduleNotCurrentWeek.setTextColor(tintColor)
             textViewScheduleNowShowWeekNum.setTextColor(tintColor)
             toolBarSchedule.menu.setIconTint(tintColor)
+            // PorterDuffColorFilter在Android P以下显示错误
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                 toolBarSchedule.navigationIcon?.colorFilter = PorterDuffColorFilter(tintColor, PorterDuff.Mode.SRC)
+            } else {
+                actionBarDrawerToggle?.drawerArrowDrawable?.color = tintColor
             }
         }
     }
@@ -229,7 +236,7 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
                 }
             }
         }
-        ActionBarDrawerToggle(this, viewBinding.drawerSchedule, viewBinding.toolBarSchedule, R.string.open_drawer, R.string.close_drawer).apply {
+        actionBarDrawerToggle = ActionBarDrawerToggle(this, viewBinding.drawerSchedule, viewBinding.toolBarSchedule, R.string.open_drawer, R.string.close_drawer).apply {
             drawerArrowDrawable.color = getColorCompat(R.color.dark_icon)
             syncState()
             viewBinding.drawerSchedule.addDrawerListener(this)

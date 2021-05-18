@@ -34,6 +34,8 @@ object AppDataStore : AbstractDataStore("App") {
 
     suspend fun setApkUpdateDownloadId(data: Long) = apkUpdateDownloadId.saveData(data)
 
+    suspend fun removeApkUpdateDownloadId() = apkUpdateDownloadId.remove()
+
     suspend fun setReadOnlineImportAttention(data: Boolean) = readOnlineImportAttention.saveData(data)
 
     suspend fun hasShownFeedbackAttention() = shownFeedbackAttention.readAsShownOnce()
