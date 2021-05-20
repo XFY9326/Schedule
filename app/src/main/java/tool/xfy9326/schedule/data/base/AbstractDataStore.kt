@@ -63,12 +63,16 @@ abstract class AbstractDataStore(val name: String) {
         }
     }.filterNotNull()
 
-    protected suspend fun <T> Preferences.Key<T>.saveData(data: T) = dataStore.edit {
-        it[this] = data
+    protected suspend fun <T> Preferences.Key<T>.saveData(data: T) {
+        dataStore.edit {
+            it[this] = data
+        }
     }
 
-    protected suspend fun <T> Preferences.Key<T>.remove() = dataStore.edit {
-        it.remove(this)
+    protected suspend fun <T> Preferences.Key<T>.remove() {
+        dataStore.edit {
+            it.remove(this)
+        }
     }
 
     protected fun booleanPreferencesKey() =
