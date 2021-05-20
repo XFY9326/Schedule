@@ -14,6 +14,7 @@
       <w>dtstamp</w>
       <w>dtstart</w>
       <w>hmmss</w>
+      <w>hmmss'z</w>
       <w>iframe</w>
       <w>jcenter</w>
       <w>jetpack</w>
@@ -24,6 +25,7 @@
       <w>leakcanary</w>
       <w>loginout</w>
       <w>mdd</w>
+      <w>mdd't</w>
       <w>meth</w>
       <w>miui</w>
       <w>mtrl</w>
