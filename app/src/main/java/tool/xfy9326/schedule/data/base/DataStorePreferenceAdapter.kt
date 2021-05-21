@@ -1,14 +1,13 @@
 package tool.xfy9326.schedule.data.base
 
-import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.*
 import androidx.preference.PreferenceDataStore
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
 
-open class DataStorePreferenceAdapter(private val dataStore: DataStore<Preferences>, scope: CoroutineScope) : PreferenceDataStore(),
+open class DataStorePreferenceAdapter(private val dataStore: AbstractDataStore, scope: CoroutineScope) : PreferenceDataStore(),
     CoroutineScope by CoroutineScope(scope.coroutineContext + SupervisorJob() + Dispatchers.IO) {
-    private val dsData = dataStore.data.shareIn(scope, SharingStarted.Eagerly, 1)
 
     private fun <T> putData(key: Preferences.Key<T>, value: T?) {
         launch {
@@ -20,7 +19,7 @@ open class DataStorePreferenceAdapter(private val dataStore: DataStore<Preferenc
 
     private fun <T> readNullableData(key: Preferences.Key<T>, defValue: T?): T? {
         return runBlocking(coroutineContext) {
-            dsData.map {
+            dataStore.read {
                 it[key] ?: defValue
             }.firstOrNull()
         }
@@ -28,7 +27,7 @@ open class DataStorePreferenceAdapter(private val dataStore: DataStore<Preferenc
 
     private fun <T> readNonNullData(key: Preferences.Key<T>, defValue: T): T {
         return runBlocking(coroutineContext) {
-            dsData.map {
+            dataStore.read {
                 it[key] ?: defValue
             }.first()
         }

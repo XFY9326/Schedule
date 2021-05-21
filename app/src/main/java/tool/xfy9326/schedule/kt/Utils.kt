@@ -1,5 +1,3 @@
-@file:Suppress("unused")
-
 package tool.xfy9326.schedule.kt
 
 import androidx.preference.Preference

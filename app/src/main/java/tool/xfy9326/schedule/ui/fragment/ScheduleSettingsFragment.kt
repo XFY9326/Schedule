@@ -37,7 +37,7 @@ class ScheduleSettingsFragment : AbstractSettingsFragment() {
 
     override val titleName: Int = R.string.schedule_settings
     override val preferenceResId: Int = R.xml.settings_schedule
-    override val preferenceDataStore: PreferenceDataStore = object : DataStorePreferenceAdapter(ScheduleDataStore.dataStore, lifecycleScope) {
+    override val preferenceDataStore: PreferenceDataStore = object : DataStorePreferenceAdapter(ScheduleDataStore, lifecycleScope) {
         override fun getInt(key: String, defValue: Int): Int {
             when (key) {
                 ScheduleDataStore.toolBarTintColor.name ->
