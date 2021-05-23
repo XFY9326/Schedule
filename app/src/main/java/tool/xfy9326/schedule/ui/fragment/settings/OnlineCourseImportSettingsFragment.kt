@@ -1,4 +1,4 @@
-package tool.xfy9326.schedule.ui.fragment
+package tool.xfy9326.schedule.ui.fragment.settings
 
 import android.os.Bundle
 import androidx.lifecycle.lifecycleScope
@@ -11,12 +11,7 @@ import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.ui.fragment.base.AbstractSettingsFragment
 import tool.xfy9326.schedule.utils.view.DialogUtils
 
-@Suppress("unused")
 class OnlineCourseImportSettingsFragment : AbstractSettingsFragment() {
-    companion object {
-        private const val KEY_JS_COURSE_IMPORT_ENABLE_NETWORK = "jsCourseImportEnableNetwork"
-    }
-
     override val titleName: Int = R.string.online_course_import
     override val preferenceResId: Int = R.xml.settings_online_course_import
     override val preferenceDataStore: PreferenceDataStore = AppSettingsDataStore.getPreferenceDataStore(lifecycleScope)
@@ -28,7 +23,7 @@ class OnlineCourseImportSettingsFragment : AbstractSettingsFragment() {
             }
             true
         }
-        findPreference<CheckBoxPreference>(KEY_JS_COURSE_IMPORT_ENABLE_NETWORK)?.setOnPreferenceChangeListener { pref, newValue ->
+        findPreference<CheckBoxPreference>(AppSettingsDataStore.jsCourseImportEnableNetwork.name)?.setOnPreferenceChangeListener { pref, newValue ->
             if (newValue == true) {
                 DialogUtils.showAdvancedFunctionDialog(requireContext(), viewLifecycleOwner) {
                     (pref as? CheckBoxPreference?)?.isChecked = true

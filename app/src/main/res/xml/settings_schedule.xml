@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <androidx.preference.PreferenceCategory
         app:iconSpaceReserved="false"
         app:title="@string/schedule_format_settings">
@@ -32,7 +33,7 @@
             app:defaultValue="@array/not_this_week_course_show_style_value_default"
             app:dependency="showNotThisWeekCourse"
             app:entries="@array/not_this_week_course_show_style"
-            app:entryValues="@array/not_this_week_course_show_style_value"
+            app:entryValues="@array/not_this_week_course_show_style_values"
             app:iconSpaceReserved="false"
             app:key="notThisWeekCourseShowStyle"
             app:summary="@string/not_this_week_course_show_style_sum"
@@ -114,12 +115,14 @@
         app:iconSpaceReserved="false"
         app:title="@string/schedule_color">
 
-        <androidx.preference.CheckBoxPreference
-            app:defaultValue="false"
+        <androidx.preference.ListPreference
+            app:defaultValue="FOLLOW_THEME"
+            app:entries="@array/system_bar_appearance"
+            app:entryValues="@array/system_bar_appearance_values"
             app:iconSpaceReserved="false"
-            app:key="useLightColorSystemBarColor"
-            app:summary="@string/use_light_color_system_bar_color_sum"
-            app:title="@string/use_light_color_system_bar_color" />
+            app:key="scheduleSystemBarAppearance"
+            app:summary="@string/system_bar_appearance_sum"
+            app:title="@string/system_bar_appearance" />
 
         <androidx.preference.CheckBoxPreference
             app:defaultValue="false"
@@ -165,7 +168,7 @@
         <androidx.preference.Preference
             app:dependency="enableScheduleBackground"
             app:iconSpaceReserved="false"
-            app:key="selectScheduleBackgroundImage"
+            app:key="@string/pref_select_schedule_background_image"
             app:persistent="false"
             app:summary="@string/select_schedule_background_image_sum"
             app:title="@string/select_schedule_background_image" />

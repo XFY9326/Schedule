@@ -1,4 +1,4 @@
-package tool.xfy9326.schedule.ui.fragment
+package tool.xfy9326.schedule.ui.fragment.settings
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatDelegate
@@ -15,13 +15,7 @@ import tool.xfy9326.schedule.kt.showSnackBar
 import tool.xfy9326.schedule.kt.tryEnumValueOf
 import tool.xfy9326.schedule.ui.fragment.base.AbstractSettingsFragment
 
-@Suppress("unused")
 class GeneralSettingsFragment : AbstractSettingsFragment() {
-    companion object {
-        private const val KEY_CLEAR_CACHE = "clearCache"
-        private const val KEY_RESTORE_SETTINGS = "restoreSettings"
-    }
-
     override val titleName: Int = R.string.general_settings
     override val preferenceResId: Int = R.xml.settings_general
     override val preferenceDataStore: PreferenceDataStore = AppSettingsDataStore.getPreferenceDataStore(lifecycleScope)
@@ -31,7 +25,7 @@ class GeneralSettingsFragment : AbstractSettingsFragment() {
             tryEnumValueOf<NightMode>(newValue as? String)?.let(::changeNightMode)
             true
         }
-        setOnPrefClickListener(KEY_CLEAR_CACHE) {
+        setOnPrefClickListener(R.string.pref_clear_cache) {
             MaterialAlertDialogBuilder(requireContext()).apply {
                 setTitle(R.string.clear_cache)
                 setMessage(R.string.clear_cache_msg)
@@ -42,7 +36,7 @@ class GeneralSettingsFragment : AbstractSettingsFragment() {
                 setNegativeButton(android.R.string.cancel, null)
             }.show(viewLifecycleOwner)
         }
-        setOnPrefClickListener(KEY_RESTORE_SETTINGS) {
+        setOnPrefClickListener(R.string.pref_restore_settings) {
             MaterialAlertDialogBuilder(requireContext()).apply {
                 setTitle(R.string.restore_settings)
                 setMessage(R.string.restore_settings_msg)

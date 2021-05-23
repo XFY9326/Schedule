@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pref_general_settings">GeneralSettings</string>
+    <string name="pref_schedule_table_settings">ScheduleTableSettings</string>
+    <string name="pref_calendar_sync_settings">CalendarSyncSettings</string>
+    <string name="pref_online_course_import_settings">OnlineCourseImportSettings</string>
+    <string name="pref_backup_restore_settings">BackupRestoreSettings</string>
+    <string name="pref_debug_settings">DebugSettings</string>
+    <string name="pref_about">About</string>
+    <string name="pref_feedback">Feedback</string>
+    <string name="pref_check_upgrade">CheckUpgrade</string>
+    <string name="pref_backup_schedule">BackupSchedule</string>
+    <string name="pref_restore_schedule">RestoreSchedule</string>
+    <string name="pref_sync_to_calendar">SyncToCalendar</string>
+    <string name="pref_clear_calendar">ClearCalendar</string>
+    <string name="pref_clear_sync_settings">ClearSyncSettings</string>
+    <string name="pref_calendar_sync_list">CalendarSyncList</string>
+    <string name="pref_calendar_editable_list">CalendarEditableList</string>
+    <string name="pref_calendar_visible_list">CalendarVisibleList</string>
+    <string name="pref_calendar_add_reminder_list">CalendarSyncAddReminderList</string>
+    <string name="pref_read_debug_logs">ReadDebugLogs</string>
+    <string name="pref_output_debug_logs">OutputDebugLogs</string>
+    <string name="pref_clear_debug_logs">ClearDebugLogs</string>
+    <string name="pref_send_debug_log">SendDebugLog</string>
+    <string name="pref_clear_cache">ClearCache</string>
+    <string name="pref_restore_settings">RestoreSettings</string>
+    <string name="pref_select_schedule_background_image">SelectScheduleBackgroundImage</string>
+</resources>

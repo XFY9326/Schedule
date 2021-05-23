@@ -3,9 +3,7 @@
 package tool.xfy9326.schedule.kt
 
 import android.app.Dialog
-import android.content.Context
 import android.content.res.Resources
-import android.graphics.Color
 import android.graphics.drawable.*
 import android.os.Build
 import android.text.Editable
@@ -21,6 +19,7 @@ import androidx.annotation.ColorInt
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
 import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.children
 import androidx.core.view.iterator
 import androidx.lifecycle.DefaultLifecycleObserver
@@ -28,7 +27,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.vectordrawable.graphics.drawable.Animatable2Compat
 import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
 import com.google.android.material.snackbar.Snackbar
-import tool.xfy9326.schedule.R
+import tool.xfy9326.schedule.beans.SystemBarAppearance
 
 fun Float.dpToPx() = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, this, Resources.getSystem().displayMetrics)
 
@@ -113,42 +112,20 @@ fun Editable?.getText(): String? {
     }
 }
 
+fun Window.setSystemBarAppearance(systemBarAppearance: SystemBarAppearance) {
+    when (systemBarAppearance) {
+        SystemBarAppearance.FOLLOW_THEME -> setLightSystemBar(!decorView.context.isUsingNightMode())
+        SystemBarAppearance.USE_LIGHT -> setLightSystemBar(true)
+        SystemBarAppearance.USE_DARK -> setLightSystemBar(false)
+    }
+}
+
 // Light status bar in Android Window means status bar that used in light background, so the status bar color is black.
 // For default, it's true in app theme.
-@Suppress("DEPRECATION")
-fun Window.enableLightSystemBar(context: Context, enabled: Boolean) {
-    when {
-//        New api setSystemBarsBehavior() is not stable even in Android R
-//        Build.VERSION.SDK_INT >= Build.VERSION_CODES.R -> {
-//            insetsController?.apply {
-//                if (enabled) {
-//                    setSystemBarsAppearance(WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS, WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS)
-//                    setSystemBarsAppearance(WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS, WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS)
-//                } else {
-//                    setSystemBarsAppearance(0, WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS)
-//                    setSystemBarsAppearance(0, WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS)
-//                }
-//            }
-//        }
-        Build.VERSION.SDK_INT >= Build.VERSION_CODES.O -> {
-            decorView.systemUiVisibility = if (enabled) {
-                decorView.systemUiVisibility or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR or View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
-            } else {
-                decorView.systemUiVisibility and View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR.inv() and View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR.inv()
-            }
-        }
-        else -> {
-            if (enabled) {
-                decorView.systemUiVisibility = decorView.systemUiVisibility or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-                navigationBarColor = context.getColorCompat(R.color.light_navigation_bar)
-            } else {
-                decorView.systemUiVisibility = decorView.systemUiVisibility and View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR.inv()
-                navigationBarColor = context.getColorCompat(R.color.not_light_navigation_bar)
-            }
-        }
-    }
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-        navigationBarDividerColor = Color.TRANSPARENT
+private fun Window.setLightSystemBar(enabled: Boolean) {
+    WindowInsetsControllerCompat(this, decorView).apply {
+        isAppearanceLightStatusBars = enabled
+        isAppearanceLightNavigationBars = enabled
     }
 }
 
@@ -182,7 +159,7 @@ fun WebView.bindLifeCycle(lifecycleOwner: LifecycleOwner) {
                 removeAllViews()
                 destroy()
             } catch (e: Exception) {
-                e.printStackTrace()
+                // Ignore
             }
             lifecycleOwner.lifecycle.removeObserver(this)
         }

@@ -1,4 +1,4 @@
-package tool.xfy9326.schedule.ui.fragment
+package tool.xfy9326.schedule.ui.fragment.settings
 
 import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
@@ -19,12 +19,7 @@ import tool.xfy9326.schedule.ui.dialog.FullScreenLoadingDialog
 import tool.xfy9326.schedule.ui.fragment.base.AbstractSettingsFragment
 import tool.xfy9326.schedule.ui.vm.SettingsViewModel
 
-@Suppress("unused")
 class ScheduleSettingsFragment : AbstractSettingsFragment() {
-    companion object {
-        private const val KEY_SELECT_SCHEDULE_BACKGROUND_IMAGE = "selectScheduleBackgroundImage"
-    }
-
     private val loadingDialogController by lazy { FullScreenLoadingDialog.createControllerInstance(viewLifecycleOwner, childFragmentManager) }
     private val selectBackgroundImage = registerForActivityResult(ActivityResultContracts.GetContent()) {
         if (it == null) {
@@ -52,7 +47,7 @@ class ScheduleSettingsFragment : AbstractSettingsFragment() {
     }
 
     override fun onPrefInit(savedInstanceState: Bundle?) {
-        setOnPrefClickListener(KEY_SELECT_SCHEDULE_BACKGROUND_IMAGE) {
+        setOnPrefClickListener(R.string.pref_select_schedule_background_image) {
             selectBackgroundImage.launch(MIMEConst.MIME_IMAGE)
         }
         findPreference<MultiSelectListPreference>(ScheduleDataStore.notThisWeekCourseShowStyle.name)?.setOnPreferenceChangeListener { _, newValue ->

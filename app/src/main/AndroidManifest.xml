@@ -47,7 +47,8 @@
 
         <activity
             android:name=".ui.activity.ScheduleActivity"
-            android:launchMode="singleTop" />
+            android:launchMode="singleTop"
+            android:theme="@style/AppTheme.DefaultSystemBar" />
 
         <activity
             android:name=".ui.activity.AppErrorActivity"

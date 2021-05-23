@@ -1,4 +1,4 @@
-package tool.xfy9326.schedule.ui.fragment
+package tool.xfy9326.schedule.ui.fragment.settings
 
 import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
@@ -17,19 +17,12 @@ import tool.xfy9326.schedule.ui.fragment.base.AbstractSettingsFragment
 import tool.xfy9326.schedule.ui.vm.SettingsViewModel
 import tool.xfy9326.schedule.utils.PermissionUtils
 
-@Suppress("unused")
 class CalendarSyncSettingsFragment : AbstractSettingsFragment(), MultiItemSelectDialog.OnMultiItemSelectedListener {
     companion object {
-        private const val PREFERENCE_SYNC_TO_CALENDAR = "syncToCalendar"
-        private const val PREFERENCE_CLEAR_CALENDAR = "clearCalendar"
-        private const val PREFERENCE_CLEAR_SYNC_SETTINGS = "clearSyncSettings"
-
-        private const val PREFERENCE_CALENDAR_SYNC_LIST = "calendarSyncList"
-        private const val PREFERENCE_CALENDAR_EDITABLE_LIST = "calendarEditableList"
-        private const val PREFERENCE_CALENDAR_VISIBLE_LIST = "calendarVisibleList"
-        private const val PREFERENCE_CALENDAR_ADD_REMINDER_LIST = "calendarSyncAddReminderList"
-
-        private const val REQUEST_CODE_CALENDAR_PERMISSION = 1
+        private const val TAG_CALENDAR_SYNC_LIST = "CALENDAR_SYNC_LIST"
+        private const val TAG_CALENDAR_EDITABLE_LIST = "CALENDAR_EDITABLE_LIST"
+        private const val TAG_CALENDAR_VISIBLE_LIST = "CALENDAR_VISIBLE_LIST"
+        private const val TAG_CALENDAR_ADD_REMINDER_LIST = "CALENDAR_ADD_REMINDER_LIST"
     }
 
     override val titleName: Int = R.string.calendar_sync
@@ -44,14 +37,14 @@ class CalendarSyncSettingsFragment : AbstractSettingsFragment(), MultiItemSelect
     }
 
     override fun onPrefInit(savedInstanceState: Bundle?) {
-        setOnPrefClickListener(PREFERENCE_SYNC_TO_CALENDAR) {
+        setOnPrefClickListener(R.string.pref_sync_to_calendar) {
             lifecycleScope.launch {
                 if (PermissionUtils.checkCalendarPermission(requireContext(), requestCalendarPermission)) {
                     requireSettingsViewModel()?.syncToCalendar()
                 }
             }
         }
-        setOnPrefClickListener(PREFERENCE_CLEAR_CALENDAR) {
+        setOnPrefClickListener(R.string.pref_clear_calendar) {
             MaterialAlertDialogBuilder(requireContext()).apply {
                 setTitle(R.string.clear_calendar)
                 setMessage(R.string.clear_calendar_msg)
@@ -62,7 +55,7 @@ class CalendarSyncSettingsFragment : AbstractSettingsFragment(), MultiItemSelect
                 }
             }.show(viewLifecycleOwner)
         }
-        setOnPrefClickListener(PREFERENCE_CLEAR_SYNC_SETTINGS) {
+        setOnPrefClickListener(R.string.pref_clear_sync_settings) {
             MaterialAlertDialogBuilder(requireContext()).apply {
                 setTitle(R.string.clear_calendar_settings)
                 setMessage(R.string.clear_calendar_settings_msg)
@@ -73,17 +66,17 @@ class CalendarSyncSettingsFragment : AbstractSettingsFragment(), MultiItemSelect
                 }
             }.show(viewLifecycleOwner)
         }
-        setOnPrefClickListener(PREFERENCE_CALENDAR_SYNC_LIST) {
-            requireSettingsViewModel()?.getScheduleSyncEditList(PREFERENCE_CALENDAR_SYNC_LIST)
+        setOnPrefClickListener(R.string.pref_calendar_sync_list) {
+            requireSettingsViewModel()?.getScheduleSyncEditList(TAG_CALENDAR_SYNC_LIST)
         }
-        setOnPrefClickListener(PREFERENCE_CALENDAR_EDITABLE_LIST) {
-            requireSettingsViewModel()?.getScheduleSyncEditList(PREFERENCE_CALENDAR_EDITABLE_LIST)
+        setOnPrefClickListener(R.string.pref_calendar_editable_list) {
+            requireSettingsViewModel()?.getScheduleSyncEditList(TAG_CALENDAR_EDITABLE_LIST)
         }
-        setOnPrefClickListener(PREFERENCE_CALENDAR_VISIBLE_LIST) {
-            requireSettingsViewModel()?.getScheduleSyncEditList(PREFERENCE_CALENDAR_VISIBLE_LIST)
+        setOnPrefClickListener(R.string.pref_calendar_visible_list) {
+            requireSettingsViewModel()?.getScheduleSyncEditList(TAG_CALENDAR_VISIBLE_LIST)
         }
-        setOnPrefClickListener(PREFERENCE_CALENDAR_ADD_REMINDER_LIST) {
-            requireSettingsViewModel()?.getScheduleSyncEditList(PREFERENCE_CALENDAR_ADD_REMINDER_LIST)
+        setOnPrefClickListener(R.string.pref_calendar_add_reminder_list) {
+            requireSettingsViewModel()?.getScheduleSyncEditList(TAG_CALENDAR_ADD_REMINDER_LIST)
         }
     }
 
@@ -110,20 +103,14 @@ class CalendarSyncSettingsFragment : AbstractSettingsFragment(), MultiItemSelect
                 idArr = it.second.map { pair ->
                     pair.first.scheduleId
                 }.toLongArray(),
-                selectedArr = when (it.first) {
-                    PREFERENCE_CALENDAR_SYNC_LIST -> it.second.map { pair ->
-                        pair.second.syncable
+                selectedArr = it.second.mapNotNull { pair ->
+                    when (it.first) {
+                        TAG_CALENDAR_SYNC_LIST -> pair.second.syncable
+                        TAG_CALENDAR_EDITABLE_LIST -> pair.second.editable
+                        TAG_CALENDAR_VISIBLE_LIST -> pair.second.defaultVisible
+                        TAG_CALENDAR_ADD_REMINDER_LIST -> pair.second.addReminder
+                        else -> null
                     }
-                    PREFERENCE_CALENDAR_EDITABLE_LIST -> it.second.map { pair ->
-                        pair.second.editable
-                    }
-                    PREFERENCE_CALENDAR_VISIBLE_LIST -> it.second.map { pair ->
-                        pair.second.defaultVisible
-                    }
-                    PREFERENCE_CALENDAR_ADD_REMINDER_LIST -> it.second.map { pair ->
-                        pair.second.addReminder
-                    }
-                    else -> error("Unsupported key! ${it.first}")
                 }.toBooleanArray()
             )
         }
@@ -132,10 +119,10 @@ class CalendarSyncSettingsFragment : AbstractSettingsFragment(), MultiItemSelect
     override fun onMultiItemSelected(tag: String?, idArr: LongArray, selectedArr: BooleanArray) {
         requireSettingsViewModel()?.apply {
             when (tag) {
-                PREFERENCE_CALENDAR_SYNC_LIST -> updateSyncEnabled(idArr, selectedArr)
-                PREFERENCE_CALENDAR_EDITABLE_LIST -> updateSyncEditable(idArr, selectedArr)
-                PREFERENCE_CALENDAR_VISIBLE_LIST -> updateSyncVisible(idArr, selectedArr)
-                PREFERENCE_CALENDAR_ADD_REMINDER_LIST -> updateSyncReminder(idArr, selectedArr)
+                TAG_CALENDAR_SYNC_LIST -> updateSyncEnabled(idArr, selectedArr)
+                TAG_CALENDAR_EDITABLE_LIST -> updateSyncEditable(idArr, selectedArr)
+                TAG_CALENDAR_VISIBLE_LIST -> updateSyncVisible(idArr, selectedArr)
+                TAG_CALENDAR_ADD_REMINDER_LIST -> updateSyncReminder(idArr, selectedArr)
             }
         }
     }

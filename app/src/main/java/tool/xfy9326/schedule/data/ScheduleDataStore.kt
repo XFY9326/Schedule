@@ -3,10 +3,7 @@ package tool.xfy9326.schedule.data
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flowOn
-import tool.xfy9326.schedule.beans.ImageScareType
-import tool.xfy9326.schedule.beans.NotThisWeekCourseShowStyle
-import tool.xfy9326.schedule.beans.ScheduleStyles
-import tool.xfy9326.schedule.beans.WeekDay
+import tool.xfy9326.schedule.beans.*
 import tool.xfy9326.schedule.data.base.AbstractDataStore
 import tool.xfy9326.schedule.io.FileManager
 import tool.xfy9326.schedule.kt.tryEnumValueOf
@@ -29,7 +26,7 @@ object ScheduleDataStore : AbstractDataStore("ScheduleSettings") {
     private val scheduleBackgroundImageAlpha by intPreferencesKey()
     private val enableScheduleBackground by booleanPreferencesKey()
     private val scheduleBackgroundScareType by stringPreferencesKey()
-    private val useLightColorSystemBarColor by booleanPreferencesKey()
+    private val scheduleSystemBarAppearance by stringPreferencesKey()
     private val scheduleBackgroundUseAnim by booleanPreferencesKey()
     private val showScheduleTimes by booleanPreferencesKey()
     private val horizontalCourseCellText by booleanPreferencesKey()
@@ -66,7 +63,7 @@ object ScheduleDataStore : AbstractDataStore("ScheduleSettings") {
         }
     }
 
-    val useLightColorSystemBarColorFlow = useLightColorSystemBarColor.readAsFlow(false)
+    val scheduleSystemBarAppearanceFlow = scheduleSystemBarAppearance.readEnumAsFlow(SystemBarAppearance.FOLLOW_THEME)
 
     val toolBarTintColorFlow = read {
         if (it[customScheduleTextColor] == true) it[toolBarTintColor] else null

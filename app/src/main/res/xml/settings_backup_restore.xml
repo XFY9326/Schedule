@@ -12,7 +12,7 @@
 
         <androidx.preference.Preference
             app:iconSpaceReserved="false"
-            app:key="backupSchedule"
+            app:key="@string/pref_backup_schedule"
             app:persistent="false"
             app:summary="@string/backup_schedule_sum"
             app:title="@string/backup_schedule" />
@@ -30,7 +30,7 @@
 
         <androidx.preference.Preference
             app:iconSpaceReserved="false"
-            app:key="restoreSchedule"
+            app:key="@string/pref_restore_schedule"
             app:persistent="false"
             app:summary="@string/restore_schedule_sum"
             app:title="@string/restore_schedule" />

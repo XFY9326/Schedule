@@ -108,7 +108,7 @@ class ScheduleGridView @JvmOverloads constructor(context: Context, attrs: Attrib
 
         val bottomInset =
             rootWindowInsets?.let {
-                WindowInsetsCompat.toWindowInsetsCompat(it).systemWindowInsetBottom
+                WindowInsetsCompat.toWindowInsetsCompat(it).getInsets(WindowInsetsCompat.Type.systemBars()).bottom
             } ?: 0
 
         val actualHeight =

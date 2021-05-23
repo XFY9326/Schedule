@@ -24,7 +24,7 @@ object AppSettingsDataStore : AbstractDataStore("Settings") {
     private val allowImportIncompleteSchedule by booleanPreferencesKey()
     private val drawWaterMarkOnScheduleImage by booleanPreferencesKey()
     private val enableWebCourseProviderConsoleDebug by booleanPreferencesKey()
-    private val jsCourseImportEnableNetwork by booleanPreferencesKey()
+    val jsCourseImportEnableNetwork by booleanPreferencesKey()
     val enableOnlineCourseImport by booleanPreferencesKey()
 
     suspend fun setNightModeType(nightMode: NightMode) = nightModeType.saveData(nightMode.name)

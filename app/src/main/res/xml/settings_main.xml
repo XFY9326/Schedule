@@ -1,63 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.preference.PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
     <androidx.preference.Preference
-        app:fragment="tool.xfy9326.schedule.ui.fragment.GeneralSettingsFragment"
         app:icon="@drawable/ic_settings_24"
+        app:key="@string/pref_general_settings"
         app:persistent="false"
         app:summary="@string/general_settings_sum"
         app:title="@string/general_settings" />
 
     <androidx.preference.Preference
-        app:fragment="tool.xfy9326.schedule.ui.fragment.ScheduleSettingsFragment"
         app:icon="@drawable/ic_table_24"
+        app:key="@string/pref_schedule_table_settings"
         app:persistent="false"
         app:summary="@string/schedule_settings_sum"
         app:title="@string/schedule_settings" />
 
     <androidx.preference.Preference
-        app:fragment="tool.xfy9326.schedule.ui.fragment.CalendarSyncSettingsFragment"
         app:icon="@drawable/ic_sync_24"
+        app:key="@string/pref_calendar_sync_settings"
         app:persistent="false"
         app:summary="@string/calendar_sync_settings_sum"
         app:title="@string/calendar_sync" />
 
     <androidx.preference.Preference
-        app:fragment="tool.xfy9326.schedule.ui.fragment.OnlineCourseImportSettingsFragment"
         app:icon="@drawable/ic_online_24"
+        app:key="@string/pref_online_course_import_settings"
         app:persistent="false"
         app:summary="@string/online_course_import_sum"
         app:title="@string/online_course_import" />
 
     <androidx.preference.Preference
-        app:fragment="tool.xfy9326.schedule.ui.fragment.BackupRestoreSettingsFragment"
         app:icon="@drawable/ic_backup_restore_24"
+        app:key="@string/pref_backup_restore_settings"
         app:persistent="false"
         app:summary="@string/backup_and_restore_sum"
         app:title="@string/backup_and_restore" />
 
     <androidx.preference.Preference
         app:icon="@drawable/ic_feedback_24"
-        app:key="feedback"
+        app:key="@string/pref_feedback"
         app:persistent="false"
         app:summary="@string/online_feedback_sum"
         app:title="@string/online_feedback" />
 
     <androidx.preference.Preference
-        app:fragment="tool.xfy9326.schedule.ui.fragment.DebugSettingsFragment"
         app:icon="@drawable/ic_debug_24"
+        app:key="@string/pref_debug_settings"
         app:persistent="false"
         app:summary="@string/debug_settings_sum"
         app:title="@string/debug_settings" />
 
     <androidx.preference.Preference
         app:icon="@drawable/ic_cloud_download_24"
-        app:key="checkUpgrade"
+        app:key="@string/pref_check_upgrade"
         app:persistent="false"
         app:title="@string/check_upgrade" />
 
     <androidx.preference.Preference
         app:icon="@drawable/ic_about_24"
-        app:key="about"
+        app:key="@string/pref_about"
         app:persistent="false"
         app:title="@string/about" />
+
 </androidx.preference.PreferenceScreen>
