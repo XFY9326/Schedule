@@ -27,7 +27,7 @@ import tool.xfy9326.schedule.ui.adapter.CourseImportAdapter
 import tool.xfy9326.schedule.ui.dialog.FullScreenLoadingDialog
 import tool.xfy9326.schedule.ui.dialog.JSConfigImportDialog
 import tool.xfy9326.schedule.ui.dialog.JSConfigPrepareDialog
-import tool.xfy9326.schedule.ui.recyclerview.AdvancedDividerItemDecoration
+import tool.xfy9326.schedule.ui.view.recyclerview.AdvancedDividerItemDecoration
 import tool.xfy9326.schedule.ui.vm.OnlineCourseImportViewModel
 import tool.xfy9326.schedule.utils.IntentUtils
 import tool.xfy9326.schedule.utils.schedule.CourseImportUtils

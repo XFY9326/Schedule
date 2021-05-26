@@ -1,4 +1,4 @@
-package tool.xfy9326.schedule.ui.recyclerview
+package tool.xfy9326.schedule.ui.view.recyclerview
 
 import android.animation.Animator
 import android.animation.ValueAnimator

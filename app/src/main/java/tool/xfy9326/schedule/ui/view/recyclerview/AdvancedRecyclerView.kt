@@ -1,6 +1,6 @@
 @file:Suppress("MemberVisibilityCanBePrivate", "unused")
 
-package tool.xfy9326.schedule.ui.view
+package tool.xfy9326.schedule.ui.view.recyclerview
 
 import android.content.Context
 import android.util.AttributeSet

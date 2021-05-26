@@ -12,9 +12,9 @@ import tool.xfy9326.schedule.content.beans.JSConfig
 import tool.xfy9326.schedule.databinding.ItemCourseImportBinding
 import tool.xfy9326.schedule.databinding.LayoutSwipeItemBinding
 import tool.xfy9326.schedule.kt.setOnSingleClickListener
-import tool.xfy9326.schedule.ui.recyclerview.ListViewBindingAdapter
-import tool.xfy9326.schedule.ui.recyclerview.SwipeItemCallback
-import tool.xfy9326.schedule.ui.recyclerview.SwipeItemViewHolder
+import tool.xfy9326.schedule.ui.view.recyclerview.ListViewBindingAdapter
+import tool.xfy9326.schedule.ui.view.recyclerview.SwipeItemCallback
+import tool.xfy9326.schedule.ui.view.recyclerview.SwipeItemViewHolder
 import tool.xfy9326.schedule.ui.viewholder.ViewBindingViewHolder
 
 class CourseImportAdapter : ListViewBindingAdapter<ICourseImportConfig, ViewBinding, ViewBindingViewHolder<out ViewBinding>>() {

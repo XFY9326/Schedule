@@ -12,8 +12,8 @@ import tool.xfy9326.schedule.databinding.ItemScheduleBinding
 import tool.xfy9326.schedule.kt.getColorCompat
 import tool.xfy9326.schedule.kt.setOnSingleClickListener
 import tool.xfy9326.schedule.tools.MaterialColorHelper
-import tool.xfy9326.schedule.ui.recyclerview.BaseDifferItemCallBack
-import tool.xfy9326.schedule.ui.recyclerview.ListViewBindingAdapter
+import tool.xfy9326.schedule.ui.view.recyclerview.BaseDifferItemCallBack
+import tool.xfy9326.schedule.ui.view.recyclerview.ListViewBindingAdapter
 import tool.xfy9326.schedule.ui.viewholder.ViewBindingViewHolder
 
 class ScheduleManageAdapter :

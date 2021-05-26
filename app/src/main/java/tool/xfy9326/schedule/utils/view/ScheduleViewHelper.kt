@@ -21,6 +21,7 @@ import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
 import tool.xfy9326.schedule.kt.getColorCompat
 import tool.xfy9326.schedule.kt.getDefaultBackgroundColor
 import tool.xfy9326.schedule.ui.view.*
+import tool.xfy9326.schedule.ui.view.schedule.*
 import tool.xfy9326.schedule.utils.schedule.CourseTimeUtils
 import tool.xfy9326.schedule.utils.schedule.CourseUtils
 
