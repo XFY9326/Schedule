@@ -2,6 +2,7 @@ package tool.xfy9326.schedule.kt
 
 import android.view.View
 
+@JvmSynthetic
 fun View.setOnSingleClickListener(block: (View?) -> Unit) {
     setOnClickListener(object : OnSingleClickListener() {
         override fun onSingleClick(v: View?) {

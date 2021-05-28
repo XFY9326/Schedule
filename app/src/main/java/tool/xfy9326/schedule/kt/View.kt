@@ -121,7 +121,6 @@ fun Window.setSystemBarAppearance(systemBarAppearance: SystemBarAppearance) {
 }
 
 // Light status bar in Android Window means status bar that used in light background, so the status bar color is black.
-// For default, it's true in app theme.
 private fun Window.setLightSystemBar(enabled: Boolean) {
     WindowInsetsControllerCompat(this, decorView).apply {
         isAppearanceLightStatusBars = enabled

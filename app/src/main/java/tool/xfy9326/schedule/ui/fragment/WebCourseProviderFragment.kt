@@ -173,7 +173,7 @@ class WebCourseProviderFragment : ViewBindingFragment<FragmentWebCourseProviderB
                 weakRef.get()?.cancel()
             }
             setCancelable(false)
-        }.show(this)
+        }.show(viewLifecycleOwner)
     }
 
     private fun changeProgressBar(newProgress: Int) {
