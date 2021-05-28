@@ -2,7 +2,6 @@ package tool.xfy9326.schedule.ui.dialog
 
 import android.app.Dialog
 import android.os.Bundle
-import android.view.View
 import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.setFragmentResult
@@ -71,7 +70,8 @@ class ScheduleControlPanel : BottomSheetDialogFragment() {
         }
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onStart() {
+        super.onStart()
         val systemBarAppearance = requireArguments().getSerializable(ARGUMENT_SYSTEM_BAR_APPEARANCE) as SystemBarAppearance
         requireDialog().window?.setSystemBarAppearance(systemBarAppearance)
     }

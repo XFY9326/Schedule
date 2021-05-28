@@ -84,8 +84,8 @@ class ScheduleViewModel : AbstractViewModel() {
     fun showScheduleControlPanel() {
         viewModelScope.launch(Dispatchers.IO) {
             val weekNumInfo = ScheduleViewDataProcessor.weekNumInfoFlow.first()
-            val scheduleSystemBarAppearance = ScheduleDataStore.scheduleSystemBarAppearanceFlow.first()
-            showScheduleControlPanel.postEvent(Triple(weekNumInfo.first, weekNumInfo.second, scheduleSystemBarAppearance))
+            val systemBarAppearance = ScheduleDataStore.scheduleSystemBarAppearanceFlow.first()
+            showScheduleControlPanel.postEvent(Triple(weekNumInfo.first, weekNumInfo.second, systemBarAppearance))
         }
     }
 
