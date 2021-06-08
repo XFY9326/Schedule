@@ -1,4 +1,4 @@
-package tool.xfy9326.schedule.ui.fragment
+package tool.xfy9326.schedule.ui.fragment.settings
 
 import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
@@ -15,13 +15,10 @@ import tool.xfy9326.schedule.ui.fragment.base.AbstractSettingsFragment
 import tool.xfy9326.schedule.ui.vm.SettingsViewModel
 import tool.xfy9326.schedule.utils.BackupUtils
 
-@Suppress("unused")
 class BackupRestoreSettingsFragment : AbstractSettingsFragment(), MultiItemSelectDialog.OnMultiItemSelectedListener,
     ImportCourseConflictDialog.OnReadImportCourseConflictListener {
     companion object {
         private const val EXTRA_BATCH_RESULT = "EXTRA_BATCH_RESULT"
-        private const val PREFERENCE_BACKUP_SCHEDULE = "backupSchedule"
-        private const val PREFERENCE_RESTORE_SCHEDULE = "restoreSchedule"
     }
 
     override val titleName: Int = R.string.backup_and_restore
@@ -43,10 +40,10 @@ class BackupRestoreSettingsFragment : AbstractSettingsFragment(), MultiItemSelec
     }
 
     override fun onPrefInit(savedInstanceState: Bundle?) {
-        setOnPrefClickListener(PREFERENCE_BACKUP_SCHEDULE) {
+        setOnPrefClickListener(R.string.pref_backup_schedule) {
             requireSettingsViewModel()?.getScheduleBackupList()
         }
-        setOnPrefClickListener(PREFERENCE_RESTORE_SCHEDULE) {
+        setOnPrefClickListener(R.string.pref_restore_schedule) {
             restoreSchedule.launch(MIMEConst.MIME_APPLICATION_JSON)
         }
     }
@@ -55,7 +52,7 @@ class BackupRestoreSettingsFragment : AbstractSettingsFragment(), MultiItemSelec
         viewModel.scheduleBackupList.observeEvent(this) {
             MultiItemSelectDialog.showDialog(
                 childFragmentManager,
-                PREFERENCE_BACKUP_SCHEDULE,
+                null,
                 getString(R.string.backup_schedule_choose),
                 showArr = it.map { min ->
                     min.name

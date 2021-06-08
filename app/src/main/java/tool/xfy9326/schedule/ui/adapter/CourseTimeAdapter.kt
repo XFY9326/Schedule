@@ -7,7 +7,7 @@ import tool.xfy9326.schedule.beans.CourseTime
 import tool.xfy9326.schedule.databinding.ItemCourseTimeBinding
 import tool.xfy9326.schedule.kt.getStringArray
 import tool.xfy9326.schedule.kt.setOnSingleClickListener
-import tool.xfy9326.schedule.ui.recyclerview.ListViewBindingAdapter
+import tool.xfy9326.schedule.ui.view.recyclerview.ListViewBindingAdapter
 import tool.xfy9326.schedule.ui.viewholder.ViewBindingViewHolder
 import tool.xfy9326.schedule.utils.schedule.WeekNumPattern
 

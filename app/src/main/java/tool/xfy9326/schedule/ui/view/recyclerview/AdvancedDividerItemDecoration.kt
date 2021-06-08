@@ -1,4 +1,4 @@
-package tool.xfy9326.schedule.ui.recyclerview
+package tool.xfy9326.schedule.ui.view.recyclerview
 
 import android.content.Context
 import android.graphics.Canvas

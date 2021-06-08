@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.preference.PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <androidx.preference.PreferenceCategory
         app:iconSpaceReserved="false"
         app:title="@string/theme">
@@ -67,13 +68,13 @@
 
         <androidx.preference.Preference
             app:iconSpaceReserved="false"
-            app:key="clearCache"
+            app:key="@string/pref_clear_cache"
             app:persistent="false"
             app:title="@string/clear_cache" />
 
         <androidx.preference.Preference
             app:iconSpaceReserved="false"
-            app:key="restoreSettings"
+            app:key="@string/pref_restore_settings"
             app:persistent="false"
             app:title="@string/restore_settings" />
 

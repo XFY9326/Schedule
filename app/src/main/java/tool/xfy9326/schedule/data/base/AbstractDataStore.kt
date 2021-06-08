@@ -16,17 +16,13 @@ abstract class AbstractDataStore(val name: String) {
     val dataStore = App.instance.dataStore
     protected val readOnlyFlow = dataStore.data.shareIn(GlobalScope, SharingStarted.Eagerly, 1)
 
-    fun getPreferenceDataStore(scope: CoroutineScope) = DataStorePreferenceAdapter(dataStore, scope)
+    fun getPreferenceDataStore(scope: CoroutineScope) = DataStorePreferenceAdapter(this, scope)
 
     fun <R> read(transform: suspend (pref: Preferences) -> R) = readOnlyFlow.map(transform).distinctUntilChanged()
 
     suspend fun edit(transform: suspend (MutablePreferences) -> Unit) = dataStore.edit(transform)
 
     suspend fun updateData(transform: suspend (Preferences) -> Preferences) = dataStore.updateData(transform)
-
-    suspend fun clear() = edit {
-        it.clear()
-    }
 
     protected fun <T> Preferences.Key<T>.readAsFlow() = read {
         it[this]
@@ -63,12 +59,22 @@ abstract class AbstractDataStore(val name: String) {
         }
     }.filterNotNull()
 
-    protected suspend fun <T> Preferences.Key<T>.saveData(data: T) = dataStore.edit {
-        it[this] = data
+    protected suspend fun <T> Preferences.Key<T>.saveData(data: T) {
+        edit {
+            it[this] = data
+        }
     }
 
-    protected suspend fun <T> Preferences.Key<T>.remove() = dataStore.edit {
-        it.remove(this)
+    protected suspend fun <T> Preferences.Key<T>.remove() {
+        edit {
+            it.remove(this)
+        }
+    }
+
+    suspend fun clear() {
+        edit {
+            it.clear()
+        }
     }
 
     protected fun booleanPreferencesKey() =

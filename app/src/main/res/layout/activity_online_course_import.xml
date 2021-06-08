@@ -74,7 +74,7 @@
                 android:layout_marginTop="5dp"
                 android:animateLayoutChanges="true">
 
-                <tool.xfy9326.schedule.ui.view.AdvancedRecyclerView
+                <tool.xfy9326.schedule.ui.view.recyclerview.AdvancedRecyclerView
                     android:id="@+id/recyclerView_courseImportList"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"

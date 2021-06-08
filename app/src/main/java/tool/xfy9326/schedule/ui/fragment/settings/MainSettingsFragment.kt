@@ -1,7 +1,8 @@
-package tool.xfy9326.schedule.ui.fragment
+package tool.xfy9326.schedule.ui.fragment.settings
 
 import android.os.Bundle
 import tool.xfy9326.schedule.R
+import tool.xfy9326.schedule.kt.bindPrefFragment
 import tool.xfy9326.schedule.kt.setOnPrefClickListener
 import tool.xfy9326.schedule.kt.showSnackBar
 import tool.xfy9326.schedule.kt.startActivity
@@ -12,23 +13,23 @@ import tool.xfy9326.schedule.ui.fragment.base.AbstractSettingsFragment
 import tool.xfy9326.schedule.utils.UpgradeUtils
 
 class MainSettingsFragment : AbstractSettingsFragment() {
-    companion object {
-        private const val PREFERENCE_ABOUT = "about"
-        private const val PREFERENCE_FEEDBACK = "feedback"
-        private const val PREFERENCE_CHECK_UPGRADE = "checkUpgrade"
-    }
-
     override val preferenceResId: Int = R.xml.settings_main
     override val titleName: Int = R.string.settings
 
     override fun onPrefInit(savedInstanceState: Bundle?) {
-        setOnPrefClickListener(PREFERENCE_ABOUT) {
+        bindPrefFragment<GeneralSettingsFragment>(R.string.pref_general_settings)
+        bindPrefFragment<ScheduleSettingsFragment>(R.string.pref_schedule_table_settings)
+        bindPrefFragment<CalendarSyncSettingsFragment>(R.string.pref_calendar_sync_settings)
+        bindPrefFragment<OnlineCourseImportSettingsFragment>(R.string.pref_online_course_import_settings)
+        bindPrefFragment<BackupRestoreSettingsFragment>(R.string.pref_backup_restore_settings)
+        bindPrefFragment<DebugSettingsFragment>(R.string.pref_debug_settings)
+        setOnPrefClickListener(R.string.pref_about) {
             requireActivity().startActivity<AboutActivity>()
         }
-        setOnPrefClickListener(PREFERENCE_FEEDBACK) {
+        setOnPrefClickListener(R.string.pref_feedback) {
             requireActivity().startActivity<FeedbackActivity>()
         }
-        setOnPrefClickListener(PREFERENCE_CHECK_UPGRADE) {
+        setOnPrefClickListener(R.string.pref_check_upgrade) {
             UpgradeUtils.checkUpgrade(this, true,
                 onFailed = { requireRootLayout()?.showSnackBar(R.string.update_check_failed) },
                 onNoUpgrade = { requireRootLayout()?.showSnackBar(R.string.no_new_update) },

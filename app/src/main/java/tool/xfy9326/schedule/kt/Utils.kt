@@ -1,10 +1,9 @@
-@file:Suppress("unused")
-
 package tool.xfy9326.schedule.kt
 
+import androidx.annotation.StringRes
 import androidx.preference.Preference
+import androidx.preference.PreferenceFragmentCompat
 import tool.xfy9326.schedule.beans.*
-import tool.xfy9326.schedule.ui.fragment.base.AbstractSettingsFragment
 import java.util.*
 import kotlin.math.min
 
@@ -40,9 +39,15 @@ infix fun ScheduleTime.intersect(scheduleTime: ScheduleTime): Boolean {
     return start1 <= end2 && end1 >= start2
 }
 
-fun AbstractSettingsFragment.setOnPrefClickListener(key: String, action: (Preference) -> Unit) {
-    findPreference<Preference>(key)?.setOnPreferenceClickListener {
+fun <T : Preference> PreferenceFragmentCompat.findPreference(@StringRes keyId: Int): T? = findPreference(getString(keyId))
+
+fun PreferenceFragmentCompat.setOnPrefClickListener(@StringRes keyId: Int, action: (Preference) -> Unit) {
+    findPreference<Preference>(keyId)?.setOnPreferenceClickListener {
         action(it)
         false
     }
+}
+
+inline fun <reified T : PreferenceFragmentCompat> PreferenceFragmentCompat.bindPrefFragment(@StringRes keyId: Int) {
+    findPreference<Preference>(keyId)?.fragment = T::class.qualifiedName
 }

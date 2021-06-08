@@ -19,12 +19,16 @@ import tool.xfy9326.schedule.io.kt.*
 import java.io.InputStream
 
 /**
+ * Dir sample:
  * |----- config.json
  * |----- src
  *        |----- ScheduleProvider.js
  *        |----- ScheduleParser.js
  * |----- lib
  *        |-----[Url MD5].js
+ *
+ * File download:
+ * XXX.js.download -> XXX.js
  */
 object JSFileManager {
     private const val FILE_NAME_JS_CONFIG = "config.json"

@@ -1,4 +1,4 @@
-package tool.xfy9326.schedule.ui.view
+package tool.xfy9326.schedule.ui.view.schedule
 
 import android.content.Context
 import android.util.AttributeSet
@@ -108,7 +108,7 @@ class ScheduleGridView @JvmOverloads constructor(context: Context, attrs: Attrib
 
         val bottomInset =
             rootWindowInsets?.let {
-                WindowInsetsCompat.toWindowInsetsCompat(it).systemWindowInsetBottom
+                WindowInsetsCompat.toWindowInsetsCompat(it).getInsets(WindowInsetsCompat.Type.systemBars()).bottom
             } ?: 0
 
         val actualHeight =

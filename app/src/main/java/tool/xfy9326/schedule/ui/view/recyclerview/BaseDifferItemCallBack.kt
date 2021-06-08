@@ -1,6 +1,6 @@
 @file:Suppress("DiffUtilEquals")
 
-package tool.xfy9326.schedule.ui.recyclerview
+package tool.xfy9326.schedule.ui.view.recyclerview
 
 import androidx.recyclerview.widget.DiffUtil
 

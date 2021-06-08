@@ -1,4 +1,4 @@
-package tool.xfy9326.schedule.ui.fragment
+package tool.xfy9326.schedule.ui.fragment.settings
 
 import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
@@ -17,14 +17,11 @@ import tool.xfy9326.schedule.ui.fragment.base.AbstractSettingsFragment
 import tool.xfy9326.schedule.ui.vm.SettingsViewModel
 import tool.xfy9326.schedule.utils.IntentUtils
 
-@Suppress("unused")
 class DebugSettingsFragment : AbstractSettingsFragment() {
     companion object {
-        private const val KEY_READ_DEBUG_LOGS = "readDebugLogs"
-        private const val KEY_OUTPUT_DEBUG_LOGS = "outputDebugLogs"
-        private const val KEY_CLEAR_DEBUG_LOGS = "clearDebugLogs"
-        private const val KEY_SEND_DEBUG_LOG = "sendDebugLog"
-        private const val KEY_HANDLE_EXCEPTION = "handleException"
+        private const val TAG_READ_DEBUG_LOGS = "READ_DEBUG_LOGS"
+        private const val TAG_OUTPUT_DEBUG_LOGS = "OUTPUT_DEBUG_LOGS"
+        private const val TAG_SEND_DEBUG_LOG = "SEND_DEBUG_LOG"
     }
 
     override val titleName: Int = R.string.debug_settings
@@ -40,16 +37,16 @@ class DebugSettingsFragment : AbstractSettingsFragment() {
     }
 
     override fun onPrefInit(savedInstanceState: Bundle?) {
-        setOnPrefClickListener(KEY_READ_DEBUG_LOGS) {
-            requireSettingsViewModel()?.getAllLogs(KEY_READ_DEBUG_LOGS)
+        setOnPrefClickListener(R.string.pref_read_debug_logs) {
+            requireSettingsViewModel()?.getAllLogs(TAG_READ_DEBUG_LOGS)
         }
-        setOnPrefClickListener(KEY_OUTPUT_DEBUG_LOGS) {
-            requireSettingsViewModel()?.getAllLogs(KEY_OUTPUT_DEBUG_LOGS)
+        setOnPrefClickListener(R.string.pref_output_debug_logs) {
+            requireSettingsViewModel()?.getAllLogs(TAG_OUTPUT_DEBUG_LOGS)
         }
-        setOnPrefClickListener(KEY_SEND_DEBUG_LOG) {
-            requireSettingsViewModel()?.getAllLogs(KEY_SEND_DEBUG_LOG)
+        setOnPrefClickListener(R.string.pref_send_debug_log) {
+            requireSettingsViewModel()?.getAllLogs(TAG_SEND_DEBUG_LOG)
         }
-        setOnPrefClickListener(KEY_CLEAR_DEBUG_LOGS) {
+        setOnPrefClickListener(R.string.pref_clear_debug_logs) {
             MaterialAlertDialogBuilder(requireContext()).apply {
                 setTitle(R.string.clear_debug_logs)
                 setMessage(R.string.clear_debug_logs_msg)
@@ -65,14 +62,14 @@ class DebugSettingsFragment : AbstractSettingsFragment() {
     override fun onBindLiveDataFromSettingsViewMode(viewModel: SettingsViewModel) {
         viewModel.allDebugLogs.observeEvent(this) {
             when (it.first) {
-                KEY_READ_DEBUG_LOGS -> showDebugLogsSelectDialog(it.second, R.string.read_debug_logs) { log ->
+                TAG_READ_DEBUG_LOGS -> showDebugLogsSelectDialog(it.second, R.string.read_debug_logs) { log ->
                     viewModel.showDebugLog(log)
                 }
-                KEY_OUTPUT_DEBUG_LOGS -> showDebugLogsSelectDialog(it.second, R.string.output_debug_logs) { log ->
+                TAG_OUTPUT_DEBUG_LOGS -> showDebugLogsSelectDialog(it.second, R.string.output_debug_logs) { log ->
                     viewModel.waitCreateLogFileName.write(log)
                     outputLogFile.launch(log)
                 }
-                KEY_SEND_DEBUG_LOG -> showDebugLogsSelectDialog(it.second, R.string.send_debug_log) { log ->
+                TAG_SEND_DEBUG_LOG -> showDebugLogsSelectDialog(it.second, R.string.send_debug_log) { log ->
                     IntentUtils.sendCrashReport(requireContext(), log)
                 }
             }
@@ -82,11 +79,7 @@ class DebugSettingsFragment : AbstractSettingsFragment() {
         }
         viewModel.outputLogFileToUriResult.observeEvent(this) {
             requireRootLayout()?.showSnackBar(
-                if (it) {
-                    R.string.output_file_success
-                } else {
-                    R.string.output_file_failed
-                }
+                if (it) R.string.output_file_success else R.string.output_file_failed
             )
         }
     }

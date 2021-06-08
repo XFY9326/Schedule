@@ -5,6 +5,11 @@
         <item name="android:windowLightNavigationBar" tools:ignore="NewApi">true</item>
     </style>
 
+    <style name="AppTheme.DefaultSystemBar" parent="AppTheme.Base">
+        <item name="android:windowLightStatusBar">@null</item>
+        <item name="android:windowLightNavigationBar" tools:ignore="NewApi">@null</item>
+    </style>
+
     <style name="AppTheme.LaunchScreen.Base" parent="AppTheme.Base">
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>

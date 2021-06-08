@@ -1,4 +1,4 @@
-package tool.xfy9326.schedule.ui.recyclerview
+package tool.xfy9326.schedule.ui.view.recyclerview
 
 import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatImageView

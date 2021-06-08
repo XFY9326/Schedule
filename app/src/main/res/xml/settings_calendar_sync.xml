@@ -4,7 +4,6 @@
 
     <androidx.preference.Preference
         app:iconSpaceReserved="false"
-        app:key="syncCalendarAttention"
         app:persistent="false"
         app:summary="@string/calendar_sync_attention" />
 
@@ -14,13 +13,13 @@
 
         <androidx.preference.Preference
             app:icon="@drawable/ic_sync_24"
-            app:key="syncToCalendar"
+            app:key="@string/pref_sync_to_calendar"
             app:persistent="false"
             app:title="@string/sync_to_calendar" />
 
         <androidx.preference.Preference
             app:icon="@drawable/ic_delete_sweep_24"
-            app:key="clearCalendar"
+            app:key="@string/pref_clear_calendar"
             app:persistent="false"
             app:summary="@string/clear_calendar_sum"
             app:title="@string/clear_calendar" />
@@ -40,7 +39,7 @@
 
         <androidx.preference.Preference
             app:iconSpaceReserved="false"
-            app:key="calendarSyncList"
+            app:key="@string/pref_calendar_sync_list"
             app:persistent="false"
             app:summary="@string/calendar_sync_schedule_default_sum"
             app:title="@string/calendar_sync_schedule_list" />
@@ -54,7 +53,7 @@
 
         <androidx.preference.Preference
             app:iconSpaceReserved="false"
-            app:key="calendarVisibleList"
+            app:key="@string/pref_calendar_visible_list"
             app:persistent="false"
             app:summary="@string/calendar_sync_schedule_default_sum"
             app:title="@string/calendar_sync_schedule_default_visible_list" />
@@ -68,7 +67,7 @@
 
         <androidx.preference.Preference
             app:iconSpaceReserved="false"
-            app:key="calendarEditableList"
+            app:key="@string/pref_calendar_editable_list"
             app:persistent="false"
             app:summary="@string/calendar_sync_schedule_default_sum"
             app:title="@string/calendar_sync_schedule_editable_list" />
@@ -82,7 +81,7 @@
 
         <androidx.preference.Preference
             app:iconSpaceReserved="false"
-            app:key="calendarSyncAddReminderList"
+            app:key="@string/pref_calendar_add_reminder_list"
             app:persistent="false"
             app:summary="@string/calendar_sync_schedule_default_sum"
             app:title="@string/add_calendar_reminder_list" />
@@ -100,7 +99,7 @@
 
         <androidx.preference.Preference
             app:iconSpaceReserved="false"
-            app:key="clearSyncSettings"
+            app:key="@string/pref_clear_sync_settings"
             app:persistent="false"
             app:summary="@string/clear_calendar_settings_sum"
             app:title="@string/clear_calendar_settings" />

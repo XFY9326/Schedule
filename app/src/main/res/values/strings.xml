@@ -200,8 +200,8 @@
     <string name="tool_bar_tint_color_sum">修改顶部工具栏文字与图标颜色</string>
     <string name="time_text_color">课表时间文字颜色</string>
     <string name="time_text_color_sum">修改课表内的时间文字颜色</string>
-    <string name="use_light_color_system_bar_color">使用浅色的系统栏文字图标颜色</string>
-    <string name="use_light_color_system_bar_color_sum">状态栏与导航栏文字图标颜色将会使用浅色</string>
+    <string name="system_bar_appearance">系统栏文字图标颜色</string>
+    <string name="system_bar_appearance_sum">调整课表状态栏与导航栏文字图标颜色</string>
     <string name="schedule_view_alpha">课表透明度</string>
     <string name="schedule_view_alpha_sum">调整课表透明度</string>
     <string name="course_cell_text_size">课程格文字大小</string>
@@ -420,6 +420,10 @@
     <string name="scare_type_fit_center">等比缩放，从中间开始填充满</string>
     <string name="scare_type_center_crop">等比缩放直到完全填充</string>
     <string name="scare_type_center_inside">等比缩放到能完整展示</string>
+
+    <string name="system_bar_follow_theme">跟随主题颜色调整</string>
+    <string name="system_bar_use_light">适用于明亮背景</string>
+    <string name="system_bar_use_dark">适用于暗色背景</string>
 
     <string name="monday">一</string>
     <string name="tuesday">二</string>

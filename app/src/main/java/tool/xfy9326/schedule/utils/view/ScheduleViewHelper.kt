@@ -21,12 +21,13 @@ import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
 import tool.xfy9326.schedule.kt.getColorCompat
 import tool.xfy9326.schedule.kt.getDefaultBackgroundColor
 import tool.xfy9326.schedule.ui.view.*
+import tool.xfy9326.schedule.ui.view.schedule.*
 import tool.xfy9326.schedule.utils.schedule.CourseTimeUtils
 import tool.xfy9326.schedule.utils.schedule.CourseUtils
 
 object ScheduleViewHelper {
-    private const val MIN_SCHEDULE_COLUMN_COUNT = 6
-    private const val MAX_SCHEDULE_COLUMN_COUNT = 8
+    private const val MIN_SCHEDULE_COLUMN_COUNT = 5 + 1
+    private const val MAX_SCHEDULE_COLUMN_COUNT = 7 + 1
 
     suspend fun buildScheduleView(
         context: Context,

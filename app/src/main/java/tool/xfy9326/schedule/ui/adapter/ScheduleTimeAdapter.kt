@@ -6,7 +6,7 @@ import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.ScheduleTime
 import tool.xfy9326.schedule.databinding.ItemScheduleTimeBinding
 import tool.xfy9326.schedule.kt.setOnSingleClickListener
-import tool.xfy9326.schedule.ui.recyclerview.ListViewBindingAdapter
+import tool.xfy9326.schedule.ui.view.recyclerview.ListViewBindingAdapter
 import tool.xfy9326.schedule.ui.viewholder.ViewBindingViewHolder
 
 class ScheduleTimeAdapter : ListViewBindingAdapter<ScheduleTime, ItemScheduleTimeBinding, ViewBindingViewHolder<ItemScheduleTimeBinding>>() {

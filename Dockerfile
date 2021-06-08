@@ -20,9 +20,9 @@ ENV PATH ${JAVA_HOME}/bin:$PATH
 
 # Gradle
 ENV GRADLE_DISTS ~/.gradle/wrapper/dists
-ENV GRADLE_VERSION 6.5
+ENV GRADLE_VERSION 6.7.1
 ENV GRADLE_TYPE all
-ENV GRADLE_DIGEST 2oz4ud9k3tuxjg84bbf55q0tn
+ENV GRADLE_DIGEST 2moa8rlfac5eqlcfgk98k0deb
 
 # For users in china, use tencent mirrors instead
 # ENV GRADLE_DISTRIBUTIONS_URL https://services.gradle.org/distributions
@@ -41,7 +41,7 @@ RUN mkdir -p ${ANDROID_HOME}
 RUN mkdir ~/.android
 RUN touch ~/.android/repositories.cfg
 
-ENV ANDROID_COMMAND_LINE_TOOLS_VERSION 6858069
+ENV ANDROID_COMMAND_LINE_TOOLS_VERSION 7302050
 
 RUN wget --no-check-certificate -O ${ANDROID_HOME}/tools.zip "https://dl.google.com/android/repository/commandlinetools-linux-${ANDROID_COMMAND_LINE_TOOLS_VERSION}_latest.zip"
 RUN unzip -d ${ANDROID_HOME} ${ANDROID_HOME}/tools.zip > /dev/null

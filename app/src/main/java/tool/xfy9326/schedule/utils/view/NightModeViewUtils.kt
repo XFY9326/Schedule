@@ -25,8 +25,10 @@ import tool.xfy9326.schedule.beans.NightMode
 import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.databinding.ActivityScheduleBinding
 import tool.xfy9326.schedule.databinding.LayoutNavHeaderBinding
+import tool.xfy9326.schedule.io.kt.tryRecycle
 import tool.xfy9326.schedule.kt.getDefaultBackgroundColor
 import tool.xfy9326.schedule.kt.isUsingNightMode
+import tool.xfy9326.schedule.kt.setListener
 import tool.xfy9326.schedule.kt.showToast
 import tool.xfy9326.schedule.ui.vm.ScheduleViewModel
 import kotlin.math.max
@@ -46,6 +48,9 @@ object NightModeViewUtils {
             viewBinding.imageViewNightModeChangeMask,
             viewBinding.layoutScheduleRoot,
             viewBinding.drawerSchedule,
+            isChangingNightMode = {
+                viewModel.nightModeChanging.get()
+            },
             onReadOldSurface = {
                 viewModel.nightModeChangeOldSurface.read()
             },
@@ -61,12 +66,13 @@ object NightModeViewUtils {
         nightModeMask: ImageView,
         rootView: View,
         contentView: View,
+        isChangingNightMode: () -> Boolean,
         onReadOldSurface: () -> Bitmap?,
         onNightModeChanged: () -> Unit,
     ) {
         val animationParams = activity.intent.getBundleExtra(EXTRA_ANIMATE_NIGHT_MODE_CHANGED_BUNDLE)
         val nightModeChangeButton = LayoutNavHeaderBinding.bind(navHeaderView).buttonNightModeChange
-        if (animationParams != null) {
+        if (animationParams != null && isChangingNightMode.invoke()) {
             activity.intent.removeExtra(EXTRA_ANIMATE_NIGHT_MODE_CHANGED_BUNDLE)
             animateNightModeChanged(
                 activity,
@@ -98,7 +104,13 @@ object NightModeViewUtils {
 
             val isUsingNightMode = activity.isUsingNightMode()
             prepareAnimateNightModeChanged(rootView, nightModeButton, !isUsingNightMode, activity.intent)
-            onSaveSurface(activity.window.decorView.drawToBitmap())
+            val mask = try {
+                activity.window.decorView.drawToBitmap()
+            } catch (e: Exception) {
+                e.printStackTrace()
+                Bitmap.createBitmap(activity.window.decorView.measuredWidth, activity.window.decorView.measuredHeight, Bitmap.Config.ALPHA_8)
+            }
+            onSaveSurface(mask)
 
             val newMode = if (isUsingNightMode) {
                 NightMode.DISABLED
@@ -108,7 +120,7 @@ object NightModeViewUtils {
                 AppSettingsDataStore.setNightModeType(mode)
             }.modeInt
 
-            launch(Dispatchers.Main.immediate) {
+            launch(Dispatchers.Main) {
                 if (manuallyChangeNightMode) activity.showToast(R.string.manually_change_night_mode)
                 activity.window.setWindowAnimations(R.style.AppTheme_NightModeTransitionAnimation)
                 AppCompatDelegate.setDefaultNightMode(newMode)
@@ -157,10 +169,15 @@ object NightModeViewUtils {
             val animationDuration = context.resources.getInteger(android.R.integer.config_mediumAnimTime).toLong()
 
             rootView.postOnAnimation {
-                button.animate().scaleX(0f).scaleY(0f).setDuration(animationDuration / 2).withEndAction {
+                button.animate().scaleX(0f).scaleY(0f).setDuration(animationDuration / 2).setListener(doOnFinally = {
+                    button.scaleX = 0f
+                    button.scaleY = 0f
                     button.setImageResource(getNightModeIcon(setNightMode))
-                    button.animate().scaleX(1f).scaleY(1f).setDuration(animationDuration / 2).start()
-                }.start()
+                    button.animate().scaleX(1f).scaleY(1f).setDuration(animationDuration / 2).setListener(doOnFinally = {
+                        button.scaleX = 1f
+                        button.scaleY = 1f
+                    }).start()
+                }).start()
 
                 ViewAnimationUtils.createCircularReveal(contentView, startX.toInt(), startY.toInt(), 0f, finalRadius).apply {
                     duration = animationDuration
@@ -170,7 +187,7 @@ object NightModeViewUtils {
                         nightModeMask.isVisible = false
                         contentView.background = null
                         nightModeMask.setImageDrawable(null)
-                        oldSurface.recycle()
+                        oldSurface.tryRecycle()
                         onNightModeChanged()
                     }
 

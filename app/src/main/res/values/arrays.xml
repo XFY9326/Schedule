@@ -53,7 +53,7 @@
         <item>@string/use_transparent_background</item>
     </string-array>
 
-    <string-array name="not_this_week_course_show_style_value">
+    <string-array name="not_this_week_course_show_style_values">
         <item>SHOW_NOT_THIS_WEEK_TEXT</item>
         <item>USE_TRANSPARENT_BACKGROUND</item>
     </string-array>
@@ -62,4 +62,18 @@
         <item>SHOW_NOT_THIS_WEEK_TEXT</item>
         <item>USE_TRANSPARENT_BACKGROUND</item>
     </string-array>
+
+    <!-- SystemBarAppearance -->
+    <string-array name="system_bar_appearance">
+        <item>@string/system_bar_follow_theme</item>
+        <item>@string/system_bar_use_light</item>
+        <item>@string/system_bar_use_dark</item>
+    </string-array>
+
+    <string-array name="system_bar_appearance_values">
+        <item>FOLLOW_THEME</item>
+        <item>USE_LIGHT</item>
+        <item>USE_DARK</item>
+    </string-array>
+
 </resources>

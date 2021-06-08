@@ -37,10 +37,6 @@ inline fun <reified E : Enum<E>> tryEnumValueOf(names: Set<String>?): Set<E>? {
     }
 }
 
-inline fun <T> Array<out T>.forEachTwo(action: (Int, T, Int, T) -> Unit) {
-    for (i1 in indices) for (i2 in (i1 + 1)..lastIndex) action(i1, this[i1], i2, this[i2])
-}
-
 inline fun <T> List<T>.forEachTwo(action: (Int, T, Int, T) -> Unit) {
     for (i1 in indices) for (i2 in (i1 + 1)..lastIndex) action(i1, this[i1], i2, this[i2])
 }
@@ -56,4 +52,4 @@ inline fun <T> Mutex.withTryLock(owner: Any? = null, action: () -> T): T? {
     return null
 }
 
-fun Exception.getDeepStackTraceString() = cause?.stackTraceToString() ?: stackTraceToString()
+fun Throwable.getDeepStackTraceString() = cause?.stackTraceToString() ?: stackTraceToString()

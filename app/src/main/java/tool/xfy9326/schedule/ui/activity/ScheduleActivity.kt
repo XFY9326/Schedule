@@ -6,6 +6,7 @@ import android.os.Build
 import android.os.Bundle
 import android.view.*
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.core.graphics.Insets
 import androidx.core.view.*
 import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.widget.ViewPager2
@@ -63,7 +64,7 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
         scheduleBackgroundModule.init()
         viewModel.scrollToWeek.observeEvent(this, observer = ::scrollToWeek)
         viewModel.showScheduleControlPanel.observeEvent(this) {
-            ScheduleControlPanel.showDialog(supportFragmentManager, getCurrentShowWeekNum(), it.first, it.second, !it.third)
+            ScheduleControlPanel.showDialog(supportFragmentManager, getCurrentShowWeekNum(), it.first, it.second, it.third)
         }
         viewModel.showCourseDetailDialog.observeEvent(this) {
             CourseDetailDialog.showDialog(supportFragmentManager, it)
@@ -81,8 +82,8 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
             }
         }
         viewModel.toolBarTintColor.observe(this, ::setToolBarTintColor)
-        viewModel.useLightColorSystemBarColor.observe(this) {
-            window.enableLightSystemBar(this, !it && !isUsingNightMode())
+        viewModel.scheduleSystemBarAppearance.observe(this) {
+            window.setSystemBarAppearance(it)
         }
         viewModel.onlineCourseImportEnabled.observe(this) {
             viewBinding.navSchedule.menu.findItem(R.id.menu_navOnlineCourseImport)?.isVisible = it
@@ -103,17 +104,20 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
         }
 
         window.decorView.setOnApplyWindowInsetsListener { _, insets ->
-            WindowInsetsCompat.toWindowInsetsCompat(insets).apply {
-                viewBinding.layoutScheduleContent.apply {
-                    if (layoutParams == null || layoutParams !is ViewGroup.MarginLayoutParams) {
-                        updatePadding(top = systemWindowInsetTop)
-                    } else {
-                        updateLayoutParams<ViewGroup.MarginLayoutParams> {
-                            updateMargins(top = systemWindowInsetTop)
-                        }
+            val systemBarInset = WindowInsetsCompat.toWindowInsetsCompat(insets).getInsets(WindowInsetsCompat.Type.systemBars())
+            viewBinding.layoutScheduleContent.apply {
+                if (layoutParams == null || layoutParams !is ViewGroup.MarginLayoutParams) {
+                    updatePadding(top = systemBarInset.top)
+                } else {
+                    updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                        updateMargins(top = systemBarInset.top)
                     }
                 }
-            }.consumeSystemWindowInsets().toWindowInsets()
+            }
+            WindowInsetsCompat.Builder(WindowInsetsCompat.toWindowInsetsCompat(insets))
+                .setInsets(WindowInsetsCompat.Type.systemBars(), Insets.of(systemBarInset.left, 0, systemBarInset.right, 0))
+                .build()
+                .toWindowInsets()
         }
 
         ScheduleControlPanel.addScrollToWeekListener(supportFragmentManager, this) {
@@ -187,7 +191,7 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
             textViewScheduleTodayDate.setTextColor(tintColor)
             textViewScheduleNotCurrentWeek.setTextColor(tintColor)
             textViewScheduleNowShowWeekNum.setTextColor(tintColor)
-            toolBarSchedule.menu.setIconTint(tintColor)
+            invalidateOptionsMenu()
             // PorterDuffColorFilter在Android P以下显示错误
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                 toolBarSchedule.navigationIcon?.colorFilter = PorterDuffColorFilter(tintColor, PorterDuff.Mode.SRC)

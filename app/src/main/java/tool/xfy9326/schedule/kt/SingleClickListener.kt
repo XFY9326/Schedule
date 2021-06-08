@@ -2,6 +2,7 @@ package tool.xfy9326.schedule.kt
 
 import android.view.View
 
+@JvmSynthetic
 fun View.setOnSingleClickListener(block: (View?) -> Unit) {
     setOnClickListener(object : OnSingleClickListener() {
         override fun onSingleClick(v: View?) {
@@ -28,9 +29,9 @@ abstract class OnSingleClickListener : View.OnClickListener {
     override fun onClick(v: View?) {
         val currentMills = System.currentTimeMillis()
         if (currentMills - lastClickTime > MIN_CLICK_INTERVAL) {
+            lastClickTime = currentMills
             onSingleClick(v)
         }
-        lastClickTime = currentMills
     }
 
     protected abstract fun onSingleClick(v: View?)

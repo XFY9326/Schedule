@@ -38,12 +38,12 @@ class ScheduleViewModel : AbstractViewModel() {
     val nowDay = MutableLiveData<Day>()
     val scrollToWeek = MutableEventLiveData<Int>()
     val showWeekChanged = MutableEventLiveData<Pair<Int, WeekNumType>>()
-    val showScheduleControlPanel = MutableEventLiveData<Triple<Int, Int, Boolean>>()
+    val showScheduleControlPanel = MutableEventLiveData<Triple<Int, Int, SystemBarAppearance>>()
     val showCourseDetailDialog = MutableEventLiveData<CourseDetail>()
     val openCourseManageActivity = MutableEventLiveData<Long>()
     val exitAppDirectly = MutableEventLiveData<Boolean>()
     val toolBarTintColor = ScheduleDataStore.toolBarTintColorFlow.asDistinctLiveData()
-    val useLightColorSystemBarColor = ScheduleDataStore.useLightColorSystemBarColorFlow.asDistinctLiveData()
+    val scheduleSystemBarAppearance = ScheduleDataStore.scheduleSystemBarAppearanceFlow.asDistinctLiveData()
 
     val scheduleShared = MutableEventLiveData<Uri?>()
     val selectScheduleForExportingICS = MutableEventLiveData<List<Schedule.Min>>()
@@ -84,8 +84,8 @@ class ScheduleViewModel : AbstractViewModel() {
     fun showScheduleControlPanel() {
         viewModelScope.launch(Dispatchers.IO) {
             val weekNumInfo = ScheduleViewDataProcessor.weekNumInfoFlow.first()
-            val useLightColorSystemBar = ScheduleDataStore.useLightColorSystemBarColorFlow.first()
-            showScheduleControlPanel.postEvent(Triple(weekNumInfo.first, weekNumInfo.second, useLightColorSystemBar))
+            val systemBarAppearance = ScheduleDataStore.scheduleSystemBarAppearanceFlow.first()
+            showScheduleControlPanel.postEvent(Triple(weekNumInfo.first, weekNumInfo.second, systemBarAppearance))
         }
     }
 

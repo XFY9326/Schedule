@@ -9,9 +9,9 @@ import androidx.recyclerview.widget.RecyclerView
 import tool.xfy9326.schedule.beans.Course
 import tool.xfy9326.schedule.databinding.ItemCourseBinding
 import tool.xfy9326.schedule.kt.setOnSingleClickListener
-import tool.xfy9326.schedule.ui.recyclerview.AdvancedDividerItemDecoration
-import tool.xfy9326.schedule.ui.recyclerview.BaseDifferItemCallBack
-import tool.xfy9326.schedule.ui.recyclerview.SwipeListViewBindingAdapter
+import tool.xfy9326.schedule.ui.view.recyclerview.AdvancedDividerItemDecoration
+import tool.xfy9326.schedule.ui.view.recyclerview.BaseDifferItemCallBack
+import tool.xfy9326.schedule.ui.view.recyclerview.SwipeListViewBindingAdapter
 
 class CourseManageAdapter : SwipeListViewBindingAdapter<Course, ItemCourseBinding>(CourseDifferCallback()) {
     private var onCourseEditListener: ((Course) -> Unit)? = null

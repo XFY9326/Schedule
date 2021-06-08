@@ -4,7 +4,8 @@ import android.animation.ValueAnimator
 import android.content.Context
 import android.util.AttributeSet
 import android.view.HapticFeedbackConstants
-import android.view.animation.LinearInterpolator
+import android.view.animation.DecelerateInterpolator
+import androidx.core.animation.doOnCancel
 import com.google.android.material.slider.Slider
 import tool.xfy9326.schedule.R
 
@@ -37,14 +38,15 @@ class AnimateSlider @JvmOverloads constructor(
 
     private fun animateSlideThumb(isTouched: Boolean) {
         clearAnimation()
-        if (isTouched) {
-            ValueAnimator.ofInt(animNotTouchedRadius, animTouchedRadius)
-        } else {
-            ValueAnimator.ofInt(animTouchedRadius, animNotTouchedRadius)
-        }.apply {
+        val currentRadius = if (isTouched) animNotTouchedRadius else animTouchedRadius
+        val targetRadius = if (isTouched) animTouchedRadius else animNotTouchedRadius
+        ValueAnimator.ofInt(currentRadius, targetRadius).apply {
             duration = animTime
-            interpolator = LinearInterpolator()
+            interpolator = DecelerateInterpolator()
             addUpdateListener { thumbRadius = it.animatedValue as Int }
+            doOnCancel {
+                thumbRadius = targetRadius
+            }
             start()
         }
     }
