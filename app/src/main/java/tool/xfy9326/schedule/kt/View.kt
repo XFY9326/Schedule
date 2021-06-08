@@ -2,16 +2,14 @@
 
 package tool.xfy9326.schedule.kt
 
+import android.animation.Animator
 import android.app.Dialog
 import android.content.res.Resources
 import android.graphics.drawable.*
 import android.os.Build
 import android.text.Editable
 import android.util.TypedValue
-import android.view.Menu
-import android.view.View
-import android.view.ViewGroup
-import android.view.Window
+import android.view.*
 import android.webkit.CookieManager
 import android.webkit.WebStorage
 import android.webkit.WebView
@@ -181,4 +179,33 @@ fun WebView.clearAll(cookies: Boolean = true, webStorage: Boolean = true) {
     if (webStorage) {
         WebStorage.getInstance().deleteAllData()
     }
+}
+
+fun ViewPropertyAnimator.setListener(
+    doOnStart: ((Animator) -> Unit)? = null,
+    doOnEnd: ((Animator) -> Unit)? = null,
+    doOnCancel: ((Animator) -> Unit)? = null,
+    doOnRepeat: ((Animator) -> Unit)? = null,
+    doOnFinally: ((Animator) -> Unit)? = null,
+): ViewPropertyAnimator {
+    setListener(object : Animator.AnimatorListener {
+        override fun onAnimationStart(animation: Animator) {
+            doOnStart?.invoke(animation)
+        }
+
+        override fun onAnimationEnd(animation: Animator) {
+            doOnEnd?.invoke(animation)
+            doOnFinally?.invoke(animation)
+        }
+
+        override fun onAnimationCancel(animation: Animator) {
+            doOnCancel?.invoke(animation)
+            doOnFinally?.invoke(animation)
+        }
+
+        override fun onAnimationRepeat(animation: Animator) {
+            doOnRepeat?.invoke(animation)
+        }
+    })
+    return this
 }

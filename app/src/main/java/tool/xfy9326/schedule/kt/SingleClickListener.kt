@@ -29,9 +29,9 @@ abstract class OnSingleClickListener : View.OnClickListener {
     override fun onClick(v: View?) {
         val currentMills = System.currentTimeMillis()
         if (currentMills - lastClickTime > MIN_CLICK_INTERVAL) {
+            lastClickTime = currentMills
             onSingleClick(v)
         }
-        lastClickTime = currentMills
     }
 
     protected abstract fun onSingleClick(v: View?)
