@@ -34,14 +34,14 @@
         <item>DISABLED</item>
     </string-array>
 
-    <!-- ImageScareType -->
-    <string-array name="scare_type">
-        <item>@string/scare_type_fit_center</item>
-        <item>@string/scare_type_center_crop</item>
-        <item>@string/scare_type_center_inside</item>
+    <!-- ImageScaleType -->
+    <string-array name="scale_type">
+        <item>@string/scale_type_fit_center</item>
+        <item>@string/scale_type_center_crop</item>
+        <item>@string/scale_type_center_inside</item>
     </string-array>
 
-    <string-array name="scare_type_value">
+    <string-array name="scale_type_value">
         <item>FIT_CENTER</item>
         <item>CENTER_CROP</item>
         <item>CENTER_INSIDE</item>

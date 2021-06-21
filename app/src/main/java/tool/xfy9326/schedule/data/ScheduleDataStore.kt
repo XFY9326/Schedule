@@ -25,7 +25,7 @@ object ScheduleDataStore : AbstractDataStore("ScheduleSettings") {
     private val scheduleBackgroundImageQuality by intPreferencesKey()
     private val scheduleBackgroundImageAlpha by intPreferencesKey()
     private val enableScheduleBackground by booleanPreferencesKey()
-    private val scheduleBackgroundScareType by stringPreferencesKey()
+    private val scheduleBackgroundScaleType by stringPreferencesKey()
     private val scheduleSystemBarAppearance by stringPreferencesKey()
     private val scheduleBackgroundUseAnim by booleanPreferencesKey()
     private val showScheduleTimes by booleanPreferencesKey()
@@ -79,7 +79,7 @@ object ScheduleDataStore : AbstractDataStore("ScheduleSettings") {
         if (enabled && fileName != null) {
             return@read ScheduleBackgroundBuildBundle(
                 file = FileManager.getAppPictureFile(fileName),
-                scareType = tryEnumValueOf<ImageScareType>(it[scheduleBackgroundScareType]) ?: ImageScareType.CENTER_CROP,
+                scaleType = tryEnumValueOf<ImageScaleType>(it[scheduleBackgroundScaleType]) ?: ImageScaleType.CENTER_CROP,
                 alpha = (it[scheduleBackgroundImageAlpha] ?: 100) / 100f,
                 useAnim = it[scheduleBackgroundUseAnim] ?: true
             )
@@ -89,7 +89,7 @@ object ScheduleDataStore : AbstractDataStore("ScheduleSettings") {
 
     data class ScheduleBackgroundBuildBundle(
         val file: File,
-        val scareType: ImageScareType,
+        val scaleType: ImageScaleType,
         val alpha: Float,
         val useAnim: Boolean,
     )
