@@ -59,13 +59,6 @@ class CourseImportConfigManager(scope: CoroutineScope) : CoroutineScope by scope
     private val httpClient = HttpClient(OkHttp) {
         install(HttpRedirect)
         BrowserUserAgent()
-        engine {
-            config {
-                followRedirects(true)
-                followSslRedirects(true)
-                retryOnConnectionFailure(true)
-            }
-        }
     }
 
     init {

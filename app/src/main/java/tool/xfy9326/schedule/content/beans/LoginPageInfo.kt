@@ -3,11 +3,11 @@
 package tool.xfy9326.schedule.content.beans
 
 import android.os.Bundle
-import java.lang.reflect.Parameter
+import io.ktor.http.*
 
 class LoginPageInfo(
     val captchaUrl: String? = null,
-    val loginParams: Parameter? = null,
+    val loginParams: Parameters? = null,
     val bundle: Bundle? = null,
 ) {
     companion object {

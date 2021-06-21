@@ -104,7 +104,7 @@ class NetworkCourseProviderViewModel : CourseProviderViewModel<NetworkCourseImpo
         courseParser: NetworkCourseParser<*>,
     ): ScheduleImportContent {
         if (courseProvider is LoginCourseProvider) {
-            courseProvider.login(importParams.userId, importParams.userPw, importParams.captchaCode, importParams.loginPageInfo, importOption)
+            courseProvider.login(importParams.userId, importParams.userPw, importParams.captchaCode, loginPageInfo, importOption)
         }
 
         val scheduleTimesHtml = courseProvider.loadScheduleTimesHtml(importOption)

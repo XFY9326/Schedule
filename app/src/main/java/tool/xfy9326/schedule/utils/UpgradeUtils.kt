@@ -109,12 +109,5 @@ object UpgradeUtils {
             serializer = KotlinxSerializer()
         }
         install(HttpRedirect)
-        engine {
-            config {
-                followRedirects(true)
-                followSslRedirects(true)
-                retryOnConnectionFailure(true)
-            }
-        }
     }
 }

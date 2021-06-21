@@ -27,15 +27,6 @@ object CourseAdapterUtils {
             }
         }
         BrowserUserAgent()
-        engine {
-            config {
-                if (hasRedirect) {
-                    followRedirects(true)
-                    followSslRedirects(true)
-                }
-                retryOnConnectionFailure(true)
-            }
-        }
     }
 
     fun newDateFormat(format: String = "yyyy-MM-dd"): SimpleDateFormat {

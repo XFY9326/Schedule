@@ -153,7 +153,7 @@ class NetworkCourseProviderActivity :
                 val userPw = getTextWithCheck(editTextUserPw, R.string.user_pw_empty) ?: return
                 val captchaCode = (if (layoutCaptcha.isVisible) getTextWithCheck(editTextCaptcha, R.string.captcha_empty) else null) ?: return
 
-                block(NetworkCourseImportParams(userId, userPw, captchaCode = captchaCode))
+                block(NetworkCourseImportParams(userId, userPw, captchaCode))
             }
         }
     }
