@@ -1,5 +1,3 @@
-@file:Suppress("unused")
-
 package tool.xfy9326.schedule.content.beans
 
 import android.os.Bundle
