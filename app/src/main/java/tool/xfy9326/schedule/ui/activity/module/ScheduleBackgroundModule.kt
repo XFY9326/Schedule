@@ -2,7 +2,7 @@ package tool.xfy9326.schedule.ui.activity.module
 
 import android.widget.ImageView
 import coil.load
-import tool.xfy9326.schedule.beans.ImageScareType
+import tool.xfy9326.schedule.beans.ImageScaleType
 import tool.xfy9326.schedule.data.ScheduleDataStore
 import tool.xfy9326.schedule.databinding.ActivityScheduleBinding
 import tool.xfy9326.schedule.ui.activity.ScheduleActivity
@@ -19,10 +19,10 @@ class ScheduleBackgroundModule(activity: ScheduleActivity) : AbstractViewModelAc
             if (bundle == null) {
                 setImageDrawable(null)
             } else {
-                scaleType = when (bundle.scareType) {
-                    ImageScareType.FIT_CENTER -> ImageView.ScaleType.FIT_CENTER
-                    ImageScareType.CENTER_CROP -> ImageView.ScaleType.CENTER_CROP
-                    ImageScareType.CENTER_INSIDE -> ImageView.ScaleType.CENTER_INSIDE
+                scaleType = when (bundle.scaleType) {
+                    ImageScaleType.FIT_CENTER -> ImageView.ScaleType.FIT_CENTER
+                    ImageScaleType.CENTER_CROP -> ImageView.ScaleType.CENTER_CROP
+                    ImageScaleType.CENTER_INSIDE -> ImageView.ScaleType.CENTER_INSIDE
                 }
                 load(bundle.file) {
                     if (bundle.useAnim) crossfade(true)

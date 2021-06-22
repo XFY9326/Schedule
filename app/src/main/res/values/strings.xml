@@ -185,8 +185,8 @@
     <string name="custom_schedule_background_sum">启用后将可以自定义课表背景</string>
     <string name="select_schedule_background_image">选择图片作为课表背景</string>
     <string name="select_schedule_background_image_sum">从相册或文件中选择图片作为课表背景</string>
-    <string name="schedule_background_scare_type">课表背景图片缩放方式</string>
-    <string name="schedule_background_scare_type_sum">设定不同的缩放方式以完美显示图片</string>
+    <string name="schedule_background_scale_type">课表背景图片缩放方式</string>
+    <string name="schedule_background_scale_type_sum">设定不同的缩放方式以完美显示图片</string>
     <string name="schedule_background_alpha">课表背景透明度</string>
     <string name="schedule_background_alpha_sum">调整课表背景透明度</string>
     <string name="schedule_background_quality">课表背景图片质量</string>
@@ -417,9 +417,9 @@
     <string name="js_config_prepare_dependencies">准备运行环境依赖</string>
     <string name="js_config_prepare_finish">准备完成</string>
 
-    <string name="scare_type_fit_center">等比缩放，从中间开始填充满</string>
-    <string name="scare_type_center_crop">等比缩放直到完全填充</string>
-    <string name="scare_type_center_inside">等比缩放到能完整展示</string>
+    <string name="scale_type_fit_center">等比缩放，从中间开始填充满</string>
+    <string name="scale_type_center_crop">等比缩放直到完全填充</string>
+    <string name="scale_type_center_inside">等比缩放到能完整展示</string>
 
     <string name="system_bar_follow_theme">跟随主题颜色调整</string>
     <string name="system_bar_use_light">适用于明亮背景</string>

@@ -9,7 +9,6 @@ import tool.xfy9326.schedule.beans.ScheduleImportContent
 import tool.xfy9326.schedule.content.base.LoginCourseProvider
 import tool.xfy9326.schedule.content.base.NetworkCourseParser
 import tool.xfy9326.schedule.content.base.NetworkCourseProvider
-import tool.xfy9326.schedule.content.beans.LoginPageInfo
 import tool.xfy9326.schedule.io.kt.tryRecycle
 import tool.xfy9326.schedule.ui.vm.base.CourseProviderViewModel
 
@@ -22,8 +21,6 @@ class NetworkCourseProviderViewModel : CourseProviderViewModel<NetworkCourseImpo
 
     val isLoginCourseProvider
         get() = courseProvider is LoginCourseProvider
-
-    private var loginPageInfo = LoginPageInfo.Empty
 
     override fun onProviderCreate() {
         providerFunctionRunner(
@@ -70,10 +67,8 @@ class NetworkCourseProviderViewModel : CourseProviderViewModel<NetworkCourseImpo
     }
 
     private suspend fun loadLoginPage(importOption: Int = 0, provider: NetworkCourseProvider<*>) {
-        loginPageInfo = if (provider is LoginCourseProvider) {
+        if (provider is LoginCourseProvider) {
             provider.loadLoginPage(importOption)
-        } else {
-            LoginPageInfo.Empty
         }
     }
 
@@ -89,9 +84,8 @@ class NetworkCourseProviderViewModel : CourseProviderViewModel<NetworkCourseImpo
     }
 
     private suspend fun getCaptchaImage(importOption: Int = 0, provider: NetworkCourseProvider<*>) {
-        val url = loginPageInfo.captchaUrl
-        if (provider is LoginCourseProvider && url != null) {
-            loginCaptcha.postValue(provider.getCaptchaImage(url, importOption))
+        if (provider is LoginCourseProvider) {
+            loginCaptcha.postValue(provider.getCaptchaImage(importOption))
         } else {
             loginCaptcha.postValue(null)
         }
@@ -104,7 +98,7 @@ class NetworkCourseProviderViewModel : CourseProviderViewModel<NetworkCourseImpo
         courseParser: NetworkCourseParser<*>,
     ): ScheduleImportContent {
         if (courseProvider is LoginCourseProvider) {
-            courseProvider.login(importParams.userId, importParams.userPw, importParams.captchaCode, importParams.loginPageInfo, importOption)
+            courseProvider.login(importParams.userId, importParams.userPw, importParams.captchaCode, importOption)
         }
 
         val scheduleTimesHtml = courseProvider.loadScheduleTimesHtml(importOption)

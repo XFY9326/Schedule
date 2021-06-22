@@ -176,12 +176,12 @@
         <androidx.preference.ListPreference
             app:defaultValue="CENTER_CROP"
             app:dependency="enableScheduleBackground"
-            app:entries="@array/scare_type"
-            app:entryValues="@array/scare_type_value"
+            app:entries="@array/scale_type"
+            app:entryValues="@array/scale_type_value"
             app:iconSpaceReserved="false"
-            app:key="scheduleBackgroundScareType"
-            app:summary="@string/schedule_background_scare_type_sum"
-            app:title="@string/schedule_background_scare_type" />
+            app:key="scheduleBackgroundScaleType"
+            app:summary="@string/schedule_background_scale_type_sum"
+            app:title="@string/schedule_background_scale_type" />
 
         <androidx.preference.CheckBoxPreference
             app:defaultValue="true"
