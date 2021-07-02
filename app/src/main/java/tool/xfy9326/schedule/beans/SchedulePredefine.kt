@@ -3,9 +3,9 @@ package tool.xfy9326.schedule.beans
 import androidx.annotation.ColorInt
 import androidx.annotation.FloatRange
 import androidx.annotation.Px
-import tool.xfy9326.schedule.App
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.io.IOManager
+import tool.xfy9326.schedule.kt.AppInstance
 import tool.xfy9326.schedule.kt.getColorCompat
 
 class SchedulePredefine private constructor(
@@ -56,10 +56,10 @@ class SchedulePredefine private constructor(
                 gridBottomCornerScreenMargin = IOManager.resources.getDimensionPixelSize(R.dimen.schedule_grid_bottom_corner_screen_margin),
                 courseCellBackgroundRadius = IOManager.resources.getDimension(R.dimen.schedule_grid_cell_radius),
                 courseCellTextPadding = IOManager.resources.getDimensionPixelSize(R.dimen.schedule_course_cell_text_padding),
-                courseCellTextColorLight = App.instance.getColorCompat(R.color.course_cell_text_light),
-                courseCellTextColorDark = App.instance.getColorCompat(R.color.course_cell_text_dark),
+                courseCellTextColorLight = AppInstance.getColorCompat(R.color.course_cell_text_light),
+                courseCellTextColorDark = AppInstance.getColorCompat(R.color.course_cell_text_dark),
                 notThisWeekCourseCellAlpha = DEFAULT_NOT_THIS_WEEK_COURSE_ALPHA,
-                courseCellRippleColor = App.instance.getColorCompat(R.color.course_cell_ripple)
+                courseCellRippleColor = AppInstance.getColorCompat(R.color.course_cell_ripple)
             )
         }
     }

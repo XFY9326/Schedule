@@ -10,7 +10,6 @@ import androidx.core.graphics.applyCanvas
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
-import tool.xfy9326.schedule.App
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.CourseCell
 import tool.xfy9326.schedule.beans.ScheduleBuildBundle
@@ -18,6 +17,7 @@ import tool.xfy9326.schedule.beans.SchedulePredefine
 import tool.xfy9326.schedule.beans.ScheduleViewData
 import tool.xfy9326.schedule.data.ScheduleDataStore
 import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
+import tool.xfy9326.schedule.kt.AppInstance
 import tool.xfy9326.schedule.kt.getColorCompat
 import tool.xfy9326.schedule.kt.getDefaultBackgroundColor
 import tool.xfy9326.schedule.ui.view.*
@@ -90,11 +90,9 @@ object ScheduleViewHelper {
             enableScheduleGridScroll = false
         ) ?: return@withContext null
 
-        val context = App.instance
-
-        val backgroundColor = context.getDefaultBackgroundColor()
+        val backgroundColor = AppInstance.getDefaultBackgroundColor()
         val viewData = CourseUtils.getScheduleViewDataByWeek(weekNum, ScheduleBuildBundle(schedule, courses, styles))
-        val scheduleView = buildScheduleView(context, viewData, noScroll = true)
+        val scheduleView = buildScheduleView(AppInstance, viewData, noScroll = true)
 
         val widthSpec = View.MeasureSpec.makeMeasureSpec(targetWidth, View.MeasureSpec.AT_MOST)
         val heightSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
@@ -106,7 +104,7 @@ object ScheduleViewHelper {
             drawColor(backgroundColor)
             scheduleView.draw(this)
         }.apply {
-            if (waterMark) drawWaterMark(context, this, context.getString(R.string.app_name))
+            if (waterMark) drawWaterMark(AppInstance, this, AppInstance.getString(R.string.app_name))
         }
     }
 

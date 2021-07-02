@@ -7,15 +7,15 @@ import android.content.res.Resources
 import android.net.Uri
 import android.os.Build
 import androidx.core.content.FileProvider
-import tool.xfy9326.schedule.App
 import tool.xfy9326.schedule.BuildConfig
 import tool.xfy9326.schedule.io.kt.deleteRecursively
 import tool.xfy9326.schedule.io.kt.runSimpleIOJob
 import tool.xfy9326.schedule.io.utils.DirUtils
+import tool.xfy9326.schedule.kt.AppInstance
 import java.io.File
 
 object IOManager {
-    private val appContext by lazy { App.instance }
+    private val appContext by lazy { AppInstance }
     private const val FILE_PROVIDER_AUTH = BuildConfig.APPLICATION_ID + ".file.provider"
 
     val contentResolver: ContentResolver by lazy { appContext.contentResolver }

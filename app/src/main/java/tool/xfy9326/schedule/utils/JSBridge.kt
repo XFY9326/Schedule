@@ -10,7 +10,7 @@ import tool.xfy9326.schedule.kt.NEW_LINE
 object JSBridge {
     private const val FUN_HEAD = "pureSchedule_"
 
-    private const val V_CONSOLE_URL = "https://cdn.bootcdn.net/ajax/libs/vConsole/3.4.1/vconsole.min.js"
+    private const val V_CONSOLE_URL = "https://unpkg.com/vconsole/dist/vconsole.min.js"
     const val V_CONSOLE_INJECT =
         """
         javascript:

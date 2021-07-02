@@ -3,11 +3,11 @@
 package tool.xfy9326.schedule.io.utils
 
 import androidx.core.content.ContextCompat
-import tool.xfy9326.schedule.App
+import tool.xfy9326.schedule.kt.AppInstance
 import java.io.File
 
 object DirUtils {
-    private val appContext by lazy { App.instance }
+    private val appContext by lazy { AppInstance }
 
     fun externalFilesDirs(vararg childDirs: String): List<File> =
         ContextCompat.getExternalFilesDirs(appContext, if (childDirs.isEmpty()) null else childDirs.joinToString(File.separator)).filterNotNull()

@@ -38,11 +38,10 @@ class CourseAdapterException : Exception {
             }
     }
 
-    enum class Error(@StringRes val msgId: Int?, val strictMode: Boolean = false) {
+    enum class Error(@StringRes val msgId: Int?, val strictModeOnly: Boolean = false) {
         IMPORT_SELECT_OPTION_ERROR(R.string.adapter_exception_import_option_error),
         IMPORT_OPTION_GET_ERROR(R.string.adapter_exception_import_option_get_error),
         PARSE_PAGE_ERROR(R.string.adapter_exception_parse_page_error),
-        PARSE_INFO_NOT_ENOUGH_ERROR(R.string.adapter_exception_parse_info_not_enough_error),
         USER_ID_ERROR(R.string.adapter_exception_login_user_id_error),
         USER_PASSWORD_ERROR(R.string.adapter_exception_login_user_password_error),
         USER_ID_OR_PASSWORD_ERROR(R.string.adapter_exception_login_user_id_or_password_error),

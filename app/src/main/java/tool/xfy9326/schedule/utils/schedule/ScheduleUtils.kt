@@ -1,6 +1,5 @@
 package tool.xfy9326.schedule.utils.schedule
 
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
@@ -14,6 +13,7 @@ import tool.xfy9326.schedule.data.AppDataStore
 import tool.xfy9326.schedule.data.ScheduleDataStore
 import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
 import tool.xfy9326.schedule.io.IOManager
+import tool.xfy9326.schedule.kt.AppScope
 import tool.xfy9326.schedule.kt.combine
 import tool.xfy9326.schedule.kt.intersect
 import tool.xfy9326.schedule.kt.iterateAll
@@ -24,12 +24,12 @@ object ScheduleUtils {
     val currentScheduleFlow =
         AppDataStore.currentScheduleIdFlow.combine {
             ScheduleDBProvider.db.scheduleDAO.getSchedule(it).filterNotNull()
-        }.shareIn(GlobalScope, SharingStarted.Eagerly, 1)
+        }.shareIn(AppScope, SharingStarted.Eagerly, 1)
 
     val currentScheduleTimesFlow =
         AppDataStore.currentScheduleIdFlow.combine {
             ScheduleDBProvider.db.scheduleDAO.getScheduleTimes(it).filterNotNull()
-        }.shareIn(GlobalScope, SharingStarted.Eagerly, 1)
+        }.shareIn(AppScope, SharingStarted.Eagerly, 1)
 
     private val DEFAULT_SCHEDULE_TIMES by lazy {
         listOf(
