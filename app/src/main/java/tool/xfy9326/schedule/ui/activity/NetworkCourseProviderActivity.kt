@@ -69,9 +69,8 @@ class NetworkCourseProviderActivity :
         viewBinding.buttonCourseImportReload.setOnSingleClickListener {
             if (!viewModel.isImportingCourses) {
                 withImportOption {
-                    withLoadingView {
-                        viewModel.refreshLoginPageInfo(it)
-                    }
+                    setLoadingView(isLoading = true, isError = false)
+                    viewModel.refreshLoginPageInfo(it)
                 }
             }
         }
@@ -102,9 +101,8 @@ class NetworkCourseProviderActivity :
             R.id.menu_networkCourseProviderRefresh -> {
                 if (!requireViewModel().isImportingCourses) {
                     withImportOption {
-                        withLoadingView {
-                            requireViewModel().refreshLoginPageInfo(it)
-                        }
+                        setLoadingView(isLoading = true, isError = false)
+                        requireViewModel().refreshLoginPageInfo(it)
                     }
                 }
             }
@@ -141,7 +139,7 @@ class NetworkCourseProviderActivity :
     override fun onReadyImportCourse() {
         requireViewBinding().apply {
             layoutCourseImportContent.setAllEnable(false)
-            setLoadingView(true)
+            setLoadingView(isLoading = true, isError = false)
         }
     }
 
@@ -193,31 +191,36 @@ class NetworkCourseProviderActivity :
                 if (params.enableCaptcha) {
                     editTextCaptcha.text = null
                 }
-                setLoadingView(false)
+                setLoadingView(isLoading = false, isError = false)
             } else {
-                setLoadingView(isLoading = false, enableReload = true)
+                setLoadingView(isLoading = false, isError = true)
             }
         }
     }
 
-    private fun withLoadingView(block: () -> Boolean) {
-        setLoadingView(true)
-        if (!block()) {
-            setLoadingView(false)
-        }
-    }
-
-    private fun setLoadingView(isLoading: Boolean, enableReload: Boolean = false) {
+    private fun setLoadingView(isLoading: Boolean, isError: Boolean) {
         requireViewBinding().apply {
-            if (enableReload || isLoading) {
-                progressBarLoadingCourseImportInit.isIndeterminate = isLoading
-                buttonCourseImportReload.isVisible = enableReload
+            when {
+                isError -> {
+                    layoutCourseImportLoading.isVisible = true
+                    layoutCourseImportContent.isVisible = false
 
-                layoutCourseImportLoading.isVisible = true
-                layoutCourseImportContent.isVisible = false
-            } else {
-                layoutCourseImportLoading.isVisible = false
-                layoutCourseImportContent.isVisible = true
+                    progressBarLoadingCourseImportInit.isVisible = false
+                    buttonCourseImportReload.isVisible = true
+                    imageViewCourseImportLoadError.isVisible = true
+                }
+                isLoading -> {
+                    layoutCourseImportLoading.isVisible = true
+                    layoutCourseImportContent.isVisible = false
+
+                    progressBarLoadingCourseImportInit.isVisible = true
+                    buttonCourseImportReload.isVisible = false
+                    imageViewCourseImportLoadError.isVisible = false
+                }
+                else -> {
+                    layoutCourseImportLoading.isVisible = false
+                    layoutCourseImportContent.isVisible = true
+                }
             }
         }
     }

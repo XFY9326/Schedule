@@ -26,7 +26,7 @@ class NetworkCourseProviderViewModel : CourseProviderViewModel<NetworkCourseImpo
         providerFunctionRunner(
             onRun = {
                 it.init()
-                refreshProviderParams(provider = it)
+                refreshLoginPageInfo()
                 loadImportOptions()
             }
         )
@@ -44,7 +44,7 @@ class NetworkCourseProviderViewModel : CourseProviderViewModel<NetworkCourseImpo
         )
     }
 
-    fun refreshLoginPageInfo(importOption: Int): Boolean =
+    fun refreshLoginPageInfo(importOption: Int = 0): Boolean =
         providerFunctionRunner(loginPageInfoLock,
             onRun = {
                 refreshProviderParams(importOption, it)
