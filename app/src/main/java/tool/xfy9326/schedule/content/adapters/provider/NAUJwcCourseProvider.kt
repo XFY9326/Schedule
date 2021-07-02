@@ -137,5 +137,6 @@ class NAUJwcCourseProvider : LoginCourseProvider<Nothing>() {
 
     override suspend fun onClearConnection() {
         logout()
+        super.onClearConnection()
     }
 }

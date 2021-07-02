@@ -3,7 +3,6 @@
 package tool.xfy9326.schedule.kt
 
 import android.app.Activity
-import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
@@ -15,17 +14,23 @@ import androidx.annotation.*
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 import androidx.fragment.app.Fragment
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
 import tool.xfy9326.schedule.App
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.ui.activity.SplashActivity
 import kotlin.system.exitProcess
 
+val AppInstance: App
+    get() = App.instance
+
+val AppScope: CoroutineScope
+    get() = App.scope
+
 inline fun showGlobalToast(@StringRes resId: Int, vararg params: Any, showLong: Boolean = false) =
-    Toast.makeText(App.instance, App.instance.getString(resId, *params), if (showLong) Toast.LENGTH_LONG else Toast.LENGTH_SHORT).show()
+    Toast.makeText(AppInstance, AppInstance.getString(resId, *params), if (showLong) Toast.LENGTH_LONG else Toast.LENGTH_SHORT).show()
 
 inline fun showGlobalToast(text: String, showLong: Boolean = false) =
-    Toast.makeText(App.instance, text, if (showLong) Toast.LENGTH_LONG else Toast.LENGTH_SHORT).show()
+    Toast.makeText(AppInstance, text, if (showLong) Toast.LENGTH_LONG else Toast.LENGTH_SHORT).show()
 
 inline fun Context.showToast(@StringRes resId: Int, vararg params: Any, showLong: Boolean = false) =
     Toast.makeText(this, getString(resId, *params), if (showLong) Toast.LENGTH_LONG else Toast.LENGTH_SHORT).show()
@@ -108,20 +113,3 @@ fun Context.getDefaultBackgroundColor(): Int {
 }
 
 fun <T> Fragment.requireOwner() = (parentFragment ?: requireActivity()).tryCast<T>()
-
-fun BroadcastReceiver.goAsync(
-    coroutineScope: CoroutineScope = GlobalScope,
-    dispatcher: CoroutineDispatcher = Dispatchers.Main.immediate,
-    block: suspend () -> Unit,
-) {
-    val result = goAsync()
-    coroutineScope.launch(dispatcher) {
-        try {
-            block()
-        } catch (e: Exception) {
-            e.printStackTrace()
-        } finally {
-            result.finish()
-        }
-    }
-}

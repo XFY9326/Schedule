@@ -129,7 +129,7 @@ dependencies {
     implementation "androidx.constraintlayout:constraintlayout:2.0.4"
 
     implementation "androidx.preference:preference-ktx:1.1.1"
-    implementation 'androidx.datastore:datastore-preferences:1.0.0-beta02'
+    implementation 'androidx.datastore:datastore-preferences:1.0.0-rc01'
 
     // LifeCycle, ViewModel, LiveData
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$androidxVersion.lifecycle"

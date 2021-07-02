@@ -43,8 +43,6 @@
     <color name="bottom_button_ripple">#99000000</color>
 
     <color name="snack_bar_background_tint">#323232</color>
-    <color name="light_navigation_bar">#80000000</color>
-    <color name="not_light_navigation_bar">#80FFFFFF</color>
 
     <color name="progress_bar_foreground">#2196F3</color>
     <color name="progress_bar_background">#802196F3</color>

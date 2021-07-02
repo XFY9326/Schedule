@@ -8,12 +8,9 @@ import io.ktor.client.features.*
 import io.ktor.client.features.json.*
 import io.ktor.client.features.json.serializer.*
 import io.ktor.client.request.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.withContext
 import tool.xfy9326.schedule.BuildConfig
 import tool.xfy9326.schedule.data.AppDataStore
 import tool.xfy9326.schedule.json.upgrade.UpdateIndex
@@ -40,7 +37,7 @@ object UpgradeUtils {
         onNoUpgrade: (() -> Unit)? = null,
         onFoundUpgrade: ((UpdateInfo) -> Unit)? = null,
     ) {
-        GlobalScope.launch(Dispatchers.Default) {
+        lifecycleOwner.lifecycleScope.launch(Dispatchers.Default) {
             UPDATE_CHECK_MUTEX.withTryLock {
                 requestUpgrade(forceCheck).let {
                     if (it.first) {
