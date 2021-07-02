@@ -16,11 +16,11 @@ import kotlin.collections.ArrayList
 
 class NAUCourseParser : NetworkCourseParser<Nothing>() {
     companion object {
-        private const val INIT_WEEK_NUM = 20
+        private const val INIT_WEEK_NUM = 24
         private const val TERM_START_SELECTOR = "#TermInfo > div:nth-child(4) > span"
         private const val TERM_END_SELECTOR = "#TermInfo > div:nth-child(5) > span"
         private const val COURSE_TR_TAGS = "#content > tbody > tr[align='center']"
-        private val WEEKDAY_COURSE_REG = "周 (\\d+) 第 (\\d+)-(\\d+)节".toRegex()
+        private val WEEKDAY_COURSE_REG = "周\\s*(\\d+)\\s*第\\s*(\\d+)-(\\d+)节".toRegex()
 
         private fun getWeeks(timeStr: String): BooleanArray {
             // 周数模式（0: 任意周  1: 单周  2: 双周）
@@ -71,7 +71,7 @@ class NAUCourseParser : NetworkCourseParser<Nothing>() {
             val weeks = getWeeks(timeStr)
 
             val weekDayCourseSectionStr = timeStr.substring(timeStr.indexOf("周") + 1).trim()
-            val weekDayCourseValues = WEEKDAY_COURSE_REG.matchEntire(weekDayCourseSectionStr)?.groupValues ?: return null
+            val weekDayCourseValues = WEEKDAY_COURSE_REG.find(weekDayCourseSectionStr)?.groupValues ?: return null
 
             val weekDay = weekDayCourseValues[1].toInt()
             val classStart = weekDayCourseValues[2].toInt()
