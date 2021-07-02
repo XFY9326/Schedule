@@ -26,6 +26,7 @@ class FeedbackActivity : ViewBindingActivity<ActivityFeedbackBinding>() {
     companion object {
         private const val EXTRA_WEB_VIEW = "EXTRA_WEB_VIEW"
         private const val SCHEMA_WEIXIN = "weixin"
+        private const val HOST_JQ_QQ = "jq.qq.com"
         private const val ONLINE_FEEDBACK_URL = "https://support.qq.com/product/301005?d-wx-push=1"
         private val CLIENT_DATA =
             "clientVersion=${BuildConfig.VERSION_NAME}(${BuildConfig.VERSION_CODE})&osVersion=${Build.VERSION.RELEASE}(${Build.VERSION.SDK_INT})&device=${Build.BRAND}-${Build.MODEL}".toByteArray()
@@ -74,7 +75,7 @@ class FeedbackActivity : ViewBindingActivity<ActivityFeedbackBinding>() {
                     request?.let {
                         try {
                             val url = it.url
-                            if (url != null && url.scheme == SCHEMA_WEIXIN) {
+                            if (url != null && SCHEMA_WEIXIN.equals(url.scheme, true) || HOST_JQ_QQ.equals(url.host, true)) {
                                 startActivity(Intent(Intent.ACTION_VIEW, url))
                                 return true
                             }
