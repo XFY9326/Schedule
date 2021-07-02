@@ -8,6 +8,8 @@ import tool.xfy9326.schedule.beans.WeekDay
 import tool.xfy9326.schedule.content.adapters.provider.NAUJwcCourseProvider
 import tool.xfy9326.schedule.content.base.CourseParseResult
 import tool.xfy9326.schedule.content.base.NetworkCourseParser
+import tool.xfy9326.schedule.content.utils.CourseAdapterException
+import tool.xfy9326.schedule.content.utils.CourseAdapterException.Companion.report
 import tool.xfy9326.schedule.content.utils.CourseAdapterUtils
 import tool.xfy9326.schedule.kt.isEven
 import tool.xfy9326.schedule.kt.isOdd
@@ -67,11 +69,11 @@ class NAUCourseParser : NetworkCourseParser<Nothing>() {
             return weeks
         }
 
-        private fun getCourseTime(location: String, timeStr: String): CourseTime? {
+        private fun getCourseTime(location: String, timeStr: String): CourseTime {
             val weeks = getWeeks(timeStr)
 
             val weekDayCourseSectionStr = timeStr.substring(timeStr.indexOf("周") + 1).trim()
-            val weekDayCourseValues = WEEKDAY_COURSE_REG.find(weekDayCourseSectionStr)?.groupValues ?: return null
+            val weekDayCourseValues = WEEKDAY_COURSE_REG.find(weekDayCourseSectionStr)?.groupValues ?: CourseAdapterException.Error.INCOMPLETE_COURSE_INFO_ERROR.report()
 
             val weekDay = weekDayCourseValues[1].toInt()
             val classStart = weekDayCourseValues[2].toInt()
@@ -122,9 +124,7 @@ class NAUCourseParser : NetworkCourseParser<Nothing>() {
 
                     for (i in 1 until timeStrArr.size) {
                         val times = timeStrArr[i].split("上课时间：")
-                        getCourseTime(times[0].trim(), times[1].trim())?.let {
-                            courseTimes.add(it)
-                        }
+                        courseTimes.add(getCourseTime(times[0].trim(), times[1].trim()))
                     }
 
                     Course(courseName, courseTeacher, courseTimes)

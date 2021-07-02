@@ -46,7 +46,7 @@ abstract class CourseProviderActivity<I, P1 : AbstractCourseProvider<*>, P2 : Ab
     @CallSuper
     override fun onBindLiveData(viewBinding: V, viewModel: M) {
         viewModel.providerError.observeEvent(this, javaClass.simpleName) {
-            if (it.type.strictMode) {
+            if (it.type.strictModeOnly) {
                 StrictImportModeWarningDialog.showDialog(supportFragmentManager, it.getText(this), it.getDeepStackTraceString())
             } else {
                 onShowCourseAdapterError(it)
