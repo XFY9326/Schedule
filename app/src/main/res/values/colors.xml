@@ -48,4 +48,6 @@
     <color name="progress_bar_background">#802196F3</color>
 
     <color name="launch_screen_windows_background">#FFFFFF</color>
+
+    <color name="operation_button_dialog_background">#99FFFFFF</color>
 </resources>

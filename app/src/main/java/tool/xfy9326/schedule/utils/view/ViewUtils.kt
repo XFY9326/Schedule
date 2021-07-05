@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.RippleDrawable
+import android.net.Uri
 import androidx.annotation.ColorInt
 import androidx.annotation.Px
 import androidx.appcompat.app.AppCompatActivity
@@ -15,6 +16,7 @@ import tool.xfy9326.schedule.content.utils.CourseAdapterException
 import tool.xfy9326.schedule.content.utils.JSConfigException
 import tool.xfy9326.schedule.kt.getDeepStackTraceString
 import tool.xfy9326.schedule.ui.dialog.CrashViewDialog
+import tool.xfy9326.schedule.utils.IntentUtils
 
 object ViewUtils {
     fun showCourseAdapterErrorSnackBar(activity: AppCompatActivity, coordinatorLayout: CoordinatorLayout, exception: CourseAdapterException) {
@@ -30,6 +32,14 @@ object ViewUtils {
             .setActionTextColor(Color.RED)
             .setAction(R.string.details) {
                 CrashViewDialog.showDialog(activity.supportFragmentManager, exception.getDeepStackTraceString(), false)
+            }.show()
+    }
+
+    fun showScheduleImageSaveSnackBar(coordinatorLayout: CoordinatorLayout, uri: Uri) {
+        Snackbar.make(coordinatorLayout, R.string.generate_save_schedule_success, Snackbar.LENGTH_LONG)
+            .setActionTextColor(Color.RED)
+            .setAction(R.string.see) {
+                IntentUtils.seeImage(coordinatorLayout.context, uri)
             }.show()
     }
 

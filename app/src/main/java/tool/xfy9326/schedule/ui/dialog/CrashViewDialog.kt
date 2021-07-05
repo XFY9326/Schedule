@@ -14,7 +14,7 @@ import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.databinding.DialogCrashViewBinding
 import tool.xfy9326.schedule.io.FileManager
 import tool.xfy9326.schedule.kt.APP_ID
-import tool.xfy9326.schedule.kt.setWindowWidthPercent
+import tool.xfy9326.schedule.kt.setWindowPercent
 import tool.xfy9326.schedule.kt.showGlobalToast
 import tool.xfy9326.schedule.kt.showToast
 
@@ -83,6 +83,6 @@ class CrashViewDialog : AppCompatDialogFragment() {
 
     override fun onStart() {
         super.onStart()
-        requireDialog().setWindowWidthPercent(WINDOW_WIDTH_PERCENT)
+        requireDialog().setWindowPercent(WINDOW_WIDTH_PERCENT)
     }
 }

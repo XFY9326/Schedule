@@ -46,6 +46,7 @@ class ScheduleViewModel : AbstractViewModel() {
     val scheduleSystemBarAppearance = ScheduleDataStore.scheduleSystemBarAppearanceFlow.asDistinctLiveData()
 
     val scheduleShared = MutableEventLiveData<Uri?>()
+    val scheduleImageSaved = MutableEventLiveData<Uri?>()
     val selectScheduleForExportingICS = MutableEventLiveData<List<Schedule.Min>>()
     val iceExportStatus = MutableEventLiveData<Boolean>()
     val syncToCalendarStatus = MutableEventLiveData<BatchResult>()
@@ -130,23 +131,19 @@ class ScheduleViewModel : AbstractViewModel() {
         }
     }
 
-    fun shareScheduleImage(weekNum: Int, targetWidth: Int) {
+    fun shareScheduleImage(saveImage: Boolean, weekNum: Int, targetWidth: Int) {
         viewModelScope.launch(Dispatchers.Default) {
             scheduleSharedMutex.withTryLock {
                 val scheduleId = AppDataStore.currentScheduleIdFlow.first()
                 val waterMark = AppSettingsDataStore.drawWaterMarkOnScheduleImageFlow.first()
                 val bitmap = ScheduleViewHelper.generateScheduleImageByWeekNum(scheduleId, weekNum, targetWidth, waterMark)
                 if (bitmap != null) {
-                    val uri = if (AppSettingsDataStore.saveImageWhileSharingFlow.first()) {
-                        ImageUtils.outputImageToAlbum(bitmap)
+                    if (saveImage) {
+                        val uri = ImageUtils.outputImageToAlbum(bitmap)
+                        scheduleImageSaved.postEvent(uri)
                     } else {
-                        ImageUtils.createShareCacheImage(bitmap)
-                    }
-
-                    if (uri != null) {
+                        val uri = ImageUtils.createShareCacheImage(bitmap)
                         scheduleShared.postEvent(uri)
-                    } else {
-                        scheduleShared.postEvent(null)
                     }
                 } else {
                     scheduleShared.postEvent(null)

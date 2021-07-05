@@ -38,7 +38,7 @@ class ScheduleControlPanel : BottomSheetDialogFragment() {
         }
 
         fun addScrollToWeekListener(fragmentManager: FragmentManager, lifecycleOwner: LifecycleOwner, block: (Int) -> Unit) {
-            fragmentManager.setFragmentResultListener(ScheduleControlPanel::class.java.simpleName, lifecycleOwner) { _, bundle ->
+            fragmentManager.setFragmentResultListener(DIALOG_TAG, lifecycleOwner) { _, bundle ->
                 block(bundle.getInt(EXTRA_SCROLL_TO_WEEK))
             }
         }
@@ -77,7 +77,7 @@ class ScheduleControlPanel : BottomSheetDialogFragment() {
     }
 
     private fun changeShowWeekNum(value: Float) {
-        setFragmentResult(javaClass.simpleName, bundleOf(
+        setFragmentResult(DIALOG_TAG, bundleOf(
             EXTRA_SCROLL_TO_WEEK to value.toInt()
         ))
     }

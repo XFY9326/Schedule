@@ -93,7 +93,7 @@ class CourseTimeEditDialog : AppCompatDialogFragment() {
 
     override fun onStart() {
         super.onStart()
-        requireDialog().setWindowWidthPercent(WINDOW_WIDTH_PERCENT)
+        requireDialog().setWindowPercent(WINDOW_WIDTH_PERCENT)
     }
 
     private fun updateEditData() {

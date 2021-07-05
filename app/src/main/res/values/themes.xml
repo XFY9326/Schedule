@@ -102,6 +102,16 @@
         <item name="materialAlertDialogTitlePanelStyle">@style/AppTheme.MaterialDialogTitle</item>
     </style>
 
+    <style name="AppTheme.OperationButtonDialog" parent="AppTheme.MaterialDialog">
+        <item name="android:windowBackground">@color/operation_button_dialog_background</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:backgroundDimEnabled">false</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+    </style>
+
     <style name="AppTheme.MaterialDialogTitle" parent="MaterialAlertDialog.MaterialComponents.Title.Panel">
         <item name="android:layout_marginBottom">5dp</item>
     </style>

@@ -48,13 +48,6 @@
             app:title="@string/exit_app_directly" />
 
         <androidx.preference.CheckBoxPreference
-            app:defaultValue="false"
-            app:icon="@drawable/ic_save_alt_24"
-            app:key="saveImageWhileSharing"
-            app:summary="@string/save_image_while_sharing_sum"
-            app:title="@string/save_image_while_sharing" />
-
-        <androidx.preference.CheckBoxPreference
             app:defaultValue="true"
             app:icon="@drawable/ic_image_24"
             app:key="drawWaterMarkOnScheduleImage"

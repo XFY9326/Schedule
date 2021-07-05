@@ -6,8 +6,10 @@ import tool.xfy9326.schedule.databinding.ActivityScheduleBinding
 import tool.xfy9326.schedule.kt.showSnackBar
 import tool.xfy9326.schedule.ui.activity.ScheduleActivity
 import tool.xfy9326.schedule.ui.activity.base.AbstractViewModelActivityModule
+import tool.xfy9326.schedule.ui.dialog.ScheduleImageDialog
 import tool.xfy9326.schedule.ui.vm.ScheduleViewModel
 import tool.xfy9326.schedule.utils.IntentUtils
+import tool.xfy9326.schedule.utils.view.ViewUtils
 
 class ScheduleShareModule(activity: ScheduleActivity) : AbstractViewModelActivityModule<ScheduleViewModel, ActivityScheduleBinding, ScheduleActivity>(activity) {
     override fun init() {
@@ -18,10 +20,21 @@ class ScheduleShareModule(activity: ScheduleActivity) : AbstractViewModelActivit
                 requireActivity().startActivity(IntentUtils.getShareImageIntent(requireActivity(), it))
             }
         }
+        requireViewModel().scheduleImageSaved.observeEvent(requireActivity()) {
+            if (it == null) {
+                requireViewBinding().layoutSchedule.showSnackBar(R.string.generate_save_schedule_failed)
+            } else {
+                ViewUtils.showScheduleImageSaveSnackBar(requireViewBinding().layoutSchedule, it)
+            }
+        }
+        ScheduleImageDialog.setScheduleImageListener(requireActivity(), requireActivity().supportFragmentManager, ::generateScheduleImage)
     }
 
     fun shareSchedule(weekNum: Int) {
-        requireViewBinding().layoutSchedule.showSnackBar(R.string.generating_share_schedule)
-        requireViewModel().shareScheduleImage(weekNum, requireActivity().resources.displayMetrics.widthPixels)
+        ScheduleImageDialog.showDialog(requireActivity().supportFragmentManager, weekNum)
+    }
+
+    private fun generateScheduleImage(saveImage: Boolean, weekNum: Int) {
+        requireViewModel().shareScheduleImage(saveImage, weekNum, requireActivity().resources.displayMetrics.widthPixels)
     }
 }
