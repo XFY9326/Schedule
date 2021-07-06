@@ -10,21 +10,11 @@ import tool.xfy9326.schedule.kt.getColorCompat
 
 class SchedulePredefine private constructor(
     @Px
-    val monthTextSize: Float,
-    @Px
-    val weekDayTextSize: Float,
-    @Px
-    val monthDateTextSize: Float,
-    @Px
     val gridCellPadding: Int,
     @Px
     val timeCellVerticalPadding: Int,
     @Px
     val timeCellTimeDivideTopMargin: Int,
-    @Px
-    val timeCellScheduleTimeTextSize: Float,
-    @Px
-    val timeCellCourseNumTextSize: Float,
     @Px
     val gridBottomCornerScreenMargin: Int,
     @Px
@@ -45,14 +35,9 @@ class SchedulePredefine private constructor(
 
         val content by lazy(LazyThreadSafetyMode.NONE) {
             SchedulePredefine(
-                monthTextSize = IOManager.resources.getDimension(R.dimen.schedule_header_month_text_size),
-                weekDayTextSize = IOManager.resources.getDimension(R.dimen.schedule_header_weekday_text_size),
-                monthDateTextSize = IOManager.resources.getDimension(R.dimen.schedule_header_month_date_text_size),
                 gridCellPadding = IOManager.resources.getDimensionPixelSize(R.dimen.schedule_grid_cell_padding),
                 timeCellVerticalPadding = IOManager.resources.getDimensionPixelSize(R.dimen.schedule_time_cell_vertical_padding),
                 timeCellTimeDivideTopMargin = IOManager.resources.getDimensionPixelSize(R.dimen.schedule_time_divide_top_margin),
-                timeCellScheduleTimeTextSize = IOManager.resources.getDimension(R.dimen.schedule_time_text_size),
-                timeCellCourseNumTextSize = IOManager.resources.getDimension(R.dimen.schedule_time_cell_course_num_text_size),
                 gridBottomCornerScreenMargin = IOManager.resources.getDimensionPixelSize(R.dimen.schedule_grid_bottom_corner_screen_margin),
                 courseCellBackgroundRadius = IOManager.resources.getDimension(R.dimen.schedule_grid_cell_radius),
                 courseCellTextPadding = IOManager.resources.getDimensionPixelSize(R.dimen.schedule_course_cell_text_padding),

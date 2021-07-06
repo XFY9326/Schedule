@@ -16,7 +16,7 @@ import tool.xfy9326.schedule.kt.setOnSingleClickListener
 class WebCourseProviderBottomPanel : BottomSheetDialogFragment() {
     companion object {
         private val TAG_DIALOG = WebCourseProviderBottomPanel::class.simpleName
-        const val EXTRA_AUTHOR_NAME = "EXTRA_AUTHOR_NAME"
+        private const val EXTRA_AUTHOR_NAME = "EXTRA_AUTHOR_NAME"
 
         fun showDialog(fragmentManager: FragmentManager, authorName: String) {
             WebCourseProviderBottomPanel().apply {
@@ -48,11 +48,6 @@ class WebCourseProviderBottomPanel : BottomSheetDialogFragment() {
 
             behavior.state = BottomSheetBehavior.STATE_EXPANDED
         }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        requireDialog().window?.setDimAmount(0f)
     }
 
     override fun onDismiss(dialog: DialogInterface) {

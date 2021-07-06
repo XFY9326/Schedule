@@ -34,8 +34,6 @@ class BackupRestoreSettingsFragment : AbstractSettingsFragment(), MultiItemSelec
     private val restoreSchedule = registerForActivityResult(ActivityResultContracts.GetContent()) {
         if (it != null) {
             requireSettingsViewModel()?.restoreScheduleFromUri(it)
-        } else {
-            requireRootLayout()?.showSnackBar(R.string.input_file_cancel)
         }
     }
 

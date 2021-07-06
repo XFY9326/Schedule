@@ -23,4 +23,5 @@
     <color name="snack_bar_background_tint">#4D4D4D</color>
 
     <color name="operation_button_dialog_background">#66000000</color>
+    <color name="text_edit_dialog_sample_background">#1AFFFFFF</color>
 </resources>

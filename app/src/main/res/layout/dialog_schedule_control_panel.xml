@@ -50,6 +50,7 @@
                     android:layout_height="wrap_content"
                     android:stepSize="1"
                     android:valueFrom="1"
+                    android:valueTo="30"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/textView_scheduleControlCurrentWeekInfo" />
 

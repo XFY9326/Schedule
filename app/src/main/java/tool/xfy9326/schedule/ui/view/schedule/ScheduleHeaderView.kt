@@ -3,7 +3,6 @@ package tool.xfy9326.schedule.ui.view.schedule
 import android.content.Context
 import android.graphics.Typeface
 import android.util.AttributeSet
-import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
@@ -44,7 +43,7 @@ class ScheduleHeaderView @JvmOverloads constructor(context: Context, attrs: Attr
         val styles = this.styles
         val predefine = this.predefine
         if (styles != null && predefine != null && !days.contentEquals(this.days)) {
-            buildMonthView(days[0].month, styles, predefine).also {
+            buildMonthView(days[0].month, styles).also {
                 addViewInLayout(it, -1, it.layoutParams, true)
             }
             repeat(days.size) { i ->
@@ -78,10 +77,10 @@ class ScheduleHeaderView @JvmOverloads constructor(context: Context, attrs: Attr
         this.xRecords = xRecords
     }
 
-    private fun buildMonthView(month: Int, styles: ScheduleStyles, predefine: SchedulePredefine) =
+    private fun buildMonthView(month: Int, styles: ScheduleStyles) =
         TextView(context).apply {
             text = context.getString(R.string.month, month)
-            setTextSize(TypedValue.COMPLEX_UNIT_PX, predefine.monthTextSize)
+            textSize = styles.textSize.getHeaderMonthTextSize(context)
             gravity = Gravity.CENTER
             setTextColor(styles.getTimeTextColor(context))
             typeface = Typeface.defaultFromStyle(Typeface.BOLD)
@@ -113,14 +112,14 @@ class ScheduleHeaderView @JvmOverloads constructor(context: Context, attrs: Attr
             addView(TextView(context).apply {
                 text = context.getString(R.string.month_date_simple, day.month, day.day)
                 setTextColor(timeTextColor)
-                setTextSize(TypedValue.COMPLEX_UNIT_PX, predefine.monthDateTextSize)
+                textSize = styles.textSize.getHeaderMonthDateTextSize(context)
                 typeface = Typeface.defaultFromStyle(Typeface.BOLD)
                 layoutParams = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
             })
             addView(TextView(context).apply {
                 text = weekDayStrArr[day.weekDay.ordinal]
                 setTextColor(timeTextColor)
-                setTextSize(TypedValue.COMPLEX_UNIT_PX, predefine.weekDayTextSize)
+                textSize = styles.textSize.getHeaderWeekdayTextSize(context)
                 typeface = Typeface.defaultFromStyle(Typeface.BOLD)
                 layoutParams = LinearLayoutCompat.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT).apply {
                     setMargins(0, predefine.timeCellTimeDivideTopMargin, 0, 0)

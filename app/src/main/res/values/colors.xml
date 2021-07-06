@@ -50,4 +50,5 @@
     <color name="launch_screen_windows_background">#FFFFFF</color>
 
     <color name="operation_button_dialog_background">#99FFFFFF</color>
+    <color name="text_edit_dialog_sample_background">#0D000000</color>
 </resources>

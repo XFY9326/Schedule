@@ -25,4 +25,12 @@
     <string name="pref_clear_cache">ClearCache</string>
     <string name="pref_restore_settings">RestoreSettings</string>
     <string name="pref_select_schedule_background_image">SelectScheduleBackgroundImage</string>
+    <string name="pref_schedule_text">ScheduleText</string>
+    <string name="pref_schedule_course_text_size">ScheduleCourseTextSize</string>
+    <string name="pref_schedule_time_text_size">ScheduleTimeTextSize</string>
+    <string name="pref_schedule_number_text_size">ScheduleNumberTextSize</string>
+    <string name="pref_schedule_header_month_text_size">HeaderMonthTextSize</string>
+    <string name="pref_schedule_header_month_date_text_size">HeaderMonthDateTextSize</string>
+    <string name="pref_schedule_header_weekday_text_size">HeaderWeekdayTextSize</string>
+    <string name="pref_schedule_text_size_reset">ScheduleTextSizeReset</string>
 </resources>
