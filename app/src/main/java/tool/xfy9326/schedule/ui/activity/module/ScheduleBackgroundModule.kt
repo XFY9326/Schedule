@@ -8,6 +8,7 @@ import tool.xfy9326.schedule.databinding.ActivityScheduleBinding
 import tool.xfy9326.schedule.ui.activity.ScheduleActivity
 import tool.xfy9326.schedule.ui.activity.base.AbstractViewModelActivityModule
 import tool.xfy9326.schedule.ui.vm.ScheduleViewModel
+import kotlin.math.roundToInt
 
 class ScheduleBackgroundModule(activity: ScheduleActivity) : AbstractViewModelActivityModule<ScheduleViewModel, ActivityScheduleBinding, ScheduleActivity>(activity) {
     override fun init() {
@@ -26,6 +27,7 @@ class ScheduleBackgroundModule(activity: ScheduleActivity) : AbstractViewModelAc
                 }
                 load(bundle.file) {
                     if (bundle.useAnim) crossfade(true)
+                    imageAlpha = (bundle.alpha * 255).roundToInt()
                 }
             }
         }
