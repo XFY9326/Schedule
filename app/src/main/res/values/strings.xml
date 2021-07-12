@@ -391,7 +391,7 @@
     <string name="schedule_header_month_date_text_size_sum">调整每列顶部日期的文字大小</string>
     <string name="schedule_header_weekday_text_size">课表表头星期文字大小</string>
     <string name="schedule_header_weekday_text_size_sum">调整每列顶部星期的文字大小</string>
-    <string name="schedule_text_size_reset">重置课表课程表大小</string>
+    <string name="schedule_text_size_reset">重置课程表文字大小</string>
     <string name="reset_success">重置成功！</string>
 
     <string name="js_config_read_failed">配置文件读取错误！</string>
