@@ -8,7 +8,6 @@ import tool.xfy9326.schedule.data.base.AbstractDataStore
 
 object AppSettingsDataStore : AbstractDataStore("Settings") {
     val nightModeType by stringPreferencesKey()
-    private val saveImageWhileSharing by booleanPreferencesKey()
     private val exitAppDirectly by booleanPreferencesKey()
     private val keepWebProviderCache by booleanPreferencesKey()
     private val debugLogsMaxStoreAmount by intPreferencesKey()
@@ -64,8 +63,6 @@ object AppSettingsDataStore : AbstractDataStore("Settings") {
     val nightModeTypeFlow = nightModeType.readEnumAsFlow(NightMode.FOLLOW_SYSTEM)
 
     val exitAppDirectlyFlow = exitAppDirectly.readAsFlow(false)
-
-    val saveImageWhileSharingFlow = saveImageWhileSharing.readAsFlow(false)
 
     val debugLogsMaxStoreAmountFlow = debugLogsMaxStoreAmount.readAsFlow(5)
 

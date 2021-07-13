@@ -19,9 +19,7 @@
     <string name="even_week_description">%1$s周之双</string>
     <string name="month">%1$d月</string>
     <string name="month_date">%1$d月%2$d日</string>
-    <string name="month_date_simple">%1$d/%2$d</string>
     <string name="week_num">第%1$d周</string>
-    <string name="course_cell_text">%1$s\n\n@%2$s</string>
     <string name="current_week">当前周</string>
     <string name="next_week">下一周</string>
     <string name="not_current_week">非本周</string>
@@ -117,14 +115,13 @@
     <string name="error_details">错误详情</string>
     <string name="loading_failed">加载错误</string>
     <string name="reload">重新加载</string>
-    <string name="adapter_author" translatable="false">\@%1$s</string>
     <string name="captcha_empty">验证码为空！</string>
     <string name="user_id_empty">用户名为空！</string>
     <string name="user_pw_empty">密码为空！</string>
     <string name="options_empty">选项为空！</string>
     <string name="course_import_success_title">课程导入成功</string>
     <string name="course_import_success_attention">\u3000\u3000是否立即前往课表编辑页面？\n\u3000\u3000您可能需要\"%1$s\"，当然您也可以稍后在\"课表管理\"页面选择导入的课表进行编辑。\n\u3000\u3000若要启用导入的课表，请在\"课表管理\"页面长按需要使用的课表以切换到该课表。</string>
-    <string name="course_import_success_attention_highlight">手动调整课表的学期开始与结束时间以调整当前周数的计算</string>
+    <string name="course_import_success_attention_highlight">手动调整课表的学期开始与结束的时间以正确显示当前周数</string>
     <string name="edit_schedule_now">立即前往</string>
     <string name="edit_schedule_later">稍后再说</string>
     <string name="import_course_to_current_schedule_msg">导入课程到当前课表后，所有此课表下原有的所有课程都将会被覆盖，请慎重操作！</string>
@@ -142,7 +139,6 @@
     <string name="course_color_edit">课程颜色编辑</string>
     <string name="schedule_color_edit">课表颜色编辑</string>
     <string name="version_title">版本</string>
-    <string name="version">v%1$s (%2$d)</string>
     <string name="open_source_website">开源网址</string>
     <string name="license">协议</string>
     <string name="eula_license">使用协议</string>
@@ -181,19 +177,18 @@
     <string name="highlight_show_today_cell">高亮显示今日课程日期格</string>
     <string name="highlight_show_today_cell_sum">关闭后将不会显示今日的课程日期格背景</string>
     <string name="schedule_background">课表背景</string>
-    <string name="custom_schedule_background">自定义课表背景功能</string>
-    <string name="custom_schedule_background_sum">启用后将可以自定义课表背景</string>
+    <string name="custom_schedule_background">自定义课表背景图片功能</string>
+    <string name="custom_schedule_background_sum">启用后将可以自定义课表背景图片</string>
     <string name="select_schedule_background_image">选择图片作为课表背景</string>
     <string name="select_schedule_background_image_sum">从相册或文件中选择图片作为课表背景</string>
     <string name="schedule_background_scale_type">课表背景图片缩放方式</string>
     <string name="schedule_background_scale_type_sum">设定不同的缩放方式以完美显示图片</string>
-    <string name="schedule_background_alpha">课表背景透明度</string>
-    <string name="schedule_background_alpha_sum">调整课表背景透明度</string>
+    <string name="schedule_background_alpha">课表背景图片透明度</string>
+    <string name="schedule_background_alpha_sum">调整课表背景图片的透明度</string>
     <string name="schedule_background_quality">课表背景图片质量</string>
     <string name="schedule_background_quality_sum">背景图片质量越高读取速度越慢\n注：设定后重新导入图片即可生效</string>
     <string name="schedule_background_set_success">课表背景设置成功！</string>
     <string name="schedule_background_set_failed">课表背景设置失败！</string>
-    <string name="schedule_background_set_cancel">已取消设置课表背景！</string>
     <string name="custom_schedule_text_color">自定义课表文字与图标颜色</string>
     <string name="custom_schedule_text_color_sum">开启后可以自定义课表文字与图标颜色</string>
     <string name="tool_bar_tint_color">工具栏文字与图标颜色</string>
@@ -204,16 +199,13 @@
     <string name="system_bar_appearance_sum">调整课表状态栏与导航栏文字图标颜色</string>
     <string name="schedule_view_alpha">课表透明度</string>
     <string name="schedule_view_alpha_sum">调整课表透明度</string>
-    <string name="course_cell_text_size">课程格文字大小</string>
-    <string name="course_cell_text_size_sum">调整课程格显示的文字大小</string>
     <string name="schedule_background_fade_anim">课表背景渐入动画</string>
     <string name="schedule_background_fade_anim_sum">关闭后加载课表背景将不会使用动画效果</string>
     <string name="share_image">分享图片</string>
     <string name="share_schedule">分享课表</string>
-    <string name="generating_share_schedule">正在生成课表图片中</string>
     <string name="generate_share_schedule_failed">课表图片生成失败！</string>
-    <string name="save_image_while_sharing">分享课表图片时保存图片到相册</string>
-    <string name="save_image_while_sharing_sum">保留分享的课表图片到相册</string>
+    <string name="generate_save_schedule_success">课表图片已成功保存到相册！</string>
+    <string name="generate_save_schedule_failed">课表图片保存失败！</string>
     <string name="copy_to_other_schedule">复制到其他课表</string>
     <string name="import_times_from_other_schedule">从其他课表导入课表时间</string>
     <string name="schedule_time_import_failed">课表时间导入失败！</string>
@@ -260,7 +252,6 @@
     <string name="handle_exception">自动处理应用崩溃</string>
     <string name="handle_exception_sum">关闭后将不会自动重启或显示崩溃处理界面\n注：该功能强烈建议普通用户开启！</string>
     <string name="output_file_cancel">已取消导出文件！</string>
-    <string name="input_file_cancel">已取消导入文件！</string>
     <string name="output_file_success">已成功导出文件！</string>
     <string name="output_file_failed">导出文件失败！</string>
     <string name="ics_description_teacher">教师名称：%1$s</string>
@@ -330,11 +321,9 @@
     <string name="export">导出</string>
     <string name="found_new_version">检测到版本更新！</string>
     <string name="force_update_warning">这是一个重要的版本更新，请立即更新！</string>
-    <string name="update_version_info" translatable="false">v%1$s(%2$d) -> v%3$s(%4$d)</string>
     <string name="update_now">立即更新</string>
     <string name="ignore_update">忽略</string>
     <string name="change_log">更新日志</string>
-    <string name="downloading_update_description" translatable="false">v%1$s(%2$d)</string>
     <string name="start_download_update">开始下载更新！</string>
     <string name="no_update_source">暂无可用更新源</string>
     <string name="no_new_update">您已经在使用最新版本！</string>
@@ -360,7 +349,6 @@
     <string name="schedule_import_strict_mode">课表导入严格模式警告</string>
     <string name="schedule_import_strict_mode_msg">\u3000\u3000由于启用了课表导入的严格检查功能，该课表在该情况下无法导入。\n\n错误原因：%1$s\n\n\u3000\u3000启用严格的课表检查将保证课程导入的完整性，如果依然需要导入该课表，请在\'设置-在线课程导入\'中进行更改。</string>
     <string name="send_debug_log">发送错误日志</string>
-    <string name="javascript" translatable="false">JS</string>
     <string name="swipe_to_delete_js_import">Tips：标有[JS]的选项可以侧滑删除</string>
     <string name="add_course_import">添加课程导入选项</string>
     <string name="add">添加</string>
@@ -385,6 +373,26 @@
     <string name="never_alert">不再提示</string>
     <string name="grant_permission">授予权限</string>
     <string name="package_install_permission_denied">未授予应用安装权限！</string>
+    <string name="see">查看</string>
+    <string name="text_size_edit_sample">示例 1 a A @</string>
+    <string name="schedule_text_style">课表文字格式</string>
+    <string name="schedule_text_size">课表文字大小</string>
+    <string name="schedule_text_settings">课表文字</string>
+    <string name="schedule_text_settings_sum">调整课程表中的文字</string>
+    <string name="schedule_course_text_size">课程格文字大小</string>
+    <string name="schedule_course_text_size_sum">调整课程格内容的文字大小</string>
+    <string name="schedule_time_text_size">课表时间文字大小</string>
+    <string name="schedule_time_text_size_sum">调整课表上下课时间的文字大小</string>
+    <string name="schedule_number_text_size">课程序号文字大小</string>
+    <string name="schedule_number_text_size_sum">调整课程节数序号的文字大小</string>
+    <string name="schedule_header_month_text_size">课表表头月份文字大小</string>
+    <string name="schedule_header_month_text_size_sum">调整顶部月份的文字大小</string>
+    <string name="schedule_header_month_date_text_size">课表表头日期文字大小</string>
+    <string name="schedule_header_month_date_text_size_sum">调整每列顶部日期的文字大小</string>
+    <string name="schedule_header_weekday_text_size">课表表头星期文字大小</string>
+    <string name="schedule_header_weekday_text_size_sum">调整每列顶部星期的文字大小</string>
+    <string name="schedule_text_size_reset">重置课程表文字大小</string>
+    <string name="reset_success">重置成功！</string>
 
     <string name="js_config_read_failed">配置文件读取错误！</string>
     <string name="js_config_invalid">导入的配置文件不合法！</string>
@@ -406,7 +414,9 @@
     <string name="js_config_update_url_not_changed">配置文件更新地址未发生变化！</string>
     <string name="web_page_debug">网页调试</string>
     <string name="web_course_provider_console_debug">课程导入网页调试功能</string>
-    <string name="web_course_provider_console_debug_sum">启用vConsole与WebContentsDebugging</string>
+    <string name="web_course_provider_console_debug_sum">启用vConsole与WebView远程调试</string>
+    <string name="save_to_album">保存到相册</string>
+    <string name="share_with_apps">分享到应用</string>
 
     <string name="js_config_unknown_error">配置文件未知错误！</string>
     <string name="js_config_config_add_success">配置文件添加成功</string>
@@ -438,6 +448,16 @@
 
     <string name="crash_report_email_title">%1$s-崩溃反馈报告</string>
     <string name="crash_report_email_content">应用ID：%1$s&lt;br&gt;当前版本：v%2$s(%3$d)&lt;br&gt;反馈时间：%4$s&lt;br&gt;</string>
+
+    <string name="month_date_simple" translatable="false">%1$d/%2$d</string>
+    <string name="course_cell_text" translatable="false">%1$s\n\n@%2$s</string>
+    <string name="adapter_author" translatable="false">\@%1$s</string>
+
+    <string name="javascript" translatable="false">JS</string>
+
+    <string name="version" translatable="false">v%1$s (%2$d)</string>
+    <string name="update_version_info" translatable="false">v%1$s(%2$d) -> v%3$s(%4$d)</string>
+    <string name="downloading_update_description" translatable="false">v%1$s(%2$d)</string>
 
     <string name="time_period" translatable="false">~</string>
     <string name="author" translatable="false">逸雪飞扬 (XFY9326)</string>

@@ -29,7 +29,6 @@ class ScheduleImportSuccessDialog : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?) = MaterialAlertDialogBuilder(requireContext()).apply {
         setTitle(R.string.course_import_success_title)
-        setMessage(R.string.course_import_success_attention)
         val msgHighLight = getString(R.string.course_import_success_attention_highlight)
         val msgOriginal = getString(R.string.course_import_success_attention, msgHighLight)
         val start = msgOriginal.indexOf(msgHighLight)

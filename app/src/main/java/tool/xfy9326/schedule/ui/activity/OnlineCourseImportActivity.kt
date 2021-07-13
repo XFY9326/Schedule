@@ -41,8 +41,6 @@ class OnlineCourseImportActivity : ViewModelActivity<OnlineCourseImportViewModel
     private val selectJSConfig = registerForActivityResult(ActivityResultContracts.GetContent()) {
         if (it != null) {
             requireViewModel().addJSConfig(it)
-        } else {
-            requireViewBinding().layoutCourseImport.showSnackBar(R.string.input_file_cancel)
         }
     }
 

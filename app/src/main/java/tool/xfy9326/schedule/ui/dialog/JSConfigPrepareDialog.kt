@@ -17,7 +17,7 @@ import tool.xfy9326.schedule.content.beans.JSConfig
 import tool.xfy9326.schedule.content.utils.JSConfigException
 import tool.xfy9326.schedule.databinding.DialogJsConfigPrepareBinding
 import tool.xfy9326.schedule.kt.getDeepStackTraceString
-import tool.xfy9326.schedule.kt.setWindowWidthPercent
+import tool.xfy9326.schedule.kt.setWindowPercent
 import tool.xfy9326.schedule.kt.showToast
 import tool.xfy9326.schedule.ui.vm.OnlineCourseImportViewModel
 
@@ -108,7 +108,7 @@ class JSConfigPrepareDialog : DialogFragment() {
 
     override fun onStart() {
         super.onStart()
-        requireDialog().setWindowWidthPercent(WINDOW_WIDTH_PERCENT)
+        requireDialog().setWindowPercent(WINDOW_WIDTH_PERCENT)
     }
 
     private fun runPreparing() {

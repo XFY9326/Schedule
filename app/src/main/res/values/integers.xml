@@ -7,4 +7,15 @@
     <integer name="default_course_cost_time">40</integer>
     <integer name="default_break_cost_time">10</integer>
     <integer name="default_water_mark_alpha">90</integer>
+
+    <integer name="schedule_text_size_min">1</integer>
+    <integer name="schedule_text_size_max">30</integer>
+    <integer name="schedule_text_size_offset">5</integer>
+
+    <integer name="schedule_course_default_text_size">8</integer>
+    <integer name="schedule_time_default_text_size">4</integer>
+    <integer name="schedule_number_default_text_size">12</integer>
+    <integer name="schedule_header_month_default_text_size">7</integer>
+    <integer name="schedule_header_month_date_default_text_size">7</integer>
+    <integer name="schedule_header_weekday_default_text_size">5</integer>
 </resources>

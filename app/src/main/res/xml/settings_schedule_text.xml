@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.preference.PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="@string/schedule_text_style">
+
+        <androidx.preference.CheckBoxPreference
+            app:defaultValue="false"
+            app:iconSpaceReserved="false"
+            app:key="horizontalCourseCellText"
+            app:summary="@string/horizontal_course_cell_text_sum"
+            app:title="@string/horizontal_course_cell_text" />
+
+        <androidx.preference.CheckBoxPreference
+            app:defaultValue="false"
+            app:iconSpaceReserved="false"
+            app:key="verticalCourseCellText"
+            app:summary="@string/vertical_course_cell_text_sum"
+            app:title="@string/vertical_course_cell_text" />
+
+    </androidx.preference.PreferenceCategory>
+
+    <androidx.preference.PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="@string/schedule_text_size">
+
+        <androidx.preference.Preference
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_schedule_course_text_size"
+            app:persistent="false"
+            app:summary="@string/schedule_course_text_size_sum"
+            app:title="@string/schedule_course_text_size" />
+
+        <androidx.preference.Preference
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_schedule_time_text_size"
+            app:persistent="false"
+            app:summary="@string/schedule_time_text_size_sum"
+            app:title="@string/schedule_time_text_size" />
+
+        <androidx.preference.Preference
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_schedule_number_text_size"
+            app:persistent="false"
+            app:summary="@string/schedule_number_text_size_sum"
+            app:title="@string/schedule_number_text_size" />
+
+        <androidx.preference.Preference
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_schedule_header_month_text_size"
+            app:persistent="false"
+            app:summary="@string/schedule_header_month_text_size_sum"
+            app:title="@string/schedule_header_month_text_size" />
+
+        <androidx.preference.Preference
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_schedule_header_month_date_text_size"
+            app:persistent="false"
+            app:summary="@string/schedule_header_month_date_text_size_sum"
+            app:title="@string/schedule_header_month_date_text_size" />
+
+        <androidx.preference.Preference
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_schedule_header_weekday_text_size"
+            app:persistent="false"
+            app:summary="@string/schedule_header_weekday_text_size_sum"
+            app:title="@string/schedule_header_weekday_text_size" />
+
+        <androidx.preference.Preference
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_schedule_text_size_reset"
+            app:persistent="false"
+            app:title="@string/schedule_text_size_reset" />
+
+    </androidx.preference.PreferenceCategory>
+
+</androidx.preference.PreferenceScreen>

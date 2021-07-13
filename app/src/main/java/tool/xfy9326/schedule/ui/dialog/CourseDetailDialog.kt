@@ -16,7 +16,7 @@ import tool.xfy9326.schedule.beans.ScheduleTime
 import tool.xfy9326.schedule.databinding.DialogCourseDetailBinding
 import tool.xfy9326.schedule.kt.getColorCompat
 import tool.xfy9326.schedule.kt.getStringArray
-import tool.xfy9326.schedule.kt.setWindowWidthPercent
+import tool.xfy9326.schedule.kt.setWindowPercent
 import tool.xfy9326.schedule.kt.startActivity
 import tool.xfy9326.schedule.tools.MaterialColorHelper
 import tool.xfy9326.schedule.ui.activity.CourseEditActivity
@@ -110,6 +110,6 @@ class CourseDetailDialog : AppCompatDialogFragment() {
 
     override fun onStart() {
         super.onStart()
-        requireDialog().setWindowWidthPercent(WINDOW_WIDTH_PERCENT)
+        requireDialog().setWindowPercent(WINDOW_WIDTH_PERCENT)
     }
 }

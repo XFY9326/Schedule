@@ -6,7 +6,6 @@ import android.graphics.Typeface
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.StyleSpan
-import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
@@ -91,7 +90,7 @@ class ScheduleCellView private constructor(context: Context, private val predefi
                     }
                 }
                 text = if (!courseCell.isThisWeekCourse && NotThisWeekCourseShowStyle.SHOW_NOT_THIS_WEEK_TEXT in styles.notThisWeekCourseShowStyle) {
-                    val notThisWeekText = context.getString(R.string.not_this_week)
+                    val notThisWeekText = context.getString(R.string.not_this_week) + NEW_LINE
                     SpannableStringBuilder(notThisWeekText + showText).apply {
                         setSpan(StyleSpan(Typeface.BOLD), 0, notThisWeekText.length, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
                     }
@@ -101,7 +100,7 @@ class ScheduleCellView private constructor(context: Context, private val predefi
                 layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
                 background = ViewUtils.buildBackground(courseCell.cellColor, predefine.courseCellRippleColor, predefine.courseCellBackgroundRadius)
 
-                setTextSize(TypedValue.COMPLEX_UNIT_PX, styles.getCourseCellTextSize(context))
+                textSize = styles.textSize.getCourseTextSize(context)
                 setPadding(predefine.courseCellTextPadding)
 
                 setTextColor(
@@ -148,7 +147,7 @@ class ScheduleCellView private constructor(context: Context, private val predefi
         addViewPreventLayout(
             TextView(context).apply {
                 text = courseTimeNumText
-                setTextSize(TypedValue.COMPLEX_UNIT_PX, predefine.timeCellCourseNumTextSize)
+                textSize = styles.textSize.getScheduleNumberTextSize(context)
                 typeface = Typeface.defaultFromStyle(Typeface.BOLD)
                 setTextColor(timeTextColor)
                 setPadding(0, predefine.timeCellVerticalPadding, 0, predefine.timeCellVerticalPadding)
@@ -165,7 +164,7 @@ class ScheduleCellView private constructor(context: Context, private val predefi
             addViewPreventLayout(
                 TextView(context).apply {
                     text = courseTimeText
-                    setTextSize(TypedValue.COMPLEX_UNIT_PX, predefine.timeCellScheduleTimeTextSize)
+                    textSize = styles.textSize.getScheduleTimeTextSize(context)
                     setTextColor(timeTextColor)
                     setPadding(0, predefine.timeCellTimeDivideTopMargin, 0, 0)
 

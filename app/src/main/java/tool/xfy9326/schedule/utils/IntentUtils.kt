@@ -32,6 +32,13 @@ object IntentUtils {
         })
     }
 
+    fun seeImage(context: Context, uri: Uri) {
+        context.tryStartActivity(Intent(Intent.ACTION_VIEW).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_GRANT_READ_URI_PERMISSION
+            setDataAndType(uri, MIMEConst.MIME_IMAGE)
+        })
+    }
+
     fun getShareImageIntent(context: Context, uri: Uri): Intent =
         Intent.createChooser(Intent(Intent.ACTION_SEND).apply {
             type = MIMEConst.MIME_IMAGE

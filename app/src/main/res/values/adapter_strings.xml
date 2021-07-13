@@ -28,7 +28,6 @@
     <string name="adapter_exception_import_option_get_error">课程选项加载错误</string>
     <string name="adapter_exception_parse_error">课程分析时出现错误</string>
     <string name="adapter_exception_parse_page_error">课程导入页面错误</string>
-    <string name="adapter_exception_parse_info_not_enough_error">课程信息不完整</string>
     <string name="adapter_exception_captcha_download_error">验证码加载时出现错误</string>
     <string name="adapter_exception_captcha_code_error">验证码错误</string>
     <string name="adapter_exception_init_error">初始化错误</string>

@@ -23,7 +23,7 @@ import tool.xfy9326.schedule.databinding.DialogUpgradeBinding
 import tool.xfy9326.schedule.json.upgrade.DownloadSource
 import tool.xfy9326.schedule.json.upgrade.UpdateInfo
 import tool.xfy9326.schedule.kt.APP_ID
-import tool.xfy9326.schedule.kt.setWindowWidthPercent
+import tool.xfy9326.schedule.kt.setWindowPercent
 import tool.xfy9326.schedule.kt.show
 import tool.xfy9326.schedule.kt.showToast
 import tool.xfy9326.schedule.tools.MIMEConst
@@ -201,7 +201,7 @@ class UpgradeDialog : AppCompatDialogFragment() {
         requireDialog().apply {
             setCancelable(!updateInfo.forceUpdate)
             setCanceledOnTouchOutside(!updateInfo.forceUpdate)
-            setWindowWidthPercent(CONTENT_WIDTH_PERCENT)
+            setWindowPercent(CONTENT_WIDTH_PERCENT)
         }
     }
 }

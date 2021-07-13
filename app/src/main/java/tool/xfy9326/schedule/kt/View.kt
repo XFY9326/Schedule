@@ -41,15 +41,12 @@ fun CoordinatorLayout.showSnackBar(@StringRes strId: Int, vararg params: Any, sh
 fun CoordinatorLayout.showSnackBar(str: String, showLong: Boolean = false) =
     Snackbar.make(this, str, if (showLong) Snackbar.LENGTH_LONG else Snackbar.LENGTH_SHORT).show()
 
-fun Dialog.setWindowWidthPercent(widthPercent: Double): Int? {
+fun Dialog.setWindowPercent(widthPercent: Double = -1.0, heightPercent: Double = -1.0) {
     context.resources?.displayMetrics?.let {
-        val width = (it.widthPixels * widthPercent).toInt()
-        window?.apply {
-            setLayout(width, ViewGroup.LayoutParams.WRAP_CONTENT)
-            return width
-        }
+        val width = if (widthPercent < 0) ViewGroup.LayoutParams.WRAP_CONTENT else (it.widthPixels * widthPercent).toInt()
+        val height = if (heightPercent < 0) ViewGroup.LayoutParams.WRAP_CONTENT else (it.heightPixels * heightPercent).toInt()
+        window?.setLayout(width, height)
     }
-    return null
 }
 
 fun AlertDialog.Builder.show(lifecycleOwner: LifecycleOwner) {

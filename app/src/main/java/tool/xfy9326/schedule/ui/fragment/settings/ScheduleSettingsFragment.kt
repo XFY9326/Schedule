@@ -10,6 +10,7 @@ import lib.xfy9326.livedata.observeEvent
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.data.ScheduleDataStore
 import tool.xfy9326.schedule.data.base.DataStorePreferenceAdapter
+import tool.xfy9326.schedule.kt.bindPrefFragment
 import tool.xfy9326.schedule.kt.getColorCompat
 import tool.xfy9326.schedule.kt.setOnPrefClickListener
 import tool.xfy9326.schedule.kt.showSnackBar
@@ -22,9 +23,7 @@ import tool.xfy9326.schedule.ui.vm.SettingsViewModel
 class ScheduleSettingsFragment : AbstractSettingsFragment() {
     private val loadingDialogController by lazy { FullScreenLoadingDialog.createControllerInstance(viewLifecycleOwner, childFragmentManager) }
     private val selectBackgroundImage = registerForActivityResult(ActivityResultContracts.GetContent()) {
-        if (it == null) {
-            requireRootLayout()?.showSnackBar(R.string.schedule_background_set_cancel)
-        } else {
+        if (it != null) {
             loadingDialogController.show(false)
             requireSettingsViewModel()?.importScheduleImage(it)
         }
@@ -47,6 +46,7 @@ class ScheduleSettingsFragment : AbstractSettingsFragment() {
     }
 
     override fun onPrefInit(savedInstanceState: Bundle?) {
+        bindPrefFragment<ScheduleTextSettingsFragment>(R.string.pref_schedule_text)
         setOnPrefClickListener(R.string.pref_select_schedule_background_image) {
             selectBackgroundImage.launch(MIMEConst.MIME_IMAGE)
         }
