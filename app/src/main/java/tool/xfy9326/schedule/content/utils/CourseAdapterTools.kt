@@ -2,6 +2,7 @@
 
 package tool.xfy9326.schedule.content.utils
 
+import org.jsoup.nodes.Element
 import tool.xfy9326.schedule.beans.Course
 import tool.xfy9326.schedule.kt.tryCast
 import java.io.*
@@ -90,3 +91,5 @@ fun <T : Serializable> T.clone(): T? {
     }
     return null
 }
+
+fun Element.selectSingle(cssQuery: String) = selectFirst(cssQuery) ?: throw NoSuchElementException("No element found by css selector! $cssQuery")

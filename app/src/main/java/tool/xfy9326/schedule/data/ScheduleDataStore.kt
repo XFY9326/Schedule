@@ -2,12 +2,11 @@ package tool.xfy9326.schedule.data
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOn
-import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.*
 import tool.xfy9326.schedule.data.base.AbstractDataStore
 import tool.xfy9326.schedule.io.FileManager
-import tool.xfy9326.schedule.io.IOManager
 import tool.xfy9326.schedule.kt.tryEnumValueOf
 import java.io.File
 
@@ -44,14 +43,13 @@ object ScheduleDataStore : AbstractDataStore("ScheduleSettings") {
 
     suspend fun resetScheduleTextSize() {
         edit {
-            it.remove(courseTextSize)
-            it.remove(scheduleTimeTextSize)
-            it.remove(scheduleNumberTextSize)
-            it.remove(headerMonthTextSize)
-            it.remove(headerMonthDateTextSize)
-            it.remove(headerWeekDayTextSize)
+            for (value in ScheduleText.values()) {
+                it.remove(value.prefKey)
+            }
         }
     }
+
+    suspend fun readScheduleTextSize(textType: ScheduleText) = read { ScheduleText.TextSize.create(it, textType) }.first()
 
     val scheduleStylesFlow = read {
         ScheduleStyles(
@@ -68,14 +66,7 @@ object ScheduleDataStore : AbstractDataStore("ScheduleSettings") {
             notThisWeekCourseShowStyle = tryEnumValueOf(it[notThisWeekCourseShowStyle])
                 ?: setOf(NotThisWeekCourseShowStyle.SHOW_NOT_THIS_WEEK_TEXT, NotThisWeekCourseShowStyle.USE_TRANSPARENT_BACKGROUND),
             enableScheduleGridScroll = it[enableScheduleGridScroll] ?: true,
-            textSize = ScheduleTextSize(
-                courseTextSize = it[courseTextSize] ?: IOManager.resources.getInteger(R.integer.schedule_course_default_text_size),
-                scheduleTimeTextSize = it[scheduleTimeTextSize] ?: IOManager.resources.getInteger(R.integer.schedule_time_default_text_size),
-                scheduleNumberTextSize = it[scheduleNumberTextSize] ?: IOManager.resources.getInteger(R.integer.schedule_number_default_text_size),
-                headerMonthTextSize = it[headerMonthTextSize] ?: IOManager.resources.getInteger(R.integer.schedule_header_month_default_text_size),
-                headerMonthDateTextSize = it[headerMonthDateTextSize] ?: IOManager.resources.getInteger(R.integer.schedule_header_month_date_default_text_size),
-                headerWeekDayTextSize = it[headerWeekDayTextSize] ?: IOManager.resources.getInteger(R.integer.schedule_header_weekday_default_text_size)
-            )
+            textSize = ScheduleText.TextSize.create(it)
         )
     }.distinctUntilChanged()
 

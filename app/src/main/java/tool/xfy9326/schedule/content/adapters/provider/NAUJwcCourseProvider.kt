@@ -9,6 +9,7 @@ import tool.xfy9326.schedule.content.base.LoginCourseProvider
 import tool.xfy9326.schedule.content.beans.LoginPageInfo
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
 import tool.xfy9326.schedule.content.utils.CourseAdapterException.Companion.report
+import tool.xfy9326.schedule.content.utils.selectSingle
 import tool.xfy9326.schedule.content.utils.toHex
 import java.math.BigInteger
 import java.security.KeyFactory
@@ -82,11 +83,11 @@ class NAUJwcCourseProvider : LoginCourseProvider<Nothing>() {
             content = httpClient.get(JWC_LOGIN_URL)
         }
         val htmlContent = Jsoup.parse(content, SSO_URL).body()
-        val captchaUrl = htmlContent.selectFirst(SELECTOR_CHECK_CODE).absUrl(HTML_ATTR_SRC)
-        val loginFormElement = htmlContent.selectFirst(SELECTOR_LOGIN_FORM)
+        val captchaUrl = htmlContent.selectSingle(SELECTOR_CHECK_CODE).absUrl(HTML_ATTR_SRC)
+        val loginFormElement = htmlContent.selectSingle(SELECTOR_LOGIN_FORM)
         val loginParams = Parameters.build {
             for (param in LOGIN_PARAMS_STATIC_ARRAY) {
-                val input = loginFormElement.selectFirst(SELECTOR_POST_FORMAT.format(param))
+                val input = loginFormElement.selectSingle(SELECTOR_POST_FORMAT.format(param))
                 val value = input.attr(SSO_INPUT_TAG_VALUE_ATTR)
                 append(param, value)
             }
@@ -108,7 +109,7 @@ class NAUJwcCourseProvider : LoginCourseProvider<Nothing>() {
             JWC_HOST -> studentDefaultPageUrl = loginResponseUrl
             SSO_HOST -> {
                 val loginResponseContent = loginResponse.readText()
-                val msgElement = Jsoup.parse(loginResponseContent).body().selectFirst(SELECTOR_LOGIN_ERROR_MSG)
+                val msgElement = Jsoup.parse(loginResponseContent).body().selectSingle(SELECTOR_LOGIN_ERROR_MSG)
                 CourseAdapterException.Error.CUSTOM_ERROR.report(msg = msgElement.text())
             }
             else -> CourseAdapterException.Error.UNKNOWN_ERROR.report()

@@ -20,7 +20,7 @@ data class ScheduleStyles(
     val verticalCourseCellText: Boolean,
     val notThisWeekCourseShowStyle: Set<NotThisWeekCourseShowStyle>,
     val enableScheduleGridScroll: Boolean,
-    val textSize: ScheduleTextSize,
+    val textSize: ScheduleText.TextSize,
 ) {
     val scheduleViewAlpha = viewAlpha / 100f
 

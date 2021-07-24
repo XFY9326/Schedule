@@ -12,10 +12,7 @@ import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.core.view.children
 import androidx.core.view.setPadding
 import tool.xfy9326.schedule.R
-import tool.xfy9326.schedule.beans.Day
-import tool.xfy9326.schedule.beans.SchedulePredefine
-import tool.xfy9326.schedule.beans.ScheduleStyles
-import tool.xfy9326.schedule.beans.ScheduleViewData
+import tool.xfy9326.schedule.beans.*
 import tool.xfy9326.schedule.kt.getStringArray
 import tool.xfy9326.schedule.utils.view.ViewUtils
 import kotlin.math.max
@@ -80,7 +77,7 @@ class ScheduleHeaderView @JvmOverloads constructor(context: Context, attrs: Attr
     private fun buildMonthView(month: Int, styles: ScheduleStyles) =
         TextView(context).apply {
             text = context.getString(R.string.month, month)
-            textSize = styles.textSize.getHeaderMonthTextSize(context)
+            textSize = styles.textSize[ScheduleText.HEADER_MONTH_TEXT]
             gravity = Gravity.CENTER
             setTextColor(styles.getTimeTextColor(context))
             typeface = Typeface.defaultFromStyle(Typeface.BOLD)
@@ -112,14 +109,14 @@ class ScheduleHeaderView @JvmOverloads constructor(context: Context, attrs: Attr
             addView(TextView(context).apply {
                 text = context.getString(R.string.month_date_simple, day.month, day.day)
                 setTextColor(timeTextColor)
-                textSize = styles.textSize.getHeaderMonthDateTextSize(context)
+                textSize = styles.textSize[ScheduleText.HEADER_MONTH_DATE_TEXT]
                 typeface = Typeface.defaultFromStyle(Typeface.BOLD)
                 layoutParams = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
             })
             addView(TextView(context).apply {
                 text = weekDayStrArr[day.weekDay.ordinal]
                 setTextColor(timeTextColor)
-                textSize = styles.textSize.getHeaderWeekdayTextSize(context)
+                textSize = styles.textSize[ScheduleText.HEADER_WEEKDAY_TEXT]
                 typeface = Typeface.defaultFromStyle(Typeface.BOLD)
                 layoutParams = LinearLayoutCompat.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT).apply {
                     setMargins(0, predefine.timeCellTimeDivideTopMargin, 0, 0)

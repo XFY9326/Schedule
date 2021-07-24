@@ -11,6 +11,7 @@ import tool.xfy9326.schedule.content.base.NetworkCourseParser
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
 import tool.xfy9326.schedule.content.utils.CourseAdapterException.Companion.report
 import tool.xfy9326.schedule.content.utils.CourseAdapterUtils
+import tool.xfy9326.schedule.content.utils.selectSingle
 import tool.xfy9326.schedule.kt.isEven
 import tool.xfy9326.schedule.kt.isOdd
 import java.util.*
@@ -139,8 +140,8 @@ class NAUCourseParser : NetworkCourseParser<Nothing>() {
         if (importOption == NAUJwcCourseProvider.IMPORT_OPTION_THIS_TERM && htmlContent != null) {
             try {
                 val body = Jsoup.parse(htmlContent).body()
-                val termStartStr = body.selectFirst(TERM_START_SELECTOR).text().trim()
-                val termEndStr = body.selectFirst(TERM_END_SELECTOR).text().trim()
+                val termStartStr = body.selectSingle(TERM_START_SELECTOR).text().trim()
+                val termEndStr = body.selectSingle(TERM_END_SELECTOR).text().trim()
                 val termStart = termDateFormat.parse(termStartStr)
                 val termEnd = termDateFormat.parse(termEndStr)
                 if (termStart != null && termEnd != null) {

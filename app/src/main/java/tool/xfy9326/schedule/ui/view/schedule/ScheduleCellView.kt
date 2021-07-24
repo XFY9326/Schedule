@@ -100,7 +100,7 @@ class ScheduleCellView private constructor(context: Context, private val predefi
                 layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
                 background = ViewUtils.buildBackground(courseCell.cellColor, predefine.courseCellRippleColor, predefine.courseCellBackgroundRadius)
 
-                textSize = styles.textSize.getCourseTextSize(context)
+                textSize = styles.textSize[ScheduleText.COURSE_TEXT]
                 setPadding(predefine.courseCellTextPadding)
 
                 setTextColor(
@@ -147,7 +147,7 @@ class ScheduleCellView private constructor(context: Context, private val predefi
         addViewPreventLayout(
             TextView(context).apply {
                 text = courseTimeNumText
-                textSize = styles.textSize.getScheduleNumberTextSize(context)
+                textSize = styles.textSize[ScheduleText.SCHEDULE_NUMBER_TEXT]
                 typeface = Typeface.defaultFromStyle(Typeface.BOLD)
                 setTextColor(timeTextColor)
                 setPadding(0, predefine.timeCellVerticalPadding, 0, predefine.timeCellVerticalPadding)
@@ -164,7 +164,7 @@ class ScheduleCellView private constructor(context: Context, private val predefi
             addViewPreventLayout(
                 TextView(context).apply {
                     text = courseTimeText
-                    textSize = styles.textSize.getScheduleTimeTextSize(context)
+                    textSize = styles.textSize[ScheduleText.SCHEDULE_TIME_TEXT]
                     setTextColor(timeTextColor)
                     setPadding(0, predefine.timeCellTimeDivideTopMargin, 0, 0)
 
