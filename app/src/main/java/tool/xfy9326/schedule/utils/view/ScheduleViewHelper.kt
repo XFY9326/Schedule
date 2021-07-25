@@ -11,23 +11,52 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import tool.xfy9326.schedule.R
-import tool.xfy9326.schedule.beans.CourseCell
-import tool.xfy9326.schedule.beans.ScheduleBuildBundle
-import tool.xfy9326.schedule.beans.SchedulePredefine
-import tool.xfy9326.schedule.beans.ScheduleViewData
+import tool.xfy9326.schedule.beans.*
 import tool.xfy9326.schedule.data.ScheduleDataStore
 import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
-import tool.xfy9326.schedule.kt.AppInstance
-import tool.xfy9326.schedule.kt.getColorCompat
-import tool.xfy9326.schedule.kt.getDefaultBackgroundColor
+import tool.xfy9326.schedule.io.IOManager
+import tool.xfy9326.schedule.kt.*
+import tool.xfy9326.schedule.tools.MaterialColorHelper
 import tool.xfy9326.schedule.ui.view.*
 import tool.xfy9326.schedule.ui.view.schedule.*
+import tool.xfy9326.schedule.utils.CalendarUtils
 import tool.xfy9326.schedule.utils.schedule.CourseTimeUtils
 import tool.xfy9326.schedule.utils.schedule.CourseUtils
+import java.util.*
+import kotlin.collections.ArrayList
 
 object ScheduleViewHelper {
     private const val MIN_SCHEDULE_COLUMN_COUNT = 5 + 1
     private const val MAX_SCHEDULE_COLUMN_COUNT = 7 + 1
+
+    private val SAMPLE_SCHEDULE_TIMES by lazy {
+        listOf(
+            ScheduleTime(8, 0, 8, 40),
+            ScheduleTime(8, 50, 9, 30),
+            ScheduleTime(9, 50, 10, 30),
+            ScheduleTime(10, 40, 11, 20),
+            ScheduleTime(11, 30, 12, 10),
+            ScheduleTime(13, 30, 14, 10),
+            ScheduleTime(14, 20, 15, 0),
+            ScheduleTime(15, 20, 16, 0),
+            ScheduleTime(16, 10, 16, 50),
+            ScheduleTime(17, 0, 17, 40),
+        )
+    }
+    private val SAMPLE_COURSE_CELLS by lazy {
+        val colors = MaterialColorHelper.all()
+        val sampleName = IOManager.resources.getString(R.string.sample_course_name)
+        val sampleLocation = IOManager.resources.getString(R.string.sample_course_location)
+        listOf(
+            CourseCell(0, 0, sampleName, sampleLocation, ClassTime(WeekDay.MONDAY, 1, 2), colors[0], true),
+            CourseCell(0, 1, sampleName, sampleLocation, ClassTime(WeekDay.MONDAY, 5, 2), colors[2], true),
+            CourseCell(0, 2, sampleName, sampleLocation, ClassTime(WeekDay.TUESDAY, 5, 4), colors[4], true),
+            CourseCell(0, 3, sampleName, sampleLocation, ClassTime(WeekDay.WEDNESDAY, 2, 2), colors[6], true),
+            CourseCell(0, 4, sampleName, sampleLocation, ClassTime(WeekDay.WEDNESDAY, 5, 2), colors[8], false),
+            CourseCell(0, 5, sampleName, sampleLocation, ClassTime(WeekDay.FRIDAY, 4, 3), colors[10], false),
+            CourseCell(0, 6, sampleName, sampleLocation, ClassTime(WeekDay.FRIDAY, 8, 2), colors[12], true),
+        )
+    }
 
     suspend fun buildScheduleView(
         context: Context,
@@ -45,7 +74,9 @@ object ScheduleViewHelper {
         }
 
         for (cell in viewData.cells) {
-            cellsDeferred.add(async { ScheduleCellView(context, showWeekend, cell, schedulePredefine, viewData.styles, viewData.weekStart) })
+            if (cell.isThisWeekCourse || viewData.styles.showNotThisWeekCourse) {
+                cellsDeferred.add(async { ScheduleCellView(context, showWeekend, cell, schedulePredefine, viewData.styles, viewData.weekStart) })
+            }
         }
 
         val scheduleHeaderViewDeferred = async {
@@ -121,9 +152,25 @@ object ScheduleViewHelper {
         bitmap.applyCanvas {
             val rect = Rect()
             paint.getTextBounds(text, 0, text.length, rect)
-            val font = paint.fontMetrics
-            val baseLineHeight = (font.descent - font.ascent) / 2
+            val baseLineHeight = paint.textBaselineHeight
             drawText(text, width - rect.width().toFloat() - textPadding, height - rect.height().toFloat() + baseLineHeight - textPadding, paint)
         }
+    }
+
+    suspend fun buildPreviewScheduleView(context: Context, previewStyles: SchedulePreviewStyles): View {
+        val today = Date()
+
+        val viewData = ScheduleViewData(
+            scheduleId = 0,
+            startDate = CalendarUtils.getFirstDateInThisWeek(today, previewStyles.weekStart),
+            endDate = CalendarUtils.getLastDateInThisWeek(today, previewStyles.weekStart),
+            weekNum = 1,
+            weekStart = previewStyles.weekStart,
+            times = SAMPLE_SCHEDULE_TIMES,
+            cells = SAMPLE_COURSE_CELLS,
+            styles = previewStyles.scheduleStyles
+        )
+
+        return buildScheduleView(context, viewData)
     }
 }

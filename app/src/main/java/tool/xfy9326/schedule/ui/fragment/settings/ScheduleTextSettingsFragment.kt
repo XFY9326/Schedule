@@ -15,7 +15,7 @@ import tool.xfy9326.schedule.ui.dialog.ScheduleTextSizeEditDialog
 import tool.xfy9326.schedule.ui.fragment.base.AbstractSettingsFragment
 
 class ScheduleTextSettingsFragment : AbstractSettingsFragment() {
-    override val titleName: Int = R.string.schedule_text_settings
+    override val titleName: Int = R.string.schedule_text
     override val preferenceResId: Int = R.xml.settings_schedule_text
     override val preferenceDataStore: PreferenceDataStore = ScheduleDataStore.getPreferenceDataStore(lifecycleScope)
 

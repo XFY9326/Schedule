@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.preference.PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="@string/basic_settings">
+
+        <androidx.preference.ListPreference
+            app:defaultValue="FOLLOW_THEME"
+            app:entries="@array/system_bar_appearance"
+            app:entryValues="@array/system_bar_appearance_values"
+            app:iconSpaceReserved="false"
+            app:key="scheduleSystemBarAppearance"
+            app:summary="@string/system_bar_appearance_sum"
+            app:title="@string/system_bar_appearance" />
+
+        <androidx.preference.SeekBarPreference
+            android:max="100"
+            app:defaultValue="100"
+            app:iconSpaceReserved="false"
+            app:key="scheduleViewAlpha"
+            app:min="0"
+            app:seekBarIncrement="1"
+            app:showSeekBarValue="true"
+            app:summary="@string/schedule_view_alpha_sum"
+            app:title="@string/schedule_view_alpha" />
+
+    </androidx.preference.PreferenceCategory>
+
+    <androidx.preference.PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="@string/advanced_settings">
+
+        <androidx.preference.CheckBoxPreference
+            app:defaultValue="false"
+            app:iconSpaceReserved="false"
+            app:key="customScheduleTextColor"
+            app:summary="@string/custom_schedule_text_color_sum"
+            app:title="@string/custom_schedule_text_color" />
+
+        <com.jaredrummler.android.colorpicker.ColorPreferenceCompat
+            app:dependency="customScheduleTextColor"
+            app:iconSpaceReserved="false"
+            app:key="toolBarTintColor"
+            app:summary="@string/tool_bar_tint_color_sum"
+            app:title="@string/tool_bar_tint_color" />
+
+        <com.jaredrummler.android.colorpicker.ColorPreferenceCompat
+            app:dependency="customScheduleTextColor"
+            app:iconSpaceReserved="false"
+            app:key="timeTextColor"
+            app:summary="@string/time_text_color_sum"
+            app:title="@string/time_text_color" />
+
+        <com.jaredrummler.android.colorpicker.ColorPreferenceCompat
+            app:dependency="customScheduleTextColor"
+            app:iconSpaceReserved="false"
+            app:key="highlightShowTodayCellColor"
+            app:summary="@string/highlight_show_today_cell_color_sum"
+            app:title="@string/highlight_show_today_cell_color" />
+
+    </androidx.preference.PreferenceCategory>
+
+</androidx.preference.PreferenceScreen>

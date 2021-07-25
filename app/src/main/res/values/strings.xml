@@ -163,7 +163,7 @@
     <string name="night_mode_follow_system">跟随系统设置</string>
     <string name="theme">主题</string>
     <string name="schedule_format_settings">课表格式</string>
-    <string name="schedule_display">课表样式</string>
+    <string name="schedule_style_settings">课表样式</string>
     <string name="force_show_weekend">强制显示周末课程列</string>
     <string name="force_show_weekend_sum">关闭后根据课程自动显示周末课程列</string>
     <string name="corner_screen_adapter">圆角屏幕适配</string>
@@ -177,6 +177,8 @@
     <string name="highlight_show_today_cell">高亮显示今日课程日期格</string>
     <string name="highlight_show_today_cell_sum">关闭后将不会显示今日的课程日期格背景</string>
     <string name="schedule_background">课表背景</string>
+    <string name="schedule_background_settings">课表背景自定义</string>
+    <string name="schedule_background_settings_sum">自定义课表显示的背景</string>
     <string name="custom_schedule_background">自定义课表背景图片功能</string>
     <string name="custom_schedule_background_sum">启用后将可以自定义课表背景图片</string>
     <string name="select_schedule_background_image">选择图片作为课表背景</string>
@@ -221,7 +223,10 @@
     <string name="vertical_course_cell_text_sum">竖向居中显示课程格内的文字</string>
     <string name="highlight_show_today_cell_color">今日课程日期格高亮显示颜色</string>
     <string name="highlight_show_today_cell_color_sum">修改今日课程日期格的高亮显示颜色</string>
-    <string name="schedule_color">课表颜色</string>
+    <string name="basic_settings">基础设置</string>
+    <string name="schedule_color">课表文字</string>
+    <string name="schedule_color_settings">课表颜色设置</string>
+    <string name="schedule_color_settings_sum">调整课表文字以及控件的颜色</string>
     <string name="not_this_week_course_show_style">非本周课程显示样式</string>
     <string name="not_this_week_course_show_style_sum">修改非本周课程的特殊显示样式</string>
     <string name="show_not_this_week_text">显示\'[非本周]\'文字</string>
@@ -377,7 +382,8 @@
     <string name="text_size_edit_sample">示例 1 a A @</string>
     <string name="schedule_text_style">课表文字格式</string>
     <string name="schedule_text_size">课表文字大小</string>
-    <string name="schedule_text_settings">课表文字</string>
+    <string name="schedule_text">课表文字</string>
+    <string name="schedule_text_settings">课表文字设置</string>
     <string name="schedule_text_settings_sum">调整课程表中的文字</string>
     <string name="schedule_course_text_size">课程格文字大小</string>
     <string name="schedule_course_text_size_sum">调整课程格内容的文字大小</string>
@@ -393,6 +399,10 @@
     <string name="schedule_header_weekday_text_size_sum">调整每列顶部星期的文字大小</string>
     <string name="schedule_text_size_reset">重置课程表文字大小</string>
     <string name="reset_success">重置成功！</string>
+    <string name="sample_course_name">课程名称示例</string>
+    <string name="sample_course_location">课程地点示例</string>
+    <string name="schedule_background_preview_attention">注意：\n由于实际课程表背景显示的大小与设备有关，因此设置中预览的课程表背景图片不代表真实的显示效果</string>
+    <string name="schedule_preview_ratio">课表预览比例</string>
 
     <string name="js_config_read_failed">配置文件读取错误！</string>
     <string name="js_config_invalid">导入的配置文件不合法！</string>

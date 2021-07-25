@@ -26,6 +26,8 @@
     <string name="pref_restore_settings">RestoreSettings</string>
     <string name="pref_select_schedule_background_image">SelectScheduleBackgroundImage</string>
     <string name="pref_schedule_text">ScheduleText</string>
+    <string name="pref_schedule_background">ScheduleBackground</string>
+    <string name="pref_schedule_color">ScheduleColor</string>
     <string name="pref_schedule_course_text_size">ScheduleCourseTextSize</string>
     <string name="pref_schedule_time_text_size">ScheduleTimeTextSize</string>
     <string name="pref_schedule_number_text_size">ScheduleNumberTextSize</string>

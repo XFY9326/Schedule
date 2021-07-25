@@ -3,6 +3,7 @@ package tool.xfy9326.schedule.ui.vm
 import android.net.Uri
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
@@ -11,6 +12,7 @@ import lib.xfy9326.livedata.MutableEventLiveData
 import lib.xfy9326.livedata.postEvent
 import tool.xfy9326.schedule.beans.BatchResult
 import tool.xfy9326.schedule.beans.Schedule
+import tool.xfy9326.schedule.beans.SchedulePreviewStyles
 import tool.xfy9326.schedule.beans.ScheduleSync
 import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.data.ScheduleDataStore
@@ -20,10 +22,12 @@ import tool.xfy9326.schedule.io.IOManager
 import tool.xfy9326.schedule.io.PathManager
 import tool.xfy9326.schedule.io.kt.asParentOf
 import tool.xfy9326.schedule.io.utils.ImageUtils
+import tool.xfy9326.schedule.kt.asDistinctLiveData
 import tool.xfy9326.schedule.tools.DisposableValue
 import tool.xfy9326.schedule.ui.vm.base.AbstractViewModel
 import tool.xfy9326.schedule.utils.BackupUtils
 import tool.xfy9326.schedule.utils.schedule.ScheduleSyncHelper
+import tool.xfy9326.schedule.utils.view.ScheduleViewDataProcessor
 
 class SettingsViewModel : AbstractViewModel() {
     private val scheduleSyncFlow = ScheduleDBProvider.db.scheduleSyncDao.getScheduleSyncsInfo().map {
@@ -34,6 +38,14 @@ class SettingsViewModel : AbstractViewModel() {
             }
         }
     }
+
+    val schedulePreviewStyles by lazy {
+        ScheduleDataStore.defaultFirstDayOfWeekFlow.combine(ScheduleDataStore.scheduleStylesFlow) { weekStart, styles ->
+            SchedulePreviewStyles(weekStart, styles)
+        }.asDistinctLiveData()
+    }
+    val scheduleBackground by lazy { ScheduleViewDataProcessor.scheduleBackgroundFlow.asDistinctLiveData() }
+    val schedulePreviewPreviewWidth by lazy { MutableEventLiveData<Boolean>() }
 
     val importScheduleImage by lazy { MutableEventLiveData<Boolean>() }
     val allDebugLogs by lazy { MutableEventLiveData<Pair<String, List<String>>>() }

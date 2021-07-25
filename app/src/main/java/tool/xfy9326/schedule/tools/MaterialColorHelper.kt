@@ -9,6 +9,10 @@ object MaterialColorHelper {
     @FloatRange(from = 0.0, to = 1.0)
     private const val LUMINANCE_IS_LIGHT_COLOR = 0.7f
 
+    /**
+     * 修改预置颜色数量可能会影响：
+     * @see[tool.xfy9326.schedule.utils.view.ScheduleViewHelper.SAMPLE_COURSE_CELLS]
+     */
     private val MATERIAL_COLORS = arrayOf(
         // material_red_300
         "#E57373",
@@ -44,9 +48,9 @@ object MaterialColorHelper {
         // material_deep_orange_300
         "#FF8A65"
     )
-    private val colorIntList by lazy { MATERIAL_COLORS.map { it.toColorInt() } }
+    private val colorIntList by lazy { MATERIAL_COLORS.map { it.toColorInt() }.toIntArray() }
 
-    fun all() = colorIntList.toIntArray()
+    fun all() = colorIntList
 
     fun random() = colorIntList.random()
 

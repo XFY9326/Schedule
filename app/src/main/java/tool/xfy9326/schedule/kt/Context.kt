@@ -6,6 +6,8 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
+import android.graphics.Point
+import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
 import android.view.inputmethod.InputMethodManager
@@ -112,4 +114,28 @@ fun Context.getDefaultBackgroundColor(): Int {
     }
 }
 
+@Px
+fun Context.getActionBarDefaultHeight(): Int {
+    theme.obtainStyledAttributes(IntArray(1) {
+        android.R.attr.actionBarSize
+    }).let { array ->
+        return array.getDimensionPixelSize(0, 0).also {
+            array.recycle()
+        }
+    }
+}
+
 fun <T> Fragment.requireOwner() = (parentFragment ?: requireActivity()).tryCast<T>()
+
+fun Activity.getRealScreenSize(): Pair<Int, Int> {
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        val size = Point()
+        display?.getRealSize(size)
+        Pair(size.x, size.y)
+    } else {
+        val size = Point()
+        @Suppress("DEPRECATION")
+        windowManager.defaultDisplay.getRealSize(size)
+        Pair(size.x, size.y)
+    }
+}

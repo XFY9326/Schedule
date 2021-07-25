@@ -5,6 +5,8 @@ package tool.xfy9326.schedule.kt
 import android.animation.Animator
 import android.app.Dialog
 import android.content.res.Resources
+import android.graphics.Paint
+import android.graphics.Rect
 import android.graphics.drawable.*
 import android.os.Build
 import android.text.Editable
@@ -14,6 +16,7 @@ import android.webkit.CookieManager
 import android.webkit.WebStorage
 import android.webkit.WebView
 import androidx.annotation.ColorInt
+import androidx.annotation.Px
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
 import androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -105,6 +108,13 @@ fun Editable?.getText(): String? {
     } else {
         str
     }
+}
+
+@Px
+fun Window.getStatusBarHeight(): Int {
+    val rect = Rect()
+    decorView.getWindowVisibleDisplayFrame(rect)
+    return rect.top
 }
 
 fun Window.setSystemBarAppearance(systemBarAppearance: SystemBarAppearance) {
@@ -206,3 +216,9 @@ fun ViewPropertyAnimator.setListener(
     })
     return this
 }
+
+val Paint.textBaselineHeight: Float
+    get() {
+        val font = fontMetrics
+        return (font.descent - font.ascent) / 2f
+    }

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/menu_schedulePreviewRatio"
+        android:icon="@drawable/ic_aspect_ratio_24"
+        android:title="@string/schedule_preview_ratio"
+        app:showAsAction="always" />
+</menu>

@@ -155,7 +155,7 @@ class ScheduleCellView private constructor(context: Context, private val predefi
                 textAlignment = View.TEXT_ALIGNMENT_INHERIT
                 gravity = Gravity.CENTER
 
-                layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
+                layoutParams = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
             }
         )
 
@@ -171,7 +171,7 @@ class ScheduleCellView private constructor(context: Context, private val predefi
                     textAlignment = View.TEXT_ALIGNMENT_INHERIT
                     gravity = Gravity.CENTER
 
-                    layoutParams = LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply {
+                    layoutParams = LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply {
                         setMargins(0, predefine.timeCellTimeDivideTopMargin, 0, 0)
                     }
                 }

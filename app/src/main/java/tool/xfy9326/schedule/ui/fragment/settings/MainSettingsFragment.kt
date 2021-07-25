@@ -18,7 +18,7 @@ class MainSettingsFragment : AbstractSettingsFragment() {
 
     override fun onPrefInit(savedInstanceState: Bundle?) {
         bindPrefFragment<GeneralSettingsFragment>(R.string.pref_general_settings)
-        bindPrefFragment<ScheduleSettingsFragment>(R.string.pref_schedule_table_settings)
+        bindPrefFragment<ScheduleBaseSettingsFragment>(R.string.pref_schedule_table_settings)
         bindPrefFragment<CalendarSyncSettingsFragment>(R.string.pref_calendar_sync_settings)
         bindPrefFragment<OnlineCourseImportSettingsFragment>(R.string.pref_online_course_import_settings)
         bindPrefFragment<BackupRestoreSettingsFragment>(R.string.pref_backup_restore_settings)

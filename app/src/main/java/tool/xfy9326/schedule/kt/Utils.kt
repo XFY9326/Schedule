@@ -1,6 +1,7 @@
 package tool.xfy9326.schedule.kt
 
 import androidx.annotation.StringRes
+import androidx.fragment.app.Fragment
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import tool.xfy9326.schedule.beans.*
@@ -48,6 +49,6 @@ fun PreferenceFragmentCompat.setOnPrefClickListener(@StringRes keyId: Int, actio
     }
 }
 
-inline fun <reified T : PreferenceFragmentCompat> PreferenceFragmentCompat.bindPrefFragment(@StringRes keyId: Int) {
+inline fun <reified T : Fragment> PreferenceFragmentCompat.bindPrefFragment(@StringRes keyId: Int) {
     findPreference<Preference>(keyId)?.fragment = T::class.qualifiedName
 }
