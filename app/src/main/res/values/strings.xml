@@ -401,7 +401,7 @@
     <string name="reset_success">重置成功！</string>
     <string name="sample_course_name">课程名称示例</string>
     <string name="sample_course_location">课程地点示例</string>
-    <string name="schedule_background_preview_attention">注意：\n由于实际课程表背景显示的大小与设备有关，因此设置中预览的课程表背景图片不代表真实的显示效果</string>
+    <string name="schedule_background_preview_attention">注意：\n由于设置中预览的课程表高度受限，因此预览的课程表背景缩放位置与大小不能完全代表最终的显示效果</string>
     <string name="schedule_preview_ratio">课表预览比例</string>
 
     <string name="js_config_read_failed">配置文件读取错误！</string>
