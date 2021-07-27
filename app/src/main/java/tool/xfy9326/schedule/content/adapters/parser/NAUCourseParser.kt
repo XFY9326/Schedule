@@ -12,22 +12,19 @@ import tool.xfy9326.schedule.content.utils.CourseAdapterException
 import tool.xfy9326.schedule.content.utils.CourseAdapterException.Companion.report
 import tool.xfy9326.schedule.content.utils.CourseAdapterUtils
 import tool.xfy9326.schedule.content.utils.selectSingle
-import tool.xfy9326.schedule.kt.isEven
-import tool.xfy9326.schedule.kt.isOdd
 import java.util.*
 import kotlin.collections.ArrayList
 
 class NAUCourseParser : NetworkCourseParser<Nothing>() {
     companion object {
-        private const val INIT_WEEK_NUM = 24
         private const val TERM_START_SELECTOR = "#TermInfo > div:nth-child(4) > span"
         private const val TERM_END_SELECTOR = "#TermInfo > div:nth-child(5) > span"
         private const val COURSE_TR_TAGS = "#content > tbody > tr[align='center']"
         private val WEEKDAY_COURSE_REG = "周\\s*(\\d+)\\s*第\\s*(\\d+)-(\\d+)节".toRegex()
 
         private fun getWeeks(timeStr: String): BooleanArray {
-            // 周数模式（0: 任意周  1: 单周  2: 双周）
-            var weekMode = 0
+            var oddMode = false
+            var evenMode = false
             val weekNumStr: String
 
             val weeksStr = timeStr.substring(0, timeStr.indexOf("周") + 1).trim()
@@ -36,38 +33,15 @@ class NAUCourseParser : NetworkCourseParser<Nothing>() {
             } else if ("之" in weeksStr) {
                 weekNumStr = weeksStr.substring(0, weeksStr.indexOf("之")).trim()
                 if ("单" in weeksStr) {
-                    weekMode = 1
+                    oddMode = true
                 } else if ("双" in weeksStr) {
-                    weekMode = 2
+                    evenMode = true
                 }
             } else {
                 weekNumStr = weeksStr.substring(0, weeksStr.length - 1).trim()
             }
 
-            val weeks = BooleanArray(INIT_WEEK_NUM)
-            val weekNumStrArr =
-                if ("," in weekNumStr) {
-                    weekNumStr.split(",")
-                } else {
-                    listOf(weekNumStr)
-                }
-            for (str in weekNumStrArr) {
-                val trimStr = str.trim()
-                if ("-" in trimStr) {
-                    val numStrArr = trimStr.split("-")
-                    for (num in numStrArr[0].toInt()..numStrArr[1].toInt()) {
-                        when (weekMode) {
-                            0 -> weeks[num - 1] = true
-                            1 -> if (num.isOdd()) weeks[num - 1] = true
-                            2 -> if (num.isEven()) weeks[num - 1] = true
-                        }
-                    }
-                } else {
-                    weeks[trimStr.toInt() - 1] = true
-                }
-            }
-
-            return weeks
+            return CourseAdapterUtils.parseNumberPeriods(weekNumStr, oddOnly = oddMode, evenOnly = evenMode)
         }
 
         private fun getCourseTime(location: String, timeStr: String): CourseTime {

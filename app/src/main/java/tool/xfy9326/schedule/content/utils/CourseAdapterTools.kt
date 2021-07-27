@@ -2,6 +2,7 @@
 
 package tool.xfy9326.schedule.content.utils
 
+import androidx.annotation.IntRange
 import org.jsoup.nodes.Element
 import tool.xfy9326.schedule.beans.Course
 import tool.xfy9326.schedule.kt.tryCast
@@ -27,7 +28,7 @@ fun BooleanArray.arrangeWeekNum(): BooleanArray {
     }
 }
 
-fun BooleanArray.hasCourse(num: Int): Boolean {
+fun BooleanArray.hasCourse(@IntRange(from = 1) num: Int): Boolean {
     val index = num - 1
     return if (index in indices) {
         this[index]
