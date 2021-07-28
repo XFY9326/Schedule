@@ -8,6 +8,7 @@ import io.ktor.client.features.*
 import io.ktor.client.features.cookies.*
 import io.ktor.client.features.json.*
 import io.ktor.client.features.json.serializer.*
+import tool.xfy9326.schedule.beans.TimePeriod
 import tool.xfy9326.schedule.kt.isEven
 import tool.xfy9326.schedule.kt.isOdd
 import java.text.SimpleDateFormat
@@ -84,5 +85,37 @@ object CourseAdapterUtils {
             }
         }
         return result
+    }
+
+    /**
+     * 将整形Collection转为时间间隔数组
+     *
+     * @param arr 整形Collection
+     * @return 时间间隔数组
+     */
+    fun parseIntCollectionPeriod(arr: Collection<Int>): List<TimePeriod> {
+        val sortedArr = arr.toSet().sorted().toList()
+        if (sortedArr.isNotEmpty()) {
+            val result = ArrayList<TimePeriod>()
+            var start = 0
+            for ((i, num) in sortedArr.withIndex()) {
+                if (i == 0) {
+                    start = num
+                } else {
+                    if (sortedArr[i - 1] != num - 1) {
+                        result.add(TimePeriod(start, sortedArr[i - 1]))
+                        start = num
+                    }
+                }
+            }
+            val last = sortedArr.last()
+            if (last - start >= 0) {
+                result.add(TimePeriod(start, last))
+            }
+
+            return result
+        } else {
+            return emptyList()
+        }
     }
 }

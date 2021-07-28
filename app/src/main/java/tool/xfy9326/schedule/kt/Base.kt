@@ -53,3 +53,5 @@ inline fun <T> Mutex.withTryLock(owner: Any? = null, action: () -> T): T? {
 }
 
 fun Throwable.getDeepStackTraceString() = cause?.stackTraceToString() ?: stackTraceToString()
+
+fun <T : CharSequence> T.nullIfBlank() = if (isBlank()) null else this

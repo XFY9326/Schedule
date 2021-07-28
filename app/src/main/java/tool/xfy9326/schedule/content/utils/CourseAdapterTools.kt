@@ -51,11 +51,17 @@ fun String.deserializeToBooleanArray(): BooleanArray {
     }
 }
 
-fun List<Course>.arrangeWeekNum() {
+fun List<Course>.arrangeCourseWeekNum() {
     this.forEach {
         it.times.forEach { time ->
             time.weekNum = time.weekNum.arrangeWeekNum()
         }
+    }
+}
+
+fun Course.arrangeWeekNum() {
+    this.times.forEach {
+        it.weekNum = it.weekNum.arrangeWeekNum()
     }
 }
 
@@ -94,3 +100,5 @@ fun <T : Serializable> T.clone(): T? {
 }
 
 fun Element.selectSingle(cssQuery: String) = selectFirst(cssQuery) ?: throw NoSuchElementException("No element found by css selector! $cssQuery")
+
+fun Element.hasChild(tag: String) = (children().find { it.tagName() == tag } != null)

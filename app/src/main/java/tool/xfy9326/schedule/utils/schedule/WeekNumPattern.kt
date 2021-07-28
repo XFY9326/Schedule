@@ -4,6 +4,7 @@ import android.content.Context
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.CourseTime
 import tool.xfy9326.schedule.beans.ScheduleCalculateTimes
+import tool.xfy9326.schedule.beans.TimePeriod
 import tool.xfy9326.schedule.beans.WeekDay.Companion.orderedValue
 import tool.xfy9326.schedule.kt.isEven
 import tool.xfy9326.schedule.utils.CalendarUtils
@@ -60,12 +61,6 @@ class WeekNumPattern(weekNum: BooleanArray) {
          * @constructor Create MESSY
          */
         MESSY;
-    }
-
-    data class TimePeriod(val start: Int, val end: Int) {
-        constructor(start: Int) : this(start, start)
-
-        val length = end - start + 1
     }
 
     companion object {

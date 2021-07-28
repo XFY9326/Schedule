@@ -68,31 +68,16 @@ class JSCourseParser : AbstractCourseParser<JSParams>() {
     }
 
     private fun getSeriesClassTimeList(info: CourseInfos): List<ClassTime> {
-        val courseNum = info.sections.asSequence().map { it.section }.toSet().sorted().toList()
-        if (courseNum.isNotEmpty()) {
-            val weekDay = WeekDay.of(info.day)
+        val timePeriods = CourseAdapterUtils.parseIntCollectionPeriod(info.sections.map { it.section })
+        if (timePeriods.isEmpty()) return emptyList()
 
-            val result = ArrayList<ClassTime>()
-            var start = 0
-            for ((i, num) in courseNum.withIndex()) {
-                if (i == 0) {
-                    start = num
-                } else {
-                    if (courseNum[i - 1] + 1 != num) {
-                        result.add(ClassTime(weekDay, start, courseNum[i - 1] - start + 1))
-                        start = num
-                    }
-                }
-            }
-            val last = courseNum.last()
-            if (last - start >= 0) {
-                result.add(ClassTime(weekDay, start, last - start + 1))
-            }
-
-            return result
-        } else {
-            return emptyList()
+        val weekDay = WeekDay.of(info.day)
+        val result = ArrayList<ClassTime>(timePeriods.size)
+        for (timePeriod in timePeriods) {
+            result.add(ClassTime(weekDay, timePeriod.start, timePeriod.length))
         }
+
+        return result
     }
 
     private fun processPureScheduleResult(data: String): ScheduleImportContent {

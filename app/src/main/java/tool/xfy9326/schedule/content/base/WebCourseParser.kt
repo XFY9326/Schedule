@@ -1,41 +1,24 @@
 package tool.xfy9326.schedule.content.base
 
 import tool.xfy9326.schedule.beans.ScheduleTime
-import tool.xfy9326.schedule.content.utils.arrangeWeekNum
+import tool.xfy9326.schedule.beans.WebPageContent
+import tool.xfy9326.schedule.content.utils.arrangeCourseWeekNum
 import java.io.Serializable
 import java.util.*
 
 abstract class WebCourseParser<P : Serializable> : AbstractCourseParser<P>() {
 
-    fun parseScheduleTimes(importOption: Int, htmlContent: String, iframeContent: Array<String>, frameContent: Array<String>) =
-        onParseScheduleTimes(importOption, htmlContent, iframeContent, frameContent)
+    fun parseScheduleTimes(importOption: Int, webPageContent: WebPageContent) = onParseScheduleTimes(importOption, webPageContent)
 
-    fun parseCourses(importOption: Int, htmlContent: String, iframeContent: Array<String>, frameContent: Array<String>) =
-        onParseCourses(importOption, htmlContent, iframeContent, frameContent).also {
-            it.courses.arrangeWeekNum()
-        }
+    fun parseCourses(importOption: Int, webPageContent: WebPageContent) = onParseCourses(importOption, webPageContent).also {
+        it.courses.arrangeCourseWeekNum()
+    }
 
-    fun parseTerm(importOption: Int, htmlContent: String, iframeContent: Array<String>, frameContent: Array<String>) =
-        onParseTerm(importOption, htmlContent, iframeContent, frameContent)
+    fun parseTerm(importOption: Int, webPageContent: WebPageContent) = onParseTerm(importOption, webPageContent)
 
-    protected abstract fun onParseScheduleTimes(
-        importOption: Int,
-        htmlContent: String,
-        iframeContent: Array<String>,
-        frameContent: Array<String>,
-    ): List<ScheduleTime>
+    protected abstract fun onParseScheduleTimes(importOption: Int, webPageContent: WebPageContent): List<ScheduleTime>
 
-    protected abstract fun onParseCourses(
-        importOption: Int,
-        htmlContent: String,
-        iframeContent: Array<String>,
-        frameContent: Array<String>,
-    ): CourseParseResult
+    protected abstract fun onParseCourses(importOption: Int, webPageContent: WebPageContent): CourseParseResult
 
-    protected open fun onParseTerm(
-        importOption: Int,
-        htmlContent: String,
-        iframeContent: Array<String>,
-        frameContent: Array<String>,
-    ): Pair<Date, Date>? = null
+    protected open fun onParseTerm(importOption: Int, webPageContent: WebPageContent): Pair<Date, Date>? = null
 }

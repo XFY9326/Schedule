@@ -21,41 +21,6 @@ class NAUCourseParser : NetworkCourseParser<Nothing>() {
         private const val TERM_END_SELECTOR = "#TermInfo > div:nth-child(5) > span"
         private const val COURSE_TR_TAGS = "#content > tbody > tr[align='center']"
         private val WEEKDAY_COURSE_REG = "周\\s*(\\d+)\\s*第\\s*(\\d+)-(\\d+)节".toRegex()
-
-        private fun getWeeks(timeStr: String): BooleanArray {
-            var oddMode = false
-            var evenMode = false
-            val weekNumStr: String
-
-            val weeksStr = timeStr.substring(0, timeStr.indexOf("周") + 1).trim()
-            if (weeksStr.startsWith("第")) {
-                weekNumStr = weeksStr.substring(1, weeksStr.length - 1).trim()
-            } else if ("之" in weeksStr) {
-                weekNumStr = weeksStr.substring(0, weeksStr.indexOf("之")).trim()
-                if ("单" in weeksStr) {
-                    oddMode = true
-                } else if ("双" in weeksStr) {
-                    evenMode = true
-                }
-            } else {
-                weekNumStr = weeksStr.substring(0, weeksStr.length - 1).trim()
-            }
-
-            return CourseAdapterUtils.parseNumberPeriods(weekNumStr, oddOnly = oddMode, evenOnly = evenMode)
-        }
-
-        private fun getCourseTime(location: String, timeStr: String): CourseTime {
-            val weeks = getWeeks(timeStr)
-
-            val weekDayCourseSectionStr = timeStr.substring(timeStr.indexOf("周") + 1).trim()
-            val weekDayCourseValues = WEEKDAY_COURSE_REG.find(weekDayCourseSectionStr)?.groupValues ?: CourseAdapterException.Error.INCOMPLETE_COURSE_INFO_ERROR.report()
-
-            val weekDay = weekDayCourseValues[1].toInt()
-            val classStart = weekDayCourseValues[2].toInt()
-            val classEnd = weekDayCourseValues[3].toInt()
-
-            return CourseTime(weeks, WeekDay.of(weekDay), classStart, classEnd - classStart + 1, location)
-        }
     }
 
     private val termDateFormat = CourseAdapterUtils.newDateFormat()
@@ -126,5 +91,40 @@ class NAUCourseParser : NetworkCourseParser<Nothing>() {
             }
         }
         return null
+    }
+
+    private fun getWeeks(timeStr: String): BooleanArray {
+        var oddMode = false
+        var evenMode = false
+        val weekNumStr: String
+
+        val weeksStr = timeStr.substring(0, timeStr.indexOf("周") + 1).trim()
+        if (weeksStr.startsWith("第")) {
+            weekNumStr = weeksStr.substring(1, weeksStr.length - 1).trim()
+        } else if ("之" in weeksStr) {
+            weekNumStr = weeksStr.substring(0, weeksStr.indexOf("之")).trim()
+            if ("单" in weeksStr) {
+                oddMode = true
+            } else if ("双" in weeksStr) {
+                evenMode = true
+            }
+        } else {
+            weekNumStr = weeksStr.substring(0, weeksStr.length - 1).trim()
+        }
+
+        return CourseAdapterUtils.parseNumberPeriods(weekNumStr, oddOnly = oddMode, evenOnly = evenMode)
+    }
+
+    private fun getCourseTime(location: String, timeStr: String): CourseTime {
+        val weeks = getWeeks(timeStr)
+
+        val weekDayCourseSectionStr = timeStr.substring(timeStr.indexOf("周") + 1).trim()
+        val weekDayCourseValues = WEEKDAY_COURSE_REG.find(weekDayCourseSectionStr)?.groupValues ?: CourseAdapterException.Error.INCOMPLETE_COURSE_INFO_ERROR.report()
+
+        val weekDay = weekDayCourseValues[1].toInt()
+        val classStart = weekDayCourseValues[2].toInt()
+        val classEnd = weekDayCourseValues[3].toInt()
+
+        return CourseTime(weeks, WeekDay.of(weekDay), classStart, classEnd - classStart + 1, location)
     }
 }
