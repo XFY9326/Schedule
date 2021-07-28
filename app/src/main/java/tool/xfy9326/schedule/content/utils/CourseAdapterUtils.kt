@@ -8,11 +8,14 @@ import io.ktor.client.features.*
 import io.ktor.client.features.cookies.*
 import io.ktor.client.features.json.*
 import io.ktor.client.features.json.serializer.*
+import tool.xfy9326.schedule.beans.CourseTime
 import tool.xfy9326.schedule.beans.TimePeriod
+import tool.xfy9326.schedule.beans.WeekDay
 import tool.xfy9326.schedule.kt.isEven
 import tool.xfy9326.schedule.kt.isOdd
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.math.max
 import kotlin.math.min
 
@@ -94,7 +97,7 @@ object CourseAdapterUtils {
      * @return 时间间隔数组
      */
     fun parseIntCollectionPeriod(arr: Collection<Int>): List<TimePeriod> {
-        val sortedArr = arr.toSet().sorted().toList()
+        val sortedArr = (if (arr is Set<Int>) arr else arr.toSet()).toList().sorted()
         if (sortedArr.isNotEmpty()) {
             val result = ArrayList<TimePeriod>()
             var start = 0
@@ -117,5 +120,24 @@ object CourseAdapterUtils {
         } else {
             return emptyList()
         }
+    }
+
+    /**
+     * 解析多个课程时间
+     * 用于上课时间并非完整的时间片段（例如：1-3）而是只包含节次（例如：1，2，3，5）的课程
+     *
+     * @param weeks 周数
+     * @param weekDay 星期
+     * @param numArr 上课时间
+     * @param location 地点
+     * @return 课程时间
+     */
+    fun parseMultiCourseTimes(weeks: BooleanArray, weekDay: WeekDay, numArr: Collection<Int>, location: String? = null): List<CourseTime> {
+        val timePeriods = parseIntCollectionPeriod(numArr)
+        val result = ArrayList<CourseTime>(timePeriods.size)
+        for (period in timePeriods) {
+            result.add(CourseTime(weeks, weekDay, period.start, period.length, location))
+        }
+        return result
     }
 }

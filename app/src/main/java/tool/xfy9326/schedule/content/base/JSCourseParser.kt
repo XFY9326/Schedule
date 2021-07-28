@@ -8,25 +8,12 @@ import tool.xfy9326.schedule.content.beans.JSParams
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
 import tool.xfy9326.schedule.content.utils.CourseAdapterException.Companion.report
 import tool.xfy9326.schedule.content.utils.CourseAdapterUtils
+import tool.xfy9326.schedule.content.utils.toBooleanArray
 import tool.xfy9326.schedule.json.parser.ai.AiScheduleResult
-import tool.xfy9326.schedule.json.parser.ai.CourseInfos
 import tool.xfy9326.schedule.json.parser.pure.ScheduleImportJSON
+import tool.xfy9326.schedule.kt.nullIfBlank
 
 class JSCourseParser : AbstractCourseParser<JSParams>() {
-    companion object {
-        private fun getWeeksArray(weeks: List<Int>): BooleanArray {
-            val fixedWeeks = weeks.toSet().toList()
-            val max = fixedWeeks.maxOrNull()
-            return if (max == null) {
-                BooleanArray(0)
-            } else {
-                BooleanArray(max) {
-                    (it + 1) in fixedWeeks
-                }
-            }
-        }
-    }
-
     private val json = Json {
         ignoreUnknownKeys = true
     }
@@ -55,29 +42,14 @@ class JSCourseParser : AbstractCourseParser<JSParams>() {
         val builder = CourseParseResult.Builder(scheduleData.courseInfos.size)
 
         for (info in scheduleData.courseInfos) {
-            val classTimes = getSeriesClassTimeList(info)
-            for (classTime in classTimes) {
-                builder.add(combineSameCourse = true) {
-                    val courseTime = CourseTime(getWeeksArray(info.weeks), classTime, info.position?.takeIf { it.isNotBlank() })
-                    Course(info.name, info.teacher?.takeIf { it.isNotBlank() }, listOf(courseTime))
-                }
+            builder.add {
+                val weeks = info.weeks.toBooleanArray()
+                val courseTimes = CourseAdapterUtils.parseMultiCourseTimes(weeks, WeekDay.of(info.day), info.sections.map { it.section }, info.position?.nullIfBlank())
+                Course(info.name, info.teacher?.nullIfBlank(), courseTimes)
             }
         }
 
-        return ScheduleImportContent(scheduleTimes, builder.build())
-    }
-
-    private fun getSeriesClassTimeList(info: CourseInfos): List<ClassTime> {
-        val timePeriods = CourseAdapterUtils.parseIntCollectionPeriod(info.sections.map { it.section })
-        if (timePeriods.isEmpty()) return emptyList()
-
-        val weekDay = WeekDay.of(info.day)
-        val result = ArrayList<ClassTime>(timePeriods.size)
-        for (timePeriod in timePeriods) {
-            result.add(ClassTime(weekDay, timePeriod.start, timePeriod.length))
-        }
-
-        return result
+        return ScheduleImportContent(scheduleTimes, builder.build(combineCourse = true))
     }
 
     private fun processPureScheduleResult(data: String): ScheduleImportContent {
@@ -93,7 +65,7 @@ class JSCourseParser : AbstractCourseParser<JSParams>() {
         for (course in scheduleData.courses) {
             builder.add {
                 Course(course.name.trim(), course.teacher?.trim(), course.times.map {
-                    CourseTime(getWeeksArray(it.weekNum), it.weekDay, it.start, it.duration, it.location?.trim())
+                    CourseTime(it.weekNum.toBooleanArray(), it.weekDay, it.start, it.duration, it.location?.trim())
                 })
             }
         }

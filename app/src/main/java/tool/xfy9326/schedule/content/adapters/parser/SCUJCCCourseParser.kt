@@ -20,32 +20,6 @@ class SCUJCCCourseParser : WebCourseParser<Nothing>() {
         private const val COURSE_TIME_DIVIDER = ","
     }
 
-    private data class CourseInfo(val name: String, val teacher: String? = null)
-
-    private data class CourseTimeInfo(
-        val weeks: BooleanArray,
-        val weekDay: WeekDay,
-        val location: String? = null,
-    ) {
-        override fun equals(other: Any?): Boolean {
-            if (this === other) return true
-            if (other !is CourseTimeInfo) return false
-
-            if (!weeks.contentEquals(other.weeks)) return false
-            if (weekDay != other.weekDay) return false
-            if (location != other.location) return false
-
-            return true
-        }
-
-        override fun hashCode(): Int {
-            var result = weeks.contentHashCode()
-            result = 31 * result + weekDay.hashCode()
-            result = 31 * result + (location?.hashCode() ?: 0)
-            return result
-        }
-    }
-
     private val courseTimeReg = "(.*?)\\((.*?)\\)".toRegex()
 
     override fun onParseScheduleTimes(importOption: Int, webPageContent: WebPageContent): List<ScheduleTime> {
@@ -76,21 +50,20 @@ class SCUJCCCourseParser : WebCourseParser<Nothing>() {
     private fun parseCourses(element: Element): CourseParseResult {
         val builder = CourseParseResult.Builder()
 
-        val courseInfoMap = HashMap<CourseInfo, HashMap<CourseTimeInfo, HashSet<Int>>>()
 
         val column = element.select(COURSE_SELECTOR)
         for (data in column) {
             val datumRow = data.parent()?.elementSiblingIndex() ?: continue
             if (datumRow == 0) continue
 
-            builder.withCatcher {
-                val datumColumn = data.elementSiblingIndex()
+            val datumColumn = data.elementSiblingIndex()
 
-                val weekDay = WeekDay.of(if (datumRow == 2 || datumRow == 6 || datumRow == 10) (datumColumn - 1) else datumColumn)
+            val weekDay = WeekDay.of(if (datumRow == 2 || datumRow == 6 || datumRow == 10) (datumColumn - 1) else datumColumn)
 
-                val courseData = data.html().split(COURSE_DIVIDER)
+            val courseData = data.html().split(COURSE_DIVIDER)
 
-                for (courseDatum in courseData) {
+            for (courseDatum in courseData) {
+                builder.withCatcher {
                     val details = courseDatum.split(TAG_BR)
 
                     if (details.size < 4) {
@@ -99,38 +72,17 @@ class SCUJCCCourseParser : WebCourseParser<Nothing>() {
                         val name = details[0].trim()
                         if (name.isBlank()) CourseAdapterException.Error.INCOMPLETE_COURSE_INFO_ERROR.report()
                         val teacher = details[2].trim().nullIfBlank()
-                        val timeInfo = parseTime(weekDay, details)
-                        val courseInfo = CourseInfo(name, teacher)
-
-                        val courseTimeMap = courseInfoMap.getOrPut(courseInfo) { HashMap() }
-                        val timeSet = courseTimeMap.getOrPut(timeInfo.first) { HashSet() }
-                        timeSet.addAll(timeInfo.second)
+                        val courseTimes = parseTime(weekDay, details)
+                        builder.add(Course(name, teacher, courseTimes))
                     }
                 }
             }
         }
 
-        return courseInfoMapToResult(builder, courseInfoMap)
+        return builder.build(combineCourse = true, combineCourseTime = true)
     }
 
-    private fun courseInfoMapToResult(builder: CourseParseResult.Builder, courseInfoMap: HashMap<CourseInfo, HashMap<CourseTimeInfo, HashSet<Int>>>): CourseParseResult {
-        for (courseEntry in courseInfoMap) {
-            val course = courseEntry.key
-            val courseTimes = courseEntry.value
-            val courseTimeList = ArrayList<CourseTime>()
-            for (timesEntry in courseTimes) {
-                val courseTime = timesEntry.key
-                val timePeriods = CourseAdapterUtils.parseIntCollectionPeriod(timesEntry.value)
-                for (timePeriod in timePeriods) {
-                    courseTimeList.add(CourseTime(courseTime.weeks, courseTime.weekDay, timePeriod.start, timePeriod.length, courseTime.location))
-                }
-            }
-            builder.add(Course(course.name, course.teacher, courseTimeList))
-        }
-        return builder.build()
-    }
-
-    private fun parseTime(weekDay: WeekDay, details: List<String>): Pair<CourseTimeInfo, List<Int>> {
+    private fun parseTime(weekDay: WeekDay, details: List<String>): List<CourseTime> {
         val courseTimeData = courseTimeReg.matchEntire(details[1].trim())?.groups ?: CourseAdapterException.Error.PARSER_ERROR.report()
         var weeksStr = courseTimeData[1]?.value?.trim() ?: CourseAdapterException.Error.PARSER_ERROR.report()
         val courseTimeStr = courseTimeData[2]?.value?.trim() ?: CourseAdapterException.Error.PARSER_ERROR.report()
@@ -147,6 +99,6 @@ class SCUJCCCourseParser : WebCourseParser<Nothing>() {
 
         val times = courseTimeStr.split(COURSE_TIME_DIVIDER).map { it.trim().toInt() }
 
-        return CourseTimeInfo(weeks, weekDay, details[3].trim().nullIfBlank()) to times
+        return CourseAdapterUtils.parseMultiCourseTimes(weeks, weekDay, times, details[3].trim().nullIfBlank())
     }
 }
