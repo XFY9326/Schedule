@@ -28,6 +28,8 @@ data class JSConfig(
     val updateUrl: String? = null,
     val sortingBasis: String,
     val requireNetwork: Boolean = false,
+    val combineCourse: Boolean = false,
+    val combineCourseTime: Boolean = false,
 ) : Parcelable, ICourseImportConfig {
     companion object {
         private const val CONFIG = 1
@@ -65,5 +67,5 @@ data class JSConfig(
         }
     }
 
-    fun getJSParams() = JSParams(id, jsType, initPageUrl, requireNetwork)
+    fun getJSParams() = JSParams(id, jsType, initPageUrl, requireNetwork, combineCourse, combineCourseTime)
 }

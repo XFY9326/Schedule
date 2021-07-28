@@ -12,6 +12,11 @@ import java.security.MessageDigest
 private const val CHAR_ZERO = '0'
 private const val CHAR_ONE = '1'
 
+/**
+ * 重新整理周数数组
+ * 减少不必要的尾部信息
+ * @return 周数数组
+ */
 fun BooleanArray.arrangeWeekNum(): BooleanArray {
     var newSize = size
     for (i in size - 1 downTo 0) {
@@ -28,6 +33,26 @@ fun BooleanArray.arrangeWeekNum(): BooleanArray {
     }
 }
 
+fun List<Course>.arrangeCourseWeekNum() {
+    this.forEach {
+        it.times.forEach { time ->
+            time.weekNum = time.weekNum.arrangeWeekNum()
+        }
+    }
+}
+
+fun Course.arrangeWeekNum() {
+    this.times.forEach {
+        it.weekNum = it.weekNum.arrangeWeekNum()
+    }
+}
+
+/**
+ * 是否有课程
+ *
+ * @param num 节次（从1开始）
+ * @return 是否有课程
+ */
 fun BooleanArray.hasCourse(@IntRange(from = 1) num: Int): Boolean {
     val index = num - 1
     return if (index in indices) {
@@ -51,6 +76,13 @@ fun String.deserializeToBooleanArray(): BooleanArray {
     }
 }
 
+/**
+ * 整形Collection转BooleanArray
+ * 1 -> Index 0
+ * 2 -> Index 1
+ *
+ * @return BooleanArray
+ */
 fun Collection<Int>.toBooleanArray(): BooleanArray {
     val max = maxOrNull()
     return if (max == null) {
@@ -61,20 +93,6 @@ fun Collection<Int>.toBooleanArray(): BooleanArray {
                 it[i - 1] = true
             }
         }
-    }
-}
-
-fun List<Course>.arrangeCourseWeekNum() {
-    this.forEach {
-        it.times.forEach { time ->
-            time.weekNum = time.weekNum.arrangeWeekNum()
-        }
-    }
-}
-
-fun Course.arrangeWeekNum() {
-    this.times.forEach {
-        it.weekNum = it.weekNum.arrangeWeekNum()
     }
 }
 
@@ -113,5 +131,3 @@ fun <T : Serializable> T.clone(): T? {
 }
 
 fun Element.selectSingle(cssQuery: String) = selectFirst(cssQuery) ?: throw NoSuchElementException("No element found by css selector! $cssQuery")
-
-fun Element.hasChild(tag: String) = (children().find { it.tagName() == tag } != null)

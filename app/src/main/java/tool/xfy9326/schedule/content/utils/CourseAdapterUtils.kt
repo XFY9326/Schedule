@@ -21,6 +21,13 @@ import kotlin.math.min
 
 object CourseAdapterUtils {
 
+    /**
+     * 构建简单的Http客户端
+     *
+     * @param supportJson 是否支持JSON
+     * @param hasRedirect 是否允许重定向
+     * @return HttpClient
+     */
     fun buildSimpleHttpClient(supportJson: Boolean = false, hasRedirect: Boolean = true) = HttpClient(OkHttp) {
         install(HttpCookies)
         if (hasRedirect) {
@@ -37,10 +44,24 @@ object CourseAdapterUtils {
         BrowserUserAgent()
     }
 
+    /**
+     * 创建日期格式
+     *
+     * @param format 格式
+     * @return SimpleDateFormat
+     */
     fun newDateFormat(format: String = "yyyy-MM-dd"): SimpleDateFormat {
         return SimpleDateFormat(format, Locale.getDefault())
     }
 
+    /**
+     * 简单的学期时间修复
+     * 适用于学期时间有可能只有开头的情况
+     *
+     * @param termStart 学期开始时间
+     * @param termEnd 学期结束时间
+     * @return Pair<学期开始时间, 学期结束时间>
+     */
     fun simpleTermFix(termStart: Date?, termEnd: Date?) =
         if (termStart != null && termEnd == null) {
             termStart to termStart

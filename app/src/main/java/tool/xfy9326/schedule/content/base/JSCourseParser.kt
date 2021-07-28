@@ -49,7 +49,7 @@ class JSCourseParser : AbstractCourseParser<JSParams>() {
             }
         }
 
-        return ScheduleImportContent(scheduleTimes, builder.build(combineCourse = true))
+        return ScheduleImportContent(scheduleTimes, builder.build(requireParams().combineCourse, requireParams().combineCourseTime))
     }
 
     private fun processPureScheduleResult(data: String): ScheduleImportContent {
@@ -70,6 +70,10 @@ class JSCourseParser : AbstractCourseParser<JSParams>() {
             }
         }
 
-        return ScheduleImportContent(scheduleTimes, builder.build(), CourseAdapterUtils.simpleTermFix(scheduleData.termStart, scheduleData.termEnd))
+        return ScheduleImportContent(
+            scheduleTimes,
+            builder.build(requireParams().combineCourse, requireParams().combineCourseTime),
+            CourseAdapterUtils.simpleTermFix(scheduleData.termStart, scheduleData.termEnd)
+        )
     }
 }

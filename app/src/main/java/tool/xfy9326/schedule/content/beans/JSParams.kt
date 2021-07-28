@@ -7,4 +7,6 @@ class JSParams(
     val jsType: String,
     val initUrl: String,
     val requireNetwork: Boolean,
+    val combineCourse: Boolean,
+    val combineCourseTime: Boolean,
 ) : Serializable
