@@ -15,8 +15,6 @@ android {
     defaultConfig {
         minSdkVersion androidConfig.minSdkVersion
         targetSdkVersion androidConfig.targetSDKVersion
-        versionCode config.library.LiveDataTools.versionCode
-        versionName config.library.LiveDataTools.versionName
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
