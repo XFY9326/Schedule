@@ -14,6 +14,13 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="../../../../layout/custom_preview.xml" value="0.3546875" />
+        <entry key="app/src/main/res/drawable/ic_adjust_24.xml" value="0.3661184210526316" />
+        <entry key="app/src/main/res/drawable/ic_edit_24.xml" value="0.3661184210526316" />
+        <entry key="app/src/main/res/drawable/ic_edit_30.xml" value="0.3661184210526316" />
+        <entry key="app/src/main/res/layout/activity_schedule_manage.xml" value="0.2510245901639344" />
+        <entry key="app/src/main/res/layout/item_schedule.xml" value="0.2510245901639344" />
+        <entry key="app/src/main/res/xml/settings_online_course_import.xml" value="0.2510245901639344" />
+        <entry key="app/src/main/res/xml/settings_schedule.xml" value="0.2510245901639344" />
       </map>
     </option>
   </component>

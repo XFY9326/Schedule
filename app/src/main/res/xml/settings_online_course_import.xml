@@ -29,18 +29,26 @@
             app:title="@string/allow_import_incomplete_schedule" />
 
         <androidx.preference.CheckBoxPreference
-            app:defaultValue="false"
+            app:defaultValue="true"
             app:dependency="enableOnlineCourseImport"
             app:iconSpaceReserved="false"
-            app:key="keepWebProviderCache"
-            app:summary="@string/keep_web_browser_cache_sum"
-            app:title="@string/keep_web_browser_cache" />
+            app:key="autoSwitchToNewImportSchedule"
+            app:summary="@string/auto_switch_to_new_import_schedule_sum"
+            app:title="@string/auto_switch_to_new_import_schedule" />
 
     </androidx.preference.PreferenceCategory>
 
     <androidx.preference.PreferenceCategory
         app:iconSpaceReserved="false"
         app:title="@string/advanced_settings">
+
+        <androidx.preference.CheckBoxPreference
+            app:defaultValue="false"
+            app:dependency="enableOnlineCourseImport"
+            app:iconSpaceReserved="false"
+            app:key="keepWebProviderCache"
+            app:summary="@string/keep_web_browser_cache_sum"
+            app:title="@string/keep_web_browser_cache" />
 
         <androidx.preference.CheckBoxPreference
             app:defaultValue="false"

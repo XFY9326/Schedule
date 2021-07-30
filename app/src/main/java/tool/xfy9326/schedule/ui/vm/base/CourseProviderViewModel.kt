@@ -14,6 +14,7 @@ import tool.xfy9326.schedule.content.base.*
 import tool.xfy9326.schedule.content.beans.CourseImportInstance
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
 import tool.xfy9326.schedule.content.utils.CourseAdapterException.Companion.make
+import tool.xfy9326.schedule.data.AppDataStore
 import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.utils.schedule.CourseUtils
 import tool.xfy9326.schedule.utils.schedule.ScheduleUtils
@@ -122,6 +123,10 @@ abstract class CourseProviderViewModel<I, T1 : AbstractCourseProvider<*>, T2 : A
                         reportFinishResult(ImportResult.SUCCESS_WITH_IGNORABLE_CONFLICTS, editScheduleId)
                     } else {
                         reportFinishResult(ImportResult.SUCCESS, editScheduleId)
+                    }
+
+                    if (!currentSchedule && AppSettingsDataStore.autoSwitchToNewImportScheduleFlow.first()) {
+                        AppDataStore.setCurrentScheduleId(editScheduleId)
                     }
                 } catch (e: CancellationException) {
                     // Ignore

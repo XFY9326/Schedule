@@ -23,6 +23,7 @@ object AppSettingsDataStore : AbstractDataStore("Settings") {
     private val allowImportIncompleteSchedule by booleanPreferencesKey()
     private val drawWaterMarkOnScheduleImage by booleanPreferencesKey()
     private val enableWebCourseProviderConsoleDebug by booleanPreferencesKey()
+    private val autoSwitchToNewImportSchedule by booleanPreferencesKey()
     val jsCourseImportEnableNetwork by booleanPreferencesKey()
     val enableOnlineCourseImport by booleanPreferencesKey()
 
@@ -39,6 +40,8 @@ object AppSettingsDataStore : AbstractDataStore("Settings") {
             it[calendarSyncAddReminderDefault] ?: true
         )
     }
+
+    val autoSwitchToNewImportScheduleFlow = autoSwitchToNewImportSchedule.readAsFlow(false)
 
     val allowImportIncompleteScheduleFlow = allowImportIncompleteSchedule.readAsFlow(false)
 
