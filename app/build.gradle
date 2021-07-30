@@ -8,18 +8,17 @@ plugins {
 
 def config = rootProject.ext
 def androidConfig = config.android
-def dependenciesVersion = config.dependencies
+def dependenciesVersion = config.dependencies_version
 def kotlinxVersion = dependenciesVersion.kotlinx
 def androidxVersion = dependenciesVersion.androidx
 
 android {
-    compileSdkVersion androidConfig.compileSdkVersion
-    buildToolsVersion androidConfig.buildToolsVersion
+    compileSdk androidConfig.compileSdk
 
     defaultConfig {
         applicationId androidConfig.applicationId
-        minSdkVersion androidConfig.minSdkVersion
-        targetSdkVersion androidConfig.targetSDKVersion
+        minSdk androidConfig.minSdk
+        targetSdk androidConfig.targetSdk
         versionCode androidConfig.versionCode
         versionName androidConfig.versionName
 
@@ -110,7 +109,6 @@ dependencies {
     implementation project(path: ":LiveDataTools")
 
     // Kotlin
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlinxVersion.coroutines"
 
     // Kotlin Serialization

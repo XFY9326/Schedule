@@ -37,6 +37,7 @@
 
         <activity
             android:name=".ui.activity.SplashActivity"
+            android:exported="true"
             android:launchMode="singleTask"
             android:theme="@style/AppTheme.LaunchScreen">
             <intent-filter>
@@ -97,7 +98,9 @@
             android:name=".ui.activity.AboutActivity"
             android:label="@string/about" />
 
-        <receiver android:name=".receiver.DownloadCompleteReceiver">
+        <receiver
+            android:name=".receiver.DownloadCompleteReceiver"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.DOWNLOAD_COMPLETE" />
             </intent-filter>

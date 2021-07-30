@@ -1,3 +1,5 @@
+@file:Suppress("MemberVisibilityCanBePrivate")
+
 package tool.xfy9326.schedule.beans
 
 import android.os.Parcelable

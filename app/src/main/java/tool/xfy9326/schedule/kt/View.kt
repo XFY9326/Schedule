@@ -3,6 +3,7 @@
 package tool.xfy9326.schedule.kt
 
 import android.animation.Animator
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.res.Resources
 import android.graphics.Paint
@@ -67,6 +68,7 @@ fun AlertDialog.Builder.show(lifecycleOwner: LifecycleOwner) {
     dialog.show()
 }
 
+@SuppressLint("ObsoleteSdkInt")
 fun Drawable.tryStartAnimateDrawable() {
     when {
         this is AnimatedVectorDrawable -> start()
@@ -78,6 +80,7 @@ fun Drawable.tryStartAnimateDrawable() {
     }
 }
 
+@SuppressLint("ObsoleteSdkInt")
 fun Drawable.tryStopAnimateDrawable() {
     when {
         this is AnimatedVectorDrawable -> stop()

@@ -1,5 +1,6 @@
 package tool.xfy9326.schedule.ui.activity.module
 
+import android.annotation.SuppressLint
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.ScheduleTime
 import tool.xfy9326.schedule.databinding.ActivityScheduleEditBinding
@@ -95,6 +96,7 @@ class ScheduleTimeEditModule(activity: ScheduleEditActivity) :
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     fun updateCourseCostTime(minute: Int, viewInit: Boolean) {
         if (!viewInit) {
             val breakCostTime = requireViewModel().breakCostTime
@@ -114,6 +116,7 @@ class ScheduleTimeEditModule(activity: ScheduleEditActivity) :
         requireViewBinding().textViewScheduleCourseCostTime.text = requireActivity().getString(R.string.minute, minute)
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     fun updateBreakCostTime(minute: Int, viewInit: Boolean) {
         if (!viewInit) {
             val courseCostTime = requireViewModel().courseCostTime
