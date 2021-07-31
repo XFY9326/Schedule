@@ -185,7 +185,8 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
         return true
     }
 
-    private fun setToolBarTintColor(tintColor: Int) {
+    private fun setToolBarTintColor(color: Int?) {
+        val tintColor = color ?: getColorCompat(R.color.schedule_tool_bar_tint)
         requireViewBinding().apply {
             textViewScheduleTodayDate.setTextColor(tintColor)
             textViewScheduleNotCurrentWeek.setTextColor(tintColor)

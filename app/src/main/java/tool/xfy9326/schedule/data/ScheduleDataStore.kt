@@ -4,12 +4,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOn
-import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.*
 import tool.xfy9326.schedule.data.base.AbstractDataStore
 import tool.xfy9326.schedule.io.FileManager
-import tool.xfy9326.schedule.kt.AppInstance
-import tool.xfy9326.schedule.kt.getColorCompat
 import tool.xfy9326.schedule.kt.tryEnumValueOf
 import java.io.File
 
@@ -87,9 +84,9 @@ object ScheduleDataStore : AbstractDataStore("ScheduleSettings") {
 
     val toolBarTintColorFlow = read {
         if (it[customScheduleTextColor] == true) {
-            it[toolBarTintColor] ?: AppInstance.getColorCompat(R.color.schedule_tool_bar_tint)
+            it[toolBarTintColor]
         } else {
-            AppInstance.getColorCompat(R.color.schedule_tool_bar_tint)
+            null
         }
     }
 
