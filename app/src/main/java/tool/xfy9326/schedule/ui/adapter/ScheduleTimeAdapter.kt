@@ -2,10 +2,10 @@ package tool.xfy9326.schedule.ui.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import lib.xfy9326.android.kit.setOnSingleClickListener
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.ScheduleTime
 import tool.xfy9326.schedule.databinding.ItemScheduleTimeBinding
-import tool.xfy9326.schedule.kt.setOnSingleClickListener
 import tool.xfy9326.schedule.ui.view.recyclerview.ListViewBindingAdapter
 import tool.xfy9326.schedule.ui.viewholder.ViewBindingViewHolder
 

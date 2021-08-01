@@ -6,11 +6,11 @@ import android.net.Uri
 import android.os.Build
 import android.provider.Settings
 import androidx.activity.result.contract.ActivityResultContract
+import lib.xfy9326.kit.asParentOf
 import tool.xfy9326.schedule.BuildConfig
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.io.IOManager.getUriByFileProvider
 import tool.xfy9326.schedule.io.PathManager
-import tool.xfy9326.schedule.io.kt.asParentOf
 import tool.xfy9326.schedule.kt.tryStartActivity
 import tool.xfy9326.schedule.tools.MIMEConst
 import java.util.*

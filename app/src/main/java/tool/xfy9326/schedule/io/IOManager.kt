@@ -7,15 +7,15 @@ import android.content.res.Resources
 import android.net.Uri
 import android.os.Build
 import androidx.core.content.FileProvider
+import lib.xfy9326.android.kit.AppDir
+import lib.xfy9326.android.kit.ApplicationInstance
+import lib.xfy9326.kit.deleteRecursively
+import lib.xfy9326.kit.runSimpleIOJob
 import tool.xfy9326.schedule.BuildConfig
-import tool.xfy9326.schedule.io.kt.deleteRecursively
-import tool.xfy9326.schedule.io.kt.runSimpleIOJob
-import tool.xfy9326.schedule.io.utils.DirUtils
-import tool.xfy9326.schedule.kt.AppInstance
 import java.io.File
 
 object IOManager {
-    private val appContext by lazy { AppInstance }
+    private val appContext by lazy { ApplicationInstance }
     private const val FILE_PROVIDER_AUTH = BuildConfig.APPLICATION_ID + ".file.provider"
 
     val contentResolver: ContentResolver by lazy { appContext.contentResolver }
@@ -39,9 +39,9 @@ object IOManager {
 
     suspend fun clearAllCache() {
         runSimpleIOJob {
-            DirUtils.cacheDir.deleteRecursively()
-            DirUtils.codeCacheDir.deleteRecursively()
-            DirUtils.externalCacheDirs.deleteRecursively()
+            AppDir.cacheDir.deleteRecursively()
+            AppDir.codeCacheDir.deleteRecursively()
+            AppDir.externalCacheDirs.deleteRecursively()
         }
     }
 }

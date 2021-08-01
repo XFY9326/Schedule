@@ -1,3 +1,5 @@
+@file:Suppress("unused", "MemberVisibilityCanBePrivate")
+
 package tool.xfy9326.schedule.beans
 
 import android.os.Parcelable
@@ -5,7 +7,6 @@ import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 import java.util.*
 
-@Suppress("unused")
 @Parcelize
 enum class WeekDay(val shortName: String, val calWeekDay: Int) : Parcelable {
     MONDAY(WeekDay.SHORT_NAME_MO, Calendar.MONDAY),
@@ -27,6 +28,8 @@ enum class WeekDay(val shortName: String, val calWeekDay: Int) : Parcelable {
 
         const val MAX_VALUE = 7
         const val MIN_VALUE = 1
+
+        fun Calendar.getWeekDay() = valueOfCalWeekDay(get(Calendar.DAY_OF_WEEK))
 
         fun valueOfCalWeekDay(calWeekDay: Int) =
             values().find {

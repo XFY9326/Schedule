@@ -23,6 +23,9 @@ data class ClassTime(
     companion object {
         private const val CLASS_TIME_PERIOD_SYMBOL = "-"
         private const val TIME_DIVIDE = "~"
+
+        infix fun ClassTime.intersect(classTime: ClassTime): Boolean =
+            weekDay == classTime.weekDay && classStartTime <= classTime.classEndTime && classEndTime >= classTime.classStartTime
     }
 
     operator fun compareTo(classTime: ClassTime): Int {

@@ -2,6 +2,7 @@ package tool.xfy9326.schedule.content.base
 
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
+import lib.xfy9326.kit.nullIfBlank
 import tool.xfy9326.schedule.beans.*
 import tool.xfy9326.schedule.content.beans.JSConfig
 import tool.xfy9326.schedule.content.beans.JSParams
@@ -11,7 +12,6 @@ import tool.xfy9326.schedule.content.utils.CourseAdapterUtils
 import tool.xfy9326.schedule.content.utils.toBooleanArray
 import tool.xfy9326.schedule.json.parser.ai.AiScheduleResult
 import tool.xfy9326.schedule.json.parser.pure.ScheduleImportJSON
-import tool.xfy9326.schedule.kt.nullIfBlank
 
 class JSCourseParser : AbstractCourseParser<JSParams>() {
     private val json = Json {

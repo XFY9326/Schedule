@@ -3,10 +3,10 @@ package tool.xfy9326.schedule.tools
 import android.os.Build
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
+import lib.xfy9326.android.kit.ApplicationInstance
 import tool.xfy9326.schedule.BuildConfig
 import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.io.CrashFileManager
-import tool.xfy9326.schedule.kt.AppInstance
 import tool.xfy9326.schedule.kt.appErrorRelaunch
 import tool.xfy9326.schedule.kt.crashRelaunch
 import java.util.*
@@ -39,9 +39,9 @@ object ExceptionHandler : Thread.UncaughtExceptionHandler {
                 runBlocking {
                     if (AppSettingsDataStore.handleExceptionFlow.first()) {
                         if (isAppErrorCrash()) {
-                            AppInstance.appErrorRelaunch(if (crashSaveSuccess) crashFileName else null)
+                            ApplicationInstance.appErrorRelaunch(if (crashSaveSuccess) crashFileName else null)
                         } else {
-                            AppInstance.crashRelaunch()
+                            ApplicationInstance.crashRelaunch()
                         }
                     }
                 }

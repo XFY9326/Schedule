@@ -1,6 +1,6 @@
 @file:Suppress("unused")
 
-package tool.xfy9326.schedule.io.kt
+package lib.xfy9326.kit
 
 import java.io.File
 

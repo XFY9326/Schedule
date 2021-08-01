@@ -22,6 +22,22 @@ data class ScheduleTime(
         private const val HOUR_MINUTE_DIVIDE = ":"
         private const val TIME_DIVIDE = "~"
 
+        infix fun ScheduleTime.intersect(scheduleTime: ScheduleTime): Boolean {
+            var start1 = this.startHour * 60 + this.startMinute
+            val end1 = this.endHour * 60 + this.endMinute
+            if (start1 > end1) {
+                start1 -= 24 * 60
+            }
+
+            var start2 = scheduleTime.startHour * 60 + scheduleTime.startMinute
+            val end2 = scheduleTime.endHour * 60 + scheduleTime.endMinute
+            if (start2 > end2) {
+                start2 -= 24 * 60
+            }
+
+            return start1 <= end2 && end1 >= start2
+        }
+
         fun listOf(vararg numArr: Int): List<ScheduleTime> {
             require(numArr.size % 4 == 0)
 

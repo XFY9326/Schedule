@@ -1,9 +1,13 @@
 package tool.xfy9326.schedule.beans
 
+import android.content.Context
 import android.os.Parcelable
 import androidx.room.*
 import kotlinx.parcelize.Parcelize
+import tool.xfy9326.schedule.beans.ClassTime.Companion.intersect
 import tool.xfy9326.schedule.db.DBConst
+import tool.xfy9326.schedule.tools.NumberPattern
+import tool.xfy9326.schedule.utils.schedule.WeekNumPattern.getWeeksDescriptionText
 import kotlin.math.min
 
 @Entity(
@@ -33,6 +37,17 @@ data class CourseTime(
     var classTime: ClassTime,
     var location: String? = null,
 ) : Parcelable {
+
+    companion object {
+        infix fun CourseTime.intersect(courseTime: CourseTime): Boolean {
+            for (i in 0 until min(weekNum.size, courseTime.weekNum.size)) {
+                if (weekNum[i] && courseTime.weekNum[i] && classTime intersect courseTime.classTime) return true
+            }
+            return false
+        }
+
+        fun CourseTime.getWeeksDescriptionText(context: Context) = NumberPattern(weekNum).getWeeksDescriptionText(context)
+    }
 
     constructor(weekNum: BooleanArray, weekDay: WeekDay, classStartTime: Int, classDuration: Int, location: String? = null) :
             this(weekNum, ClassTime(weekDay, classStartTime, classDuration), location)

@@ -4,10 +4,10 @@ import android.os.Bundle
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceDataStore
 import com.jaredrummler.android.colorpicker.ColorPreferenceCompat
+import lib.xfy9326.android.kit.getColorCompat
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.data.ScheduleDataStore
 import tool.xfy9326.schedule.data.base.DataStorePreferenceAdapter
-import tool.xfy9326.schedule.kt.getColorCompat
 import tool.xfy9326.schedule.tools.MaterialColorHelper
 import tool.xfy9326.schedule.ui.fragment.base.AbstractSettingsFragment
 

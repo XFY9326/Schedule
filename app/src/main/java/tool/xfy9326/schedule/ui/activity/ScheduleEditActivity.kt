@@ -8,11 +8,15 @@ import android.view.MenuItem
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.jaredrummler.android.colorpicker.ColorPickerDialogListener
+import lib.xfy9326.android.kit.hideKeyboard
+import lib.xfy9326.android.kit.setOnSingleClickListener
+import lib.xfy9326.android.kit.show
+import lib.xfy9326.android.kit.showToast
 import lib.xfy9326.livedata.observeEvent
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.Schedule
 import tool.xfy9326.schedule.databinding.ActivityScheduleEditBinding
-import tool.xfy9326.schedule.kt.*
+import tool.xfy9326.schedule.kt.showSnackBar
 import tool.xfy9326.schedule.ui.activity.base.ViewModelActivity
 import tool.xfy9326.schedule.ui.activity.module.ScheduleTermEditModule
 import tool.xfy9326.schedule.ui.activity.module.ScheduleTimeEditModule

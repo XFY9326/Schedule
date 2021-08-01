@@ -1,6 +1,6 @@
 @file:Suppress("unused", "UNCHECKED_CAST")
 
-package tool.xfy9326.schedule.kt
+package lib.xfy9326.kit
 
 fun <T> Any.cast() = this as T
 

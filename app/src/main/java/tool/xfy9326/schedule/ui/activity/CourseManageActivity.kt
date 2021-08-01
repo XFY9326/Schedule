@@ -2,13 +2,13 @@ package tool.xfy9326.schedule.ui.activity
 
 import android.graphics.Color
 import com.google.android.material.snackbar.Snackbar
+import lib.xfy9326.android.kit.setOnSingleClickListener
+import lib.xfy9326.android.kit.startActivity
 import lib.xfy9326.livedata.observeNotify
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.Course
 import tool.xfy9326.schedule.databinding.ActivityCourseManageBinding
-import tool.xfy9326.schedule.kt.setOnSingleClickListener
 import tool.xfy9326.schedule.kt.showSnackBar
-import tool.xfy9326.schedule.kt.startActivity
 import tool.xfy9326.schedule.ui.activity.base.ViewModelActivity
 import tool.xfy9326.schedule.ui.adapter.CourseManageAdapter
 import tool.xfy9326.schedule.ui.vm.CourseManageViewModel

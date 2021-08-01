@@ -1,10 +1,10 @@
 package tool.xfy9326.schedule.ui.activity.module
 
 import android.annotation.SuppressLint
+import lib.xfy9326.android.kit.setOnSingleClickListener
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.ScheduleTime
 import tool.xfy9326.schedule.databinding.ActivityScheduleEditBinding
-import tool.xfy9326.schedule.kt.setOnSingleClickListener
 import tool.xfy9326.schedule.kt.showSnackBar
 import tool.xfy9326.schedule.ui.activity.ScheduleEditActivity
 import tool.xfy9326.schedule.ui.activity.base.AbstractViewModelActivityModule

@@ -6,8 +6,8 @@ import android.os.Parcelable
 import androidx.annotation.IntegerRes
 import androidx.datastore.preferences.core.Preferences
 import kotlinx.parcelize.Parcelize
+import lib.xfy9326.android.kit.Sp
 import tool.xfy9326.schedule.R
-import tool.xfy9326.schedule.annotation.Sp
 import tool.xfy9326.schedule.data.ScheduleDataStore
 import tool.xfy9326.schedule.io.IOManager
 

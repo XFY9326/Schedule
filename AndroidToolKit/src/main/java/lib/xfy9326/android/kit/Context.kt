@@ -1,7 +1,8 @@
 @file:Suppress("unused", "NOTHING_TO_INLINE")
 
-package tool.xfy9326.schedule.kt
+package lib.xfy9326.android.kit
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -16,48 +17,23 @@ import androidx.annotation.*
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 import androidx.fragment.app.Fragment
-import kotlinx.coroutines.CoroutineScope
-import tool.xfy9326.schedule.App
-import tool.xfy9326.schedule.R
-import tool.xfy9326.schedule.ui.activity.SplashActivity
+import lib.xfy9326.kit.tryCast
 import kotlin.system.exitProcess
 
-val AppInstance: App
-    get() = App.instance
+inline fun Context.showToast(@StringRes resId: Int, vararg params: Any, showLong: Boolean = false) = showToast(getString(resId, *params), showLong)
 
-val AppScope: CoroutineScope
-    get() = App.scope
+inline fun Context.showToast(text: String, showLong: Boolean = false) = Toast.makeText(this, text, if (showLong) Toast.LENGTH_LONG else Toast.LENGTH_SHORT).show()
 
-inline fun showGlobalToast(@StringRes resId: Int, vararg params: Any, showLong: Boolean = false) =
-    Toast.makeText(AppInstance, AppInstance.getString(resId, *params), if (showLong) Toast.LENGTH_LONG else Toast.LENGTH_SHORT).show()
+inline fun showGlobalToast(@StringRes resId: Int, vararg params: Any, showLong: Boolean = false) = ApplicationInstance.showToast(resId, params, showLong)
 
-inline fun showGlobalToast(text: String, showLong: Boolean = false) =
-    Toast.makeText(AppInstance, text, if (showLong) Toast.LENGTH_LONG else Toast.LENGTH_SHORT).show()
+inline fun showGlobalToast(text: String, showLong: Boolean = false) = ApplicationInstance.showToast(text, showLong)
 
-inline fun Context.showToast(@StringRes resId: Int, vararg params: Any, showLong: Boolean = false) =
-    Toast.makeText(this, getString(resId, *params), if (showLong) Toast.LENGTH_LONG else Toast.LENGTH_SHORT).show()
+inline fun Fragment.showToast(@StringRes resId: Int, vararg params: Any, showLong: Boolean = false) = requireContext().showToast(resId, params, showLong)
 
-inline fun Fragment.showToast(@StringRes resId: Int, vararg params: Any, showLong: Boolean = false) =
-    Toast.makeText(requireContext(), getString(resId, *params), if (showLong) Toast.LENGTH_LONG else Toast.LENGTH_SHORT).show()
-
-inline fun Fragment.showToast(text: String, showLong: Boolean = false) =
-    Toast.makeText(requireContext(), text, if (showLong) Toast.LENGTH_LONG else Toast.LENGTH_SHORT).show()
+inline fun Fragment.showToast(text: String, showLong: Boolean = false) = requireContext().showToast(text, showLong)
 
 inline fun <reified A : Activity> Context.startActivity(intentBlock: Intent.() -> Unit = {}) {
     startActivity(Intent(this, A::class.java).apply(intentBlock))
-}
-
-fun Context.crashRelaunch() {
-    relaunchApp {
-        putExtra(SplashActivity.INTENT_EXTRA_CRASH_RELAUNCH, true)
-    }
-}
-
-fun Context.appErrorRelaunch(crashLogName: String?) {
-    relaunchApp {
-        putExtra(SplashActivity.INTENT_EXTRA_APP_ERROR, true)
-        putExtra(SplashActivity.INTENT_EXTRA_APP_ERROR_CRASH_LOG, crashLogName)
-    }
 }
 
 fun Context.relaunchApp(intentBlock: Intent.() -> Unit = {}) {
@@ -86,7 +62,8 @@ fun Context.hideKeyboard(windowToken: IBinder) {
     }
 }
 
-fun Context.tryStartActivity(intent: Intent, options: Bundle? = null, showToast: Boolean = true): Boolean {
+@SuppressLint("QueryPermissionsNeeded")
+fun Context.tryStartActivity(intent: Intent, options: Bundle? = null, onFailed: () -> Unit = {}): Boolean {
     // 由于兼容性问题，部分系统无法查询到Intent是否可以被处理
     val queryActivity = intent.resolveActivity(packageManager) != null
     if (queryActivity) {
@@ -97,18 +74,18 @@ fun Context.tryStartActivity(intent: Intent, options: Bundle? = null, showToast:
             ContextCompat.startActivity(this, intent, options)
             return true
         }.onFailure {
-            if (showToast) showToast(R.string.application_launch_failed)
+            onFailed()
         }
     }
     return false
 }
 
 @ColorInt
-fun Context.getDefaultBackgroundColor(): Int {
+fun Context.getBackgroundColor(@ColorInt default: Int): Int {
     theme.obtainStyledAttributes(IntArray(1) {
         android.R.attr.colorBackground
     }).let { array ->
-        return array.getColor(0, getColorCompat(R.color.default_background)).also {
+        return array.getColor(0, default).also {
             array.recycle()
         }
     }

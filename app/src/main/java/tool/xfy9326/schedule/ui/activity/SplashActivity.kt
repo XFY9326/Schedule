@@ -5,11 +5,11 @@ import android.os.Bundle
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import lib.xfy9326.android.kit.showGlobalToast
+import lib.xfy9326.android.kit.startActivity
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.data.AppDataStore
 import tool.xfy9326.schedule.io.FileManager
-import tool.xfy9326.schedule.kt.showGlobalToast
-import tool.xfy9326.schedule.kt.startActivity
 import tool.xfy9326.schedule.ui.activity.base.AbstractActivity
 import tool.xfy9326.schedule.utils.view.DialogUtils
 import tool.xfy9326.schedule.utils.view.ScheduleViewDataProcessor

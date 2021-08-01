@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatDialogFragment
 import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import tool.xfy9326.schedule.kt.requireOwner
+import lib.xfy9326.android.kit.requireOwner
 
 class MultiItemSelectDialog : AppCompatDialogFragment() {
     companion object {

@@ -1,13 +1,12 @@
 @file:Suppress("MemberVisibilityCanBePrivate", "unused")
 
-package tool.xfy9326.schedule.io.utils
+package lib.xfy9326.android.kit
 
 import androidx.core.content.ContextCompat
-import tool.xfy9326.schedule.kt.AppInstance
 import java.io.File
 
-object DirUtils {
-    private val appContext by lazy { AppInstance }
+object AppDir {
+    private val appContext by lazy { ApplicationInstance }
 
     fun externalFilesDirs(vararg childDirs: String): List<File> =
         ContextCompat.getExternalFilesDirs(appContext, if (childDirs.isEmpty()) null else childDirs.joinToString(File.separator)).filterNotNull()

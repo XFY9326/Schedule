@@ -1,10 +1,7 @@
 @file:Suppress("unused", "EXPERIMENTAL_API_USAGE")
 
-package tool.xfy9326.schedule.kt
+package lib.xfy9326.kit
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.asLiveData
-import androidx.lifecycle.distinctUntilChanged
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -33,5 +30,3 @@ fun <T1, T2, R> Flow<T1>.combineTransform(combineTransform: suspend (T1) -> Flow
             oldJob?.cancel()
         }
     }
-
-fun <T> Flow<T>.asDistinctLiveData(): LiveData<T> = asLiveData().distinctUntilChanged()

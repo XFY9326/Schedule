@@ -8,10 +8,10 @@ import androidx.fragment.app.FragmentManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import lib.xfy9326.android.kit.requireOwner
+import lib.xfy9326.android.kit.setOnSingleClickListener
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.databinding.DialogWebCourseProviderBottomPanelBinding
-import tool.xfy9326.schedule.kt.requireOwner
-import tool.xfy9326.schedule.kt.setOnSingleClickListener
 
 class WebCourseProviderBottomPanel : BottomSheetDialogFragment() {
     companion object {

@@ -1,8 +1,8 @@
 package tool.xfy9326.schedule.content.base
 
+import tool.xfy9326.schedule.beans.Course.Companion.arrangeWeekNum
 import tool.xfy9326.schedule.beans.ScheduleTime
 import tool.xfy9326.schedule.beans.WebPageContent
-import tool.xfy9326.schedule.content.utils.arrangeCourseWeekNum
 import java.io.Serializable
 import java.util.*
 
@@ -11,7 +11,7 @@ abstract class WebCourseParser<P : Serializable> : AbstractCourseParser<P>() {
     fun parseScheduleTimes(importOption: Int, webPageContent: WebPageContent) = onParseScheduleTimes(importOption, webPageContent)
 
     fun parseCourses(importOption: Int, webPageContent: WebPageContent) = onParseCourses(importOption, webPageContent).also {
-        it.courses.arrangeCourseWeekNum()
+        it.courses.arrangeWeekNum()
     }
 
     fun parseTerm(importOption: Int, webPageContent: WebPageContent) = onParseTerm(importOption, webPageContent)

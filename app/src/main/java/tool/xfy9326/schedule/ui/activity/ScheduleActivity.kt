@@ -13,6 +13,10 @@ import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.navigation.NavigationView
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import lib.xfy9326.android.kit.getColorCompat
+import lib.xfy9326.android.kit.setIconTint
+import lib.xfy9326.android.kit.setOnSingleClickListener
+import lib.xfy9326.android.kit.startActivity
 import lib.xfy9326.livedata.observeEvent
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.Day

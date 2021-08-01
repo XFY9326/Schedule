@@ -1,11 +1,11 @@
 package tool.xfy9326.schedule.ui.fragment.settings
 
 import android.os.Bundle
+import lib.xfy9326.android.kit.startActivity
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.kt.bindPrefFragment
 import tool.xfy9326.schedule.kt.setOnPrefClickListener
 import tool.xfy9326.schedule.kt.showSnackBar
-import tool.xfy9326.schedule.kt.startActivity
 import tool.xfy9326.schedule.ui.activity.AboutActivity
 import tool.xfy9326.schedule.ui.activity.FeedbackActivity
 import tool.xfy9326.schedule.ui.dialog.UpgradeDialog

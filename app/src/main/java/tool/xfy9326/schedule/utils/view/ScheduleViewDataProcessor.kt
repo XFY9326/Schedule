@@ -3,19 +3,19 @@ package tool.xfy9326.schedule.utils.view
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.sync.Mutex
+import lib.xfy9326.android.kit.ApplicationScope
+import lib.xfy9326.kit.combineTransform
+import lib.xfy9326.kit.withTryLock
 import tool.xfy9326.schedule.beans.ScheduleBuildBundle
 import tool.xfy9326.schedule.data.ScheduleDataStore
 import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
-import tool.xfy9326.schedule.kt.AppScope
-import tool.xfy9326.schedule.kt.combineTransform
-import tool.xfy9326.schedule.kt.withTryLock
 import tool.xfy9326.schedule.utils.schedule.CourseTimeUtils
 import tool.xfy9326.schedule.utils.schedule.ScheduleUtils
 
 object ScheduleViewDataProcessor {
     private val hasPreloadLock = Mutex()
 
-    private fun <T> Flow<T>.preload() = flowOn(Dispatchers.IO).shareIn(AppScope, SharingStarted.Eagerly, 1)
+    private fun <T> Flow<T>.preload() = flowOn(Dispatchers.IO).shareIn(ApplicationScope, SharingStarted.Eagerly, 1)
 
     suspend fun preload() = withContext(Dispatchers.IO + SupervisorJob()) {
         hasPreloadLock.withTryLock {

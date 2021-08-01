@@ -10,13 +10,13 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.launch
+import lib.xfy9326.android.kit.setWindowPercent
+import lib.xfy9326.android.kit.showGlobalToast
+import lib.xfy9326.android.kit.showToast
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.databinding.DialogCrashViewBinding
 import tool.xfy9326.schedule.io.FileManager
 import tool.xfy9326.schedule.kt.APP_ID
-import tool.xfy9326.schedule.kt.setWindowPercent
-import tool.xfy9326.schedule.kt.showGlobalToast
-import tool.xfy9326.schedule.kt.showToast
 
 class CrashViewDialog : AppCompatDialogFragment() {
     companion object {

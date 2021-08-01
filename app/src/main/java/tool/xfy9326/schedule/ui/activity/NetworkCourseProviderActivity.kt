@@ -9,6 +9,9 @@ import android.widget.Spinner
 import androidx.annotation.StringRes
 import androidx.core.view.isVisible
 import coil.load
+import lib.xfy9326.android.kit.getText
+import lib.xfy9326.android.kit.setAllEnable
+import lib.xfy9326.android.kit.setOnSingleClickListener
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.NetworkCourseImportParams
 import tool.xfy9326.schedule.beans.NetworkProviderParams

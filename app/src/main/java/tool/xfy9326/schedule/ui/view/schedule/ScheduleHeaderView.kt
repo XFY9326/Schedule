@@ -11,9 +11,9 @@ import androidx.annotation.Px
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.core.view.children
 import androidx.core.view.setPadding
+import lib.xfy9326.android.kit.getStringArray
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.*
-import tool.xfy9326.schedule.kt.getStringArray
 import tool.xfy9326.schedule.utils.view.ViewUtils
 import kotlin.math.max
 

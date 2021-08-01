@@ -1,5 +1,7 @@
-include ':LiveDataTools'
 include ':AnnotationProcessor'
 include ':Annotation'
+include ':LiveDataTools'
+include ':ToolKit'
+include ':AndroidToolKit'
 include ':app'
 rootProject.name = "Schedule"

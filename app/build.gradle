@@ -107,6 +107,7 @@ dependencies {
     kapt project(path: ":AnnotationProcessor")
 
     implementation project(path: ":LiveDataTools")
+    implementation project(path: ":AndroidToolKit")
 
     // Kotlin
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlinxVersion.coroutines"

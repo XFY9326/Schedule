@@ -10,8 +10,8 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import lib.xfy9326.android.kit.requireOwner
 import tool.xfy9326.schedule.R
-import tool.xfy9326.schedule.kt.requireOwner
 
 class ScheduleImportSuccessDialog : DialogFragment() {
     companion object {

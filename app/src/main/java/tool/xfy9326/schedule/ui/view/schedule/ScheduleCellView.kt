@@ -12,11 +12,11 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.core.view.setPadding
+import lib.xfy9326.android.kit.setOnSingleClickListener
+import lib.xfy9326.kit.NEW_LINE
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.*
 import tool.xfy9326.schedule.beans.WeekDay.Companion.orderedValue
-import tool.xfy9326.schedule.kt.NEW_LINE
-import tool.xfy9326.schedule.kt.setOnSingleClickListener
 import tool.xfy9326.schedule.tools.MaterialColorHelper
 import tool.xfy9326.schedule.utils.view.ViewUtils
 import kotlin.properties.Delegates

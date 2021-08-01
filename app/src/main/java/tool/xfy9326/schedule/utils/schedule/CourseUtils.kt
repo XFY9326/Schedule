@@ -1,16 +1,17 @@
 package tool.xfy9326.schedule.utils.schedule
 
+import lib.xfy9326.kit.forEachTwo
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.*
+import tool.xfy9326.schedule.beans.ClassTime.Companion.intersect
+import tool.xfy9326.schedule.beans.Course.Companion.iterateAll
+import tool.xfy9326.schedule.beans.CourseTime.Companion.intersect
 import tool.xfy9326.schedule.beans.WeekDay.Companion.orderedValue
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
 import tool.xfy9326.schedule.content.utils.CourseAdapterException.Companion.report
 import tool.xfy9326.schedule.content.utils.arrangeWeekNum
 import tool.xfy9326.schedule.content.utils.hasCourse
 import tool.xfy9326.schedule.io.IOManager
-import tool.xfy9326.schedule.kt.forEachTwo
-import tool.xfy9326.schedule.kt.intersect
-import tool.xfy9326.schedule.kt.iterateAll
 import tool.xfy9326.schedule.tools.MaterialColorHelper
 import tool.xfy9326.schedule.utils.CalendarUtils
 import kotlin.math.max

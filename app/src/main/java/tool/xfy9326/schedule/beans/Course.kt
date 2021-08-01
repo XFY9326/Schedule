@@ -4,6 +4,7 @@ import android.os.Parcelable
 import androidx.annotation.ColorInt
 import androidx.room.*
 import kotlinx.parcelize.Parcelize
+import tool.xfy9326.schedule.content.utils.arrangeWeekNum
 import tool.xfy9326.schedule.db.DBConst
 import tool.xfy9326.schedule.tools.MaterialColorHelper
 
@@ -31,6 +32,24 @@ data class Course(
     @Ignore
     var times: List<CourseTime>,
 ) : Parcelable {
+
+    companion object {
+        inline fun List<Course>.iterateAll(action: (Course, CourseTime) -> Unit) {
+            for (course in this) for (time in course.times) action(course, time)
+        }
+
+        fun List<Course>.arrangeWeekNum() {
+            forEach {
+                it.arrangeWeekNum()
+            }
+        }
+
+        fun Course.arrangeWeekNum() {
+            this.times.forEach {
+                it.weekNum = it.weekNum.arrangeWeekNum()
+            }
+        }
+    }
 
     constructor(courseId: Long, scheduleId: Long, name: String, teacher: String?, color: Int = MaterialColorHelper.random()) :
             this(courseId, scheduleId, name, teacher, color, emptyList())

@@ -10,7 +10,7 @@ import androidx.core.content.ContextCompat
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.withContext
-import tool.xfy9326.schedule.kt.withTryLock
+import lib.xfy9326.kit.withTryLock
 
 
 object PermissionUtils {

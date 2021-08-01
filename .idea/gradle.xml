@@ -11,9 +11,11 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/AndroidToolKit" />
             <option value="$PROJECT_DIR$/Annotation" />
             <option value="$PROJECT_DIR$/AnnotationProcessor" />
             <option value="$PROJECT_DIR$/LiveDataTools" />
+            <option value="$PROJECT_DIR$/ToolKit" />
             <option value="$PROJECT_DIR$/app" />
           </set>
         </option>

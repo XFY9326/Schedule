@@ -8,11 +8,11 @@ import io.ktor.client.features.*
 import io.ktor.client.features.cookies.*
 import io.ktor.client.features.json.*
 import io.ktor.client.features.json.serializer.*
+import lib.xfy9326.kit.isEven
+import lib.xfy9326.kit.isOdd
 import tool.xfy9326.schedule.beans.CourseTime
 import tool.xfy9326.schedule.beans.TimePeriod
 import tool.xfy9326.schedule.beans.WeekDay
-import tool.xfy9326.schedule.kt.isEven
-import tool.xfy9326.schedule.kt.isOdd
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList

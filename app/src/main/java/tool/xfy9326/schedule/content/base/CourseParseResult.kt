@@ -4,11 +4,11 @@ package tool.xfy9326.schedule.content.base
 
 import androidx.collection.*
 import tool.xfy9326.schedule.beans.Course
+import tool.xfy9326.schedule.beans.Course.Companion.arrangeWeekNum
 import tool.xfy9326.schedule.beans.CourseTime
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
 import tool.xfy9326.schedule.content.utils.CourseAdapterException.Companion.make
 import tool.xfy9326.schedule.content.utils.CourseAdapterUtils
-import tool.xfy9326.schedule.content.utils.arrangeWeekNum
 
 class CourseParseResult private constructor(val courses: List<Course>, val ignorableError: CourseAdapterException?) {
     class Builder(exceptCourseAmount: Int? = null) {

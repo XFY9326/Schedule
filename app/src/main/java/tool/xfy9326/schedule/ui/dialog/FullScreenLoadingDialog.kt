@@ -18,9 +18,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import lib.xfy9326.android.kit.getDrawableCompat
+import lib.xfy9326.android.kit.requireOwner
 import tool.xfy9326.schedule.R
-import tool.xfy9326.schedule.kt.getDrawableCompat
-import tool.xfy9326.schedule.kt.requireOwner
 
 class FullScreenLoadingDialog : AppCompatDialogFragment() {
     companion object {

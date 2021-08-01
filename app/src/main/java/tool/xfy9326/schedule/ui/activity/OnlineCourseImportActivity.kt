@@ -9,6 +9,8 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import lib.xfy9326.android.kit.setOnSingleClickListener
+import lib.xfy9326.android.kit.show
 import lib.xfy9326.livedata.observeEvent
 import lib.xfy9326.livedata.observeNotify
 import tool.xfy9326.schedule.R
@@ -17,8 +19,6 @@ import tool.xfy9326.schedule.content.beans.JSConfig
 import tool.xfy9326.schedule.data.AppDataStore
 import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.databinding.ActivityOnlineCourseImportBinding
-import tool.xfy9326.schedule.kt.setOnSingleClickListener
-import tool.xfy9326.schedule.kt.show
 import tool.xfy9326.schedule.kt.showSnackBar
 import tool.xfy9326.schedule.tools.MIMEConst
 import tool.xfy9326.schedule.ui.activity.base.CourseProviderActivity

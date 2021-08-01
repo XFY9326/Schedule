@@ -4,15 +4,15 @@ import android.content.Context
 import android.net.Uri
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.Course
+import tool.xfy9326.schedule.beans.Course.Companion.iterateAll
 import tool.xfy9326.schedule.beans.CourseTime
 import tool.xfy9326.schedule.beans.Schedule
 import tool.xfy9326.schedule.beans.ScheduleCalculateTimes
 import tool.xfy9326.schedule.io.FileManager
 import tool.xfy9326.schedule.io.IOManager
-import tool.xfy9326.schedule.kt.iterateAll
+import tool.xfy9326.schedule.tools.NumberPattern.PatternType.*
 import tool.xfy9326.schedule.utils.schedule.CourseTimeUtils
 import tool.xfy9326.schedule.utils.schedule.WeekNumPattern
-import tool.xfy9326.schedule.utils.schedule.WeekNumPattern.PatternType.*
 
 class ScheduleICSHelper constructor(schedule: Schedule, private val courses: List<Course>) {
     companion object {
@@ -35,7 +35,7 @@ class ScheduleICSHelper constructor(schedule: Schedule, private val courses: Lis
     }
 
     private fun createCourseTimeVEvent(iCal: ScheduleICSWriter, course: Course, courseTime: CourseTime) {
-        val weekNumPattern = WeekNumPattern(courseTime, scheduleCalculateTimes)
+        val weekNumPattern = WeekNumPattern.parsePattern(courseTime, scheduleCalculateTimes)
         if (weekNumPattern.type == SINGLE) {
             CourseTimeUtils.getRealClassTime(scheduleCalculateTimes, weekNumPattern.start + 1, courseTime.classTime).let { time ->
                 iCal.addEvent(time.first, time.second, course.name, courseTime.location, getEventDescription(course))

@@ -4,11 +4,11 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.View
 import androidx.core.view.children
+import lib.xfy9326.kit.isEven
+import lib.xfy9326.kit.isOdd
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.content.utils.arrangeWeekNum
 import tool.xfy9326.schedule.content.utils.hasCourse
-import tool.xfy9326.schedule.kt.isEven
-import tool.xfy9326.schedule.kt.isOdd
 
 class WeekNumEditView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0, defStyleRes: Int = 0) :
     AutoSquareLayout(context, attrs, defStyleAttr, defStyleRes) {

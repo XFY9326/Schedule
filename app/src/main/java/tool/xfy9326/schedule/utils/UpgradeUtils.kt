@@ -11,11 +11,11 @@ import io.ktor.client.request.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.sync.Mutex
+import lib.xfy9326.kit.withTryLock
 import tool.xfy9326.schedule.BuildConfig
 import tool.xfy9326.schedule.data.AppDataStore
 import tool.xfy9326.schedule.json.upgrade.UpdateIndex
 import tool.xfy9326.schedule.json.upgrade.UpdateInfo
-import tool.xfy9326.schedule.kt.withTryLock
 
 object UpgradeUtils {
     private const val CURRENT_VERSION = BuildConfig.VERSION_CODE
