@@ -48,17 +48,11 @@ fun BooleanArray.hasCourse(@IntRange(from = 1) num: Int): Boolean {
  *
  * @return BooleanArray
  */
-fun Collection<Int>.toBooleanArray(): BooleanArray {
-    val max = maxOrNull()
-    return if (max == null) {
-        BooleanArray(0)
-    } else {
-        BooleanArray(max).also {
-            for (i in this) {
-                it[i - 1] = true
-            }
+fun Collection<Int>.toBooleanArray() =
+    BooleanArray(maxOrNull() ?: 0).also {
+        for (i in this) {
+            it[i - 1] = true
         }
     }
-}
 
 fun Element.selectSingle(cssQuery: String) = selectFirst(cssQuery) ?: throw NoSuchElementException("No element found by css selector! $cssQuery")

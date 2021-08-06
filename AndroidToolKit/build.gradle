@@ -42,7 +42,7 @@ dependencies {
     implementation "androidx.core:core-ktx:$androidxVersion.core"
     implementation "androidx.appcompat:appcompat:$androidxVersion.appcompat"
 
-    implementation "androidx.activity:activity-ktx:1.3.0"
+    implementation 'androidx.activity:activity-ktx:1.3.1'
     implementation 'androidx.fragment:fragment-ktx:1.3.6'
 
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$androidxVersion.lifecycle"

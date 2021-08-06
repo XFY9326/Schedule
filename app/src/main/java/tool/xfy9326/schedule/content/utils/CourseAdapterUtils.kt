@@ -10,6 +10,7 @@ import io.ktor.client.features.json.*
 import io.ktor.client.features.json.serializer.*
 import lib.xfy9326.kit.isEven
 import lib.xfy9326.kit.isOdd
+import lib.xfy9326.kit.minAndMax
 import tool.xfy9326.schedule.beans.CourseTime
 import tool.xfy9326.schedule.beans.TimePeriod
 import tool.xfy9326.schedule.beans.WeekDay
@@ -17,7 +18,6 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.math.max
-import kotlin.math.min
 
 object CourseAdapterUtils {
 
@@ -84,28 +84,16 @@ object CourseAdapterUtils {
      */
     fun parseNumberPeriods(str: String, groupDivider: String = ",", durationDivider: String = "-", oddOnly: Boolean = false, evenOnly: Boolean = false): BooleanArray {
         var maxValue = 0
-        val groups = str.split(groupDivider).map {
+        val groups = str.split(groupDivider).mapNotNull {
             val duration = it.split(durationDivider).map { num -> num.trim().toInt() }
-            val fixedDuration = if (duration.size == 1) {
-                duration[0] to duration[0]
-            } else {
-                var min = duration[0]
-                var max = duration[0]
-                duration.forEach { num ->
-                    min = min(num, min)
-                    max = max(num, max)
-                }
-                min to max
+            duration.minAndMax()?.also { pair ->
+                maxValue = max(pair.second, maxValue)
             }
-            maxValue = max(fixedDuration.second, maxValue)
-            return@map fixedDuration
         }
         val result = BooleanArray(maxValue)
         groups.forEach {
             for (num in it.first..it.second) {
-                if ((oddOnly == evenOnly) || (oddOnly && num.isOdd()) || (evenOnly && num.isEven())) {
-                    result[num - 1] = true
-                }
+                result[num - 1] = (oddOnly == evenOnly) || (oddOnly && num.isOdd()) || (evenOnly && num.isEven())
             }
         }
         return result
