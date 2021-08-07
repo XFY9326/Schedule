@@ -9,6 +9,7 @@ import kotlinx.coroutines.launch
 import lib.xfy9326.livedata.MutableEventLiveData
 import lib.xfy9326.livedata.postEvent
 import tool.xfy9326.schedule.beans.Course
+import tool.xfy9326.schedule.beans.Course.Companion.clone
 import tool.xfy9326.schedule.beans.CourseTime
 import tool.xfy9326.schedule.beans.EditError
 import tool.xfy9326.schedule.beans.Schedule

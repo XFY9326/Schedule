@@ -1,7 +1,9 @@
 package tool.xfy9326.schedule.utils.schedule
 
 import tool.xfy9326.schedule.beans.*
+import tool.xfy9326.schedule.beans.ClassTime.Companion.classEndTime
 import tool.xfy9326.schedule.beans.WeekDay.Companion.getWeekDay
+import tool.xfy9326.schedule.beans.WeekDay.Companion.isWeekend
 import tool.xfy9326.schedule.beans.WeekDay.Companion.orderedValue
 import tool.xfy9326.schedule.utils.CalendarUtils
 import java.util.*

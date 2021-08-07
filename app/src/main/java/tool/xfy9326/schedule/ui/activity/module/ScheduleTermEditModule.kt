@@ -2,6 +2,7 @@ package tool.xfy9326.schedule.ui.activity.module
 
 import lib.xfy9326.android.kit.setOnSingleClickListener
 import lib.xfy9326.livedata.observeEvent
+import tool.xfy9326.schedule.beans.WeekDay.Companion.calWeekDay
 import tool.xfy9326.schedule.databinding.ActivityScheduleEditBinding
 import tool.xfy9326.schedule.ui.activity.ScheduleEditActivity
 import tool.xfy9326.schedule.ui.activity.base.AbstractViewModelActivityModule

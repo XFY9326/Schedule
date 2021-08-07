@@ -6,7 +6,7 @@ import tool.xfy9326.schedule.beans.Course
 import tool.xfy9326.schedule.beans.CourseTime
 import tool.xfy9326.schedule.db.DBConst
 
-data class CourseBundle(
+class CourseBundle(
     @Embedded
     val course: Course,
     @Relation(parentColumn = DBConst.COLUMN_COURSE_ID, entityColumn = DBConst.COLUMN_COURSE_ID)

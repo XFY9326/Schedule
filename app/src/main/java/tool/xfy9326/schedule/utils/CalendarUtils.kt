@@ -2,6 +2,7 @@ package tool.xfy9326.schedule.utils
 
 import tool.xfy9326.schedule.beans.Day
 import tool.xfy9326.schedule.beans.WeekDay
+import tool.xfy9326.schedule.beans.WeekDay.Companion.calWeekDay
 import tool.xfy9326.schedule.beans.WeekDay.Companion.getWeekDay
 import tool.xfy9326.schedule.beans.WeekDay.Companion.orderedValue
 import java.util.*
@@ -42,13 +43,7 @@ object CalendarUtils {
 
     fun getLastDateInThisWeek(date: Date, weekStart: WeekDay, actualEnd: Boolean = false): Date =
         getCalendar(date, weekStart, true).apply {
-            add(
-                Calendar.DATE, 7 - getWeekDay().orderedValue(weekStart) + if (actualEnd) {
-                    1
-                } else {
-                    0
-                }
-            )
+            add(Calendar.DATE, 7 - getWeekDay().orderedValue(weekStart) + (if (actualEnd) 1 else 0))
         }.time
 
     private fun clearToDay(date: Date): Date = getCalendar(date, clearToDate = true).time

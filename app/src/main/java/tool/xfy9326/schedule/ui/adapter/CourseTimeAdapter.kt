@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import lib.xfy9326.android.kit.getStringArray
 import lib.xfy9326.android.kit.setOnSingleClickListener
 import tool.xfy9326.schedule.R
+import tool.xfy9326.schedule.beans.ClassTime.Companion.classTimeDescription
 import tool.xfy9326.schedule.beans.CourseTime
 import tool.xfy9326.schedule.beans.CourseTime.Companion.getWeeksDescriptionText
 import tool.xfy9326.schedule.databinding.ItemCourseTimeBinding
@@ -34,7 +35,7 @@ class CourseTimeAdapter : ListViewBindingAdapter<CourseTime, ItemCourseTimeBindi
             holder.viewContext.getString(
                 R.string.course_detail_class_time_simple,
                 holder.viewContext.getString(R.string.weekday, weekDayStrArr[element.classTime.weekDay.ordinal]),
-                element.classTime.classTimeDescription()
+                element.classTime.classTimeDescription
             )
         holder.viewBinding.textViewCourseLocation.text =
             holder.viewContext.getString(

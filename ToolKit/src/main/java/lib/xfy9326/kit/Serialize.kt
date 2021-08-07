@@ -2,8 +2,8 @@ package lib.xfy9326.kit
 
 import java.io.*
 
-private const val CHAR_ZERO = '0'
-private const val CHAR_ONE = '1'
+const val CHAR_ZERO = '0'
+const val CHAR_ONE = '1'
 
 fun BooleanArray.serializeToString(): String {
     return buildString(size) {

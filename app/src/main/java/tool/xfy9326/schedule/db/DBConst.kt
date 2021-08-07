@@ -18,4 +18,7 @@ object DBConst {
     const val COLUMN_CLASS_DURATION = "classDuration"
     const val COLUMN_WEEK_NUM = "weekNum"
     const val COLUMN_SYNC_ID = "syncId"
+
+    const val LIKE_MORE = "%"
+    const val LIKE_SINGLE = "_"
 }

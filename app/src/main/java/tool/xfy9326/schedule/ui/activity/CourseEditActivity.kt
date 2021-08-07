@@ -14,6 +14,7 @@ import lib.xfy9326.livedata.observeEvent
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.Course
 import tool.xfy9326.schedule.beans.CourseTime
+import tool.xfy9326.schedule.beans.EditError.Companion.getText
 import tool.xfy9326.schedule.databinding.ActivityCourseEditBinding
 import tool.xfy9326.schedule.kt.showSnackBar
 import tool.xfy9326.schedule.ui.activity.base.ViewModelActivity

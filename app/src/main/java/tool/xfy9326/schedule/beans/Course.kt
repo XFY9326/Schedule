@@ -49,6 +49,14 @@ data class Course(
                 it.weekNum = it.weekNum.arrangeWeekNum()
             }
         }
+
+        fun Course.clone(scheduleId: Long): Course {
+            val timesList = ArrayList<CourseTime>(times.size)
+            times.forEach {
+                timesList.add(it.copy(timeId = DBConst.DEFAULT_ID, courseId = DBConst.DEFAULT_ID, classTime = it.classTime.copy()))
+            }
+            return copy(scheduleId = scheduleId, courseId = DBConst.DEFAULT_ID, times = timesList)
+        }
     }
 
     constructor(courseId: Long, scheduleId: Long, name: String, teacher: String?, color: Int = MaterialColorHelper.random()) :
@@ -56,12 +64,4 @@ data class Course(
 
     constructor(name: String, teacher: String?, times: List<CourseTime>, color: Int = MaterialColorHelper.random()) :
             this(DBConst.DEFAULT_ID, DBConst.DEFAULT_ID, name, teacher, color, times)
-
-    fun clone(scheduleId: Long): Course {
-        val timesList = ArrayList<CourseTime>(times.size)
-        times.forEach {
-            timesList.add(it.copy(timeId = DBConst.DEFAULT_ID, courseId = DBConst.DEFAULT_ID, classTime = it.classTime.copy()))
-        }
-        return copy(scheduleId = scheduleId, courseId = DBConst.DEFAULT_ID, times = timesList)
-    }
 }

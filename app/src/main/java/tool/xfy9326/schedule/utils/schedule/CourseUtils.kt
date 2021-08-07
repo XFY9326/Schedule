@@ -3,9 +3,11 @@ package tool.xfy9326.schedule.utils.schedule
 import lib.xfy9326.kit.forEachTwo
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.*
+import tool.xfy9326.schedule.beans.ClassTime.Companion.classEndTime
 import tool.xfy9326.schedule.beans.ClassTime.Companion.intersect
 import tool.xfy9326.schedule.beans.Course.Companion.iterateAll
 import tool.xfy9326.schedule.beans.CourseTime.Companion.intersect
+import tool.xfy9326.schedule.beans.WeekDay.Companion.isWeekend
 import tool.xfy9326.schedule.beans.WeekDay.Companion.orderedValue
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
 import tool.xfy9326.schedule.content.utils.CourseAdapterException.Companion.report

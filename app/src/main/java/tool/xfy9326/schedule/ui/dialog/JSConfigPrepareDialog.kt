@@ -18,6 +18,7 @@ import tool.xfy9326.schedule.content.CourseImportConfigManager
 import tool.xfy9326.schedule.content.CourseImportConfigManager.Type.*
 import tool.xfy9326.schedule.content.beans.JSConfig
 import tool.xfy9326.schedule.content.utils.JSConfigException
+import tool.xfy9326.schedule.content.utils.JSConfigException.Companion.getText
 import tool.xfy9326.schedule.databinding.DialogJsConfigPrepareBinding
 import tool.xfy9326.schedule.ui.vm.OnlineCourseImportViewModel
 

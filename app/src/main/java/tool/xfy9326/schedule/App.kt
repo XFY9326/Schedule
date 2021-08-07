@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import lib.xfy9326.android.kit.initializeToolKit
+import tool.xfy9326.schedule.beans.NightMode.Companion.modeInt
 import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.tools.ExceptionHandler
 

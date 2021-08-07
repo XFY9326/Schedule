@@ -14,7 +14,9 @@ import com.google.android.material.snackbar.Snackbar
 import lib.xfy9326.kit.getDeepStackTraceString
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
+import tool.xfy9326.schedule.content.utils.CourseAdapterException.Companion.getText
 import tool.xfy9326.schedule.content.utils.JSConfigException
+import tool.xfy9326.schedule.content.utils.JSConfigException.Companion.getText
 import tool.xfy9326.schedule.ui.dialog.CrashViewDialog
 import tool.xfy9326.schedule.utils.IntentUtils
 

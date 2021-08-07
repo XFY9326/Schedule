@@ -9,6 +9,8 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 import lib.xfy9326.android.kit.getDrawableCompat
 import tool.xfy9326.schedule.R
+import tool.xfy9326.schedule.beans.ClassTime.Companion.classTimeDescription
+import tool.xfy9326.schedule.beans.ClassTime.Companion.scheduleTimeDescription
 import tool.xfy9326.schedule.beans.CourseTime
 import tool.xfy9326.schedule.beans.CourseTime.Companion.getWeeksDescriptionText
 import tool.xfy9326.schedule.beans.ScheduleTime
@@ -113,7 +115,7 @@ class CourseDetailAdapter(
             holder.viewBinding.textViewCourseClassTime.text = holder.viewContext.getString(
                 R.string.course_detail_class_time,
                 holder.viewContext.getString(R.string.weekday, weekDayStrArray[courseTime.classTime.weekDay.ordinal]),
-                courseTime.classTime.classTimeDescription(),
+                courseTime.classTime.classTimeDescription,
                 courseTime.classTime.scheduleTimeDescription(scheduleTimes)
             )
             val location = courseTime.location

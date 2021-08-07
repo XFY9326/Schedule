@@ -21,6 +21,7 @@ import lib.xfy9326.livedata.observeEvent
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.Day
 import tool.xfy9326.schedule.beans.WeekNumType
+import tool.xfy9326.schedule.beans.WeekNumType.Companion.getText
 import tool.xfy9326.schedule.databinding.ActivityScheduleBinding
 import tool.xfy9326.schedule.databinding.LayoutNavHeaderBinding
 import tool.xfy9326.schedule.kt.*

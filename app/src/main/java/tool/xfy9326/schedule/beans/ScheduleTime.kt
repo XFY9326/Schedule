@@ -22,20 +22,34 @@ data class ScheduleTime(
         private const val HOUR_MINUTE_DIVIDE = ":"
         private const val TIME_DIVIDE = "~"
 
+        val ScheduleTime.startTimeStr
+            get() = "%02d$HOUR_MINUTE_DIVIDE%02d".format(startHour, startMinute)
+        val ScheduleTime.endTimeStr
+            get() = "%02d$HOUR_MINUTE_DIVIDE%02d".format(endHour, endMinute)
+
+        fun ScheduleTime.compare(hour: Int, minute: Int): Int {
+            val m = this.getFixedMinutesInDay()
+            val input = hour * 60 + minute
+            return when {
+                input < m.first -> -1
+                input > m.second -> 1
+                else -> 0
+            }
+        }
+
+        private fun ScheduleTime.getFixedMinutesInDay(): Pair<Int, Int> {
+            var start = this.startHour * 60 + this.startMinute
+            val end = this.endHour * 60 + this.endMinute
+            if (start > end) {
+                start -= 24 * 60
+            }
+            return start to end
+        }
+
         infix fun ScheduleTime.intersect(scheduleTime: ScheduleTime): Boolean {
-            var start1 = this.startHour * 60 + this.startMinute
-            val end1 = this.endHour * 60 + this.endMinute
-            if (start1 > end1) {
-                start1 -= 24 * 60
-            }
-
-            var start2 = scheduleTime.startHour * 60 + scheduleTime.startMinute
-            val end2 = scheduleTime.endHour * 60 + scheduleTime.endMinute
-            if (start2 > end2) {
-                start2 -= 24 * 60
-            }
-
-            return start1 <= end2 && end1 >= start2
+            val m1 = this.getFixedMinutesInDay()
+            val m2 = scheduleTime.getFixedMinutesInDay()
+            return m1.first <= m2.second && m1.second >= m2.first
         }
 
         fun listOf(vararg numArr: Int): List<ScheduleTime> {
@@ -101,11 +115,6 @@ data class ScheduleTime(
         val end = timeAdd(endHour, endMinute, breakCostMinute + courseCostMinute)
         return ScheduleTime(start.first, start.second, end.first, end.second)
     }
-
-    val startTimeStr
-        get() = "%02d$HOUR_MINUTE_DIVIDE%02d".format(startHour, startMinute)
-    val endTimeStr
-        get() = "%02d$HOUR_MINUTE_DIVIDE%02d".format(endHour, endMinute)
 
     override fun toString(): String = "$startTimeStr$TIME_DIVIDE$endTimeStr"
 }

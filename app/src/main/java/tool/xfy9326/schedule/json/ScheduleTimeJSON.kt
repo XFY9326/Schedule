@@ -2,6 +2,8 @@ package tool.xfy9326.schedule.json
 
 import kotlinx.serialization.Serializable
 import tool.xfy9326.schedule.beans.ScheduleTime
+import tool.xfy9326.schedule.beans.ScheduleTime.Companion.endTimeStr
+import tool.xfy9326.schedule.beans.ScheduleTime.Companion.startTimeStr
 
 @Serializable
 data class ScheduleTimeJSON(

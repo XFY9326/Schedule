@@ -90,7 +90,7 @@ class ScheduleHeaderView @JvmOverloads constructor(context: Context, attrs: Attr
 
     private fun buildDayView(day: Day, styles: ScheduleStyles, predefine: SchedulePredefine) =
         LinearLayoutCompat(context).apply {
-            val isToday = day.isToday()
+            val isToday = day.isToday
             val timeTextColor = styles.getTimeTextColor(context)
 
             orientation = LinearLayoutCompat.VERTICAL

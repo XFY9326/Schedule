@@ -7,6 +7,7 @@ import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import tool.xfy9326.schedule.beans.WeekDay
+import tool.xfy9326.schedule.beans.WeekDay.Companion.shortName
 
 class WeekDayShortNameSerializer : KSerializer<WeekDay> {
     override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor(javaClass.simpleName, PrimitiveKind.STRING)

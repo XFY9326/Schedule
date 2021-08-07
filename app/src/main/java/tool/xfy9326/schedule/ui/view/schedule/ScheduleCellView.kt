@@ -16,6 +16,8 @@ import lib.xfy9326.android.kit.setOnSingleClickListener
 import lib.xfy9326.kit.NEW_LINE
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.*
+import tool.xfy9326.schedule.beans.ScheduleTime.Companion.endTimeStr
+import tool.xfy9326.schedule.beans.ScheduleTime.Companion.startTimeStr
 import tool.xfy9326.schedule.beans.WeekDay.Companion.orderedValue
 import tool.xfy9326.schedule.tools.MaterialColorHelper
 import tool.xfy9326.schedule.utils.view.ViewUtils

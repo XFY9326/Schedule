@@ -3,9 +3,12 @@ package tool.xfy9326.schedule.db.dao
 import androidx.room.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import lib.xfy9326.kit.CHAR_ONE
 import tool.xfy9326.schedule.beans.Course
 import tool.xfy9326.schedule.beans.CourseTime
 import tool.xfy9326.schedule.beans.Schedule
+import tool.xfy9326.schedule.beans.WeekDay
+import tool.xfy9326.schedule.beans.WeekDay.Companion.value
 import tool.xfy9326.schedule.content.utils.arrangeWeekNum
 import tool.xfy9326.schedule.db.DBConst
 import tool.xfy9326.schedule.db.query.CourseBundle
@@ -14,10 +17,19 @@ import tool.xfy9326.schedule.utils.schedule.ScheduleUtils
 @Dao
 abstract class ScheduleDAO {
     companion object {
-        fun Flow<List<CourseBundle>>.convert() = map { list ->
+        private fun Flow<List<CourseBundle>>.convertCourseList() = map { list ->
             list.map {
                 it.course.times = it.courseTime
                 it.course
+            }
+        }
+
+        private fun Flow<CourseBundle?>.convertCourse() = map {
+            if (it != null) {
+                it.course.times = it.courseTime
+                it.course
+            } else {
+                null
             }
         }
     }
@@ -41,17 +53,23 @@ abstract class ScheduleDAO {
         return scheduleId
     }
 
-    fun getScheduleCourses(scheduleId: Long) = getCourses(scheduleId).convert()
+    fun getScheduleCourses(scheduleId: Long) = getCourses(scheduleId).convertCourseList()
 
-    fun getScheduleCoursesWithoutId(scheduleId: Long, courseId: Long) = getCoursesWithoutId(scheduleId, courseId).convert()
+    fun getScheduleCoursesWithoutId(scheduleId: Long, courseId: Long) = getCoursesWithoutId(scheduleId, courseId).convertCourseList()
 
-    fun getScheduleCourse(courseId: Long) = getCourse(courseId).map {
-        if (it != null) {
-            it.course.times = it.courseTime
-            it.course
-        } else {
-            null
+    fun getScheduleCourse(courseId: Long) = getCourse(courseId).convertCourse()
+
+    suspend fun getNextScheduleCourseTimeByDate(scheduleId: Long, weekNum: Int, weekDay: WeekDay, currentClassNum: Int): CourseTime? {
+        if (weekNum < 1) return null
+
+        val weekNumLike = buildString(weekNum + 2) {
+            repeat(weekNum - 1) {
+                append(DBConst.LIKE_SINGLE)
+            }
+            append(CHAR_ONE + DBConst.LIKE_MORE)
         }
+
+        return getNextCourseTimeByDate(scheduleId, weekNumLike, weekDay.value, currentClassNum)
     }
 
     @Transaction
@@ -115,12 +133,20 @@ abstract class ScheduleDAO {
     protected abstract fun getCourses(scheduleId: Long): Flow<List<CourseBundle>>
 
     @Transaction
+    @Query("select ${DBConst.TABLE_COURSE_TIME}.* from ${DBConst.TABLE_COURSE}, ${DBConst.TABLE_COURSE_TIME} where ${DBConst.COLUMN_SCHEDULE_ID}=:scheduleId and ${DBConst.TABLE_COURSE_TIME}.${DBConst.COLUMN_COURSE_ID}=${DBConst.TABLE_COURSE}.${DBConst.COLUMN_COURSE_ID} and ${DBConst.COLUMN_WEEK_DAY}=:weekDayInt and (${DBConst.COLUMN_CLASS_START_TIME} + ${DBConst.COLUMN_CLASS_DURATION} - 1) >= :minEndClassNum and ${DBConst.COLUMN_WEEK_NUM} like :weekNumLike order by ${DBConst.COLUMN_CLASS_START_TIME} asc limit 1")
+    protected abstract suspend fun getNextCourseTimeByDate(scheduleId: Long, weekNumLike: String, weekDayInt: Int, minEndClassNum: Int): CourseTime?
+
+    @Transaction
     @Query("select * from ${DBConst.TABLE_COURSE} where ${DBConst.COLUMN_SCHEDULE_ID}=:scheduleId and ${DBConst.COLUMN_COURSE_ID}!=:courseId")
     protected abstract fun getCoursesWithoutId(scheduleId: Long, courseId: Long): Flow<List<CourseBundle>>
 
     @Transaction
     @Query("select * from ${DBConst.TABLE_COURSE} where ${DBConst.COLUMN_COURSE_ID}=:courseId")
     protected abstract fun getCourse(courseId: Long): Flow<CourseBundle?>
+
+    @Transaction
+    @Query("select * from ${DBConst.TABLE_COURSE} where ${DBConst.COLUMN_COURSE_ID}=:courseId limit 1")
+    abstract suspend fun getSingleCourse(courseId: Long): Course?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract suspend fun putSchedule(schedule: Schedule): Long

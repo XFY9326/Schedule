@@ -2,6 +2,7 @@ package tool.xfy9326.schedule.utils.ics
 
 import tool.xfy9326.schedule.BuildConfig
 import tool.xfy9326.schedule.beans.WeekDay
+import tool.xfy9326.schedule.beans.WeekDay.Companion.shortName
 import tool.xfy9326.schedule.kt.APP_ID
 import java.text.SimpleDateFormat
 import java.util.*

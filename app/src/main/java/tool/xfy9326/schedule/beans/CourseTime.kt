@@ -47,6 +47,17 @@ data class CourseTime(
         }
 
         fun CourseTime.getWeeksDescriptionText(context: Context) = NumberPattern(weekNum).getWeeksDescriptionText(context)
+
+        operator fun CourseTime.compareTo(courseTime: CourseTime): Int {
+            for (i in 0 until min(weekNum.size, courseTime.weekNum.size)) {
+                if (weekNum[i] && !courseTime.weekNum[i]) {
+                    return 1
+                } else if (!weekNum[i] && courseTime.weekNum[i]) {
+                    return -1
+                }
+            }
+            return classTime.compareTo(courseTime.classTime)
+        }
     }
 
     constructor(weekNum: BooleanArray, weekDay: WeekDay, classStartTime: Int, classDuration: Int, location: String? = null) :
@@ -54,17 +65,6 @@ data class CourseTime(
 
     constructor(weekNum: BooleanArray, classTime: ClassTime, location: String? = null) :
             this(DBConst.DEFAULT_ID, DBConst.DEFAULT_ID, weekNum, classTime, location)
-
-    operator fun compareTo(courseTime: CourseTime): Int {
-        for (i in 0 until min(weekNum.size, courseTime.weekNum.size)) {
-            if (weekNum[i] && !courseTime.weekNum[i]) {
-                return 1
-            } else if (!weekNum[i] && courseTime.weekNum[i]) {
-                return -1
-            }
-        }
-        return classTime.compareTo(courseTime.classTime)
-    }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

@@ -14,6 +14,7 @@ import lib.xfy9326.android.kit.show
 import lib.xfy9326.android.kit.showToast
 import lib.xfy9326.livedata.observeEvent
 import tool.xfy9326.schedule.R
+import tool.xfy9326.schedule.beans.EditError.Companion.getText
 import tool.xfy9326.schedule.beans.Schedule
 import tool.xfy9326.schedule.databinding.ActivityScheduleEditBinding
 import tool.xfy9326.schedule.kt.showSnackBar
