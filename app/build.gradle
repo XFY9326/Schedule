@@ -61,8 +61,6 @@ android {
             storePassword "debug_key"
             keyAlias "${config.projectName}"
             keyPassword "debug_key"
-            v1SigningEnabled true
-            v2SigningEnabled true
         }
     }
 
