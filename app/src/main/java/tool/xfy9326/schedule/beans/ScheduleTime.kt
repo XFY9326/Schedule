@@ -32,7 +32,7 @@ data class ScheduleTime(
             val input = hour * 60 + minute
             return when {
                 input < m.first -> -1
-                input > m.second -> 1
+                input >= m.second -> 1
                 else -> 0
             }
         }

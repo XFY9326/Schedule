@@ -472,6 +472,7 @@
     <string name="downloading_update_description" translatable="false">v%1$s(%2$d)</string>
 
     <string name="time_period" translatable="false">~</string>
+    <string name="next_course_description" translatable="false">%1$s·%2$s</string>
     <string name="author" translatable="false">逸雪飞扬 (XFY9326)</string>
     <string name="email" translatable="false">xfy9326@126.com</string>
     <string name="open_source_website_url" translatable="false">https://github.com/xfy9326/Schedule</string>
