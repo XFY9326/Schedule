@@ -9,14 +9,19 @@ import android.net.Uri
 import androidx.annotation.ColorInt
 import androidx.annotation.Px
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 import lib.xfy9326.kit.getDeepStackTraceString
 import tool.xfy9326.schedule.R
+import tool.xfy9326.schedule.beans.NightMode.Companion.modeInt
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
 import tool.xfy9326.schedule.content.utils.CourseAdapterException.Companion.getText
 import tool.xfy9326.schedule.content.utils.JSConfigException
 import tool.xfy9326.schedule.content.utils.JSConfigException.Companion.getText
+import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.ui.dialog.CrashViewDialog
 import tool.xfy9326.schedule.utils.IntentUtils
 
@@ -51,5 +56,11 @@ object ViewUtils {
             setColor(contentColorInt)
         }
         return RippleDrawable(ColorStateList.valueOf(rippleColorInt), content, null)
+    }
+
+    fun initNightMode() {
+        runBlocking {
+            AppCompatDelegate.setDefaultNightMode(AppSettingsDataStore.nightModeTypeFlow.first().modeInt)
+        }
     }
 }

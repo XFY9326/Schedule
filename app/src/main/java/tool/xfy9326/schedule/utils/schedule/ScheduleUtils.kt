@@ -1,11 +1,6 @@
 package tool.xfy9326.schedule.utils.schedule
 
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.shareIn
-import lib.xfy9326.android.kit.ApplicationScope
-import lib.xfy9326.kit.combine
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.ClassTime.Companion.classEndTime
 import tool.xfy9326.schedule.beans.Course
@@ -14,7 +9,6 @@ import tool.xfy9326.schedule.beans.EditError
 import tool.xfy9326.schedule.beans.Schedule
 import tool.xfy9326.schedule.beans.ScheduleTime
 import tool.xfy9326.schedule.beans.ScheduleTime.Companion.intersect
-import tool.xfy9326.schedule.data.AppDataStore
 import tool.xfy9326.schedule.data.ScheduleDataStore
 import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
 import tool.xfy9326.schedule.io.IOManager
@@ -22,16 +16,6 @@ import tool.xfy9326.schedule.utils.CalendarUtils
 import java.util.*
 
 object ScheduleUtils {
-    val currentScheduleFlow =
-        AppDataStore.currentScheduleIdFlow.combine {
-            ScheduleDBProvider.db.scheduleDAO.getSchedule(it).filterNotNull()
-        }.shareIn(ApplicationScope, SharingStarted.Eagerly, 1)
-
-    val currentScheduleTimesFlow =
-        AppDataStore.currentScheduleIdFlow.combine {
-            ScheduleDBProvider.db.scheduleDAO.getScheduleTimes(it).filterNotNull()
-        }.shareIn(ApplicationScope, SharingStarted.Eagerly, 1)
-
     private val DEFAULT_SCHEDULE_TIMES by lazy {
         listOf(
             ScheduleTime(8, 0, 8, 45),
@@ -123,7 +107,7 @@ object ScheduleUtils {
     }
 
     suspend fun saveCurrentSchedule(scheduleTimes: List<ScheduleTime>, courses: List<Course>): Long {
-        val schedule = currentScheduleFlow.first().also {
+        val schedule = ScheduleDataProcessor.currentScheduleFlow.first().also {
             it.times = scheduleTimes
             adjustScheduleDateByCourses(it, courses)
         }

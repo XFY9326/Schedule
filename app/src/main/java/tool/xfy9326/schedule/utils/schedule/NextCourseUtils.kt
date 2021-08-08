@@ -45,7 +45,7 @@ object NextCourseUtils {
         )
     }
 
-    private suspend fun getNextCourseByDate(schedule: Schedule, date: Date): NextCourse {
+    suspend fun getNextCourseByDate(schedule: Schedule, date: Date = Date()): NextCourse {
         if (schedule.times.isEmpty()) {
             return NextCourse(
                 isVacation = false,
@@ -87,5 +87,5 @@ object NextCourseUtils {
         )
     }
 
-    suspend fun getCurrentScheduleNextCourse() = getNextCourseByDate(ScheduleUtils.currentScheduleFlow.first(), Date())
+    suspend fun getCurrentScheduleNextCourse() = getNextCourseByDate(ScheduleDataProcessor.currentScheduleFlow.first())
 }

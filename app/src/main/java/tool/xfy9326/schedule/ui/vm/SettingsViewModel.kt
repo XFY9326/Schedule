@@ -26,8 +26,8 @@ import tool.xfy9326.schedule.kt.asDistinctLiveData
 import tool.xfy9326.schedule.tools.DisposableValue
 import tool.xfy9326.schedule.ui.vm.base.AbstractViewModel
 import tool.xfy9326.schedule.utils.BackupUtils
+import tool.xfy9326.schedule.utils.schedule.ScheduleDataProcessor
 import tool.xfy9326.schedule.utils.schedule.ScheduleSyncHelper
-import tool.xfy9326.schedule.utils.view.ScheduleViewDataProcessor
 
 class SettingsViewModel : AbstractViewModel() {
     private val scheduleSyncFlow = ScheduleDBProvider.db.scheduleSyncDao.getScheduleSyncsInfo().map {
@@ -44,7 +44,7 @@ class SettingsViewModel : AbstractViewModel() {
             SchedulePreviewStyles(weekStart, styles)
         }.asDistinctLiveData()
     }
-    val scheduleBackground by lazy { ScheduleViewDataProcessor.scheduleBackgroundFlow.asDistinctLiveData() }
+    val scheduleBackground by lazy { ScheduleDataProcessor.scheduleBackgroundFlow.asDistinctLiveData() }
     val schedulePreviewPreviewWidth by lazy { MutableEventLiveData<Boolean>() }
 
     val importScheduleImage by lazy { MutableEventLiveData<Boolean>() }
