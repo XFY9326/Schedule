@@ -3,13 +3,11 @@ package tool.xfy9326.schedule.beans
 import android.content.Context
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
-import kotlinx.serialization.Serializable
 import lib.xfy9326.kit.nullIfBlank
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.ScheduleTime.Companion.startTimeStr
 
 @Parcelize
-@Serializable
 data class NextCourseInfo(
     val scheduleId: Long,
     val courseId: Long,

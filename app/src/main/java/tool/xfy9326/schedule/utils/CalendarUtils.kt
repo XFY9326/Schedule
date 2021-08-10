@@ -9,6 +9,10 @@ import java.util.*
 import kotlin.math.floor
 
 object CalendarUtils {
+    fun getTomorrowStartTime(date: Date): Long = getCalendar(date, clearToDate = true).apply {
+        add(Calendar.DATE, 1)
+    }.timeInMillis
+
     fun getCalendar(date: Date? = null, weekStart: WeekDay? = null, clearToDate: Boolean = false): Calendar =
         Calendar.getInstance(Locale.getDefault()).apply {
             if (date != null) time = date

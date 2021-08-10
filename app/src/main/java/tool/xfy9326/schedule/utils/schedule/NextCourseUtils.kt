@@ -11,7 +11,6 @@ import tool.xfy9326.schedule.utils.CalendarUtils
 import java.util.*
 
 object NextCourseUtils {
-    private const val FIRST_COURSE_MINUTE_OFFSET = 20
     private val EMPTY_NEXT_COURSE = NextCourse(
         isVacation = false,
         noNextCourse = false,
@@ -33,22 +32,13 @@ object NextCourseUtils {
         return -1
     }
 
-    private fun getRefreshTomorrowNextCourse(date: Date, schedule: Schedule): NextCourse {
-        val scheduleTime = schedule.times.firstOrNull()
-        val time = CourseTimeUtils.getOffsetTime(
-            date = date,
-            hour = scheduleTime?.startHour ?: 0,
-            minute = scheduleTime?.startMinute ?: 0,
-            dayOffset = 1,
-            minuteOffset = if (scheduleTime == null) 0 else FIRST_COURSE_MINUTE_OFFSET
-        )
-        return NextCourse(
+    private fun getRefreshTomorrowNextCourse(date: Date) =
+        NextCourse(
             isVacation = false,
             noNextCourse = true,
             nextCourseInfo = null,
-            nextAutoRefreshTime = time
+            nextAutoRefreshTime = CalendarUtils.getTomorrowStartTime(date)
         )
-    }
 
     suspend fun getNextCourseByDate(schedule: Schedule, date: Date = Date()): NextCourse {
         if (date.time > 0 && schedule.times.isEmpty()) {
@@ -57,7 +47,7 @@ object NextCourseUtils {
 
         val currentClassNumber = getCurrentOrNextTimeIndex(schedule.times, date) + 1
         if (currentClassNumber <= 0) {
-            return getRefreshTomorrowNextCourse(date, schedule)
+            return getRefreshTomorrowNextCourse(date)
         }
 
         val weekNum = CourseTimeUtils.getWeekNum(schedule, date)
@@ -75,7 +65,7 @@ object NextCourseUtils {
         val weekDay = CalendarUtils.getWeekDay(date)
 
         val resultPair = ScheduleDBProvider.db.scheduleDAO.getNextScheduleCourseTimeByDate(schedule.scheduleId, weekNum, weekDay, currentClassNumber)
-            ?: return getRefreshTomorrowNextCourse(date, schedule)
+            ?: return getRefreshTomorrowNextCourse(date)
 
         return NextCourse(
             isVacation = false,

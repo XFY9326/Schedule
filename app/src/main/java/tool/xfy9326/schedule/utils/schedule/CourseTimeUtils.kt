@@ -51,14 +51,6 @@ object CourseTimeUtils {
         return CalendarUtils.getLastDateInThisWeek(endWeekNum, weekStart)
     }
 
-    fun getOffsetTime(date: Date, hour: Int, minute: Int, dayOffset: Int, minuteOffset: Int): Long =
-        CalendarUtils.getCalendar(date = date, clearToDate = true).apply {
-            set(Calendar.HOUR_OF_DAY, hour)
-            set(Calendar.MINUTE, minute)
-            add(Calendar.DATE, dayOffset)
-            add(Calendar.MINUTE, minuteOffset)
-        }.timeInMillis
-
     fun getClassEndTime(date: Date, scheduleTimes: List<ScheduleTime>, classTime: ClassTime): Long =
         CalendarUtils.getCalendar(date = date, clearToDate = true).apply {
             val scheduleTime = scheduleTimes[classTime.classEndTime - 1]
