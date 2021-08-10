@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <LinearLayout
-        android:id="@+id/layout_nextCourseWidgetMsg"
+        android:id="@+id/layout_nextCourseWidgetContent"
         style="@style/AppTheme.AppWidgetNextCourse"
         android:gravity="center"
         android:orientation="vertical"

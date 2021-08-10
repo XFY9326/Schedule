@@ -155,7 +155,7 @@ object NextCourseWidgetUtils {
             setViewVisibility(R.id.imageView_nextCourseWidgetIcon, View.VISIBLE)
             setImageViewResource(R.id.imageView_nextCourseWidgetIcon, iconRes)
 
-            setOnClickPendingIntent(R.id.textView_nextCourseWidgetMsg, getContentClickPendingIntent(context))
+            setOnClickPendingIntent(R.id.layout_nextCourseWidgetContent, getContentClickPendingIntent(context))
         }
 
     private fun buildWidgetNextCourseView(context: Context, @LayoutRes layoutRes: Int, nextCourseInfo: NextCourseInfo) =

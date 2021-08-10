@@ -8,7 +8,7 @@
     android:paddingBottom="10dp">
 
     <LinearLayout
-        android:id="@+id/layout_nextCourseWidgetMsg"
+        android:id="@+id/layout_nextCourseWidgetContent"
         style="@style/AppTheme.AppWidgetNextCourse"
         android:gravity="center"
         android:orientation="horizontal"
