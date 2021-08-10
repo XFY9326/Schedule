@@ -427,11 +427,18 @@
     <string name="web_course_provider_console_debug_sum">启用vConsole与WebView远程调试</string>
     <string name="save_to_album">保存到相册</string>
     <string name="share_with_apps">分享到应用</string>
+
     <string name="app_widget_init">正在初始化中\.\.\.</string>
     <string name="next_course_widget_in_vacation">正在放假中</string>
     <string name="next_course_widget_no_next_course">今日已无待上课程</string>
     <string name="next_course_widget_no_data">无数据</string>
     <string name="app_widget_attention">为了能够在后台及时更新桌面控件内容\n请确保已授予应用自启动相关权限！</string>
+    <string name="next_course_widget_description">展示\'下一节课\'的课程提示</string>
+    <string name="next_course_widget_sample_name">下一节课</string>
+    <string name="next_course_widget_sample_time">12:00</string>
+    <string name="next_course_widget_sample_teacher">教师信息</string>
+    <string name="next_course_widget_sample_location">上课地点信息</string>
+    <string name="next_course_widget_sample_teacher_and_location">教师信息·上课地点信息</string>
 
     <string name="js_config_unknown_error">配置文件未知错误！</string>
     <string name="js_config_config_add_success">配置文件添加成功</string>

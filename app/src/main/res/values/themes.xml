@@ -150,10 +150,13 @@
         <item name="expandedTitleGravity">left|bottom</item>
     </style>
 
-    <style name="AppTheme.AppWidgetNextCourse" parent="AppTheme.SelectableItemBackground">
+    <style name="AppTheme.AppWidgetNextCourse" parent="Theme.MaterialComponents.DayNight">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:layout_gravity">center</item>
         <item name="android:background">@drawable/background_app_widget</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:foreground">?android:attr/selectableItemBackground</item>
     </style>
 </resources>

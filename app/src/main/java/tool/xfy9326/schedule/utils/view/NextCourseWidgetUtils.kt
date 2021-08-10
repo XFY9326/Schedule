@@ -119,22 +119,27 @@ object NextCourseWidgetUtils {
         }
     }
 
-    fun generateRemoteViews(context: Context, nextCourse: NextCourse, clazz: KClass<out NextCourseWidget>): RemoteViews {
-        val layoutId = getLayoutId(clazz)
-        return when {
-            nextCourse.isVacation -> buildWidgetMessageView(context, layoutId, R.drawable.ic_surfing_24, R.string.next_course_widget_in_vacation)
-            nextCourse.noNextCourse -> buildWidgetMessageView(context, layoutId, R.drawable.ic_break_24, R.string.next_course_widget_no_next_course)
-            nextCourse.nextCourseInfo != null -> buildWidgetNextCourseView(context, layoutId, nextCourse.nextCourseInfo)
-            else -> buildWidgetMessageView(context, layoutId, R.drawable.ic_data_24, R.string.next_course_widget_no_data)
+    fun generateRemoteViews(context: Context, nextCourse: NextCourse, clazz: KClass<out NextCourseWidget>) =
+        when {
+            nextCourse.isVacation ->
+                buildWidgetMessageView(context, getLayoutId(clazz, true), R.drawable.ic_surfing_24, R.string.next_course_widget_in_vacation)
+            nextCourse.noNextCourse ->
+                buildWidgetMessageView(context, getLayoutId(clazz, true), R.drawable.ic_break_24, R.string.next_course_widget_no_next_course)
+            nextCourse.nextCourseInfo != null ->
+                buildWidgetNextCourseView(context, getLayoutId(clazz, false), nextCourse.nextCourseInfo)
+            else ->
+                buildWidgetMessageView(context, getLayoutId(clazz, true), R.drawable.ic_data_24, R.string.next_course_widget_no_data)
         }
-    }
 
     @LayoutRes
-    private fun getLayoutId(clazz: KClass<out NextCourseWidget>) =
+    private fun getLayoutId(clazz: KClass<out NextCourseWidget>, isMsg: Boolean) =
         when (clazz) {
-            NextCourseWidget.Size4x1::class -> R.layout.widget_next_course_4x1
-            NextCourseWidget.Size2x2::class -> R.layout.widget_next_course_2x2
-            NextCourseWidget.Size2x1::class -> R.layout.widget_next_course_2x1
+            NextCourseWidget.Size4x1::class ->
+                if (isMsg) R.layout.widget_next_course_4x1_msg else R.layout.widget_next_course_4x1
+            NextCourseWidget.Size2x2::class ->
+                if (isMsg) R.layout.widget_next_course_2x2_msg else R.layout.widget_next_course_2x2
+            NextCourseWidget.Size2x1::class ->
+                if (isMsg) R.layout.widget_next_course_2x1_msg else R.layout.widget_next_course_2x1
             else -> error("Unsupported NextCourseWidget size class! Class: $clazz")
         }
 
@@ -146,9 +151,6 @@ object NextCourseWidgetUtils {
 
     private fun buildWidgetMessageView(context: Context, @LayoutRes layoutRes: Int, @DrawableRes iconRes: Int, @StringRes msgRes: Int) =
         RemoteViews(context.packageName, layoutRes).apply {
-            setViewVisibility(R.id.layout_nextCourseWidgetContent, View.GONE)
-            setViewVisibility(R.id.layout_nextCourseWidgetMsg, View.VISIBLE)
-
             setTextViewText(R.id.textView_nextCourseWidgetMsg, context.getString(msgRes))
             setViewVisibility(R.id.imageView_nextCourseWidgetIcon, View.VISIBLE)
             setImageViewResource(R.id.imageView_nextCourseWidgetIcon, iconRes)
@@ -158,9 +160,6 @@ object NextCourseWidgetUtils {
 
     private fun buildWidgetNextCourseView(context: Context, @LayoutRes layoutRes: Int, nextCourseInfo: NextCourseInfo) =
         RemoteViews(context.packageName, layoutRes).apply {
-            setViewVisibility(R.id.layout_nextCourseWidgetMsg, View.GONE)
-            setViewVisibility(R.id.layout_nextCourseWidgetContent, View.VISIBLE)
-
             val drawable = getCourseColorDrawable(context, nextCourseInfo.courseColor)
             setImageViewBitmap(R.id.imageView_nextCourseWidgetColor, drawable.toBitmap())
 
