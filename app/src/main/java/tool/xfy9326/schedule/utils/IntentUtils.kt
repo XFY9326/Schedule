@@ -18,6 +18,11 @@ import java.util.*
 object IntentUtils {
     const val COURSE_IMPORT_WIKI_URL = "https://github.com/XFY9326/Schedule/wiki"
 
+    fun getLaunchAppIntent(context: Context) =
+        context.packageManager.getLaunchIntentForPackage(context.packageName)!!.apply {
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        }
+
     fun installPackage(context: Context, uri: Uri) {
         context.tryStartActivity(Intent(Intent.ACTION_VIEW).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_GRANT_READ_URI_PERMISSION

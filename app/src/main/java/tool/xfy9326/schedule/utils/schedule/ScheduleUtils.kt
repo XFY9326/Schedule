@@ -9,6 +9,7 @@ import tool.xfy9326.schedule.beans.EditError
 import tool.xfy9326.schedule.beans.Schedule
 import tool.xfy9326.schedule.beans.ScheduleTime
 import tool.xfy9326.schedule.beans.ScheduleTime.Companion.intersect
+import tool.xfy9326.schedule.data.AppDataStore
 import tool.xfy9326.schedule.data.ScheduleDataStore
 import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
 import tool.xfy9326.schedule.io.IOManager
@@ -34,6 +35,9 @@ object ScheduleUtils {
             ScheduleTime(21, 0, 21, 45)
         )
     }
+
+    suspend fun hasInitData() =
+        AppDataStore.hasCurrentScheduleId() && ScheduleDBProvider.db.scheduleDAO.getScheduleCount() > 0
 
     fun getDefaultTermDate(): Pair<Date, Date> {
         CalendarUtils.getCalendar(clearToDate = true).apply {

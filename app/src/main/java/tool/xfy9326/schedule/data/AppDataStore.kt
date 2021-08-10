@@ -13,10 +13,13 @@ object AppDataStore : AbstractDataStore("App") {
     private val readOnlineImportAttention by booleanPreferencesKey()
     private val apkUpdateDownloadId by longPreferencesKey()
     private val ignorePackageInstallPermission by booleanPreferencesKey()
+    private val showAppWidgetAttention by booleanPreferencesKey()
 
     val currentScheduleIdFlow = currentScheduleId.readAndInitAsFlow {
         ScheduleDBProvider.db.scheduleDAO.tryInitDefaultSchedule()
     }
+
+    suspend fun hasCurrentScheduleId() = currentScheduleId.hasValue()
 
     val acceptEULAFlow = acceptEULA.readAsFlow(false)
 
@@ -29,6 +32,10 @@ object AppDataStore : AbstractDataStore("App") {
     val apkUpdateDownloadIdFlow = apkUpdateDownloadId.readAsFlow()
 
     val ignorePackageInstallPermissionFlow = ignorePackageInstallPermission.readAsFlow(false)
+
+    val showAppWidgetAttentionFlow = showAppWidgetAttention.readAsFlow(true)
+
+    suspend fun setShowAppWidgetAttention(data: Boolean) = showAppWidgetAttention.saveData(data)
 
     suspend fun setIgnorePackageInstallPermission(data: Boolean) = ignorePackageInstallPermission.saveData(data)
 

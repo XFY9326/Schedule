@@ -66,6 +66,10 @@ abstract class AbstractDataStore(val name: String) {
         }
     }
 
+    protected suspend fun <T> Preferences.Key<T>.hasValue() = read {
+        this in it
+    }.first()
+
     protected suspend fun <T> Preferences.Key<T>.remove() {
         edit {
             it.remove(this)

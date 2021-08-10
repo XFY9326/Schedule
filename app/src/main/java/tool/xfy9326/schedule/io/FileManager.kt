@@ -6,21 +6,16 @@ import android.content.ContentValues
 import android.graphics.Bitmap
 import android.net.Uri
 import android.provider.MediaStore
-import kotlinx.serialization.json.Json
-import lib.xfy9326.android.kit.AppDir
 import lib.xfy9326.android.kit.tryRecycle
 import lib.xfy9326.kit.*
 import okio.sink
 import okio.source
 import tool.xfy9326.schedule.R
-import tool.xfy9326.schedule.beans.NextCourse
 import tool.xfy9326.schedule.io.IOManager.getUriByFileProvider
 import tool.xfy9326.schedule.io.kt.*
 import java.io.File
 
 object FileManager {
-    private const val FILE_NAME_NEXT_COURSE_CACHE = "NextCourse.cache"
-
     private val FILE_EULA = rawResFile(R.raw.eula)
     private val FILE_LICENSE = rawResFile(R.raw.license)
 
@@ -92,15 +87,5 @@ object FileManager {
             writeAll(from.source())
             true
         } ?: false
-    }
-
-    suspend fun saveNextCourseCache(nextCourse: NextCourse) {
-        val cacheFile = AppDir.cacheDir.asParentOf(FILE_NAME_NEXT_COURSE_CACHE)
-        cacheFile.writeJSON(nextCourse, Json)
-    }
-
-    suspend fun readNextCourseCache(): NextCourse? {
-        val cacheFile = AppDir.cacheDir.asParentOf(FILE_NAME_NEXT_COURSE_CACHE)
-        return cacheFile.readJSON(Json)
     }
 }

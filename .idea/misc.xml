@@ -14,14 +14,25 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="../../../../layout/custom_preview.xml" value="0.3546875" />
+        <entry key="app/src/main/res/drawable/background_app_widget.xml" value="0.33519736842105263" />
         <entry key="app/src/main/res/drawable/ic_adjust_24.xml" value="0.3661184210526316" />
+        <entry key="app/src/main/res/drawable/ic_break_24.xml" value="0.33519736842105263" />
+        <entry key="app/src/main/res/drawable/ic_broken_image_24.xml" value="0.33519736842105263" />
+        <entry key="app/src/main/res/drawable/ic_data_24.xml" value="0.33519736842105263" />
         <entry key="app/src/main/res/drawable/ic_edit_24.xml" value="0.3661184210526316" />
         <entry key="app/src/main/res/drawable/ic_edit_30.xml" value="0.3661184210526316" />
         <entry key="app/src/main/res/drawable/ic_share_24.xml" value="0.12269736842105264" />
+        <entry key="app/src/main/res/drawable/ic_surfing_24.xml" value="0.33519736842105263" />
         <entry key="app/src/main/res/drawable/ic_tune_dark_24.xml" value="0.12269736842105264" />
+        <entry key="app/src/main/res/drawable/shape_circle_20.xml" value="0.33519736842105263" />
         <entry key="app/src/main/res/layout/activity_schedule.xml" value="0.1125" />
         <entry key="app/src/main/res/layout/activity_schedule_manage.xml" value="0.2510245901639344" />
         <entry key="app/src/main/res/layout/item_schedule.xml" value="0.2510245901639344" />
+        <entry key="app/src/main/res/layout/widget_next_course_2x1.xml" value="0.67" />
+        <entry key="app/src/main/res/layout/widget_next_course_2x2.xml" value="0.67" />
+        <entry key="app/src/main/res/layout/widget_next_course_4x1.xml" value="0.325" />
+        <entry key="app/src/main/res/layout/widget_next_course_initial.xml" value="0.35592105263157897" />
+        <entry key="app/src/main/res/layout/widget_next_course_msg.xml" value="0.325" />
         <entry key="app/src/main/res/xml/settings_online_course_import.xml" value="0.2510245901639344" />
         <entry key="app/src/main/res/xml/settings_schedule.xml" value="0.2510245901639344" />
       </map>

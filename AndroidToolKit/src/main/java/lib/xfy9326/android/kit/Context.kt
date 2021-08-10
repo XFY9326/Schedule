@@ -4,6 +4,7 @@ package lib.xfy9326.android.kit
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
@@ -17,6 +18,10 @@ import androidx.annotation.*
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 import androidx.fragment.app.Fragment
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import lib.xfy9326.kit.tryCast
 import kotlin.system.exitProcess
 
@@ -114,5 +119,20 @@ fun Activity.getRealScreenSize(): Pair<Int, Int> {
         @Suppress("DEPRECATION")
         windowManager.defaultDisplay.getRealSize(size)
         Pair(size.x, size.y)
+    }
+}
+
+fun BroadcastReceiver.goAsync(
+    coroutineScope: CoroutineScope = ApplicationScope,
+    dispatcher: CoroutineDispatcher = Dispatchers.Default,
+    block: suspend () -> Unit,
+) {
+    val result = goAsync()
+    coroutineScope.launch(dispatcher) {
+        try {
+            block()
+        } finally {
+            result.finish()
+        }
     }
 }

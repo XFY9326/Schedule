@@ -1,39 +1,45 @@
 package tool.xfy9326.schedule.beans
 
 import android.content.Context
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 import lib.xfy9326.kit.nullIfBlank
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.ScheduleTime.Companion.startTimeStr
 
+@Parcelize
 @Serializable
 data class NextCourseInfo(
+    val scheduleId: Long,
     val courseId: Long,
     val timeId: Long,
-    val name: String,
-    val color: Int,
-    val description: String?,
+    val courseName: String,
+    val courseColor: Int,
+    val courseTeacher: String?,
+    val courseLocation: String?,
     val startTime: String,
-) {
-    companion object {
-        private fun getCourseDescription(context: Context, course: Course, courseTime: CourseTime) =
-            if (course.teacher == null && courseTime.location == null) {
-                null
-            } else if (course.teacher == null) {
-                courseTime.location
-            } else if (courseTime.location == null) {
-                course.teacher
-            } else {
-                context.getString(R.string.next_course_description, course.teacher, courseTime.location)
-            }.nullIfBlank()
-    }
+) : Parcelable {
 
-    constructor(context: Context, schedule: Schedule, course: Course, courseTime: CourseTime) : this(
+    constructor(schedule: Schedule, course: Course, courseTime: CourseTime) : this(
+        schedule.scheduleId,
         course.courseId,
         courseTime.timeId,
         course.name,
         course.color,
-        getCourseDescription(context, course, courseTime),
+        course.teacher,
+        courseTime.location,
         schedule.times[courseTime.classTime.classStartTime - 1].startTimeStr
     )
+
+    fun getSingleLineCourseTimeDescription(context: Context) =
+        if (courseTeacher == null && courseLocation == null) {
+            null
+        } else if (courseTeacher == null) {
+            courseLocation
+        } else if (courseLocation == null) {
+            courseTeacher
+        } else {
+            context.getString(R.string.next_course_description, courseTeacher, courseLocation)
+        }.nullIfBlank()
 }

@@ -149,4 +149,11 @@
         <item name="collapsedTitleGravity">left|center_vertical</item>
         <item name="expandedTitleGravity">left|bottom</item>
     </style>
+
+    <style name="AppTheme.AppWidgetNextCourse" parent="AppTheme.SelectableItemBackground">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:background">@drawable/background_app_widget</item>
+    </style>
 </resources>

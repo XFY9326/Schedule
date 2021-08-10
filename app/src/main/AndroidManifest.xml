@@ -106,6 +106,59 @@
             </intent-filter>
         </receiver>
 
+        <receiver
+            android:name=".widget.NextCourseWidget"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="${ApplicationId}.action.WIDGET_NEXT_COURSE_REFRESH" />
+            </intent-filter>
+        </receiver>
+
+        <receiver
+            android:name=".widget.NextCourseWidget$Size4x1"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_ENABLED" />
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="android.appwidget.action.APPWIDGET_RESTORED" />
+                <action android:name="android.appwidget.action.APPWIDGET_DISABLED" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/next_course_appwidget_info_4x1" />
+        </receiver>
+
+        <receiver
+            android:name=".widget.NextCourseWidget$Size2x2"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_ENABLED" />
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="android.appwidget.action.APPWIDGET_RESTORED" />
+                <action android:name="android.appwidget.action.APPWIDGET_DISABLED" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/next_course_appwidget_info_2x2" />
+        </receiver>
+
+        <receiver
+            android:name=".widget.NextCourseWidget$Size2x1"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_ENABLED" />
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="android.appwidget.action.APPWIDGET_RESTORED" />
+                <action android:name="android.appwidget.action.APPWIDGET_DISABLED" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/next_course_appwidget_info_2x1" />
+        </receiver>
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${ApplicationId}.file.provider"

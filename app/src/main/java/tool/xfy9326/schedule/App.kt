@@ -20,7 +20,7 @@ class App : Application() {
         // 初始化夜间模式设定
         ViewUtils.initNightMode()
 
-        // 初始化'下一节课'的数据监听
+        // 初始化'下一节课'的数据监听（仅限运行APP期间）
         NextCourseWidgetUtils.initDataObserver()
     }
 }

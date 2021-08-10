@@ -1,7 +1,6 @@
 package tool.xfy9326.schedule.utils.schedule
 
 import kotlinx.coroutines.flow.first
-import lib.xfy9326.android.kit.ApplicationInstance
 import tool.xfy9326.schedule.beans.NextCourse
 import tool.xfy9326.schedule.beans.NextCourseInfo
 import tool.xfy9326.schedule.beans.Schedule
@@ -13,6 +12,12 @@ import java.util.*
 
 object NextCourseUtils {
     private const val FIRST_COURSE_MINUTE_OFFSET = 20
+    private val EMPTY_NEXT_COURSE = NextCourse(
+        isVacation = false,
+        noNextCourse = false,
+        nextCourseInfo = null,
+        nextAutoRefreshTime = -1
+    )
 
     private fun getCurrentOrNextTimeIndex(times: List<ScheduleTime>, date: Date): Int {
         if (times.isNotEmpty()) {
@@ -46,13 +51,8 @@ object NextCourseUtils {
     }
 
     suspend fun getNextCourseByDate(schedule: Schedule, date: Date = Date()): NextCourse {
-        if (schedule.times.isEmpty()) {
-            return NextCourse(
-                isVacation = false,
-                noNextCourse = false,
-                nextCourseInfo = null,
-                nextAutoRefreshTime = -1
-            )
+        if (date.time > 0 && schedule.times.isEmpty()) {
+            return EMPTY_NEXT_COURSE
         }
 
         val currentClassNumber = getCurrentOrNextTimeIndex(schedule.times, date) + 1
@@ -74,18 +74,21 @@ object NextCourseUtils {
 
         val weekDay = CalendarUtils.getWeekDay(date)
 
-        val dao = ScheduleDBProvider.db.scheduleDAO
-        val courseTime = dao.getNextScheduleCourseTimeByDate(schedule.scheduleId, weekNum, weekDay, currentClassNumber)
+        val resultPair = ScheduleDBProvider.db.scheduleDAO.getNextScheduleCourseTimeByDate(schedule.scheduleId, weekNum, weekDay, currentClassNumber)
             ?: return getRefreshTomorrowNextCourse(date, schedule)
-        val course = dao.getSingleCourse(courseTime.courseId) ?: error("Can't get Course by CourseTime.courseId from DB!")
 
         return NextCourse(
             isVacation = false,
             noNextCourse = false,
-            nextCourseInfo = NextCourseInfo(ApplicationInstance, schedule, course, courseTime),
-            nextAutoRefreshTime = CourseTimeUtils.getClassEndTime(date, schedule.times, courseTime.classTime)
+            nextCourseInfo = NextCourseInfo(schedule, resultPair.first, resultPair.second),
+            nextAutoRefreshTime = CourseTimeUtils.getClassEndTime(date, schedule.times, resultPair.second.classTime)
         )
     }
 
-    suspend fun getCurrentScheduleNextCourse() = getNextCourseByDate(ScheduleDataProcessor.currentScheduleFlow.first())
+    suspend fun getCurrentScheduleNextCourse(date: Date = Date()) =
+        if (ScheduleUtils.hasInitData()) {
+            getNextCourseByDate(ScheduleDataProcessor.currentScheduleFlow.first(), date)
+        } else {
+            EMPTY_NEXT_COURSE
+        }
 }
