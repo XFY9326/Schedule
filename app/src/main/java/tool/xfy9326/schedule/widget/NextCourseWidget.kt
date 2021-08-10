@@ -47,6 +47,7 @@ open class NextCourseWidget : AppWidgetProvider() {
                     }
                 }
             } else if (action == AppWidgetManager.ACTION_APPWIDGET_ENABLED) {
+                // TODO: Change it in SDK 31 https://developer.android.google.cn/about/versions/12/behavior-changes-12#exact-alarm-permission
                 widget.goAsync {
                     if (AppDataStore.showAppWidgetAttentionFlow.first()) {
                         AppDataStore.setShowAppWidgetAttention(false)
