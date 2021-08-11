@@ -33,7 +33,6 @@ android {
 
         packagingOptions {
             exclude "META-INF/*.version"
-            exclude "main/java/androidx/datastore/preferences/PreferencesProto.java"
             exclude "META-INF/CHANGES"
             exclude "META-INF/README.md"
             exclude "okhttp3/internal/publicsuffix/NOTICE"
