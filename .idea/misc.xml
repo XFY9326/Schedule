@@ -26,13 +26,16 @@
         <entry key="app/src/main/res/drawable/ic_data_24.xml" value="0.33519736842105263" />
         <entry key="app/src/main/res/drawable/ic_edit_24.xml" value="0.3661184210526316" />
         <entry key="app/src/main/res/drawable/ic_edit_30.xml" value="0.3661184210526316" />
+        <entry key="app/src/main/res/drawable/ic_email_30.xml" value="0.35" />
         <entry key="app/src/main/res/drawable/ic_launcher_foreground.xml" value="0.2069078947368421" />
+        <entry key="app/src/main/res/drawable/ic_launcher_round.xml" value="0.35" />
         <entry key="app/src/main/res/drawable/ic_share_24.xml" value="0.12269736842105264" />
         <entry key="app/src/main/res/drawable/ic_surfing_24.xml" value="0.33519736842105263" />
         <entry key="app/src/main/res/drawable/ic_tune_dark_24.xml" value="0.12269736842105264" />
         <entry key="app/src/main/res/drawable/ic_widgets_24.xml" value="0.2069078947368421" />
         <entry key="app/src/main/res/drawable/shape_circle_20.xml" value="0.33519736842105263" />
         <entry key="app/src/main/res/drawable/shape_round_square_15.xml" value="0.2069078947368421" />
+        <entry key="app/src/main/res/layout/activity_about.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_app_error.xml" value="0.335" />
         <entry key="app/src/main/res/layout/activity_schedule.xml" value="0.1125" />
         <entry key="app/src/main/res/layout/activity_schedule_manage.xml" value="0.2510245901639344" />

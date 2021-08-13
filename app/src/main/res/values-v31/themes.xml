@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="AppTheme.LaunchScreen" parent="Theme.SplashScreen">
+        <item name="postSplashScreenTheme">@style/AppTheme.Schedule</item>
+        <item name="windowSplashScreenBackground">@color/launch_screen_windows_background</item>
+    </style>
+</resources>

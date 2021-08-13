@@ -13,7 +13,7 @@
     <style name="AppTheme.LaunchScreen" parent="Theme.SplashScreen">
         <item name="postSplashScreenTheme">@style/AppTheme.Schedule</item>
         <item name="windowSplashScreenBackground">@color/launch_screen_windows_background</item>
-        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_round</item>
+        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_logo</item>
     </style>
 
     <style name="AppTheme.LaunchScreen.DayNightSystemBar" parent="AppTheme.LaunchScreen">
