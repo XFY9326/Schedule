@@ -4,6 +4,7 @@
     <string name="pref_schedule_table_settings">ScheduleTableSettings</string>
     <string name="pref_calendar_sync_settings">CalendarSyncSettings</string>
     <string name="pref_online_course_import_settings">OnlineCourseImportSettings</string>
+    <string name="pref_app_widget_settings">AppWidgetSettings</string>
     <string name="pref_backup_restore_settings">BackupRestoreSettings</string>
     <string name="pref_debug_settings">DebugSettings</string>
     <string name="pref_about">About</string>
@@ -35,4 +36,7 @@
     <string name="pref_schedule_header_month_date_text_size">HeaderMonthDateTextSize</string>
     <string name="pref_schedule_header_weekday_text_size">HeaderWeekdayTextSize</string>
     <string name="pref_schedule_text_size_reset">ScheduleTextSizeReset</string>
+    <string name="pref_auto_launch_permission">AutoLaunchPermission</string>
+    <string name="pref_accurate_app_widget_update">AccurateAppWidgetUpdate</string>
+    <string name="pref_schedule_next_alarm_permission">ScheduleNextAlarmPermission</string>
 </resources>

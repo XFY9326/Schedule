@@ -10,5 +10,8 @@
     </issue>
     <issue id="IconLocation">
         <ignore path="src/main/res/drawable/ic_launcher_round.png" />
+        <ignore path="src/main/res/drawable/widget_next_course_2x1.webp" />
+        <ignore path="src/main/res/drawable/widget_next_course_4x1.webp" />
+        <ignore path="src/main/res/drawable/widget_next_course_2x2.webp" />
     </issue>
 </lint>

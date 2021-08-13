@@ -58,7 +58,7 @@ class UpgradeDialog : AppCompatDialogFragment() {
     private var selectedSource: DownloadSource? = null
 
     private val packageInstallPermission = registerForActivityResult(IntentUtils.PackageInstallPermissionContact()) {
-        if (PermissionUtils.canInstallPackage(requireContext())) {
+        if (it) {
             selectedSource?.let(::downloadFile)
             selectedSource = null
         } else {

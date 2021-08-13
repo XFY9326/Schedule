@@ -1,7 +1,9 @@
 package tool.xfy9326.schedule.ui.view.schedule
 
 import android.content.Context
+import android.os.Build
 import android.util.AttributeSet
+import android.view.RoundedCorner
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.Px
@@ -79,9 +81,6 @@ class ScheduleGridView @JvmOverloads constructor(context: Context, attrs: Attrib
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        val enableScreenCornerMargin = styles?.cornerScreenMargin ?: false
-        val screenCornerMargin = predefine?.gridBottomCornerScreenMargin ?: 0
-
         val timeColumnWidthSpec = MeasureSpec.makeMeasureSpec(timeColumnWidth, MeasureSpec.EXACTLY)
         val courseColumnWidthSpec = MeasureSpec.makeMeasureSpec(courseColumnWidth, MeasureSpec.EXACTLY)
 
@@ -112,7 +111,15 @@ class ScheduleGridView @JvmOverloads constructor(context: Context, attrs: Attrib
             } ?: 0
 
         val actualHeight =
-            if (enableScreenCornerMargin) {
+            if (styles?.cornerScreenMargin == true) {
+                val defaultScreenCornerMargin = predefine?.gridBottomCornerScreenMargin ?: 0
+                val screenCornerMargin = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    val bottomLeftCorner = rootWindowInsets.getRoundedCorner(RoundedCorner.POSITION_BOTTOM_LEFT)
+                    val bottomRightCorner = rootWindowInsets.getRoundedCorner(RoundedCorner.POSITION_BOTTOM_RIGHT)
+                    max(bottomLeftCorner?.radius ?: defaultScreenCornerMargin, bottomRightCorner?.radius ?: defaultScreenCornerMargin)
+                } else {
+                    defaultScreenCornerMargin
+                }
                 rowHeight * rowAmount + max(screenCornerMargin, bottomInset)
             } else {
                 rowHeight * rowAmount + bottomInset

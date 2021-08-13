@@ -17,6 +17,7 @@ import android.widget.Toast
 import androidx.annotation.*
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
@@ -49,6 +50,9 @@ fun Context.relaunchApp(intentBlock: Intent.() -> Unit = {}) {
     })
     exitProcess(0)
 }
+
+val Context.packageUri
+    get() = "package:${packageName}".toUri()
 
 inline fun Context.getColorCompat(@ColorRes id: Int) = ContextCompat.getColor(this, id)
 
@@ -109,18 +113,25 @@ fun Context.getActionBarDefaultHeight(): Int {
 
 fun <T> Fragment.requireOwner() = (parentFragment ?: requireActivity()).tryCast<T>()
 
-fun Activity.getRealScreenSize(): Pair<Int, Int> {
-    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-        val size = Point()
-        display?.getRealSize(size)
-        Pair(size.x, size.y)
-    } else {
-        val size = Point()
-        @Suppress("DEPRECATION")
-        windowManager.defaultDisplay.getRealSize(size)
-        Pair(size.x, size.y)
+fun Activity.getRealScreenSize() =
+    when {
+        Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
+            val rect = windowManager.currentWindowMetrics.bounds
+            rect.width() to rect.height()
+        }
+        Build.VERSION.SDK_INT >= Build.VERSION_CODES.R -> {
+            val size = Point()
+            @Suppress("DEPRECATION")
+            display?.getRealSize(size)
+            size.x to size.y
+        }
+        else -> {
+            val size = Point()
+            @Suppress("DEPRECATION")
+            windowManager.defaultDisplay.getRealSize(size)
+            size.x to size.y
+        }
     }
-}
 
 fun BroadcastReceiver.goAsync(
     coroutineScope: CoroutineScope = ApplicationScope,

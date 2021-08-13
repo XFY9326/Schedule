@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_CALENDAR" />
     <uses-permission android:name="android.permission.WRITE_CALENDAR" />
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
 
     <queries>
@@ -36,20 +37,15 @@
         tools:targetApi="n">
 
         <activity
-            android:name=".ui.activity.SplashActivity"
+            android:name=".ui.activity.ScheduleActivity"
             android:exported="true"
-            android:launchMode="singleTask"
-            android:theme="@style/AppTheme.LaunchScreen">
+            android:launchMode="singleTop"
+            android:theme="@style/AppTheme.LaunchScreen.DayNightSystemBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity
-            android:name=".ui.activity.ScheduleActivity"
-            android:launchMode="singleTop"
-            android:theme="@style/AppTheme.DefaultSystemBar" />
 
         <activity
             android:name=".ui.activity.AppErrorActivity"
@@ -111,6 +107,7 @@
             android:exported="false">
             <intent-filter>
                 <action android:name="${ApplicationId}.action.WIDGET_NEXT_COURSE_REFRESH" />
+                <action android:name="android.app.action.SCHEDULE_EXACT_ALARM_PERMISSION_STATE_CHANGED" />
             </intent-filter>
         </receiver>
 
@@ -118,7 +115,6 @@
             android:name=".widget.NextCourseWidget$Size4x1"
             android:exported="true">
             <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_ENABLED" />
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
                 <action android:name="android.appwidget.action.APPWIDGET_RESTORED" />
                 <action android:name="android.appwidget.action.APPWIDGET_DISABLED" />
@@ -133,7 +129,6 @@
             android:name=".widget.NextCourseWidget$Size2x2"
             android:exported="true">
             <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_ENABLED" />
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
                 <action android:name="android.appwidget.action.APPWIDGET_RESTORED" />
                 <action android:name="android.appwidget.action.APPWIDGET_DISABLED" />
@@ -148,7 +143,6 @@
             android:name=".widget.NextCourseWidget$Size2x1"
             android:exported="true">
             <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_ENABLED" />
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
                 <action android:name="android.appwidget.action.APPWIDGET_RESTORED" />
                 <action android:name="android.appwidget.action.APPWIDGET_DISABLED" />

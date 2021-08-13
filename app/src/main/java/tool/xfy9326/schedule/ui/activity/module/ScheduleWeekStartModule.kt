@@ -12,7 +12,7 @@ import tool.xfy9326.schedule.ui.vm.ScheduleEditViewModel
 
 class ScheduleWeekStartModule(activity: ScheduleEditActivity) :
     AbstractViewModelActivityModule<ScheduleEditViewModel, ActivityScheduleEditBinding, ScheduleEditActivity>(activity) {
-    override fun init() {
+    override fun onInit() {
         requireViewBinding().layoutScheduleWeekStart.setOnClickListener {
             showWeekStartSelectDialog()
         }

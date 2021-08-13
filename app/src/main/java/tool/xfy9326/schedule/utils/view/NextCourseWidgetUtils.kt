@@ -28,6 +28,7 @@ import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.NextCourse
 import tool.xfy9326.schedule.beans.NextCourseInfo
 import tool.xfy9326.schedule.utils.IntentUtils
+import tool.xfy9326.schedule.utils.PermissionUtils
 import tool.xfy9326.schedule.utils.schedule.NextCourseUtils
 import tool.xfy9326.schedule.utils.schedule.ScheduleDataProcessor
 import tool.xfy9326.schedule.widget.NextCourseWidget
@@ -75,8 +76,7 @@ object NextCourseWidgetUtils {
             putExtra(NextCourseWidget.EXTRA_NEXT_COURSE, nextCourse)
         })
 
-    fun hasNextCourseWidget(context: Context): Boolean {
-        val idMap = getAllNextCourseWidgetId(context)
+    fun hasNextCourseWidget(context: Context, idMap: Map<KClass<out NextCourseWidget>, IntArray> = getAllNextCourseWidgetId(context)): Boolean {
         for (entry in idMap) {
             if (entry.value.isNotEmpty()) {
                 return true
@@ -105,18 +105,20 @@ object NextCourseWidgetUtils {
     fun setupNextAlarm(context: Context, nextCourse: NextCourse) {
         val pendingIntent = getWidgetRefreshPendingIntent(context)
         context.getSystemService<AlarmManager>()?.apply {
-            if (nextCourse.nextAutoRefreshTime > 0) {
-                AlarmManagerCompat.setExactAndAllowWhileIdle(this, AlarmManager.RTC, nextCourse.nextAutoRefreshTime, pendingIntent)
+            if (nextCourse.nextAutoRefreshTimeMills > 0) {
+                if (PermissionUtils.canScheduleNextAlarm(context)) {
+                    AlarmManagerCompat.setExactAndAllowWhileIdle(this, AlarmManager.RTC, nextCourse.nextAutoRefreshTimeMills, pendingIntent)
+                } else {
+                    set(AlarmManager.RTC, nextCourse.nextAutoRefreshTimeMills, pendingIntent)
+                }
             } else {
                 cancel(pendingIntent)
             }
         }
     }
 
-    fun cancelAllAlarmIfNoWidget(context: Context) {
-        if (!hasNextCourseWidget(context)) {
-            context.getSystemService<AlarmManager>()?.cancel(getWidgetRefreshPendingIntent(context))
-        }
+    fun cancelAllAlarm(context: Context) {
+        context.getSystemService<AlarmManager>()?.cancel(getWidgetRefreshPendingIntent(context))
     }
 
     fun generateRemoteViews(context: Context, nextCourse: NextCourse, clazz: KClass<out NextCourseWidget>) =
@@ -178,7 +180,7 @@ object NextCourseWidgetUtils {
                     setViewVisibility(R.id.textView_nextCourseWidgetLocation, View.VISIBLE)
                     setTextViewText(R.id.textView_nextCourseWidgetLocation, nextCourseInfo.courseLocation)
                 }
-            } else {
+            } else if (layoutRes == R.layout.widget_next_course_4x1) {
                 val description = nextCourseInfo.getSingleLineCourseTimeDescription(context)
                 if (description == null) {
                     setViewVisibility(R.id.textView_nextCourseWidgetDescription, View.GONE)

@@ -1,3 +1,5 @@
+@file:Suppress("MemberVisibilityCanBePrivate")
+
 package tool.xfy9326.schedule.utils
 
 import tool.xfy9326.schedule.beans.Day
@@ -13,9 +15,12 @@ object CalendarUtils {
         add(Calendar.DATE, 1)
     }.timeInMillis
 
-    fun getCalendar(date: Date? = null, weekStart: WeekDay? = null, clearToDate: Boolean = false): Calendar =
+    fun getCalendar(date: Date? = null, weekStart: WeekDay? = null, clearToDate: Boolean = false) =
+        getCalendarWithMills(date?.time, weekStart, clearToDate)
+
+    fun getCalendarWithMills(mills: Long? = null, weekStart: WeekDay? = null, clearToDate: Boolean = false): Calendar =
         Calendar.getInstance(Locale.getDefault()).apply {
-            if (date != null) time = date
+            if (mills != null) timeInMillis = mills
             if (clearToDate) {
                 set(Calendar.HOUR_OF_DAY, 0)
                 set(Calendar.MINUTE, 0)

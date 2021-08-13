@@ -21,7 +21,7 @@ class ICSExportModule(activity: ScheduleActivity) : AbstractViewModelActivityMod
         }
     }
 
-    override fun init() {
+    override fun onInit() {
         requireViewModel().selectScheduleForExportingICS.observeEvent(requireActivity()) {
             DialogUtils.showScheduleSelectDialog(requireActivity(), R.string.export_to_ics, it) { name, id ->
                 requireViewModel().waitExportScheduleId.write(id)

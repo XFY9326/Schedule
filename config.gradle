@@ -3,8 +3,8 @@ ext {
     gitCommitId = "git rev-parse --short HEAD".execute().text.trim()
 
     android = [
-            compileSdk: 30,
-            targetSdk : 30,
+            compileSdk: 31,
+            targetSdk : 31,
             minSdk    : 23,
             applicationId    : "tool.xfy9326.schedule",
             versionCode      : 19,

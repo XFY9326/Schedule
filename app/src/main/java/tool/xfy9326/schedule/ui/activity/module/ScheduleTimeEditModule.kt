@@ -25,7 +25,7 @@ class ScheduleTimeEditModule(activity: ScheduleEditActivity) :
         this.scheduleTimeAdapter = scheduleTimeAdapter
     }
 
-    override fun init() {
+    override fun onInit() {
         scheduleTimeAdapter.setOnScheduleTimeEditListener(::selectScheduleTime)
 
         requireViewBinding().checkBoxScheduleTimeCourseTimeSame.isChecked = requireViewModel().scheduleTimeCourseTimeSame

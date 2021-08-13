@@ -15,20 +15,20 @@ import kotlinx.coroutines.flow.Flow
 import lib.xfy9326.android.kit.*
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.SystemBarAppearance
-import tool.xfy9326.schedule.ui.activity.SplashActivity
+import tool.xfy9326.schedule.ui.activity.module.ScheduleLaunchModule
 
 const val APP_ID = "PureSchedule"
 
 fun Context.crashRelaunch() {
     relaunchApp {
-        putExtra(SplashActivity.INTENT_EXTRA_CRASH_RELAUNCH, true)
+        putExtra(ScheduleLaunchModule.INTENT_EXTRA_CRASH_RELAUNCH, true)
     }
 }
 
 fun Context.appErrorRelaunch(crashLogName: String?) {
     relaunchApp {
-        putExtra(SplashActivity.INTENT_EXTRA_APP_ERROR, true)
-        putExtra(SplashActivity.INTENT_EXTRA_APP_ERROR_CRASH_LOG, crashLogName)
+        putExtra(ScheduleLaunchModule.INTENT_EXTRA_APP_ERROR, true)
+        putExtra(ScheduleLaunchModule.INTENT_EXTRA_APP_ERROR_CRASH_LOG, crashLogName)
     }
 }
 

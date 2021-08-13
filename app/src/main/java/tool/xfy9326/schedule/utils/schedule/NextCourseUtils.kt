@@ -15,7 +15,7 @@ object NextCourseUtils {
         isVacation = false,
         noNextCourse = false,
         nextCourseInfo = null,
-        nextAutoRefreshTime = -1
+        nextAutoRefreshTimeMills = -1
     )
 
     private fun getCurrentOrNextTimeIndex(times: List<ScheduleTime>, date: Date): Int {
@@ -37,7 +37,7 @@ object NextCourseUtils {
             isVacation = false,
             noNextCourse = true,
             nextCourseInfo = null,
-            nextAutoRefreshTime = CalendarUtils.getTomorrowStartTime(date)
+            nextAutoRefreshTimeMills = CalendarUtils.getTomorrowStartTime(date)
         )
 
     suspend fun getNextCourseByDate(schedule: Schedule, date: Date = Date()): NextCourse {
@@ -58,7 +58,7 @@ object NextCourseUtils {
                 isVacation = true,
                 noNextCourse = false,
                 nextCourseInfo = null,
-                nextAutoRefreshTime = if (currentTime < startTime) startTime else -1
+                nextAutoRefreshTimeMills = if (currentTime < startTime) startTime else -1
             )
         }
 
@@ -71,7 +71,7 @@ object NextCourseUtils {
             isVacation = false,
             noNextCourse = false,
             nextCourseInfo = NextCourseInfo(schedule, resultPair.first, resultPair.second),
-            nextAutoRefreshTime = CourseTimeUtils.getClassEndTime(date, schedule.times, resultPair.second.classTime)
+            nextAutoRefreshTimeMills = CourseTimeUtils.getClassEndTime(date, schedule.times, resultPair.second.classTime)
         )
     }
 

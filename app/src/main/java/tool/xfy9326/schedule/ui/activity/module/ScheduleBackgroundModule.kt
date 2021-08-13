@@ -31,7 +31,7 @@ class ScheduleBackgroundModule(activity: ScheduleActivity) : AbstractViewModelAc
         }
     }
 
-    override fun init() {
+    override fun onInit() {
         requireViewModel().scheduleBackground.observe(requireActivity()) {
             setBackgroundView(requireViewBinding().imageViewScheduleBackground, it)
         }

@@ -14,30 +14,43 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="../../../../layout/custom_preview.xml" value="0.3546875" />
+        <entry key="../../Library/Android/sdk/platforms/android-31/data/res/drawable-watch/sym_def_app_icon.xml" value="0.10032894736842106" />
+        <entry key="app/src/main/res/drawable-v31/background_app_widget.xml" value="0.1174342105263158" />
         <entry key="app/src/main/res/drawable/avd_delete.xml" value="0.18611111111111112" />
         <entry key="app/src/main/res/drawable/background_app_widget.xml" value="0.33519736842105263" />
+        <entry key="app/src/main/res/drawable/background_launch_screen.xml" value="0.2069078947368421" />
         <entry key="app/src/main/res/drawable/ic_adjust_24.xml" value="0.3661184210526316" />
         <entry key="app/src/main/res/drawable/ic_break_24.xml" value="0.33519736842105263" />
         <entry key="app/src/main/res/drawable/ic_broken_image_24.xml" value="0.33519736842105263" />
+        <entry key="app/src/main/res/drawable/ic_cloud_download_24.xml" value="0.2069078947368421" />
         <entry key="app/src/main/res/drawable/ic_data_24.xml" value="0.33519736842105263" />
         <entry key="app/src/main/res/drawable/ic_edit_24.xml" value="0.3661184210526316" />
         <entry key="app/src/main/res/drawable/ic_edit_30.xml" value="0.3661184210526316" />
+        <entry key="app/src/main/res/drawable/ic_launcher_foreground.xml" value="0.2069078947368421" />
         <entry key="app/src/main/res/drawable/ic_share_24.xml" value="0.12269736842105264" />
         <entry key="app/src/main/res/drawable/ic_surfing_24.xml" value="0.33519736842105263" />
         <entry key="app/src/main/res/drawable/ic_tune_dark_24.xml" value="0.12269736842105264" />
+        <entry key="app/src/main/res/drawable/ic_widgets_24.xml" value="0.2069078947368421" />
         <entry key="app/src/main/res/drawable/shape_circle_20.xml" value="0.33519736842105263" />
+        <entry key="app/src/main/res/drawable/shape_round_square_15.xml" value="0.2069078947368421" />
         <entry key="app/src/main/res/layout/activity_app_error.xml" value="0.335" />
         <entry key="app/src/main/res/layout/activity_schedule.xml" value="0.1125" />
         <entry key="app/src/main/res/layout/activity_schedule_manage.xml" value="0.2510245901639344" />
         <entry key="app/src/main/res/layout/item_schedule.xml" value="0.2510245901639344" />
-        <entry key="app/src/main/res/layout/widget_next_course_2x1.xml" value="0.45" />
+        <entry key="app/src/main/res/layout/widget_next_course_2x1.xml" value="0.2716049382716049" />
         <entry key="app/src/main/res/layout/widget_next_course_2x1_msg.xml" value="0.19671052631578947" />
-        <entry key="app/src/main/res/layout/widget_next_course_2x2.xml" value="0.67" />
+        <entry key="app/src/main/res/layout/widget_next_course_2x2.xml" value="0.4693333333333333" />
         <entry key="app/src/main/res/layout/widget_next_course_2x2_msg.xml" value="0.19671052631578947" />
         <entry key="app/src/main/res/layout/widget_next_course_4x1.xml" value="0.165" />
         <entry key="app/src/main/res/layout/widget_next_course_4x1_msg.xml" value="0.19671052631578947" />
         <entry key="app/src/main/res/layout/widget_next_course_initial.xml" value="0.35592105263157897" />
         <entry key="app/src/main/res/layout/widget_next_course_msg.xml" value="0.325" />
+        <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.2069078947368421" />
+        <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.10328947368421053" />
+        <entry key="app/src/main/res/xml/settings_app_widget.xml" value="0.19671052631578947" />
+        <entry key="app/src/main/res/xml/settings_backup_restore.xml" value="0.1" />
+        <entry key="app/src/main/res/xml/settings_debug.xml" value="0.1" />
+        <entry key="app/src/main/res/xml/settings_main.xml" value="0.25" />
         <entry key="app/src/main/res/xml/settings_online_course_import.xml" value="0.2510245901639344" />
         <entry key="app/src/main/res/xml/settings_schedule.xml" value="0.2510245901639344" />
       </map>

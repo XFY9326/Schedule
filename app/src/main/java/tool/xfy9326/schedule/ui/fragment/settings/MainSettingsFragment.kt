@@ -21,6 +21,7 @@ class MainSettingsFragment : AbstractSettingsFragment() {
         bindPrefFragment<ScheduleBaseSettingsFragment>(R.string.pref_schedule_table_settings)
         bindPrefFragment<CalendarSyncSettingsFragment>(R.string.pref_calendar_sync_settings)
         bindPrefFragment<OnlineCourseImportSettingsFragment>(R.string.pref_online_course_import_settings)
+        bindPrefFragment<AppWidgetSettingsFragment>(R.string.pref_app_widget_settings)
         bindPrefFragment<BackupRestoreSettingsFragment>(R.string.pref_backup_restore_settings)
         bindPrefFragment<DebugSettingsFragment>(R.string.pref_debug_settings)
         setOnPrefClickListener(R.string.pref_about) {

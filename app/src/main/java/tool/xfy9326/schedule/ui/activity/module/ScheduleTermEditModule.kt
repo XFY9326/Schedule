@@ -20,7 +20,7 @@ class ScheduleTermEditModule(activity: ScheduleEditActivity) :
 
     private val scheduleDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
 
-    override fun init() {
+    override fun onInit() {
         requireViewModel().selectScheduleDate.observeEvent(requireActivity()) {
             DatePickerDialog.showDialog(
                 requireActivity().supportFragmentManager,

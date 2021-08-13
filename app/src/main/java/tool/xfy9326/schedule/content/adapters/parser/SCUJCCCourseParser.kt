@@ -49,8 +49,6 @@ class SCUJCCCourseParser : WebCourseParser<Nothing>() {
 
     private fun parseCourses(element: Element): CourseParseResult {
         val builder = CourseParseResult.Builder()
-
-
         val column = element.select(COURSE_SELECTOR)
         for (data in column) {
             val datumRow = data.parent()?.elementSiblingIndex() ?: continue

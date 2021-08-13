@@ -8,5 +8,5 @@ data class NextCourse(
     val isVacation: Boolean,
     val noNextCourse: Boolean,
     val nextCourseInfo: NextCourseInfo?,
-    val nextAutoRefreshTime: Long,
+    val nextAutoRefreshTimeMills: Long,
 ) : Parcelable

@@ -427,12 +427,22 @@
     <string name="web_course_provider_console_debug_sum">启用vConsole与WebView远程调试</string>
     <string name="save_to_album">保存到相册</string>
     <string name="share_with_apps">分享到应用</string>
+    <string name="app_widget_settings">桌面部件</string>
+    <string name="app_widget_settings_sum">控制桌面部件相关功能</string>
+    <string name="app_widget_alarm_auto_launch">自启动权限</string>
+    <string name="app_widget_alarm_auto_launch_attention">\u3000\u3000由于安卓平台碎片化，部分手机系统提供了\'自启动\'权限限制APP的自启动行为以降低电耗，但是该权限同样可能限制Pure课程表自动更新桌面部件。\n\u3000\u3000建议您手动开启该权限以确保桌面部件能够在后台及时更新，Pure课程表会根据实际情况，在指定时间控制桌面部件的更新，并不会造成大量电耗</string>
+    <string name="app_widget_alarm_auto_launch_settings">打开应用设置</string>
+    <string name="app_widget_alarm_auto_launch_settings_sum">设置Pure课程表的\'自启动\'权限</string>
+    <string name="app_widget_alarm_schedule_next_alarm">精确的桌面部件更新</string>
+    <string name="app_widget_alarm_schedule_next_alarm_attention">\u3000\u3000由于Android 12平台限制，若您不授予\'精确计时\'的权限以允许设定任务和事件的通知，系统为了降低功耗可能不会及时更新桌面部件。\n\u3000\u3000您可以根据实际的使用情况灵活控制该权限的授予，APP将会在拥有权限的情况下自动使用更为精准的桌面部件更新方式。\n\u3000\u3000建议您手动开启该权限以确保使用体验，因为Pure课程表桌面部件的更新并不会造成大量电耗。</string>
+    <string name="app_widget_alarm_schedule_next_alarm_settings">设置\'精确计时\'权限</string>
+    <string name="permission_status_granted">当前权限状态：已授予</string>
+    <string name="permission_status_not_granted">当前权限状态：未授予</string>
 
     <string name="app_widget_init">正在初始化中\.\.\.</string>
     <string name="next_course_widget_in_vacation">正在放假中</string>
     <string name="next_course_widget_no_next_course">今日已无待上课程</string>
     <string name="next_course_widget_no_data">无数据</string>
-    <string name="app_widget_attention">为了能够在后台及时更新桌面控件内容\n请确保已授予应用自启动相关权限！</string>
     <string name="next_course_widget_description">展示\'下一节课\'的课程提示</string>
     <string name="next_course_widget_sample_name">下一节课</string>
     <string name="next_course_widget_sample_time">12:00</string>

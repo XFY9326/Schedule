@@ -115,6 +115,8 @@ dependencies {
     // AndroidX
     implementation "androidx.core:core-ktx:$androidxVersion.core"
 
+    implementation "androidx.core:core-splashscreen:1.0.0-alpha01"
+
     implementation "androidx.appcompat:appcompat:$androidxVersion.appcompat"
     implementation "androidx.appcompat:appcompat-resources:$androidxVersion.appcompat"
 
