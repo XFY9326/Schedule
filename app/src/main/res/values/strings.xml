@@ -62,7 +62,7 @@
     <string name="course_list_num_simple">第%1$d节</string>
     <string name="save">保存</string>
     <string name="schedule_time_list">所有课程时间（点击时间进行编辑）</string>
-    <string name="long_click_to_set_current_schedule">Tips：长按切换课表，编辑课表修改学期与上课时间</string>
+    <string name="long_click_to_set_current_schedule">Tips：长按切换课表，点击右下角图标可编辑课表</string>
     <string name="swipe_to_delete_course">Tips：侧滑可以删除课程</string>
     <string name="course_cost_time_same_mode">所有课程上课时间相等</string>
     <string name="course_cost_time_same_mode_sum">开启后只能编辑课程开始时间，并依次推算时间</string>
