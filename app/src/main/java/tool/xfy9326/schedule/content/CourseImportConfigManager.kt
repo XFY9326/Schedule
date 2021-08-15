@@ -21,8 +21,8 @@ import okhttp3.internal.closeQuietly
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.content.base.AbstractCourseImportConfig
 import tool.xfy9326.schedule.content.base.ICourseImportConfig
-import tool.xfy9326.schedule.content.base.JSCourseImportConfig.Companion.toCourseImportConfig
 import tool.xfy9326.schedule.content.beans.JSConfig
+import tool.xfy9326.schedule.content.js.JSCourseImportConfig.Companion.toCourseImportConfig
 import tool.xfy9326.schedule.content.utils.JSConfigException
 import tool.xfy9326.schedule.content.utils.JSConfigException.Companion.make
 import tool.xfy9326.schedule.content.utils.JSConfigException.Companion.report

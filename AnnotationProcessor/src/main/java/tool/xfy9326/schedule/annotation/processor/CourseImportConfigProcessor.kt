@@ -5,7 +5,7 @@ package tool.xfy9326.schedule.annotation.processor
 import com.squareup.kotlinpoet.*
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
 import tool.xfy9326.schedule.annotation.processor.ProcessorUtils.getAnnotatedClassNames
-import java.io.File
+import tool.xfy9326.schedule.annotation.processor.ProcessorUtils.kaptSourceDir
 import javax.annotation.processing.*
 import javax.lang.model.SourceVersion
 import javax.lang.model.element.TypeElement
@@ -24,27 +24,12 @@ class CourseImportConfigProcessor : AbstractProcessor() {
         private const val TARGET_FUNCTION_GET_CONFIGS = "getConfigs"
 
         private const val BASE_COURSE_ADAPTER_CLASS_PACKAGE = "${ProcessorUtils.PACKAGE_NAME}.content.base"
-        private val ABSTRACT_IMPORT_PROVIDER =
-            ClassName(BASE_COURSE_ADAPTER_CLASS_PACKAGE, "AbstractCourseProvider").parameterizedBy(ProcessorUtils.WILDCARD_SERIALIZABLE)
-        private val ABSTRACT_IMPORT_PARSER =
-            ClassName(BASE_COURSE_ADAPTER_CLASS_PACKAGE, "AbstractCourseParser").parameterizedBy(ProcessorUtils.WILDCARD_SERIALIZABLE)
         private val ABSTRACT_IMPORT_CONFIG =
-            ClassName(BASE_COURSE_ADAPTER_CLASS_PACKAGE, "AbstractCourseImportConfig").parameterizedBy(
-                ProcessorUtils.WILDCARD_SERIALIZABLE,
-                WildcardTypeName.producerOf(ABSTRACT_IMPORT_PROVIDER),
-                ProcessorUtils.WILDCARD_SERIALIZABLE,
-                WildcardTypeName.producerOf(ABSTRACT_IMPORT_PARSER)
-            )
+            ClassName(BASE_COURSE_ADAPTER_CLASS_PACKAGE, "AbstractCourseImportConfig").parameterizedBy(STAR, STAR, STAR, STAR)
 
         private val TARGET_PROPERTY_CONFIG_CLASSES_CLASS =
             ProcessorUtils.KOTLIN_LIST.parameterizedBy(ProcessorUtils.KOTLIN_CLASS.parameterizedBy(WildcardTypeName.producerOf(ABSTRACT_IMPORT_CONFIG)))
-
-        private fun getParametersString(size: Int, codeStr: String) =
-            Array(size) { codeStr }.joinToString()
     }
-
-    private val kaptSourceDir
-        get() = File(processingEnv.options[ProcessorUtils.KAPT_KOTLIN_GENERATED_OPTION_NAME]!!)
 
     override fun process(annotations: MutableSet<out TypeElement>, roundEnv: RoundEnvironment): Boolean {
         try {
@@ -55,7 +40,7 @@ class CourseImportConfigProcessor : AbstractProcessor() {
             val generateClass = TypeSpec.objectBuilder(TARGET_CLASS_NAME)
 
             val configProperty = PropertySpec.builder(TARGET_PROPERTY_CONFIG_CLASSES, TARGET_PROPERTY_CONFIG_CLASSES_CLASS)
-                .initializer("listOf(${getParametersString(configClasses.size, "%T::class")})", *configClasses)
+                .initializer("listOf(${ProcessorUtils.getParametersString(configClasses.size, "%T::class")})", *configClasses)
                 .build()
 
             val sortedConfigFunction = FunSpec.builder(TARGET_FUNCTION_GET_CONFIGS)
@@ -74,7 +59,7 @@ class CourseImportConfigProcessor : AbstractProcessor() {
             generateFile
                 .addType(generateClass.build())
                 .build()
-                .writeTo(kaptSourceDir)
+                .writeTo(processingEnv.kaptSourceDir)
         } catch (e: Exception) {
             processingEnv.messager.printMessage(Diagnostic.Kind.ERROR, e.stackTraceToString())
         }

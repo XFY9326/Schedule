@@ -6,8 +6,8 @@ import kotlinx.serialization.json.Json
 import lib.xfy9326.livedata.MutableEventLiveData
 import lib.xfy9326.livedata.postEvent
 import tool.xfy9326.schedule.beans.ScheduleImportContent
-import tool.xfy9326.schedule.content.base.JSCourseParser
-import tool.xfy9326.schedule.content.base.JSCourseProvider
+import tool.xfy9326.schedule.content.js.JSCourseParser
+import tool.xfy9326.schedule.content.js.JSCourseProvider
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
 import tool.xfy9326.schedule.content.utils.CourseAdapterException.Companion.report
 import tool.xfy9326.schedule.ui.vm.base.AbstractWebCourseProviderViewModel

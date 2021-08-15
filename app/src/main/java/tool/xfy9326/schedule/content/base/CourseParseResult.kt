@@ -11,6 +11,10 @@ import tool.xfy9326.schedule.content.utils.CourseAdapterException.Companion.make
 import tool.xfy9326.schedule.content.utils.CourseAdapterUtils
 
 class CourseParseResult private constructor(val courses: List<Course>, val ignorableError: CourseAdapterException?) {
+    companion object {
+        val EMPTY = CourseParseResult(emptyList(), null)
+    }
+
     class Builder(exceptCourseAmount: Int? = null) {
         private val courses: ArrayList<Course> = if (exceptCourseAmount == null) ArrayList() else ArrayList(exceptCourseAmount)
         private var error: CourseAdapterException? = null

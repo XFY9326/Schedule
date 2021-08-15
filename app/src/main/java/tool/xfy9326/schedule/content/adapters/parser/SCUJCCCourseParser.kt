@@ -22,7 +22,7 @@ class SCUJCCCourseParser : WebCourseParser<Nothing>() {
 
     private val courseTimeReg = "(.*?)\\((.*?)\\)".toRegex()
 
-    override fun onParseScheduleTimes(importOption: Int, webPageContent: WebPageContent): List<ScheduleTime> {
+    override fun onParseScheduleTimes(importOption: Int, content: WebPageContent): List<ScheduleTime> {
         return ScheduleTime.listOf(
             8, 15, 9, 0,
             9, 5, 9, 50,
@@ -39,9 +39,9 @@ class SCUJCCCourseParser : WebCourseParser<Nothing>() {
         )
     }
 
-    override fun onParseCourses(importOption: Int, webPageContent: WebPageContent): CourseParseResult {
-        if (webPageContent.providedContent != null) {
-            return parseCourses(Jsoup.parseBodyFragment(webPageContent.providedContent).body())
+    override fun onParseCourses(importOption: Int, content: WebPageContent): CourseParseResult {
+        if (content.providedContent != null) {
+            return parseCourses(Jsoup.parseBodyFragment(content.providedContent).body())
         } else {
             CourseAdapterException.Error.PARSER_ERROR.report()
         }

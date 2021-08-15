@@ -9,15 +9,15 @@ import tool.xfy9326.schedule.content.utils.CourseAdapterException.Companion.repo
 class NAUCourseWebParser : WebCourseParser<Nothing>() {
     private val loginParser = NAUCourseParser()
 
-    override fun onParseScheduleTimes(importOption: Int, webPageContent: WebPageContent) =
-        loginParser.parseScheduleTimes(importOption)
+    override fun onParseScheduleTimes(importOption: Int, content: WebPageContent) =
+        loginParser.parseScheduleTimes(importOption, null)
 
-    override fun onParseTerm(importOption: Int, webPageContent: WebPageContent) =
-        loginParser.parseTerm(importOption, webPageContent.htmlContent)
+    override fun onParseTerm(importOption: Int, content: WebPageContent) =
+        loginParser.parseTerm(importOption, content.htmlContent)
 
-    override fun onParseCourses(importOption: Int, webPageContent: WebPageContent): CourseParseResult {
-        if (webPageContent.providedContent != null) {
-            return loginParser.parseCourses(importOption, webPageContent.providedContent)
+    override fun onParseCourses(importOption: Int, content: WebPageContent): CourseParseResult {
+        if (content.providedContent != null) {
+            return loginParser.parseCourses(importOption, content.providedContent)
         } else {
             CourseAdapterException.Error.PARSER_ERROR.report()
         }

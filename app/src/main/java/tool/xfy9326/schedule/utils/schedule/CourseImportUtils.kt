@@ -1,6 +1,8 @@
 package tool.xfy9326.schedule.utils.schedule
 
 import tool.xfy9326.schedule.content.base.*
+import tool.xfy9326.schedule.content.js.JSCourseParser
+import tool.xfy9326.schedule.content.js.JSCourseProvider
 
 object CourseImportUtils {
     enum class ImportMethod {

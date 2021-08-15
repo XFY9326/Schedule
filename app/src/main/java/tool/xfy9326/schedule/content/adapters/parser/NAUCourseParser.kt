@@ -25,7 +25,7 @@ class NAUCourseParser : NetworkCourseParser<Nothing>() {
 
     private val termDateFormat = CourseAdapterUtils.newDateFormat()
 
-    override fun onParseScheduleTimes(importOption: Int, htmlContent: String?) =
+    override fun onParseScheduleTimes(importOption: Int, content: String?) =
         ScheduleTime.listOf(
             8, 30, 9, 10,
             9, 20, 10, 0,
@@ -42,8 +42,10 @@ class NAUCourseParser : NetworkCourseParser<Nothing>() {
             20, 10, 20, 50
         )
 
-    override fun onParseCourses(importOption: Int, htmlContent: String): CourseParseResult {
-        val body = Jsoup.parse(htmlContent).body()
+    override fun onParseCourses(importOption: Int, content: String?): CourseParseResult {
+        if (content == null) return CourseParseResult.EMPTY
+
+        val body = Jsoup.parse(content).body()
         val trTags = body.select(COURSE_TR_TAGS)
 
         val builder = CourseParseResult.Builder(trTags.size)
@@ -75,10 +77,10 @@ class NAUCourseParser : NetworkCourseParser<Nothing>() {
         return builder.build()
     }
 
-    override fun onParseTerm(importOption: Int, htmlContent: String?): Pair<Date, Date>? {
-        if (importOption == NAUJwcCourseProvider.IMPORT_OPTION_THIS_TERM && htmlContent != null) {
+    override fun onParseTerm(importOption: Int, content: String?): Pair<Date, Date>? {
+        if (importOption == NAUJwcCourseProvider.IMPORT_OPTION_THIS_TERM && content != null) {
             try {
-                val body = Jsoup.parse(htmlContent).body()
+                val body = Jsoup.parse(content).body()
                 val termStartStr = body.selectSingle(TERM_START_SELECTOR).text().trim()
                 val termEndStr = body.selectSingle(TERM_END_SELECTOR).text().trim()
                 val termStart = termDateFormat.parse(termStartStr)

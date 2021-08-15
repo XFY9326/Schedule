@@ -7,8 +7,8 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import lib.xfy9326.livedata.observeEvent
-import tool.xfy9326.schedule.content.base.JSCourseParser
-import tool.xfy9326.schedule.content.base.JSCourseProvider
+import tool.xfy9326.schedule.content.js.JSCourseParser
+import tool.xfy9326.schedule.content.js.JSCourseProvider
 import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.databinding.ActivityFragmentContainerBinding
 import tool.xfy9326.schedule.ui.activity.base.AbstractWebCourseProviderActivity

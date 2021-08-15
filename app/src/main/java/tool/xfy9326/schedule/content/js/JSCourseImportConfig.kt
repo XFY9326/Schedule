@@ -1,5 +1,6 @@
-package tool.xfy9326.schedule.content.base
+package tool.xfy9326.schedule.content.js
 
+import tool.xfy9326.schedule.content.base.AbstractCourseImportConfig
 import tool.xfy9326.schedule.content.beans.JSConfig
 import tool.xfy9326.schedule.content.beans.JSParams
 
