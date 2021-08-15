@@ -4,6 +4,9 @@ package tool.xfy9326.schedule.content.utils
 
 import androidx.annotation.IntRange
 import org.jsoup.nodes.Element
+import tool.xfy9326.schedule.content.base.AbstractCourseImportConfig
+
+typealias BaseCourseImportConfig = AbstractCourseImportConfig<*, *, *, *>
 
 /**
  * 重新整理周数数组

@@ -10,6 +10,7 @@ import tool.xfy9326.schedule.beans.ScheduleImportContent
 import tool.xfy9326.schedule.content.base.LoginCourseProvider
 import tool.xfy9326.schedule.content.base.NetworkCourseParser
 import tool.xfy9326.schedule.content.base.NetworkCourseProvider
+import tool.xfy9326.schedule.content.utils.CourseImportHelper
 import tool.xfy9326.schedule.ui.vm.base.CourseProviderViewModel
 
 class NetworkCourseProviderViewModel : CourseProviderViewModel<NetworkCourseImportParams, NetworkCourseProvider<*>, NetworkCourseParser<*>>() {
@@ -96,21 +97,7 @@ class NetworkCourseProviderViewModel : CourseProviderViewModel<NetworkCourseImpo
         importOption: Int,
         courseProvider: NetworkCourseProvider<*>,
         courseParser: NetworkCourseParser<*>,
-    ): ScheduleImportContent {
-        if (courseProvider is LoginCourseProvider) {
-            courseProvider.login(importParams.userId, importParams.userPw, importParams.captchaCode, importOption)
-        }
-
-        val scheduleTimesHtml = courseProvider.loadScheduleTimesHtml(importOption)
-        val coursesHtml = courseProvider.loadCoursesHtml(importOption)
-        val termHtml = courseProvider.loadTermHtml(importOption)
-
-        val scheduleTimes = courseParser.parseScheduleTimes(importOption, scheduleTimesHtml)
-        val coursesParseResult = courseParser.parseCourses(importOption, coursesHtml)
-        val term = courseParser.parseTerm(importOption, termHtml)
-
-        return ScheduleImportContent(scheduleTimes, coursesParseResult, term)
-    }
+    ): ScheduleImportContent = CourseImportHelper.importNetworkCourse(importParams, importOption, courseProvider, courseParser)
 
     override fun onProviderDestroy() {
         providerFunctionRunner(

@@ -15,6 +15,7 @@ import lib.xfy9326.android.kit.setOnSingleClickListener
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.NetworkCourseImportParams
 import tool.xfy9326.schedule.beans.NetworkProviderParams
+import tool.xfy9326.schedule.beans.ScheduleImportRequestParams
 import tool.xfy9326.schedule.content.base.*
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
 import tool.xfy9326.schedule.databinding.ActivityNetworkCourseProviderBinding
@@ -81,14 +82,14 @@ class NetworkCourseProviderActivity :
         viewBinding.buttonImportCourseToCurrentSchedule.setOnSingleClickListener {
             withImportOption {
                 withImportCourseParams { params ->
-                    requestImportCourse(ImportRequestParams(true, params, it))
+                    requestImportCourse(ScheduleImportRequestParams(true, params, it))
                 }
             }
         }
         viewBinding.buttonImportCourseToNewSchedule.setOnSingleClickListener {
             withImportOption {
                 withImportCourseParams { params ->
-                    requestImportCourse(ImportRequestParams(false, params, it))
+                    requestImportCourse(ScheduleImportRequestParams(false, params, it))
                 }
             }
         }

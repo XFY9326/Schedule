@@ -5,14 +5,15 @@ import kotlinx.coroutines.sync.Mutex
 import lib.xfy9326.livedata.MutableEventLiveData
 import lib.xfy9326.livedata.postEvent
 import tool.xfy9326.schedule.beans.ScheduleImportContent
+import tool.xfy9326.schedule.beans.ScheduleImportRequestParams
 import tool.xfy9326.schedule.beans.WebPageContent
 import tool.xfy9326.schedule.content.base.WebCourseParser
 import tool.xfy9326.schedule.content.base.WebCourseProvider
-import tool.xfy9326.schedule.ui.activity.base.CourseProviderActivity
+import tool.xfy9326.schedule.content.utils.CourseImportHelper
 import tool.xfy9326.schedule.ui.vm.base.AbstractWebCourseProviderViewModel
 
 class WebCourseProviderViewModel : AbstractWebCourseProviderViewModel<WebPageContent, WebCourseProvider<*>, WebCourseParser<*>>() {
-    val validateHtmlPage = MutableEventLiveData<CourseProviderActivity.ImportRequestParams<WebPageContent>?>()
+    val validateHtmlPage = MutableEventLiveData<ScheduleImportRequestParams<WebPageContent>?>()
     private val validatePageLock = Mutex()
 
     override fun getInitUrl(): String {
@@ -23,12 +24,12 @@ class WebCourseProviderViewModel : AbstractWebCourseProviderViewModel<WebPageCon
         if (!isImportingCourses) {
             providerFunctionRunner(validatePageLock, Dispatchers.Default,
                 onRun = {
-                    val pageInfo = it.validateCourseImportPage(importParams.htmlContent, importParams.iframeContent, importParams.frameContent)
-                    if (pageInfo.isValidPage) {
-                        validateHtmlPage.postEvent(CourseProviderActivity.ImportRequestParams(
+                    val result = CourseImportHelper.analyseWebPage(importParams, it)
+                    if (result != null) {
+                        validateHtmlPage.postEvent(ScheduleImportRequestParams(
                             isCurrentSchedule,
-                            importParams.copy(providedContent = pageInfo.providedContent),
-                            pageInfo.asImportOption
+                            result.second,
+                            result.first
                         ))
                     } else {
                         validateHtmlPage.postEvent(null)
@@ -46,10 +47,5 @@ class WebCourseProviderViewModel : AbstractWebCourseProviderViewModel<WebPageCon
         importOption: Int,
         courseProvider: WebCourseProvider<*>,
         courseParser: WebCourseParser<*>,
-    ): ScheduleImportContent {
-        val scheduleTimes = courseParser.parseScheduleTimes(importOption, importParams)
-        val coursesParseResult = courseParser.parseCourses(importOption, importParams)
-        val term = courseParser.parseTerm(importOption, importParams)
-        return ScheduleImportContent(scheduleTimes, coursesParseResult, term)
-    }
+    ): ScheduleImportContent = CourseImportHelper.parseWebCourse(importParams, importOption, courseParser)
 }

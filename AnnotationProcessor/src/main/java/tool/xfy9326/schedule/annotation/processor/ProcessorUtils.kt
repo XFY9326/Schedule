@@ -14,7 +14,10 @@ object ProcessorUtils {
 
     const val KAPT_KOTLIN_GENERATED_OPTION_NAME = "kapt.kotlin.generated"
 
+    const val INDENT = "    "
+
     val KOTLIN_LIST = List::class.asClassName()
+    val KOTLIN_MAP = Map::class.asClassName()
     val KOTLIN_CLASS = KClass::class.asClassName()
     val KOTLIN_COROUTINES_WITH_CONTEXT = MemberName("kotlinx.coroutines", "withContext")
     val KOTLIN_COROUTINES_DISPATCHERS_IO = MemberName("kotlinx.coroutines.Dispatchers", "IO")
@@ -22,8 +25,12 @@ object ProcessorUtils {
     val ProcessingEnvironment.kaptSourceDir
         get() = File(options[KAPT_KOTLIN_GENERATED_OPTION_NAME]!!)
 
-    fun ProcessingEnvironment.getAnnotatedClassNames(annotations: MutableSet<out TypeElement>, roundEnv: RoundEnvironment): List<ClassName> {
-        val result = ArrayList<ClassName>()
+    fun <A : Annotation> ProcessingEnvironment.getAnnotatedClassNames(
+        clazz: KClass<A>,
+        annotations: MutableSet<out TypeElement>,
+        roundEnv: RoundEnvironment,
+    ): ArrayList<Pair<A, ClassName>> {
+        val result = ArrayList<Pair<A, ClassName>>()
 
         for (annotation in annotations) {
             val elements = roundEnv.getElementsAnnotatedWith(annotation)
@@ -31,7 +38,8 @@ object ProcessorUtils {
                 val pkgName = elementUtils.getPackageOf(element).asType().toString()
                 val classSimpleName = element.simpleName.toString()
                 val className = ClassName(pkgName, classSimpleName)
-                result.add(className)
+                val annotationObject = element.getAnnotation(clazz.java)
+                result.add(annotationObject to className)
             }
         }
 

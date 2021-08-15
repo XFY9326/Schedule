@@ -19,10 +19,10 @@ import lib.xfy9326.livedata.MutableEventLiveData
 import lib.xfy9326.livedata.postEvent
 import okhttp3.internal.closeQuietly
 import tool.xfy9326.schedule.R
-import tool.xfy9326.schedule.content.base.AbstractCourseImportConfig
 import tool.xfy9326.schedule.content.base.ICourseImportConfig
 import tool.xfy9326.schedule.content.beans.JSConfig
 import tool.xfy9326.schedule.content.js.JSCourseImportConfig.Companion.toCourseImportConfig
+import tool.xfy9326.schedule.content.utils.BaseCourseImportConfig
 import tool.xfy9326.schedule.content.utils.JSConfigException
 import tool.xfy9326.schedule.content.utils.JSConfigException.Companion.make
 import tool.xfy9326.schedule.content.utils.JSConfigException.Companion.report
@@ -35,7 +35,7 @@ class CourseImportConfigManager(scope: CoroutineScope) : CoroutineScope by scope
     private val configLock = Mutex()
     private val currentImportConfigList = ArrayList<ICourseImportConfig>()
     private val importConfigs = MutableLiveData<List<ICourseImportConfig>>()
-    private val preparedConfig = MutableEventLiveData<AbstractCourseImportConfig<*, *, *, *>>()
+    private val preparedConfig = MutableEventLiveData<BaseCourseImportConfig>()
     private val prepareConfigProgress = MutableEventLiveData<Type>()
     private val operationError = MutableEventLiveData<JSConfigException>()
     private val operationAttention = MutableEventLiveData<Type>()
@@ -43,7 +43,7 @@ class CourseImportConfigManager(scope: CoroutineScope) : CoroutineScope by scope
     private val jsConfigExist = MutableEventLiveData<Pair<JSConfig, JSConfig>>()
     val courseImportConfigs: LiveData<List<ICourseImportConfig>>
         get() = importConfigs
-    val preparedJSConfig: EventLiveData<AbstractCourseImportConfig<*, *, *, *>>
+    val preparedJSConfig: EventLiveData<BaseCourseImportConfig>
         get() = preparedConfig
     val jsConfigPrepareProgress: EventLiveData<Type>
         get() = prepareConfigProgress

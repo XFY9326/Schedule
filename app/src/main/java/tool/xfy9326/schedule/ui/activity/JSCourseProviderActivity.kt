@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import lib.xfy9326.livedata.observeEvent
+import tool.xfy9326.schedule.beans.ScheduleImportRequestParams
 import tool.xfy9326.schedule.content.js.JSCourseParser
 import tool.xfy9326.schedule.content.js.JSCourseProvider
 import tool.xfy9326.schedule.data.AppSettingsDataStore
@@ -38,7 +39,7 @@ class JSCourseProviderActivity : AbstractWebCourseProviderActivity<String, JSCou
             @JavascriptInterface
             override fun onJSProviderResponse(resultJSON: String, isCurrentSchedule: Boolean) {
                 lifecycleScope.launch {
-                    requestImportCourse(ImportRequestParams(isCurrentSchedule, resultJSON))
+                    requestImportCourse(ScheduleImportRequestParams(isCurrentSchedule, resultJSON))
                 }
             }
         }, JSBridge.JS_COURSE_PROVIDER_JS_INTERFACE_NAME)

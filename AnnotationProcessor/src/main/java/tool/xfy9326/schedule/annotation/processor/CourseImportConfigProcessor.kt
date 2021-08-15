@@ -4,6 +4,7 @@ package tool.xfy9326.schedule.annotation.processor
 
 import com.squareup.kotlinpoet.*
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
+import tool.xfy9326.schedule.annotation.CourseImportConfig
 import tool.xfy9326.schedule.annotation.processor.ProcessorUtils.getAnnotatedClassNames
 import tool.xfy9326.schedule.annotation.processor.ProcessorUtils.kaptSourceDir
 import javax.annotation.processing.*
@@ -23,9 +24,8 @@ class CourseImportConfigProcessor : AbstractProcessor() {
         private const val TARGET_PROPERTY_CONFIG_CLASSES = "configClasses"
         private const val TARGET_FUNCTION_GET_CONFIGS = "getConfigs"
 
-        private const val BASE_COURSE_ADAPTER_CLASS_PACKAGE = "${ProcessorUtils.PACKAGE_NAME}.content.base"
         private val ABSTRACT_IMPORT_CONFIG =
-            ClassName(BASE_COURSE_ADAPTER_CLASS_PACKAGE, "AbstractCourseImportConfig").parameterizedBy(STAR, STAR, STAR, STAR)
+            ClassName("${ProcessorUtils.PACKAGE_NAME}.content.base", "AbstractCourseImportConfig").parameterizedBy(STAR, STAR, STAR, STAR)
 
         private val TARGET_PROPERTY_CONFIG_CLASSES_CLASS =
             ProcessorUtils.KOTLIN_LIST.parameterizedBy(ProcessorUtils.KOTLIN_CLASS.parameterizedBy(WildcardTypeName.producerOf(ABSTRACT_IMPORT_CONFIG)))
@@ -33,7 +33,7 @@ class CourseImportConfigProcessor : AbstractProcessor() {
 
     override fun process(annotations: MutableSet<out TypeElement>, roundEnv: RoundEnvironment): Boolean {
         try {
-            val configClasses = processingEnv.getAnnotatedClassNames(annotations, roundEnv).toTypedArray()
+            val configClasses = processingEnv.getAnnotatedClassNames(CourseImportConfig::class, annotations, roundEnv).map { it.second }.toTypedArray()
             if (configClasses.isEmpty()) return false
 
             val generateFile = FileSpec.builder(TARGET_PACKAGE_NAME, TARGET_CLASS_NAME)
@@ -41,13 +41,14 @@ class CourseImportConfigProcessor : AbstractProcessor() {
 
             val configProperty = PropertySpec.builder(TARGET_PROPERTY_CONFIG_CLASSES, TARGET_PROPERTY_CONFIG_CLASSES_CLASS)
                 .initializer("listOf(${ProcessorUtils.getParametersString(configClasses.size, "%T::class")})", *configClasses)
+                .addModifiers(KModifier.PRIVATE)
                 .build()
 
-            val sortedConfigFunction = FunSpec.builder(TARGET_FUNCTION_GET_CONFIGS)
+            val configFunction = FunSpec.builder(TARGET_FUNCTION_GET_CONFIGS)
                 .addModifiers(KModifier.SUSPEND)
                 .addStatement("""
                     return %M(%M) {
-                        ${TARGET_PROPERTY_CONFIG_CLASSES}.map {
+                        $TARGET_PROPERTY_CONFIG_CLASSES.map {
                             it.java.newInstance()
                         }
                     }
@@ -55,9 +56,10 @@ class CourseImportConfigProcessor : AbstractProcessor() {
                 .build()
 
             generateClass.addProperty(configProperty)
-            generateClass.addFunction(sortedConfigFunction)
+            generateClass.addFunction(configFunction)
             generateFile
                 .addType(generateClass.build())
+                .indent(ProcessorUtils.INDENT)
                 .build()
                 .writeTo(processingEnv.kaptSourceDir)
         } catch (e: Exception) {

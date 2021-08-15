@@ -9,9 +9,10 @@ import lib.xfy9326.android.kit.startActivity
 import lib.xfy9326.kit.castNonNull
 import lib.xfy9326.kit.getDeepStackTraceString
 import lib.xfy9326.livedata.observeEvent
-import tool.xfy9326.schedule.content.base.AbstractCourseImportConfig
+import tool.xfy9326.schedule.beans.ScheduleImportRequestParams
 import tool.xfy9326.schedule.content.base.AbstractCourseParser
 import tool.xfy9326.schedule.content.base.AbstractCourseProvider
+import tool.xfy9326.schedule.content.utils.BaseCourseImportConfig
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
 import tool.xfy9326.schedule.content.utils.CourseAdapterException.Companion.getText
 import tool.xfy9326.schedule.content.utils.CourseAdapterException.Companion.strictModeOnly
@@ -30,7 +31,7 @@ abstract class CourseProviderActivity<I, P1 : AbstractCourseProvider<*>, P2 : Ab
 
         const val EXTRA_COURSE_IMPORT_CONFIG_CLASS = "EXTRA_COURSE_IMPORT_CONFIG_CLASS"
 
-        inline fun <reified T : CourseProviderActivity<*, *, *, *, *>> startProviderActivity(context: Context, config: AbstractCourseImportConfig<*, *, *, *>) {
+        inline fun <reified T : CourseProviderActivity<*, *, *, *, *>> startProviderActivity(context: Context, config: BaseCourseImportConfig) {
             context.startActivity<T> {
                 putExtra(EXTRA_COURSE_IMPORT_CONFIG_CLASS, config)
             }
@@ -60,7 +61,7 @@ abstract class CourseProviderActivity<I, P1 : AbstractCourseProvider<*>, P2 : Ab
         }
     }
 
-    protected fun requestImportCourse(params: ImportRequestParams<I>) {
+    protected fun requestImportCourse(params: ScheduleImportRequestParams<I>) {
         if (params.isCurrentSchedule) {
             DialogUtils.showOverwriteScheduleAttentionDialog(this) {
                 onReadyImportCourse()
@@ -110,5 +111,4 @@ abstract class CourseProviderActivity<I, P1 : AbstractCourseProvider<*>, P2 : Ab
 
     protected open fun onReadyImportCourse() {}
 
-    class ImportRequestParams<I>(val isCurrentSchedule: Boolean, val importParams: I, val importOption: Int = 0)
 }

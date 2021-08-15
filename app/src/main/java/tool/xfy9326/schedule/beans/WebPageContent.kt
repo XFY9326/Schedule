@@ -1,9 +1,11 @@
 package tool.xfy9326.schedule.beans
 
+import lib.xfy9326.kit.EMPTY
+
 data class WebPageContent(
-    val htmlContent: String,
-    val iframeContent: Array<String>,
-    val frameContent: Array<String>,
+    val htmlContent: String = EMPTY,
+    val iframeContent: Array<String> = emptyArray(),
+    val frameContent: Array<String> = emptyArray(),
     val providedContent: String? = null,
 ) {
     override fun equals(other: Any?): Boolean {

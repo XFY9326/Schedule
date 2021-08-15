@@ -6,6 +6,8 @@ import java.security.MessageDigest
 
 const val NEW_LINE = "\n"
 
+const val EMPTY = ""
+
 inline fun Int.isOdd(): Boolean = this % 2 != 0
 
 inline fun Int.isEven(): Boolean = this % 2 == 0

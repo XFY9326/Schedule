@@ -7,9 +7,9 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 import lib.xfy9326.android.kit.setOnSingleClickListener
-import tool.xfy9326.schedule.content.base.AbstractCourseImportConfig
 import tool.xfy9326.schedule.content.base.ICourseImportConfig
 import tool.xfy9326.schedule.content.beans.JSConfig
+import tool.xfy9326.schedule.content.utils.BaseCourseImportConfig
 import tool.xfy9326.schedule.databinding.ItemCourseImportBinding
 import tool.xfy9326.schedule.databinding.LayoutSwipeItemBinding
 import tool.xfy9326.schedule.ui.view.recyclerview.ListViewBindingAdapter
@@ -28,7 +28,7 @@ class CourseImportAdapter : ListViewBindingAdapter<ICourseImportConfig, ViewBind
 
     override fun getItemViewType(position: Int): Int {
         return when (getItem(position)) {
-            is AbstractCourseImportConfig<*, *, *, *> -> 0
+            is BaseCourseImportConfig -> 0
             is JSConfig -> 1
             else -> error("Invalid element type! Class: ${getItem(position).javaClass}")
         }
@@ -62,7 +62,7 @@ class CourseImportAdapter : ListViewBindingAdapter<ICourseImportConfig, ViewBind
         }
         viewBinding.textViewCourseImportJSConfig.isVisible = element is JSConfig
         viewBinding.layoutCourseImportItem.setOnSingleClickListener {
-            if (element is AbstractCourseImportConfig<*, *, *, *>) {
+            if (element is BaseCourseImportConfig) {
                 onCourseImportItemListener?.onCourseImportConfigClick(element)
             } else if (element is JSConfig) {
                 onCourseImportItemListener?.onJSConfigClick(element)
@@ -82,7 +82,7 @@ class CourseImportAdapter : ListViewBindingAdapter<ICourseImportConfig, ViewBind
     }
 
     interface OnCourseImportItemListener {
-        fun onCourseImportConfigClick(config: AbstractCourseImportConfig<*, *, *, *>)
+        fun onCourseImportConfigClick(config: BaseCourseImportConfig)
 
         fun onJSConfigClick(jsConfig: JSConfig)
 

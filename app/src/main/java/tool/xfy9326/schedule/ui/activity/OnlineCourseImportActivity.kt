@@ -15,8 +15,8 @@ import lib.xfy9326.android.kit.show
 import lib.xfy9326.livedata.observeEvent
 import lib.xfy9326.livedata.observeNotify
 import tool.xfy9326.schedule.R
-import tool.xfy9326.schedule.content.base.AbstractCourseImportConfig
 import tool.xfy9326.schedule.content.beans.JSConfig
+import tool.xfy9326.schedule.content.utils.BaseCourseImportConfig
 import tool.xfy9326.schedule.data.AppDataStore
 import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.databinding.ActivityOnlineCourseImportBinding
@@ -169,7 +169,7 @@ class OnlineCourseImportActivity : ViewModelActivity<OnlineCourseImportViewModel
             .show(this)
     }
 
-    private fun openCourseImportActivity(config: AbstractCourseImportConfig<*, *, *, *>) {
+    private fun openCourseImportActivity(config: BaseCourseImportConfig) {
         val importMethod = CourseImportUtils.getCourseImportMethod(config,
             onInterfaceProviderError = {
                 showAttention(R.string.interface_provider_error)
@@ -193,7 +193,7 @@ class OnlineCourseImportActivity : ViewModelActivity<OnlineCourseImportViewModel
 
     private fun showAttention(msg: String) = requireViewBinding().layoutCourseImport.showSnackBar(msg)
 
-    override fun onCourseImportConfigClick(config: AbstractCourseImportConfig<*, *, *, *>) {
+    override fun onCourseImportConfigClick(config: BaseCourseImportConfig) {
         openCourseImportActivity(config)
     }
 

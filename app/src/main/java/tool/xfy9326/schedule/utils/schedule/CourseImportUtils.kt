@@ -3,6 +3,7 @@ package tool.xfy9326.schedule.utils.schedule
 import tool.xfy9326.schedule.content.base.*
 import tool.xfy9326.schedule.content.js.JSCourseParser
 import tool.xfy9326.schedule.content.js.JSCourseProvider
+import tool.xfy9326.schedule.content.utils.BaseCourseImportConfig
 
 object CourseImportUtils {
     enum class ImportMethod {
@@ -13,7 +14,7 @@ object CourseImportUtils {
     }
 
     fun getCourseImportMethod(
-        config: AbstractCourseImportConfig<*, *, *, *>,
+        config: BaseCourseImportConfig,
         onInvalidParser: () -> Unit,
         onInterfaceProviderError: () -> Unit,
         onUnknownProviderError: () -> Unit,
