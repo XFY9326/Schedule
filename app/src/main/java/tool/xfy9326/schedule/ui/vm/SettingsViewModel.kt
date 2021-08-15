@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import lib.xfy9326.android.kit.io.IOManager
 import lib.xfy9326.kit.asParentOf
 import lib.xfy9326.livedata.MutableEventLiveData
 import lib.xfy9326.livedata.postEvent
@@ -19,7 +20,6 @@ import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.data.ScheduleDataStore
 import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
 import tool.xfy9326.schedule.io.CrashFileManager
-import tool.xfy9326.schedule.io.IOManager
 import tool.xfy9326.schedule.io.PathManager
 import tool.xfy9326.schedule.io.utils.ImageUtils
 import tool.xfy9326.schedule.kt.asDistinctLiveData
@@ -174,7 +174,7 @@ class SettingsViewModel : AbstractViewModel() {
     }
 
     fun showDebugLog(logName: String) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             CrashFileManager.readCrashLog(logName)?.let {
                 showDebugLog.postEvent(it)
             }
@@ -188,19 +188,19 @@ class SettingsViewModel : AbstractViewModel() {
     }
 
     fun clearCache() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             IOManager.clearAllCache()
         }
     }
 
     fun clearLogs() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             PathManager.LogDir.deleteRecursively()
         }
     }
 
     fun restoreSettings() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             AppSettingsDataStore.clear()
             ScheduleDataStore.clear()
             ScheduleDBProvider.db.scheduleSyncDao.clearAll()

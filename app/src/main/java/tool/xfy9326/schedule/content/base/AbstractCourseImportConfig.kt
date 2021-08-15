@@ -4,9 +4,9 @@ package tool.xfy9326.schedule.content.base
 
 import androidx.annotation.ArrayRes
 import androidx.annotation.StringRes
+import lib.xfy9326.android.kit.io.IOManager
 import lib.xfy9326.kit.clone
 import tool.xfy9326.schedule.content.beans.CourseImportInstance
-import tool.xfy9326.schedule.io.IOManager
 import java.io.Serializable
 import java.util.*
 import kotlin.reflect.KClass

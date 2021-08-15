@@ -12,6 +12,8 @@ import io.ktor.client.request.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import lib.xfy9326.android.kit.io.kt.source
+import lib.xfy9326.android.kit.io.kt.useBuffer
 import lib.xfy9326.livedata.EventLiveData
 import lib.xfy9326.livedata.MutableEventLiveData
 import lib.xfy9326.livedata.postEvent
@@ -25,8 +27,6 @@ import tool.xfy9326.schedule.content.utils.JSConfigException
 import tool.xfy9326.schedule.content.utils.JSConfigException.Companion.make
 import tool.xfy9326.schedule.content.utils.JSConfigException.Companion.report
 import tool.xfy9326.schedule.io.JSFileManager
-import tool.xfy9326.schedule.io.kt.source
-import tool.xfy9326.schedule.io.kt.useBuffer
 import kotlin.coroutines.CoroutineContext
 
 class CourseImportConfigManager(scope: CoroutineScope) : CoroutineScope by scope {

@@ -6,6 +6,7 @@ import io.ktor.client.*
 import io.ktor.client.request.*
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
+import lib.xfy9326.android.kit.io.kt.useBuffer
 import lib.xfy9326.kit.*
 import okio.Source
 import okio.sink
@@ -15,9 +16,8 @@ import tool.xfy9326.schedule.content.utils.JSConfigException
 import tool.xfy9326.schedule.content.utils.JSConfigException.Companion.make
 import tool.xfy9326.schedule.content.utils.JSConfigException.Companion.report
 import tool.xfy9326.schedule.io.JSFileManager.SaveType.*
-import tool.xfy9326.schedule.io.kt.readJSON
-import tool.xfy9326.schedule.io.kt.useBuffer
-import tool.xfy9326.schedule.io.kt.writeJSON
+import tool.xfy9326.schedule.io.utils.readJSON
+import tool.xfy9326.schedule.io.utils.writeJSON
 import java.io.InputStream
 
 /**

@@ -1,9 +1,9 @@
 @file:Suppress("unused")
 
-package tool.xfy9326.schedule.io.file
+package lib.xfy9326.android.kit.io.file
 
 import android.content.res.AssetManager
-import tool.xfy9326.schedule.io.IOManager
+import lib.xfy9326.android.kit.io.IOManager
 import java.io.IOException
 
 class AssetFile constructor(val path: String) {

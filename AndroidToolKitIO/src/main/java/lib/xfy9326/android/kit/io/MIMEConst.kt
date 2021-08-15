@@ -1,4 +1,4 @@
-package tool.xfy9326.schedule.tools
+package lib.xfy9326.android.kit.io
 
 object MIMEConst {
     const val MIME_APK = "application/vnd.android.package-archive"

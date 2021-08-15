@@ -1,12 +1,12 @@
 @file:Suppress("unused")
 
-package tool.xfy9326.schedule.io.file
+package lib.xfy9326.android.kit.io.file
 
 import android.content.res.AssetFileDescriptor
 import android.content.res.Resources
 import android.util.TypedValue
 import androidx.annotation.RawRes
-import tool.xfy9326.schedule.io.IOManager
+import lib.xfy9326.android.kit.io.IOManager
 
 class RawResFile constructor(@RawRes val resId: Int) {
     private val resources by lazy { IOManager.resources }

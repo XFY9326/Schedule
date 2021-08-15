@@ -3,13 +3,14 @@
 package tool.xfy9326.schedule.io
 
 import android.net.Uri
+import lib.xfy9326.android.kit.io.FileHelper
+import lib.xfy9326.android.kit.io.kt.useBuffer
 import lib.xfy9326.kit.asParentOf
 import lib.xfy9326.kit.runOnlyResultIOJob
 import lib.xfy9326.kit.runSafeIOJob
 import lib.xfy9326.kit.runSimpleIOJob
 import okio.sink
 import okio.source
-import tool.xfy9326.schedule.io.kt.useBuffer
 import tool.xfy9326.schedule.tools.ExceptionHandler
 
 object CrashFileManager {
@@ -29,7 +30,7 @@ object CrashFileManager {
         true
     }
 
-    suspend fun copyLogFile(name: String, uri: Uri) = FileManager.copyFileToUri(PathManager.LogDir.asParentOf(name), uri)
+    suspend fun copyLogFile(name: String, uri: Uri) = FileHelper.copyFileToUri(PathManager.LogDir.asParentOf(name), uri)
 
     suspend fun readCrashRecord(): Long = runSafeIOJob(0L) {
         FILE_CRASH_RECORD.source().useBuffer {

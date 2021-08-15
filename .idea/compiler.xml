@@ -3,6 +3,7 @@
   <component name="CompilerConfiguration">
     <bytecodeTargetLevel target="1.8">
       <module name="Schedule.AndroidToolKit" target="11" />
+      <module name="Schedule.AndroidToolKitIO" target="11" />
       <module name="Schedule.app" target="11" />
       <module name="Schedule.LiveDataTools" target="11" />
     </bytecodeTargetLevel>

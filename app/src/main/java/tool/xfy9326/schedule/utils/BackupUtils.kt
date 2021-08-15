@@ -7,8 +7,8 @@ import kotlinx.serialization.json.Json
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.*
 import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
-import tool.xfy9326.schedule.io.kt.readJSON
-import tool.xfy9326.schedule.io.kt.writeJSON
+import tool.xfy9326.schedule.io.utils.readJSON
+import tool.xfy9326.schedule.io.utils.writeJSON
 import tool.xfy9326.schedule.json.ScheduleTimeJSON
 import tool.xfy9326.schedule.json.backup.BackupWrapperJSON
 import tool.xfy9326.schedule.json.backup.CourseJSON

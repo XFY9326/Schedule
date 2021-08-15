@@ -37,7 +37,7 @@ android {
 }
 
 dependencies {
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$androidxVersion.lifecycle"
+    api "androidx.lifecycle:lifecycle-livedata-ktx:$androidxVersion.lifecycle"
 
     testImplementation "junit:junit:$dependenciesVersion.junit"
     androidTestImplementation "androidx.test.ext:junit:$androidxVersion.test.junit"

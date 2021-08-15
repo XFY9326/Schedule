@@ -1,10 +1,10 @@
 @file:Suppress("unused")
 
-package tool.xfy9326.schedule.io.kt
+package lib.xfy9326.android.kit.io.kt
 
 import androidx.annotation.RawRes
-import tool.xfy9326.schedule.io.file.AssetFile
-import tool.xfy9326.schedule.io.file.RawResFile
+import lib.xfy9326.android.kit.io.file.AssetFile
+import lib.xfy9326.android.kit.io.file.RawResFile
 
 fun assetFile(path: String) = AssetFile(path)
 

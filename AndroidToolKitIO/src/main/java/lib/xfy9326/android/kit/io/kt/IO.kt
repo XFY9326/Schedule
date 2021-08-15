@@ -1,14 +1,14 @@
 @file:Suppress("unused")
 
-package tool.xfy9326.schedule.io.kt
+package lib.xfy9326.android.kit.io.kt
 
 import android.content.res.AssetManager
 import android.net.Uri
 import android.util.TypedValue
+import lib.xfy9326.android.kit.io.IOManager
+import lib.xfy9326.android.kit.io.file.AssetFile
+import lib.xfy9326.android.kit.io.file.RawResFile
 import okio.*
-import tool.xfy9326.schedule.io.IOManager
-import tool.xfy9326.schedule.io.file.AssetFile
-import tool.xfy9326.schedule.io.file.RawResFile
 import kotlin.io.use
 
 fun AssetFile.source(accessMode: Int = AssetManager.ACCESS_STREAMING) = open(accessMode).source()

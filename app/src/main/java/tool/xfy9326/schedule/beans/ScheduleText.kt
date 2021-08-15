@@ -7,9 +7,9 @@ import androidx.annotation.IntegerRes
 import androidx.datastore.preferences.core.Preferences
 import kotlinx.parcelize.Parcelize
 import lib.xfy9326.android.kit.Sp
+import lib.xfy9326.android.kit.io.IOManager
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.data.ScheduleDataStore
-import tool.xfy9326.schedule.io.IOManager
 
 enum class ScheduleText(val prefKey: Preferences.Key<Int>, @IntegerRes private val defaultTextSize: Int) {
     COURSE_TEXT(ScheduleDataStore.courseTextSize, R.integer.schedule_course_default_text_size),

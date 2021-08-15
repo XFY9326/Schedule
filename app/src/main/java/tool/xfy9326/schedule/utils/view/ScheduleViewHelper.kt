@@ -12,12 +12,12 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import lib.xfy9326.android.kit.ApplicationInstance
 import lib.xfy9326.android.kit.getColorCompat
+import lib.xfy9326.android.kit.io.IOManager
 import lib.xfy9326.android.kit.textBaselineHeight
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.*
 import tool.xfy9326.schedule.data.ScheduleDataStore
 import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
-import tool.xfy9326.schedule.io.IOManager
 import tool.xfy9326.schedule.kt.*
 import tool.xfy9326.schedule.tools.MaterialColorHelper
 import tool.xfy9326.schedule.ui.view.*

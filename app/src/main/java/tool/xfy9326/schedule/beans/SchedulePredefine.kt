@@ -5,8 +5,8 @@ import androidx.annotation.FloatRange
 import androidx.annotation.Px
 import lib.xfy9326.android.kit.ApplicationInstance
 import lib.xfy9326.android.kit.getColorCompat
+import lib.xfy9326.android.kit.io.IOManager
 import tool.xfy9326.schedule.R
-import tool.xfy9326.schedule.io.IOManager
 
 class SchedulePredefine private constructor(
     @Px

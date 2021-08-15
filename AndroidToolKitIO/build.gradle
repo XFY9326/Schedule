@@ -1,0 +1,46 @@
+plugins {
+    id 'com.android.library'
+    id 'kotlin-android'
+}
+
+def config = rootProject.ext
+def androidConfig = config.android
+def dependenciesVersion = config.dependencies_version
+def androidxVersion = dependenciesVersion.androidx
+
+android {
+    compileSdkVersion androidConfig.compileSdk
+
+    defaultConfig {
+        minSdk androidConfig.minSdk
+        targetSdk androidConfig.targetSdk
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+    }
+}
+
+dependencies {
+    implementation project(path: ":AndroidToolKit")
+
+    api "com.squareup.okio:okio:2.10.0"
+
+    testImplementation "junit:junit:$dependenciesVersion.junit"
+    androidTestImplementation "androidx.test.ext:junit:$androidxVersion.test.junit"
+}

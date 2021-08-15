@@ -15,6 +15,7 @@ import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import lib.xfy9326.android.kit.io.MIMEConst
 import lib.xfy9326.android.kit.setWindowPercent
 import lib.xfy9326.android.kit.show
 import lib.xfy9326.android.kit.showToast
@@ -26,7 +27,6 @@ import tool.xfy9326.schedule.databinding.DialogUpgradeBinding
 import tool.xfy9326.schedule.json.upgrade.DownloadSource
 import tool.xfy9326.schedule.json.upgrade.UpdateInfo
 import tool.xfy9326.schedule.kt.APP_ID
-import tool.xfy9326.schedule.tools.MIMEConst
 import tool.xfy9326.schedule.utils.DownloadUtils
 import tool.xfy9326.schedule.utils.IntentUtils
 import tool.xfy9326.schedule.utils.PermissionUtils

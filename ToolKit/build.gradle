@@ -13,5 +13,5 @@ def dependenciesVersion = config.dependencies_version
 def kotlinxVersion = dependenciesVersion.kotlinx
 
 dependencies {
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxVersion.coroutines"
+    api "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxVersion.coroutines"
 }

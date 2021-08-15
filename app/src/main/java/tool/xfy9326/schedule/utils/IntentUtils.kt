@@ -9,14 +9,14 @@ import android.provider.Settings
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.annotation.RequiresApi
 import lib.xfy9326.android.kit.ApplicationInstance
+import lib.xfy9326.android.kit.io.MIMEConst
 import lib.xfy9326.android.kit.packageUri
 import lib.xfy9326.kit.asParentOf
 import tool.xfy9326.schedule.BuildConfig
 import tool.xfy9326.schedule.R
-import tool.xfy9326.schedule.io.IOManager.getUriByFileProvider
 import tool.xfy9326.schedule.io.PathManager
+import tool.xfy9326.schedule.io.utils.getUriByFileProvider
 import tool.xfy9326.schedule.kt.tryStartActivity
-import tool.xfy9326.schedule.tools.MIMEConst
 import java.util.*
 
 object IntentUtils {

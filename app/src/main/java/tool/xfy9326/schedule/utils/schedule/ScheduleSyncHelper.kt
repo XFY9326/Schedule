@@ -8,13 +8,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.withContext
+import lib.xfy9326.android.kit.io.IOManager
 import lib.xfy9326.kit.withTryLock
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.*
 import tool.xfy9326.schedule.beans.Course.Companion.iterateAll
 import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
-import tool.xfy9326.schedule.io.IOManager
 import tool.xfy9326.schedule.kt.APP_ID
 import tool.xfy9326.schedule.tools.NumberPattern
 import tool.xfy9326.schedule.utils.ics.ScheduleICSWriter
