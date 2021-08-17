@@ -48,10 +48,7 @@ class ScheduleManageActivity : ViewModelActivity<ScheduleManageViewModel, Activi
             COURSE_EDIT -> startActivity<CourseManageActivity> {
                 putExtra(CourseManageActivity.EXTRA_SCHEDULE_ID, scheduleWrapper.schedule.scheduleId)
             }
-            EDIT -> startActivity<ScheduleEditActivity> {
-                putExtra(ScheduleEditActivity.INTENT_EXTRA_SCHEDULE_ID, scheduleWrapper.schedule.scheduleId)
-                putExtra(ScheduleEditActivity.INTENT_EXTRA_IS_CURRENT_SCHEDULE, scheduleWrapper.inUsing)
-            }
+            EDIT -> ScheduleEditActivity.startActivity(this, scheduleWrapper.schedule.scheduleId, scheduleWrapper.inUsing)
             SET_AS_CURRENT -> {
                 if (scheduleWrapper.inUsing) {
                     requireViewBinding().layoutScheduleManage.showSnackBar(R.string.schedule_has_set_as_current)

@@ -120,8 +120,9 @@
     <string name="user_pw_empty">密码为空！</string>
     <string name="options_empty">选项为空！</string>
     <string name="course_import_success_title">课程导入成功</string>
-    <string name="course_import_success_attention">\u3000\u3000是否立即前往课表编辑页面？\n\u3000\u3000您可能需要\"%1$s\"，当然您也可以稍后在\"课表管理\"页面选择导入的课表进行编辑。\n\u3000\u3000若要启用导入的课表，请在\"课表管理\"页面长按需要使用的课表以切换到该课表。</string>
-    <string name="course_import_success_attention_highlight">手动调整课表的学期开始与结束的时间以正确显示当前周数</string>
+    <string name="course_import_success_attention_edit_schedule_highlight">\u3000\u3000是否立即前往课表编辑页面？\n</string>
+    <string name="course_import_success_attention">\u3000\u3000您可能需要\"%1$s\"，当然您也可以稍后在\"课表管理\"页面选择导入的课表进行编辑。\n\u3000\u3000若要启用导入的课表，请在\"课表管理\"页面长按需要使用的课表以切换到该课表。</string>
+    <string name="course_import_success_attention_necessary_highlight">手动调整课表的学期开始与结束的时间以正确显示当前周数</string>
     <string name="edit_schedule_now">立即前往</string>
     <string name="edit_schedule_later">稍后再说</string>
     <string name="import_course_to_current_schedule_msg">导入课程到当前课表后，所有此课表下原有的所有课程都将会被覆盖，请慎重操作！</string>
@@ -403,6 +404,11 @@
     <string name="sample_course_location">课程地点示例</string>
     <string name="schedule_background_preview_attention">注意：\n由于设置中预览的课程表高度受限，因此预览的课程表背景缩放位置与大小不能完全代表最终的显示效果</string>
     <string name="schedule_preview_ratio">课表预览比例</string>
+    <string name="external_course_import">外部课程导入</string>
+    <string name="external_course_import_params_incomplete">启动参数有缺失！</string>
+    <string name="external_course_init_error">初始化错误！</string>
+    <string name="external_course_processor_name_error">未找到指定的外部课程处理器！</string>
+    <string name="launch_pure_schedule">打开Pure课程表</string>
 
     <string name="js_config_read_failed">配置文件读取错误！</string>
     <string name="js_config_invalid">导入的配置文件不合法！</string>

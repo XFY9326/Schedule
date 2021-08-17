@@ -22,7 +22,7 @@ import tool.xfy9326.schedule.databinding.ActivityNetworkCourseProviderBinding
 import tool.xfy9326.schedule.kt.*
 import tool.xfy9326.schedule.ui.activity.base.CourseProviderActivity
 import tool.xfy9326.schedule.ui.vm.NetworkCourseProviderViewModel
-import tool.xfy9326.schedule.ui.vm.base.CourseProviderViewModel
+import tool.xfy9326.schedule.utils.schedule.ScheduleImportManager
 import tool.xfy9326.schedule.utils.view.DialogUtils
 import tool.xfy9326.schedule.utils.view.ViewUtils
 
@@ -131,8 +131,8 @@ class NetworkCourseProviderActivity :
         ViewUtils.showCourseAdapterErrorSnackBar(this, requireViewBinding().layoutLoginCourseProvider, exception)
     }
 
-    override fun onCourseImportFinish(result: CourseProviderViewModel.ImportResult, editScheduleId: Long?) {
-        if (result == CourseProviderViewModel.ImportResult.FAILED) {
+    override fun onCourseImportFinish(result: ScheduleImportManager.ImportResult, editScheduleId: Long?) {
+        if (result == ScheduleImportManager.ImportResult.FAILED) {
             requireViewBinding().layoutCourseImportContent.setAllEnable(true)
             withImportOption(false) {
                 requireViewModel().refreshLoginPageInfo(it)
@@ -209,7 +209,7 @@ class NetworkCourseProviderActivity :
                     layoutCourseImportLoading.isVisible = true
                     layoutCourseImportContent.isVisible = false
 
-                    progressBarLoadingCourseImportInit.isVisible = false
+                    progressBarLoadingCourseImportInit.hide()
                     buttonCourseImportReload.isVisible = true
                     imageViewCourseImportLoadError.isVisible = true
                 }
@@ -217,7 +217,7 @@ class NetworkCourseProviderActivity :
                     layoutCourseImportLoading.isVisible = true
                     layoutCourseImportContent.isVisible = false
 
-                    progressBarLoadingCourseImportInit.isVisible = true
+                    progressBarLoadingCourseImportInit.show()
                     buttonCourseImportReload.isVisible = false
                     imageViewCourseImportLoadError.isVisible = false
                 }

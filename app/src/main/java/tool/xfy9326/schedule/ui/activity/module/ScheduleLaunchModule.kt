@@ -1,8 +1,11 @@
 package tool.xfy9326.schedule.ui.activity.module
 
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import lib.xfy9326.android.kit.ApplicationScope
 import lib.xfy9326.android.kit.showToast
 import lib.xfy9326.android.kit.startActivity
 import tool.xfy9326.schedule.R
@@ -21,6 +24,21 @@ class ScheduleLaunchModule(activity: ScheduleActivity) : AbstractActivityModule<
         const val INTENT_EXTRA_CRASH_RELAUNCH = "CRASH_RELAUNCH"
         const val INTENT_EXTRA_APP_ERROR = "APP_ERROR"
         const val INTENT_EXTRA_APP_ERROR_CRASH_LOG = "APP_ERROR_CRASH_LOG"
+
+        fun tryShowEula(activity: AppCompatActivity) {
+            activity.lifecycleScope.launch {
+                if (!AppDataStore.acceptEULAFlow.first()) {
+                    val eula = FileManager.readEULA()
+                    DialogUtils.showEULADialog(activity, eula, false) {
+                        if (it) {
+                            ApplicationScope.launch { AppDataStore.setAcceptEULA(true) }
+                        } else {
+                            activity.finishAndRemoveTask()
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private var isPreloadReady = false
@@ -62,21 +80,6 @@ class ScheduleLaunchModule(activity: ScheduleActivity) : AbstractActivityModule<
             }
         } else {
             isPreloadReady = true
-        }
-    }
-
-    fun showEula() {
-        launch {
-            if (!AppDataStore.acceptEULAFlow.first()) {
-                val eula = FileManager.readEULA()
-                DialogUtils.showEULADialog(requireActivity(), eula, false) {
-                    if (it) {
-                        launch { AppDataStore.setAcceptEULA(true) }
-                    } else {
-                        requireActivity().finishAndRemoveTask()
-                    }
-                }
-            }
         }
     }
 

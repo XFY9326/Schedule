@@ -12,8 +12,8 @@ import tool.xfy9326.schedule.kt.showSnackBar
 import tool.xfy9326.schedule.ui.activity.base.AbstractWebCourseProviderActivity
 import tool.xfy9326.schedule.ui.dialog.FullScreenLoadingDialog
 import tool.xfy9326.schedule.ui.vm.WebCourseProviderViewModel
-import tool.xfy9326.schedule.ui.vm.base.CourseProviderViewModel
 import tool.xfy9326.schedule.utils.JSBridge
+import tool.xfy9326.schedule.utils.schedule.ScheduleImportManager
 import tool.xfy9326.schedule.utils.view.DialogUtils
 
 class WebCourseProviderActivity :
@@ -64,7 +64,7 @@ class WebCourseProviderActivity :
         loadingController.show()
     }
 
-    override fun onCourseImportFinish(result: CourseProviderViewModel.ImportResult, editScheduleId: Long?) {
+    override fun onCourseImportFinish(result: ScheduleImportManager.ImportResult, editScheduleId: Long?) {
         loadingController.hide()
     }
 }

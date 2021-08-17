@@ -16,7 +16,11 @@ abstract class ViewBindingActivity<V : ViewBinding> : AbstractActivity() {
 
     protected open fun onHandleSavedInstanceState(bundle: Bundle?, viewBinding: V) {}
 
+    protected open fun onContentViewPreload(savedInstanceState: Bundle?) {}
+
     final override fun onActivityInit(savedInstanceState: Bundle?) {
+        onContentViewPreload(savedInstanceState)
+
         viewBinding = onCreateViewBinding()
         onBindView(viewBinding)
 

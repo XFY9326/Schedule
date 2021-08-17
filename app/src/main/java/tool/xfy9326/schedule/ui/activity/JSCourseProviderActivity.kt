@@ -15,8 +15,8 @@ import tool.xfy9326.schedule.databinding.ActivityFragmentContainerBinding
 import tool.xfy9326.schedule.ui.activity.base.AbstractWebCourseProviderActivity
 import tool.xfy9326.schedule.ui.dialog.FullScreenLoadingDialog
 import tool.xfy9326.schedule.ui.vm.JSCourseProviderViewModel
-import tool.xfy9326.schedule.ui.vm.base.CourseProviderViewModel
 import tool.xfy9326.schedule.utils.JSBridge
+import tool.xfy9326.schedule.utils.schedule.ScheduleImportManager
 import tool.xfy9326.schedule.utils.view.DialogUtils
 
 class JSCourseProviderActivity : AbstractWebCourseProviderActivity<String, JSCourseProvider, JSCourseParser, JSCourseProviderViewModel>(),
@@ -60,7 +60,7 @@ class JSCourseProviderActivity : AbstractWebCourseProviderActivity<String, JSCou
         }
     }
 
-    override fun onCourseImportFinish(result: CourseProviderViewModel.ImportResult, editScheduleId: Long?) {
+    override fun onCourseImportFinish(result: ScheduleImportManager.ImportResult, editScheduleId: Long?) {
         if (!(requireViewModel().isRequireNetwork && enableJSNetwork)) {
             fragmentContact.setWebViewConnection(true)
         } else {

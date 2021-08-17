@@ -23,7 +23,8 @@ android {
         versionName androidConfig.versionName
 
         resConfigs "zh", "en"
-        manifestPlaceholders = ["ApplicationId": androidConfig.applicationId]
+        buildConfigField("String", "BASE_APPLICATION_ID", "\"${androidConfig.applicationId}\"")
+        manifestPlaceholders += ["ApplicationId": androidConfig.applicationId, "BaseApplicationId": androidConfig.applicationId]
         applicationVariants.all {
             variant ->
                 variant.outputs.all {
@@ -67,7 +68,7 @@ android {
         debug {
             versionNameSuffix "-$config.gitCommitId"
             applicationIdSuffix ".debug"
-            manifestPlaceholders = ["ApplicationId": androidConfig.applicationId + applicationIdSuffix]
+            manifestPlaceholders += ["ApplicationId": androidConfig.applicationId + applicationIdSuffix]
 
 //            minifyEnabled true
 //            shrinkResources true
@@ -155,7 +156,7 @@ dependencies {
     implementation "io.ktor:ktor-client-serialization:$dependenciesVersion.ktor"
 
     // Jsoup
-    implementation 'org.jsoup:jsoup:1.14.1'
+    implementation 'org.jsoup:jsoup:1.14.2'
 
     // ColorPicker
     implementation "com.jaredrummler:colorpicker:1.1.0"

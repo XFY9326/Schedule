@@ -14,7 +14,7 @@ abstract class ViewModelActivity<M : AbstractViewModel, V : ViewBinding> : Abstr
     private lateinit var viewModel: M
     private lateinit var viewBinding: V
 
-    protected open fun onContentViewPreload(savedInstanceState: Bundle?) {}
+    protected open fun onContentViewPreload(savedInstanceState: Bundle?, viewModel: M) {}
 
     protected open fun onGetViewModelStoreOwner(): ViewModelStoreOwner = this
 
@@ -41,7 +41,7 @@ abstract class ViewModelActivity<M : AbstractViewModel, V : ViewBinding> : Abstr
     }
 
     final override fun onActivityInit(savedInstanceState: Bundle?) {
-        onContentViewPreload(savedInstanceState)
+        onContentViewPreload(savedInstanceState, viewModel)
 
         viewBinding = onCreateViewBinding()
         onBindView(viewBinding)

@@ -5,7 +5,7 @@
         <item name="android:windowLightNavigationBar" tools:ignore="NewApi">false</item>
     </style>
 
-    <style name="AppTheme.LaunchScreen.DayNightSystemBar" parent="AppTheme.LaunchScreen">
+    <style name="AppTheme.LaunchScreen" parent="AppTheme.LaunchScreen.Base">
         <item name="android:windowLightStatusBar">false</item>
         <item name="android:windowLightNavigationBar" tools:ignore="NewApi">false</item>
     </style>

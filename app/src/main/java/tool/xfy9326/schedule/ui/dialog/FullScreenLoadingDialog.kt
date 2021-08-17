@@ -53,6 +53,7 @@ class FullScreenLoadingDialog : AppCompatDialogFragment() {
                 val size = resources.getDimensionPixelOffset(R.dimen.full_screen_loading_dialog_loading_size)
                 layoutParams = LinearLayoutCompat.LayoutParams(size, size)
                 isIndeterminate = true
+                indeterminateDrawable = requireContext().getDrawableCompat(R.drawable.background_progress_bar_circle)
             })
             if (requireArguments().getBoolean(EXTRA_SHOW_CANCEL_BUTTON)) {
                 addView(MaterialButton(requireContext()).apply {

@@ -1,5 +1,6 @@
 package tool.xfy9326.schedule.ui.activity
 
+import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
@@ -8,10 +9,7 @@ import android.view.MenuItem
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.jaredrummler.android.colorpicker.ColorPickerDialogListener
-import lib.xfy9326.android.kit.hideKeyboard
-import lib.xfy9326.android.kit.setOnSingleClickListener
-import lib.xfy9326.android.kit.show
-import lib.xfy9326.android.kit.showToast
+import lib.xfy9326.android.kit.*
 import lib.xfy9326.livedata.observeEvent
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.EditError.Companion.getText
@@ -34,8 +32,15 @@ class ScheduleEditActivity : ViewModelActivity<ScheduleEditViewModel, ActivitySc
     DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, ColorPickerDialogListener {
 
     companion object {
-        const val INTENT_EXTRA_SCHEDULE_ID = "EXTRA_SCHEDULE_ID"
-        const val INTENT_EXTRA_IS_CURRENT_SCHEDULE = "EXTRA_IS_CURRENT_SCHEDULE"
+        private const val INTENT_EXTRA_SCHEDULE_ID = "EXTRA_SCHEDULE_ID"
+        private const val INTENT_EXTRA_IS_CURRENT_SCHEDULE = "EXTRA_IS_CURRENT_SCHEDULE"
+
+        fun startActivity(context: Context, scheduleId: Long, isCurrentSchedule: Boolean) {
+            context.startActivity<ScheduleEditActivity> {
+                putExtra(INTENT_EXTRA_SCHEDULE_ID, scheduleId)
+                putExtra(INTENT_EXTRA_IS_CURRENT_SCHEDULE, isCurrentSchedule)
+            }
+        }
     }
 
     override val vmClass = ScheduleEditViewModel::class

@@ -12,29 +12,23 @@
         android:id="@+id/toolBar_loginCourseProvider"
         layout="@layout/layout_toolbar_general" />
 
-    <androidx.core.widget.NestedScrollView
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="?attr/actionBarSize"
         android:clipChildren="false"
         android:clipToPadding="false"
-        android:fillViewport="true"
-        android:fitsSystemWindows="true"
-        android:overScrollMode="never"
-        android:scrollbars="none">
+        android:fillViewport="true">
 
-        <androidx.appcompat.widget.LinearLayoutCompat
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:clipChildren="false"
-            android:clipToPadding="false"
-            android:gravity="center"
-            android:orientation="vertical">
+            android:layout_height="wrap_content">
 
             <com.google.android.material.card.MaterialCardView
                 style="@style/AppTheme.CardView.SelectableItemBackground"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_marginStart="40dp"
                 android:layout_marginTop="60dp"
                 android:layout_marginEnd="40dp"
@@ -55,9 +49,10 @@
                     <androidx.core.widget.ContentLoadingProgressBar
                         android:id="@+id/progressBar_loadingCourseImportInit"
                         style="@style/Widget.AppCompat.ProgressBar"
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
-                        android:indeterminate="true" />
+                        android:layout_width="130dp"
+                        android:layout_height="130dp"
+                        android:indeterminate="true"
+                        android:indeterminateDrawable="@drawable/background_progress_bar_circle_small" />
 
                     <androidx.appcompat.widget.AppCompatImageView
                         android:id="@+id/imageView_courseImportLoadError"
@@ -72,7 +67,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="30dp"
                         android:text="@string/reload"
-                        android:visibility="gone" />
+                        android:visibility="gone"
+                        tools:visibility="visible" />
 
                 </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -242,14 +238,18 @@
                         android:id="@+id/textView_courseAdapterAuthor"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="center" />
+                        android:ellipsize="marquee"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:gravity="center"
+                        android:singleLine="true" />
 
                 </androidx.appcompat.widget.LinearLayoutCompat>
 
             </com.google.android.material.card.MaterialCardView>
 
-        </androidx.appcompat.widget.LinearLayoutCompat>
+        </FrameLayout>
 
-    </androidx.core.widget.NestedScrollView>
+    </ScrollView>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

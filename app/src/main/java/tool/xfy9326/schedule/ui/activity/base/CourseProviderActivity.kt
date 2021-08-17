@@ -4,7 +4,10 @@ import android.content.Context
 import android.os.Bundle
 import androidx.annotation.CallSuper
 import androidx.core.os.bundleOf
+import androidx.lifecycle.lifecycleScope
 import androidx.viewbinding.ViewBinding
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import lib.xfy9326.android.kit.startActivity
 import lib.xfy9326.kit.castNonNull
 import lib.xfy9326.kit.getDeepStackTraceString
@@ -16,11 +19,13 @@ import tool.xfy9326.schedule.content.utils.BaseCourseImportConfig
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
 import tool.xfy9326.schedule.content.utils.CourseAdapterException.Companion.getText
 import tool.xfy9326.schedule.content.utils.CourseAdapterException.Companion.strictModeOnly
+import tool.xfy9326.schedule.data.AppDataStore
 import tool.xfy9326.schedule.ui.activity.ScheduleEditActivity
 import tool.xfy9326.schedule.ui.dialog.ImportCourseConflictDialog
 import tool.xfy9326.schedule.ui.dialog.ScheduleImportSuccessDialog
 import tool.xfy9326.schedule.ui.dialog.StrictImportModeWarningDialog
 import tool.xfy9326.schedule.ui.vm.base.CourseProviderViewModel
+import tool.xfy9326.schedule.utils.schedule.ScheduleImportManager
 import tool.xfy9326.schedule.utils.view.DialogUtils
 
 abstract class CourseProviderActivity<I, P1 : AbstractCourseProvider<*>, P2 : AbstractCourseParser<*>, M : CourseProviderViewModel<I, P1, P2>, V : ViewBinding> :
@@ -75,15 +80,15 @@ abstract class CourseProviderActivity<I, P1 : AbstractCourseProvider<*>, P2 : Ab
         }
     }
 
-    protected open fun onCourseImportFinish(result: CourseProviderViewModel.ImportResult, editScheduleId: Long?) {}
+    protected open fun onCourseImportFinish(result: ScheduleImportManager.ImportResult, editScheduleId: Long?) {}
 
-    private fun internalCourseImportFinish(result: CourseProviderViewModel.ImportResult, editScheduleId: Long?) {
+    private fun internalCourseImportFinish(result: ScheduleImportManager.ImportResult, editScheduleId: Long?) {
         if (editScheduleId != null) {
-            if (result == CourseProviderViewModel.ImportResult.SUCCESS_WITH_IGNORABLE_CONFLICTS) {
+            if (result == ScheduleImportManager.ImportResult.SUCCESS_WITH_IGNORABLE_CONFLICTS) {
                 ImportCourseConflictDialog.showDialog(supportFragmentManager, bundleOf(
                     EXTRA_EDIT_SCHEDULE_ID to editScheduleId
                 ))
-            } else if (result == CourseProviderViewModel.ImportResult.SUCCESS) {
+            } else if (result == ScheduleImportManager.ImportResult.SUCCESS) {
                 ScheduleImportSuccessDialog.showDialog(supportFragmentManager, editScheduleId)
             }
         }
@@ -96,11 +101,11 @@ abstract class CourseProviderActivity<I, P1 : AbstractCourseProvider<*>, P2 : Ab
     }
 
     final override fun onEditScheduleNow(scheduleId: Long) {
-        startActivity<ScheduleEditActivity> {
-            putExtra(ScheduleEditActivity.INTENT_EXTRA_SCHEDULE_ID, scheduleId)
-            putExtra(ScheduleEditActivity.INTENT_EXTRA_IS_CURRENT_SCHEDULE, false)
+        lifecycleScope.launch {
+            val isCurrentSchedule = AppDataStore.currentScheduleIdFlow.first() == scheduleId
+            ScheduleEditActivity.startActivity(this@CourseProviderActivity, scheduleId, isCurrentSchedule)
+            if (exitIfImportSuccess) finish()
         }
-        if (exitIfImportSuccess) finish()
     }
 
     final override fun onEditScheduleLater() {

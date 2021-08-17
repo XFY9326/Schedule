@@ -43,7 +43,7 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
 
     override fun onCreateViewBinding() = ActivityScheduleBinding.inflate(layoutInflater)
 
-    override fun onContentViewPreload(savedInstanceState: Bundle?) {
+    override fun onContentViewPreload(savedInstanceState: Bundle?, viewModel: ScheduleViewModel) {
         scheduleLaunchModule.init()
     }
 
@@ -107,7 +107,7 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
             scrollToWeek(it)
         }
 
-        scheduleLaunchModule.showEula()
+        ScheduleLaunchModule.tryShowEula(this)
         scheduleLaunchModule.checkUpgrade()
     }
 

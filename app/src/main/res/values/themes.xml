@@ -10,15 +10,19 @@
         <item name="android:windowLightNavigationBar" tools:ignore="NewApi">@null</item>
     </style>
 
-    <style name="AppTheme.LaunchScreen" parent="Theme.SplashScreen">
-        <item name="postSplashScreenTheme">@style/AppTheme.Schedule</item>
+    <style name="AppTheme.LaunchScreen.Base" parent="Theme.SplashScreen">
+        <item name="postSplashScreenTheme">@style/AppTheme</item>
         <item name="windowSplashScreenBackground">@color/launch_screen_windows_background</item>
         <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_logo</item>
     </style>
 
-    <style name="AppTheme.LaunchScreen.DayNightSystemBar" parent="AppTheme.LaunchScreen">
+    <style name="AppTheme.LaunchScreen" parent="AppTheme.LaunchScreen.Base">
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:windowLightNavigationBar" tools:ignore="NewApi">true</item>
+    </style>
+
+    <style name="AppTheme.LaunchScreen.Schedule" parent="AppTheme.LaunchScreen">
+        <item name="postSplashScreenTheme">@style/AppTheme.Schedule</item>
     </style>
 
     <style name="AppTheme.Base" parent="Theme.MaterialComponents.DayNight.NoActionBar.Bridge">

@@ -1,5 +1,6 @@
 package tool.xfy9326.schedule.ui.dialog
 
+import android.content.Context
 import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
@@ -11,6 +12,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import lib.xfy9326.android.kit.requireOwner
+import lib.xfy9326.kit.EMPTY
 import tool.xfy9326.schedule.R
 
 class ScheduleImportSuccessDialog : DialogFragment() {
@@ -25,25 +27,35 @@ class ScheduleImportSuccessDialog : DialogFragment() {
                 )
             }.show(fragmentManager, DIALOG_TAG)
         }
-    }
 
-    override fun onCreateDialog(savedInstanceState: Bundle?) = MaterialAlertDialogBuilder(requireContext()).apply {
-        setTitle(R.string.course_import_success_title)
-        val msgHighLight = getString(R.string.course_import_success_attention_highlight)
-        val msgOriginal = getString(R.string.course_import_success_attention, msgHighLight)
-        val start = msgOriginal.indexOf(msgHighLight)
-        val end = start + msgHighLight.length
+        fun getImportSuccessMsg(context: Context, showEditMsg: Boolean): SpannableString {
+            val msgEditHighlight = if (showEditMsg) {
+                context.getString(R.string.course_import_success_attention_edit_schedule_highlight)
+            } else {
+                EMPTY
+            }
+            val msgNecessaryHighlight = context.getString(R.string.course_import_success_attention_necessary_highlight)
+            val msgOriginal = context.getString(R.string.course_import_success_attention, msgNecessaryHighlight)
+            val start = msgOriginal.indexOf(msgNecessaryHighlight)
+            val end = start + msgNecessaryHighlight.length
 
-        setMessage(
-            SpannableString(msgOriginal).apply {
+            return SpannableString(msgEditHighlight + msgOriginal).apply {
                 val span = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                     TypefaceSpan(Typeface.DEFAULT_BOLD)
                 } else {
                     StyleSpan(Typeface.BOLD)
                 }
-                setSpan(span, start, end, SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE)
+                if (msgEditHighlight.isNotEmpty()) {
+                    setSpan(span, 0, msgEditHighlight.length, SpannableString.SPAN_EXCLUSIVE_INCLUSIVE)
+                }
+                setSpan(span, msgEditHighlight.length + start, msgEditHighlight.length + end, SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE)
             }
-        )
+        }
+    }
+
+    override fun onCreateDialog(savedInstanceState: Bundle?) = MaterialAlertDialogBuilder(requireContext()).apply {
+        setTitle(R.string.course_import_success_title)
+        setMessage(getImportSuccessMsg(requireContext(), true))
         setPositiveButton(R.string.edit_schedule_now) { _, _ ->
             requireOwner<OnScheduleImportSuccessListener>()?.onEditScheduleNow(requireArguments().getLong(EXTRA_SCHEDULE_ID))
         }

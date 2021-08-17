@@ -40,7 +40,7 @@
             android:name=".ui.activity.ScheduleActivity"
             android:exported="true"
             android:launchMode="singleTop"
-            android:theme="@style/AppTheme.LaunchScreen.DayNightSystemBar">
+            android:theme="@style/AppTheme.LaunchScreen.Schedule">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -63,6 +63,19 @@
         <activity
             android:name=".ui.activity.OnlineCourseImportActivity"
             android:label="@string/online_course_import" />
+
+        <activity
+            android:name=".ui.activity.ExternalCourseImportActivity"
+            android:exported="true"
+            android:label="@string/external_course_import"
+            android:theme="@style/AppTheme.LaunchScreen">
+            <intent-filter>
+                <action android:name="${BaseApplicationId}.action.EXTERNAL_COURSE_IMPORT" />
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="text/plain" />
+            </intent-filter>
+        </activity>
 
         <activity
             android:name=".ui.activity.CourseManageActivity"

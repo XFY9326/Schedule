@@ -19,12 +19,23 @@ abstract class AbstractActivity : AppCompatActivity() {
     @CallSuper
     override fun onCreate(savedInstanceState: Bundle?) {
         internalIsFirstLaunch = savedInstanceState == null
-        if (enableCustomActivityAnimation && AppSettingsDataStore.useCustomActivityTransitionAnimation) {
-            window?.setWindowAnimations(R.style.AppTheme_ActivityAnimation)
+        val validLaunch = onValidateLaunch(savedInstanceState)
+        if (validLaunch) {
+            if (enableCustomActivityAnimation && AppSettingsDataStore.useCustomActivityTransitionAnimation) {
+                window?.setWindowAnimations(R.style.AppTheme_ActivityAnimation)
+            }
         }
         super.onCreate(savedInstanceState)
-        onActivityInit(savedInstanceState)
+        if (validLaunch) {
+            onActivityInit(savedInstanceState)
+        } else {
+            onLaunchInvalid()
+        }
     }
+
+    protected open fun onValidateLaunch(savedInstanceState: Bundle?): Boolean = true
+
+    protected open fun onLaunchInvalid() = finish()
 
     protected open fun onActivityInit(savedInstanceState: Bundle?) {}
 
