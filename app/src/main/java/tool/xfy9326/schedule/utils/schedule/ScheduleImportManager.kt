@@ -72,7 +72,7 @@ class ScheduleImportManager {
                         onFinish?.invoke(ImportResult.SUCCESS, editScheduleId)
                     }
 
-                    if (!currentSchedule && AppSettingsDataStore.autoSwitchToNewImportScheduleFlow.first()) {
+                    if (!AppDataStore.hasCurrentScheduleId() || !currentSchedule && AppSettingsDataStore.autoSwitchToNewImportScheduleFlow.first()) {
                         AppDataStore.setCurrentScheduleId(editScheduleId)
                     }
                 } catch (e: CancellationException) {

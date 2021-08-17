@@ -34,10 +34,10 @@ object ExternalCourseImportUtils {
             try {
                 return ViewModelProvider(activity, object : ViewModelProvider.NewInstanceFactory() {
                     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-                        return try {
-                            modelClass.getConstructor(ExternalCourseImportData.Origin::class.java).newInstance(parseResult)
-                        } catch (e: NoSuchMethodException) {
-                            modelClass.newInstance()
+                        return super.create(modelClass).also {
+                            if (it is ExternalCourseImportViewModel) {
+                                it.importParams = parseResult
+                            }
                         }
                     }
                 })[ExternalCourseImportViewModel::class.java]

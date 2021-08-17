@@ -12,8 +12,13 @@ import tool.xfy9326.schedule.content.utils.CourseAdapterException.Companion.repo
 import tool.xfy9326.schedule.ui.vm.base.AbstractViewModel
 import tool.xfy9326.schedule.utils.schedule.ScheduleImportManager
 
-class ExternalCourseImportViewModel(private val importParams: ExternalCourseImportData.Origin) : AbstractViewModel() {
-    private val processor = ExternalCourseProcessorRegistry.getProcessor(importParams.processorName) ?: error("External processor not found! Name: ${importParams.processorName}")
+class ExternalCourseImportViewModel : AbstractViewModel() {
+    // Inject
+    lateinit var importParams: ExternalCourseImportData.Origin
+
+    private val processor by lazy {
+        ExternalCourseProcessorRegistry.getProcessor(importParams.processorName) ?: error("External processor not found! Name: ${importParams.processorName}")
+    }
 
     val schoolName
         get() = processor.schoolName
