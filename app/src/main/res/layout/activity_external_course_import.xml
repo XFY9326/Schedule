@@ -113,6 +113,7 @@
                         android:focusable="true"
                         android:focusableInTouchMode="true"
                         android:singleLine="true"
+                        android:text="@string/json_course_import_title"
                         android:textColor="@color/theme_color_primary_text"
                         android:textSize="25sp"
                         android:textStyle="bold" />
@@ -126,6 +127,7 @@
                         android:focusable="true"
                         android:focusableInTouchMode="true"
                         android:singleLine="true"
+                        android:text="@string/json_course_import_msg"
                         android:textSize="16sp" />
 
                     <com.google.android.material.button.MaterialButton
@@ -161,7 +163,8 @@
                         android:ellipsize="marquee"
                         android:focusable="true"
                         android:focusableInTouchMode="true"
-                        android:singleLine="true" />
+                        android:singleLine="true"
+                        android:visibility="gone" />
 
                 </androidx.appcompat.widget.LinearLayoutCompat>
 

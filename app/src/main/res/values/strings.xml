@@ -409,6 +409,8 @@
     <string name="external_course_init_error">初始化错误！</string>
     <string name="external_course_processor_name_error">未找到指定的外部课程处理器！</string>
     <string name="launch_pure_schedule">打开Pure课程表</string>
+    <string name="json_course_import_title">欢迎使用Pure课程表</string>
+    <string name="json_course_import_msg">请选择课程导入方式</string>
 
     <string name="js_config_read_failed">配置文件读取错误！</string>
     <string name="js_config_invalid">导入的配置文件不合法！</string>

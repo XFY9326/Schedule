@@ -3,7 +3,10 @@ package tool.xfy9326.schedule.content.js
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import lib.xfy9326.kit.nullIfBlank
-import tool.xfy9326.schedule.beans.*
+import tool.xfy9326.schedule.beans.Course
+import tool.xfy9326.schedule.beans.ScheduleImportContent
+import tool.xfy9326.schedule.beans.ScheduleTime
+import tool.xfy9326.schedule.beans.WeekDay
 import tool.xfy9326.schedule.content.base.AbstractCourseParser
 import tool.xfy9326.schedule.content.base.CourseParseResult
 import tool.xfy9326.schedule.content.beans.JSConfig
@@ -11,20 +14,17 @@ import tool.xfy9326.schedule.content.beans.JSParams
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
 import tool.xfy9326.schedule.content.utils.CourseAdapterException.Companion.report
 import tool.xfy9326.schedule.content.utils.CourseAdapterUtils
+import tool.xfy9326.schedule.content.utils.CourseImportHelper
 import tool.xfy9326.schedule.content.utils.toBooleanArray
 import tool.xfy9326.schedule.json.parser.ai.AiScheduleResult
-import tool.xfy9326.schedule.json.parser.pure.ScheduleImportJSON
 
 class JSCourseParser : AbstractCourseParser<JSParams>() {
-    private val json = Json {
-        ignoreUnknownKeys = true
-    }
 
     fun processJSResult(data: String) =
         try {
             when (requireParams().jsType) {
                 JSConfig.TYPE_AI_SCHEDULE -> processAiScheduleResult(data)
-                JSConfig.TYPE_PURE_SCHEDULE -> processPureScheduleResult(data)
+                JSConfig.TYPE_PURE_SCHEDULE -> CourseImportHelper.parsePureScheduleJSON(data, requireParams().combineCourse, requireParams().combineCourseTime)
                 else -> error("Unsupported JS Type! ${requireParams().jsType}")
             }
         } catch (e: Exception) {
@@ -32,6 +32,7 @@ class JSCourseParser : AbstractCourseParser<JSParams>() {
         }
 
     private fun processAiScheduleResult(data: String): ScheduleImportContent {
+        val json = Json { ignoreUnknownKeys = true }
         val scheduleData = json.decodeFromString<AiScheduleResult>(data)
 
         val scheduleTimes = ArrayList<ScheduleTime>(scheduleData.sectionTimes.size)
@@ -52,30 +53,5 @@ class JSCourseParser : AbstractCourseParser<JSParams>() {
         }
 
         return ScheduleImportContent(scheduleTimes, builder.build(requireParams().combineCourse, requireParams().combineCourseTime))
-    }
-
-    private fun processPureScheduleResult(data: String): ScheduleImportContent {
-        val scheduleData = json.decodeFromString<ScheduleImportJSON>(data)
-
-        val scheduleTimes = ArrayList<ScheduleTime>(scheduleData.times.size)
-        scheduleData.times.forEach {
-            scheduleTimes.add(it.toScheduleTime())
-        }
-
-        val builder = CourseParseResult.Builder(scheduleData.courses.size)
-
-        for (course in scheduleData.courses) {
-            builder.add {
-                Course(course.name.trim(), course.teacher?.trim(), course.times.map {
-                    CourseTime(it.weekNum.toBooleanArray(), it.weekDay, it.start, it.duration, it.location?.trim())
-                })
-            }
-        }
-
-        return ScheduleImportContent(
-            scheduleTimes,
-            builder.build(requireParams().combineCourse, requireParams().combineCourseTime),
-            CourseAdapterUtils.simpleTermFix(scheduleData.termStart, scheduleData.termEnd)
-        )
     }
 }

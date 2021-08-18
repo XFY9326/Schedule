@@ -7,9 +7,19 @@ class ExternalCourseImportData(
     val fileContent: String,
     val bundle: Bundle?,
 ) {
-    class Origin(
-        val fileUri: Uri,
-        val processorName: String,
-        val processorExtraData: Bundle?,
-    )
+    sealed interface Origin {
+        val fileUri: Uri
+
+        class External(
+            override val fileUri: Uri,
+            val processorName: String,
+            val processorExtraData: Bundle?,
+        ) : Origin
+
+        class JSON(
+            override val fileUri: Uri,
+            val combineCourse: Boolean,
+            val combineCourseTime: Boolean,
+        ) : Origin
+    }
 }

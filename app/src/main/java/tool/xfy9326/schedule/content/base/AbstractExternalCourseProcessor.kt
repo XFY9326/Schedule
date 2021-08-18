@@ -9,12 +9,12 @@ abstract class AbstractExternalCourseProcessor<T1 : AbstractCourseProvider<*>, T
     private val configInstance: CourseImportInstance<T1, T2> by lazy {
         configClass.java.newInstance().getInstance()
     }
-    val schoolName: String
-        get() = configInstance.schoolName
-    val authorName: String
-        get() = configInstance.authorName
-    val systemName: String
-        get() = configInstance.systemName
+    val adapterInfo: IAdapterInfo
+        get() = object : IAdapterInfo {
+            override val schoolName = configInstance.schoolName
+            override val systemName = configInstance.systemName
+            override val authorName = configInstance.authorName
+        }
 
     suspend fun importCourse(data: ExternalCourseImportData) =
         onImportCourse(data, configInstance.provider, configInstance.parser)

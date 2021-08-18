@@ -71,9 +71,12 @@
             android:theme="@style/AppTheme.LaunchScreen">
             <intent-filter>
                 <action android:name="${BaseApplicationId}.action.EXTERNAL_COURSE_IMPORT" />
+                <action android:name="${BaseApplicationId}.action.JSON_COURSE_IMPORT" />
+
                 <category android:name="android.intent.category.DEFAULT" />
 
                 <data android:mimeType="text/plain" />
+                <data android:mimeType="application/json" />
             </intent-filter>
         </activity>
 

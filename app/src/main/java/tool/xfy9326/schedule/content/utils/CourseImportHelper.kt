@@ -1,9 +1,10 @@
 package tool.xfy9326.schedule.content.utils
 
-import tool.xfy9326.schedule.beans.NetworkCourseImportParams
-import tool.xfy9326.schedule.beans.ScheduleImportContent
-import tool.xfy9326.schedule.beans.WebPageContent
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.Json
+import tool.xfy9326.schedule.beans.*
 import tool.xfy9326.schedule.content.base.*
+import tool.xfy9326.schedule.json.parser.pure.ScheduleImportJSON
 
 object CourseImportHelper {
 
@@ -51,5 +52,32 @@ object CourseImportHelper {
         val coursesParseResult = parser.parseCourses(importOption, content)
         val term = parser.parseTerm(importOption, content)
         return ScheduleImportContent(scheduleTimes, coursesParseResult, term)
+    }
+
+    // 解析Pure课程表JSON文件
+    fun parsePureScheduleJSON(data: String, combineCourse: Boolean, combineCourseTime: Boolean): ScheduleImportContent {
+        val json = Json { ignoreUnknownKeys = true }
+        val scheduleData = json.decodeFromString<ScheduleImportJSON>(data)
+
+        val scheduleTimes = ArrayList<ScheduleTime>(scheduleData.times.size)
+        scheduleData.times.forEach {
+            scheduleTimes.add(it.toScheduleTime())
+        }
+
+        val builder = CourseParseResult.Builder(scheduleData.courses.size)
+
+        for (course in scheduleData.courses) {
+            builder.add {
+                Course(course.name.trim(), course.teacher?.trim(), course.times.map {
+                    CourseTime(it.weekNum.toBooleanArray(), it.weekDay, it.start, it.duration, it.location?.trim())
+                })
+            }
+        }
+
+        return ScheduleImportContent(
+            scheduleTimes,
+            builder.build(combineCourse, combineCourseTime),
+            CourseAdapterUtils.simpleTermFix(scheduleData.termStart, scheduleData.termEnd)
+        )
     }
 }

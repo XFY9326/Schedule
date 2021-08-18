@@ -9,6 +9,7 @@ import tool.xfy9326.schedule.content.ExternalCourseProcessorRegistry
 import tool.xfy9326.schedule.content.beans.ExternalCourseImportData
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
 import tool.xfy9326.schedule.content.utils.CourseAdapterException.Companion.report
+import tool.xfy9326.schedule.content.utils.CourseImportHelper
 import tool.xfy9326.schedule.ui.vm.base.AbstractViewModel
 import tool.xfy9326.schedule.utils.schedule.ScheduleImportManager
 
@@ -20,15 +21,17 @@ class ExternalCourseImportViewModel : AbstractViewModel() {
     lateinit var importParams: ExternalCourseImportData.Origin
 
     private val processor by lazy {
-        ExternalCourseProcessorRegistry.getProcessor(importParams.processorName) ?: error("External processor not found! Name: ${importParams.processorName}")
+        val params = importParams
+        if (params is ExternalCourseImportData.Origin.External) {
+            ExternalCourseProcessorRegistry.getProcessor(params.processorName) ?: error("External processor not found! Name: ${params.processorName}")
+        } else {
+            error("Params type error!")
+        }
     }
 
-    val schoolName
-        get() = processor.schoolName
-    val authorName
-        get() = processor.authorName
-    val systemName
-        get() = processor.systemName
+    // Only available when using ExternalCourseImportData.Origin.External
+    val adapterInfo
+        get() = processor.adapterInfo
 
     var isInit = true
     var isLoading = false
@@ -47,10 +50,14 @@ class ExternalCourseImportViewModel : AbstractViewModel() {
 
     fun importCourse(currentSchedule: Boolean, newScheduleName: String? = null) {
         scheduleImportManager.importCourse(viewModelScope, currentSchedule, newScheduleName) {
-            processor.importCourse(ExternalCourseImportData(
-                importParams.fileUri.readText() ?: CourseAdapterException.Error.PARSE_PAGE_ERROR.report(),
-                importParams.processorExtraData
-            )) ?: CourseAdapterException.Error.PARSE_PAGE_ERROR.report()
+            val params = importParams
+            val fileContent = params.fileUri.readText() ?: CourseAdapterException.Error.PARSE_PAGE_ERROR.report()
+            when (params) {
+                is ExternalCourseImportData.Origin.External ->
+                    processor.importCourse(ExternalCourseImportData(fileContent, params.processorExtraData)) ?: CourseAdapterException.Error.PARSE_PAGE_ERROR.report()
+                is ExternalCourseImportData.Origin.JSON ->
+                    CourseImportHelper.parsePureScheduleJSON(fileContent, params.combineCourse, params.combineCourseTime)
+            }
         }
     }
 

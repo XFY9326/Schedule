@@ -7,6 +7,7 @@ import lib.xfy9326.android.kit.setOnSingleClickListener
 import lib.xfy9326.kit.getDeepStackTraceString
 import lib.xfy9326.livedata.observeEvent
 import tool.xfy9326.schedule.R
+import tool.xfy9326.schedule.content.beans.ExternalCourseImportData
 import tool.xfy9326.schedule.content.utils.CourseAdapterException.Companion.getText
 import tool.xfy9326.schedule.content.utils.CourseAdapterException.Companion.strictModeOnly
 import tool.xfy9326.schedule.databinding.ActivityExternalCourseImportBinding
@@ -62,18 +63,8 @@ class ExternalCourseImportActivity : ViewBindingActivity<ActivityExternalCourseI
             }
         }
 
-        viewBinding.textViewExternalCourseSchoolName.apply {
-            isSelected = true
-            text = viewModel.schoolName
-        }
-        viewBinding.textViewExternalCourseSystemName.apply {
-            isSelected = true
-            text = viewModel.systemName
-        }
-        viewBinding.textViewExternalCourseAuthorName.apply {
-            isSelected = true
-            text = getString(R.string.adapter_author, viewModel.authorName)
-        }
+        setupText(viewBinding)
+
         viewBinding.buttonImportCourseToCurrentSchedule.setOnSingleClickListener {
             requestImportCourse(true)
         }
@@ -87,11 +78,43 @@ class ExternalCourseImportActivity : ViewBindingActivity<ActivityExternalCourseI
             startActivity(IntentUtils.getLaunchAppIntent(this))
             finish()
         }
-        viewBinding.textViewExternalCourseSuccessMsg.text = ScheduleImportSuccessDialog.getImportSuccessMsg(this, false)
 
         changeMainView(isInit = viewModel.isInit, isLoading = viewModel.isLoading, isSuccess = viewModel.isSuccess)
 
         ScheduleLaunchModule.tryShowEula(this)
+    }
+
+    private fun setupText(viewBinding: ActivityExternalCourseImportBinding) {
+        when (viewModel.importParams) {
+            is ExternalCourseImportData.Origin.External -> {
+                val adapterInfo = viewModel.adapterInfo
+                viewBinding.textViewExternalCourseSchoolName.apply {
+                    isSelected = true
+                    text = adapterInfo.schoolName
+                }
+                viewBinding.textViewExternalCourseSystemName.apply {
+                    isSelected = true
+                    text = adapterInfo.systemName
+                }
+                viewBinding.textViewExternalCourseAuthorName.apply {
+                    isSelected = true
+                    text = getString(R.string.adapter_author, adapterInfo.authorName)
+                    isVisible = true
+                }
+            }
+            is ExternalCourseImportData.Origin.JSON -> {
+                viewBinding.textViewExternalCourseSchoolName.apply {
+                    isSelected = true
+                    setText(R.string.json_course_import_title)
+                }
+                viewBinding.textViewExternalCourseSystemName.apply {
+                    isSelected = true
+                    setText(R.string.json_course_import_msg)
+                }
+                viewBinding.textViewExternalCourseAuthorName.isVisible = false
+            }
+        }
+        viewBinding.textViewExternalCourseSuccessMsg.text = ScheduleImportSuccessDialog.getImportSuccessMsg(this, false)
     }
 
     override fun onReadImportCourseConflict(value: Bundle?) {
