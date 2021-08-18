@@ -74,6 +74,8 @@ class CourseImportConfigManager(scope: CoroutineScope) : CoroutineScope by scope
         try {
             val content = uri.source()?.useBuffer { readUtf8() } ?: error("Empty uri! Uri $uri")
             addJSConfig(JSFileManager.parserJSConfig(content), false)
+        } catch (e: JSConfigException) {
+            operationError.postEvent(e)
         } catch (e: Exception) {
             operationError.postEvent(JSConfigException.Error.READ_FAILED.make(e))
         }
@@ -83,6 +85,8 @@ class CourseImportConfigManager(scope: CoroutineScope) : CoroutineScope by scope
         try {
             val content = httpClient.get<String>(url)
             addJSConfig(JSFileManager.parserJSConfig(content), false)
+        } catch (e: JSConfigException) {
+            operationError.postEvent(e)
         } catch (e: Exception) {
             operationError.postEvent(JSConfigException.Error.READ_FAILED.make(e))
         }

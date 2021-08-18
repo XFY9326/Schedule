@@ -197,6 +197,8 @@ object JSFileManager {
     suspend fun parserJSConfig(content: String) = runUnsafeIOJob {
         try {
             JSON.decodeFromString<JSConfig>(content)
+        } catch (e: JSConfigException) {
+            throw e
         } catch (e: Exception) {
             JSConfigException.Error.INVALID.report(e)
         }

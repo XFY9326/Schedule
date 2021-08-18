@@ -8,6 +8,7 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import tool.xfy9326.schedule.content.base.ICourseImportConfig
 import tool.xfy9326.schedule.content.utils.JSConfigException
+import tool.xfy9326.schedule.content.utils.JSConfigException.Companion.make
 import tool.xfy9326.schedule.content.utils.JSConfigException.Companion.report
 import java.util.*
 
@@ -45,6 +46,12 @@ data class JSConfig(
             } catch (e: Exception) {
                 false
             }
+    }
+
+    init {
+        if (CONFIG < config) {
+            JSConfigException.Error.INCOMPATIBLE_VERSION_ERROR.make()
+        }
     }
 
     @IgnoredOnParcel

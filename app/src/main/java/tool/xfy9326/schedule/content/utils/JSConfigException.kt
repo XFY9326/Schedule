@@ -39,6 +39,7 @@ class JSConfigException : Exception {
                 Error.PARSER_DOWNLOAD_ERROR -> R.string.js_config_parser_download_error
                 Error.DEPENDENCIES_DOWNLOAD_ERROR -> R.string.js_config_dependencies_download_error
                 Error.PREPARE_ERROR -> R.string.js_config_prepare_error
+                Error.INCOMPATIBLE_VERSION_ERROR -> R.string.js_config_incompatible_version_error
             }
     }
 
@@ -58,7 +59,8 @@ class JSConfigException : Exception {
         PROVIDER_DOWNLOAD_ERROR,
         PARSER_DOWNLOAD_ERROR,
         DEPENDENCIES_DOWNLOAD_ERROR,
-        PREPARE_ERROR
+        PREPARE_ERROR,
+        INCOMPATIBLE_VERSION_ERROR
     }
 
     private constructor(type: Error) : super(type.name) {

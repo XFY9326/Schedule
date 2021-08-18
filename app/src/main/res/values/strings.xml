@@ -426,6 +426,8 @@
     <string name="js_config_parser_download_error">课程解析器下载失败！</string>
     <string name="js_config_dependencies_download_error">运行环境依赖下载失败！</string>
     <string name="js_config_prepare_error">运行环境准备失败！</string>
+    <string name="js_config_incompatible_version_error">不兼容的配置文件版本！</string>
+
     <string name="js_config_exist_title">配置文件已存在</string>
     <string name="js_config_exist_msg">同UUID的配置文件已经存在！\n\n将要导入：\n\u3000学校：%1$s\n\u3000作者：%2$s\n已经存在：\n\u3000学校：%3$s\n\u3000作者：%4$s\n\n%5$s\n\n是否替换该配置文件？</string>
     <string name="js_config_update_url_changed">配置文件更新地址发生变化！</string>
