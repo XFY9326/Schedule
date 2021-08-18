@@ -13,7 +13,10 @@ import tool.xfy9326.schedule.ui.vm.base.AbstractViewModel
 import tool.xfy9326.schedule.utils.schedule.ScheduleImportManager
 
 class ExternalCourseImportViewModel : AbstractViewModel() {
-    // Inject
+    /**
+     * Inject by ExternalCourseImportUtils in ViewModelProvider.NewInstanceFactory
+     * @link[tool.xfy9326.schedule.utils.ExternalCourseImportUtils.prepareRunningEnvironment]
+     */
     lateinit var importParams: ExternalCourseImportData.Origin
 
     private val processor by lazy {
@@ -26,6 +29,10 @@ class ExternalCourseImportViewModel : AbstractViewModel() {
         get() = processor.authorName
     val systemName
         get() = processor.systemName
+
+    var isInit = true
+    var isLoading = false
+    var isSuccess = false
 
     private val scheduleImportManager = ScheduleImportManager().apply {
         setOnErrorListener(::reportError)

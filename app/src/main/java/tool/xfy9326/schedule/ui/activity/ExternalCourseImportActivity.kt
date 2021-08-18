@@ -89,7 +89,7 @@ class ExternalCourseImportActivity : ViewBindingActivity<ActivityExternalCourseI
         }
         viewBinding.textViewExternalCourseSuccessMsg.text = ScheduleImportSuccessDialog.getImportSuccessMsg(this, false)
 
-        changeMainView(isInit = true, isLoading = false, isSuccess = false)
+        changeMainView(isInit = viewModel.isInit, isLoading = viewModel.isLoading, isSuccess = viewModel.isSuccess)
 
         ScheduleLaunchModule.tryShowEula(this)
     }
@@ -133,6 +133,10 @@ class ExternalCourseImportActivity : ViewBindingActivity<ActivityExternalCourseI
     }
 
     private fun changeMainView(isInit: Boolean, isLoading: Boolean, isSuccess: Boolean) {
+        viewModel.isInit = isInit
+        viewModel.isLoading = isLoading
+        viewModel.isSuccess = isSuccess
+
         requireViewBinding().layoutExternalCourseContent.isVisible = isInit
         requireViewBinding().layoutExternalCourseSuccess.isVisible = isSuccess
         if (isLoading) {
