@@ -7,6 +7,7 @@ import tool.xfy9326.schedule.content.base.*
 
 object CourseImportHelper {
 
+    // 导入在线课程
     suspend fun importNetworkCourse(
         params: NetworkCourseImportParams,
         importOption: Int,
@@ -28,6 +29,9 @@ object CourseImportHelper {
         return ScheduleImportContent(scheduleTimes, coursesParseResult, term)
     }
 
+    // 分析网页
+    // 返回：导入选项，网页分析结果
+    // 返回null代表网页内容无法解析出结果
     fun analyseWebPage(content: WebPageContent, provider: WebCourseProvider<*>): Pair<Int, WebPageContent>? {
         val pageInfo = provider.validateCourseImportPage(content.htmlContent, content.iframeContent, content.frameContent)
         return if (pageInfo.isValidPage) {
@@ -37,6 +41,7 @@ object CourseImportHelper {
         }
     }
 
+    // 解析网页
     fun parseWebCourse(
         content: WebPageContent,
         importOption: Int,

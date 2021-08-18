@@ -16,7 +16,7 @@ class SCUJCCExternalProcessor : AbstractExternalCourseProcessor<SCUJCCCourseProv
         const val PROCESSOR_NAME = "SCUJCC"
     }
 
-    override fun onImportCourse(data: ExternalCourseImportData, provider: SCUJCCCourseProvider, parser: SCUJCCCourseParser): ScheduleImportContent? {
+    override suspend fun onImportCourse(data: ExternalCourseImportData, provider: SCUJCCCourseProvider, parser: SCUJCCCourseParser): ScheduleImportContent? {
         val content = WebPageContent(iframeContent = arrayOf(data.fileContent))
         val pair = CourseImportHelper.analyseWebPage(content, provider)
         return if (pair == null) {

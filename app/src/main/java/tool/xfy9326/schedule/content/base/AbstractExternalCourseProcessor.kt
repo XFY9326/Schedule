@@ -16,7 +16,7 @@ abstract class AbstractExternalCourseProcessor<T1 : AbstractCourseProvider<*>, T
     val systemName: String
         get() = configInstance.systemName
 
-    fun importCourse(data: ExternalCourseImportData) =
+    suspend fun importCourse(data: ExternalCourseImportData) =
         onImportCourse(data, configInstance.provider, configInstance.parser)
 
     /**
@@ -27,5 +27,5 @@ abstract class AbstractExternalCourseProcessor<T1 : AbstractCourseProvider<*>, T
      * @param parser 课程解析器
      * @return 若传入的数据导致无法解析出结果，返回null
      */
-    protected abstract fun onImportCourse(data: ExternalCourseImportData, provider: T1, parser: T2): ScheduleImportContent?
+    protected abstract suspend fun onImportCourse(data: ExternalCourseImportData, provider: T1, parser: T2): ScheduleImportContent?
 }
