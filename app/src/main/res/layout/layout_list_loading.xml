@@ -10,4 +10,5 @@
     android:gravity="center"
     android:indeterminate="true"
     android:indeterminateDrawable="@drawable/background_progress_bar_circle_small"
+    android:visibility="gone"
     tools:ignore="ObsoleteLayoutParam" />
