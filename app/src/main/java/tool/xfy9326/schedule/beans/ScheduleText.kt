@@ -22,15 +22,15 @@ enum class ScheduleText(val prefKey: Preferences.Key<Int>, @IntegerRes private v
     @Parcelize
     class TextSize private constructor(private val sizeMap: Map<ScheduleText, Int>) : Parcelable {
         companion object {
-            @get:Sp
+            @Sp
             val maxSize
                 get() = IOManager.resources.getInteger(R.integer.schedule_text_size_max)
 
-            @get:Sp
+            @Sp
             val minSize
                 get() = IOManager.resources.getInteger(R.integer.schedule_text_size_min)
 
-            @get:Sp
+            @Sp
             val sizeOffset
                 get() = IOManager.resources.getInteger(R.integer.schedule_text_size_offset)
 
