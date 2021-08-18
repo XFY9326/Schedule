@@ -83,6 +83,7 @@ object CourseAdapterUtils {
      * @return 解析结果数组
      */
     fun parseNumberPeriods(str: String, groupDivider: String = ",", durationDivider: String = "-", oddOnly: Boolean = false, evenOnly: Boolean = false): BooleanArray {
+        if (str.isBlank()) return BooleanArray(0)
         var maxValue = 0
         val groups = str.split(groupDivider).mapNotNull {
             val duration = it.split(durationDivider).map { num -> num.trim().toInt() }
@@ -106,6 +107,7 @@ object CourseAdapterUtils {
      * @return 时间间隔数组
      */
     fun parseIntCollectionPeriod(arr: Collection<Int>): List<TimePeriod> {
+        if (arr.isEmpty()) return emptyList()
         val sortedArr = (if (arr is Set<Int>) arr else arr.toSet()).toList().sorted()
         if (sortedArr.isNotEmpty()) {
             val result = ArrayList<TimePeriod>()
@@ -142,6 +144,7 @@ object CourseAdapterUtils {
      * @return 课程时间
      */
     fun parseMultiCourseTimes(weeks: BooleanArray, weekDay: WeekDay, numArr: Collection<Int>, location: String? = null): List<CourseTime> {
+        if (numArr.isEmpty()) return emptyList()
         val timePeriods = parseIntCollectionPeriod(numArr)
         val result = ArrayList<CourseTime>(timePeriods.size)
         for (period in timePeriods) {

@@ -33,7 +33,11 @@ class JSCourseParser : AbstractCourseParser<JSParams>() {
 
     private fun processAiScheduleResult(data: String): ScheduleImportContent {
         val json = Json { ignoreUnknownKeys = true }
-        val scheduleData = json.decodeFromString<AiScheduleResult>(data)
+        val scheduleData = try {
+            json.decodeFromString<AiScheduleResult>(data)
+        } catch (e: Exception) {
+            CourseAdapterException.Error.JSON_PARSE_ERROR.report(e)
+        }
 
         val scheduleTimes = ArrayList<ScheduleTime>(scheduleData.sectionTimes.size)
         scheduleData.sectionTimes.sortedBy {

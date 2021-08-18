@@ -52,6 +52,7 @@ class CourseAdapterException : Exception {
                 Error.INCOMPLETE_COURSE_INFO_ERROR -> R.string.adapter_exception_incomplete_course_info
                 Error.UNKNOWN_ERROR -> R.string.adapter_exception_unknown_error
                 Error.CAPTCHA_CODE_ERROR -> R.string.adapter_exception_captcha_code_error
+                Error.JSON_PARSE_ERROR -> R.string.adapter_exception_json_parse_error
 
                 Error.CONNECTION_ERROR -> R.string.adapter_exception_login_connection_error
                 Error.PARSER_ERROR -> R.string.adapter_exception_parse_error
@@ -82,6 +83,7 @@ class CourseAdapterException : Exception {
         INCOMPLETE_COURSE_INFO_ERROR,
         UNKNOWN_ERROR,
         CAPTCHA_CODE_ERROR,
+        JSON_PARSE_ERROR,
 
         // 课程导入时会自动判断该错误
         CONNECTION_ERROR,

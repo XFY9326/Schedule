@@ -2,8 +2,10 @@ package tool.xfy9326.schedule.content.utils
 
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
+import lib.xfy9326.kit.nullIfBlank
 import tool.xfy9326.schedule.beans.*
 import tool.xfy9326.schedule.content.base.*
+import tool.xfy9326.schedule.content.utils.CourseAdapterException.Companion.report
 import tool.xfy9326.schedule.json.parser.pure.ScheduleImportJSON
 
 object CourseImportHelper {
@@ -57,7 +59,11 @@ object CourseImportHelper {
     // 解析Pure课程表JSON文件
     fun parsePureScheduleJSON(data: String, combineCourse: Boolean, combineCourseTime: Boolean): ScheduleImportContent {
         val json = Json { ignoreUnknownKeys = true }
-        val scheduleData = json.decodeFromString<ScheduleImportJSON>(data)
+        val scheduleData = try {
+            json.decodeFromString<ScheduleImportJSON>(data)
+        } catch (e: Exception) {
+            CourseAdapterException.Error.JSON_PARSE_ERROR.report(e)
+        }
 
         val scheduleTimes = ArrayList<ScheduleTime>(scheduleData.times.size)
         scheduleData.times.forEach {
@@ -68,9 +74,19 @@ object CourseImportHelper {
 
         for (course in scheduleData.courses) {
             builder.add {
-                Course(course.name.trim(), course.teacher?.trim(), course.times.map {
-                    CourseTime(it.weekNum.toBooleanArray(), it.weekDay, it.start, it.duration, it.location?.trim())
-                })
+                val times = ArrayList<CourseTime>()
+                for (time in course.times) {
+                    val weekNum = time.weekNum.toBooleanArray()
+                    val location = time.location?.trim().nullIfBlank()
+                    if (time.start != null && time.duration != null) {
+                        times.add(CourseTime(weekNum, time.weekDay, time.start, time.duration, location))
+                    } else if (time.sections != null) {
+                        times.addAll(CourseAdapterUtils.parseMultiCourseTimes(weekNum, time.weekDay, time.sections, location))
+                    } else {
+                        CourseAdapterException.Error.JSON_PARSE_ERROR.report()
+                    }
+                }
+                Course(course.name.trim(), course.teacher?.trim().nullIfBlank(), times)
             }
         }
 
