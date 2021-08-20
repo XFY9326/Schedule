@@ -27,7 +27,7 @@ data class NextCourseInfo(
         course.color,
         course.teacher,
         courseTime.location,
-        schedule.times[courseTime.classTime.classStartTime - 1].startTimeStr
+        schedule.times[courseTime.sectionTime.start - 1].startTimeStr
     )
 
     fun getSingleLineCourseTimeDescription(context: Context) =

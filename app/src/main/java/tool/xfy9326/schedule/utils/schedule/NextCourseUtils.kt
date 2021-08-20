@@ -71,7 +71,7 @@ object NextCourseUtils {
             isVacation = false,
             noNextCourse = false,
             nextCourseInfo = NextCourseInfo(schedule, resultPair.first, resultPair.second),
-            nextAutoRefreshTimeMills = CourseTimeUtils.getClassEndTime(date, schedule.times, resultPair.second.classTime)
+            nextAutoRefreshTimeMills = CourseTimeUtils.getClassEndTime(date, schedule.times, resultPair.second.sectionTime)
         )
     }
 

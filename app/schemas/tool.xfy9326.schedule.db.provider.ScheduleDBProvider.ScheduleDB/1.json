@@ -154,19 +154,19 @@
             "notNull": false
           },
           {
-            "fieldPath": "classTime.weekDay",
+            "fieldPath": "sectionTime.weekDay",
             "columnName": "weekDay",
             "affinity": "INTEGER",
             "notNull": true
           },
           {
-            "fieldPath": "classTime.classStartTime",
+            "fieldPath": "sectionTime.start",
             "columnName": "classStartTime",
             "affinity": "INTEGER",
             "notNull": true
           },
           {
-            "fieldPath": "classTime.classDuration",
+            "fieldPath": "sectionTime.duration",
             "columnName": "classDuration",
             "affinity": "INTEGER",
             "notNull": true

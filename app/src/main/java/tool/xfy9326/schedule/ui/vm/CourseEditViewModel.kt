@@ -61,7 +61,7 @@ class CourseEditViewModel : AbstractViewModel() {
                     CourseTimeEditDialog.EditBundle(
                         CourseTimeUtils.getMaxWeekNum(it.startDate, it.endDate, it.weekStart),
                         it.times.size,
-                        courseTime?.copy(classTime = courseTime.classTime.copy()),
+                        courseTime?.copy(sectionTime = courseTime.sectionTime.copy()),
                         position
                     )
                 )

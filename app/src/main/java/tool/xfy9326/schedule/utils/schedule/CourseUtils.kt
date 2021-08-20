@@ -4,10 +4,10 @@ import lib.xfy9326.android.kit.io.IOManager
 import lib.xfy9326.kit.forEachTwo
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.*
-import tool.xfy9326.schedule.beans.ClassTime.Companion.classEndTime
-import tool.xfy9326.schedule.beans.ClassTime.Companion.intersect
 import tool.xfy9326.schedule.beans.Course.Companion.iterateAll
 import tool.xfy9326.schedule.beans.CourseTime.Companion.intersect
+import tool.xfy9326.schedule.beans.SectionTime.Companion.end
+import tool.xfy9326.schedule.beans.SectionTime.Companion.intersect
 import tool.xfy9326.schedule.beans.WeekDay.Companion.isWeekend
 import tool.xfy9326.schedule.beans.WeekDay.Companion.orderedValue
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
@@ -31,7 +31,7 @@ object CourseUtils {
                 hasThisWeekCourseBySchedule(courseTime, weekNum, maxWeekNum, startWeekDay, endWeekDay, bundle.schedule.weekStart)
             if (isThisWeekCourse || showNotThisWeekCourse) {
                 val intersectCells = result.filter {
-                    it.classTime intersect courseTime.classTime
+                    it.sectionTime intersect courseTime.sectionTime
                 }
 
                 if (intersectCells.isEmpty()) {
@@ -45,7 +45,7 @@ object CourseUtils {
                             } else if (b.isThisWeekCourse && !a.isThisWeekCourse) {
                                 1
                             } else {
-                                a.classTime.compareTo(b.classTime)
+                                a.sectionTime.compareTo(b.sectionTime)
                             }
                         }
                         result.removeAll(this)
@@ -68,8 +68,8 @@ object CourseUtils {
     ) =
         if (courseTime.weekNum.hasCourse(weekNum)) {
             when (weekNum) {
-                1 -> startWeekDay.orderedValue(weekStart) <= courseTime.classTime.weekDay.orderedValue(weekStart)
-                maxWeekNum -> endWeekDay.orderedValue(weekStart) >= courseTime.classTime.weekDay.orderedValue(weekStart)
+                1 -> startWeekDay.orderedValue(weekStart) <= courseTime.sectionTime.weekDay.orderedValue(weekStart)
+                maxWeekNum -> endWeekDay.orderedValue(weekStart) >= courseTime.sectionTime.weekDay.orderedValue(weekStart)
                 else -> true
             }
         } else {
@@ -87,7 +87,7 @@ object CourseUtils {
 
     fun hasWeekendCourse(cells: List<CourseCell>): Boolean {
         for (cell in cells) {
-            if (cell.classTime.weekDay.isWeekend) {
+            if (cell.sectionTime.weekDay.isWeekend) {
                 return true
             }
         }
@@ -102,7 +102,7 @@ object CourseUtils {
         var foundConflicts = false
 
         allTimes.forEach {
-            if (it.classTime.classEndTime > scheduleTimes.size) CourseAdapterException.Error.MAX_COURSE_NUM_ERROR.report()
+            if (it.sectionTime.end > scheduleTimes.size) CourseAdapterException.Error.MAX_COURSE_NUM_ERROR.report()
         }
 
         allTimes.forEachTwo { _, t1, _, t2 ->

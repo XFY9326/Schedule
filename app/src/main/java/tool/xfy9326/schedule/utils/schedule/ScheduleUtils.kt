@@ -3,13 +3,13 @@ package tool.xfy9326.schedule.utils.schedule
 import kotlinx.coroutines.flow.first
 import lib.xfy9326.android.kit.io.IOManager
 import tool.xfy9326.schedule.R
-import tool.xfy9326.schedule.beans.ClassTime.Companion.classEndTime
 import tool.xfy9326.schedule.beans.Course
 import tool.xfy9326.schedule.beans.Course.Companion.iterateAll
 import tool.xfy9326.schedule.beans.EditError
 import tool.xfy9326.schedule.beans.Schedule
 import tool.xfy9326.schedule.beans.ScheduleTime
 import tool.xfy9326.schedule.beans.ScheduleTime.Companion.intersect
+import tool.xfy9326.schedule.beans.SectionTime.Companion.end
 import tool.xfy9326.schedule.data.AppDataStore
 import tool.xfy9326.schedule.data.ScheduleDataStore
 import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
@@ -178,7 +178,7 @@ object ScheduleUtils {
         }
 
         scheduleCourses.iterateAll { course, courseTime ->
-            if (courseTime.classTime.classEndTime > schedule.times.size) {
+            if (courseTime.sectionTime.end > schedule.times.size) {
                 return EditError.Type.SCHEDULE_COURSE_NUM_ERROR.make(course.name)
             }
             if (courseTime.weekNum.size > maxWeekNum) {

@@ -24,7 +24,7 @@ data class CourseTimeImportJSON(
             require(start > 0) { "Start error!" }
             require(duration > 0) { "Duration error!" }
         } else {
-            require(sections != null) { "Sections or start and duration error!" }
+            require(sections != null) { "Sections or start - duration error!" }
         }
     }
 }

@@ -138,7 +138,7 @@ abstract class ScheduleDAO {
     @Query("select * from ${DBConst.TABLE_COURSE} where ${DBConst.COLUMN_SCHEDULE_ID}=:scheduleId")
     protected abstract fun getCourses(scheduleId: Long): Flow<List<CourseBundle>>
 
-    @Query("select ${DBConst.TABLE_COURSE_TIME}.* from ${DBConst.TABLE_COURSE}, ${DBConst.TABLE_COURSE_TIME} where ${DBConst.COLUMN_SCHEDULE_ID}=:scheduleId and ${DBConst.TABLE_COURSE_TIME}.${DBConst.COLUMN_COURSE_ID}=${DBConst.TABLE_COURSE}.${DBConst.COLUMN_COURSE_ID} and ${DBConst.COLUMN_WEEK_DAY}=:weekDayInt and (${DBConst.COLUMN_CLASS_START_TIME} + ${DBConst.COLUMN_CLASS_DURATION} - 1) >= :minEndClassNum and ${DBConst.COLUMN_WEEK_NUM} like :weekNumLike order by ${DBConst.COLUMN_CLASS_START_TIME} asc limit 1")
+    @Query("select ${DBConst.TABLE_COURSE_TIME}.* from ${DBConst.TABLE_COURSE}, ${DBConst.TABLE_COURSE_TIME} where ${DBConst.COLUMN_SCHEDULE_ID}=:scheduleId and ${DBConst.TABLE_COURSE_TIME}.${DBConst.COLUMN_COURSE_ID}=${DBConst.TABLE_COURSE}.${DBConst.COLUMN_COURSE_ID} and ${DBConst.COLUMN_WEEK_DAY}=:weekDayInt and (${DBConst.COLUMN_SECTION_START} + ${DBConst.COLUMN_SECTION_DURATION} - 1) >= :minEndClassNum and ${DBConst.COLUMN_WEEK_NUM} like :weekNumLike order by ${DBConst.COLUMN_SECTION_START} asc limit 1")
     protected abstract suspend fun getNextCourseTimeByDate(scheduleId: Long, weekNumLike: String, weekDayInt: Int, minEndClassNum: Int): CourseTime?
 
     @Transaction

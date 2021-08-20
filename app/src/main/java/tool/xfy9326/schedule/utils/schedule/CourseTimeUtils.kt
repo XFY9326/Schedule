@@ -1,7 +1,7 @@
 package tool.xfy9326.schedule.utils.schedule
 
 import tool.xfy9326.schedule.beans.*
-import tool.xfy9326.schedule.beans.ClassTime.Companion.classEndTime
+import tool.xfy9326.schedule.beans.SectionTime.Companion.end
 import tool.xfy9326.schedule.beans.WeekDay.Companion.getWeekDay
 import tool.xfy9326.schedule.beans.WeekDay.Companion.isWeekend
 import tool.xfy9326.schedule.beans.WeekDay.Companion.orderedValue
@@ -51,32 +51,32 @@ object CourseTimeUtils {
         return CalendarUtils.getLastDateInThisWeek(endWeekNum, weekStart)
     }
 
-    fun getClassEndTime(date: Date, scheduleTimes: List<ScheduleTime>, classTime: ClassTime): Long =
+    fun getClassEndTime(date: Date, scheduleTimes: List<ScheduleTime>, sectionTime: SectionTime): Long =
         CalendarUtils.getCalendar(date = date, clearToDate = true).apply {
-            val scheduleTime = scheduleTimes[classTime.classEndTime - 1]
+            val scheduleTime = scheduleTimes[sectionTime.end - 1]
             set(Calendar.HOUR_OF_DAY, scheduleTime.endHour)
             set(Calendar.MINUTE, scheduleTime.endMinute)
         }.timeInMillis
 
-    fun getRealClassTime(
+    fun getRealSectionTime(
         scheduleCalculateTimes: ScheduleCalculateTimes,
         weekNum: Int,
-        classTime: ClassTime,
+        sectionTime: SectionTime,
     ): Pair<Date, Date> {
         CalendarUtils.getCalendar(
             date = scheduleCalculateTimes.weekCountBeginning,
             weekStart = scheduleCalculateTimes.weekStart,
             clearToDate = true
         ).apply {
-            val dayOffset = (weekNum - 1) * 7 + classTime.weekDay.orderedValue(scheduleCalculateTimes.weekStart) - 1
+            val dayOffset = (weekNum - 1) * 7 + sectionTime.weekDay.orderedValue(scheduleCalculateTimes.weekStart) - 1
             if (dayOffset != 0) add(Calendar.DATE, dayOffset)
 
-            val start = scheduleCalculateTimes.times[classTime.classStartTime - 1]
+            val start = scheduleCalculateTimes.times[sectionTime.start - 1]
             set(Calendar.HOUR_OF_DAY, start.startHour)
             set(Calendar.MINUTE, start.startMinute)
             val startTime = time
 
-            val end = scheduleCalculateTimes.times[classTime.classEndTime - 1]
+            val end = scheduleCalculateTimes.times[sectionTime.end - 1]
             set(Calendar.HOUR_OF_DAY, end.endHour)
             set(Calendar.MINUTE, end.endMinute)
             val endTime = time

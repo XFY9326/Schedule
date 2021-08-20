@@ -53,7 +53,7 @@ data class Course(
         fun Course.clone(scheduleId: Long): Course {
             val timesList = ArrayList<CourseTime>(times.size)
             times.forEach {
-                timesList.add(it.copy(timeId = DBConst.DEFAULT_ID, courseId = DBConst.DEFAULT_ID, classTime = it.classTime.copy()))
+                timesList.add(it.copy(timeId = DBConst.DEFAULT_ID, courseId = DBConst.DEFAULT_ID, sectionTime = it.sectionTime.copy()))
             }
             return copy(scheduleId = scheduleId, courseId = DBConst.DEFAULT_ID, times = timesList)
         }

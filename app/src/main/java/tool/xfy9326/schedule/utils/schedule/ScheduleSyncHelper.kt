@@ -148,29 +148,29 @@ object ScheduleSyncHelper {
     ): Boolean {
         val weekNumPattern = WeekNumPattern.parsePattern(courseTime, scheduleCalculateTimes)
         if (weekNumPattern.type == NumberPattern.PatternType.SINGLE) {
-            CourseTimeUtils.getRealClassTime(scheduleCalculateTimes, weekNumPattern.start + 1, courseTime.classTime).let { time ->
+            CourseTimeUtils.getRealSectionTime(scheduleCalculateTimes, weekNumPattern.start + 1, courseTime.sectionTime).let { time ->
                 if (!insertEvent(contentResolver, sync, reminderMinutes, ContentValues().apply {
                         addBasicInfoToCalendarEvent(this, calId, time, course, courseTime)
                     })) return false
             }
         } else if (weekNumPattern.type == NumberPattern.PatternType.SPACED || weekNumPattern.type == NumberPattern.PatternType.SERIAL) {
-            CourseTimeUtils.getRealClassTime(scheduleCalculateTimes, weekNumPattern.start + 1, courseTime.classTime).let { time ->
+            CourseTimeUtils.getRealSectionTime(scheduleCalculateTimes, weekNumPattern.start + 1, courseTime.sectionTime).let { time ->
                 if (!insertEvent(contentResolver, sync, reminderMinutes, ContentValues().apply {
                         put(
                             CalendarContract.Events.RRULE,
-                            ScheduleICSWriter.RRULE(weekNumPattern.interval, weekNumPattern.amount, courseTime.classTime.weekDay, scheduleCalculateTimes.weekStart).text
+                            ScheduleICSWriter.RRULE(weekNumPattern.interval, weekNumPattern.amount, courseTime.sectionTime.weekDay, scheduleCalculateTimes.weekStart).text
                         )
                         addBasicInfoToCalendarEvent(this, calId, time, course, courseTime)
                     })) return false
             }
         } else if (weekNumPattern.type == NumberPattern.PatternType.MESSY) {
             for (period in weekNumPattern.timePeriodArray) {
-                CourseTimeUtils.getRealClassTime(scheduleCalculateTimes, period.start + 1, courseTime.classTime).let { time ->
+                CourseTimeUtils.getRealSectionTime(scheduleCalculateTimes, period.start + 1, courseTime.sectionTime).let { time ->
                     if (!insertEvent(contentResolver, sync, reminderMinutes, ContentValues().apply {
                             if (period.length > 1) {
                                 put(
                                     CalendarContract.Events.RRULE,
-                                    ScheduleICSWriter.RRULE(1, period.length, courseTime.classTime.weekDay, scheduleCalculateTimes.weekStart).text
+                                    ScheduleICSWriter.RRULE(1, period.length, courseTime.sectionTime.weekDay, scheduleCalculateTimes.weekStart).text
                                 )
                             }
                             addBasicInfoToCalendarEvent(this, calId, time, course, courseTime)

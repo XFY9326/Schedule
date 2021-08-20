@@ -20,10 +20,10 @@ object WeekNumPattern {
 
         if (tempWeekNum.first()) {
             val startWeekDay = CalendarUtils.getWeekDay(scheduleCalculateTimes.actualStartTime)
-            tempWeekNum[0] = startWeekDay.orderedValue(weekStart) <= courseTime.classTime.weekDay.orderedValue(weekStart)
+            tempWeekNum[0] = startWeekDay.orderedValue(weekStart) <= courseTime.sectionTime.weekDay.orderedValue(weekStart)
         } else if (tempWeekNum.size == maxWeekNum && tempWeekNum.last()) {
             val endWeekDay = CalendarUtils.getWeekDay(scheduleCalculateTimes.actualEndTime)
-            tempWeekNum[tempWeekNum.lastIndex] = endWeekDay.orderedValue(weekStart) >= courseTime.classTime.weekDay.orderedValue(weekStart)
+            tempWeekNum[tempWeekNum.lastIndex] = endWeekDay.orderedValue(weekStart) >= courseTime.sectionTime.weekDay.orderedValue(weekStart)
         }
 
         return NumberPattern(tempWeekNum)

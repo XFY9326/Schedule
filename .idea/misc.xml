@@ -54,7 +54,9 @@
         <entry key="app/src/main/res/layout/activity_schedule.xml" value="0.1125" />
         <entry key="app/src/main/res/layout/activity_schedule_edit.xml" value="0.2504273504273504" />
         <entry key="app/src/main/res/layout/activity_schedule_manage.xml" value="0.2510245901639344" />
+        <entry key="app/src/main/res/layout/dialog_course_time_edit.xml" value="0.291213768115942" />
         <entry key="app/src/main/res/layout/dialog_schedule_text_size_edit.xml" value="0.2504273504273504" />
+        <entry key="app/src/main/res/layout/item_course_detail_time.xml" value="0.291213768115942" />
         <entry key="app/src/main/res/layout/item_course_time.xml" value="0.2794871794871795" />
         <entry key="app/src/main/res/layout/item_schedule.xml" value="0.2510245901639344" />
         <entry key="app/src/main/res/layout/layout_list_loading.xml" value="0.2504273504273504" />

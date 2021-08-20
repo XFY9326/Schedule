@@ -20,7 +20,7 @@
         app:drawableStartCompat="@drawable/ic_week_20" />
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/textView_courseClassTime"
+        android:id="@+id/textView_courseSectionTime"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="3dp"

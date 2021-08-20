@@ -51,13 +51,13 @@ object ScheduleViewHelper {
         val sampleName = IOManager.resources.getString(R.string.sample_course_name)
         val sampleLocation = IOManager.resources.getString(R.string.sample_course_location)
         listOf(
-            CourseCell(0, 0, sampleName, sampleLocation, ClassTime(WeekDay.MONDAY, 1, 2), colors[0], true),
-            CourseCell(0, 1, sampleName, sampleLocation, ClassTime(WeekDay.MONDAY, 5, 2), colors[2], true),
-            CourseCell(0, 2, sampleName, sampleLocation, ClassTime(WeekDay.TUESDAY, 5, 4), colors[4], true),
-            CourseCell(0, 3, sampleName, sampleLocation, ClassTime(WeekDay.WEDNESDAY, 2, 2), colors[6], true),
-            CourseCell(0, 4, sampleName, sampleLocation, ClassTime(WeekDay.WEDNESDAY, 5, 2), colors[8], false),
-            CourseCell(0, 5, sampleName, sampleLocation, ClassTime(WeekDay.FRIDAY, 4, 3), colors[10], false),
-            CourseCell(0, 6, sampleName, sampleLocation, ClassTime(WeekDay.FRIDAY, 8, 2), colors[12], true),
+            CourseCell(0, 0, sampleName, sampleLocation, SectionTime(WeekDay.MONDAY, 1, 2), colors[0], true),
+            CourseCell(0, 1, sampleName, sampleLocation, SectionTime(WeekDay.MONDAY, 5, 2), colors[2], true),
+            CourseCell(0, 2, sampleName, sampleLocation, SectionTime(WeekDay.TUESDAY, 5, 4), colors[4], true),
+            CourseCell(0, 3, sampleName, sampleLocation, SectionTime(WeekDay.WEDNESDAY, 2, 2), colors[6], true),
+            CourseCell(0, 4, sampleName, sampleLocation, SectionTime(WeekDay.WEDNESDAY, 5, 2), colors[8], false),
+            CourseCell(0, 5, sampleName, sampleLocation, SectionTime(WeekDay.FRIDAY, 4, 3), colors[10], false),
+            CourseCell(0, 6, sampleName, sampleLocation, SectionTime(WeekDay.FRIDAY, 8, 2), colors[12], true),
         )
     }
 

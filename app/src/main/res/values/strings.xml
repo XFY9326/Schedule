@@ -27,8 +27,8 @@
     <string name="weekday">周%1$s</string>
     <string name="course_detail_week_num">周数：第%1$s周</string>
     <string name="course_detail_week_num_simple">周数：%1$s</string>
-    <string name="course_detail_class_time">时间：%1$s 第%2$s节\u3000%3$s</string>
-    <string name="course_detail_class_time_simple">时间：%1$s 第%2$s节</string>
+    <string name="course_detail_section_time">时间：%1$s 第%2$s节\u3000%3$s</string>
+    <string name="course_detail_section_time_simple">时间：%1$s 第%2$s节</string>
     <string name="course_detail_location">地点：%1$s</string>
     <string name="open_drawer">打开侧边栏</string>
     <string name="close_drawer">关闭侧边栏</string>
@@ -86,7 +86,7 @@
     <string name="course_detail">课程详情</string>
     <string name="course_name">课程名称</string>
     <string name="teacher_name">教师名称（可选）</string>
-    <string name="class_location">课程地点（可选）</string>
+    <string name="course_location">课程地点（可选）</string>
     <string name="undefined">未设定</string>
     <string name="course_time_delete_success">课程时间删除成功！</string>
     <string name="set_all_odd_week">单周</string>

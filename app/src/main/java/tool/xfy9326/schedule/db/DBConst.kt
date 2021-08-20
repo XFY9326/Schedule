@@ -14,8 +14,8 @@ object DBConst {
     const val COLUMN_COURSE_ID = "courseId"
     const val COLUMN_TIME_ID = "timeId"
     const val COLUMN_WEEK_DAY = "weekDay"
-    const val COLUMN_CLASS_START_TIME = "classStartTime"
-    const val COLUMN_CLASS_DURATION = "classDuration"
+    const val COLUMN_SECTION_START = "classStartTime"
+    const val COLUMN_SECTION_DURATION = "classDuration"
     const val COLUMN_WEEK_NUM = "weekNum"
     const val COLUMN_SYNC_ID = "syncId"
 

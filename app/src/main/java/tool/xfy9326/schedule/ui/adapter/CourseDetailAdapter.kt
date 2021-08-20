@@ -9,11 +9,11 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 import lib.xfy9326.android.kit.getDrawableCompat
 import tool.xfy9326.schedule.R
-import tool.xfy9326.schedule.beans.ClassTime.Companion.classTimeDescription
-import tool.xfy9326.schedule.beans.ClassTime.Companion.scheduleTimeDescription
 import tool.xfy9326.schedule.beans.CourseTime
 import tool.xfy9326.schedule.beans.CourseTime.Companion.getWeeksDescriptionText
 import tool.xfy9326.schedule.beans.ScheduleTime
+import tool.xfy9326.schedule.beans.SectionTime.Companion.description
+import tool.xfy9326.schedule.beans.SectionTime.Companion.scheduleTimeDescription
 import tool.xfy9326.schedule.databinding.ItemCourseDetailTimeBinding
 import tool.xfy9326.schedule.databinding.ItemCourseDetailTimeExpandBinding
 import tool.xfy9326.schedule.ui.view.recyclerview.AdvancedDividerItemDecoration
@@ -112,11 +112,11 @@ class CourseDetailAdapter(
                 } else {
                     holder.viewContext.getString(R.string.course_detail_week_num, weekNumText)
                 }
-            holder.viewBinding.textViewCourseClassTime.text = holder.viewContext.getString(
-                R.string.course_detail_class_time,
-                holder.viewContext.getString(R.string.weekday, weekDayStrArray[courseTime.classTime.weekDay.ordinal]),
-                courseTime.classTime.classTimeDescription,
-                courseTime.classTime.scheduleTimeDescription(scheduleTimes)
+            holder.viewBinding.textViewCourseSectionTime.text = holder.viewContext.getString(
+                R.string.course_detail_section_time,
+                holder.viewContext.getString(R.string.weekday, weekDayStrArray[courseTime.sectionTime.weekDay.ordinal]),
+                courseTime.sectionTime.description,
+                courseTime.sectionTime.scheduleTimeDescription(scheduleTimes)
             )
             val location = courseTime.location
             if (location == null) {

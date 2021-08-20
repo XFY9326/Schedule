@@ -78,9 +78,9 @@ object BackupUtils {
                 for (time in course.times) {
                     jsonCourseTimes.add(CourseTimeJSON(
                         weekNum = time.weekNum,
-                        weekDay = time.classTime.weekDay,
-                        start = time.classTime.classStartTime,
-                        duration = time.classTime.classDuration,
+                        weekDay = time.sectionTime.weekDay,
+                        start = time.sectionTime.start,
+                        duration = time.sectionTime.duration,
                         location = time.location
                     ))
                 }
@@ -125,8 +125,8 @@ object BackupUtils {
                     courseTimes.add(CourseTime(
                         weekNum = timeJson.weekNum,
                         weekDay = timeJson.weekDay,
-                        classStartTime = timeJson.start,
-                        classDuration = timeJson.duration,
+                        start = timeJson.start,
+                        duration = timeJson.duration,
                         location = timeJson.location
                     ))
                 }

@@ -149,7 +149,7 @@
                     android:id="@+id/editText_courseLocation"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/class_location"
+                    android:hint="@string/course_location"
                     android:inputType="text"
                     android:singleLine="true"
                     android:textSize="14sp" />

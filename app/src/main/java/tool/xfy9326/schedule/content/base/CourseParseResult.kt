@@ -23,7 +23,7 @@ class CourseParseResult private constructor(val courses: List<Course>, val ignor
             name.hashCode() + 31 * (teacher?.hashCode() ?: 0)
 
         private fun CourseTime.combinableHashCode() =
-            weekNum.contentHashCode() + 31 * classTime.weekDay.hashCode() + 31 * (location?.hashCode() ?: 0)
+            weekNum.contentHashCode() + 31 * sectionTime.weekDay.hashCode() + 31 * (location?.hashCode() ?: 0)
 
         fun add(course: Course) {
             course.arrangeWeekNum()
@@ -74,17 +74,17 @@ class CourseParseResult private constructor(val courses: List<Course>, val ignor
                 val hashCode = courseTime.combinableHashCode()
                 if (hashCode in courseTimeMap) {
                     courseTimeMap[hashCode]?.let {
-                        timePeriodAddToHashSet(courseTime.classTime.classStartTime, courseTime.classTime.classDuration, it.second)
+                        timePeriodAddToHashSet(courseTime.sectionTime.start, courseTime.sectionTime.duration, it.second)
                     }
                 } else {
-                    courseTimeMap[hashCode] = courseTime to timePeriodToHashSet(courseTime.classTime.classStartTime, courseTime.classTime.classDuration)
+                    courseTimeMap[hashCode] = courseTime to timePeriodToHashSet(courseTime.sectionTime.start, courseTime.sectionTime.duration)
                 }
             }
             val result = ArrayList<CourseTime>(courseTimeMap.size)
             for (pair in courseTimeMap.valueIterator()) {
                 val timePeriods = CourseAdapterUtils.parseIntCollectionPeriod(pair.second)
                 for (timePeriod in timePeriods) {
-                    result.add(pair.first.copy(classTime = pair.first.classTime.copy(classStartTime = timePeriod.start, classDuration = timePeriod.length)))
+                    result.add(pair.first.copy(sectionTime = pair.first.sectionTime.copy(start = timePeriod.start, duration = timePeriod.length)))
                 }
             }
             return result

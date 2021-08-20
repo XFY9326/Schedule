@@ -50,12 +50,12 @@ class ScheduleCellView private constructor(context: Context, private val predefi
         weekStart: WeekDay,
     ) : this(context, schedulePredefine, scheduleSettings) {
         if (showWeekend || weekStart == WeekDay.MONDAY) {
-            this.column = courseCell.classTime.weekDay.orderedValue(weekStart)
+            this.column = courseCell.sectionTime.weekDay.orderedValue(weekStart)
         } else {
-            this.column = courseCell.classTime.weekDay.orderedValue(weekStart) - 1
+            this.column = courseCell.sectionTime.weekDay.orderedValue(weekStart) - 1
         }
-        this.row = courseCell.classTime.classStartTime - 1
-        this.rowSpan = courseCell.classTime.classDuration
+        this.row = courseCell.sectionTime.start - 1
+        this.rowSpan = courseCell.sectionTime.duration
 
         initAsCourseCell(courseCell)
     }
