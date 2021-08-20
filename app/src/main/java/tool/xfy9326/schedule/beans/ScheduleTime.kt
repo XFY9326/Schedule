@@ -49,7 +49,7 @@ data class ScheduleTime(
         infix fun ScheduleTime.intersect(scheduleTime: ScheduleTime): Boolean {
             val m1 = this.getFixedMinutesInDay()
             val m2 = scheduleTime.getFixedMinutesInDay()
-            return m1.first <= m2.second && m1.second >= m2.first
+            return m1.first < m2.second && m1.second > m2.first
         }
 
         fun listOf(vararg numArr: Int): List<ScheduleTime> {

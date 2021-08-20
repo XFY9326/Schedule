@@ -152,7 +152,7 @@ object ScheduleUtils {
 
         val maxWeekNum = CourseTimeUtils.getMaxWeekNum(schedule.startDate, schedule.endDate, schedule.weekStart)
 
-        if (schedule.startDate >= schedule.endDate) {
+        if (schedule.startDate > schedule.endDate) {
             return EditError.Type.SCHEDULE_DATE_ERROR.make()
         }
         if (maxWeekNum <= 0) {
@@ -162,7 +162,7 @@ object ScheduleUtils {
         for (i1 in schedule.times.indices) {
             val time1 = schedule.times[i1]
 
-            if (time1.startHour >= time1.endHour && time1.startMinute >= time1.endMinute) {
+            if (time1.startHour > time1.endHour || time1.startHour == time1.endHour && time1.startMinute > time1.endMinute) {
                 return EditError.Type.SCHEDULE_TIME_START_END_ERROR.make(i1 + 1)
             }
 
@@ -171,7 +171,7 @@ object ScheduleUtils {
                 if (time1 intersect time2) {
                     return EditError.Type.SCHEDULE_TIME_CONFLICT_ERROR.make(i1 + 1, i2 + 1)
                 }
-                if (time1.endHour >= time2.startHour && time1.endMinute >= time2.startMinute) {
+                if (time1.endHour > time2.startHour || time1.endHour == time2.startHour && time1.endMinute > time2.startMinute) {
                     return EditError.Type.SCHEDULE_TIME_NOT_IN_ONE_DAY_ERROR.make()
                 }
             }
