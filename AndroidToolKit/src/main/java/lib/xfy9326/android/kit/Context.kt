@@ -42,13 +42,13 @@ inline fun <reified A : Activity> Context.startActivity(intentBlock: Intent.() -
     startActivity(Intent(this, A::class.java).apply(intentBlock))
 }
 
-fun Context.relaunchApp(intentBlock: Intent.() -> Unit = {}) {
+fun Context.relaunchApp(statusCode: Int = 0, intentBlock: Intent.() -> Unit = {}) {
     startActivity(packageManager.getLaunchIntentForPackage(packageName)!!.apply {
         addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
         addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         intentBlock.invoke(this)
     })
-    exitProcess(0)
+    exitProcess(statusCode)
 }
 
 val Context.packageUri

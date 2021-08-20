@@ -20,13 +20,13 @@ import tool.xfy9326.schedule.ui.activity.module.ScheduleLaunchModule
 const val APP_ID = "PureSchedule"
 
 fun Context.crashRelaunch() {
-    relaunchApp {
+    relaunchApp(1) {
         putExtra(ScheduleLaunchModule.INTENT_EXTRA_CRASH_RELAUNCH, true)
     }
 }
 
 fun Context.appErrorRelaunch(crashLogName: String?) {
-    relaunchApp {
+    relaunchApp(1) {
         putExtra(ScheduleLaunchModule.INTENT_EXTRA_APP_ERROR, true)
         putExtra(ScheduleLaunchModule.INTENT_EXTRA_APP_ERROR_CRASH_LOG, crashLogName)
     }

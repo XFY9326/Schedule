@@ -33,17 +33,17 @@ object ScheduleViewHelper {
     private const val MAX_SCHEDULE_COLUMN_COUNT = 7 + 1
 
     private val SAMPLE_SCHEDULE_TIMES by lazy {
-        listOf(
-            ScheduleTime(8, 0, 8, 40),
-            ScheduleTime(8, 50, 9, 30),
-            ScheduleTime(9, 50, 10, 30),
-            ScheduleTime(10, 40, 11, 20),
-            ScheduleTime(11, 30, 12, 10),
-            ScheduleTime(13, 30, 14, 10),
-            ScheduleTime(14, 20, 15, 0),
-            ScheduleTime(15, 20, 16, 0),
-            ScheduleTime(16, 10, 16, 50),
-            ScheduleTime(17, 0, 17, 40),
+        ScheduleTime.listOf(
+            8, 0, 8, 40,
+            8, 50, 9, 30,
+            9, 50, 10, 30,
+            10, 40, 11, 20,
+            11, 30, 12, 10,
+            13, 30, 14, 10,
+            14, 20, 15, 0,
+            15, 20, 16, 0,
+            16, 10, 16, 50,
+            17, 0, 17, 40
         )
     }
     private val SAMPLE_COURSE_CELLS by lazy {

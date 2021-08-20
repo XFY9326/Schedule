@@ -51,7 +51,7 @@ object CourseTimeUtils {
         return CalendarUtils.getLastDateInThisWeek(endWeekNum, weekStart)
     }
 
-    fun getClassEndTime(date: Date, scheduleTimes: List<ScheduleTime>, sectionTime: SectionTime): Long =
+    fun getCourseSectionEndTime(date: Date, scheduleTimes: List<ScheduleTime>, sectionTime: SectionTime): Long =
         CalendarUtils.getCalendar(date = date, clearToDate = true).apply {
             val scheduleTime = scheduleTimes[sectionTime.end - 1]
             set(Calendar.HOUR_OF_DAY, scheduleTime.endHour)

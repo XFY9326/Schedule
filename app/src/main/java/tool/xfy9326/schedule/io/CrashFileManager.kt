@@ -14,7 +14,7 @@ import okio.source
 import tool.xfy9326.schedule.tools.ExceptionHandler
 
 object CrashFileManager {
-    private const val FILE_NAME_CRASH_RECORD = "LastCrashMills.record"
+    private const val FILE_NAME_CRASH_RECORD = "LastCrashRecord"
     private val FILE_CRASH_RECORD = PathManager.LogDir.asParentOf(FILE_NAME_CRASH_RECORD)
 
     suspend fun readCrashLog(name: String) = runSafeIOJob {
@@ -32,15 +32,16 @@ object CrashFileManager {
 
     suspend fun copyLogFile(name: String, uri: Uri) = FileHelper.copyFileToUri(PathManager.LogDir.asParentOf(name), uri)
 
-    suspend fun readCrashRecord(): Long = runSafeIOJob(0L) {
-        FILE_CRASH_RECORD.source().useBuffer {
-            readUtf8().toLong()
+    suspend fun readCrashRecord(): Pair<Long, Boolean> = runSafeIOJob(0L to false) {
+        val contentArr = FILE_CRASH_RECORD.source().useBuffer {
+            readUtf8().split(",")
         }
+        contentArr[0].toLong() to contentArr[1].toBooleanStrict()
     }
 
-    suspend fun writeCrashRecord(mills: Long) = runOnlyResultIOJob {
+    suspend fun writeCrashRecord(mills: Long, isAppErrorRelaunch: Boolean) = runOnlyResultIOJob {
         FILE_CRASH_RECORD.sink().useBuffer {
-            writeUtf8(mills.toString())
+            writeUtf8("$mills,$isAppErrorRelaunch")
         }
         true
     }

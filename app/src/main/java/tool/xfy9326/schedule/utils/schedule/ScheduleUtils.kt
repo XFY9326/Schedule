@@ -18,21 +18,21 @@ import java.util.*
 
 object ScheduleUtils {
     private val DEFAULT_SCHEDULE_TIMES by lazy {
-        listOf(
-            ScheduleTime(8, 0, 8, 45),
-            ScheduleTime(8, 50, 9, 35),
-            ScheduleTime(9, 50, 10, 35),
-            ScheduleTime(10, 40, 11, 25),
-            ScheduleTime(11, 30, 12, 15),
-            ScheduleTime(13, 30, 14, 15),
-            ScheduleTime(14, 20, 15, 5),
-            ScheduleTime(15, 20, 16, 5),
-            ScheduleTime(16, 10, 16, 55),
-            ScheduleTime(17, 5, 17, 50),
-            ScheduleTime(17, 55, 18, 40),
-            ScheduleTime(19, 20, 20, 5),
-            ScheduleTime(20, 10, 20, 55),
-            ScheduleTime(21, 0, 21, 45)
+        ScheduleTime.listOf(
+            8, 0, 8, 45,
+            8, 50, 9, 35,
+            9, 50, 10, 35,
+            10, 40, 11, 25,
+            11, 30, 12, 15,
+            13, 30, 14, 15,
+            14, 20, 15, 5,
+            15, 20, 16, 5,
+            16, 10, 16, 55,
+            17, 5, 17, 50,
+            17, 55, 18, 40,
+            19, 20, 20, 5,
+            20, 10, 20, 55,
+            21, 0, 21, 45
         )
     }
 
