@@ -114,7 +114,7 @@ class NAUCourseParser : NetworkCourseParser<Nothing>() {
             weekNumStr = weeksStr.substring(0, weeksStr.length - 1).trim()
         }
 
-        return CourseAdapterUtils.parseNumberPeriods(weekNumStr, oddOnly = oddMode, evenOnly = evenMode)
+        return CourseAdapterUtils.parseWeekNum(weekNumStr, oddOnly = oddMode, evenOnly = evenMode)
     }
 
     private fun getCourseTime(location: String, timeStr: String): CourseTime {

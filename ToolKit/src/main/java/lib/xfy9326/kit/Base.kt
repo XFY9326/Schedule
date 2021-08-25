@@ -76,3 +76,20 @@ fun List<Int>.minAndMax(): Pair<Int, Int>? {
 fun Throwable.getDeepStackTraceString() = cause?.stackTraceToString() ?: stackTraceToString()
 
 fun <T : CharSequence> T?.nullIfBlank() = if (isNullOrBlank()) null else this
+
+fun <T : Any> firstNonNullOf(vararg lazyElements: () -> T?): T? {
+    for (block in lazyElements) {
+        block()?.let { return it }
+    }
+    return null
+}
+
+fun <T> firstNotEmptyOf(vararg lazyElements: () -> Collection<T>): Collection<T>? {
+    for (block in lazyElements) {
+        val value = block()
+        if (value.isNotEmpty()) {
+            return value
+        }
+    }
+    return null
+}

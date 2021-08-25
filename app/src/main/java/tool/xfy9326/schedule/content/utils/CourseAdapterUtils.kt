@@ -1,4 +1,4 @@
-@file:Suppress("unused")
+@file:Suppress("unused", "MemberVisibilityCanBePrivate")
 
 package tool.xfy9326.schedule.content.utils
 
@@ -17,7 +17,7 @@ import tool.xfy9326.schedule.beans.WeekDay
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
-import kotlin.math.max
+import kotlin.collections.HashSet
 
 object CourseAdapterUtils {
 
@@ -80,25 +80,26 @@ object CourseAdapterUtils {
      * @param durationDivider 时间段分割符号
      * @param oddOnly 仅限偶数
      * @param evenOnly 仅限奇数
-     * @return 解析结果数组
+     * @return 解析结果
      */
-    fun parseNumberPeriods(str: String, groupDivider: String = ",", durationDivider: String = "-", oddOnly: Boolean = false, evenOnly: Boolean = false): BooleanArray {
-        if (str.isBlank()) return BooleanArray(0)
-        var maxValue = 0
-        val groups = str.split(groupDivider).mapNotNull {
-            val duration = it.split(durationDivider).map { num -> num.trim().toInt() }
-            duration.minAndMax()?.also { pair ->
-                maxValue = max(pair.second, maxValue)
-            }
-        }
-        val result = BooleanArray(maxValue)
-        groups.forEach {
+    fun parseNumberPeriods(str: String, groupDivider: String = ",", durationDivider: String = "-", oddOnly: Boolean = false, evenOnly: Boolean = false): Set<Int> {
+        val result = HashSet<Int>()
+        if (str.isBlank()) return result
+        str.split(groupDivider).mapNotNull {
+            it.split(durationDivider).map { num -> num.trim().toInt() }.minAndMax()
+        }.forEach {
             for (num in it.first..it.second) {
-                result[num - 1] = (oddOnly == evenOnly) || (oddOnly && num.isOdd()) || (evenOnly && num.isEven())
+                if ((oddOnly == evenOnly) || (oddOnly && num.isOdd()) || (evenOnly && num.isEven())) {
+                    result.add(num)
+                }
             }
         }
         return result
     }
+
+    // 用于周数解析
+    fun parseWeekNum(str: String, groupDivider: String = ",", durationDivider: String = "-", oddOnly: Boolean = false, evenOnly: Boolean = false): BooleanArray =
+        parseNumberPeriods(str, groupDivider, durationDivider, oddOnly, evenOnly).toBooleanArray()
 
     /**
      * 将整形Collection转为时间间隔数组
@@ -152,4 +153,22 @@ object CourseAdapterUtils {
         }
         return result
     }
+
+    /**
+     * 解析中文的星期
+     *
+     * @param str 中文数字字符串
+     * @return WeekDay
+     */
+    fun parseWeekDayChinese(str: String): WeekDay =
+        when (str) {
+            "一" -> WeekDay.MONDAY
+            "二" -> WeekDay.TUESDAY
+            "三" -> WeekDay.WEDNESDAY
+            "四" -> WeekDay.THURSDAY
+            "五" -> WeekDay.FRIDAY
+            "六" -> WeekDay.SATURDAY
+            "日" -> WeekDay.SUNDAY
+            else -> error("Unsupported WeekDay Chinese! Input: $str")
+        }
 }

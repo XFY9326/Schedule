@@ -7,20 +7,26 @@ import tool.xfy9326.schedule.beans.*
 import tool.xfy9326.schedule.content.base.CourseParseResult
 import tool.xfy9326.schedule.content.base.WebCourseParser
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
+import tool.xfy9326.schedule.content.utils.CourseAdapterException.Companion.make
 import tool.xfy9326.schedule.content.utils.CourseAdapterException.Companion.report
 import tool.xfy9326.schedule.content.utils.CourseAdapterUtils
 
 class SCUJCCCourseParser : WebCourseParser<Nothing>() {
     companion object {
         private const val TAG_BR = "<br>"
-        private const val COURSE_DIVIDER = "$TAG_BR$TAG_BR$TAG_BR"
-        private const val COURSE_SELECTOR = "tbody > tr > td:has(> br)"
+        private const val COURSE_DIVIDER_OPTION0 = "$TAG_BR$TAG_BR"
+        private const val COURSE_DIVIDER_OPTION1 = "$TAG_BR$TAG_BR$TAG_BR"
+        private const val COURSE_SELECTOR = "tr > td:has(> br)"
         private const val ODD_WEEK_STR = "单"
         private const val EVEN_WEEK_STR = "双"
         private const val COURSE_TIME_DIVIDER = ","
     }
 
-    private val courseTimeReg = "(.*?)\\((.*?)\\)".toRegex()
+    // 无法在安卓设备上使用 (?:) 表达式
+    // 不可以在安卓设备上省略 } 的转译
+    @Suppress("RegExpRedundantEscape")
+    private val courseTimeOption0Reg = "周(.*?)第(.*?)节\\{第(.*?)周(\\|(.*?)周)?\\}".toRegex()
+    private val courseTimeOption1Reg = "(.*?)\\((.*?)\\)".toRegex()
 
     override fun onParseScheduleTimes(importOption: Int, content: WebPageContent): List<ScheduleTime> {
         return ScheduleTime.listOf(
@@ -41,49 +47,92 @@ class SCUJCCCourseParser : WebCourseParser<Nothing>() {
 
     override fun onParseCourses(importOption: Int, content: WebPageContent): CourseParseResult {
         if (content.providedContent != null) {
-            return parseCourses(Jsoup.parseBodyFragment(content.providedContent).body())
+            return parseCourses(importOption, Jsoup.parseBodyFragment(content.providedContent).body())
         } else {
             CourseAdapterException.Error.PARSER_ERROR.report()
         }
     }
 
-    private fun parseCourses(element: Element): CourseParseResult {
-        val builder = CourseParseResult.Builder()
+    private fun parseCourses(importOption: Int, element: Element): CourseParseResult {
         val column = element.select(COURSE_SELECTOR)
+        if (column.isEmpty()) return CourseParseResult.EMPTY
+
+        val builder = CourseParseResult.Builder()
+
         for (data in column) {
-            val datumRow = data.parent()?.elementSiblingIndex() ?: continue
-            if (datumRow == 0) continue
-
-            val datumColumn = data.elementSiblingIndex()
-
-            val weekDay = WeekDay.of(if (datumRow == 2 || datumRow == 6 || datumRow == 10) (datumColumn - 1) else datumColumn)
-
-            val courseData = data.html().split(COURSE_DIVIDER)
-
-            for (courseDatum in courseData) {
-                builder.withCatcher {
-                    val details = courseDatum.split(TAG_BR)
-
-                    if (details.size < 4) {
-                        CourseAdapterException.Error.INCOMPLETE_COURSE_INFO_ERROR.report()
-                    } else {
-                        val name = details[0].trim()
-                        if (name.isBlank()) CourseAdapterException.Error.INCOMPLETE_COURSE_INFO_ERROR.report()
-                        val teacher = details[2].trim().nullIfBlank()
-                        val courseTimes = parseTime(weekDay, details)
-                        builder.add(Course(name, teacher, courseTimes))
-                    }
-                }
+            when (importOption) {
+                0 -> parseCourseOption0(builder, data)
+                1 -> parseCourseOption1(builder, data)
+                else -> CourseAdapterException.Error.IMPORT_SELECT_OPTION_ERROR.make()
             }
         }
 
         return builder.build(combineCourse = true, combineCourseTime = true)
     }
 
-    private fun parseTime(weekDay: WeekDay, details: List<String>): List<CourseTime> {
-        val courseTimeData = courseTimeReg.matchEntire(details[1].trim())?.groups ?: CourseAdapterException.Error.PARSER_ERROR.report()
+    private fun parseCourseOption0(builder: CourseParseResult.Builder, data: Element) {
+        val courseData = data.html().split(COURSE_DIVIDER_OPTION0)
+        for (courseDatum in courseData) {
+            builder.withCatcher {
+                val details = courseDatum.split(TAG_BR)
+
+                if (details.size < 4) {
+                    CourseAdapterException.Error.INCOMPLETE_COURSE_INFO_ERROR.report()
+                } else {
+                    val name = details[0].trim()
+                    if (name.isBlank()) CourseAdapterException.Error.INCOMPLETE_COURSE_INFO_ERROR.report()
+                    val teacher = details[2].trim().nullIfBlank()
+                    val courseTimes = parseTimeOption0(details)
+                    builder.add(Course(name, teacher, courseTimes))
+                }
+            }
+        }
+    }
+
+    private fun parseTimeOption0(details: List<String>): List<CourseTime> {
+        val courseTimeData = courseTimeOption0Reg.matchEntire(details[1].trim())?.groups ?: CourseAdapterException.Error.PARSER_ERROR.report()
+        val weekDayStr = courseTimeData[1]?.value?.trim() ?: CourseAdapterException.Error.PARSER_ERROR.report()
+        val sectionTimeStr = courseTimeData[2]?.value?.trim() ?: CourseAdapterException.Error.PARSER_ERROR.report()
+        val weekNumStr = courseTimeData[3]?.value?.trim() ?: CourseAdapterException.Error.PARSER_ERROR.report()
+        val weekModeStr = courseTimeData[5]?.value?.trim()
+
+        val weekDay = CourseAdapterUtils.parseWeekDayChinese(weekDayStr)
+        val sectionTimes = sectionTimeStr.split(COURSE_TIME_DIVIDER).map { it.trim().toInt() }
+        val weekNum = CourseAdapterUtils.parseWeekNum(weekNumStr, oddOnly = weekModeStr == ODD_WEEK_STR, evenOnly = weekModeStr == EVEN_WEEK_STR)
+        return CourseAdapterUtils.parseMultiCourseTimes(weekNum, weekDay, sectionTimes, details[3].trim().nullIfBlank())
+    }
+
+    private fun parseCourseOption1(builder: CourseParseResult.Builder, data: Element) {
+        val datumRow = data.parent()?.elementSiblingIndex() ?: return
+        if (datumRow == 0) return
+
+        val datumColumn = data.elementSiblingIndex()
+
+        val weekDay = WeekDay.of(if (datumRow == 2 || datumRow == 6 || datumRow == 10) (datumColumn - 1) else datumColumn)
+
+        val courseData = data.html().split(COURSE_DIVIDER_OPTION1)
+
+        for (courseDatum in courseData) {
+            builder.withCatcher {
+                val details = courseDatum.split(TAG_BR)
+
+                if (details.size < 4) {
+                    CourseAdapterException.Error.INCOMPLETE_COURSE_INFO_ERROR.report()
+                } else {
+                    val name = details[0].trim()
+                    if (name.isBlank()) CourseAdapterException.Error.INCOMPLETE_COURSE_INFO_ERROR.report()
+                    val teacher = details[2].trim().nullIfBlank()
+                    val courseTimes = parseTimeOption1(weekDay, details)
+                    builder.add(Course(name, teacher, courseTimes))
+                }
+            }
+        }
+    }
+
+    private fun parseTimeOption1(weekDay: WeekDay, details: List<String>): List<CourseTime> {
+        val courseTimeData = courseTimeOption1Reg.matchEntire(details[1].trim())?.groups ?: CourseAdapterException.Error.PARSER_ERROR.report()
         var weeksStr = courseTimeData[1]?.value?.trim() ?: CourseAdapterException.Error.PARSER_ERROR.report()
-        val courseTimeStr = courseTimeData[2]?.value?.trim() ?: CourseAdapterException.Error.PARSER_ERROR.report()
+        val sectionTimeStr = courseTimeData[2]?.value?.trim() ?: CourseAdapterException.Error.PARSER_ERROR.report()
 
         val oddMode = weeksStr.endsWith(ODD_WEEK_STR)
         if (oddMode) {
@@ -93,10 +142,9 @@ class SCUJCCCourseParser : WebCourseParser<Nothing>() {
         if (evenMode) {
             weeksStr = weeksStr.substring(0, weeksStr.length - EVEN_WEEK_STR.length)
         }
-        val weeks = CourseAdapterUtils.parseNumberPeriods(weeksStr, oddOnly = oddMode, evenOnly = evenMode)
 
-        val times = courseTimeStr.split(COURSE_TIME_DIVIDER).map { it.trim().toInt() }
-
-        return CourseAdapterUtils.parseMultiCourseTimes(weeks, weekDay, times, details[3].trim().nullIfBlank())
+        val weekNum = CourseAdapterUtils.parseWeekNum(weeksStr, oddOnly = oddMode, evenOnly = evenMode)
+        val sectionTimes = sectionTimeStr.split(COURSE_TIME_DIVIDER).map { it.trim().toInt() }
+        return CourseAdapterUtils.parseMultiCourseTimes(weekNum, weekDay, sectionTimes, details[3].trim().nullIfBlank())
     }
 }
