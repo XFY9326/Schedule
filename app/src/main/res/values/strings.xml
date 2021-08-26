@@ -350,8 +350,8 @@
     <string name="lock_schedule_header_scroll">滑动时锁定课程表首行</string>
     <string name="lock_schedule_header_scroll_sum">关闭后将会连带课表首行日期整体滑动</string>
     <string name="draw_water_mark_on_schedule_image">分享课表时添加水印</string>
-    <string name="allow_import_incomplete_schedule">允许导入不完整的课表</string>
-    <string name="allow_import_incomplete_schedule_sum">将会跳过部分无法导入的课程</string>
+    <string name="allow_import_incomplete_schedule">允许跳过部分无法导入的课程</string>
+    <string name="allow_import_incomplete_schedule_sum">可能会导致导入的课表不完整\n注：部分课程解析可能不允许忽略错误</string>
     <string name="schedule_import_strict_mode">课表导入严格模式警告</string>
     <string name="schedule_import_strict_mode_msg">\u3000\u3000由于启用了课表导入的严格检查功能，该课表在该情况下无法导入。\n\n错误原因：%1$s\n\n\u3000\u3000启用严格的课表检查将保证课程导入的完整性，如果依然需要导入该课表，请在\'设置-在线课程导入\'中进行更改。</string>
     <string name="send_debug_log">发送错误日志</string>

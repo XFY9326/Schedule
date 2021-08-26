@@ -1,14 +1,12 @@
 @file:Suppress("MemberVisibilityCanBePrivate")
 
-package tool.xfy9326.schedule.content.base
+package tool.xfy9326.schedule.content.utils
 
 import androidx.collection.*
 import tool.xfy9326.schedule.beans.Course
 import tool.xfy9326.schedule.beans.Course.Companion.arrangeWeekNum
 import tool.xfy9326.schedule.beans.CourseTime
-import tool.xfy9326.schedule.content.utils.CourseAdapterException
 import tool.xfy9326.schedule.content.utils.CourseAdapterException.Companion.make
-import tool.xfy9326.schedule.content.utils.CourseAdapterUtils
 
 class CourseParseResult private constructor(val courses: List<Course>, val ignorableError: CourseAdapterException?) {
     companion object {
@@ -30,14 +28,14 @@ class CourseParseResult private constructor(val courses: List<Course>, val ignor
             courses.add(course)
         }
 
-        fun withCatcher(skipError: Boolean = true, action: () -> Unit): Boolean {
+        fun withCatcher(skipUnknownError: Boolean = true, action: () -> Unit): Boolean {
             try {
                 action()
                 return true
             } catch (e: CourseAdapterException) {
                 throw e
             } catch (e: Exception) {
-                if (skipError) {
+                if (skipUnknownError) {
                     error = CourseAdapterException.Error.FAILED_TO_IMPORT_SOME_COURSE.make(e)
                 } else {
                     throw e
@@ -46,8 +44,8 @@ class CourseParseResult private constructor(val courses: List<Course>, val ignor
             return false
         }
 
-        fun add(skipErrorCourse: Boolean = true, action: () -> Course?) {
-            withCatcher(skipErrorCourse) {
+        fun add(skipUnknownErrorCourse: Boolean = true, action: () -> Course?) {
+            withCatcher(skipUnknownErrorCourse) {
                 action()?.let { add(it) }
             }
         }

@@ -4,8 +4,9 @@ package tool.xfy9326.schedule.content.utils
 
 import android.content.Context
 import tool.xfy9326.schedule.R
+import tool.xfy9326.schedule.content.base.CourseImportException
 
-class JSConfigException : Exception {
+class JSConfigException : CourseImportException {
     val type: Error
 
     companion object {
@@ -18,8 +19,6 @@ class JSConfigException : Exception {
             } else {
                 JSConfigException(this, cause)
             }
-
-        fun JSConfigException.getText(context: Context) = context.getString(type.msgId)
 
         private val Error.msgId
             get() = when (this) {
@@ -70,4 +69,6 @@ class JSConfigException : Exception {
     private constructor(type: Error, cause: Throwable) : super(type.name, cause) {
         this.type = type
     }
+
+    override fun getText(context: Context) = context.getString(type.msgId)
 }

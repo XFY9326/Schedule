@@ -4,12 +4,12 @@ import lib.xfy9326.kit.nullIfBlank
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
 import tool.xfy9326.schedule.beans.*
-import tool.xfy9326.schedule.content.base.CourseParseResult
 import tool.xfy9326.schedule.content.base.WebCourseParser
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
 import tool.xfy9326.schedule.content.utils.CourseAdapterException.Companion.make
 import tool.xfy9326.schedule.content.utils.CourseAdapterException.Companion.report
 import tool.xfy9326.schedule.content.utils.CourseAdapterUtils
+import tool.xfy9326.schedule.content.utils.CourseParseResult
 
 class SCUJCCCourseParser : WebCourseParser<Nothing>() {
     companion object {
@@ -19,7 +19,6 @@ class SCUJCCCourseParser : WebCourseParser<Nothing>() {
         private const val COURSE_SELECTOR = "tr > td:has(> br)"
         private const val ODD_WEEK_STR = "单"
         private const val EVEN_WEEK_STR = "双"
-        private const val COURSE_TIME_DIVIDER = ","
     }
 
     // 无法在安卓设备上使用 (?:) 表达式
@@ -97,8 +96,9 @@ class SCUJCCCourseParser : WebCourseParser<Nothing>() {
         val weekModeStr = courseTimeData[5]?.value?.trim()
 
         val weekDay = CourseAdapterUtils.parseWeekDayChinese(weekDayStr)
-        val sectionTimes = sectionTimeStr.split(COURSE_TIME_DIVIDER).map { it.trim().toInt() }
-        val weekNum = CourseAdapterUtils.parseWeekNum(weekNumStr, oddOnly = weekModeStr == ODD_WEEK_STR, evenOnly = weekModeStr == EVEN_WEEK_STR)
+        val sectionTimes = CourseAdapterUtils.parseNumberList(sectionTimeStr)
+        val weekMode = CourseAdapterUtils.parseWeekModeChinese(weekModeStr)
+        val weekNum = CourseAdapterUtils.parseWeekNum(weekNumStr, oddOnly = weekMode.first, evenOnly = weekMode.second)
         return CourseAdapterUtils.parseMultiCourseTimes(weekNum, weekDay, sectionTimes, details[3].trim().nullIfBlank())
     }
 
@@ -144,7 +144,7 @@ class SCUJCCCourseParser : WebCourseParser<Nothing>() {
         }
 
         val weekNum = CourseAdapterUtils.parseWeekNum(weeksStr, oddOnly = oddMode, evenOnly = evenMode)
-        val sectionTimes = sectionTimeStr.split(COURSE_TIME_DIVIDER).map { it.trim().toInt() }
+        val sectionTimes = CourseAdapterUtils.parseNumberList(sectionTimeStr)
         return CourseAdapterUtils.parseMultiCourseTimes(weekNum, weekDay, sectionTimes, details[3].trim().nullIfBlank())
     }
 }

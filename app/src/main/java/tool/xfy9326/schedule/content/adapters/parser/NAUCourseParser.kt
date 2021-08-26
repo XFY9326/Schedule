@@ -6,11 +6,11 @@ import tool.xfy9326.schedule.beans.CourseTime
 import tool.xfy9326.schedule.beans.ScheduleTime
 import tool.xfy9326.schedule.beans.WeekDay
 import tool.xfy9326.schedule.content.adapters.provider.NAUJwcCourseProvider
-import tool.xfy9326.schedule.content.base.CourseParseResult
 import tool.xfy9326.schedule.content.base.NetworkCourseParser
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
 import tool.xfy9326.schedule.content.utils.CourseAdapterException.Companion.report
 import tool.xfy9326.schedule.content.utils.CourseAdapterUtils
+import tool.xfy9326.schedule.content.utils.CourseParseResult
 import tool.xfy9326.schedule.content.utils.selectSingle
 import java.util.*
 import kotlin.collections.ArrayList

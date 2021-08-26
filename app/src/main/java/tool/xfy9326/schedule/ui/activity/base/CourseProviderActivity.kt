@@ -17,7 +17,6 @@ import tool.xfy9326.schedule.content.base.AbstractCourseParser
 import tool.xfy9326.schedule.content.base.AbstractCourseProvider
 import tool.xfy9326.schedule.content.utils.BaseCourseImportConfig
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
-import tool.xfy9326.schedule.content.utils.CourseAdapterException.Companion.getText
 import tool.xfy9326.schedule.content.utils.CourseAdapterException.Companion.strictModeOnly
 import tool.xfy9326.schedule.data.AppDataStore
 import tool.xfy9326.schedule.ui.activity.ScheduleEditActivity

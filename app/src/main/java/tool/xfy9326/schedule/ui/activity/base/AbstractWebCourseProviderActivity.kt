@@ -62,6 +62,6 @@ abstract class AbstractWebCourseProviderActivity<I, P1 : AbstractCourseProvider<
     }
 
     final override fun onShowCourseAdapterError(exception: CourseAdapterException) {
-        ViewUtils.showCourseAdapterErrorSnackBar(this, requireViewBinding().layoutFragmentContainer, exception)
+        ViewUtils.showCourseImportErrorSnackBar(this, requireViewBinding().layoutFragmentContainer, exception)
     }
 }

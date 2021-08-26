@@ -97,6 +97,16 @@ object CourseAdapterUtils {
         return result
     }
 
+    /**
+     * 整数数字列表解析
+     * 输入示例：1,2,4,5
+     *
+     * @param str 字符串
+     * @param divider 分隔符
+     * @return 整形列表
+     */
+    fun parseNumberList(str: String, divider: String = ","): List<Int> = str.split(divider).map { it.trim().toInt() }
+
     // 用于周数解析
     fun parseWeekNum(str: String, groupDivider: String = ",", durationDivider: String = "-", oddOnly: Boolean = false, evenOnly: Boolean = false): BooleanArray =
         parseNumberPeriods(str, groupDivider, durationDivider, oddOnly, evenOnly).toBooleanArray()
@@ -161,7 +171,7 @@ object CourseAdapterUtils {
      * @return WeekDay
      */
     fun parseWeekDayChinese(str: String): WeekDay =
-        when (str) {
+        when (str.trim()) {
             "一" -> WeekDay.MONDAY
             "二" -> WeekDay.TUESDAY
             "三" -> WeekDay.WEDNESDAY
@@ -170,5 +180,18 @@ object CourseAdapterUtils {
             "六" -> WeekDay.SATURDAY
             "日" -> WeekDay.SUNDAY
             else -> error("Unsupported WeekDay Chinese! Input: $str")
+        }
+
+    /**
+     * 解析中文单双周
+     *
+     * @param str 中文'单'或'双'或'单周'或'双周'
+     * @return 是否是单周 to 是否是双周
+     */
+    fun parseWeekModeChinese(str: String?): Pair<Boolean, Boolean> =
+        when (str?.trim()) {
+            "单", "单周" -> true to false
+            "双", "双周" -> false to true
+            else -> false to false
         }
 }

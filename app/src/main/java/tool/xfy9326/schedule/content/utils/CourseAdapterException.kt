@@ -4,8 +4,9 @@ package tool.xfy9326.schedule.content.utils
 
 import android.content.Context
 import tool.xfy9326.schedule.R
+import tool.xfy9326.schedule.content.base.CourseImportException
 
-class CourseAdapterException : Exception {
+class CourseAdapterException : CourseImportException {
     val type: Error
 
     companion object {
@@ -27,13 +28,6 @@ class CourseAdapterException : Exception {
                 CourseAdapterException(msg)
             } else {
                 CourseAdapterException(msg, cause)
-            }
-
-        fun CourseAdapterException.getText(context: Context) =
-            if (type == Error.CUSTOM_ERROR) {
-                message.orEmpty()
-            } else {
-                type.msgId?.let { context.getString(it) } ?: error("Unsupported error type!")
             }
 
         val Error.strictModeOnly
@@ -63,7 +57,10 @@ class CourseAdapterException : Exception {
 
                 Error.MAX_COURSE_NUM_ERROR -> R.string.adapter_exception_max_course_num_error
                 Error.SCHEDULE_TIMES_ERROR -> R.string.adapter_exception_schedule_time_error
+                // 严格模式下启用
                 Error.SCHEDULE_COURSE_IMPORT_EMPTY -> R.string.adapter_exception_schedule_course_empty
+                // 严格模式下启用
+                // 仅用于出现非CourseAdapterException的错误，即意外错误时
                 Error.FAILED_TO_IMPORT_SOME_COURSE -> R.string.adapter_exception_failed_to_import_some_course
 
                 Error.JS_HANDLE_ERROR -> R.string.adapter_exception_js_handle_error
@@ -120,4 +117,11 @@ class CourseAdapterException : Exception {
     private constructor(type: Error, cause: Throwable) : super(type.name, cause) {
         this.type = type
     }
+
+    override fun getText(context: Context) =
+        if (type == Error.CUSTOM_ERROR) {
+            message.orEmpty()
+        } else {
+            type.msgId?.let { context.getString(it) } ?: error("Unsupported error type!")
+        }
 }

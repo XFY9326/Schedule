@@ -2,6 +2,7 @@ package tool.xfy9326.schedule.content.base
 
 import tool.xfy9326.schedule.beans.Course.Companion.arrangeWeekNum
 import tool.xfy9326.schedule.beans.ScheduleTime
+import tool.xfy9326.schedule.content.utils.CourseParseResult
 import java.io.Serializable
 import java.util.*
 

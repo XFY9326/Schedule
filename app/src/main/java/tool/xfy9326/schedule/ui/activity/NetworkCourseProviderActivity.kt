@@ -128,7 +128,7 @@ class NetworkCourseProviderActivity :
     }
 
     override fun onShowCourseAdapterError(exception: CourseAdapterException) {
-        ViewUtils.showCourseAdapterErrorSnackBar(this, requireViewBinding().layoutLoginCourseProvider, exception)
+        ViewUtils.showCourseImportErrorSnackBar(this, requireViewBinding().layoutLoginCourseProvider, exception)
     }
 
     override fun onCourseImportFinish(result: ScheduleImportManager.ImportResult, editScheduleId: Long?) {

@@ -85,24 +85,21 @@ class NAUJwcCourseProvider : LoginCourseProvider<Nothing>() {
         val htmlContent = Jsoup.parse(content, SSO_URL).body()
         val captchaUrl = htmlContent.selectSingle(SELECTOR_CHECK_CODE).absUrl(HTML_ATTR_SRC)
         val loginFormElement = htmlContent.selectSingle(SELECTOR_LOGIN_FORM)
-        val loginParams = Parameters.build {
-            for (param in LOGIN_PARAMS_STATIC_ARRAY) {
-                val input = loginFormElement.selectSingle(SELECTOR_POST_FORMAT.format(param))
-                val value = input.attr(SSO_INPUT_TAG_VALUE_ATTR)
-                append(param, value)
-            }
+        var loginParams = Parameters.Empty
+        for (param in LOGIN_PARAMS_STATIC_ARRAY) {
+            val input = loginFormElement.selectSingle(SELECTOR_POST_FORMAT.format(param))
+            val value = input.attr(SSO_INPUT_TAG_VALUE_ATTR)
+            loginParams += parametersOf(param, value)
         }
         return LoginPageInfo(captchaUrl = captchaUrl, loginParams = loginParams)
     }
 
     override suspend fun onLogin(userId: String, userPw: String, captchaCode: String?, loginPageInfo: LoginPageInfo, importOption: Int) {
         if (captchaCode == null) CourseAdapterException.Error.CAPTCHA_CODE_ERROR.report()
-        val loginParams = Parameters.build {
-            loginPageInfo.loginParams?.let(::appendAll)
-            append(LOGIN_PARAMS_USER_NAME, userId)
-            append(LOGIN_PARAMS_PASSWORD, encryptPassword(userPw))
-            append(LOGIN_PARAMS_AUTH_CODE, captchaCode)
-        }
+        var loginParams = loginPageInfo.loginParams ?: Parameters.Empty
+        loginParams += parametersOf(LOGIN_PARAMS_USER_NAME, userId)
+        loginParams += parametersOf(LOGIN_PARAMS_PASSWORD, encryptPassword(userPw))
+        loginParams += parametersOf(LOGIN_PARAMS_AUTH_CODE, captchaCode)
         val loginResponse = httpClient.submitForm<HttpResponse>(JWC_LOGIN_URL, loginParams)
         val loginResponseUrl = loginResponse.request.url
         when (loginResponseUrl.host) {

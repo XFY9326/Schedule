@@ -17,24 +17,13 @@ import kotlinx.coroutines.runBlocking
 import lib.xfy9326.kit.getDeepStackTraceString
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.NightMode.Companion.modeInt
-import tool.xfy9326.schedule.content.utils.CourseAdapterException
-import tool.xfy9326.schedule.content.utils.CourseAdapterException.Companion.getText
-import tool.xfy9326.schedule.content.utils.JSConfigException
-import tool.xfy9326.schedule.content.utils.JSConfigException.Companion.getText
+import tool.xfy9326.schedule.content.base.CourseImportException
 import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.ui.dialog.CrashViewDialog
 import tool.xfy9326.schedule.utils.IntentUtils
 
 object ViewUtils {
-    fun showCourseAdapterErrorSnackBar(activity: AppCompatActivity, coordinatorLayout: CoordinatorLayout, exception: CourseAdapterException) {
-        Snackbar.make(coordinatorLayout, exception.getText(activity), Snackbar.LENGTH_LONG)
-            .setActionTextColor(Color.RED)
-            .setAction(R.string.details) {
-                CrashViewDialog.showDialog(activity.supportFragmentManager, exception.getDeepStackTraceString(), false)
-            }.show()
-    }
-
-    fun showJSConfigErrorSnackBar(activity: AppCompatActivity, coordinatorLayout: CoordinatorLayout, exception: JSConfigException) {
+    fun showCourseImportErrorSnackBar(activity: AppCompatActivity, coordinatorLayout: CoordinatorLayout, exception: CourseImportException) {
         Snackbar.make(coordinatorLayout, exception.getText(activity), Snackbar.LENGTH_LONG)
             .setActionTextColor(Color.RED)
             .setAction(R.string.details) {

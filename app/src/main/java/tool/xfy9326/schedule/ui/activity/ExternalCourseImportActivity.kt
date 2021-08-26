@@ -8,7 +8,6 @@ import lib.xfy9326.kit.getDeepStackTraceString
 import lib.xfy9326.livedata.observeEvent
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.content.beans.ExternalCourseImportData
-import tool.xfy9326.schedule.content.utils.CourseAdapterException.Companion.getText
 import tool.xfy9326.schedule.content.utils.CourseAdapterException.Companion.strictModeOnly
 import tool.xfy9326.schedule.databinding.ActivityExternalCourseImportBinding
 import tool.xfy9326.schedule.ui.activity.base.ViewBindingActivity
@@ -50,7 +49,7 @@ class ExternalCourseImportActivity : ViewBindingActivity<ActivityExternalCourseI
             if (it.type.strictModeOnly) {
                 StrictImportModeWarningDialog.showDialog(supportFragmentManager, it.getText(this), it.getDeepStackTraceString())
             } else {
-                ViewUtils.showCourseAdapterErrorSnackBar(this, requireViewBinding().layoutExternalCourse, it)
+                ViewUtils.showCourseImportErrorSnackBar(this, requireViewBinding().layoutExternalCourse, it)
             }
         }
         viewModel.courseImportFinish.observeEvent(this, javaClass.simpleName) {

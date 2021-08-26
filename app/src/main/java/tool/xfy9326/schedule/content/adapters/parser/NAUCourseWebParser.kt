@@ -1,10 +1,10 @@
 package tool.xfy9326.schedule.content.adapters.parser
 
 import tool.xfy9326.schedule.beans.WebPageContent
-import tool.xfy9326.schedule.content.base.CourseParseResult
 import tool.xfy9326.schedule.content.base.WebCourseParser
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
 import tool.xfy9326.schedule.content.utils.CourseAdapterException.Companion.report
+import tool.xfy9326.schedule.content.utils.CourseParseResult
 
 class NAUCourseWebParser : WebCourseParser<Nothing>() {
     private val loginParser = NAUCourseParser()

@@ -86,12 +86,12 @@ class OnlineCourseImportActivity : ViewModelActivity<OnlineCourseImportViewModel
         viewModel.configOperationError.observeEvent(this, javaClass.simpleName) {
             if (!JSConfigPrepareDialog.isShowing(supportFragmentManager)) {
                 loadingController.hide()
-                ViewUtils.showJSConfigErrorSnackBar(this, viewBinding.layoutCourseImport, it)
+                ViewUtils.showCourseImportErrorSnackBar(this, viewBinding.layoutCourseImport, it)
             }
         }
         viewModel.configIgnorableWarning.observeEvent(this, javaClass.simpleName) {
             if (!JSConfigPrepareDialog.isShowing(supportFragmentManager)) {
-                ViewUtils.showJSConfigErrorSnackBar(this, viewBinding.layoutCourseImport, it)
+                ViewUtils.showCourseImportErrorSnackBar(this, viewBinding.layoutCourseImport, it)
             }
         }
         viewModel.jsConfigExistWarning.observeEvent(this, javaClass.simpleName) {
