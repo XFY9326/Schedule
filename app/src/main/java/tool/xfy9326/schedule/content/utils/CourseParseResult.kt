@@ -7,6 +7,7 @@ import tool.xfy9326.schedule.beans.Course
 import tool.xfy9326.schedule.beans.Course.Companion.arrangeWeekNum
 import tool.xfy9326.schedule.beans.CourseTime
 import tool.xfy9326.schedule.content.utils.CourseAdapterException.Companion.make
+import tool.xfy9326.schedule.content.utils.CourseAdapterException.Companion.strictModeOnly
 
 class CourseParseResult private constructor(val courses: List<Course>, val ignorableError: CourseAdapterException?) {
     companion object {
@@ -33,7 +34,11 @@ class CourseParseResult private constructor(val courses: List<Course>, val ignor
                 action()
                 return true
             } catch (e: CourseAdapterException) {
-                throw e
+                if (e.type.strictModeOnly && skipUnknownError) {
+                    error = e
+                } else {
+                    throw e
+                }
             } catch (e: Exception) {
                 if (skipUnknownError) {
                     error = CourseAdapterException.Error.FAILED_TO_IMPORT_SOME_COURSE.make(e)
@@ -44,11 +49,10 @@ class CourseParseResult private constructor(val courses: List<Course>, val ignor
             return false
         }
 
-        fun add(skipUnknownErrorCourse: Boolean = true, action: () -> Course?) {
+        fun add(skipUnknownErrorCourse: Boolean = true, action: () -> Course?): Boolean =
             withCatcher(skipUnknownErrorCourse) {
                 action()?.let { add(it) }
             }
-        }
 
         private fun timePeriodToHashSet(start: Int, duration: Int): HashSet<Int> {
             val result = HashSet<Int>()

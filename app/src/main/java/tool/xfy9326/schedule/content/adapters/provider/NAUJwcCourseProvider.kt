@@ -107,7 +107,7 @@ class NAUJwcCourseProvider : LoginCourseProvider<Nothing>() {
             SSO_HOST -> {
                 val loginResponseContent = loginResponse.readText()
                 val msgElement = Jsoup.parse(loginResponseContent).body().selectSingle(SELECTOR_LOGIN_ERROR_MSG)
-                CourseAdapterException.Error.CUSTOM_ERROR.report(msg = msgElement.text())
+                CourseAdapterException.reportCustomError(msgElement.text())
             }
             else -> CourseAdapterException.Error.UNKNOWN_ERROR.report()
         }

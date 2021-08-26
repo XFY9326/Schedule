@@ -14,6 +14,7 @@ import tool.xfy9326.schedule.ui.vm.base.AbstractWebCourseProviderViewModel
 import tool.xfy9326.schedule.utils.JSBridge
 
 class JSCourseProviderViewModel : AbstractWebCourseProviderViewModel<String, JSCourseProvider, JSCourseParser>() {
+    private val resultJSONFormat = Json { ignoreUnknownKeys = true }
     private val jsLoadLock = Mutex()
     val jsContent = MutableEventLiveData<String>()
     val isRequireNetwork
@@ -38,11 +39,11 @@ class JSCourseProviderViewModel : AbstractWebCourseProviderViewModel<String, JSC
         courseProvider: JSCourseProvider,
         courseParser: JSCourseParser,
     ): ScheduleImportContent {
-        val resultJSON = Json.decodeFromString<JSBridge.JSProviderResponse>(importParams)
+        val resultJSON = resultJSONFormat.decodeFromString<JSBridge.JSProviderResponse>(importParams)
         if (resultJSON.isSuccess) {
             return courseParser.processJSResult(resultJSON.data)
         } else {
-            CourseAdapterException.Error.JS_HANDLE_ERROR.report(resultJSON.data)
+            CourseAdapterException.Error.JSON_PARSE_ERROR.report()
         }
     }
 }

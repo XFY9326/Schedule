@@ -1,6 +1,8 @@
 package tool.xfy9326.schedule.beans
 
 import lib.xfy9326.kit.EMPTY
+import tool.xfy9326.schedule.content.utils.CourseAdapterException
+import tool.xfy9326.schedule.content.utils.CourseAdapterException.Companion.report
 
 data class WebPageContent(
     val htmlContent: String = EMPTY,
@@ -8,6 +10,8 @@ data class WebPageContent(
     val frameContent: Array<String> = emptyArray(),
     val providedContent: String? = null,
 ) {
+    fun requireProvidedContent(): String = providedContent ?: CourseAdapterException.Error.PARSE_PAGE_ERROR.report()
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other !is WebPageContent) return false

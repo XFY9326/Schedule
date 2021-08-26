@@ -6,7 +6,6 @@ import org.jsoup.nodes.Element
 import tool.xfy9326.schedule.beans.*
 import tool.xfy9326.schedule.content.base.WebCourseParser
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
-import tool.xfy9326.schedule.content.utils.CourseAdapterException.Companion.make
 import tool.xfy9326.schedule.content.utils.CourseAdapterException.Companion.report
 import tool.xfy9326.schedule.content.utils.CourseAdapterUtils
 import tool.xfy9326.schedule.content.utils.CourseParseResult
@@ -19,6 +18,9 @@ class SCUJCCCourseParser : WebCourseParser<Nothing>() {
         private const val COURSE_SELECTOR = "tr > td:has(> br)"
         private const val ODD_WEEK_STR = "单"
         private const val EVEN_WEEK_STR = "双"
+
+        const val IMPORT_OPTION_TABLE_1 = 0
+        const val IMPORT_OPTION_TABLE_6 = 1
     }
 
     // 无法在安卓设备上使用 (?:) 表达式
@@ -45,11 +47,7 @@ class SCUJCCCourseParser : WebCourseParser<Nothing>() {
     }
 
     override fun onParseCourses(importOption: Int, content: WebPageContent): CourseParseResult {
-        if (content.providedContent != null) {
-            return parseCourses(importOption, Jsoup.parseBodyFragment(content.providedContent).body())
-        } else {
-            CourseAdapterException.Error.PARSER_ERROR.report()
-        }
+        return parseCourses(importOption, Jsoup.parseBodyFragment(content.requireProvidedContent()).body())
     }
 
     private fun parseCourses(importOption: Int, element: Element): CourseParseResult {
@@ -60,9 +58,9 @@ class SCUJCCCourseParser : WebCourseParser<Nothing>() {
 
         for (data in column) {
             when (importOption) {
-                0 -> parseCourseOption0(builder, data)
-                1 -> parseCourseOption1(builder, data)
-                else -> CourseAdapterException.Error.IMPORT_SELECT_OPTION_ERROR.make()
+                IMPORT_OPTION_TABLE_1 -> parseCourseOption0(builder, data)
+                IMPORT_OPTION_TABLE_6 -> parseCourseOption1(builder, data)
+                else -> CourseAdapterException.Error.IMPORT_SELECT_OPTION_ERROR.report()
             }
         }
 
@@ -89,11 +87,11 @@ class SCUJCCCourseParser : WebCourseParser<Nothing>() {
     }
 
     private fun parseTimeOption0(details: List<String>): List<CourseTime> {
-        val courseTimeData = courseTimeOption0Reg.matchEntire(details[1].trim())?.groups ?: CourseAdapterException.Error.PARSER_ERROR.report()
-        val weekDayStr = courseTimeData[1]?.value?.trim() ?: CourseAdapterException.Error.PARSER_ERROR.report()
-        val sectionTimeStr = courseTimeData[2]?.value?.trim() ?: CourseAdapterException.Error.PARSER_ERROR.report()
-        val weekNumStr = courseTimeData[3]?.value?.trim() ?: CourseAdapterException.Error.PARSER_ERROR.report()
-        val weekModeStr = courseTimeData[5]?.value?.trim()
+        val courseTimeData = courseTimeOption0Reg.matchEntire(details[1].trim())?.groups ?: CourseAdapterException.Error.CONTENT_PARSE_ERROR.report()
+        val weekDayStr = courseTimeData[1]?.value?.trim() ?: CourseAdapterException.Error.CONTENT_PARSE_ERROR.report()
+        val sectionTimeStr = courseTimeData[2]?.value?.trim() ?: CourseAdapterException.Error.CONTENT_PARSE_ERROR.report()
+        val weekNumStr = courseTimeData[3]?.value?.trim() ?: CourseAdapterException.Error.CONTENT_PARSE_ERROR.report()
+        val weekModeStr = courseTimeData[5]?.value?.trim() ?: CourseAdapterException.Error.CONTENT_PARSE_ERROR.report()
 
         val weekDay = CourseAdapterUtils.parseWeekDayChinese(weekDayStr)
         val sectionTimes = CourseAdapterUtils.parseNumberList(sectionTimeStr)
@@ -130,9 +128,9 @@ class SCUJCCCourseParser : WebCourseParser<Nothing>() {
     }
 
     private fun parseTimeOption1(weekDay: WeekDay, details: List<String>): List<CourseTime> {
-        val courseTimeData = courseTimeOption1Reg.matchEntire(details[1].trim())?.groups ?: CourseAdapterException.Error.PARSER_ERROR.report()
-        var weeksStr = courseTimeData[1]?.value?.trim() ?: CourseAdapterException.Error.PARSER_ERROR.report()
-        val sectionTimeStr = courseTimeData[2]?.value?.trim() ?: CourseAdapterException.Error.PARSER_ERROR.report()
+        val courseTimeData = courseTimeOption1Reg.matchEntire(details[1].trim())?.groups ?: CourseAdapterException.Error.CONTENT_PARSE_ERROR.report()
+        var weeksStr = courseTimeData[1]?.value?.trim() ?: CourseAdapterException.Error.CONTENT_PARSE_ERROR.report()
+        val sectionTimeStr = courseTimeData[2]?.value?.trim() ?: CourseAdapterException.Error.CONTENT_PARSE_ERROR.report()
 
         val oddMode = weeksStr.endsWith(ODD_WEEK_STR)
         if (oddMode) {

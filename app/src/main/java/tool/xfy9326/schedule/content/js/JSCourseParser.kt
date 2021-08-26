@@ -24,7 +24,7 @@ class JSCourseParser : AbstractCourseParser<JSParams>() {
                 else -> error("Unsupported JS Type! ${requireParams().jsType}")
             }
         } catch (e: Exception) {
-            CourseAdapterException.Error.PARSER_ERROR.report(e)
+            CourseAdapterException.Error.JS_RESULT_PARSE_ERROR.report(e)
         }
 
     private fun processAiScheduleResult(data: String): ScheduleImportContent {
