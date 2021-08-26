@@ -24,11 +24,11 @@ object CourseAdapterUtils {
     /**
      * 构建简单的Http客户端
      *
-     * @param supportJson 是否支持JSON
+     * @param supportJson 是否支持JSON（Ktor对Kotlin serialization的支持）
      * @param hasRedirect 是否允许重定向
      * @return HttpClient
      */
-    fun buildSimpleHttpClient(supportJson: Boolean = false, hasRedirect: Boolean = true) = HttpClient(OkHttp) {
+    fun buildSimpleHttpClient(supportJson: Boolean = false, hasRedirect: Boolean = true): HttpClient = HttpClient(OkHttp) {
         install(HttpCookies)
         if (hasRedirect) {
             install(HttpRedirect) {
@@ -45,9 +45,9 @@ object CourseAdapterUtils {
     }
 
     /**
-     * 创建日期格式
+     * 创建日期格式解析
      *
-     * @param format 格式
+     * @param format 日期格式
      * @return SimpleDateFormat
      */
     fun newDateFormat(format: String = "yyyy-MM-dd"): SimpleDateFormat {
@@ -62,7 +62,7 @@ object CourseAdapterUtils {
      * @param termEnd 学期结束时间
      * @return Pair<学期开始时间, 学期结束时间>
      */
-    fun simpleTermFix(termStart: Date?, termEnd: Date?) =
+    fun simpleTermFix(termStart: Date?, termEnd: Date?): Pair<Date, Date>? =
         if (termStart != null && termEnd == null) {
             termStart to termStart
         } else if (termStart != null && termEnd != null) {
@@ -80,7 +80,7 @@ object CourseAdapterUtils {
      * @param durationDivider 时间段分割符号
      * @param oddOnly 仅限偶数
      * @param evenOnly 仅限奇数
-     * @return 解析结果
+     * @return 整形集合
      */
     fun parseNumberPeriods(str: String, groupDivider: String = ",", durationDivider: String = "-", oddOnly: Boolean = false, evenOnly: Boolean = false): Set<Int> {
         val result = HashSet<Int>()

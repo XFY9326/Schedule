@@ -51,11 +51,16 @@ fun BooleanArray.hasCourse(@IntRange(from = 1) num: Int): Boolean {
  *
  * @return BooleanArray
  */
-fun Collection<Int>.toBooleanArray() =
+fun Collection<Int>.toBooleanArray(): BooleanArray =
     BooleanArray(maxOrNull() ?: 0).also {
         for (i in this) {
             it[i - 1] = true
         }
     }
 
-fun Element.selectSingle(cssQuery: String) = selectFirst(cssQuery) ?: throw NoSuchElementException("No element found by css selector! $cssQuery")
+/**
+ * Jsoup选择单个元素，若不存在则报错
+ *
+ * @param cssQuery CSS查询语句
+ */
+fun Element.selectSingle(cssQuery: String): Element = selectFirst(cssQuery) ?: throw NoSuchElementException("No element found by css selector! $cssQuery")

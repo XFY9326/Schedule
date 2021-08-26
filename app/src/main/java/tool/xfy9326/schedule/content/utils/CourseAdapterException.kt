@@ -83,7 +83,7 @@ class CourseAdapterException : CourseImportException {
 
         // 如果可以添加固定的报错内容，就不要使用该报错类型
         // 此类型上报的错误内容会直接显示到用户界面的提示处
-        // 使用CourseAdapterException.reportCustomError与CourseAdapterException.makeCustomError上报该类错误的具体内容
+        // 使用CourseAdapterException.reportCustomError与CourseAdapterException.makeCustomError设定该类错误的具体内容
         CUSTOM_ERROR,
 
         /* ----- 以下错误为课程导入时会自动判断的错误，不建议手动调用，手动调用可能导致重复报错 ----- */
