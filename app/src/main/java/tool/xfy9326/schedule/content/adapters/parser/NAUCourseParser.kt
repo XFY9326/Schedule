@@ -121,7 +121,8 @@ class NAUCourseParser : NetworkCourseParser<Nothing>() {
         val weeks = getWeeks(timeStr)
 
         val weekDayCourseSectionStr = timeStr.substring(timeStr.indexOf("周") + 1).trim()
-        val weekDayCourseValues = WEEKDAY_COURSE_REG.find(weekDayCourseSectionStr)?.groupValues ?: CourseAdapterException.Error.CONTENT_PARSE_ERROR.report()
+        val weekDayCourseValues = WEEKDAY_COURSE_REG.find(weekDayCourseSectionStr)?.groupValues
+            ?: CourseAdapterException.Error.CONTENT_PARSE_ERROR.report(msg = "Error content: $weekDayCourseSectionStr")
 
         val weekDay = weekDayCourseValues[1].toInt()
         val classStart = weekDayCourseValues[2].toInt()
