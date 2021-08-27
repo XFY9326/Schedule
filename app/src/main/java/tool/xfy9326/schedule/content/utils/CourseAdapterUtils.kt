@@ -167,20 +167,27 @@ object CourseAdapterUtils {
     /**
      * 解析中文的星期
      *
-     * @param str 中文数字字符串
+     * @param str 中文星期
      * @return WeekDay
      */
-    fun parseWeekDayChinese(str: String): WeekDay =
-        when (str.trim()) {
+    fun parseWeekDayChinese(str: String): WeekDay {
+        val fixedStr = when {
+            str.isBlank() -> error("Blank input!")
+            str.startsWith("周") -> str.trim().substring(1)
+            str.startsWith("星期") -> str.trim().substring(2)
+            else -> str
+        }.trim()
+        return when (fixedStr) {
             "一" -> WeekDay.MONDAY
             "二" -> WeekDay.TUESDAY
             "三" -> WeekDay.WEDNESDAY
             "四" -> WeekDay.THURSDAY
             "五" -> WeekDay.FRIDAY
             "六" -> WeekDay.SATURDAY
-            "日" -> WeekDay.SUNDAY
+            "天", "日" -> WeekDay.SUNDAY
             else -> error("Unsupported WeekDay Chinese! Input: $str")
         }
+    }
 
     /**
      * 解析中文单双周
