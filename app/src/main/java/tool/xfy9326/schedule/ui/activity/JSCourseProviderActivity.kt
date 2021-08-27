@@ -7,15 +7,16 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import lib.xfy9326.livedata.observeEvent
-import tool.xfy9326.schedule.content.base.JSCourseParser
-import tool.xfy9326.schedule.content.base.JSCourseProvider
+import tool.xfy9326.schedule.beans.ScheduleImportRequestParams
+import tool.xfy9326.schedule.content.js.JSCourseParser
+import tool.xfy9326.schedule.content.js.JSCourseProvider
 import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.databinding.ActivityFragmentContainerBinding
 import tool.xfy9326.schedule.ui.activity.base.AbstractWebCourseProviderActivity
 import tool.xfy9326.schedule.ui.dialog.FullScreenLoadingDialog
 import tool.xfy9326.schedule.ui.vm.JSCourseProviderViewModel
-import tool.xfy9326.schedule.ui.vm.base.CourseProviderViewModel
 import tool.xfy9326.schedule.utils.JSBridge
+import tool.xfy9326.schedule.utils.schedule.ScheduleImportManager
 import tool.xfy9326.schedule.utils.view.DialogUtils
 
 class JSCourseProviderActivity : AbstractWebCourseProviderActivity<String, JSCourseProvider, JSCourseParser, JSCourseProviderViewModel>(),
@@ -38,7 +39,7 @@ class JSCourseProviderActivity : AbstractWebCourseProviderActivity<String, JSCou
             @JavascriptInterface
             override fun onJSProviderResponse(resultJSON: String, isCurrentSchedule: Boolean) {
                 lifecycleScope.launch {
-                    requestImportCourse(ImportRequestParams(isCurrentSchedule, resultJSON))
+                    requestImportCourse(ScheduleImportRequestParams(isCurrentSchedule, resultJSON))
                 }
             }
         }, JSBridge.JS_COURSE_PROVIDER_JS_INTERFACE_NAME)
@@ -59,7 +60,7 @@ class JSCourseProviderActivity : AbstractWebCourseProviderActivity<String, JSCou
         }
     }
 
-    override fun onCourseImportFinish(result: CourseProviderViewModel.ImportResult, editScheduleId: Long?) {
+    override fun onCourseImportFinish(result: ScheduleImportManager.ImportResult, editScheduleId: Long?) {
         if (!(requireViewModel().isRequireNetwork && enableJSNetwork)) {
             fragmentContact.setWebViewConnection(true)
         } else {

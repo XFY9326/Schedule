@@ -1,12 +1,12 @@
 package tool.xfy9326.schedule.ui.activity
 
+import lib.xfy9326.android.kit.setOnSingleClickListener
+import lib.xfy9326.android.kit.startActivity
 import lib.xfy9326.livedata.observeNotify
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.ScheduleWrapper
 import tool.xfy9326.schedule.databinding.ActivityScheduleManageBinding
-import tool.xfy9326.schedule.kt.setOnSingleClickListener
 import tool.xfy9326.schedule.kt.showSnackBar
-import tool.xfy9326.schedule.kt.startActivity
 import tool.xfy9326.schedule.ui.activity.base.ViewModelActivity
 import tool.xfy9326.schedule.ui.adapter.ScheduleManageAdapter
 import tool.xfy9326.schedule.ui.adapter.ScheduleManageAdapter.ScheduleOperation.*
@@ -48,10 +48,7 @@ class ScheduleManageActivity : ViewModelActivity<ScheduleManageViewModel, Activi
             COURSE_EDIT -> startActivity<CourseManageActivity> {
                 putExtra(CourseManageActivity.EXTRA_SCHEDULE_ID, scheduleWrapper.schedule.scheduleId)
             }
-            EDIT -> startActivity<ScheduleEditActivity> {
-                putExtra(ScheduleEditActivity.INTENT_EXTRA_SCHEDULE_ID, scheduleWrapper.schedule.scheduleId)
-                putExtra(ScheduleEditActivity.INTENT_EXTRA_IS_CURRENT_SCHEDULE, scheduleWrapper.inUsing)
-            }
+            EDIT -> ScheduleEditActivity.startActivity(this, scheduleWrapper.schedule.scheduleId, scheduleWrapper.inUsing)
             SET_AS_CURRENT -> {
                 if (scheduleWrapper.inUsing) {
                     requireViewBinding().layoutScheduleManage.showSnackBar(R.string.schedule_has_set_as_current)

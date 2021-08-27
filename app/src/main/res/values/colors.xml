@@ -51,4 +51,6 @@
 
     <color name="operation_button_dialog_background">#99FFFFFF</color>
     <color name="text_edit_dialog_sample_background">#0D000000</color>
+
+    <color name="app_widget_background">#E6FAFAFA</color>
 </resources>

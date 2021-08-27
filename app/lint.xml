@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <lint>
     <issue id="IconDuplicates">
+        <ignore path="src/main/res/mipmap-hdpi/ic_launcher_round.png" />
+        <ignore path="src/main/res/mipmap-mdpi/ic_launcher_round.png" />
+        <ignore path="src/main/res/mipmap-xxhdpi/ic_launcher_round.png" />
         <ignore path="src/main/res/mipmap-xxxhdpi/ic_launcher.png" />
-        <ignore path="src/main/res/mipmap/ic_launch_screen.png" />
-    </issue>
-    <issue id="IconDuplicatesConfig">
-        <ignore path="src/main/res/drawable/ic_launcher_round.png" />
         <ignore path="src/main/res/mipmap-xxxhdpi/ic_launcher_round.png" />
+        <ignore path="src/main/res/mipmap-xxxhdpi/ic_logo.png" />
+        <ignore path="src/main/res/mipmap/ic_launch_screen.png" />
+        <ignore path="src/main/res/mipmap/ic_logo.png" />
     </issue>
     <issue id="IconLocation">
-        <ignore path="src/main/res/drawable/ic_launcher_round.png" />
+        <ignore path="src/main/res/drawable/widget_next_course_2x1.webp" />
+        <ignore path="src/main/res/drawable/widget_next_course_4x1.webp" />
+        <ignore path="src/main/res/drawable/widget_next_course_2x2.webp" />
     </issue>
 </lint>

@@ -2,17 +2,17 @@ package tool.xfy9326.schedule.utils.ics
 
 import android.content.Context
 import android.net.Uri
+import lib.xfy9326.android.kit.io.IOManager
+import lib.xfy9326.android.kit.io.kt.writeText
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.Course
+import tool.xfy9326.schedule.beans.Course.Companion.iterateAll
 import tool.xfy9326.schedule.beans.CourseTime
 import tool.xfy9326.schedule.beans.Schedule
 import tool.xfy9326.schedule.beans.ScheduleCalculateTimes
-import tool.xfy9326.schedule.io.FileManager
-import tool.xfy9326.schedule.io.IOManager
-import tool.xfy9326.schedule.kt.iterateAll
+import tool.xfy9326.schedule.tools.NumberPattern.PatternType.*
 import tool.xfy9326.schedule.utils.schedule.CourseTimeUtils
 import tool.xfy9326.schedule.utils.schedule.WeekNumPattern
-import tool.xfy9326.schedule.utils.schedule.WeekNumPattern.PatternType.*
 
 class ScheduleICSHelper constructor(schedule: Schedule, private val courses: List<Course>) {
     companion object {
@@ -27,7 +27,7 @@ class ScheduleICSHelper constructor(schedule: Schedule, private val courses: Lis
             courses.iterateAll { course, courseTime ->
                 createCourseTimeVEvent(iCal, course, courseTime)
             }
-            return FileManager.writeText(uri, iCal.build())
+            return uri.writeText(iCal.build())
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -35,25 +35,25 @@ class ScheduleICSHelper constructor(schedule: Schedule, private val courses: Lis
     }
 
     private fun createCourseTimeVEvent(iCal: ScheduleICSWriter, course: Course, courseTime: CourseTime) {
-        val weekNumPattern = WeekNumPattern(courseTime, scheduleCalculateTimes)
+        val weekNumPattern = WeekNumPattern.parsePattern(courseTime, scheduleCalculateTimes)
         if (weekNumPattern.type == SINGLE) {
-            CourseTimeUtils.getRealClassTime(scheduleCalculateTimes, weekNumPattern.start + 1, courseTime.classTime).let { time ->
+            CourseTimeUtils.getRealSectionTime(scheduleCalculateTimes, weekNumPattern.start + 1, courseTime.sectionTime).let { time ->
                 iCal.addEvent(time.first, time.second, course.name, courseTime.location, getEventDescription(course))
             }
         } else if (weekNumPattern.type == SPACED || weekNumPattern.type == SERIAL) {
-            CourseTimeUtils.getRealClassTime(scheduleCalculateTimes, weekNumPattern.start + 1, classTime = courseTime.classTime).let { time ->
+            CourseTimeUtils.getRealSectionTime(scheduleCalculateTimes, weekNumPattern.start + 1, sectionTime = courseTime.sectionTime).let { time ->
                 val rrule = ScheduleICSWriter.RRULE(weekNumPattern.interval,
                     weekNumPattern.amount,
-                    courseTime.classTime.weekDay,
+                    courseTime.sectionTime.weekDay,
                     scheduleCalculateTimes.weekStart)
                 iCal.addEvent(time.first, time.second, course.name, courseTime.location, getEventDescription(course), rrule)
             }
         } else if (weekNumPattern.type == MESSY) {
             for (period in weekNumPattern.timePeriodArray) {
-                CourseTimeUtils.getRealClassTime(scheduleCalculateTimes, period.start + 1, courseTime.classTime).let { time ->
+                CourseTimeUtils.getRealSectionTime(scheduleCalculateTimes, period.start + 1, courseTime.sectionTime).let { time ->
                     val rrule =
                         if (period.length > 1) {
-                            ScheduleICSWriter.RRULE(1, period.length, courseTime.classTime.weekDay, scheduleCalculateTimes.weekStart)
+                            ScheduleICSWriter.RRULE(1, period.length, courseTime.sectionTime.weekDay, scheduleCalculateTimes.weekStart)
                         } else {
                             null
                         }

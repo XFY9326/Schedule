@@ -48,6 +48,8 @@ abstract class AbstractSettingsFragment : PreferenceFragmentCompat() {
         }
     }
 
+    override fun getCallbackFragment() = parentFragment
+
     protected open fun onBindLiveDataFromSettingsViewMode(viewModel: SettingsViewModel) {}
 
     protected open fun onPrefInit(savedInstanceState: Bundle?) {}

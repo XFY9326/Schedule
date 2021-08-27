@@ -18,6 +18,8 @@ object AppDataStore : AbstractDataStore("App") {
         ScheduleDBProvider.db.scheduleDAO.tryInitDefaultSchedule()
     }
 
+    suspend fun hasCurrentScheduleId() = currentScheduleId.hasValue()
+
     val acceptEULAFlow = acceptEULA.readAsFlow(false)
 
     val ignoreUpdateVersionCodeFlow = ignoreUpdateVersionCode.readAsFlow(0)

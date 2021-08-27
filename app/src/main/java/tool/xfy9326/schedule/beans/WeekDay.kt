@@ -1,20 +1,20 @@
+@file:Suppress("unused", "MemberVisibilityCanBePrivate")
+
 package tool.xfy9326.schedule.beans
 
 import android.os.Parcelable
-import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 import java.util.*
 
-@Suppress("unused")
 @Parcelize
-enum class WeekDay(val shortName: String, val calWeekDay: Int) : Parcelable {
-    MONDAY(WeekDay.SHORT_NAME_MO, Calendar.MONDAY),
-    TUESDAY(WeekDay.SHORT_NAME_TU, Calendar.TUESDAY),
-    WEDNESDAY(WeekDay.SHORT_NAME_WE, Calendar.WEDNESDAY),
-    THURSDAY(WeekDay.SHORT_NAME_TH, Calendar.THURSDAY),
-    FRIDAY(WeekDay.SHORT_NAME_FR, Calendar.FRIDAY),
-    SATURDAY(WeekDay.SHORT_NAME_SA, Calendar.SATURDAY),
-    SUNDAY(WeekDay.SHORT_NAME_SU, Calendar.SUNDAY);
+enum class WeekDay : Parcelable {
+    MONDAY,
+    TUESDAY,
+    WEDNESDAY,
+    THURSDAY,
+    FRIDAY,
+    SATURDAY,
+    SUNDAY;
 
     companion object {
         private const val SHORT_NAME_MO = "MO"
@@ -27,6 +27,30 @@ enum class WeekDay(val shortName: String, val calWeekDay: Int) : Parcelable {
 
         const val MAX_VALUE = 7
         const val MIN_VALUE = 1
+
+        val WeekDay.shortName
+            get() = when (this) {
+                MONDAY -> SHORT_NAME_MO
+                TUESDAY -> SHORT_NAME_TU
+                WEDNESDAY -> SHORT_NAME_WE
+                THURSDAY -> SHORT_NAME_TH
+                FRIDAY -> SHORT_NAME_FR
+                SATURDAY -> SHORT_NAME_SA
+                SUNDAY -> SHORT_NAME_SU
+            }
+
+        val WeekDay.calWeekDay
+            get() = when (this) {
+                MONDAY -> Calendar.MONDAY
+                TUESDAY -> Calendar.TUESDAY
+                WEDNESDAY -> Calendar.WEDNESDAY
+                THURSDAY -> Calendar.THURSDAY
+                FRIDAY -> Calendar.FRIDAY
+                SATURDAY -> Calendar.SATURDAY
+                SUNDAY -> Calendar.SUNDAY
+            }
+
+        fun Calendar.getWeekDay() = valueOfCalWeekDay(get(Calendar.DAY_OF_WEEK))
 
         fun valueOfCalWeekDay(calWeekDay: Int) =
             values().find {
@@ -55,11 +79,11 @@ enum class WeekDay(val shortName: String, val calWeekDay: Int) : Parcelable {
                 SUNDAY -> if (this == SUNDAY) 1 else value + 1
                 else -> error("First day of week must be MONDAY or SUNDAY")
             }
+
+        val WeekDay.value
+            get() = ordinal + 1
+
+        val WeekDay.isWeekend
+            get() = (this == SATURDAY || this == SUNDAY)
     }
-
-    @IgnoredOnParcel
-    val value: Int = ordinal + 1
-
-    val isWeekend: Boolean
-        get() = (this == SATURDAY || this == SUNDAY)
 }

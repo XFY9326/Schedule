@@ -13,8 +13,8 @@ import android.view.animation.ScaleAnimation
 import androidx.core.animation.addListener
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import tool.xfy9326.schedule.kt.dpToPx
-import tool.xfy9326.schedule.kt.tryStartAnimateDrawable
+import lib.xfy9326.android.kit.dpToPx
+import lib.xfy9326.android.kit.tryStartAnimateDrawable
 import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.math.abs
 import kotlin.math.max

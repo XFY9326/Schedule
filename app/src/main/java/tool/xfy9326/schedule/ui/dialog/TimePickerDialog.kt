@@ -6,7 +6,7 @@ import android.widget.TimePicker
 import androidx.appcompat.app.AppCompatDialogFragment
 import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
-import tool.xfy9326.schedule.kt.requireOwner
+import lib.xfy9326.android.kit.requireOwner
 
 class TimePickerDialog : AppCompatDialogFragment(), TimePickerDialog.OnTimeSetListener {
     companion object {

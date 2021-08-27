@@ -9,6 +9,9 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.activityViewModels
+import lib.xfy9326.android.kit.setWindowPercent
+import lib.xfy9326.android.kit.showToast
+import lib.xfy9326.kit.getDeepStackTraceString
 import lib.xfy9326.livedata.observeEvent
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.content.CourseImportConfigManager
@@ -16,9 +19,6 @@ import tool.xfy9326.schedule.content.CourseImportConfigManager.Type.*
 import tool.xfy9326.schedule.content.beans.JSConfig
 import tool.xfy9326.schedule.content.utils.JSConfigException
 import tool.xfy9326.schedule.databinding.DialogJsConfigPrepareBinding
-import tool.xfy9326.schedule.kt.getDeepStackTraceString
-import tool.xfy9326.schedule.kt.setWindowPercent
-import tool.xfy9326.schedule.kt.showToast
 import tool.xfy9326.schedule.ui.vm.OnlineCourseImportViewModel
 
 class JSConfigPrepareDialog : DialogFragment() {

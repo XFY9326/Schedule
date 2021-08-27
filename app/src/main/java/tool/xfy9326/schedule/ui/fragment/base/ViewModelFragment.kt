@@ -12,7 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.viewbinding.ViewBinding
-import tool.xfy9326.schedule.kt.removeSelf
+import lib.xfy9326.android.kit.removeSelf
 import tool.xfy9326.schedule.ui.vm.base.AbstractViewModel
 import kotlin.reflect.KClass
 

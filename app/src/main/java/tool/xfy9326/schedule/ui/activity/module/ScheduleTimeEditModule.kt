@@ -1,9 +1,10 @@
 package tool.xfy9326.schedule.ui.activity.module
 
+import android.annotation.SuppressLint
+import lib.xfy9326.android.kit.setOnSingleClickListener
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.ScheduleTime
 import tool.xfy9326.schedule.databinding.ActivityScheduleEditBinding
-import tool.xfy9326.schedule.kt.setOnSingleClickListener
 import tool.xfy9326.schedule.kt.showSnackBar
 import tool.xfy9326.schedule.ui.activity.ScheduleEditActivity
 import tool.xfy9326.schedule.ui.activity.base.AbstractViewModelActivityModule
@@ -24,7 +25,7 @@ class ScheduleTimeEditModule(activity: ScheduleEditActivity) :
         this.scheduleTimeAdapter = scheduleTimeAdapter
     }
 
-    override fun init() {
+    override fun onInit() {
         scheduleTimeAdapter.setOnScheduleTimeEditListener(::selectScheduleTime)
 
         requireViewBinding().checkBoxScheduleTimeCourseTimeSame.isChecked = requireViewModel().scheduleTimeCourseTimeSame
@@ -95,6 +96,7 @@ class ScheduleTimeEditModule(activity: ScheduleEditActivity) :
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     fun updateCourseCostTime(minute: Int, viewInit: Boolean) {
         if (!viewInit) {
             val breakCostTime = requireViewModel().breakCostTime
@@ -114,6 +116,7 @@ class ScheduleTimeEditModule(activity: ScheduleEditActivity) :
         requireViewBinding().textViewScheduleCourseCostTime.text = requireActivity().getString(R.string.minute, minute)
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     fun updateBreakCostTime(minute: Int, viewInit: Boolean) {
         if (!viewInit) {
             val courseCostTime = requireViewModel().courseCostTime

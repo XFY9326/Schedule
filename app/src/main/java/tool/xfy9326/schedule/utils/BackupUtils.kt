@@ -7,7 +7,8 @@ import kotlinx.serialization.json.Json
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.*
 import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
-import tool.xfy9326.schedule.io.FileManager
+import tool.xfy9326.schedule.io.utils.readJSON
+import tool.xfy9326.schedule.io.utils.writeJSON
 import tool.xfy9326.schedule.json.ScheduleTimeJSON
 import tool.xfy9326.schedule.json.backup.BackupWrapperJSON
 import tool.xfy9326.schedule.json.backup.CourseJSON
@@ -35,7 +36,7 @@ object BackupUtils {
                     ScheduleCourseBundle(schedule, courses)
                 }
             }
-            return FileManager.writeJSON(uri, getParsableClass(allBundles), JSON)
+            return uri.writeJSON(getParsableClass(allBundles), JSON)
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -47,7 +48,7 @@ object BackupUtils {
         var errorAmount = 0
         var hasConflicts = false
         try {
-            FileManager.readJSON<BackupWrapperJSON>(uri, JSON)?.let {
+            uri.readJSON<BackupWrapperJSON>(JSON)?.let {
                 val originalData = fromParsableClass(it)
                 for (bundle in originalData) {
                     totalAmount++
@@ -77,9 +78,9 @@ object BackupUtils {
                 for (time in course.times) {
                     jsonCourseTimes.add(CourseTimeJSON(
                         weekNum = time.weekNum,
-                        weekDay = time.classTime.weekDay,
-                        start = time.classTime.classStartTime,
-                        duration = time.classTime.classDuration,
+                        weekDay = time.sectionTime.weekDay,
+                        start = time.sectionTime.start,
+                        duration = time.sectionTime.duration,
                         location = time.location
                     ))
                 }
@@ -124,8 +125,8 @@ object BackupUtils {
                     courseTimes.add(CourseTime(
                         weekNum = timeJson.weekNum,
                         weekDay = timeJson.weekDay,
-                        classStartTime = timeJson.start,
-                        classDuration = timeJson.duration,
+                        start = timeJson.start,
+                        duration = timeJson.duration,
                         location = timeJson.location
                     ))
                 }

@@ -11,5 +11,5 @@ abstract class AbstractParamsClass<P> {
         _params = params
     }
 
-    fun requireParams() = params!!
+    fun requireParams() = params ?: throw IllegalArgumentException("Params should not be null!")
 }

@@ -5,8 +5,8 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatDialogFragment
 import androidx.fragment.app.FragmentManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import lib.xfy9326.android.kit.requireOwner
 import tool.xfy9326.schedule.R
-import tool.xfy9326.schedule.kt.requireOwner
 
 class ImportCourseConflictDialog : AppCompatDialogFragment(), DialogInterface.OnClickListener {
     companion object {

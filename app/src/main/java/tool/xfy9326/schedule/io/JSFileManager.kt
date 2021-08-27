@@ -6,6 +6,8 @@ import io.ktor.client.*
 import io.ktor.client.request.*
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
+import lib.xfy9326.android.kit.io.kt.useBuffer
+import lib.xfy9326.kit.*
 import okio.Source
 import okio.sink
 import okio.source
@@ -13,9 +15,9 @@ import tool.xfy9326.schedule.content.beans.JSConfig
 import tool.xfy9326.schedule.content.utils.JSConfigException
 import tool.xfy9326.schedule.content.utils.JSConfigException.Companion.make
 import tool.xfy9326.schedule.content.utils.JSConfigException.Companion.report
-import tool.xfy9326.schedule.content.utils.md5
 import tool.xfy9326.schedule.io.JSFileManager.SaveType.*
-import tool.xfy9326.schedule.io.kt.*
+import tool.xfy9326.schedule.io.utils.readJSON
+import tool.xfy9326.schedule.io.utils.writeJSON
 import java.io.InputStream
 
 /**
@@ -195,6 +197,8 @@ object JSFileManager {
     suspend fun parserJSConfig(content: String) = runUnsafeIOJob {
         try {
             JSON.decodeFromString<JSConfig>(content)
+        } catch (e: JSConfigException) {
+            throw e
         } catch (e: Exception) {
             JSConfigException.Error.INVALID.report(e)
         }

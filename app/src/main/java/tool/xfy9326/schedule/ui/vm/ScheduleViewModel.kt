@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
+import lib.xfy9326.kit.withTryLock
 import lib.xfy9326.livedata.MutableEventLiveData
 import lib.xfy9326.livedata.postEvent
 import tool.xfy9326.schedule.beans.*
@@ -19,21 +20,19 @@ import tool.xfy9326.schedule.data.ScheduleDataStore
 import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
 import tool.xfy9326.schedule.io.utils.ImageUtils
 import tool.xfy9326.schedule.kt.asDistinctLiveData
-import tool.xfy9326.schedule.kt.withTryLock
 import tool.xfy9326.schedule.tools.DisposableValue
 import tool.xfy9326.schedule.ui.vm.base.AbstractViewModel
 import tool.xfy9326.schedule.utils.CalendarUtils
 import tool.xfy9326.schedule.utils.ics.ScheduleICSHelper
+import tool.xfy9326.schedule.utils.schedule.ScheduleDataProcessor
 import tool.xfy9326.schedule.utils.schedule.ScheduleSyncHelper
-import tool.xfy9326.schedule.utils.schedule.ScheduleUtils
-import tool.xfy9326.schedule.utils.view.ScheduleViewDataProcessor
 import tool.xfy9326.schedule.utils.view.ScheduleViewHelper
 import java.util.concurrent.atomic.AtomicBoolean
 
 class ScheduleViewModel : AbstractViewModel() {
-    val weekNumInfo = ScheduleViewDataProcessor.weekNumInfoFlow.asDistinctLiveData()
-    val scheduleBuildData = ScheduleViewDataProcessor.scheduleBuildDataFlow.asDistinctLiveData()
-    val scheduleBackground = ScheduleViewDataProcessor.scheduleBackgroundFlow.asDistinctLiveData()
+    val weekNumInfo = ScheduleDataProcessor.weekNumInfoFlow.asDistinctLiveData()
+    val scheduleBuildData = ScheduleDataProcessor.scheduleViewDataFlow.asDistinctLiveData()
+    val scheduleBackground = ScheduleDataProcessor.scheduleBackgroundFlow.asDistinctLiveData()
 
     val nowDay = MutableLiveData<Day>()
     val scrollToWeek = MutableEventLiveData<Int>()
@@ -72,7 +71,7 @@ class ScheduleViewModel : AbstractViewModel() {
 
     fun scrollToCurrentWeekNum() {
         viewModelScope.launch(Dispatchers.IO) {
-            scrollToWeek.postEvent(ScheduleViewDataProcessor.weekNumFlow.first())
+            scrollToWeek.postEvent(ScheduleDataProcessor.weekNumFlow.first())
         }
     }
 
@@ -84,7 +83,7 @@ class ScheduleViewModel : AbstractViewModel() {
 
     fun showScheduleControlPanel() {
         viewModelScope.launch(Dispatchers.IO) {
-            val weekNumInfo = ScheduleViewDataProcessor.weekNumInfoFlow.first()
+            val weekNumInfo = ScheduleDataProcessor.weekNumInfoFlow.first()
             val systemBarAppearance = ScheduleDataStore.scheduleSystemBarAppearanceFlow.first()
             showScheduleControlPanel.postEvent(Triple(weekNumInfo.first, weekNumInfo.second, systemBarAppearance))
         }
@@ -92,7 +91,7 @@ class ScheduleViewModel : AbstractViewModel() {
 
     fun notifyShowWeekChanged(weekNum: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            showWeekChanged.postEvent(weekNum to WeekNumType.create(weekNum, ScheduleViewDataProcessor.weekNumFlow.first()))
+            showWeekChanged.postEvent(weekNum to WeekNumType.create(weekNum, ScheduleDataProcessor.weekNumFlow.first()))
         }
     }
 
@@ -154,7 +153,7 @@ class ScheduleViewModel : AbstractViewModel() {
 
     fun showCourseDetailDialog(courseId: Long, timeId: Long) {
         viewModelScope.launch(Dispatchers.IO) {
-            ScheduleUtils.currentScheduleTimesFlow.combine(ScheduleDBProvider.db.scheduleDAO.getScheduleCourse(courseId)) { times, course ->
+            ScheduleDataProcessor.currentScheduleTimesFlow.combine(ScheduleDBProvider.db.scheduleDAO.getScheduleCourse(courseId)) { times, course ->
                 if (course == null) {
                     null
                 } else {

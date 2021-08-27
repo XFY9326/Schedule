@@ -12,11 +12,13 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.core.view.setPadding
+import lib.xfy9326.android.kit.setOnSingleClickListener
+import lib.xfy9326.kit.NEW_LINE
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.*
+import tool.xfy9326.schedule.beans.ScheduleTime.Companion.endTimeStr
+import tool.xfy9326.schedule.beans.ScheduleTime.Companion.startTimeStr
 import tool.xfy9326.schedule.beans.WeekDay.Companion.orderedValue
-import tool.xfy9326.schedule.kt.NEW_LINE
-import tool.xfy9326.schedule.kt.setOnSingleClickListener
 import tool.xfy9326.schedule.tools.MaterialColorHelper
 import tool.xfy9326.schedule.utils.view.ViewUtils
 import kotlin.properties.Delegates
@@ -48,12 +50,12 @@ class ScheduleCellView private constructor(context: Context, private val predefi
         weekStart: WeekDay,
     ) : this(context, schedulePredefine, scheduleSettings) {
         if (showWeekend || weekStart == WeekDay.MONDAY) {
-            this.column = courseCell.classTime.weekDay.orderedValue(weekStart)
+            this.column = courseCell.sectionTime.weekDay.orderedValue(weekStart)
         } else {
-            this.column = courseCell.classTime.weekDay.orderedValue(weekStart) - 1
+            this.column = courseCell.sectionTime.weekDay.orderedValue(weekStart) - 1
         }
-        this.row = courseCell.classTime.classStartTime - 1
-        this.rowSpan = courseCell.classTime.classDuration
+        this.row = courseCell.sectionTime.start - 1
+        this.rowSpan = courseCell.sectionTime.duration
 
         initAsCourseCell(courseCell)
     }
@@ -100,7 +102,7 @@ class ScheduleCellView private constructor(context: Context, private val predefi
                 layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
                 background = ViewUtils.buildBackground(courseCell.cellColor, predefine.courseCellRippleColor, predefine.courseCellBackgroundRadius)
 
-                textSize = styles.textSize.getCourseTextSize(context)
+                textSize = styles.textSize[ScheduleText.COURSE_TEXT]
                 setPadding(predefine.courseCellTextPadding)
 
                 setTextColor(
@@ -147,7 +149,7 @@ class ScheduleCellView private constructor(context: Context, private val predefi
         addViewPreventLayout(
             TextView(context).apply {
                 text = courseTimeNumText
-                textSize = styles.textSize.getScheduleNumberTextSize(context)
+                textSize = styles.textSize[ScheduleText.SCHEDULE_NUMBER_TEXT]
                 typeface = Typeface.defaultFromStyle(Typeface.BOLD)
                 setTextColor(timeTextColor)
                 setPadding(0, predefine.timeCellVerticalPadding, 0, predefine.timeCellVerticalPadding)
@@ -155,7 +157,7 @@ class ScheduleCellView private constructor(context: Context, private val predefi
                 textAlignment = View.TEXT_ALIGNMENT_INHERIT
                 gravity = Gravity.CENTER
 
-                layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
+                layoutParams = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
             }
         )
 
@@ -164,14 +166,14 @@ class ScheduleCellView private constructor(context: Context, private val predefi
             addViewPreventLayout(
                 TextView(context).apply {
                     text = courseTimeText
-                    textSize = styles.textSize.getScheduleTimeTextSize(context)
+                    textSize = styles.textSize[ScheduleText.SCHEDULE_TIME_TEXT]
                     setTextColor(timeTextColor)
                     setPadding(0, predefine.timeCellTimeDivideTopMargin, 0, 0)
 
                     textAlignment = View.TEXT_ALIGNMENT_INHERIT
                     gravity = Gravity.CENTER
 
-                    layoutParams = LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply {
+                    layoutParams = LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply {
                         setMargins(0, predefine.timeCellTimeDivideTopMargin, 0, 0)
                     }
                 }

@@ -2,14 +2,17 @@
 
 package tool.xfy9326.schedule.content.utils
 
-import tool.xfy9326.schedule.beans.Course
-import tool.xfy9326.schedule.kt.tryCast
-import java.io.*
-import java.security.MessageDigest
+import androidx.annotation.IntRange
+import org.jsoup.nodes.Element
+import tool.xfy9326.schedule.content.base.AbstractCourseImportConfig
 
-private const val CHAR_ZERO = '0'
-private const val CHAR_ONE = '1'
+typealias BaseCourseImportConfig = AbstractCourseImportConfig<*, *, *, *>
 
+/**
+ * 重新整理周数数组
+ * 减少不必要的尾部信息
+ * @return 周数数组
+ */
 fun BooleanArray.arrangeWeekNum(): BooleanArray {
     var newSize = size
     for (i in size - 1 downTo 0) {
@@ -26,7 +29,13 @@ fun BooleanArray.arrangeWeekNum(): BooleanArray {
     }
 }
 
-fun BooleanArray.hasCourse(num: Int): Boolean {
+/**
+ * 是否有课程
+ *
+ * @param num 节次（从1开始）
+ * @return 是否有课程
+ */
+fun BooleanArray.hasCourse(@IntRange(from = 1) num: Int): Boolean {
     val index = num - 1
     return if (index in indices) {
         this[index]
@@ -35,58 +44,23 @@ fun BooleanArray.hasCourse(num: Int): Boolean {
     }
 }
 
-fun BooleanArray.serializeToString(): String {
-    return buildString(size) {
-        this@serializeToString.forEach { b ->
-            append(if (b) CHAR_ONE else CHAR_ZERO)
+/**
+ * 整形Collection转BooleanArray
+ * 1 -> Index 0
+ * 2 -> Index 1
+ *
+ * @return BooleanArray
+ */
+fun Collection<Int>.toBooleanArray(): BooleanArray =
+    BooleanArray(maxOrNull() ?: 0).also {
+        for (i in this) {
+            it[i - 1] = true
         }
     }
-}
 
-fun String.deserializeToBooleanArray(): BooleanArray {
-    return BooleanArray(length) { p ->
-        this[p] == CHAR_ONE
-    }
-}
-
-fun List<Course>.arrangeWeekNum() {
-    this.forEach {
-        it.times.forEach { time ->
-            time.weekNum = time.weekNum.arrangeWeekNum()
-        }
-    }
-}
-
-fun String.md5(): String {
-    return MessageDigest.getInstance("MD5").digest(this.toByteArray()).toHex()
-}
-
-fun ByteArray.toHex(): String {
-    val builder = StringBuilder()
-    for (byte in this) {
-        val hex = Integer.toHexString(byte.toInt() and 0xFF)
-        if (hex.length == 1) builder.append('0')
-        builder.append(hex)
-    }
-    return builder.toString()
-}
-
-fun String.hexToByteArray(): ByteArray = ByteArray(length / 2) {
-    (substring(2 * it, 2 * it + 2).toInt(16) and 0xFF).toByte()
-}
-
-fun <T : Serializable> T.clone(): T? {
-    try {
-        ByteArrayOutputStream().use { byteOutput ->
-            ObjectOutputStream(byteOutput).use {
-                it.writeObject(this)
-            }
-            ObjectInputStream(ByteArrayInputStream(byteOutput.toByteArray())).use {
-                return it.readObject().tryCast()
-            }
-        }
-    } catch (e: Exception) {
-        e.printStackTrace()
-    }
-    return null
-}
+/**
+ * Jsoup选择单个元素，若不存在则报错
+ *
+ * @param cssQuery CSS查询语句
+ */
+fun Element.selectSingle(cssQuery: String): Element = selectFirst(cssQuery) ?: throw NoSuchElementException("No element found by css selector! $cssQuery")

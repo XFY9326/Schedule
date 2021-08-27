@@ -5,18 +5,15 @@ plugins {
 
 def config = rootProject.ext
 def androidConfig = config.android
-def dependenciesVersion = config.dependencies
+def dependenciesVersion = config.dependencies_version
 def androidxVersion = dependenciesVersion.androidx
 
 android {
-    compileSdkVersion androidConfig.compileSdkVersion
-    buildToolsVersion androidConfig.buildToolsVersion
+    compileSdkVersion androidConfig.compileSdk
 
     defaultConfig {
-        minSdkVersion androidConfig.minSdkVersion
-        targetSdkVersion androidConfig.targetSDKVersion
-        versionCode config.library.LiveDataTools.versionCode
-        versionName config.library.LiveDataTools.versionName
+        minSdk androidConfig.minSdk
+        targetSdk androidConfig.targetSdk
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -40,9 +37,7 @@ android {
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$androidxVersion.lifecycle"
+    api "androidx.lifecycle:lifecycle-livedata-ktx:$androidxVersion.lifecycle"
 
     testImplementation "junit:junit:$dependenciesVersion.junit"
     androidTestImplementation "androidx.test.ext:junit:$androidxVersion.test.junit"

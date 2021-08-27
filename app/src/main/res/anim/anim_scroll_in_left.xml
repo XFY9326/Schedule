@@ -3,6 +3,6 @@
     <translate
         android:duration="@integer/activity_transition_anim_time"
         android:fromXDelta="-30%p"
-        android:interpolator="@android:interpolator/decelerate_quad"
+        android:interpolator="@android:interpolator/linear"
         android:toXDelta="0%p" />
 </set>

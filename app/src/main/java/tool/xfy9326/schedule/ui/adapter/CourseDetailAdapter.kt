@@ -7,16 +7,18 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
+import lib.xfy9326.android.kit.getDrawableCompat
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.CourseTime
+import tool.xfy9326.schedule.beans.CourseTime.Companion.getWeeksDescriptionText
 import tool.xfy9326.schedule.beans.ScheduleTime
+import tool.xfy9326.schedule.beans.SectionTime.Companion.description
+import tool.xfy9326.schedule.beans.SectionTime.Companion.scheduleTimeDescription
 import tool.xfy9326.schedule.databinding.ItemCourseDetailTimeBinding
 import tool.xfy9326.schedule.databinding.ItemCourseDetailTimeExpandBinding
-import tool.xfy9326.schedule.kt.getDrawableCompat
 import tool.xfy9326.schedule.ui.view.recyclerview.AdvancedDividerItemDecoration
 import tool.xfy9326.schedule.ui.view.recyclerview.BaseViewBindingAdapter
 import tool.xfy9326.schedule.ui.viewholder.ViewBindingViewHolder
-import tool.xfy9326.schedule.utils.schedule.WeekNumPattern
 
 class CourseDetailAdapter(
     courseTimes: List<CourseTime>,
@@ -103,18 +105,18 @@ class CourseDetailAdapter(
     override fun onBindViewHolder(holder: ViewBindingViewHolder<ViewBinding>, position: Int) {
         if (holder.viewBinding is ItemCourseDetailTimeBinding) {
             val courseTime = sortedCourseTimes[position]
-            val weekNumText = WeekNumPattern(courseTime.weekNum).getText(holder.viewContext)
+            val weekNumText = courseTime.getWeeksDescriptionText(holder.viewContext)
             holder.viewBinding.textViewCourseWeekNum.text =
                 if (weekNumText.isEmpty()) {
                     holder.viewContext.getString(R.string.course_detail_week_num_simple, holder.viewContext.getString(R.string.undefined))
                 } else {
                     holder.viewContext.getString(R.string.course_detail_week_num, weekNumText)
                 }
-            holder.viewBinding.textViewCourseClassTime.text = holder.viewContext.getString(
-                R.string.course_detail_class_time,
-                holder.viewContext.getString(R.string.weekday, weekDayStrArray[courseTime.classTime.weekDay.ordinal]),
-                courseTime.classTime.classTimeDescription(),
-                courseTime.classTime.scheduleTimeDescription(scheduleTimes)
+            holder.viewBinding.textViewCourseSectionTime.text = holder.viewContext.getString(
+                R.string.course_detail_section_time,
+                holder.viewContext.getString(R.string.weekday, weekDayStrArray[courseTime.sectionTime.weekDay.ordinal]),
+                courseTime.sectionTime.description,
+                courseTime.sectionTime.scheduleTimeDescription(scheduleTimes)
             )
             val location = courseTime.location
             if (location == null) {

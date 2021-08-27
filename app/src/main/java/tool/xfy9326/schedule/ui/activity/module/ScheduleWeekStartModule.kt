@@ -1,18 +1,18 @@
 package tool.xfy9326.schedule.ui.activity.module
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import lib.xfy9326.android.kit.getStringArray
+import lib.xfy9326.android.kit.show
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.WeekDay
 import tool.xfy9326.schedule.databinding.ActivityScheduleEditBinding
-import tool.xfy9326.schedule.kt.getStringArray
-import tool.xfy9326.schedule.kt.show
 import tool.xfy9326.schedule.ui.activity.ScheduleEditActivity
 import tool.xfy9326.schedule.ui.activity.base.AbstractViewModelActivityModule
 import tool.xfy9326.schedule.ui.vm.ScheduleEditViewModel
 
 class ScheduleWeekStartModule(activity: ScheduleEditActivity) :
     AbstractViewModelActivityModule<ScheduleEditViewModel, ActivityScheduleEditBinding, ScheduleEditActivity>(activity) {
-    override fun init() {
+    override fun onInit() {
         requireViewBinding().layoutScheduleWeekStart.setOnClickListener {
             showWeekStartSelectDialog()
         }

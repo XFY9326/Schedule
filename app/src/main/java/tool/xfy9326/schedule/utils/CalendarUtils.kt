@@ -1,16 +1,26 @@
+@file:Suppress("MemberVisibilityCanBePrivate")
+
 package tool.xfy9326.schedule.utils
 
 import tool.xfy9326.schedule.beans.Day
 import tool.xfy9326.schedule.beans.WeekDay
+import tool.xfy9326.schedule.beans.WeekDay.Companion.calWeekDay
+import tool.xfy9326.schedule.beans.WeekDay.Companion.getWeekDay
 import tool.xfy9326.schedule.beans.WeekDay.Companion.orderedValue
-import tool.xfy9326.schedule.kt.getWeekDay
 import java.util.*
 import kotlin.math.floor
 
 object CalendarUtils {
-    fun getCalendar(date: Date? = null, weekStart: WeekDay? = null, clearToDate: Boolean = false): Calendar =
+    fun getTomorrowStartTime(date: Date): Long = getCalendar(date, clearToDate = true).apply {
+        add(Calendar.DATE, 1)
+    }.timeInMillis
+
+    fun getCalendar(date: Date? = null, weekStart: WeekDay? = null, clearToDate: Boolean = false) =
+        getCalendarWithMills(date?.time, weekStart, clearToDate)
+
+    fun getCalendarWithMills(mills: Long? = null, weekStart: WeekDay? = null, clearToDate: Boolean = false): Calendar =
         Calendar.getInstance(Locale.getDefault()).apply {
-            if (date != null) time = date
+            if (mills != null) timeInMillis = mills
             if (clearToDate) {
                 set(Calendar.HOUR_OF_DAY, 0)
                 set(Calendar.MINUTE, 0)
@@ -42,13 +52,7 @@ object CalendarUtils {
 
     fun getLastDateInThisWeek(date: Date, weekStart: WeekDay, actualEnd: Boolean = false): Date =
         getCalendar(date, weekStart, true).apply {
-            add(
-                Calendar.DATE, 7 - getWeekDay().orderedValue(weekStart) + if (actualEnd) {
-                    1
-                } else {
-                    0
-                }
-            )
+            add(Calendar.DATE, 7 - getWeekDay().orderedValue(weekStart) + (if (actualEnd) 1 else 0))
         }.time
 
     private fun clearToDay(date: Date): Date = getCalendar(date, clearToDate = true).time

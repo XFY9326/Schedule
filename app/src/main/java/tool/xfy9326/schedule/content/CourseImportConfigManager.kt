@@ -12,21 +12,21 @@ import io.ktor.client.request.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import lib.xfy9326.android.kit.io.kt.source
+import lib.xfy9326.android.kit.io.kt.useBuffer
 import lib.xfy9326.livedata.EventLiveData
 import lib.xfy9326.livedata.MutableEventLiveData
 import lib.xfy9326.livedata.postEvent
 import okhttp3.internal.closeQuietly
 import tool.xfy9326.schedule.R
-import tool.xfy9326.schedule.content.base.AbstractCourseImportConfig
 import tool.xfy9326.schedule.content.base.ICourseImportConfig
-import tool.xfy9326.schedule.content.base.JSCourseImportConfig.Companion.toCourseImportConfig
 import tool.xfy9326.schedule.content.beans.JSConfig
+import tool.xfy9326.schedule.content.js.JSCourseImportConfig.Companion.toCourseImportConfig
+import tool.xfy9326.schedule.content.utils.BaseCourseImportConfig
 import tool.xfy9326.schedule.content.utils.JSConfigException
 import tool.xfy9326.schedule.content.utils.JSConfigException.Companion.make
 import tool.xfy9326.schedule.content.utils.JSConfigException.Companion.report
 import tool.xfy9326.schedule.io.JSFileManager
-import tool.xfy9326.schedule.io.kt.source
-import tool.xfy9326.schedule.io.kt.useBuffer
 import kotlin.coroutines.CoroutineContext
 
 class CourseImportConfigManager(scope: CoroutineScope) : CoroutineScope by scope {
@@ -35,7 +35,7 @@ class CourseImportConfigManager(scope: CoroutineScope) : CoroutineScope by scope
     private val configLock = Mutex()
     private val currentImportConfigList = ArrayList<ICourseImportConfig>()
     private val importConfigs = MutableLiveData<List<ICourseImportConfig>>()
-    private val preparedConfig = MutableEventLiveData<AbstractCourseImportConfig<*, *, *, *>>()
+    private val preparedConfig = MutableEventLiveData<BaseCourseImportConfig>()
     private val prepareConfigProgress = MutableEventLiveData<Type>()
     private val operationError = MutableEventLiveData<JSConfigException>()
     private val operationAttention = MutableEventLiveData<Type>()
@@ -43,7 +43,7 @@ class CourseImportConfigManager(scope: CoroutineScope) : CoroutineScope by scope
     private val jsConfigExist = MutableEventLiveData<Pair<JSConfig, JSConfig>>()
     val courseImportConfigs: LiveData<List<ICourseImportConfig>>
         get() = importConfigs
-    val preparedJSConfig: EventLiveData<AbstractCourseImportConfig<*, *, *, *>>
+    val preparedJSConfig: EventLiveData<BaseCourseImportConfig>
         get() = preparedConfig
     val jsConfigPrepareProgress: EventLiveData<Type>
         get() = prepareConfigProgress
@@ -74,6 +74,8 @@ class CourseImportConfigManager(scope: CoroutineScope) : CoroutineScope by scope
         try {
             val content = uri.source()?.useBuffer { readUtf8() } ?: error("Empty uri! Uri $uri")
             addJSConfig(JSFileManager.parserJSConfig(content), false)
+        } catch (e: JSConfigException) {
+            operationError.postEvent(e)
         } catch (e: Exception) {
             operationError.postEvent(JSConfigException.Error.READ_FAILED.make(e))
         }
@@ -83,6 +85,8 @@ class CourseImportConfigManager(scope: CoroutineScope) : CoroutineScope by scope
         try {
             val content = httpClient.get<String>(url)
             addJSConfig(JSFileManager.parserJSConfig(content), false)
+        } catch (e: JSConfigException) {
+            operationError.postEvent(e)
         } catch (e: Exception) {
             operationError.postEvent(JSConfigException.Error.READ_FAILED.make(e))
         }

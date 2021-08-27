@@ -5,24 +5,24 @@
         <item name="android:windowLightNavigationBar" tools:ignore="NewApi">true</item>
     </style>
 
-    <style name="AppTheme.DefaultSystemBar" parent="AppTheme.Base">
+    <style name="AppTheme.Schedule" parent="AppTheme.Base">
         <item name="android:windowLightStatusBar">@null</item>
         <item name="android:windowLightNavigationBar" tools:ignore="NewApi">@null</item>
     </style>
 
-    <style name="AppTheme.LaunchScreen.Base" parent="AppTheme.Base">
-        <item name="android:windowTranslucentStatus">true</item>
-        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
-        <item name="android:navigationBarColor">@android:color/transparent</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="android:windowLayoutInDisplayCutoutMode" tools:ignore="NewApi">shortEdges</item>
-        <item name="android:forceDarkAllowed" tools:ignore="NewApi">true</item>
+    <style name="AppTheme.LaunchScreen.Base" parent="Theme.SplashScreen">
+        <item name="postSplashScreenTheme">@style/AppTheme</item>
+        <item name="windowSplashScreenBackground">@color/launch_screen_windows_background</item>
+        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_logo</item>
     </style>
 
     <style name="AppTheme.LaunchScreen" parent="AppTheme.LaunchScreen.Base">
-        <item name="android:windowBackground">@drawable/background_launch_screen</item>
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:windowLightNavigationBar" tools:ignore="NewApi">true</item>
+    </style>
+
+    <style name="AppTheme.LaunchScreen.Schedule" parent="AppTheme.LaunchScreen">
+        <item name="postSplashScreenTheme">@style/AppTheme.Schedule</item>
     </style>
 
     <style name="AppTheme.Base" parent="Theme.MaterialComponents.DayNight.NoActionBar.Bridge">
@@ -148,5 +148,17 @@
     <style name="AppTheme.CollapsingToolbarLayout" parent="Widget.Design.CollapsingToolbar">
         <item name="collapsedTitleGravity">left|center_vertical</item>
         <item name="expandedTitleGravity">left|bottom</item>
+    </style>
+
+    <style name="AppTheme.AppWidgetNextCourse" parent="Theme.MaterialComponents.DayNight">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:elevation">1dp</item>
+        <item name="android:layout_margin">1dp</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:background">@drawable/background_app_widget</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:foreground">?android:attr/selectableItemBackground</item>
     </style>
 </resources>

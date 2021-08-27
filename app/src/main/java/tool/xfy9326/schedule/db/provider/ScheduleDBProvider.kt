@@ -18,7 +18,8 @@ object ScheduleDBProvider : AbstractDBProvider<ScheduleDBProvider.ScheduleDB>(Sc
     @TypeConverters(DBTypeConverter::class)
     @Database(
         entities = [Schedule::class, Course::class, CourseTime::class, ScheduleSync::class],
-        version = DB_VERSION
+        version = DB_VERSION,
+        exportSchema = true
     )
     abstract class ScheduleDB : RoomDatabase() {
         abstract val scheduleDAO: ScheduleDAO

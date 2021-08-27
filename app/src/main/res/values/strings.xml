@@ -27,8 +27,8 @@
     <string name="weekday">周%1$s</string>
     <string name="course_detail_week_num">周数：第%1$s周</string>
     <string name="course_detail_week_num_simple">周数：%1$s</string>
-    <string name="course_detail_class_time">时间：%1$s 第%2$s节\u3000%3$s</string>
-    <string name="course_detail_class_time_simple">时间：%1$s 第%2$s节</string>
+    <string name="course_detail_section_time">时间：%1$s 第%2$s节\u3000%3$s</string>
+    <string name="course_detail_section_time_simple">时间：%1$s 第%2$s节</string>
     <string name="course_detail_location">地点：%1$s</string>
     <string name="open_drawer">打开侧边栏</string>
     <string name="close_drawer">关闭侧边栏</string>
@@ -62,8 +62,8 @@
     <string name="course_list_num_simple">第%1$d节</string>
     <string name="save">保存</string>
     <string name="schedule_time_list">所有课程时间（点击时间进行编辑）</string>
-    <string name="long_click_to_set_current_schedule">Tips：长按以切换到该课表</string>
-    <string name="swipe_to_delete_course">Tips：侧滑以删除课程</string>
+    <string name="long_click_to_set_current_schedule">Tips：长按切换课表，点击右下角图标可编辑课表</string>
+    <string name="swipe_to_delete_course">Tips：侧滑可以删除课程</string>
     <string name="course_cost_time_same_mode">所有课程上课时间相等</string>
     <string name="course_cost_time_same_mode_sum">开启后只能编辑课程开始时间，并依次推算时间</string>
     <string name="course_cost_time_same_mode_warning">上课时间相等模式开启时只能编辑课程开始时间！</string>
@@ -86,7 +86,7 @@
     <string name="course_detail">课程详情</string>
     <string name="course_name">课程名称</string>
     <string name="teacher_name">教师名称（可选）</string>
-    <string name="class_location">课程地点（可选）</string>
+    <string name="course_location">课程地点（可选）</string>
     <string name="undefined">未设定</string>
     <string name="course_time_delete_success">课程时间删除成功！</string>
     <string name="set_all_odd_week">单周</string>
@@ -120,8 +120,9 @@
     <string name="user_pw_empty">密码为空！</string>
     <string name="options_empty">选项为空！</string>
     <string name="course_import_success_title">课程导入成功</string>
-    <string name="course_import_success_attention">\u3000\u3000是否立即前往课表编辑页面？\n\u3000\u3000您可能需要\"%1$s\"，当然您也可以稍后在\"课表管理\"页面选择导入的课表进行编辑。\n\u3000\u3000若要启用导入的课表，请在\"课表管理\"页面长按需要使用的课表以切换到该课表。</string>
-    <string name="course_import_success_attention_highlight">手动调整课表的学期开始与结束的时间以正确显示当前周数</string>
+    <string name="course_import_success_attention_edit_schedule_highlight">\u3000\u3000是否立即前往课表编辑页面？\n</string>
+    <string name="course_import_success_attention">\u3000\u3000您可能需要\"%1$s\"，当然您也可以稍后在\"课表管理\"页面选择导入的课表进行编辑。\n\u3000\u3000若要启用导入的课表，请在\"课表管理\"页面长按需要使用的课表以切换到该课表。</string>
+    <string name="course_import_success_attention_necessary_highlight">手动调整课表的学期开始与结束的时间以正确显示当前周数</string>
     <string name="edit_schedule_now">立即前往</string>
     <string name="edit_schedule_later">稍后再说</string>
     <string name="import_course_to_current_schedule_msg">导入课程到当前课表后，所有此课表下原有的所有课程都将会被覆盖，请慎重操作！</string>
@@ -163,7 +164,7 @@
     <string name="night_mode_follow_system">跟随系统设置</string>
     <string name="theme">主题</string>
     <string name="schedule_format_settings">课表格式</string>
-    <string name="schedule_display">课表样式</string>
+    <string name="schedule_style_settings">课表样式</string>
     <string name="force_show_weekend">强制显示周末课程列</string>
     <string name="force_show_weekend_sum">关闭后根据课程自动显示周末课程列</string>
     <string name="corner_screen_adapter">圆角屏幕适配</string>
@@ -177,6 +178,8 @@
     <string name="highlight_show_today_cell">高亮显示今日课程日期格</string>
     <string name="highlight_show_today_cell_sum">关闭后将不会显示今日的课程日期格背景</string>
     <string name="schedule_background">课表背景</string>
+    <string name="schedule_background_settings">课表背景自定义</string>
+    <string name="schedule_background_settings_sum">自定义课表显示的背景</string>
     <string name="custom_schedule_background">自定义课表背景图片功能</string>
     <string name="custom_schedule_background_sum">启用后将可以自定义课表背景图片</string>
     <string name="select_schedule_background_image">选择图片作为课表背景</string>
@@ -221,7 +224,10 @@
     <string name="vertical_course_cell_text_sum">竖向居中显示课程格内的文字</string>
     <string name="highlight_show_today_cell_color">今日课程日期格高亮显示颜色</string>
     <string name="highlight_show_today_cell_color_sum">修改今日课程日期格的高亮显示颜色</string>
-    <string name="schedule_color">课表颜色</string>
+    <string name="basic_settings">基础设置</string>
+    <string name="schedule_color">课表文字</string>
+    <string name="schedule_color_settings">课表颜色设置</string>
+    <string name="schedule_color_settings_sum">调整课表文字以及控件的颜色</string>
     <string name="not_this_week_course_show_style">非本周课程显示样式</string>
     <string name="not_this_week_course_show_style_sum">修改非本周课程的特殊显示样式</string>
     <string name="show_not_this_week_text">显示\'[非本周]\'文字</string>
@@ -344,8 +350,8 @@
     <string name="lock_schedule_header_scroll">滑动时锁定课程表首行</string>
     <string name="lock_schedule_header_scroll_sum">关闭后将会连带课表首行日期整体滑动</string>
     <string name="draw_water_mark_on_schedule_image">分享课表时添加水印</string>
-    <string name="allow_import_incomplete_schedule">允许导入不完整的课表</string>
-    <string name="allow_import_incomplete_schedule_sum">将会跳过部分无法导入的课程</string>
+    <string name="allow_import_incomplete_schedule">允许跳过部分无法导入的课程</string>
+    <string name="allow_import_incomplete_schedule_sum">可能会导致导入的课表不完整\n注：部分课程解析可能不允许忽略错误</string>
     <string name="schedule_import_strict_mode">课表导入严格模式警告</string>
     <string name="schedule_import_strict_mode_msg">\u3000\u3000由于启用了课表导入的严格检查功能，该课表在该情况下无法导入。\n\n错误原因：%1$s\n\n\u3000\u3000启用严格的课表检查将保证课程导入的完整性，如果依然需要导入该课表，请在\'设置-在线课程导入\'中进行更改。</string>
     <string name="send_debug_log">发送错误日志</string>
@@ -377,7 +383,8 @@
     <string name="text_size_edit_sample">示例 1 a A @</string>
     <string name="schedule_text_style">课表文字格式</string>
     <string name="schedule_text_size">课表文字大小</string>
-    <string name="schedule_text_settings">课表文字</string>
+    <string name="schedule_text">课表文字</string>
+    <string name="schedule_text_settings">课表文字设置</string>
     <string name="schedule_text_settings_sum">调整课程表中的文字</string>
     <string name="schedule_course_text_size">课程格文字大小</string>
     <string name="schedule_course_text_size_sum">调整课程格内容的文字大小</string>
@@ -393,6 +400,18 @@
     <string name="schedule_header_weekday_text_size_sum">调整每列顶部星期的文字大小</string>
     <string name="schedule_text_size_reset">重置课程表文字大小</string>
     <string name="reset_success">重置成功！</string>
+    <string name="sample_course_name">课程名称示例</string>
+    <string name="sample_course_location">课程地点示例</string>
+    <string name="schedule_background_preview_attention">注意：\n由于设置中预览的课程表高度受限，因此预览的课程表背景缩放位置与大小不能完全代表最终的显示效果</string>
+    <string name="schedule_preview_ratio">课表预览比例</string>
+    <string name="external_course_import">外部课程导入</string>
+    <string name="external_course_import_params_incomplete">启动参数有缺失！</string>
+    <string name="external_course_init_error">初始化错误！</string>
+    <string name="external_course_processor_name_error">未找到指定的外部课程处理器！</string>
+    <string name="launch_pure_schedule">打开Pure课程表</string>
+    <string name="json_course_import_title">欢迎使用Pure课程表</string>
+    <string name="json_course_import_msg">请选择课程导入方式</string>
+    <string name="app_crash_relaunch">运行时出现严重错误，无法重新启动！</string>
 
     <string name="js_config_read_failed">配置文件读取错误！</string>
     <string name="js_config_invalid">导入的配置文件不合法！</string>
@@ -408,6 +427,8 @@
     <string name="js_config_parser_download_error">课程解析器下载失败！</string>
     <string name="js_config_dependencies_download_error">运行环境依赖下载失败！</string>
     <string name="js_config_prepare_error">运行环境准备失败！</string>
+    <string name="js_config_incompatible_version_error">不兼容的配置文件版本！</string>
+
     <string name="js_config_exist_title">配置文件已存在</string>
     <string name="js_config_exist_msg">同UUID的配置文件已经存在！\n\n将要导入：\n\u3000学校：%1$s\n\u3000作者：%2$s\n已经存在：\n\u3000学校：%3$s\n\u3000作者：%4$s\n\n%5$s\n\n是否替换该配置文件？</string>
     <string name="js_config_update_url_changed">配置文件更新地址发生变化！</string>
@@ -417,6 +438,28 @@
     <string name="web_course_provider_console_debug_sum">启用vConsole与WebView远程调试</string>
     <string name="save_to_album">保存到相册</string>
     <string name="share_with_apps">分享到应用</string>
+    <string name="app_widget_settings">桌面部件</string>
+    <string name="app_widget_settings_sum">控制桌面部件相关功能</string>
+    <string name="app_widget_alarm_auto_launch">自启动权限</string>
+    <string name="app_widget_alarm_auto_launch_attention">\u3000\u3000由于安卓平台碎片化，部分手机系统提供了\'自启动\'权限限制APP的自启动行为以降低电耗，但是该权限同样可能限制Pure课程表自动更新桌面部件。\n\u3000\u3000建议您手动开启该权限以确保桌面部件能够在后台及时更新，Pure课程表会根据实际情况，在指定时间控制桌面部件的更新，并不会造成大量电耗</string>
+    <string name="app_widget_alarm_auto_launch_settings">打开应用设置</string>
+    <string name="app_widget_alarm_auto_launch_settings_sum">设置Pure课程表的\'自启动\'权限</string>
+    <string name="app_widget_alarm_schedule_next_alarm">精确的桌面部件更新</string>
+    <string name="app_widget_alarm_schedule_next_alarm_attention">\u3000\u3000由于Android 12平台限制，若您不授予\'精确计时\'的权限以允许设定任务和事件的通知，系统为了降低功耗可能不会及时更新桌面部件。\n\u3000\u3000您可以根据实际的使用情况灵活控制该权限的授予，APP将会在拥有权限的情况下自动使用更为精准的桌面部件更新方式。\n\u3000\u3000建议您手动开启该权限以确保使用体验，因为Pure课程表桌面部件的更新并不会造成大量电耗。</string>
+    <string name="app_widget_alarm_schedule_next_alarm_settings">设置\'精确计时\'权限</string>
+    <string name="permission_status_granted">当前权限状态：已授予</string>
+    <string name="permission_status_not_granted">当前权限状态：未授予</string>
+
+    <string name="app_widget_init">正在初始化中\.\.\.</string>
+    <string name="next_course_widget_in_vacation">正在放假中</string>
+    <string name="next_course_widget_no_next_course">今日已无待上课程</string>
+    <string name="next_course_widget_no_data">无数据</string>
+    <string name="next_course_widget_description">展示\'下一节课\'的课程提示</string>
+    <string name="next_course_widget_sample_name">下一节课</string>
+    <string name="next_course_widget_sample_time">12:00</string>
+    <string name="next_course_widget_sample_teacher">教师信息</string>
+    <string name="next_course_widget_sample_location">上课地点信息</string>
+    <string name="next_course_widget_sample_teacher_and_location">教师信息·上课地点信息</string>
 
     <string name="js_config_unknown_error">配置文件未知错误！</string>
     <string name="js_config_config_add_success">配置文件添加成功</string>
@@ -426,6 +469,8 @@
     <string name="js_config_prepare_parser">准备课程解析器</string>
     <string name="js_config_prepare_dependencies">准备运行环境依赖</string>
     <string name="js_config_prepare_finish">准备完成</string>
+    <string name="auto_switch_to_new_import_schedule">自动切换到导入的新课表</string>
+    <string name="auto_switch_to_new_import_schedule_sum">关闭后将会在导入新课表后维持原课表不变</string>
 
     <string name="scale_type_fit_center">等比缩放，从中间开始填充满</string>
     <string name="scale_type_center_crop">等比缩放直到完全填充</string>
@@ -449,6 +494,9 @@
     <string name="crash_report_email_title">%1$s-崩溃反馈报告</string>
     <string name="crash_report_email_content">应用ID：%1$s&lt;br&gt;当前版本：v%2$s(%3$d)&lt;br&gt;反馈时间：%4$s&lt;br&gt;</string>
 
+    <string name="icon_description">图标</string>
+    <string name="course_color_description">课程颜色</string>
+
     <string name="month_date_simple" translatable="false">%1$d/%2$d</string>
     <string name="course_cell_text" translatable="false">%1$s\n\n@%2$s</string>
     <string name="adapter_author" translatable="false">\@%1$s</string>
@@ -460,6 +508,7 @@
     <string name="downloading_update_description" translatable="false">v%1$s(%2$d)</string>
 
     <string name="time_period" translatable="false">~</string>
+    <string name="next_course_description" translatable="false">%1$s·%2$s</string>
     <string name="author" translatable="false">逸雪飞扬 (XFY9326)</string>
     <string name="email" translatable="false">xfy9326@126.com</string>
     <string name="open_source_website_url" translatable="false">https://github.com/xfy9326/Schedule</string>

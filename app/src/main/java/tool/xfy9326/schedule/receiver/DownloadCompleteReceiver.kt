@@ -7,9 +7,9 @@ import android.content.Intent
 import androidx.core.content.getSystemService
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.runBlocking
+import lib.xfy9326.android.kit.showGlobalToast
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.data.AppDataStore
-import tool.xfy9326.schedule.kt.showGlobalToast
 import tool.xfy9326.schedule.utils.IntentUtils
 import tool.xfy9326.schedule.utils.PermissionUtils
 

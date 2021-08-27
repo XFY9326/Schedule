@@ -2,7 +2,7 @@
 apply from: "config.gradle"
 
 buildscript {
-    ext.kotlin_version = "1.5.20"
+    ext.kotlin_version = "1.5.30"
 
     repositories {
         google()
@@ -13,7 +13,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.2.2'
+        classpath 'com.android.tools.build:gradle:7.0.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "org.jetbrains.kotlin:kotlin-serialization:$kotlin_version"
 

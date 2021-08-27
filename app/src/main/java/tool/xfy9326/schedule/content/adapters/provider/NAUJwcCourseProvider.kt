@@ -4,12 +4,13 @@ import io.ktor.client.request.*
 import io.ktor.client.request.forms.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
+import lib.xfy9326.kit.toHex
 import org.jsoup.Jsoup
 import tool.xfy9326.schedule.content.base.LoginCourseProvider
 import tool.xfy9326.schedule.content.beans.LoginPageInfo
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
 import tool.xfy9326.schedule.content.utils.CourseAdapterException.Companion.report
-import tool.xfy9326.schedule.content.utils.toHex
+import tool.xfy9326.schedule.content.utils.selectSingle
 import java.math.BigInteger
 import java.security.KeyFactory
 import java.security.interfaces.RSAPublicKey
@@ -82,34 +83,31 @@ class NAUJwcCourseProvider : LoginCourseProvider<Nothing>() {
             content = httpClient.get(JWC_LOGIN_URL)
         }
         val htmlContent = Jsoup.parse(content, SSO_URL).body()
-        val captchaUrl = htmlContent.selectFirst(SELECTOR_CHECK_CODE).absUrl(HTML_ATTR_SRC)
-        val loginFormElement = htmlContent.selectFirst(SELECTOR_LOGIN_FORM)
-        val loginParams = Parameters.build {
-            for (param in LOGIN_PARAMS_STATIC_ARRAY) {
-                val input = loginFormElement.selectFirst(SELECTOR_POST_FORMAT.format(param))
-                val value = input.attr(SSO_INPUT_TAG_VALUE_ATTR)
-                append(param, value)
-            }
+        val captchaUrl = htmlContent.selectSingle(SELECTOR_CHECK_CODE).absUrl(HTML_ATTR_SRC)
+        val loginFormElement = htmlContent.selectSingle(SELECTOR_LOGIN_FORM)
+        var loginParams = Parameters.Empty
+        for (param in LOGIN_PARAMS_STATIC_ARRAY) {
+            val input = loginFormElement.selectSingle(SELECTOR_POST_FORMAT.format(param))
+            val value = input.attr(SSO_INPUT_TAG_VALUE_ATTR)
+            loginParams += parametersOf(param, value)
         }
         return LoginPageInfo(captchaUrl = captchaUrl, loginParams = loginParams)
     }
 
     override suspend fun onLogin(userId: String, userPw: String, captchaCode: String?, loginPageInfo: LoginPageInfo, importOption: Int) {
         if (captchaCode == null) CourseAdapterException.Error.CAPTCHA_CODE_ERROR.report()
-        val loginParams = Parameters.build {
-            loginPageInfo.loginParams?.let(::appendAll)
-            append(LOGIN_PARAMS_USER_NAME, userId)
-            append(LOGIN_PARAMS_PASSWORD, encryptPassword(userPw))
-            append(LOGIN_PARAMS_AUTH_CODE, captchaCode)
-        }
+        var loginParams = loginPageInfo.loginParams ?: Parameters.Empty
+        loginParams += parametersOf(LOGIN_PARAMS_USER_NAME, userId)
+        loginParams += parametersOf(LOGIN_PARAMS_PASSWORD, encryptPassword(userPw))
+        loginParams += parametersOf(LOGIN_PARAMS_AUTH_CODE, captchaCode)
         val loginResponse = httpClient.submitForm<HttpResponse>(JWC_LOGIN_URL, loginParams)
         val loginResponseUrl = loginResponse.request.url
         when (loginResponseUrl.host) {
             JWC_HOST -> studentDefaultPageUrl = loginResponseUrl
             SSO_HOST -> {
                 val loginResponseContent = loginResponse.readText()
-                val msgElement = Jsoup.parse(loginResponseContent).body().selectFirst(SELECTOR_LOGIN_ERROR_MSG)
-                CourseAdapterException.Error.CUSTOM_ERROR.report(msg = msgElement.text())
+                val msgElement = Jsoup.parse(loginResponseContent).body().selectSingle(SELECTOR_LOGIN_ERROR_MSG)
+                CourseAdapterException.reportCustomError(msgElement.text())
             }
             else -> CourseAdapterException.Error.UNKNOWN_ERROR.report()
         }

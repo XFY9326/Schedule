@@ -1,54 +1,43 @@
 package tool.xfy9326.schedule.utils.schedule
 
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.shareIn
+import lib.xfy9326.android.kit.io.IOManager
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.Course
+import tool.xfy9326.schedule.beans.Course.Companion.iterateAll
 import tool.xfy9326.schedule.beans.EditError
 import tool.xfy9326.schedule.beans.Schedule
 import tool.xfy9326.schedule.beans.ScheduleTime
+import tool.xfy9326.schedule.beans.ScheduleTime.Companion.intersect
+import tool.xfy9326.schedule.beans.SectionTime.Companion.end
 import tool.xfy9326.schedule.data.AppDataStore
 import tool.xfy9326.schedule.data.ScheduleDataStore
 import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
-import tool.xfy9326.schedule.io.IOManager
-import tool.xfy9326.schedule.kt.AppScope
-import tool.xfy9326.schedule.kt.combine
-import tool.xfy9326.schedule.kt.intersect
-import tool.xfy9326.schedule.kt.iterateAll
 import tool.xfy9326.schedule.utils.CalendarUtils
 import java.util.*
 
 object ScheduleUtils {
-    val currentScheduleFlow =
-        AppDataStore.currentScheduleIdFlow.combine {
-            ScheduleDBProvider.db.scheduleDAO.getSchedule(it).filterNotNull()
-        }.shareIn(AppScope, SharingStarted.Eagerly, 1)
-
-    val currentScheduleTimesFlow =
-        AppDataStore.currentScheduleIdFlow.combine {
-            ScheduleDBProvider.db.scheduleDAO.getScheduleTimes(it).filterNotNull()
-        }.shareIn(AppScope, SharingStarted.Eagerly, 1)
-
     private val DEFAULT_SCHEDULE_TIMES by lazy {
-        listOf(
-            ScheduleTime(8, 0, 8, 45),
-            ScheduleTime(8, 50, 9, 35),
-            ScheduleTime(9, 50, 10, 35),
-            ScheduleTime(10, 40, 11, 25),
-            ScheduleTime(11, 30, 12, 15),
-            ScheduleTime(13, 30, 14, 15),
-            ScheduleTime(14, 20, 15, 5),
-            ScheduleTime(15, 20, 16, 5),
-            ScheduleTime(16, 10, 16, 55),
-            ScheduleTime(17, 5, 17, 50),
-            ScheduleTime(17, 55, 18, 40),
-            ScheduleTime(19, 20, 20, 5),
-            ScheduleTime(20, 10, 20, 55),
-            ScheduleTime(21, 0, 21, 45)
+        ScheduleTime.listOf(
+            8, 0, 8, 45,
+            8, 50, 9, 35,
+            9, 50, 10, 35,
+            10, 40, 11, 25,
+            11, 30, 12, 15,
+            13, 30, 14, 15,
+            14, 20, 15, 5,
+            15, 20, 16, 5,
+            16, 10, 16, 55,
+            17, 5, 17, 50,
+            17, 55, 18, 40,
+            19, 20, 20, 5,
+            20, 10, 20, 55,
+            21, 0, 21, 45
         )
     }
+
+    suspend fun hasInitData() =
+        AppDataStore.hasCurrentScheduleId() && ScheduleDBProvider.db.scheduleDAO.getScheduleCount() > 0
 
     fun getDefaultTermDate(): Pair<Date, Date> {
         CalendarUtils.getCalendar(clearToDate = true).apply {
@@ -122,7 +111,7 @@ object ScheduleUtils {
     }
 
     suspend fun saveCurrentSchedule(scheduleTimes: List<ScheduleTime>, courses: List<Course>): Long {
-        val schedule = currentScheduleFlow.first().also {
+        val schedule = ScheduleDataProcessor.currentScheduleFlow.first().also {
             it.times = scheduleTimes
             adjustScheduleDateByCourses(it, courses)
         }
@@ -163,7 +152,7 @@ object ScheduleUtils {
 
         val maxWeekNum = CourseTimeUtils.getMaxWeekNum(schedule.startDate, schedule.endDate, schedule.weekStart)
 
-        if (schedule.startDate >= schedule.endDate) {
+        if (schedule.startDate > schedule.endDate) {
             return EditError.Type.SCHEDULE_DATE_ERROR.make()
         }
         if (maxWeekNum <= 0) {
@@ -173,7 +162,7 @@ object ScheduleUtils {
         for (i1 in schedule.times.indices) {
             val time1 = schedule.times[i1]
 
-            if (time1.startHour >= time1.endHour && time1.startMinute >= time1.endMinute) {
+            if (time1.startHour > time1.endHour || time1.startHour == time1.endHour && time1.startMinute > time1.endMinute) {
                 return EditError.Type.SCHEDULE_TIME_START_END_ERROR.make(i1 + 1)
             }
 
@@ -182,14 +171,14 @@ object ScheduleUtils {
                 if (time1 intersect time2) {
                     return EditError.Type.SCHEDULE_TIME_CONFLICT_ERROR.make(i1 + 1, i2 + 1)
                 }
-                if (time1.endHour >= time2.startHour && time1.endMinute >= time2.startMinute) {
+                if (time1.endHour > time2.startHour || time1.endHour == time2.startHour && time1.endMinute > time2.startMinute) {
                     return EditError.Type.SCHEDULE_TIME_NOT_IN_ONE_DAY_ERROR.make()
                 }
             }
         }
 
         scheduleCourses.iterateAll { course, courseTime ->
-            if (courseTime.classTime.classEndTime > schedule.times.size) {
+            if (courseTime.sectionTime.end > schedule.times.size) {
                 return EditError.Type.SCHEDULE_COURSE_NUM_ERROR.make(course.name)
             }
             if (courseTime.weekNum.size > maxWeekNum) {

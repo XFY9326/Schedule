@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.preference.Preference
+        app:iconSpaceReserved="false"
+        app:summary="@string/schedule_background_preview_attention" />
+
+    <androidx.preference.PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="@string/schedule_background">
+
+        <androidx.preference.CheckBoxPreference
+            app:defaultValue="false"
+            app:iconSpaceReserved="false"
+            app:key="enableScheduleBackground"
+            app:summary="@string/custom_schedule_background_sum"
+            app:title="@string/custom_schedule_background" />
+
+        <androidx.preference.Preference
+            app:dependency="enableScheduleBackground"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_select_schedule_background_image"
+            app:persistent="false"
+            app:summary="@string/select_schedule_background_image_sum"
+            app:title="@string/select_schedule_background_image" />
+
+        <androidx.preference.ListPreference
+            app:defaultValue="CENTER_CROP"
+            app:dependency="enableScheduleBackground"
+            app:entries="@array/scale_type"
+            app:entryValues="@array/scale_type_value"
+            app:iconSpaceReserved="false"
+            app:key="scheduleBackgroundScaleType"
+            app:summary="@string/schedule_background_scale_type_sum"
+            app:title="@string/schedule_background_scale_type" />
+
+        <androidx.preference.CheckBoxPreference
+            app:defaultValue="true"
+            app:dependency="enableScheduleBackground"
+            app:iconSpaceReserved="false"
+            app:key="scheduleBackgroundUseAnim"
+            app:summary="@string/schedule_background_fade_anim_sum"
+            app:title="@string/schedule_background_fade_anim" />
+
+        <androidx.preference.SeekBarPreference
+            android:max="100"
+            app:defaultValue="100"
+            app:dependency="enableScheduleBackground"
+            app:iconSpaceReserved="false"
+            app:key="scheduleBackgroundImageAlpha"
+            app:min="0"
+            app:seekBarIncrement="1"
+            app:showSeekBarValue="true"
+            app:summary="@string/schedule_background_alpha_sum"
+            app:title="@string/schedule_background_alpha" />
+
+        <androidx.preference.SeekBarPreference
+            android:max="100"
+            app:defaultValue="60"
+            app:dependency="enableScheduleBackground"
+            app:iconSpaceReserved="false"
+            app:key="scheduleBackgroundImageQuality"
+            app:min="0"
+            app:seekBarIncrement="1"
+            app:showSeekBarValue="true"
+            app:summary="@string/schedule_background_quality_sum"
+            app:title="@string/schedule_background_quality" />
+
+    </androidx.preference.PreferenceCategory>
+</androidx.preference.PreferenceScreen>

@@ -3,13 +3,18 @@
 package tool.xfy9326.schedule.io
 
 import android.net.Uri
+import lib.xfy9326.android.kit.io.FileHelper
+import lib.xfy9326.android.kit.io.kt.useBuffer
+import lib.xfy9326.kit.asParentOf
+import lib.xfy9326.kit.runOnlyResultIOJob
+import lib.xfy9326.kit.runSafeIOJob
+import lib.xfy9326.kit.runSimpleIOJob
 import okio.sink
 import okio.source
-import tool.xfy9326.schedule.io.kt.*
 import tool.xfy9326.schedule.tools.ExceptionHandler
 
 object CrashFileManager {
-    private const val FILE_NAME_CRASH_RECORD = "LastCrashMills.record"
+    private const val FILE_NAME_CRASH_RECORD = "LastCrashRecord"
     private val FILE_CRASH_RECORD = PathManager.LogDir.asParentOf(FILE_NAME_CRASH_RECORD)
 
     suspend fun readCrashLog(name: String) = runSafeIOJob {
@@ -25,17 +30,18 @@ object CrashFileManager {
         true
     }
 
-    suspend fun copyLogFile(name: String, uri: Uri) = FileManager.copyFileToUri(PathManager.LogDir.asParentOf(name), uri)
+    suspend fun copyLogFile(name: String, uri: Uri) = FileHelper.copyFileToUri(PathManager.LogDir.asParentOf(name), uri)
 
-    suspend fun readCrashRecord(): Long = runSafeIOJob(0L) {
-        FILE_CRASH_RECORD.source().useBuffer {
-            readUtf8().toLong()
+    suspend fun readCrashRecord(): Pair<Long, Boolean> = runSafeIOJob(0L to false) {
+        val contentArr = FILE_CRASH_RECORD.source().useBuffer {
+            readUtf8().split(",")
         }
+        contentArr[0].toLong() to contentArr[1].toBooleanStrict()
     }
 
-    suspend fun writeCrashRecord(mills: Long) = runOnlyResultIOJob {
+    suspend fun writeCrashRecord(mills: Long, isAppErrorRelaunch: Boolean) = runOnlyResultIOJob {
         FILE_CRASH_RECORD.sink().useBuffer {
-            writeUtf8(mills.toString())
+            writeUtf8("$mills,$isAppErrorRelaunch")
         }
         true
     }

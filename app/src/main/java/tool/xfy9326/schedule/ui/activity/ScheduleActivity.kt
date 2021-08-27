@@ -5,30 +5,25 @@ import android.graphics.PorterDuffColorFilter
 import android.os.Build
 import android.os.Bundle
 import android.view.*
-import androidx.appcompat.app.ActionBarDrawerToggle
-import androidx.core.graphics.Insets
 import androidx.core.view.*
-import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.navigation.NavigationView
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import lib.xfy9326.android.kit.getColorCompat
+import lib.xfy9326.android.kit.setIconTint
+import lib.xfy9326.android.kit.setOnSingleClickListener
+import lib.xfy9326.android.kit.startActivity
 import lib.xfy9326.livedata.observeEvent
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.Day
 import tool.xfy9326.schedule.beans.WeekNumType
+import tool.xfy9326.schedule.beans.WeekNumType.Companion.getText
 import tool.xfy9326.schedule.databinding.ActivityScheduleBinding
-import tool.xfy9326.schedule.databinding.LayoutNavHeaderBinding
 import tool.xfy9326.schedule.kt.*
 import tool.xfy9326.schedule.ui.activity.base.ViewModelActivity
-import tool.xfy9326.schedule.ui.activity.module.CalendarSyncModule
-import tool.xfy9326.schedule.ui.activity.module.ICSExportModule
-import tool.xfy9326.schedule.ui.activity.module.ScheduleBackgroundModule
-import tool.xfy9326.schedule.ui.activity.module.ScheduleShareModule
+import tool.xfy9326.schedule.ui.activity.module.*
 import tool.xfy9326.schedule.ui.adapter.ScheduleViewPagerAdapter
 import tool.xfy9326.schedule.ui.dialog.CourseDetailDialog
 import tool.xfy9326.schedule.ui.dialog.ScheduleControlPanel
-import tool.xfy9326.schedule.ui.dialog.UpgradeDialog
 import tool.xfy9326.schedule.ui.vm.ScheduleViewModel
 import tool.xfy9326.schedule.utils.*
 import tool.xfy9326.schedule.utils.view.NightModeViewUtils
@@ -36,15 +31,21 @@ import tool.xfy9326.schedule.utils.view.NightModeViewUtils
 class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBinding>(), NavigationView.OnNavigationItemSelectedListener {
     override val vmClass = ScheduleViewModel::class
 
-    private var actionBarDrawerToggle: ActionBarDrawerToggle? = null
     private var scheduleViewPagerAdapter: ScheduleViewPagerAdapter? = null
 
+    private val scheduleLaunchModule = ScheduleLaunchModule(this)
     private val icsExportModule = ICSExportModule(this)
     private val scheduleBackgroundModule = ScheduleBackgroundModule(this)
     private val calendarSyncModule = CalendarSyncModule(this)
     private val scheduleShareModule = ScheduleShareModule(this)
+    private val scheduleInsetsModule = ScheduleInsetsModule(this)
+    private val scheduleNavigationModule = ScheduleNavigationModule(this, icsExportModule, calendarSyncModule)
 
     override fun onCreateViewBinding() = ActivityScheduleBinding.inflate(layoutInflater)
+
+    override fun onContentViewPreload(savedInstanceState: Bundle?, viewModel: ScheduleViewModel) {
+        scheduleLaunchModule.init()
+    }
 
     override fun onPrepare(viewBinding: ActivityScheduleBinding, viewModel: ScheduleViewModel) {
         setSupportActionBar(viewBinding.toolBarSchedule)
@@ -85,16 +86,13 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
         viewModel.scheduleSystemBarAppearance.observe(this) {
             window.setSystemBarAppearance(it)
         }
-        viewModel.onlineCourseImportEnabled.observe(this) {
-            viewBinding.navSchedule.menu.findItem(R.id.menu_navOnlineCourseImport)?.isVisible = it
-        }
         icsExportModule.init()
         calendarSyncModule.init()
         scheduleShareModule.init()
     }
 
     override fun onInitView(viewBinding: ActivityScheduleBinding, viewModel: ScheduleViewModel) {
-        setupDrawer(viewBinding, viewModel)
+        scheduleNavigationModule.init()
         NightModeViewUtils.checkNightModeChangedAnimation(this, viewBinding, viewModel)
 
         viewBinding.viewPagerSchedulePanel.registerOnPageChangeCallback(ScheduleViewPagerChangeCallback())
@@ -103,35 +101,14 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
             viewModel.scrollToCurrentWeekNum()
         }
 
-        window.decorView.setOnApplyWindowInsetsListener { _, insets ->
-            val systemBarInset = WindowInsetsCompat.toWindowInsetsCompat(insets).getInsets(WindowInsetsCompat.Type.systemBars())
-            viewBinding.layoutScheduleContent.apply {
-                if (layoutParams == null || layoutParams !is ViewGroup.MarginLayoutParams) {
-                    updatePadding(top = systemBarInset.top)
-                } else {
-                    updateLayoutParams<ViewGroup.MarginLayoutParams> {
-                        updateMargins(top = systemBarInset.top)
-                    }
-                }
-            }
-            WindowInsetsCompat.Builder(WindowInsetsCompat.toWindowInsetsCompat(insets))
-                .setInsets(WindowInsetsCompat.Type.systemBars(), Insets.of(systemBarInset.left, 0, systemBarInset.right, 0))
-                .build()
-                .toWindowInsets()
-        }
+        scheduleInsetsModule.init()
 
         ScheduleControlPanel.addScrollToWeekListener(supportFragmentManager, this) {
             scrollToWeek(it)
         }
-    }
 
-    override fun onHandleSavedInstanceState(bundle: Bundle?, viewBinding: ActivityScheduleBinding, viewModel: ScheduleViewModel) {
-        if (intent?.getBooleanExtra(SplashActivity.INTENT_EXTRA_APP_INIT_LAUNCH, false) == true) {
-            UpgradeUtils.checkUpgrade(this, false,
-                onFoundUpgrade = { UpgradeDialog.showDialog(supportFragmentManager, it) }
-            )
-        }
-        super.onHandleSavedInstanceState(bundle, viewBinding, viewModel)
+        ScheduleLaunchModule.tryShowEula(this)
+        scheduleLaunchModule.checkUpgrade()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -151,39 +128,13 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
     }
 
     override fun onBackPressed() {
-        if (requireViewBinding().drawerSchedule.isDrawerOpen(GravityCompat.START)) {
-            requireViewBinding().drawerSchedule.closeDrawers()
-        } else {
+        if (!scheduleNavigationModule.onBackPressed()) {
             requireViewModel().exitAppDirectly()
         }
     }
 
-    override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        var delayCloseDrawer = true
-        when (item.itemId) {
-            R.id.menu_navOnlineCourseImport -> startActivity<OnlineCourseImportActivity>()
-            R.id.menu_navCourseExportICS -> {
-                icsExportModule.requestExport()
-                delayCloseDrawer = false
-            }
-            R.id.menu_navSyncToCalendar -> {
-                calendarSyncModule.syncCalendar()
-                delayCloseDrawer = false
-            }
-            R.id.menu_navScheduleManage -> startActivity<ScheduleManageActivity>()
-            R.id.menu_navCourseManage -> requireViewModel().openCurrentScheduleCourseManageActivity()
-            R.id.menu_navSettings -> startActivity<SettingsActivity>()
-            R.id.menu_navExit -> {
-                finishAndRemoveTask()
-                return true
-            }
-        }
-        lifecycleScope.launch {
-            if (delayCloseDrawer) delay(resources.getInteger(R.integer.drawer_close_anim_time).toLong())
-            requireViewBinding().drawerSchedule.closeDrawers()
-        }
-        return true
-    }
+    override fun onNavigationItemSelected(item: MenuItem) =
+        scheduleNavigationModule.onNavigationItemSelected(item)
 
     private fun setToolBarTintColor(color: Int?) {
         val tintColor = color ?: getColorCompat(R.color.schedule_tool_bar_tint)
@@ -196,7 +147,7 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                 toolBarSchedule.navigationIcon?.colorFilter = PorterDuffColorFilter(tintColor, PorterDuff.Mode.SRC)
             } else {
-                actionBarDrawerToggle?.drawerArrowDrawable?.color = tintColor
+                scheduleNavigationModule.drawerToggle?.drawerArrowDrawable?.color = tintColor
             }
         }
     }
@@ -226,24 +177,6 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
             } else {
                 scheduleViewPagerAdapter?.updateMaxWeekNum(maxWeekNum)
             }
-        }
-    }
-
-    private fun setupDrawer(viewBinding: ActivityScheduleBinding, viewModel: ScheduleViewModel) {
-        viewBinding.navSchedule.apply {
-            setNavigationItemSelectedListener(this@ScheduleActivity)
-            getChildAt(0)?.isVerticalScrollBarEnabled = false
-            LayoutNavHeaderBinding.bind(getHeaderView(0)).buttonNightModeChange.setOnSingleClickListener {
-                if (it != null && requireViewModel().nightModeChanging.compareAndSet(false, true)) {
-                    it.performHapticFeedback(HapticFeedbackConstants.CONTEXT_CLICK)
-                    NightModeViewUtils.requestNightModeChange(this@ScheduleActivity, viewBinding, viewModel, it)
-                }
-            }
-        }
-        actionBarDrawerToggle = ActionBarDrawerToggle(this, viewBinding.drawerSchedule, viewBinding.toolBarSchedule, R.string.open_drawer, R.string.close_drawer).apply {
-            drawerArrowDrawable.color = getColorCompat(R.color.dark_icon)
-            syncState()
-            viewBinding.drawerSchedule.addDrawerListener(this)
         }
     }
 

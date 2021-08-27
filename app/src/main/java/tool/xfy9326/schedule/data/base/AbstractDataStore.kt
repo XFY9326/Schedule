@@ -2,20 +2,20 @@
 
 package tool.xfy9326.schedule.data.base
 
+import android.app.Application
 import androidx.datastore.preferences.core.*
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.*
-import tool.xfy9326.schedule.App
-import tool.xfy9326.schedule.kt.AppInstance
-import tool.xfy9326.schedule.kt.AppScope
-import tool.xfy9326.schedule.kt.tryEnumValueOf
+import lib.xfy9326.android.kit.ApplicationInstance
+import lib.xfy9326.android.kit.ApplicationScope
+import lib.xfy9326.kit.tryEnumValueOf
 import kotlin.properties.ReadOnlyProperty
 
 abstract class AbstractDataStore(val name: String) {
-    private val App.dataStore by preferencesDataStore(name)
-    val dataStore by lazy { AppInstance.dataStore }
-    protected val readOnlyFlow = dataStore.data.shareIn(AppScope, SharingStarted.Eagerly, 1)
+    private val Application.dataStore by preferencesDataStore(name)
+    val dataStore by lazy { ApplicationInstance.dataStore }
+    protected val readOnlyFlow = dataStore.data.shareIn(ApplicationScope, SharingStarted.Eagerly, 1)
 
     fun getPreferenceDataStore(scope: CoroutineScope) = DataStorePreferenceAdapter(this, scope)
 
@@ -65,6 +65,10 @@ abstract class AbstractDataStore(val name: String) {
             it[this] = data
         }
     }
+
+    protected suspend fun <T> Preferences.Key<T>.hasValue() = read {
+        this in it
+    }.first()
 
     protected suspend fun <T> Preferences.Key<T>.remove() {
         edit {

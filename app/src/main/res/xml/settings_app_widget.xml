@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.preference.PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="@string/app_widget_alarm_auto_launch">
+
+        <androidx.preference.Preference
+            app:iconSpaceReserved="false"
+            app:persistent="false"
+            app:summary="@string/app_widget_alarm_auto_launch_attention" />
+
+        <androidx.preference.Preference
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_auto_launch_permission"
+            app:persistent="false"
+            app:summary="@string/app_widget_alarm_auto_launch_settings_sum"
+            app:title="@string/app_widget_alarm_auto_launch_settings" />
+
+    </androidx.preference.PreferenceCategory>
+
+    <androidx.preference.PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:key="@string/pref_accurate_app_widget_update"
+        app:title="@string/app_widget_alarm_schedule_next_alarm">
+
+        <androidx.preference.Preference
+            app:iconSpaceReserved="false"
+            app:persistent="false"
+            app:summary="@string/app_widget_alarm_schedule_next_alarm_attention" />
+
+        <androidx.preference.Preference
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_schedule_next_alarm_permission"
+            app:persistent="false"
+            app:summary="@string/permission_status_not_granted"
+            app:title="@string/app_widget_alarm_schedule_next_alarm_settings" />
+
+    </androidx.preference.PreferenceCategory>
+
+</androidx.preference.PreferenceScreen>

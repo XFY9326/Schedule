@@ -15,11 +15,11 @@ class NAUWebCourseProvider : WebCourseProvider<Nothing>() {
     override fun onValidateCourseImportPage(htmlContent: String, iframeContent: Array<String>, frameContent: Array<String>): WebPageInfo {
         if (COURSE_TEXT_1 in htmlContent) {
             for (content in iframeContent) {
-                if (PAGE_TEXT in content) return WebPageInfo(true, 0)
+                if (PAGE_TEXT in content) return WebPageInfo(true, 0, content)
             }
         } else if (COURSE_TEXT_2 in htmlContent) {
             for (content in iframeContent) {
-                if (PAGE_TEXT in content) return WebPageInfo(true, 1)
+                if (PAGE_TEXT in content) return WebPageInfo(true, 1, content)
             }
         }
         return WebPageInfo(false)

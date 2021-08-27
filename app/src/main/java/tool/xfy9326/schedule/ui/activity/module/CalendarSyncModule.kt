@@ -22,7 +22,7 @@ class CalendarSyncModule(activity: ScheduleActivity) : AbstractViewModelActivity
         }
     }
 
-    override fun init() {
+    override fun onInit() {
         requireViewModel().syncToCalendarStatus.observeEvent(requireActivity()) {
             if (it.success) {
                 if (it.failedAmount == 0) {

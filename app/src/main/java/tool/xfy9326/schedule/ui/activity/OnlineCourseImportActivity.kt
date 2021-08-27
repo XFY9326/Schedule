@@ -9,18 +9,18 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import lib.xfy9326.android.kit.io.MIMEConst
+import lib.xfy9326.android.kit.setOnSingleClickListener
+import lib.xfy9326.android.kit.show
 import lib.xfy9326.livedata.observeEvent
 import lib.xfy9326.livedata.observeNotify
 import tool.xfy9326.schedule.R
-import tool.xfy9326.schedule.content.base.AbstractCourseImportConfig
 import tool.xfy9326.schedule.content.beans.JSConfig
+import tool.xfy9326.schedule.content.utils.BaseCourseImportConfig
 import tool.xfy9326.schedule.data.AppDataStore
 import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.databinding.ActivityOnlineCourseImportBinding
-import tool.xfy9326.schedule.kt.setOnSingleClickListener
-import tool.xfy9326.schedule.kt.show
 import tool.xfy9326.schedule.kt.showSnackBar
-import tool.xfy9326.schedule.tools.MIMEConst
 import tool.xfy9326.schedule.ui.activity.base.CourseProviderActivity
 import tool.xfy9326.schedule.ui.activity.base.ViewModelActivity
 import tool.xfy9326.schedule.ui.adapter.CourseImportAdapter
@@ -86,12 +86,12 @@ class OnlineCourseImportActivity : ViewModelActivity<OnlineCourseImportViewModel
         viewModel.configOperationError.observeEvent(this, javaClass.simpleName) {
             if (!JSConfigPrepareDialog.isShowing(supportFragmentManager)) {
                 loadingController.hide()
-                ViewUtils.showJSConfigErrorSnackBar(this, viewBinding.layoutCourseImport, it)
+                ViewUtils.showCourseImportErrorSnackBar(this, viewBinding.layoutCourseImport, it)
             }
         }
         viewModel.configIgnorableWarning.observeEvent(this, javaClass.simpleName) {
             if (!JSConfigPrepareDialog.isShowing(supportFragmentManager)) {
-                ViewUtils.showJSConfigErrorSnackBar(this, viewBinding.layoutCourseImport, it)
+                ViewUtils.showCourseImportErrorSnackBar(this, viewBinding.layoutCourseImport, it)
             }
         }
         viewModel.jsConfigExistWarning.observeEvent(this, javaClass.simpleName) {
@@ -169,7 +169,7 @@ class OnlineCourseImportActivity : ViewModelActivity<OnlineCourseImportViewModel
             .show(this)
     }
 
-    private fun openCourseImportActivity(config: AbstractCourseImportConfig<*, *, *, *>) {
+    private fun openCourseImportActivity(config: BaseCourseImportConfig) {
         val importMethod = CourseImportUtils.getCourseImportMethod(config,
             onInterfaceProviderError = {
                 showAttention(R.string.interface_provider_error)
@@ -193,7 +193,7 @@ class OnlineCourseImportActivity : ViewModelActivity<OnlineCourseImportViewModel
 
     private fun showAttention(msg: String) = requireViewBinding().layoutCourseImport.showSnackBar(msg)
 
-    override fun onCourseImportConfigClick(config: AbstractCourseImportConfig<*, *, *, *>) {
+    override fun onCourseImportConfigClick(config: BaseCourseImportConfig) {
         openCourseImportActivity(config)
     }
 

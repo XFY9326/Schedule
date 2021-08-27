@@ -4,7 +4,7 @@ import android.webkit.JavascriptInterface
 import android.webkit.WebView
 import lib.xfy9326.livedata.observeEvent
 import tool.xfy9326.schedule.R
-import tool.xfy9326.schedule.beans.WebCourseImportParams
+import tool.xfy9326.schedule.beans.WebPageContent
 import tool.xfy9326.schedule.content.base.WebCourseParser
 import tool.xfy9326.schedule.content.base.WebCourseProvider
 import tool.xfy9326.schedule.databinding.ActivityFragmentContainerBinding
@@ -12,12 +12,12 @@ import tool.xfy9326.schedule.kt.showSnackBar
 import tool.xfy9326.schedule.ui.activity.base.AbstractWebCourseProviderActivity
 import tool.xfy9326.schedule.ui.dialog.FullScreenLoadingDialog
 import tool.xfy9326.schedule.ui.vm.WebCourseProviderViewModel
-import tool.xfy9326.schedule.ui.vm.base.CourseProviderViewModel
 import tool.xfy9326.schedule.utils.JSBridge
+import tool.xfy9326.schedule.utils.schedule.ScheduleImportManager
 import tool.xfy9326.schedule.utils.view.DialogUtils
 
 class WebCourseProviderActivity :
-    AbstractWebCourseProviderActivity<WebCourseImportParams, WebCourseProvider<*>, WebCourseParser<*>, WebCourseProviderViewModel>(),
+    AbstractWebCourseProviderActivity<WebPageContent, WebCourseProvider<*>, WebCourseParser<*>, WebCourseProviderViewModel>(),
     FullScreenLoadingDialog.OnRequestCancelListener {
     private val loadingController by lazy { FullScreenLoadingDialog.createControllerInstance(this, supportFragmentManager) }
 
@@ -57,14 +57,14 @@ class WebCourseProviderActivity :
     }
 
     private fun onGetCurrentHTML(htmlContent: String, iframeContent: Array<String>, frameContent: Array<String>, isCurrentSchedule: Boolean) {
-        requireViewModel().validateHtmlPage(WebCourseImportParams(htmlContent, iframeContent, frameContent), isCurrentSchedule)
+        requireViewModel().validateHtmlPage(WebPageContent(htmlContent, iframeContent, frameContent), isCurrentSchedule)
     }
 
     override fun onReadyImportCourse() {
         loadingController.show()
     }
 
-    override fun onCourseImportFinish(result: CourseProviderViewModel.ImportResult, editScheduleId: Long?) {
+    override fun onCourseImportFinish(result: ScheduleImportManager.ImportResult, editScheduleId: Long?) {
         loadingController.hide()
     }
 }

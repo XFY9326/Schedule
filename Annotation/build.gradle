@@ -3,12 +3,14 @@ plugins {
     id 'kotlin'
 }
 
+def config = rootProject.ext
+def androidxVersion = config.dependencies_version.androidx
+
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    implementation "androidx.annotation:annotation:1.2.0"
+    api "androidx.annotation:annotation:$androidxVersion.annotation"
 }

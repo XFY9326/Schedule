@@ -1,31 +1,26 @@
+@file:Suppress("unused")
+
 package tool.xfy9326.schedule
 
 import android.app.Application
-import androidx.appcompat.app.AppCompatDelegate
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.runBlocking
-import tool.xfy9326.schedule.data.AppSettingsDataStore
+import lib.xfy9326.android.kit.initializeToolKit
 import tool.xfy9326.schedule.tools.ExceptionHandler
-import kotlin.coroutines.EmptyCoroutineContext
+import tool.xfy9326.schedule.utils.view.NextCourseWidgetUtils
+import tool.xfy9326.schedule.utils.view.ViewUtils
 
 class App : Application() {
-    companion object {
-        lateinit var instance: App
-            private set
-        val scope = CoroutineScope(EmptyCoroutineContext + SupervisorJob())
-    }
-
     override fun onCreate() {
         super.onCreate()
-        instance = this
+        // 工具类初始化
+        initializeToolKit()
 
+        // 异常收集器初始化
         ExceptionHandler.init()
 
-        runBlocking {
-            val nightMode = AppSettingsDataStore.nightModeTypeFlow.first()
-            AppCompatDelegate.setDefaultNightMode(nightMode.modeInt)
-        }
+        // 初始化夜间模式设定
+        ViewUtils.initNightMode()
+
+        // 初始化'下一节课'的数据监听（仅限运行APP期间）
+        NextCourseWidgetUtils.initDataObserver()
     }
 }

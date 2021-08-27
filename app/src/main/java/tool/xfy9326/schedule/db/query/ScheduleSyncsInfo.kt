@@ -6,7 +6,7 @@ import tool.xfy9326.schedule.beans.Schedule
 import tool.xfy9326.schedule.beans.ScheduleSync
 import tool.xfy9326.schedule.db.DBConst
 
-data class ScheduleSyncsInfo(
+class ScheduleSyncsInfo(
     @Embedded
     val scheduleMin: Schedule.Min,
     @Relation(

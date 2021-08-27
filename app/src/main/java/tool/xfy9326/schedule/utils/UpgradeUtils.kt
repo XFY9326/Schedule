@@ -11,11 +11,11 @@ import io.ktor.client.request.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.sync.Mutex
+import lib.xfy9326.kit.withTryLock
 import tool.xfy9326.schedule.BuildConfig
 import tool.xfy9326.schedule.data.AppDataStore
 import tool.xfy9326.schedule.json.upgrade.UpdateIndex
 import tool.xfy9326.schedule.json.upgrade.UpdateInfo
-import tool.xfy9326.schedule.kt.withTryLock
 
 object UpgradeUtils {
     private const val CURRENT_VERSION = BuildConfig.VERSION_CODE
@@ -32,14 +32,14 @@ object UpgradeUtils {
 
     fun checkUpgrade(
         lifecycleOwner: LifecycleOwner,
-        forceCheck: Boolean,
+        forcedCheck: Boolean,
         onFailed: (() -> Unit)? = null,
         onNoUpgrade: (() -> Unit)? = null,
         onFoundUpgrade: ((UpdateInfo) -> Unit)? = null,
     ) {
         lifecycleOwner.lifecycleScope.launch(Dispatchers.Default) {
             UPDATE_CHECK_MUTEX.withTryLock {
-                requestUpgrade(forceCheck).let {
+                requestUpgrade(forcedCheck).let {
                     if (it.first) {
                         val info = it.second
                         if (info == null) {
@@ -55,10 +55,10 @@ object UpgradeUtils {
         }
     }
 
-    private suspend fun requestUpgrade(forceCheck: Boolean): Pair<Boolean, UpdateInfo?> {
+    private suspend fun requestUpgrade(forcedCheck: Boolean): Pair<Boolean, UpdateInfo?> {
         try {
             getUpdateData(CURRENT_VERSION)?.let {
-                if (!validateIgnoreUpdate(forceCheck, it)) {
+                if (!validateIgnoreUpdate(forcedCheck, it)) {
                     return true to it
                 }
             }
@@ -69,9 +69,9 @@ object UpgradeUtils {
         return false to null
     }
 
-    private suspend fun validateIgnoreUpdate(forceCheck: Boolean, latest: UpdateInfo): Boolean {
+    private suspend fun validateIgnoreUpdate(forcedCheck: Boolean, latest: UpdateInfo): Boolean {
         if (latest.forceUpdate) return false
-        if (forceCheck || latest.versionCode > AppDataStore.ignoreUpdateVersionCodeFlow.first()) return false
+        if (forcedCheck || latest.versionCode > AppDataStore.ignoreUpdateVersionCodeFlow.first()) return false
         return true
     }
 

@@ -6,9 +6,9 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
+import lib.xfy9326.android.kit.setOnSingleClickListener
 import tool.xfy9326.schedule.beans.Course
 import tool.xfy9326.schedule.databinding.ItemCourseBinding
-import tool.xfy9326.schedule.kt.setOnSingleClickListener
 import tool.xfy9326.schedule.ui.view.recyclerview.AdvancedDividerItemDecoration
 import tool.xfy9326.schedule.ui.view.recyclerview.BaseDifferItemCallBack
 import tool.xfy9326.schedule.ui.view.recyclerview.SwipeListViewBindingAdapter

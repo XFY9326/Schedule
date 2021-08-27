@@ -3,12 +3,12 @@ package tool.xfy9326.schedule.ui.fragment.settings
 import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.os.bundleOf
+import lib.xfy9326.android.kit.io.MIMEConst
 import lib.xfy9326.livedata.observeEvent
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.BatchResult
 import tool.xfy9326.schedule.kt.setOnPrefClickListener
 import tool.xfy9326.schedule.kt.showSnackBar
-import tool.xfy9326.schedule.tools.MIMEConst
 import tool.xfy9326.schedule.ui.dialog.ImportCourseConflictDialog
 import tool.xfy9326.schedule.ui.dialog.MultiItemSelectDialog
 import tool.xfy9326.schedule.ui.fragment.base.AbstractSettingsFragment

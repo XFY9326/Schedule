@@ -2,8 +2,8 @@ package tool.xfy9326.schedule.beans
 
 import android.content.Context
 import androidx.annotation.ColorInt
+import lib.xfy9326.android.kit.getColorCompat
 import tool.xfy9326.schedule.R
-import tool.xfy9326.schedule.kt.getColorCompat
 
 data class ScheduleStyles(
     private val viewAlpha: Int,
@@ -20,7 +20,7 @@ data class ScheduleStyles(
     val verticalCourseCellText: Boolean,
     val notThisWeekCourseShowStyle: Set<NotThisWeekCourseShowStyle>,
     val enableScheduleGridScroll: Boolean,
-    val textSize: ScheduleTextSize,
+    val textSize: ScheduleText.TextSize,
 ) {
     val scheduleViewAlpha = viewAlpha / 100f
 

@@ -9,7 +9,9 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.databinding.ActivityFragmentContainerBinding
+import tool.xfy9326.schedule.ui.base.OnRequestBackCallback
 import tool.xfy9326.schedule.ui.fragment.base.AbstractSettingsFragment
+
 
 abstract class AbstractSettingsActivity : ViewBindingActivity<ActivityFragmentContainerBinding>(), PreferenceFragmentCompat.OnPreferenceStartFragmentCallback {
     val rootLayout by lazy {
@@ -66,11 +68,18 @@ abstract class AbstractSettingsActivity : ViewBindingActivity<ActivityFragmentCo
         return true
     }
 
+    override fun onBackPressed() {
+        requestBack()
+    }
+
     fun requestBack() {
         if (supportFragmentManager.backStackEntryCount == 0) {
             super.onBackPressed()
         } else {
-            supportFragmentManager.popBackStack()
+            val backStackFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainer)
+            if (backStackFragment !is OnRequestBackCallback || !backStackFragment.onRequestBack()) {
+                supportFragmentManager.popBackStack()
+            }
         }
     }
 }

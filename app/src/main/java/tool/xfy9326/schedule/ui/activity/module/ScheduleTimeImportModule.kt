@@ -18,7 +18,7 @@ class ScheduleTimeImportModule(activity: ScheduleEditActivity) :
         this.scheduleTimeAdapter = scheduleTimeAdapter
     }
 
-    override fun init() {
+    override fun onInit() {
         requireViewModel().loadAllSchedules.observeEvent(requireActivity()) {
             if (it.isEmpty()) {
                 requireViewBinding().layoutScheduleEdit.showSnackBar(R.string.empty_schedule_list)

@@ -17,6 +17,10 @@ data class ScheduleImportJSON(
     @Serializable(DateFormatStringSerializer::class)
     val termEnd: Date? = null,
 ) {
+    init {
+        require(VERSION >= version) { "Incompatible or too high JSON data version!" }
+    }
+
     companion object {
         private const val VERSION = 1
     }

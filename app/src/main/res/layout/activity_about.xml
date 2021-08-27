@@ -53,7 +53,7 @@
                             android:layout_width="60dp"
                             android:layout_height="55dp"
                             android:padding="5dp"
-                            app:srcCompat="@drawable/ic_launcher_round" />
+                            app:srcCompat="@mipmap/ic_logo" />
 
                         <androidx.appcompat.widget.LinearLayoutCompat
                             android:layout_width="wrap_content"

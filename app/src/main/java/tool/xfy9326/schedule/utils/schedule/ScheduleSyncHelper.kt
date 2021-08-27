@@ -8,14 +8,15 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.withContext
+import lib.xfy9326.android.kit.io.IOManager
+import lib.xfy9326.kit.withTryLock
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.*
+import tool.xfy9326.schedule.beans.Course.Companion.iterateAll
 import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
-import tool.xfy9326.schedule.io.IOManager
 import tool.xfy9326.schedule.kt.APP_ID
-import tool.xfy9326.schedule.kt.iterateAll
-import tool.xfy9326.schedule.kt.withTryLock
+import tool.xfy9326.schedule.tools.NumberPattern
 import tool.xfy9326.schedule.utils.ics.ScheduleICSWriter
 import java.util.*
 
@@ -145,31 +146,31 @@ object ScheduleSyncHelper {
         sync: ScheduleSync,
         reminderMinutes: Int,
     ): Boolean {
-        val weekNumPattern = WeekNumPattern(courseTime, scheduleCalculateTimes)
-        if (weekNumPattern.type == WeekNumPattern.PatternType.SINGLE) {
-            CourseTimeUtils.getRealClassTime(scheduleCalculateTimes, weekNumPattern.start + 1, courseTime.classTime).let { time ->
+        val weekNumPattern = WeekNumPattern.parsePattern(courseTime, scheduleCalculateTimes)
+        if (weekNumPattern.type == NumberPattern.PatternType.SINGLE) {
+            CourseTimeUtils.getRealSectionTime(scheduleCalculateTimes, weekNumPattern.start + 1, courseTime.sectionTime).let { time ->
                 if (!insertEvent(contentResolver, sync, reminderMinutes, ContentValues().apply {
                         addBasicInfoToCalendarEvent(this, calId, time, course, courseTime)
                     })) return false
             }
-        } else if (weekNumPattern.type == WeekNumPattern.PatternType.SPACED || weekNumPattern.type == WeekNumPattern.PatternType.SERIAL) {
-            CourseTimeUtils.getRealClassTime(scheduleCalculateTimes, weekNumPattern.start + 1, courseTime.classTime).let { time ->
+        } else if (weekNumPattern.type == NumberPattern.PatternType.SPACED || weekNumPattern.type == NumberPattern.PatternType.SERIAL) {
+            CourseTimeUtils.getRealSectionTime(scheduleCalculateTimes, weekNumPattern.start + 1, courseTime.sectionTime).let { time ->
                 if (!insertEvent(contentResolver, sync, reminderMinutes, ContentValues().apply {
                         put(
                             CalendarContract.Events.RRULE,
-                            ScheduleICSWriter.RRULE(weekNumPattern.interval, weekNumPattern.amount, courseTime.classTime.weekDay, scheduleCalculateTimes.weekStart).text
+                            ScheduleICSWriter.RRULE(weekNumPattern.interval, weekNumPattern.amount, courseTime.sectionTime.weekDay, scheduleCalculateTimes.weekStart).text
                         )
                         addBasicInfoToCalendarEvent(this, calId, time, course, courseTime)
                     })) return false
             }
-        } else if (weekNumPattern.type == WeekNumPattern.PatternType.MESSY) {
+        } else if (weekNumPattern.type == NumberPattern.PatternType.MESSY) {
             for (period in weekNumPattern.timePeriodArray) {
-                CourseTimeUtils.getRealClassTime(scheduleCalculateTimes, period.start + 1, courseTime.classTime).let { time ->
+                CourseTimeUtils.getRealSectionTime(scheduleCalculateTimes, period.start + 1, courseTime.sectionTime).let { time ->
                     if (!insertEvent(contentResolver, sync, reminderMinutes, ContentValues().apply {
                             if (period.length > 1) {
                                 put(
                                     CalendarContract.Events.RRULE,
-                                    ScheduleICSWriter.RRULE(1, period.length, courseTime.classTime.weekDay, scheduleCalculateTimes.weekStart).text
+                                    ScheduleICSWriter.RRULE(1, period.length, courseTime.sectionTime.weekDay, scheduleCalculateTimes.weekStart).text
                                 )
                             }
                             addBasicInfoToCalendarEvent(this, calId, time, course, courseTime)

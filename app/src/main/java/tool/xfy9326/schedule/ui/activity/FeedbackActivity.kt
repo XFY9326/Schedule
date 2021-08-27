@@ -14,11 +14,11 @@ import androidx.activity.result.contract.ActivityResultContract
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.launch
+import lib.xfy9326.android.kit.bindLifeCycle
 import tool.xfy9326.schedule.BuildConfig
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.data.AppDataStore
 import tool.xfy9326.schedule.databinding.ActivityFeedbackBinding
-import tool.xfy9326.schedule.kt.bindLifeCycle
 import tool.xfy9326.schedule.ui.activity.base.ViewBindingActivity
 import tool.xfy9326.schedule.utils.IntentUtils
 

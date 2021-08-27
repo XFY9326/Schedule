@@ -6,11 +6,11 @@ import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceDataStore
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.launch
+import lib.xfy9326.android.kit.show
 import lib.xfy9326.livedata.observeEvent
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.kt.setOnPrefClickListener
-import tool.xfy9326.schedule.kt.show
 import tool.xfy9326.schedule.kt.showSnackBar
 import tool.xfy9326.schedule.ui.dialog.MultiItemSelectDialog
 import tool.xfy9326.schedule.ui.fragment.base.AbstractSettingsFragment

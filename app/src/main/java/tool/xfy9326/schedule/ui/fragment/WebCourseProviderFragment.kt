@@ -11,6 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
+import lib.xfy9326.android.kit.*
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.databinding.FragmentWebCourseProviderBinding

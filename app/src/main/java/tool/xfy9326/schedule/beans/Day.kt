@@ -11,9 +11,8 @@ data class Day(
     val day: Int,
     val weekDay: WeekDay,
 ) {
-    fun isToday(): Boolean {
-        CalendarUtils.getCalendar().apply {
-            return month == get(Calendar.MONTH) + 1 && day == get(Calendar.DATE)
+    val isToday: Boolean
+        get() = CalendarUtils.getCalendar().let {
+            month == it[Calendar.MONTH] + 1 && day == it[Calendar.DATE]
         }
-    }
 }

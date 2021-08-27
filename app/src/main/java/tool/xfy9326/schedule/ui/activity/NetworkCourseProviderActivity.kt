@@ -9,16 +9,20 @@ import android.widget.Spinner
 import androidx.annotation.StringRes
 import androidx.core.view.isVisible
 import coil.load
+import lib.xfy9326.android.kit.getText
+import lib.xfy9326.android.kit.setAllEnable
+import lib.xfy9326.android.kit.setOnSingleClickListener
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.NetworkCourseImportParams
 import tool.xfy9326.schedule.beans.NetworkProviderParams
+import tool.xfy9326.schedule.beans.ScheduleImportRequestParams
 import tool.xfy9326.schedule.content.base.*
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
 import tool.xfy9326.schedule.databinding.ActivityNetworkCourseProviderBinding
 import tool.xfy9326.schedule.kt.*
 import tool.xfy9326.schedule.ui.activity.base.CourseProviderActivity
 import tool.xfy9326.schedule.ui.vm.NetworkCourseProviderViewModel
-import tool.xfy9326.schedule.ui.vm.base.CourseProviderViewModel
+import tool.xfy9326.schedule.utils.schedule.ScheduleImportManager
 import tool.xfy9326.schedule.utils.view.DialogUtils
 import tool.xfy9326.schedule.utils.view.ViewUtils
 
@@ -78,14 +82,14 @@ class NetworkCourseProviderActivity :
         viewBinding.buttonImportCourseToCurrentSchedule.setOnSingleClickListener {
             withImportOption {
                 withImportCourseParams { params ->
-                    requestImportCourse(ImportRequestParams(true, params, it))
+                    requestImportCourse(ScheduleImportRequestParams(true, params, it))
                 }
             }
         }
         viewBinding.buttonImportCourseToNewSchedule.setOnSingleClickListener {
             withImportOption {
                 withImportCourseParams { params ->
-                    requestImportCourse(ImportRequestParams(false, params, it))
+                    requestImportCourse(ScheduleImportRequestParams(false, params, it))
                 }
             }
         }
@@ -124,11 +128,11 @@ class NetworkCourseProviderActivity :
     }
 
     override fun onShowCourseAdapterError(exception: CourseAdapterException) {
-        ViewUtils.showCourseAdapterErrorSnackBar(this, requireViewBinding().layoutLoginCourseProvider, exception)
+        ViewUtils.showCourseImportErrorSnackBar(this, requireViewBinding().layoutLoginCourseProvider, exception)
     }
 
-    override fun onCourseImportFinish(result: CourseProviderViewModel.ImportResult, editScheduleId: Long?) {
-        if (result == CourseProviderViewModel.ImportResult.FAILED) {
+    override fun onCourseImportFinish(result: ScheduleImportManager.ImportResult, editScheduleId: Long?) {
+        if (result == ScheduleImportManager.ImportResult.FAILED) {
             requireViewBinding().layoutCourseImportContent.setAllEnable(true)
             withImportOption(false) {
                 requireViewModel().refreshLoginPageInfo(it)
@@ -205,7 +209,7 @@ class NetworkCourseProviderActivity :
                     layoutCourseImportLoading.isVisible = true
                     layoutCourseImportContent.isVisible = false
 
-                    progressBarLoadingCourseImportInit.isVisible = false
+                    progressBarLoadingCourseImportInit.hide()
                     buttonCourseImportReload.isVisible = true
                     imageViewCourseImportLoadError.isVisible = true
                 }
@@ -213,7 +217,7 @@ class NetworkCourseProviderActivity :
                     layoutCourseImportLoading.isVisible = true
                     layoutCourseImportContent.isVisible = false
 
-                    progressBarLoadingCourseImportInit.isVisible = true
+                    progressBarLoadingCourseImportInit.show()
                     buttonCourseImportReload.isVisible = false
                     imageViewCourseImportLoadError.isVisible = false
                 }

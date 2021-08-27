@@ -8,11 +8,11 @@ import android.webkit.URLUtil
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import lib.xfy9326.android.kit.getText
+import lib.xfy9326.android.kit.requireOwner
+import lib.xfy9326.android.kit.showToast
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.databinding.DialogEditTextBinding
-import tool.xfy9326.schedule.kt.getText
-import tool.xfy9326.schedule.kt.requireOwner
-import tool.xfy9326.schedule.kt.showToast
 
 class JSConfigImportDialog : DialogFragment() {
     companion object {

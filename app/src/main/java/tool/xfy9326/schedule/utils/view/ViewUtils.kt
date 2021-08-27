@@ -9,25 +9,21 @@ import android.net.Uri
 import androidx.annotation.ColorInt
 import androidx.annotation.Px
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
+import lib.xfy9326.kit.getDeepStackTraceString
 import tool.xfy9326.schedule.R
-import tool.xfy9326.schedule.content.utils.CourseAdapterException
-import tool.xfy9326.schedule.content.utils.JSConfigException
-import tool.xfy9326.schedule.kt.getDeepStackTraceString
+import tool.xfy9326.schedule.beans.NightMode.Companion.modeInt
+import tool.xfy9326.schedule.content.base.CourseImportException
+import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.ui.dialog.CrashViewDialog
 import tool.xfy9326.schedule.utils.IntentUtils
 
 object ViewUtils {
-    fun showCourseAdapterErrorSnackBar(activity: AppCompatActivity, coordinatorLayout: CoordinatorLayout, exception: CourseAdapterException) {
-        Snackbar.make(coordinatorLayout, exception.getText(activity), Snackbar.LENGTH_LONG)
-            .setActionTextColor(Color.RED)
-            .setAction(R.string.details) {
-                CrashViewDialog.showDialog(activity.supportFragmentManager, exception.getDeepStackTraceString(), false)
-            }.show()
-    }
-
-    fun showJSConfigErrorSnackBar(activity: AppCompatActivity, coordinatorLayout: CoordinatorLayout, exception: JSConfigException) {
+    fun showCourseImportErrorSnackBar(activity: AppCompatActivity, coordinatorLayout: CoordinatorLayout, exception: CourseImportException) {
         Snackbar.make(coordinatorLayout, exception.getText(activity), Snackbar.LENGTH_LONG)
             .setActionTextColor(Color.RED)
             .setAction(R.string.details) {
@@ -49,5 +45,11 @@ object ViewUtils {
             setColor(contentColorInt)
         }
         return RippleDrawable(ColorStateList.valueOf(rippleColorInt), content, null)
+    }
+
+    fun initNightMode() {
+        runBlocking {
+            AppCompatDelegate.setDefaultNightMode(AppSettingsDataStore.nightModeTypeFlow.first().modeInt)
+        }
     }
 }

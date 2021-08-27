@@ -6,13 +6,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LifecycleOwner
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.jaredrummler.android.colorpicker.ColorPickerDialog
+import lib.xfy9326.android.kit.getText
+import lib.xfy9326.android.kit.show
+import lib.xfy9326.android.kit.showToast
+import lib.xfy9326.kit.NEW_LINE
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.Schedule
 import tool.xfy9326.schedule.databinding.DialogEditTextBinding
-import tool.xfy9326.schedule.kt.NEW_LINE
-import tool.xfy9326.schedule.kt.getText
-import tool.xfy9326.schedule.kt.show
-import tool.xfy9326.schedule.kt.showToast
 import tool.xfy9326.schedule.tools.MaterialColorHelper
 
 object DialogUtils {

@@ -1,8 +1,8 @@
 package tool.xfy9326.schedule.io
 
 import android.os.Environment
-import tool.xfy9326.schedule.io.kt.asParentOf
-import tool.xfy9326.schedule.io.utils.DirUtils
+import lib.xfy9326.android.kit.AppDir
+import lib.xfy9326.kit.asParentOf
 
 object PathManager {
     private const val DIR_SHARE = "SharedFiles"
@@ -12,14 +12,14 @@ object PathManager {
     const val DIR_SCHEDULE = "Schedule"
 
     val LogDir
-        get() = DirUtils.externalFilesDir(DIR_LOG)
+        get() = AppDir.externalFilesDir(DIR_LOG)
 
     val PictureAppDir
-        get() = DirUtils.externalFilesDir(Environment.DIRECTORY_PICTURES, DIR_PICTURE_APP)
+        get() = AppDir.externalFilesDir(Environment.DIRECTORY_PICTURES, DIR_PICTURE_APP)
 
     val SharedFileDir
-        get() = DirUtils.externalCacheDir.asParentOf(DIR_SHARE)
+        get() = AppDir.externalCacheDir.asParentOf(DIR_SHARE)
 
     val JSConfigs
-        get() = DirUtils.externalFilesDir(DIR_JS_CONFIGS)
+        get() = AppDir.externalFilesDir(DIR_JS_CONFIGS)
 }

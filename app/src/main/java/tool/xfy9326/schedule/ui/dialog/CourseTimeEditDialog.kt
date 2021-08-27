@@ -7,11 +7,12 @@ import androidx.appcompat.app.AppCompatDialogFragment
 import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import lib.xfy9326.android.kit.*
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.CourseTime
+import tool.xfy9326.schedule.beans.SectionTime.Companion.end
 import tool.xfy9326.schedule.beans.WeekDay
 import tool.xfy9326.schedule.databinding.DialogCourseTimeEditBinding
-import tool.xfy9326.schedule.kt.*
 import tool.xfy9326.schedule.utils.schedule.CourseUtils
 import kotlin.properties.Delegates
 
@@ -99,9 +100,9 @@ class CourseTimeEditDialog : AppCompatDialogFragment() {
     private fun updateEditData() {
         viewBinding?.apply {
             editCourseTime.location = editTextCourseLocation.text.getText()
-            editCourseTime.classTime.weekDay = WeekDay.from(pickerCourseTimeWeekDay.value)
-            editCourseTime.classTime.classStartTime = pickerCourseStartTime.value
-            editCourseTime.classTime.classDuration = pickerCourseEndTime.value - pickerCourseStartTime.value + 1
+            editCourseTime.sectionTime.weekDay = WeekDay.from(pickerCourseTimeWeekDay.value)
+            editCourseTime.sectionTime.start = pickerCourseStartTime.value
+            editCourseTime.sectionTime.duration = pickerCourseEndTime.value - pickerCourseStartTime.value + 1
             editCourseTime.weekNum = viewWeekNumEdit.getWeekNumArray()
         }
     }
@@ -133,19 +134,19 @@ class CourseTimeEditDialog : AppCompatDialogFragment() {
             minValue = 0
             maxValue = weekDayStrArr.lastIndex
             displayedValues = weekDayStrArr
-            value = editCourseTime.classTime.weekDay.ordinal
+            value = editCourseTime.sectionTime.weekDay.ordinal
         }
         viewBinding.pickerCourseStartTime.apply {
             minValue = 1
             maxValue = maxCourseNum
             displayedValues = courseNumStrArr
-            value = editCourseTime.classTime.classStartTime
+            value = editCourseTime.sectionTime.start
         }
         viewBinding.pickerCourseEndTime.apply {
             minValue = 1
             maxValue = maxCourseNum
             displayedValues = courseNumStrArr
-            value = editCourseTime.classTime.classEndTime
+            value = editCourseTime.sectionTime.end
         }
         viewBinding.pickerCourseStartTime.setOnValueChangedListener { _, _, newVal ->
             if (newVal > viewBinding.pickerCourseEndTime.value) viewBinding.pickerCourseEndTime.value = newVal

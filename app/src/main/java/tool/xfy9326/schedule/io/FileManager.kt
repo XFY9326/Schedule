@@ -2,17 +2,19 @@
 
 package tool.xfy9326.schedule.io
 
-import android.content.ContentValues
 import android.graphics.Bitmap
-import android.net.Uri
-import android.provider.MediaStore
-import kotlinx.serialization.json.Json
+import lib.xfy9326.android.kit.io.kt.rawResFile
+import lib.xfy9326.android.kit.io.kt.source
+import lib.xfy9326.android.kit.io.kt.useBuffer
+import lib.xfy9326.android.kit.io.kt.writeBitmap
+import lib.xfy9326.android.kit.tryRecycle
+import lib.xfy9326.kit.asParentOf
+import lib.xfy9326.kit.runSafeIOJob
+import lib.xfy9326.kit.runUnsafeIOJob
+import lib.xfy9326.kit.withPreparedDir
 import okio.sink
-import okio.source
 import tool.xfy9326.schedule.R
-import tool.xfy9326.schedule.io.IOManager.getUriByFileProvider
-import tool.xfy9326.schedule.io.kt.*
-import java.io.File
+import tool.xfy9326.schedule.io.utils.getUriByFileProvider
 
 object FileManager {
     private val FILE_EULA = rawResFile(R.raw.eula)
@@ -32,33 +34,6 @@ object FileManager {
 
     fun getAppPictureFile(name: String) = PathManager.PictureAppDir.asParentOf(name)
 
-    suspend fun copyBitmap(from: Uri, to: File, format: Bitmap.CompressFormat, quality: Int = 100) = runOnlyResultIOJob {
-        val input = from.source()?.useBuffer {
-            readBitmap()
-        } ?: error("Can't read bitmap from $from")
-        val writeResult = to.withPreparedDir {
-            to.sink().useBuffer {
-                writeBitmap(input, format, quality)
-            }
-        } ?: false
-        input.recycle()
-        writeResult
-    }
-
-    suspend fun writeBitmapToAlbum(bitmap: Bitmap, contentValues: ContentValues, format: Bitmap.CompressFormat, quality: Int = 100, recycle: Boolean = true) =
-        runSafeIOJob {
-            val uri = IOManager.contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
-            val result = uri?.sink()?.useBuffer {
-                writeBitmap(bitmap, format, quality)
-            } ?: false
-            if (recycle) bitmap.tryRecycle()
-            if (result) {
-                uri?.also { IOManager.requestScanMediaFile(it) }
-            } else {
-                null
-            }
-        }
-
     suspend fun createShareImage(name: String, bitmap: Bitmap, format: Bitmap.CompressFormat, quality: Int = 100, recycle: Boolean = true) = runSafeIOJob {
         val imageFile = PathManager.SharedFileDir.asParentOf(name)
         imageFile.withPreparedDir {
@@ -72,30 +47,5 @@ object FileManager {
                 null
             }
         }
-    }
-
-    suspend fun writeText(uri: Uri, text: String?) = runOnlyResultIOJob {
-        uri.sink()?.useBuffer {
-            writeUtf8(text.orEmpty())
-            true
-        } ?: false
-    }
-
-    suspend fun copyFileToUri(from: File, to: Uri) = runOnlyResultIOJob {
-        to.sink()?.useBuffer {
-            writeAll(from.source())
-            true
-        } ?: false
-    }
-
-    suspend inline fun <reified T> readJSON(uri: Uri, json: Json) = runSafeIOJob {
-        uri.source()?.useBuffer { readJSON<T>(json) }
-    }
-
-    suspend inline fun <reified T> writeJSON(uri: Uri, data: T, json: Json) = runOnlyResultIOJob {
-        uri.sink()?.useBuffer {
-            writeJSON(json, data)
-            true
-        } ?: false
     }
 }

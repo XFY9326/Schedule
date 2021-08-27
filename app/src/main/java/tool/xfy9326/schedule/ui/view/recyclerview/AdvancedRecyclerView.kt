@@ -8,6 +8,7 @@ import android.view.MotionEvent
 import android.view.View
 import androidx.core.content.res.use
 import androidx.core.view.isVisible
+import androidx.core.widget.ContentLoadingProgressBar
 import androidx.recyclerview.widget.RecyclerView
 import tool.xfy9326.schedule.R
 import kotlin.math.abs
@@ -70,7 +71,15 @@ class AdvancedRecyclerView @JvmOverloads constructor(
             (parent as? View?)?.findViewById<View>(emptyViewResId)?.let {
                 val showEmptyView = isAdapterEmpty()
                 isVisible = !showEmptyView
-                it.isVisible = showEmptyView
+                if (it is ContentLoadingProgressBar) {
+                    if (showEmptyView) {
+                        it.show()
+                    } else {
+                        it.hide()
+                    }
+                } else {
+                    it.isVisible = showEmptyView
+                }
             }
         }
     }

@@ -1,0 +1,17 @@
+plugins {
+    id 'java-library'
+    id 'kotlin'
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+def config = rootProject.ext
+def dependenciesVersion = config.dependencies_version
+def kotlinxVersion = dependenciesVersion.kotlinx
+
+dependencies {
+    api "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxVersion.coroutines"
+}
