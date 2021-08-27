@@ -34,6 +34,7 @@ class WebCourseProviderFragment : ViewBindingFragment<FragmentWebCourseProviderB
     }
 
     private var isWebViewConnectionEnabled = true
+    private var isWebViewDebugLogEnabled = BuildConfig.DEBUG
     private var isBottomPanelInitShowed = false
     private val hideBottomPanelAnimation by lazy { AnimationUtils.loadAnimation(requireContext(), R.anim.anim_bottom_button_out) }
     private val showBottomPanelAnimation by lazy { AnimationUtils.loadAnimation(requireContext(), R.anim.anim_bottom_button_in) }
@@ -52,6 +53,7 @@ class WebCourseProviderFragment : ViewBindingFragment<FragmentWebCourseProviderB
             }
             AppSettingsDataStore.enableWebCourseProviderConsoleDebugFlow.first().also {
                 WebView.setWebContentsDebuggingEnabled(it)
+                isWebViewDebugLogEnabled = it
             }
         }
 
@@ -88,6 +90,21 @@ class WebCourseProviderFragment : ViewBindingFragment<FragmentWebCourseProviderB
                         return true
                     }
                     return super.onJsConfirm(view, url, message, result)
+                }
+
+                @Suppress("DEPRECATION")
+                override fun onConsoleMessage(message: String?, lineNumber: Int, sourceID: String?) {
+                    if (isWebViewDebugLogEnabled) {
+                        super.onConsoleMessage(message, lineNumber, sourceID)
+                    }
+                }
+
+                override fun onConsoleMessage(consoleMessage: ConsoleMessage?): Boolean {
+                    return if (isWebViewDebugLogEnabled) {
+                        super.onConsoleMessage(consoleMessage)
+                    } else {
+                        true
+                    }
                 }
             }
             webViewClient = object : WebViewClient() {

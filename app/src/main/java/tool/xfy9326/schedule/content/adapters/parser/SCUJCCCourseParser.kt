@@ -91,7 +91,7 @@ class SCUJCCCourseParser : WebCourseParser<Nothing>() {
         val weekDayStr = courseTimeData[1]?.value?.trim() ?: CourseAdapterException.Error.CONTENT_PARSE_ERROR.report()
         val sectionTimeStr = courseTimeData[2]?.value?.trim() ?: CourseAdapterException.Error.CONTENT_PARSE_ERROR.report()
         val weekNumStr = courseTimeData[3]?.value?.trim() ?: CourseAdapterException.Error.CONTENT_PARSE_ERROR.report()
-        val weekModeStr = courseTimeData[5]?.value?.trim() ?: CourseAdapterException.Error.CONTENT_PARSE_ERROR.report()
+        val weekModeStr = courseTimeData[5]?.value?.trim()
 
         val weekDay = CourseAdapterUtils.parseWeekDayChinese(weekDayStr)
         val sectionTimes = CourseAdapterUtils.parseNumberList(sectionTimeStr)
