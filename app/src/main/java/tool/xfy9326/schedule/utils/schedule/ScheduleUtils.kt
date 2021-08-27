@@ -46,12 +46,12 @@ object ScheduleUtils {
 
             var currentYear = get(Calendar.YEAR)
             val currentMonth = get(Calendar.MONTH)
-            if (currentMonth < Calendar.SEPTEMBER && currentMonth > Calendar.JANUARY) {
-                set(Calendar.MONTH, Calendar.FEBRUARY)
+            if (currentMonth > Calendar.JANUARY && currentMonth < Calendar.AUGUST) { // 2.1 - 7.31
+                set(Calendar.MONTH, Calendar.MARCH) // 3.1
                 set(Calendar.DATE, 1)
                 startDate = time
 
-                set(Calendar.MONTH, Calendar.JUNE)
+                set(Calendar.MONTH, Calendar.JUNE) // 6.30
                 set(Calendar.DATE, 30)
                 endDate = time
             } else {
@@ -59,13 +59,13 @@ object ScheduleUtils {
                     currentYear--
                 }
                 set(Calendar.YEAR, currentYear)
-                set(Calendar.MONTH, Calendar.SEPTEMBER)
+                set(Calendar.MONTH, Calendar.SEPTEMBER) // 9.1
                 set(Calendar.DATE, 1)
                 startDate = time
 
-                set(Calendar.YEAR, currentYear + 1)
-                set(Calendar.MONTH, Calendar.JANUARY)
-                set(Calendar.DATE, 30)
+                set(Calendar.YEAR, ++currentYear)
+                set(Calendar.MONTH, Calendar.FEBRUARY) // 2.28
+                set(Calendar.DATE, if (currentYear % 4 == 0) 29 else 28)
                 endDate = time
             }
 
