@@ -5,7 +5,6 @@
     android:id="@+id/layout_externalCourse"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.activity.ExternalCourseImportActivity"
     tools:keep="@layout/activity_external_course_import">
 
     <include
