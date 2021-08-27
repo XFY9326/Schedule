@@ -14,6 +14,6 @@ class NAUCourseWebParser : WebCourseParser<Nothing>() {
         loginParser.parseTerm(importOption, content.htmlContent)
 
     override fun onParseCourses(importOption: Int, content: WebPageContent): CourseParseResult {
-        return loginParser.parseCourses(importOption, content.requireProvidedContent())
+        return loginParser.parseCourses(importOption, content.requireFirstProvidedContent())
     }
 }

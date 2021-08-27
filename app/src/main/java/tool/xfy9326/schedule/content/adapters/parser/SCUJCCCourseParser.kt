@@ -52,7 +52,7 @@ class SCUJCCCourseParser : WebCourseParser<Nothing>() {
     }
 
     override fun onParseCourses(importOption: Int, content: WebPageContent): CourseParseResult {
-        return parseCourses(importOption, Jsoup.parseBodyFragment(content.requireProvidedContent()).body())
+        return parseCourses(importOption, Jsoup.parseBodyFragment(content.requireFirstProvidedContent()).body())
     }
 
     private fun parseCourses(importOption: Int, element: Element): CourseParseResult {
