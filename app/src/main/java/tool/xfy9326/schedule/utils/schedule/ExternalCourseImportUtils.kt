@@ -1,10 +1,13 @@
-package tool.xfy9326.schedule.utils
+package tool.xfy9326.schedule.utils.schedule
 
 import android.content.Intent
+import android.net.Uri
 import androidx.activity.ComponentActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import lib.xfy9326.android.kit.getItemUriList
 import lib.xfy9326.android.kit.showGlobalToast
+import lib.xfy9326.kit.asList
 import tool.xfy9326.schedule.BuildConfig
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.content.beans.ExternalCourseImportData
@@ -20,7 +23,7 @@ object ExternalCourseImportUtils {
 
     private fun parseReceivedIntent(intent: Intent): ExternalCourseImportData.Origin? {
         if (intent.action == ACTION_EXTERNAL_COURSE_IMPORT) {
-            val fileUri = intent.data ?: return null
+            val fileUri = getReceivedUriList(intent) ?: return null
             val processorName = intent.getStringExtra(EXTRA_PROCESSOR_NAME) ?: return null
             val processorExtraData = intent.getBundleExtra(EXTRA_PROCESSOR_EXTRA_DATA)
             return ExternalCourseImportData.Origin.External(fileUri, processorName, processorExtraData)
@@ -28,10 +31,13 @@ object ExternalCourseImportUtils {
             val fileUri = intent.data ?: return null
             val combineCourse = intent.getBooleanExtra(EXTRA_COMBINE_COURSE, false)
             val combineCourseTime = intent.getBooleanExtra(EXTRA_COMBINE_COURSE_TIME, false)
-            return ExternalCourseImportData.Origin.JSON(fileUri, combineCourse, combineCourseTime)
+            return ExternalCourseImportData.Origin.JSON(fileUri.asList(), combineCourse, combineCourseTime)
         }
         return null
     }
+
+    private fun getReceivedUriList(intent: Intent): List<Uri>? =
+        (intent.data?.asList() ?: intent.clipData?.getItemUriList())?.takeIf { it.isNotEmpty() }
 
     fun prepareRunningEnvironment(activity: ComponentActivity): ExternalCourseImportViewModel? {
         val parseResult = parseReceivedIntent(activity.intent)

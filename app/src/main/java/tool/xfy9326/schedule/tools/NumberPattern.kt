@@ -2,6 +2,7 @@
 
 package tool.xfy9326.schedule.tools
 
+import lib.xfy9326.kit.asArray
 import tool.xfy9326.schedule.beans.TimePeriod
 import tool.xfy9326.schedule.tools.NumberPattern.PatternType.*
 
@@ -140,7 +141,7 @@ class NumberPattern(boolArray: BooleanArray) {
                 end = startIndex
                 interval = -1
                 amount = 1
-                timePeriodArray = arrayOf(TimePeriod(start))
+                timePeriodArray = TimePeriod(start).asArray()
                 SINGLE
             }
             indexInterval == 1 -> {
@@ -148,7 +149,7 @@ class NumberPattern(boolArray: BooleanArray) {
                 end = endIndex
                 interval = 1
                 amount = endIndex - startIndex + 1
-                timePeriodArray = arrayOf(TimePeriod(start, end))
+                timePeriodArray = TimePeriod(start, end).asArray()
                 SERIAL
             }
             else -> {

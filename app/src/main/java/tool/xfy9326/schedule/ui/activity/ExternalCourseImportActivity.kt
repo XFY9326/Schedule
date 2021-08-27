@@ -16,8 +16,8 @@ import tool.xfy9326.schedule.ui.dialog.ImportCourseConflictDialog
 import tool.xfy9326.schedule.ui.dialog.ScheduleImportSuccessDialog
 import tool.xfy9326.schedule.ui.dialog.StrictImportModeWarningDialog
 import tool.xfy9326.schedule.ui.vm.ExternalCourseImportViewModel
-import tool.xfy9326.schedule.utils.ExternalCourseImportUtils
 import tool.xfy9326.schedule.utils.IntentUtils
+import tool.xfy9326.schedule.utils.schedule.ExternalCourseImportUtils
 import tool.xfy9326.schedule.utils.schedule.ScheduleImportManager
 import tool.xfy9326.schedule.utils.view.DialogUtils
 import tool.xfy9326.schedule.utils.view.ViewUtils

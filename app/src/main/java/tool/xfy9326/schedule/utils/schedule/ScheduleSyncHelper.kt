@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.withContext
 import lib.xfy9326.android.kit.io.IOManager
+import lib.xfy9326.kit.asArray
 import lib.xfy9326.kit.withTryLock
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.*
@@ -38,7 +39,7 @@ object ScheduleSyncHelper {
     private val syncLock = Mutex()
 
     private fun clearCalendar(calId: Int, contentResolver: ContentResolver) {
-        contentResolver.delete(CalendarContract.Calendars.CONTENT_URI, CALENDAR_ID_SELECTION, arrayOf(calId.toString()))
+        contentResolver.delete(CalendarContract.Calendars.CONTENT_URI, CALENDAR_ID_SELECTION, calId.toString().asArray())
     }
 
     private fun clearAllCalendar(contentResolver: ContentResolver) {

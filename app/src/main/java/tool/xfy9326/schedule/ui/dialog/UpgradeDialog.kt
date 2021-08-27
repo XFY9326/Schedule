@@ -15,10 +15,8 @@ import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import lib.xfy9326.android.kit.*
 import lib.xfy9326.android.kit.io.MIMEConst
-import lib.xfy9326.android.kit.setWindowPercent
-import lib.xfy9326.android.kit.show
-import lib.xfy9326.android.kit.showToast
 import tool.xfy9326.schedule.BuildConfig
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.data.AppDataStore
@@ -28,8 +26,6 @@ import tool.xfy9326.schedule.json.upgrade.DownloadSource
 import tool.xfy9326.schedule.json.upgrade.UpdateInfo
 import tool.xfy9326.schedule.kt.APP_ID
 import tool.xfy9326.schedule.utils.DownloadUtils
-import tool.xfy9326.schedule.utils.IntentUtils
-import tool.xfy9326.schedule.utils.PermissionUtils
 
 class UpgradeDialog : AppCompatDialogFragment() {
     companion object {
@@ -57,7 +53,7 @@ class UpgradeDialog : AppCompatDialogFragment() {
     private lateinit var updateInfo: UpdateInfo
     private var selectedSource: DownloadSource? = null
 
-    private val packageInstallPermission = registerForActivityResult(IntentUtils.PackageInstallPermissionContact()) {
+    private val packageInstallPermission = registerForActivityResult(PackageInstallPermissionContact()) {
         if (it) {
             selectedSource?.let(::downloadFile)
             selectedSource = null
@@ -151,7 +147,7 @@ class UpgradeDialog : AppCompatDialogFragment() {
     }
 
     private fun withPackageInstallPermission(downloadSource: DownloadSource, block: (DownloadSource) -> Unit) {
-        if (PermissionUtils.canInstallPackage(requireContext())) {
+        if (PermissionCompat.canInstallPackage(requireContext())) {
             block(downloadSource)
         } else {
             lifecycleScope.launch {
