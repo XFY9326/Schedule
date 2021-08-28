@@ -5,6 +5,7 @@ import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LifecycleOwner
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.textfield.TextInputLayout
 import com.jaredrummler.android.colorpicker.ColorPickerDialog
 import lib.xfy9326.android.kit.getText
 import lib.xfy9326.android.kit.show
@@ -86,7 +87,8 @@ object DialogUtils {
 
     fun showNewScheduleNameDialog(activity: AppCompatActivity, onConfirm: (String) -> Unit) {
         val dialogViewBinding = DialogEditTextBinding.inflate(activity.layoutInflater)
-        dialogViewBinding.editTextDialogText.setHint(R.string.new_schedule_name_title)
+        dialogViewBinding.textLayoutDialogText.setHint(R.string.new_schedule_name_title)
+        dialogViewBinding.textLayoutDialogText.endIconMode = TextInputLayout.END_ICON_CLEAR_TEXT
         dialogViewBinding.editTextDialogText.setText(R.string.new_schedule_name)
 
         MaterialAlertDialogBuilder(activity).apply {

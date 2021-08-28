@@ -54,6 +54,7 @@ class NetworkCourseProviderActivity :
     }
 
     override fun onInitView(viewBinding: ActivityNetworkCourseProviderBinding, viewModel: NetworkCourseProviderViewModel) {
+        super.onInitView(viewBinding, viewModel)
         viewBinding.textViewCourseAdapterSchool.apply {
             isSelected = true
             text = viewModel.importConfigInstance.schoolName

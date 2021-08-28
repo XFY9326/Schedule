@@ -5,28 +5,41 @@ import android.content.DialogInterface
 import android.os.Bundle
 import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.setFragmentResult
+import androidx.lifecycle.LifecycleOwner
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import lib.xfy9326.android.kit.requireOwner
 import lib.xfy9326.android.kit.setOnSingleClickListener
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.databinding.DialogWebCourseProviderBottomPanelBinding
 
 class WebCourseProviderBottomPanel : BottomSheetDialogFragment() {
     companion object {
-        private val TAG_DIALOG = WebCourseProviderBottomPanel::class.simpleName
+        private val DIALOG_TAG = WebCourseProviderBottomPanel::class.java.simpleName
+
         private const val EXTRA_AUTHOR_NAME = "EXTRA_AUTHOR_NAME"
+        private const val EXTRA_IS_CURRENT_SCHEDULE = "EXTRA_IS_CURRENT_SCHEDULE"
 
         fun showDialog(fragmentManager: FragmentManager, authorName: String) {
             WebCourseProviderBottomPanel().apply {
                 arguments = bundleOf(
                     EXTRA_AUTHOR_NAME to authorName
                 )
-            }.show(fragmentManager, TAG_DIALOG)
+            }.show(fragmentManager, DIALOG_TAG)
         }
 
-        fun isShowing(fragmentManager: FragmentManager) = fragmentManager.findFragmentByTag(TAG_DIALOG) != null
+        fun isShowing(fragmentManager: FragmentManager) = fragmentManager.findFragmentByTag(DIALOG_TAG) != null
+
+        fun setBottomPanelActionListener(fragmentManager: FragmentManager, lifecycleOwner: LifecycleOwner, onDismiss: () -> Unit, onImport: (Boolean) -> Unit) {
+            fragmentManager.setFragmentResultListener(DIALOG_TAG, lifecycleOwner) { _, bundle ->
+                if (bundle.containsKey(EXTRA_IS_CURRENT_SCHEDULE)) {
+                    onImport(bundle.getBoolean(EXTRA_IS_CURRENT_SCHEDULE))
+                } else {
+                    onDismiss()
+                }
+            }
+        }
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -38,11 +51,11 @@ class WebCourseProviderBottomPanel : BottomSheetDialogFragment() {
 
             binding.textViewCourseAdapterAuthor.text = getString(R.string.adapter_author, authorName)
             binding.buttonImportCourseToNewSchedule.setOnSingleClickListener {
-                requireOwner<BottomPanelActionListener>()?.onImportCourseToSchedule(false)
+                reportResult(false)
                 dismiss()
             }
             binding.buttonImportCourseToCurrentSchedule.setOnSingleClickListener {
-                requireOwner<BottomPanelActionListener>()?.onImportCourseToSchedule(true)
+                reportResult(true)
                 dismiss()
             }
 
@@ -52,12 +65,10 @@ class WebCourseProviderBottomPanel : BottomSheetDialogFragment() {
 
     override fun onDismiss(dialog: DialogInterface) {
         super.onDismiss(dialog)
-        requireOwner<BottomPanelActionListener>()?.onBottomPanelDismiss()
+        reportResult()
     }
 
-    interface BottomPanelActionListener {
-        fun onBottomPanelDismiss()
-
-        fun onImportCourseToSchedule(isCurrentSchedule: Boolean)
+    private fun reportResult(isCurrentSchedule: Boolean? = null) {
+        setFragmentResult(DIALOG_TAG, if (isCurrentSchedule == null) Bundle.EMPTY else bundleOf(EXTRA_IS_CURRENT_SCHEDULE to isCurrentSchedule))
     }
 }

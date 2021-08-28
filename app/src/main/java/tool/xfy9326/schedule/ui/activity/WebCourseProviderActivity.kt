@@ -17,9 +17,8 @@ import tool.xfy9326.schedule.utils.schedule.ScheduleImportManager
 import tool.xfy9326.schedule.utils.view.DialogUtils
 
 class WebCourseProviderActivity :
-    AbstractWebCourseProviderActivity<WebPageContent, WebCourseProvider<*>, WebCourseParser<*>, WebCourseProviderViewModel>(),
-    FullScreenLoadingDialog.OnRequestCancelListener {
-    private val loadingController by lazy { FullScreenLoadingDialog.createControllerInstance(this, supportFragmentManager) }
+    AbstractWebCourseProviderActivity<WebPageContent, WebCourseProvider<*>, WebCourseParser<*>, WebCourseProviderViewModel>() {
+    private val loadingController by lazy { FullScreenLoadingDialog.Controller.newInstance(this, supportFragmentManager) }
 
     override val vmClass = WebCourseProviderViewModel::class
 
@@ -35,6 +34,17 @@ class WebCourseProviderActivity :
         }
     }
 
+    override fun onInitView(viewBinding: ActivityFragmentContainerBinding, viewModel: WebCourseProviderViewModel) {
+        super.onInitView(viewBinding, viewModel)
+        loadingController.setOnRequestCancelListener {
+            DialogUtils.showCancelScheduleImportDialog(this) {
+                viewModel.finishImport()
+                loadingController.hide()
+            }
+            false
+        }
+    }
+
     override fun onSetupWebView(webView: WebView) {
         webView.addJavascriptInterface(object : JSBridge.WebCourseProviderJSInterface {
             @JavascriptInterface
@@ -42,14 +52,6 @@ class WebCourseProviderActivity :
                 onGetCurrentHTML(htmlContent, iframeContent, frameContent, isCurrentSchedule)
             }
         }, JSBridge.WEB_COURSE_PROVIDER_JS_INTERFACE_NAME)
-    }
-
-    override fun onFullScreenLoadingDialogRequestCancel(): Boolean {
-        DialogUtils.showCancelScheduleImportDialog(this) {
-            requireViewModel().finishImport()
-            loadingController.hide()
-        }
-        return false
     }
 
     override fun onImportCourseToSchedule(isCurrentSchedule: Boolean) {

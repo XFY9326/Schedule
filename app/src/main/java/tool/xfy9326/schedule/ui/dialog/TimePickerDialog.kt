@@ -6,10 +6,13 @@ import android.widget.TimePicker
 import androidx.appcompat.app.AppCompatDialogFragment
 import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
-import lib.xfy9326.android.kit.requireOwner
+import androidx.fragment.app.setFragmentResult
+import androidx.lifecycle.LifecycleOwner
 
 class TimePickerDialog : AppCompatDialogFragment(), TimePickerDialog.OnTimeSetListener {
     companion object {
+        private val DIALOG_TAG = TimePickerDialog::class.java.simpleName
+
         private const val EXTRA_TAG = "EXTRA_TAG"
         private const val EXTRA_HOUR = "EXTRA_HOUR"
         private const val EXTRA_MINUTE = "EXTRA_MINUTE"
@@ -25,6 +28,12 @@ class TimePickerDialog : AppCompatDialogFragment(), TimePickerDialog.OnTimeSetLi
                 )
             }.show(fragmentManager, tag)
         }
+
+        fun setOnTimeSetListener(fragmentManager: FragmentManager, lifecycleOwner: LifecycleOwner, block: (tag: String?, hourOfDay: Int, minute: Int) -> Unit) {
+            fragmentManager.setFragmentResultListener(DIALOG_TAG, lifecycleOwner) { _, bundle ->
+                block(bundle.getString(EXTRA_TAG), bundle.getInt(EXTRA_HOUR), bundle.getInt(EXTRA_MINUTE))
+            }
+        }
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?) =
@@ -37,10 +46,10 @@ class TimePickerDialog : AppCompatDialogFragment(), TimePickerDialog.OnTimeSetLi
         )
 
     override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
-        requireOwner<OnTimeSetListener>()?.onTimeSet(requireArguments().getString(EXTRA_TAG), hourOfDay, minute)
-    }
-
-    interface OnTimeSetListener {
-        fun onTimeSet(tag: String?, hourOfDay: Int, minute: Int)
+        setFragmentResult(DIALOG_TAG, bundleOf(
+            EXTRA_TAG to requireArguments().getString(EXTRA_TAG),
+            EXTRA_HOUR to hourOfDay,
+            EXTRA_MINUTE to minute
+        ))
     }
 }

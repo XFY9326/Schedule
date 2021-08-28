@@ -6,8 +6,13 @@ import android.view.Window
 import androidx.appcompat.app.AppCompatDialogFragment
 import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.setFragmentResult
+import androidx.lifecycle.LifecycleOwner
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import lib.xfy9326.android.kit.*
+import lib.xfy9326.android.kit.getStringArray
+import lib.xfy9326.android.kit.getText
+import lib.xfy9326.android.kit.hideKeyboard
+import lib.xfy9326.android.kit.setWindowPercent
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.CourseTime
 import tool.xfy9326.schedule.beans.SectionTime.Companion.end
@@ -18,6 +23,8 @@ import kotlin.properties.Delegates
 
 class CourseTimeEditDialog : AppCompatDialogFragment() {
     companion object {
+        private val DIALOG_TAG = CourseTimeEditDialog::class.java.simpleName
+
         private const val EXTRA_EDIT_POSITION = "EXTRA_EDIT_POSITION"
         private const val EXTRA_COURSE_TIME = "EXTRA_COURSE_TIME"
         private const val EXTRA_MAX_WEEK_NUM = "EXTRA_MAX_WEEK_NUM"
@@ -33,7 +40,13 @@ class CourseTimeEditDialog : AppCompatDialogFragment() {
                     EXTRA_COURSE_TIME to editBundle.courseTime,
                     EXTRA_EDIT_POSITION to (editBundle.editPosition ?: -1)
                 )
-            }.show(fragmentManager, null)
+            }.show(fragmentManager, DIALOG_TAG)
+        }
+
+        fun setCourseTimeEditListener(fragmentManager: FragmentManager, lifecycleOwner: LifecycleOwner, block: (courseTime: CourseTime, position: Int?) -> Unit) {
+            fragmentManager.setFragmentResultListener(DIALOG_TAG, lifecycleOwner) { _, bundle ->
+                block(bundle.getParcelable(EXTRA_COURSE_TIME)!!, bundle.getInt(EXTRA_EDIT_POSITION))
+            }
         }
     }
 
@@ -81,7 +94,10 @@ class CourseTimeEditDialog : AppCompatDialogFragment() {
                 }
                 updateEditData()
                 val position = requireArguments().getInt(EXTRA_EDIT_POSITION, -1)
-                requireOwner<OnCourseTimeEditListener>()?.onCourseTimeEditComplete(editCourseTime, if (position < 0) null else position)
+                setFragmentResult(DIALOG_TAG, bundleOf(
+                    EXTRA_COURSE_TIME to editCourseTime,
+                    EXTRA_EDIT_POSITION to if (position < 0) null else position
+                ))
             }
             setNegativeButton(android.R.string.cancel) { _, _ ->
                 viewBinding?.apply {
@@ -154,9 +170,5 @@ class CourseTimeEditDialog : AppCompatDialogFragment() {
         viewBinding.pickerCourseEndTime.setOnValueChangedListener { _, _, newVal ->
             if (newVal < viewBinding.pickerCourseStartTime.value) viewBinding.pickerCourseStartTime.value = newVal
         }
-    }
-
-    interface OnCourseTimeEditListener {
-        fun onCourseTimeEditComplete(courseTime: CourseTime, position: Int?)
     }
 }

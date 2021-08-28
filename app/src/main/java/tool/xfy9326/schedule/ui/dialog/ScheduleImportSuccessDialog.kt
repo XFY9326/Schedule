@@ -7,17 +7,18 @@ import android.os.Bundle
 import android.text.SpannableString
 import android.text.style.StyleSpan
 import android.text.style.TypefaceSpan
+import androidx.appcompat.app.AppCompatDialogFragment
 import androidx.core.os.bundleOf
-import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.setFragmentResult
+import androidx.lifecycle.LifecycleOwner
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import lib.xfy9326.android.kit.requireOwner
 import lib.xfy9326.kit.EMPTY
 import tool.xfy9326.schedule.R
 
-class ScheduleImportSuccessDialog : DialogFragment() {
+class ScheduleImportSuccessDialog : AppCompatDialogFragment() {
     companion object {
-        private val DIALOG_TAG = ScheduleImportSuccessDialog::class.simpleName
+        private val DIALOG_TAG = ScheduleImportSuccessDialog::class.java.simpleName
         private const val EXTRA_SCHEDULE_ID = "EXTRA_SCHEDULE_ID"
 
         fun showDialog(fragmentManager: FragmentManager, scheduleId: Long) {
@@ -51,16 +52,26 @@ class ScheduleImportSuccessDialog : DialogFragment() {
                 setSpan(span, msgEditHighlight.length + start, msgEditHighlight.length + end, SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE)
             }
         }
+
+        fun setOnScheduleImportSuccessListener(fragmentManager: FragmentManager, lifecycleOwner: LifecycleOwner, onEdit: (scheduleId: Long?) -> Unit) {
+            fragmentManager.setFragmentResultListener(DIALOG_TAG, lifecycleOwner) { _, bundle ->
+                if (bundle.containsKey(EXTRA_SCHEDULE_ID)) {
+                    onEdit(null)
+                } else {
+                    onEdit(bundle.getLong(EXTRA_SCHEDULE_ID))
+                }
+            }
+        }
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?) = MaterialAlertDialogBuilder(requireContext()).apply {
         setTitle(R.string.course_import_success_title)
         setMessage(getImportSuccessMsg(requireContext(), true))
         setPositiveButton(R.string.edit_schedule_now) { _, _ ->
-            requireOwner<OnScheduleImportSuccessListener>()?.onEditScheduleNow(requireArguments().getLong(EXTRA_SCHEDULE_ID))
+            setFragmentResult(DIALOG_TAG, bundleOf(EXTRA_SCHEDULE_ID to requireArguments().getLong(EXTRA_SCHEDULE_ID)))
         }
         setNegativeButton(R.string.edit_schedule_later) { _, _ ->
-            requireOwner<OnScheduleImportSuccessListener>()?.onEditScheduleLater()
+            setFragmentResult(DIALOG_TAG, Bundle.EMPTY)
         }
     }.create()
 
@@ -70,11 +81,5 @@ class ScheduleImportSuccessDialog : DialogFragment() {
             setCancelable(false)
             setCanceledOnTouchOutside(false)
         }
-    }
-
-    interface OnScheduleImportSuccessListener {
-        fun onEditScheduleNow(scheduleId: Long)
-
-        fun onEditScheduleLater()
     }
 }

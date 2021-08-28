@@ -3,11 +3,8 @@ package tool.xfy9326.schedule.utils.schedule
 import kotlinx.coroutines.flow.first
 import lib.xfy9326.android.kit.io.IOManager
 import tool.xfy9326.schedule.R
-import tool.xfy9326.schedule.beans.Course
+import tool.xfy9326.schedule.beans.*
 import tool.xfy9326.schedule.beans.Course.Companion.iterateAll
-import tool.xfy9326.schedule.beans.EditError
-import tool.xfy9326.schedule.beans.Schedule
-import tool.xfy9326.schedule.beans.ScheduleTime
 import tool.xfy9326.schedule.beans.ScheduleTime.Companion.intersect
 import tool.xfy9326.schedule.beans.SectionTime.Companion.end
 import tool.xfy9326.schedule.data.AppDataStore
@@ -17,6 +14,7 @@ import tool.xfy9326.schedule.utils.CalendarUtils
 import java.util.*
 
 object ScheduleUtils {
+    const val MAX_WEEK_NUM = 100 * 12 * 4 // 100 years
     private val DEFAULT_SCHEDULE_TIMES by lazy {
         ScheduleTime.listOf(
             8, 0, 8, 45,
@@ -39,7 +37,7 @@ object ScheduleUtils {
     suspend fun hasInitData() =
         AppDataStore.hasCurrentScheduleId() && ScheduleDBProvider.db.scheduleDAO.getScheduleCount() > 0
 
-    fun getDefaultTermDate(): Pair<Date, Date> {
+    fun getDefaultTermDate(weekStart: WeekDay): Pair<Date, Date> {
         CalendarUtils.getCalendar(clearToDate = true).apply {
             val startDate: Date
             val endDate: Date
@@ -69,7 +67,7 @@ object ScheduleUtils {
                 endDate = time
             }
 
-            return startDate to endDate
+            return startDate to CalendarUtils.getLastDateInThisWeek(endDate, weekStart)
         }
     }
 
@@ -94,20 +92,28 @@ object ScheduleUtils {
         return true
     }
 
-    suspend fun createDefaultSchedule() = getDefaultTermDate().let {
-        Schedule(IOManager.resources.getString(R.string.default_schedule_name),
-            it.first,
-            it.second,
+    suspend fun createDefaultSchedule(): Schedule {
+        val weekStart = ScheduleDataStore.defaultFirstDayOfWeekFlow.first()
+        val term = getDefaultTermDate(weekStart)
+        return Schedule(
+            IOManager.resources.getString(R.string.default_schedule_name),
+            term.first,
+            term.second,
             DEFAULT_SCHEDULE_TIMES,
-            ScheduleDataStore.defaultFirstDayOfWeekFlow.first())
+            weekStart
+        )
     }
 
-    suspend fun createNewSchedule(term: Pair<Date, Date>? = null) = (term ?: getDefaultTermDate()).let {
-        Schedule(IOManager.resources.getString(R.string.new_schedule_name),
-            it.first,
-            it.second,
+    suspend fun createNewSchedule(term: Pair<Date, Date>? = null): Schedule {
+        val weekStart = ScheduleDataStore.defaultFirstDayOfWeekFlow.first()
+        val newTerm = term ?: getDefaultTermDate(weekStart)
+        return Schedule(
+            IOManager.resources.getString(R.string.new_schedule_name),
+            newTerm.first,
+            newTerm.second,
             DEFAULT_SCHEDULE_TIMES,
-            ScheduleDataStore.defaultFirstDayOfWeekFlow.first())
+            weekStart
+        )
     }
 
     suspend fun saveCurrentSchedule(scheduleTimes: List<ScheduleTime>, courses: List<Course>): Long {
@@ -149,12 +155,14 @@ object ScheduleUtils {
         if (schedule.name.isBlank() || schedule.name.isEmpty()) {
             return EditError.Type.SCHEDULE_NAME_EMPTY.make()
         }
-
-        val maxWeekNum = CourseTimeUtils.getMaxWeekNum(schedule.startDate, schedule.endDate, schedule.weekStart)
-
         if (schedule.startDate > schedule.endDate) {
             return EditError.Type.SCHEDULE_DATE_ERROR.make()
         }
+        if (CourseTimeUtils.getMaxTermEndDate(schedule.startDate, schedule.weekStart) < schedule.endDate) {
+            return EditError.Type.SCHEDULE_TERM_TOO_LONG_ERROR.make()
+        }
+
+        val maxWeekNum = CourseTimeUtils.getMaxWeekNum(schedule.startDate, schedule.endDate, schedule.weekStart)
         if (maxWeekNum <= 0) {
             return EditError.Type.SCHEDULE_MAX_WEEK_NUM_ERROR.make()
         }

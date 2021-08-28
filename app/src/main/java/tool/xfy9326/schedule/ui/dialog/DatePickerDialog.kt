@@ -7,12 +7,16 @@ import android.widget.DatePicker
 import androidx.appcompat.app.AppCompatDialogFragment
 import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
-import lib.xfy9326.android.kit.requireOwner
+import androidx.fragment.app.setFragmentResult
+import androidx.lifecycle.LifecycleOwner
+import lib.xfy9326.kit.castNonNull
 import tool.xfy9326.schedule.utils.CalendarUtils
 import java.util.*
 
 class DatePickerDialog : AppCompatDialogFragment(), DatePickerDialog.OnDateSetListener {
     companion object {
+        private val DIALOG_TAG = DatePickerDialog::class.java.simpleName
+
         private const val EXTRA_TAG = "EXTRA_TAG"
         private const val EXTRA_DATE = "EXTRA_DATE"
         private const val EXTRA_WEEK_START = "EXTRA_WEEK_START"
@@ -25,6 +29,12 @@ class DatePickerDialog : AppCompatDialogFragment(), DatePickerDialog.OnDateSetLi
                     EXTRA_DATE to date
                 )
             }.show(fragmentManager, tag)
+        }
+
+        fun setOnDateSetListener(fragmentManager: FragmentManager, lifecycleOwner: LifecycleOwner, block: (tag: String?, date: Date) -> Unit) {
+            fragmentManager.setFragmentResultListener(DIALOG_TAG, lifecycleOwner) { _, bundle ->
+                block(bundle.getString(EXTRA_TAG), bundle.getSerializable(EXTRA_DATE).castNonNull())
+            }
         }
 
         private fun getDate(year: Int, month: Int, day: Int): Date {
@@ -51,10 +61,9 @@ class DatePickerDialog : AppCompatDialogFragment(), DatePickerDialog.OnDateSetLi
     }
 
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
-        requireOwner<OnDateSetListener>()?.onDateSet(requireArguments().getString(EXTRA_TAG), getDate(year, month, dayOfMonth))
-    }
-
-    interface OnDateSetListener {
-        fun onDateSet(tag: String?, date: Date)
+        setFragmentResult(DIALOG_TAG, bundleOf(
+            EXTRA_TAG to requireArguments().getString(EXTRA_TAG),
+            EXTRA_DATE to getDate(year, month, dayOfMonth)
+        ))
     }
 }

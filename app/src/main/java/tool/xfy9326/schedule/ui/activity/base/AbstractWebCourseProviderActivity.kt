@@ -34,6 +34,7 @@ abstract class AbstractWebCourseProviderActivity<I, P1 : AbstractCourseProvider<
 
     @CallSuper
     override fun onInitView(viewBinding: ActivityFragmentContainerBinding, viewModel: M) {
+        super.onInitView(viewBinding, viewModel)
         iFragmentContact = WebCourseProviderFragment().apply {
             arguments = bundleOf(
                 WebCourseProviderFragment.EXTRA_INIT_PAGE_URL to viewModel.initPageUrl,

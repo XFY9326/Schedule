@@ -1,6 +1,7 @@
 package tool.xfy9326.schedule.ui.fragment.settings
 
 import android.os.Bundle
+import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceDataStore
@@ -17,7 +18,7 @@ import tool.xfy9326.schedule.ui.fragment.base.AbstractSettingsFragment
 import tool.xfy9326.schedule.ui.vm.SettingsViewModel
 import tool.xfy9326.schedule.utils.PermissionUtils
 
-class CalendarSyncSettingsFragment : AbstractSettingsFragment(), MultiItemSelectDialog.OnMultiItemSelectedListener {
+class CalendarSyncSettingsFragment : AbstractSettingsFragment() {
     companion object {
         private const val TAG_CALENDAR_SYNC_LIST = "CALENDAR_SYNC_LIST"
         private const val TAG_CALENDAR_EDITABLE_LIST = "CALENDAR_EDITABLE_LIST"
@@ -116,13 +117,16 @@ class CalendarSyncSettingsFragment : AbstractSettingsFragment(), MultiItemSelect
         }
     }
 
-    override fun onMultiItemSelected(tag: String?, idArr: LongArray, selectedArr: BooleanArray) {
-        requireSettingsViewModel()?.apply {
-            when (tag) {
-                TAG_CALENDAR_SYNC_LIST -> updateSyncEnabled(idArr, selectedArr)
-                TAG_CALENDAR_EDITABLE_LIST -> updateSyncEditable(idArr, selectedArr)
-                TAG_CALENDAR_VISIBLE_LIST -> updateSyncVisible(idArr, selectedArr)
-                TAG_CALENDAR_ADD_REMINDER_LIST -> updateSyncReminder(idArr, selectedArr)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        MultiItemSelectDialog.setOnMultiItemSelectedListener(childFragmentManager, viewLifecycleOwner) { tag, idArr, selectedArr ->
+            requireSettingsViewModel()?.apply {
+                when (tag) {
+                    TAG_CALENDAR_SYNC_LIST -> updateSyncEnabled(idArr, selectedArr)
+                    TAG_CALENDAR_EDITABLE_LIST -> updateSyncEditable(idArr, selectedArr)
+                    TAG_CALENDAR_VISIBLE_LIST -> updateSyncVisible(idArr, selectedArr)
+                    TAG_CALENDAR_ADD_REMINDER_LIST -> updateSyncReminder(idArr, selectedArr)
+                }
             }
         }
     }

@@ -16,7 +16,7 @@ import tool.xfy9326.schedule.ui.fragment.base.AbstractSettingsFragment
 import tool.xfy9326.schedule.ui.vm.SettingsViewModel
 
 class ScheduleBackgroundSettingsFragment : AbstractSettingsFragment() {
-    private val loadingDialogController by lazy { FullScreenLoadingDialog.createControllerInstance(viewLifecycleOwner, childFragmentManager) }
+    private val loadingDialogController by lazy { FullScreenLoadingDialog.Controller.newInstance(viewLifecycleOwner, childFragmentManager) }
     private val selectBackgroundImage = registerForActivityResult(ActivityResultContracts.GetContent()) {
         if (it != null) {
             loadingDialogController.show(false)

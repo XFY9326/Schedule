@@ -1,17 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:paddingStart="20dp"
+    android:paddingTop="10dp"
+    android:paddingEnd="20dp"
+    android:paddingBottom="10dp">
 
-    <androidx.appcompat.widget.AppCompatEditText
-        android:id="@+id/editText_dialogText"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textLayout_dialogText"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="20dp"
-        android:inputType="text"
-        android:textSize="16sp" />
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editText_dialogText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:textSize="15sp" />
+
+    </com.google.android.material.textfield.TextInputLayout>
 
 </FrameLayout>

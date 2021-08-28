@@ -66,13 +66,13 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
                 android:layout_marginTop="8dp"
-                android:layout_marginEnd="5dp">
+                android:layout_marginEnd="5dp"
+                android:hint="@string/schedule_name">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/editText_scheduleName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/schedule_name"
                     android:inputType="text"
                     android:singleLine="true"
                     android:textSize="13sp" />
@@ -160,11 +160,56 @@
             </androidx.appcompat.widget.LinearLayoutCompat>
 
             <androidx.appcompat.widget.LinearLayoutCompat
-                android:id="@+id/layout_scheduleWeekStart"
+                android:id="@+id/layout_scheduleWeekNum"
                 style="@style/AppTheme.SelectableItemBackground"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
+                android:gravity="center_vertical"
+                android:paddingStart="5dp"
+                android:paddingTop="8dp"
+                android:paddingEnd="5dp"
+                android:paddingBottom="8dp">
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/schedule_week_num"
+                        android:textColor="@color/theme_color_primary_text" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="1dp"
+                        android:layout_marginTop="2dp"
+                        android:text="@string/schedule_week_num_sum"
+                        android:textColor="@color/theme_color_secondary_text"
+                        android:textSize="12sp" />
+
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/textView_scheduleWeekNum"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="5dp"
+                    android:textColor="@color/theme_color_primary_text"
+                    android:textSize="12sp" />
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/layout_scheduleWeekStart"
+                style="@style/AppTheme.SelectableItemBackground"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
                 android:gravity="center_vertical"
                 android:paddingStart="5dp"
                 android:paddingTop="8dp"
@@ -199,6 +244,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="5dp"
+                    android:textColor="@color/theme_color_primary_text"
                     android:textSize="12sp" />
 
             </androidx.appcompat.widget.LinearLayoutCompat>

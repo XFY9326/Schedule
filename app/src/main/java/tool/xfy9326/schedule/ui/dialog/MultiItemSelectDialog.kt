@@ -4,11 +4,14 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatDialogFragment
 import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.setFragmentResult
+import androidx.lifecycle.LifecycleOwner
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import lib.xfy9326.android.kit.requireOwner
 
 class MultiItemSelectDialog : AppCompatDialogFragment() {
     companion object {
+        private val DIALOG_TAG = MultiItemSelectDialog::class.java.simpleName
+
         private const val EXTRA_TAG = "EXTRA_TAG"
         private const val EXTRA_TITLE = "EXTRA_TITLE"
         private const val EXTRA_SHOW_ARR = "EXTRA_SHOW_ARR"
@@ -34,6 +37,16 @@ class MultiItemSelectDialog : AppCompatDialogFragment() {
                 )
             }.show(fragmentManager, tag)
         }
+
+        fun setOnMultiItemSelectedListener(
+            fragmentManager: FragmentManager,
+            lifecycleOwner: LifecycleOwner,
+            block: (tag: String?, idArr: LongArray, selectedArr: BooleanArray) -> Unit,
+        ) {
+            fragmentManager.setFragmentResultListener(DIALOG_TAG, lifecycleOwner) { _, bundle ->
+                block(bundle.getString(EXTRA_TAG), bundle.getLongArray(EXTRA_ID_ARR)!!, bundle.getBooleanArray(EXTRA_SELECTED_ARR)!!)
+            }
+        }
     }
 
     private lateinit var selectedArr: BooleanArray
@@ -55,16 +68,16 @@ class MultiItemSelectDialog : AppCompatDialogFragment() {
             }
             setNegativeButton(android.R.string.cancel, null)
             setPositiveButton(android.R.string.ok) { _, _ ->
-                requireOwner<OnMultiItemSelectedListener>()?.onMultiItemSelected(requireArguments().getString(EXTRA_TAG), idArr, selectedArr)
+                setFragmentResult(DIALOG_TAG, bundleOf(
+                    EXTRA_TAG to requireArguments().getString(EXTRA_TAG),
+                    EXTRA_ID_ARR to idArr,
+                    EXTRA_SELECTED_ARR to selectedArr
+                ))
             }
         }.create()
 
     override fun onSaveInstanceState(outState: Bundle) {
         outState.putBooleanArray(EXTRA_SELECTED_ARR, selectedArr)
         super.onSaveInstanceState(outState)
-    }
-
-    interface OnMultiItemSelectedListener {
-        fun onMultiItemSelected(tag: String?, idArr: LongArray, selectedArr: BooleanArray)
     }
 }

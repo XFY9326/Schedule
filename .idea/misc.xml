@@ -44,7 +44,7 @@
         <entry key="app/src/main/res/drawable/shape_round_square_15.xml" value="0.2069078947368421" />
         <entry key="app/src/main/res/layout/activity_about.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_app_error.xml" value="0.335" />
-        <entry key="app/src/main/res/layout/activity_course_edit.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_course_edit.xml" value="0.375" />
         <entry key="app/src/main/res/layout/activity_course_manage.xml" value="0.5" />
         <entry key="app/src/main/res/layout/activity_external_course_import.xml" value="0.33" />
         <entry key="app/src/main/res/layout/activity_external_course_import2.xml" value="0.376" />
@@ -52,18 +52,20 @@
         <entry key="app/src/main/res/layout/activity_network_course_provider.xml" value="0.33" />
         <entry key="app/src/main/res/layout/activity_online_course_import.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_schedule.xml" value="0.1125" />
-        <entry key="app/src/main/res/layout/activity_schedule_edit.xml" value="0.2504273504273504" />
+        <entry key="app/src/main/res/layout/activity_schedule_edit.xml" value="0.39655172413793105" />
         <entry key="app/src/main/res/layout/activity_schedule_manage.xml" value="0.2510245901639344" />
         <entry key="app/src/main/res/layout/dialog_course_detail.xml" value="0.12489557226399331" />
         <entry key="app/src/main/res/layout/dialog_course_time_edit.xml" value="0.291213768115942" />
         <entry key="app/src/main/res/layout/dialog_crash_view.xml" value="0.25555555555555554" />
-        <entry key="app/src/main/res/layout/dialog_edit_text.xml" value="0.12489557226399331" />
+        <entry key="app/src/main/res/layout/dialog_edit_text.xml" value="0.335" />
         <entry key="app/src/main/res/layout/dialog_js_config_prepare.xml" value="0.25555555555555554" />
+        <entry key="app/src/main/res/layout/dialog_number_picker.xml" value="0.5" />
         <entry key="app/src/main/res/layout/dialog_schedule_control_panel.xml" value="0.12489557226399331" />
         <entry key="app/src/main/res/layout/dialog_schedule_image.xml" value="0.12489557226399331" />
         <entry key="app/src/main/res/layout/dialog_schedule_text_size_edit.xml" value="0.2504273504273504" />
         <entry key="app/src/main/res/layout/dialog_upgrade.xml" value="0.12489557226399331" />
         <entry key="app/src/main/res/layout/dialog_web_course_provider_bottom_panel.xml" value="0.12489557226399331" />
+        <entry key="app/src/main/res/layout/fragment_schedule_settings.xml" value="0.2259816207184628" />
         <entry key="app/src/main/res/layout/item_course_detail_time.xml" value="0.291213768115942" />
         <entry key="app/src/main/res/layout/item_course_time.xml" value="0.2794871794871795" />
         <entry key="app/src/main/res/layout/item_schedule.xml" value="0.2510245901639344" />

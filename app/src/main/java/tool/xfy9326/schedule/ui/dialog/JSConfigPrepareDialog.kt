@@ -4,9 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatDialogFragment
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
-import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.activityViewModels
 import lib.xfy9326.android.kit.setWindowPercent
@@ -21,9 +21,10 @@ import tool.xfy9326.schedule.content.utils.JSConfigException
 import tool.xfy9326.schedule.databinding.DialogJsConfigPrepareBinding
 import tool.xfy9326.schedule.ui.vm.OnlineCourseImportViewModel
 
-class JSConfigPrepareDialog : DialogFragment() {
+class JSConfigPrepareDialog : AppCompatDialogFragment() {
     companion object {
-        private val DIALOG_TAG = JSConfigPrepareDialog::class.simpleName
+        private val DIALOG_TAG = JSConfigPrepareDialog::class.java.simpleName
+
         private const val EXTRA_JS_CONFIG = "EXTRA_JS_CONFIG"
         private const val EXTRA_PREPARE_RUNNING = "EXTRA_PREPARE_RUNNING"
         private const val WINDOW_WIDTH_PERCENT = 0.6
