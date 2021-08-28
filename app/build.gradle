@@ -25,11 +25,14 @@ android {
         resConfigs "zh", "en"
         buildConfigField("String", "BASE_APPLICATION_ID", "\"${androidConfig.applicationId}\"")
         manifestPlaceholders += ["ApplicationId": androidConfig.applicationId, "BaseApplicationId": androidConfig.applicationId]
-        applicationVariants.all {
-            variant ->
-                variant.outputs.all {
+        applicationVariants.all { variant ->
+            variant.outputs.all {
+                if (androidConfig.versionTag == null) {
                     outputFileName = "${config.projectName}_v${versionName}_${versionCode}_${config.gitCommitId}.apk"
+                } else {
+                    outputFileName = "${config.projectName}_v${versionName}_${androidConfig.versionTag}_${versionCode}_${config.gitCommitId}.apk"
                 }
+            }
         }
 
         packagingOptions {
