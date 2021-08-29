@@ -394,7 +394,7 @@
     <string name="schedule_course_text_size_sum">调整课程格内容的文字大小</string>
     <string name="schedule_time_text_size">课表时间文字大小</string>
     <string name="schedule_time_text_size_sum">调整课表上下课时间的文字大小</string>
-    <string name="schedule_number_text_size">课程序号文字大小</string>
+    <string name="schedule_number_text_size">课程节次文字大小</string>
     <string name="schedule_number_text_size_sum">调整课程节数序号的文字大小</string>
     <string name="schedule_header_month_text_size">课表表头月份文字大小</string>
     <string name="schedule_header_month_text_size_sum">调整顶部月份的文字大小</string>
