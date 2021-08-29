@@ -85,19 +85,7 @@ class CourseEditActivity : ViewModelActivity<CourseEditViewModel, ActivityCourse
         viewBinding.buttonCourseColorEdit.setOnSingleClickListener {
             DialogUtils.showColorPickerDialog(this, R.string.course_color_edit, viewModel.editCourse.color)
         }
-        CourseTimeEditDialog.setCourseTimeEditListener(supportFragmentManager, this) { courseTime, position ->
-            requireViewModel().editCourse.apply {
-                val newList = times.toMutableList()
-                if (position == null) {
-                    newList.add(courseTime)
-                    times = newList
-                } else {
-                    newList[position] = courseTime
-                }
-                times = newList
-                courseTimeAdapter.submitList(newList)
-            }
-        }
+        CourseTimeEditDialog.setCourseTimeEditListener(supportFragmentManager, this, ::onCourseTimeAddOrUpdate)
     }
 
     override fun onColorSelected(dialogId: Int, color: Int) {
@@ -148,6 +136,25 @@ class CourseEditActivity : ViewModelActivity<CourseEditViewModel, ActivityCourse
                 }.show()
         } else {
             super.onBackPressed()
+        }
+    }
+
+    private fun onCourseTimeAddOrUpdate(courseTime: CourseTime, position: Int?) {
+        requireViewModel().editCourse.apply {
+            if (times.isEmpty() && (position == null || position < 0)) {
+                times = listOf(courseTime)
+                courseTimeAdapter.submitList(times)
+            } else {
+                val newList = times.toMutableList()
+                if (position == null || position < 0) {
+                    newList.add(courseTime)
+                    times = newList
+                } else {
+                    newList[position] = courseTime
+                }
+                times = newList
+                courseTimeAdapter.submitList(newList)
+            }
         }
     }
 

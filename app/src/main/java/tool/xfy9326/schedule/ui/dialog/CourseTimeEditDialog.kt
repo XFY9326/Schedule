@@ -45,7 +45,14 @@ class CourseTimeEditDialog : AppCompatDialogFragment() {
 
         fun setCourseTimeEditListener(fragmentManager: FragmentManager, lifecycleOwner: LifecycleOwner, block: (courseTime: CourseTime, position: Int?) -> Unit) {
             fragmentManager.setFragmentResultListener(DIALOG_TAG, lifecycleOwner) { _, bundle ->
-                block(bundle.getParcelable(EXTRA_COURSE_TIME)!!, bundle.getInt(EXTRA_EDIT_POSITION))
+                block(
+                    bundle.getParcelable(EXTRA_COURSE_TIME)!!,
+                    if (bundle.containsKey(EXTRA_EDIT_POSITION)) {
+                        bundle.getInt(EXTRA_EDIT_POSITION, -1)
+                    } else {
+                        null
+                    }
+                )
             }
         }
     }
@@ -94,10 +101,15 @@ class CourseTimeEditDialog : AppCompatDialogFragment() {
                 }
                 updateEditData()
                 val position = requireArguments().getInt(EXTRA_EDIT_POSITION, -1)
-                setFragmentResult(DIALOG_TAG, bundleOf(
-                    EXTRA_COURSE_TIME to editCourseTime,
-                    EXTRA_EDIT_POSITION to if (position < 0) null else position
-                ))
+                val outputBundle = if (position < 0) {
+                    bundleOf(EXTRA_COURSE_TIME to editCourseTime)
+                } else {
+                    bundleOf(
+                        EXTRA_COURSE_TIME to editCourseTime,
+                        EXTRA_EDIT_POSITION to position
+                    )
+                }
+                setFragmentResult(DIALOG_TAG, outputBundle)
             }
             setNegativeButton(android.R.string.cancel) { _, _ ->
                 viewBinding?.apply {
