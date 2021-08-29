@@ -8,15 +8,19 @@
       <w>calscale</w>
       <w>cardview</w>
       <w>codebeat</w>
+      <w>colorpicker</w>
+      <w>constraintlayout</w>
       <w>debian</w>
       <w>derivate</w>
       <w>dists</w>
+      <w>drawerlayout</w>
       <w>dtend</w>
       <w>dtstamp</w>
       <w>dtstart</w>
       <w>hmmss</w>
       <w>hmmss'z</w>
       <w>iframe</w>
+      <w>jaredrummler</w>
       <w>jcenter</w>
       <w>jetpack</w>
       <w>jsoup</w>
@@ -35,6 +39,7 @@
       <w>onload</w>
       <w>parceler</w>
       <w>prodid</w>
+      <w>publicsuffix</w>
       <w>rrule</w>
       <w>scujcc</w>
       <w>sdkmanager</w>
@@ -46,11 +51,13 @@
       <w>tuxjg</w>
       <w>vcalendar</w>
       <w>vevent</w>
+      <w>viewmodel</w>
       <w>wechat</w>
       <w>weixin</w>
       <w>wget</w>
       <w>wkst</w>
       <w>workdir</w>
+      <w>xopt</w>
     </words>
   </dictionary>
 </component>

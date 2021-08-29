@@ -4,10 +4,21 @@
   <component name="GradleSettings">
     <option name="linkedExternalProjectsSettings">
       <GradleProjectSettings>
+        <compositeConfiguration>
+          <compositeBuild compositeDefinitionSource="SCRIPT">
+            <builds>
+              <build path="$PROJECT_DIR$/BuildPlugin" name="BuildPlugin">
+                <projects>
+                  <project path="$PROJECT_DIR$/BuildPlugin" />
+                </projects>
+              </build>
+            </builds>
+          </compositeBuild>
+        </compositeConfiguration>
         <option name="testRunner" value="GRADLE" />
         <option name="distributionType" value="DEFAULT_WRAPPED" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="gradleJvm" value="Embedded JDK" />
+        <option name="gradleJvm" value="Android Studio java home" />
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
@@ -15,6 +26,7 @@
             <option value="$PROJECT_DIR$/AndroidToolKitIO" />
             <option value="$PROJECT_DIR$/Annotation" />
             <option value="$PROJECT_DIR$/AnnotationProcessor" />
+            <option value="$PROJECT_DIR$/BuildPlugin" />
             <option value="$PROJECT_DIR$/LiveDataTools" />
             <option value="$PROJECT_DIR$/ToolKit" />
             <option value="$PROJECT_DIR$/app" />
