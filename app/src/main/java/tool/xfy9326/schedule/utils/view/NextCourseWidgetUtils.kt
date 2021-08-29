@@ -24,11 +24,11 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import lib.xfy9326.android.kit.ApplicationInstance
 import lib.xfy9326.android.kit.ApplicationScope
+import lib.xfy9326.android.kit.PermissionCompat
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.NextCourse
 import tool.xfy9326.schedule.beans.NextCourseInfo
 import tool.xfy9326.schedule.utils.IntentUtils
-import tool.xfy9326.schedule.utils.PermissionUtils
 import tool.xfy9326.schedule.utils.schedule.NextCourseUtils
 import tool.xfy9326.schedule.utils.schedule.ScheduleDataProcessor
 import tool.xfy9326.schedule.widget.NextCourseWidget
@@ -106,7 +106,7 @@ object NextCourseWidgetUtils {
         val pendingIntent = getWidgetRefreshPendingIntent(context)
         context.getSystemService<AlarmManager>()?.apply {
             if (nextCourse.nextAutoRefreshTimeMills > 0) {
-                if (PermissionUtils.canScheduleNextAlarm(context)) {
+                if (PermissionCompat.canScheduleNextAlarm(context)) {
                     AlarmManagerCompat.setExactAndAllowWhileIdle(this, AlarmManager.RTC, nextCourse.nextAutoRefreshTimeMills, pendingIntent)
                 } else {
                     set(AlarmManager.RTC, nextCourse.nextAutoRefreshTimeMills, pendingIntent)

@@ -16,13 +16,13 @@ import tool.xfy9326.schedule.ui.dialog.ImportCourseConflictDialog
 import tool.xfy9326.schedule.ui.dialog.ScheduleImportSuccessDialog
 import tool.xfy9326.schedule.ui.dialog.StrictImportModeWarningDialog
 import tool.xfy9326.schedule.ui.vm.ExternalCourseImportViewModel
-import tool.xfy9326.schedule.utils.ExternalCourseImportUtils
 import tool.xfy9326.schedule.utils.IntentUtils
+import tool.xfy9326.schedule.utils.schedule.ExternalCourseImportUtils
 import tool.xfy9326.schedule.utils.schedule.ScheduleImportManager
 import tool.xfy9326.schedule.utils.view.DialogUtils
 import tool.xfy9326.schedule.utils.view.ViewUtils
 
-class ExternalCourseImportActivity : ViewBindingActivity<ActivityExternalCourseImportBinding>(), ImportCourseConflictDialog.OnReadImportCourseConflictListener {
+class ExternalCourseImportActivity : ViewBindingActivity<ActivityExternalCourseImportBinding>() {
     private lateinit var viewModel: ExternalCourseImportViewModel
 
     override fun onCreateViewBinding() = ActivityExternalCourseImportBinding.inflate(layoutInflater)
@@ -60,6 +60,9 @@ class ExternalCourseImportActivity : ViewBindingActivity<ActivityExternalCourseI
                     onCourseImportSuccess()
                 }
             }
+        }
+        ImportCourseConflictDialog.setOnReadImportCourseConflictListener(supportFragmentManager, this) {
+            onCourseImportSuccess()
         }
 
         setupText(viewBinding)
@@ -114,10 +117,6 @@ class ExternalCourseImportActivity : ViewBindingActivity<ActivityExternalCourseI
             }
         }
         viewBinding.textViewExternalCourseSuccessMsg.text = ScheduleImportSuccessDialog.getImportSuccessMsg(this, false)
-    }
-
-    override fun onReadImportCourseConflict(value: Bundle?) {
-        onCourseImportSuccess()
     }
 
     override fun onBackPressed() {

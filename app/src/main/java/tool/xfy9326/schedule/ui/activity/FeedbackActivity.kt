@@ -15,6 +15,7 @@ import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.launch
 import lib.xfy9326.android.kit.bindLifeCycle
+import lib.xfy9326.kit.asArray
 import tool.xfy9326.schedule.BuildConfig
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.data.AppDataStore
@@ -37,7 +38,7 @@ class FeedbackActivity : ViewBindingActivity<ActivityFeedbackBinding>() {
         if (it == null) {
             filePathCallback?.onReceiveValue(null)
         } else {
-            filePathCallback?.onReceiveValue(arrayOf(it))
+            filePathCallback?.onReceiveValue(it.asArray())
         }
     }
 

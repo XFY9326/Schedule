@@ -114,14 +114,16 @@
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/layout_userId"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:hint="@string/user_id"
+                        app:endIconMode="clear_text">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/editText_userId"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="@string/user_id"
                             android:inputType="text"
                             android:singleLine="true"
                             android:textSize="13sp" />
@@ -130,14 +132,17 @@
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/layout_userPw"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:hint="@string/user_pw"
+                        app:endIconMode="password_toggle">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/editText_userPw"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="@string/user_pw"
                             android:inputType="textPassword"
                             android:singleLine="true"
                             android:textSize="13sp" />
@@ -148,20 +153,23 @@
                         android:id="@+id/layout_captcha"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
                         android:gravity="center_vertical"
                         android:visibility="gone"
                         tools:visibility="visible">
 
                         <com.google.android.material.textfield.TextInputLayout
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1">
+                            android:layout_weight="1"
+                            android:hint="@string/captcha"
+                            app:endIconMode="clear_text">
 
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/editText_captcha"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:hint="@string/captcha"
                                 android:inputType="text"
                                 android:singleLine="true"
                                 android:textSize="13sp" />
@@ -172,7 +180,10 @@
                             android:id="@+id/imageView_captcha"
                             android:layout_width="100dp"
                             android:layout_height="35dp"
-                            android:layout_margin="5dp"
+                            android:layout_marginStart="5dp"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginEnd="5dp"
+                            android:layout_marginBottom="5dp"
                             android:contentDescription="@string/captcha"
                             android:scaleType="fitCenter"
                             app:srcCompat="@drawable/ic_image_24" />

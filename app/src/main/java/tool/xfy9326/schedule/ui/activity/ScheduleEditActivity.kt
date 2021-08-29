@@ -22,14 +22,10 @@ import tool.xfy9326.schedule.ui.activity.module.ScheduleTimeEditModule
 import tool.xfy9326.schedule.ui.activity.module.ScheduleTimeImportModule
 import tool.xfy9326.schedule.ui.activity.module.ScheduleWeekStartModule
 import tool.xfy9326.schedule.ui.adapter.ScheduleTimeAdapter
-import tool.xfy9326.schedule.ui.dialog.DatePickerDialog
-import tool.xfy9326.schedule.ui.dialog.TimePickerDialog
 import tool.xfy9326.schedule.ui.vm.ScheduleEditViewModel
 import tool.xfy9326.schedule.utils.view.DialogUtils
-import java.util.*
 
-class ScheduleEditActivity : ViewModelActivity<ScheduleEditViewModel, ActivityScheduleEditBinding>(),
-    DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, ColorPickerDialogListener {
+class ScheduleEditActivity : ViewModelActivity<ScheduleEditViewModel, ActivityScheduleEditBinding>(), ColorPickerDialogListener {
 
     companion object {
         private const val INTENT_EXTRA_SCHEDULE_ID = "EXTRA_SCHEDULE_ID"
@@ -176,16 +172,8 @@ class ScheduleEditActivity : ViewModelActivity<ScheduleEditViewModel, ActivitySc
         }
     }
 
-    override fun onDateSet(tag: String?, date: Date) {
-        scheduleTermEditModule.onDateSet(tag, date)
-    }
-
     private fun updateScheduleColor(color: Int) {
         requireViewBinding().buttonScheduleColorEdit.imageTintList = ColorStateList.valueOf(color)
-    }
-
-    override fun onTimeSet(tag: String?, hourOfDay: Int, minute: Int) {
-        scheduleTimeEditModule.onTimeSet(tag, hourOfDay, minute)
     }
 
     private fun deleteScheduleAttention() {

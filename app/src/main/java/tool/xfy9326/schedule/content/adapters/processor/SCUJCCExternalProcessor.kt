@@ -1,5 +1,6 @@
 package tool.xfy9326.schedule.content.adapters.processor
 
+import lib.xfy9326.kit.asArray
 import tool.xfy9326.schedule.annotation.ExternalCourseProcessor
 import tool.xfy9326.schedule.beans.ScheduleImportContent
 import tool.xfy9326.schedule.beans.WebPageContent
@@ -17,7 +18,7 @@ class SCUJCCExternalProcessor : AbstractExternalCourseProcessor<SCUJCCCourseProv
     }
 
     override suspend fun onImportCourse(data: ExternalCourseImportData, provider: SCUJCCCourseProvider, parser: SCUJCCCourseParser): ScheduleImportContent? {
-        val content = WebPageContent(iframeContent = arrayOf(data.fileContent))
+        val content = WebPageContent(iframeContent = data.fileContentList.first().asArray())
         val pair = CourseImportHelper.analyseWebPage(content, provider)
         return if (pair == null) {
             null

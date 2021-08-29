@@ -13,7 +13,7 @@ import tool.xfy9326.schedule.ui.dialog.TimePickerDialog
 import tool.xfy9326.schedule.ui.vm.ScheduleEditViewModel
 
 class ScheduleTimeEditModule(activity: ScheduleEditActivity) :
-    AbstractViewModelActivityModule<ScheduleEditViewModel, ActivityScheduleEditBinding, ScheduleEditActivity>(activity), TimePickerDialog.OnTimeSetListener {
+    AbstractViewModelActivityModule<ScheduleEditViewModel, ActivityScheduleEditBinding, ScheduleEditActivity>(activity) {
     companion object {
         private const val TAG_SCHEDULE_TIME_START_PREFIX = "TAG_SCHEDULE_TIME_START_"
         private const val TAG_SCHEDULE_TIME_END_PREFIX = "TAG_SCHEDULE_TIME_END_"
@@ -47,9 +47,13 @@ class ScheduleTimeEditModule(activity: ScheduleEditActivity) :
         requireViewBinding().checkBoxScheduleTimeCourseTimeSame.setOnCheckedChangeListener { _, isChecked ->
             requireViewModel().scheduleTimeCourseTimeSame = isChecked
         }
+
+        TimePickerDialog.setOnTimeSetListener(requireActivity().supportFragmentManager, requireActivity()) { tag, hourOfDay, minute ->
+            onTimeSet(tag, hourOfDay, minute)
+        }
     }
 
-    override fun onTimeSet(tag: String?, hourOfDay: Int, minute: Int) {
+    private fun onTimeSet(tag: String?, hourOfDay: Int, minute: Int) {
         if (tag != null) {
             if (tag.startsWith(TAG_SCHEDULE_TIME_START_PREFIX)) {
                 tag.substringAfter(TAG_SCHEDULE_TIME_START_PREFIX).toIntOrNull()?.let { i ->

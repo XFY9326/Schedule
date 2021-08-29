@@ -9,7 +9,7 @@ import tool.xfy9326.schedule.R
 
 class StrictImportModeWarningDialog : AppCompatDialogFragment() {
     companion object {
-        private val DIALOG_TAG = StrictImportModeWarningDialog::class.simpleName
+        private val DIALOG_TAG = StrictImportModeWarningDialog::class.java.simpleName
         private const val EXTRA_ERROR_TEXT = "EXTRA_ERROR_TEXT"
         private const val EXTRA_ERROR_LOG = "EXTRA_ERROR_LOG"
 

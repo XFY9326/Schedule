@@ -93,3 +93,7 @@ fun <T> firstNotEmptyOf(vararg lazyElements: () -> Collection<T>): Collection<T>
     }
     return null
 }
+
+inline fun <reified T> T.asList(): List<T> = listOf(this)
+
+inline fun <reified T> T.asArray(): Array<T> = arrayOf(this)

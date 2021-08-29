@@ -10,6 +10,7 @@ import androidx.core.view.updateMargins
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.transition.Fade
@@ -19,16 +20,13 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import lib.xfy9326.android.kit.getDrawableCompat
-import lib.xfy9326.android.kit.requireOwner
 import tool.xfy9326.schedule.R
+import java.lang.ref.WeakReference
 
 class FullScreenLoadingDialog : AppCompatDialogFragment() {
     companion object {
-        private val FRAGMENT_TAG = FullScreenLoadingDialog::class.simpleName
+        private val FRAGMENT_TAG = FullScreenLoadingDialog::class.java.simpleName
         private const val EXTRA_SHOW_CANCEL_BUTTON = "SHOW_CANCEL_BUTTON"
-
-        fun createControllerInstance(lifecycleOwner: LifecycleOwner, fragmentManager: FragmentManager) =
-            Controller(lifecycleOwner.lifecycleScope, fragmentManager)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -66,9 +64,7 @@ class FullScreenLoadingDialog : AppCompatDialogFragment() {
                     }
                     setText(android.R.string.cancel)
                     setOnClickListener {
-                        if (requireOwner<OnRequestCancelListener>()?.onFullScreenLoadingDialogRequestCancel() == true) {
-                            dismiss()
-                        }
+                        setFragmentResult(FRAGMENT_TAG, Bundle.EMPTY)
                     }
                 })
             }
@@ -87,15 +83,16 @@ class FullScreenLoadingDialog : AppCompatDialogFragment() {
         }
     }
 
-    interface OnRequestCancelListener {
-        fun onFullScreenLoadingDialogRequestCancel(): Boolean
-    }
-
-    class Controller constructor(lifeCycleScope: CoroutineScope, private val fragmentManager: FragmentManager) : CoroutineScope by lifeCycleScope {
+    class Controller private constructor(lifecycleOwner: LifecycleOwner, fragmentManager: FragmentManager) : CoroutineScope by lifecycleOwner.lifecycleScope {
         companion object {
             private const val MIN_SHOW_TIME_MS = 500L
             private const val MIN_DELAY_MS = 200L
+
+            fun newInstance(lifecycleOwner: LifecycleOwner, fragmentManager: FragmentManager) = Controller(lifecycleOwner, fragmentManager)
         }
+
+        private val weakLifecycleOwner = WeakReference(lifecycleOwner)
+        private val weakFragmentManager = WeakReference(fragmentManager)
 
         private var showJob: Job? = null
         private var hideJob: Job? = null
@@ -129,14 +126,16 @@ class FullScreenLoadingDialog : AppCompatDialogFragment() {
         private fun delayedHide() {
             mPostedHide = false
             mStartTime = -1
-            closeDialog(fragmentManager)
+            weakFragmentManager.get()?.let(::closeDialog)
         }
 
         private fun delayedShow(showCancel: Boolean) {
             mPostedShow = false
             if (!mDismissed) {
                 mStartTime = System.currentTimeMillis()
-                showDialog(fragmentManager, showCancel)
+                weakFragmentManager.get()?.let {
+                    showDialog(it, showCancel)
+                }
             }
         }
 
@@ -178,7 +177,7 @@ class FullScreenLoadingDialog : AppCompatDialogFragment() {
             mPostedShow = false
             val diff = System.currentTimeMillis() - mStartTime
             if (diff >= MIN_SHOW_TIME_MS || mStartTime == -1L) {
-                closeDialog(fragmentManager)
+                weakFragmentManager.get()?.let(::closeDialog)
             } else {
                 if (!mPostedHide) {
                     hideJob = launch {
@@ -187,6 +186,16 @@ class FullScreenLoadingDialog : AppCompatDialogFragment() {
                         hideJob = null
                     }
                     mPostedHide = true
+                }
+            }
+        }
+
+        fun setOnRequestCancelListener(block: () -> Boolean) {
+            val manager = weakFragmentManager.get() ?: return
+            val owner = weakLifecycleOwner.get() ?: return
+            manager.setFragmentResultListener(FRAGMENT_TAG, owner) { _, _ ->
+                if (block()) {
+                    weakFragmentManager.get()?.let(::closeDialog)
                 }
             }
         }

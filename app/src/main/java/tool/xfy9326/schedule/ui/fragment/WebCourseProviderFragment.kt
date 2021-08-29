@@ -22,8 +22,7 @@ import tool.xfy9326.schedule.ui.fragment.base.ViewBindingFragment
 import tool.xfy9326.schedule.utils.JSBridge
 import java.lang.ref.WeakReference
 
-class WebCourseProviderFragment : ViewBindingFragment<FragmentWebCourseProviderBinding>(), WebCourseProviderBottomPanel.BottomPanelActionListener,
-    IWebCourseProvider.IFragmentContact {
+class WebCourseProviderFragment : ViewBindingFragment<FragmentWebCourseProviderBinding>(), IWebCourseProvider.IFragmentContact {
     companion object {
         const val EXTRA_INIT_PAGE_URL = "EXTRA_INIT_PAGE_URL"
         const val EXTRA_AUTHOR_NAME = "EXTRA_AUTHOR_NAME"
@@ -135,6 +134,20 @@ class WebCourseProviderFragment : ViewBindingFragment<FragmentWebCourseProviderB
         viewBinding.buttonWebCourseProviderPanel.setOnClickListener {
             showBottomPanel()
         }
+
+        WebCourseProviderBottomPanel.setBottomPanelActionListener(childFragmentManager, viewLifecycleOwner,
+            onDismiss = {
+                lifecycleScope.launchWhenStarted {
+                    requireViewBinding().buttonWebCourseProviderPanel.apply {
+                        isVisible = true
+                        startAnimation(showBottomPanelAnimation)
+                    }
+                }
+            },
+            onImport = {
+                requireOwner<IWebCourseProvider.IActivityContact>()?.onImportCourseToSchedule(it)
+            }
+        )
     }
 
     override fun onHandleSavedInstanceState(bundle: Bundle?, viewBinding: FragmentWebCourseProviderBinding) {
@@ -210,19 +223,6 @@ class WebCourseProviderFragment : ViewBindingFragment<FragmentWebCourseProviderB
                 startAnimation(hideBottomPanelAnimation)
             }
             WebCourseProviderBottomPanel.showDialog(childFragmentManager, requireArguments().getString(EXTRA_AUTHOR_NAME).orEmpty())
-        }
-    }
-
-    override fun onImportCourseToSchedule(isCurrentSchedule: Boolean) {
-        requireOwner<IWebCourseProvider.IActivityContact>()?.onImportCourseToSchedule(isCurrentSchedule)
-    }
-
-    override fun onBottomPanelDismiss() {
-        lifecycleScope.launchWhenStarted {
-            requireViewBinding().buttonWebCourseProviderPanel.apply {
-                isVisible = true
-                startAnimation(showBottomPanelAnimation)
-            }
         }
     }
 

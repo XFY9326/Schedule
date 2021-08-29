@@ -145,7 +145,7 @@ object BackupUtils {
 
     private fun getFixedScheduleDate(scheduleJson: ScheduleJSON) =
         if (scheduleJson.startDate == null || scheduleJson.endDate == null || scheduleJson.startDate >= scheduleJson.endDate) {
-            ScheduleUtils.getDefaultTermDate()
+            ScheduleUtils.getDefaultTermDate(scheduleJson.weekStart)
         } else {
             scheduleJson.startDate to scheduleJson.endDate
         }

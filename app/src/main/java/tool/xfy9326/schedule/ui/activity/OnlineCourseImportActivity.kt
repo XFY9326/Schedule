@@ -34,10 +34,9 @@ import tool.xfy9326.schedule.utils.schedule.CourseImportUtils
 import tool.xfy9326.schedule.utils.view.DialogUtils
 import tool.xfy9326.schedule.utils.view.ViewUtils
 
-class OnlineCourseImportActivity : ViewModelActivity<OnlineCourseImportViewModel, ActivityOnlineCourseImportBinding>(),
-    CourseImportAdapter.OnCourseImportItemListener, JSConfigImportDialog.OnJSConfigImportListener, FullScreenLoadingDialog.OnRequestCancelListener {
+class OnlineCourseImportActivity : ViewModelActivity<OnlineCourseImportViewModel, ActivityOnlineCourseImportBinding>(), CourseImportAdapter.OnCourseImportItemListener {
     private lateinit var courseImportAdapter: CourseImportAdapter
-    private val loadingController by lazy { FullScreenLoadingDialog.createControllerInstance(this, supportFragmentManager) }
+    private val loadingController by lazy { FullScreenLoadingDialog.Controller.newInstance(this, supportFragmentManager) }
     private val selectJSConfig = registerForActivityResult(ActivityResultContracts.GetContent()) {
         if (it != null) {
             requireViewModel().addJSConfig(it)
@@ -133,6 +132,19 @@ class OnlineCourseImportActivity : ViewModelActivity<OnlineCourseImportViewModel
                 }
             }
         }
+        loadingController.setOnRequestCancelListener {
+            viewModel.cancelJSConfigAdd()
+            true
+        }
+        JSConfigImportDialog.setOnJSConfigImportListener(supportFragmentManager, this,
+            onUrlImport = {
+                loadingController.show()
+                requireViewModel().addJSConfig(it)
+            },
+            onFileImport = {
+                selectJSConfig.launch(MIMEConst.MIME_APPLICATION_JSON)
+            }
+        )
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -203,20 +215,5 @@ class OnlineCourseImportActivity : ViewModelActivity<OnlineCourseImportViewModel
 
     override fun onJSConfigDelete(jsConfig: JSConfig) {
         requireViewModel().deleteJSConfig(jsConfig)
-    }
-
-    override fun onJSConfigUrlImport(url: String) {
-        loadingController.show()
-        requireViewModel().addJSConfig(url)
-    }
-
-    override fun onJSConfigFileImport() {
-        loadingController.show()
-        selectJSConfig.launch(MIMEConst.MIME_APPLICATION_JSON)
-    }
-
-    override fun onFullScreenLoadingDialogRequestCancel(): Boolean {
-        requireViewModel().cancelJSConfigAdd()
-        return true
     }
 }

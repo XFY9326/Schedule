@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package tool.xfy9326.schedule.beans
 
 import lib.xfy9326.kit.EMPTY
@@ -8,9 +10,18 @@ data class WebPageContent(
     val htmlContent: String = EMPTY,
     val iframeContent: Array<String> = emptyArray(),
     val frameContent: Array<String> = emptyArray(),
-    val providedContent: String? = null,
+    val providedContent: Array<String> = emptyArray(),
 ) {
-    fun requireProvidedContent(): String = providedContent ?: CourseAdapterException.Error.PARSE_PAGE_ERROR.report()
+
+    fun requireFirstProvidedContent(): String =
+        providedContent.firstOrNull() ?: CourseAdapterException.Error.PARSE_PAGE_ERROR.report()
+
+    fun requireProvidedContentWithMinimumSize(minSize: Int): Array<String> =
+        if (providedContent.size < minSize) {
+            CourseAdapterException.Error.PARSE_PAGE_ERROR.report()
+        } else {
+            providedContent
+        }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -19,7 +30,7 @@ data class WebPageContent(
         if (htmlContent != other.htmlContent) return false
         if (!iframeContent.contentEquals(other.iframeContent)) return false
         if (!frameContent.contentEquals(other.frameContent)) return false
-        if (providedContent != other.providedContent) return false
+        if (!providedContent.contentEquals(other.providedContent)) return false
 
         return true
     }
@@ -28,7 +39,7 @@ data class WebPageContent(
         var result = htmlContent.hashCode()
         result = 31 * result + iframeContent.contentHashCode()
         result = 31 * result + frameContent.contentHashCode()
-        result = 31 * result + (providedContent?.hashCode() ?: 0)
+        result = 31 * result + providedContent.contentHashCode()
         return result
     }
 }

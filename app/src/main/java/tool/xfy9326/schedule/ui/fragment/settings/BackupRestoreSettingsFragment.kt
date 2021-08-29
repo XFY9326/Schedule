@@ -1,6 +1,7 @@
 package tool.xfy9326.schedule.ui.fragment.settings
 
 import android.os.Bundle
+import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.os.bundleOf
 import lib.xfy9326.android.kit.io.MIMEConst
@@ -15,8 +16,7 @@ import tool.xfy9326.schedule.ui.fragment.base.AbstractSettingsFragment
 import tool.xfy9326.schedule.ui.vm.SettingsViewModel
 import tool.xfy9326.schedule.utils.BackupUtils
 
-class BackupRestoreSettingsFragment : AbstractSettingsFragment(), MultiItemSelectDialog.OnMultiItemSelectedListener,
-    ImportCourseConflictDialog.OnReadImportCourseConflictListener {
+class BackupRestoreSettingsFragment : AbstractSettingsFragment() {
     companion object {
         private const val EXTRA_BATCH_RESULT = "EXTRA_BATCH_RESULT"
     }
@@ -81,19 +81,21 @@ class BackupRestoreSettingsFragment : AbstractSettingsFragment(), MultiItemSelec
         }
     }
 
-    override fun onReadImportCourseConflict(value: Bundle?) {
-        value?.getParcelable<BatchResult>(EXTRA_BATCH_RESULT)?.let(::showRestoreResult)
-    }
-
-    override fun onMultiItemSelected(tag: String?, idArr: LongArray, selectedArr: BooleanArray) {
-        val idList = idArr.filterIndexed { i, _ ->
-            selectedArr[i]
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        MultiItemSelectDialog.setOnMultiItemSelectedListener(childFragmentManager, viewLifecycleOwner) { _, idArr, selectedArr ->
+            val idList = idArr.filterIndexed { i, _ ->
+                selectedArr[i]
+            }
+            if (idList.isEmpty()) {
+                requireRootLayout()?.showSnackBar(R.string.schedule_choose_empty)
+            } else {
+                requireSettingsViewModel()?.waitBackupScheduleId?.write(idList)
+                backupSchedule.launch(BackupUtils.createBackupFileName(requireContext()))
+            }
         }
-        if (idList.isEmpty()) {
-            requireRootLayout()?.showSnackBar(R.string.schedule_choose_empty)
-        } else {
-            requireSettingsViewModel()?.waitBackupScheduleId?.write(idList)
-            backupSchedule.launch(BackupUtils.createBackupFileName(requireContext()))
+        ImportCourseConflictDialog.setOnReadImportCourseConflictListener(childFragmentManager, viewLifecycleOwner) {
+            it?.getParcelable<BatchResult>(EXTRA_BATCH_RESULT)?.let(::showRestoreResult)
         }
     }
 

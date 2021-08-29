@@ -24,8 +24,7 @@ import tool.xfy9326.schedule.ui.vm.CourseEditViewModel
 import tool.xfy9326.schedule.utils.view.DialogUtils
 import kotlin.properties.Delegates
 
-class CourseEditActivity : ViewModelActivity<CourseEditViewModel, ActivityCourseEditBinding>(), CourseTimeEditDialog.OnCourseTimeEditListener,
-    ColorPickerDialogListener {
+class CourseEditActivity : ViewModelActivity<CourseEditViewModel, ActivityCourseEditBinding>(), ColorPickerDialogListener {
     companion object {
         const val INTENT_EXTRA_COURSE_ID = "EXTRA_COURSE_ID"
         const val INTENT_EXTRA_SCHEDULE_ID = "EXTRA_SCHEDULE_ID"
@@ -85,6 +84,19 @@ class CourseEditActivity : ViewModelActivity<CourseEditViewModel, ActivityCourse
         }
         viewBinding.buttonCourseColorEdit.setOnSingleClickListener {
             DialogUtils.showColorPickerDialog(this, R.string.course_color_edit, viewModel.editCourse.color)
+        }
+        CourseTimeEditDialog.setCourseTimeEditListener(supportFragmentManager, this) { courseTime, position ->
+            requireViewModel().editCourse.apply {
+                val newList = times.toMutableList()
+                if (position == null) {
+                    newList.add(courseTime)
+                    times = newList
+                } else {
+                    newList[position] = courseTime
+                }
+                times = newList
+                courseTimeAdapter.submitList(newList)
+            }
         }
     }
 
@@ -163,20 +175,6 @@ class CourseEditActivity : ViewModelActivity<CourseEditViewModel, ActivityCourse
 
     private fun editCourseTime(position: Int, courseTime: CourseTime) =
         requireViewModel().editCourseTime(currentEditScheduleId, courseTime, position)
-
-    override fun onCourseTimeEditComplete(courseTime: CourseTime, position: Int?) {
-        requireViewModel().editCourse.apply {
-            val newList = times.toMutableList()
-            if (position == null) {
-                newList.add(courseTime)
-                times = newList
-            } else {
-                newList[position] = courseTime
-            }
-            times = newList
-            courseTimeAdapter.submitList(newList)
-        }
-    }
 
     private fun deleteCourseTime(position: Int, courseTime: CourseTime) {
         requireViewModel().editCourse.apply {

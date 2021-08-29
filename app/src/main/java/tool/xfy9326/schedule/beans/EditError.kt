@@ -15,6 +15,7 @@ class EditError private constructor(
                 when (errorType) {
                     Type.SCHEDULE_NAME_EMPTY -> R.string.schedule_name_empty_error
                     Type.SCHEDULE_DATE_ERROR -> R.string.start_date_larger_than_end_date_error
+                    Type.SCHEDULE_TERM_TOO_LONG_ERROR -> R.string.schedule_term_too_long
                     Type.SCHEDULE_MAX_WEEK_NUM_ERROR -> R.string.max_week_num_error
                     Type.SCHEDULE_TIME_CONFLICT_ERROR -> R.string.schedule_time_conflict_error
                     Type.SCHEDULE_TIME_NOT_IN_ONE_DAY_ERROR -> R.string.schedule_time_not_in_one_day_error
@@ -34,6 +35,7 @@ class EditError private constructor(
     enum class Type {
         SCHEDULE_NAME_EMPTY,
         SCHEDULE_DATE_ERROR,
+        SCHEDULE_TERM_TOO_LONG_ERROR,
         SCHEDULE_MAX_WEEK_NUM_ERROR,
         SCHEDULE_TIME_CONFLICT_ERROR,
         SCHEDULE_TIME_NOT_IN_ONE_DAY_ERROR,

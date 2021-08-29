@@ -19,9 +19,8 @@ import tool.xfy9326.schedule.utils.JSBridge
 import tool.xfy9326.schedule.utils.schedule.ScheduleImportManager
 import tool.xfy9326.schedule.utils.view.DialogUtils
 
-class JSCourseProviderActivity : AbstractWebCourseProviderActivity<String, JSCourseProvider, JSCourseParser, JSCourseProviderViewModel>(),
-    FullScreenLoadingDialog.OnRequestCancelListener {
-    private val loadingController by lazy { FullScreenLoadingDialog.createControllerInstance(this, supportFragmentManager) }
+class JSCourseProviderActivity : AbstractWebCourseProviderActivity<String, JSCourseProvider, JSCourseParser, JSCourseProviderViewModel>() {
+    private val loadingController by lazy { FullScreenLoadingDialog.Controller.newInstance(this, supportFragmentManager) }
     private val enableJSNetwork = runBlocking { AppSettingsDataStore.jsCourseImportEnableNetworkFlow.first() }
 
     override val vmClass = JSCourseProviderViewModel::class
@@ -31,6 +30,17 @@ class JSCourseProviderActivity : AbstractWebCourseProviderActivity<String, JSCou
         viewModel.jsContent.observeEvent(this, observer = ::onJSLoaded)
         viewModel.providerError.observeEvent(this, javaClass.simpleName) {
             loadingController.hide()
+        }
+    }
+
+    override fun onInitView(viewBinding: ActivityFragmentContainerBinding, viewModel: JSCourseProviderViewModel) {
+        super.onInitView(viewBinding, viewModel)
+        loadingController.setOnRequestCancelListener {
+            DialogUtils.showCancelScheduleImportDialog(this) {
+                viewModel.finishImport()
+                loadingController.hide()
+            }
+            false
         }
     }
 
@@ -67,13 +77,5 @@ class JSCourseProviderActivity : AbstractWebCourseProviderActivity<String, JSCou
             fragmentContact.refresh()
         }
         loadingController.hide()
-    }
-
-    override fun onFullScreenLoadingDialogRequestCancel(): Boolean {
-        DialogUtils.showCancelScheduleImportDialog(this) {
-            requireViewModel().finishImport()
-            loadingController.hide()
-        }
-        return false
     }
 }

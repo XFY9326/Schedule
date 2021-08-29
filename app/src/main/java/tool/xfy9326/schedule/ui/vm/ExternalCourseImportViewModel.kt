@@ -16,7 +16,7 @@ import tool.xfy9326.schedule.utils.schedule.ScheduleImportManager
 class ExternalCourseImportViewModel : AbstractViewModel() {
     /**
      * Inject by ExternalCourseImportUtils in ViewModelProvider.NewInstanceFactory
-     * @link[tool.xfy9326.schedule.utils.ExternalCourseImportUtils.prepareRunningEnvironment]
+     * @link[tool.xfy9326.schedule.utils.schedule.ExternalCourseImportUtils.prepareRunningEnvironment]
      */
     lateinit var importParams: ExternalCourseImportData.Origin
 
@@ -51,12 +51,14 @@ class ExternalCourseImportViewModel : AbstractViewModel() {
     fun importCourse(currentSchedule: Boolean, newScheduleName: String? = null) {
         scheduleImportManager.importCourse(viewModelScope, currentSchedule, newScheduleName) {
             val params = importParams
-            val fileContent = params.fileUri.readText() ?: CourseAdapterException.Error.PARSE_PAGE_ERROR.report()
+            val fileContentList = params.fileUriList.map {
+                it.readText() ?: CourseAdapterException.Error.PARSE_PAGE_ERROR.report(msg = "Failed to read $it")
+            }
             when (params) {
                 is ExternalCourseImportData.Origin.External ->
-                    processor.importCourse(ExternalCourseImportData(fileContent, params.processorExtraData)) ?: CourseAdapterException.Error.PARSE_PAGE_ERROR.report()
+                    processor.importCourse(ExternalCourseImportData(fileContentList, params.processorExtraData)) ?: CourseAdapterException.Error.PARSE_PAGE_ERROR.report()
                 is ExternalCourseImportData.Origin.JSON ->
-                    CourseImportHelper.parsePureScheduleJSON(fileContent, params.combineCourse, params.combineCourseTime)
+                    CourseImportHelper.parsePureScheduleJSON(fileContentList.first(), params.combineCourse, params.combineCourseTime)
             }
         }
     }

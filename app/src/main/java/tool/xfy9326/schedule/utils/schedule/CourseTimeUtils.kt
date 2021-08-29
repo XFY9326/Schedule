@@ -37,18 +37,30 @@ object CourseTimeUtils {
         }
     }
 
-    fun getMaxWeekNum(startDate: Date, endDate: Date, weekStart: WeekDay) =
-        CalendarUtils.getWeekPeriod(
-            CalendarUtils.getFirstDateInThisWeek(startDate, weekStart),
-            CalendarUtils.getLastDateInThisWeek(endDate, weekStart, true)
-        )
+    fun getMaxWeekNum(startDate: Date, endDate: Date, weekStart: WeekDay): Int {
+        val fixedStartDate = CalendarUtils.getFirstDateInThisWeek(startDate, weekStart)
+        val fixedEndDate = CalendarUtils.getLastDateInThisWeek(endDate, weekStart, true)
+        if (fixedStartDate >= fixedEndDate) return 0
+        return CalendarUtils.getWeekPeriod(fixedStartDate, fixedEndDate)
+    }
 
     fun getTermEndDate(startDate: Date, weekStart: WeekDay, weekNum: Int): Date {
-        val weekCountStart = CalendarUtils.getFirstDateInThisWeek(startDate, weekStart)
-        val endWeekNum = CalendarUtils.getCalendar(weekCountStart, weekStart, true).apply {
+        val fixedStartDate = CalendarUtils.getFirstDateInThisWeek(startDate, weekStart)
+        val endDate = CalendarUtils.getCalendar(fixedStartDate, weekStart, true).apply {
             add(Calendar.DATE, weekNum * 7 - 1)
         }.time
-        return CalendarUtils.getLastDateInThisWeek(endWeekNum, weekStart)
+        return CalendarUtils.getLastDateInThisWeek(endDate, weekStart)
+    }
+
+    fun getMaxTermEndDate(startDate: Date, weekStart: WeekDay): Date =
+        getTermEndDate(startDate, weekStart, ScheduleUtils.MAX_WEEK_NUM)
+
+    fun calculateTermEndDate(startDate: Date, maxWeekNum: Int, weekStart: WeekDay): Date {
+        val fixedStartDate = CalendarUtils.getFirstDateInThisWeek(startDate, weekStart)
+        val endDate = CalendarUtils.getCalendar(fixedStartDate, weekStart, true).apply {
+            add(Calendar.DATE, 7 * maxWeekNum - 1)
+        }.time
+        return CalendarUtils.getLastDateInThisWeek(endDate, weekStart)
     }
 
     fun getCourseSectionEndTime(date: Date, scheduleTimes: List<ScheduleTime>, sectionTime: SectionTime): Long =

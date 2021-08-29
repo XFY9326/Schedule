@@ -143,13 +143,13 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:hint="@string/course_location"
                 android:padding="10dp">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/editText_courseLocation"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/course_location"
                     android:inputType="text"
                     android:singleLine="true"
                     android:textSize="14sp" />

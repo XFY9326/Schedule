@@ -5,19 +5,20 @@ import android.os.Bundle
 import androidx.annotation.RequiresApi
 import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
+import lib.xfy9326.android.kit.PermissionCompat
+import lib.xfy9326.android.kit.ScheduleNextAlarmPermissionContact
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.kt.findPreference
 import tool.xfy9326.schedule.kt.setOnPrefClickListener
 import tool.xfy9326.schedule.ui.fragment.base.AbstractSettingsFragment
 import tool.xfy9326.schedule.utils.IntentUtils
-import tool.xfy9326.schedule.utils.PermissionUtils
 
 class AppWidgetSettingsFragment : AbstractSettingsFragment() {
     override val titleName: Int = R.string.app_widget_settings
     override val preferenceResId: Int = R.xml.settings_app_widget
 
     @RequiresApi(Build.VERSION_CODES.S)
-    private val requestScheduleNextAlarmPermission = registerForActivityResult(IntentUtils.ScheduleNextAlarmPermissionContact()) {
+    private val requestScheduleNextAlarmPermission = registerForActivityResult(ScheduleNextAlarmPermissionContact()) {
         findPreference<Preference>(R.string.pref_schedule_next_alarm_permission)?.setSummary(getScheduleNextAlarmPreferenceSummaryResId())
     }
 
@@ -40,7 +41,7 @@ class AppWidgetSettingsFragment : AbstractSettingsFragment() {
     }
 
     private fun getScheduleNextAlarmPreferenceSummaryResId() =
-        if (PermissionUtils.canScheduleNextAlarm(requireContext())) {
+        if (PermissionCompat.canScheduleNextAlarm(requireContext())) {
             R.string.permission_status_granted
         } else {
             R.string.permission_status_not_granted
