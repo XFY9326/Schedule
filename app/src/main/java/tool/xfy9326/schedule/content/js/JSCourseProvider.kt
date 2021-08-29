@@ -6,6 +6,7 @@ import tool.xfy9326.schedule.content.beans.JSParams
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
 import tool.xfy9326.schedule.content.utils.CourseAdapterException.Companion.report
 import tool.xfy9326.schedule.content.utils.JSConfigException
+import tool.xfy9326.schedule.content.utils.JSConfigException.Companion.make
 import tool.xfy9326.schedule.content.utils.JSConfigException.Companion.report
 import tool.xfy9326.schedule.io.JSFileManager
 
@@ -66,14 +67,10 @@ class JSCourseProvider : AbstractCourseProvider<JSParams>() {
 
     private suspend fun <T> runJSLoad(block: suspend (String) -> T?): T =
         try {
-            try {
-                block(requireParams().uuid) ?: JSConfigException.Error.READ_FAILED.report()
-            } catch (e: JSConfigException) {
-                throw e
-            } catch (e: Exception) {
-                JSConfigException.Error.UNKNOWN_ERROR.report(e)
-            }
-        } catch (e: Exception) {
+            block(requireParams().uuid) ?: JSConfigException.Error.READ_FAILED.report()
+        } catch (e: JSConfigException) {
             CourseAdapterException.Error.JS_HANDLE_ERROR.report(e)
+        } catch (e: Exception) {
+            CourseAdapterException.Error.JS_HANDLE_ERROR.report(JSConfigException.Error.UNKNOWN_ERROR.make(e))
         }
 }
