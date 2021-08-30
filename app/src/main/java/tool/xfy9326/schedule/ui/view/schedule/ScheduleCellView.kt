@@ -114,7 +114,7 @@ class ScheduleCellView private constructor(context: Context, private val predefi
                 )
 
                 if (!courseCell.isThisWeekCourse && NotThisWeekCourseShowStyle.USE_TRANSPARENT_BACKGROUND in styles.notThisWeekCourseShowStyle) {
-                    alpha = predefine.notThisWeekCourseCellAlpha
+                    alpha = styles.notThisWeekCourseAlpha
                 }
 
                 if (styles.horizontalCourseCellText && styles.verticalCourseCellText) {

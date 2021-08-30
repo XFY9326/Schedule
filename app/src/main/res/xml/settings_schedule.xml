@@ -35,23 +35,6 @@
             app:summary="@string/lock_schedule_header_scroll_sum"
             app:title="@string/lock_schedule_header_scroll" />
 
-        <androidx.preference.CheckBoxPreference
-            app:defaultValue="true"
-            app:iconSpaceReserved="false"
-            app:key="showNotThisWeekCourse"
-            app:summary="@string/show_not_this_week_course_sum"
-            app:title="@string/show_not_this_week_course" />
-
-        <androidx.preference.MultiSelectListPreference
-            app:defaultValue="@array/not_this_week_course_show_style_value_default"
-            app:dependency="showNotThisWeekCourse"
-            app:entries="@array/not_this_week_course_show_style"
-            app:entryValues="@array/not_this_week_course_show_style_values"
-            app:iconSpaceReserved="false"
-            app:key="notThisWeekCourseShowStyle"
-            app:summary="@string/not_this_week_course_show_style_sum"
-            app:title="@string/not_this_week_course_show_style" />
-
     </androidx.preference.PreferenceCategory>
 
     <androidx.preference.PreferenceCategory
@@ -92,6 +75,13 @@
             app:persistent="false"
             app:summary="@string/schedule_background_settings_sum"
             app:title="@string/schedule_background_settings" />
+
+        <androidx.preference.Preference
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_schedule_not_this_week_style"
+            app:persistent="false"
+            app:summary="@string/schedule_not_this_week_style_sum"
+            app:title="@string/schedule_not_this_week_style" />
 
     </androidx.preference.PreferenceCategory>
 

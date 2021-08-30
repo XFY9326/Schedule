@@ -39,4 +39,5 @@
     <string name="pref_auto_launch_permission" translatable="false">AutoLaunchPermission</string>
     <string name="pref_accurate_app_widget_update" translatable="false">AccurateAppWidgetUpdate</string>
     <string name="pref_schedule_next_alarm_permission" translatable="false">ScheduleNextAlarmPermission</string>
+    <string name="pref_schedule_not_this_week_style" translatable="false">ScheduleNotThisWeekStyle</string>
 </resources>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.preference.PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="@string/basic_settings">
+
+        <androidx.preference.CheckBoxPreference
+            app:defaultValue="true"
+            app:iconSpaceReserved="false"
+            app:key="showNotThisWeekCourse"
+            app:summary="@string/show_not_this_week_course_sum"
+            app:title="@string/show_not_this_week_course" />
+
+    </androidx.preference.PreferenceCategory>
+
+    <androidx.preference.PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="@string/style_settings">
+
+        <androidx.preference.MultiSelectListPreference
+            app:defaultValue="@array/not_this_week_course_show_style_value_default"
+            app:dependency="showNotThisWeekCourse"
+            app:entries="@array/not_this_week_course_show_style"
+            app:entryValues="@array/not_this_week_course_show_style_values"
+            app:iconSpaceReserved="false"
+            app:key="notThisWeekCourseShowStyle"
+            app:summary="@string/not_this_week_course_show_style_sum"
+            app:title="@string/not_this_week_course_show_style" />
+
+        <androidx.preference.SeekBarPreference
+            android:max="60"
+            app:defaultValue="@integer/default_schedule_not_this_week_course_alpha"
+            app:dependency="showNotThisWeekCourse"
+            app:iconSpaceReserved="false"
+            app:key="notThisWeekCourseCellAlpha"
+            app:min="5"
+            app:seekBarIncrement="1"
+            app:showSeekBarValue="true"
+            app:summary="@string/schedule_not_this_week_alpha_sum"
+            app:title="@string/schedule_not_this_week_alpha" />
+
+    </androidx.preference.PreferenceCategory>
+
+</androidx.preference.PreferenceScreen>

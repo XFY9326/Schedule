@@ -21,13 +21,14 @@ android {
         resourceConfigurations.add("zh")
 
         buildConfigField("String", "BASE_APPLICATION_ID", "\"${Android.applicationId}\"")
+        buildConfigField("boolean", "IS_BETA", "false")
         manifestPlaceholders["ApplicationId"] = Android.applicationId
         manifestPlaceholders["BaseApplicationId"] = Android.applicationId
 
         applicationVariants.all {
             outputs.all {
                 if (this is BaseVariantOutputImpl) {
-                    outputFileName = "${ProjectName}_v${versionName}_${versionCode}_${GitCommitShortId}.apk"
+                    outputFileName = "${ProjectName}_v${versionName}_${versionCode}_${GitCommitShortId}_${buildType.name}.apk"
                 }
             }
         }
@@ -69,10 +70,17 @@ android {
             versionNameSuffix = "-$GitCommitShortId"
             applicationIdSuffix = ".debug"
             manifestPlaceholders["ApplicationId"] = Android.applicationId + applicationIdSuffix
+        }
+        register("beta") {
+            initWith(getByName("release"))
+            buildConfigField("boolean", "IS_BETA", "true")
 
-//            isMinifyEnabled = true
-//            isShrinkResources = true
-//            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            isMinifyEnabled = true
+            isShrinkResources = true
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+
+            matchingFallbacks.add("beta")
+            matchingFallbacks.add("release")
         }
         withRelease {
             isMinifyEnabled = true

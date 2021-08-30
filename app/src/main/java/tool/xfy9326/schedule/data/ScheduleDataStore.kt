@@ -4,7 +4,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOn
+import lib.xfy9326.android.kit.io.IOManager
 import lib.xfy9326.kit.tryEnumValueOf
+import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.*
 import tool.xfy9326.schedule.data.base.AbstractDataStore
 import tool.xfy9326.schedule.io.FileManager
@@ -32,6 +34,7 @@ object ScheduleDataStore : AbstractDataStore("ScheduleSettings") {
     private val horizontalCourseCellText by booleanPreferencesKey()
     private val verticalCourseCellText by booleanPreferencesKey()
     private val enableScheduleGridScroll by booleanPreferencesKey()
+    private val notThisWeekCourseCellAlpha by intPreferencesKey()
     val notThisWeekCourseShowStyle by stringSetPreferencesKey()
 
     val courseTextSize by intPreferencesKey()
@@ -66,7 +69,8 @@ object ScheduleDataStore : AbstractDataStore("ScheduleSettings") {
             notThisWeekCourseShowStyle = tryEnumValueOf(it[notThisWeekCourseShowStyle])
                 ?: setOf(NotThisWeekCourseShowStyle.SHOW_NOT_THIS_WEEK_TEXT, NotThisWeekCourseShowStyle.USE_TRANSPARENT_BACKGROUND),
             enableScheduleGridScroll = it[enableScheduleGridScroll] ?: true,
-            textSize = ScheduleText.TextSize.create(it)
+            textSize = ScheduleText.TextSize.create(it),
+            notThisWeekCourseCellAlpha = it[notThisWeekCourseCellAlpha] ?: IOManager.resources.getInteger(R.integer.default_schedule_not_this_week_course_alpha)
         )
     }.distinctUntilChanged()
 
@@ -90,7 +94,9 @@ object ScheduleDataStore : AbstractDataStore("ScheduleSettings") {
         }
     }
 
-    val scheduleBackgroundImageQualityFlow = scheduleBackgroundImageQuality.readAsFlow(60)
+    val scheduleBackgroundImageQualityFlow = scheduleBackgroundImageQuality.readAsFlowLazy {
+        IOManager.resources.getInteger(R.integer.default_schedule_background_image_quality)
+    }
 
     val scheduleBackgroundImageFlow = scheduleBackgroundImage.readAsFlow()
 
@@ -101,7 +107,7 @@ object ScheduleDataStore : AbstractDataStore("ScheduleSettings") {
             return@read ScheduleBackgroundBuildBundle(
                 file = FileManager.getAppPictureFile(fileName),
                 scaleType = tryEnumValueOf<ImageScaleType>(it[scheduleBackgroundScaleType]) ?: ImageScaleType.CENTER_CROP,
-                alpha = (it[scheduleBackgroundImageAlpha] ?: 100) / 100f,
+                viewAlpha = it[scheduleBackgroundImageAlpha] ?: IOManager.resources.getInteger(R.integer.default_schedule_background_image_alpha),
                 useAnim = it[scheduleBackgroundUseAnim] ?: true
             )
         }
@@ -111,7 +117,9 @@ object ScheduleDataStore : AbstractDataStore("ScheduleSettings") {
     data class ScheduleBackgroundBuildBundle(
         val file: File,
         val scaleType: ImageScaleType,
-        val alpha: Float,
+        private val viewAlpha: Int,
         val useAnim: Boolean,
-    )
+    ) {
+        val alpha = viewAlpha / 100f
+    }
 }

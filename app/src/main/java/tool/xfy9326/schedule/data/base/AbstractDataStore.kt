@@ -33,6 +33,10 @@ abstract class AbstractDataStore(val name: String) {
         it[this] ?: defaultValue
     }
 
+    protected fun <T> Preferences.Key<T>.readAsFlowLazy(lazyValue: () -> T) = read {
+        it[this] ?: lazyValue.invoke()
+    }
+
     protected suspend fun Preferences.Key<Boolean>.readAsShownOnce() = read {
         val value = it[this] ?: false
         if (!value) {

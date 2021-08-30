@@ -34,17 +34,17 @@
 
         <androidx.preference.Preference
             app:iconSpaceReserved="false"
-            app:key="@string/pref_schedule_time_text_size"
-            app:persistent="false"
-            app:summary="@string/schedule_time_text_size_sum"
-            app:title="@string/schedule_time_text_size" />
-
-        <androidx.preference.Preference
-            app:iconSpaceReserved="false"
             app:key="@string/pref_schedule_number_text_size"
             app:persistent="false"
             app:summary="@string/schedule_number_text_size_sum"
             app:title="@string/schedule_number_text_size" />
+
+        <androidx.preference.Preference
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_schedule_time_text_size"
+            app:persistent="false"
+            app:summary="@string/schedule_time_text_size_sum"
+            app:title="@string/schedule_time_text_size" />
 
         <androidx.preference.Preference
             app:iconSpaceReserved="false"

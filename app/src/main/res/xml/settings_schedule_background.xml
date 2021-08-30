@@ -45,7 +45,7 @@
 
         <androidx.preference.SeekBarPreference
             android:max="100"
-            app:defaultValue="100"
+            app:defaultValue="@integer/default_schedule_background_image_alpha"
             app:dependency="enableScheduleBackground"
             app:iconSpaceReserved="false"
             app:key="scheduleBackgroundImageAlpha"
@@ -57,7 +57,7 @@
 
         <androidx.preference.SeekBarPreference
             android:max="100"
-            app:defaultValue="60"
+            app:defaultValue="@integer/default_schedule_background_image_quality"
             app:dependency="enableScheduleBackground"
             app:iconSpaceReserved="false"
             app:key="scheduleBackgroundImageQuality"

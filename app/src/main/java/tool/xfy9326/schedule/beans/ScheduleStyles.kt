@@ -21,8 +21,11 @@ data class ScheduleStyles(
     val notThisWeekCourseShowStyle: Set<NotThisWeekCourseShowStyle>,
     val enableScheduleGridScroll: Boolean,
     val textSize: ScheduleText.TextSize,
+    private val notThisWeekCourseCellAlpha: Int,
 ) {
     val scheduleViewAlpha = viewAlpha / 100f
+
+    val notThisWeekCourseAlpha = notThisWeekCourseCellAlpha / 100f
 
     fun getTimeTextColor(context: Context) = timeTextColor ?: context.getColorCompat(R.color.course_time_cell_text)
 

@@ -56,9 +56,9 @@ class ScheduleImportSuccessDialog : AppCompatDialogFragment() {
         fun setOnScheduleImportSuccessListener(fragmentManager: FragmentManager, lifecycleOwner: LifecycleOwner, onEdit: (scheduleId: Long?) -> Unit) {
             fragmentManager.setFragmentResultListener(DIALOG_TAG, lifecycleOwner) { _, bundle ->
                 if (bundle.containsKey(EXTRA_SCHEDULE_ID)) {
-                    onEdit(null)
-                } else {
                     onEdit(bundle.getLong(EXTRA_SCHEDULE_ID))
+                } else {
+                    onEdit(null)
                 }
             }
         }
