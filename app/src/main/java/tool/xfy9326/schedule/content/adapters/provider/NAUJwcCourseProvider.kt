@@ -1,5 +1,6 @@
 package tool.xfy9326.schedule.content.adapters.provider
 
+import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.client.request.forms.*
 import io.ktor.client.statement.*
@@ -10,6 +11,7 @@ import tool.xfy9326.schedule.content.base.LoginCourseProvider
 import tool.xfy9326.schedule.content.beans.LoginPageInfo
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
 import tool.xfy9326.schedule.content.utils.CourseAdapterException.Companion.report
+import tool.xfy9326.schedule.content.utils.runResponseCatching
 import tool.xfy9326.schedule.content.utils.selectSingle
 import java.math.BigInteger
 import java.security.KeyFactory
@@ -100,7 +102,12 @@ class NAUJwcCourseProvider : LoginCourseProvider<Nothing>() {
         loginParams += parametersOf(LOGIN_PARAMS_USER_NAME, userId)
         loginParams += parametersOf(LOGIN_PARAMS_PASSWORD, encryptPassword(userPw))
         loginParams += parametersOf(LOGIN_PARAMS_AUTH_CODE, captchaCode)
-        val loginResponse = httpClient.submitForm<HttpResponse>(JWC_LOGIN_URL, loginParams)
+        val loginResponse = httpClient.runResponseCatching(
+            action = { submitForm<HttpResponse>(JWC_LOGIN_URL, loginParams) },
+            handleError = {
+                CourseAdapterException.Error.LOGIN_SERVER_ERROR.report(msg = "Response: $this\nContent: \n${response.receive<String>()}")
+            }
+        )
         val loginResponseUrl = loginResponse.request.url
         when (loginResponseUrl.host) {
             JWC_HOST -> studentDefaultPageUrl = loginResponseUrl
