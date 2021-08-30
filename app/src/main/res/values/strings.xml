@@ -421,6 +421,8 @@
     <string name="schedule_not_this_week_style">非本周课程显示设置</string>
     <string name="schedule_not_this_week_style_sum">调整非本周课程的样式</string>
     <string name="style_settings">样式设置</string>
+    <string name="schedule_not_this_week_alpha">半透明样式的透明度设置</string>
+    <string name="schedule_not_this_week_alpha_sum">仅在启用半透明样式时有效</string>
 
     <string name="js_config_read_failed">配置文件读取错误！</string>
     <string name="js_config_invalid">导入的配置文件不合法！</string>

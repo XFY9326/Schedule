@@ -1,7 +1,6 @@
 package tool.xfy9326.schedule.beans
 
 import androidx.annotation.ColorInt
-import androidx.annotation.FloatRange
 import androidx.annotation.Px
 import lib.xfy9326.android.kit.ApplicationInstance
 import lib.xfy9326.android.kit.getColorCompat
@@ -25,14 +24,10 @@ class SchedulePredefine private constructor(
     val courseCellTextColorLight: Int,
     @ColorInt
     val courseCellTextColorDark: Int,
-    @FloatRange(from = 0.0, to = 1.0)
-    val notThisWeekCourseCellAlpha: Float,
     @ColorInt
     val courseCellRippleColor: Int,
 ) {
     companion object {
-        private const val DEFAULT_NOT_THIS_WEEK_COURSE_ALPHA = 0.5f
-
         val content by lazy(LazyThreadSafetyMode.NONE) {
             SchedulePredefine(
                 gridCellPadding = IOManager.resources.getDimensionPixelSize(R.dimen.schedule_grid_cell_padding),
@@ -43,7 +38,6 @@ class SchedulePredefine private constructor(
                 courseCellTextPadding = IOManager.resources.getDimensionPixelSize(R.dimen.schedule_course_cell_text_padding),
                 courseCellTextColorLight = ApplicationInstance.getColorCompat(R.color.course_cell_text_light),
                 courseCellTextColorDark = ApplicationInstance.getColorCompat(R.color.course_cell_text_dark),
-                notThisWeekCourseCellAlpha = DEFAULT_NOT_THIS_WEEK_COURSE_ALPHA,
                 courseCellRippleColor = ApplicationInstance.getColorCompat(R.color.course_cell_ripple)
             )
         }

@@ -18,4 +18,8 @@
     <integer name="schedule_header_month_default_text_size">7</integer>
     <integer name="schedule_header_month_date_default_text_size">7</integer>
     <integer name="schedule_header_weekday_default_text_size">5</integer>
+
+    <integer name="default_schedule_not_this_week_course_alpha">50</integer>
+    <integer name="default_schedule_background_image_quality">60</integer>
+    <integer name="default_schedule_background_image_alpha">100</integer>
 </resources>

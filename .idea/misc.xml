@@ -93,7 +93,9 @@
         <entry key="app/src/main/res/xml/settings_not_this_week.xml" value="0.25555555555555554" />
         <entry key="app/src/main/res/xml/settings_online_course_import.xml" value="0.2510245901639344" />
         <entry key="app/src/main/res/xml/settings_schedule.xml" value="0.2510245901639344" />
+        <entry key="app/src/main/res/xml/settings_schedule_background.xml" value="0.2523206751054852" />
         <entry key="app/src/main/res/xml/settings_schedule_color.xml" value="0.2523206751054852" />
+        <entry key="app/src/main/res/xml/settings_schedule_not_this_week.xml" value="0.25555555555555554" />
         <entry key="app/src/main/res/xml/settings_schedule_text.xml" value="0.2523206751054852" />
       </map>
     </option>
