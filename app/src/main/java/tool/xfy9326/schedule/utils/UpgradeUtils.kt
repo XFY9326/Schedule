@@ -19,6 +19,7 @@ import tool.xfy9326.schedule.json.upgrade.UpdateInfo
 
 object UpgradeUtils {
     private const val CURRENT_VERSION = BuildConfig.VERSION_CODE
+    private const val IS_BETA = BuildConfig.IS_BETA
 
     private const val UPDATE_SERVER = "update.xfy9326.top"
     private const val UPDATE_PRODUCT = "Schedule"
@@ -71,14 +72,14 @@ object UpgradeUtils {
 
     private suspend fun validateIgnoreUpdate(forcedCheck: Boolean, latest: UpdateInfo): Boolean {
         if (latest.forceUpdate) return false
-        if (forcedCheck || latest.versionCode > AppDataStore.ignoreUpdateVersionCodeFlow.first()) return false
+        if (forcedCheck || !IS_BETA && latest.versionCode > AppDataStore.ignoreUpdateVersionCodeFlow.first()) return false
         return true
     }
 
     private suspend fun getUpdateData(currentVersionCode: Int): UpdateInfo? = withContext(Dispatchers.IO) {
         getDefaultClient().use {
             val latest = getLatestVersion(it)
-            if (latest.versionCode > currentVersionCode) {
+            if (latest.versionCode > currentVersionCode || IS_BETA && latest.versionCode == currentVersionCode) {
                 val index = getIndex(it)
                 val forceUpdate = validateForceUpdate(currentVersionCode, latest, index)
                 return@withContext latest.copy(forceUpdate = forceUpdate)
