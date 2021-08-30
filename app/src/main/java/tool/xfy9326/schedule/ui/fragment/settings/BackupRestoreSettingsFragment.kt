@@ -47,7 +47,7 @@ class BackupRestoreSettingsFragment : AbstractSettingsFragment() {
     }
 
     override fun onBindLiveDataFromSettingsViewMode(viewModel: SettingsViewModel) {
-        viewModel.scheduleBackupList.observeEvent(this) {
+        viewModel.scheduleBackupList.observeEvent(viewLifecycleOwner) {
             MultiItemSelectDialog.showDialog(
                 childFragmentManager,
                 null,
@@ -61,7 +61,7 @@ class BackupRestoreSettingsFragment : AbstractSettingsFragment() {
                 selectedArr = BooleanArray(it.size) { true }
             )
         }
-        viewModel.backupScheduleToUriResult.observeEvent(this) {
+        viewModel.backupScheduleToUriResult.observeEvent(viewLifecycleOwner) {
             requireRootLayout()?.showSnackBar(
                 if (it) {
                     R.string.output_file_success
@@ -70,7 +70,7 @@ class BackupRestoreSettingsFragment : AbstractSettingsFragment() {
                 }
             )
         }
-        viewModel.restoreScheduleFromUriResult.observeEvent(this) {
+        viewModel.restoreScheduleFromUriResult.observeEvent(viewLifecycleOwner) {
             if (it.second) {
                 ImportCourseConflictDialog.showDialog(childFragmentManager, bundleOf(
                     EXTRA_BATCH_RESULT to it.first

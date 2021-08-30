@@ -35,6 +35,13 @@
             app:summary="@string/lock_schedule_header_scroll_sum"
             app:title="@string/lock_schedule_header_scroll" />
 
+        <androidx.preference.Preference
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_schedule_course_cell"
+            app:persistent="false"
+            app:summary="@string/schedule_course_cell_settings_sum"
+            app:title="@string/schedule_course_cell_settings" />
+
     </androidx.preference.PreferenceCategory>
 
     <androidx.preference.PreferenceCategory

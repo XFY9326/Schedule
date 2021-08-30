@@ -1,6 +1,5 @@
 package tool.xfy9326.schedule.ui.fragment.base
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -23,12 +22,6 @@ abstract class AbstractSettingsFragment : PreferenceFragmentCompat() {
     protected open val titleName: Int? = null
 
     @CallSuper
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        requireSettingsViewModel()?.let(::onBindLiveDataFromSettingsViewMode)
-    }
-
-    @CallSuper
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         preferenceManager.preferenceDataStore = preferenceDataStore
         setPreferencesFromResource(preferenceResId, rootKey)
@@ -39,6 +32,12 @@ abstract class AbstractSettingsFragment : PreferenceFragmentCompat() {
         return super.onCreateView(inflater, container, savedInstanceState)?.also {
             it.setBackgroundColor(requireContext().getDefaultBackgroundColor())
         }
+    }
+
+    @CallSuper
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        requireSettingsViewModel()?.let(::onBindLiveDataFromSettingsViewMode)
     }
 
     override fun onStart() {

@@ -3,8 +3,10 @@ package tool.xfy9326.schedule.ui.view.schedule
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Typeface
+import android.text.Layout
 import android.text.Spannable
 import android.text.SpannableStringBuilder
+import android.text.TextUtils
 import android.text.style.StyleSpan
 import android.view.Gravity
 import android.view.View
@@ -21,12 +23,14 @@ import tool.xfy9326.schedule.beans.ScheduleTime.Companion.startTimeStr
 import tool.xfy9326.schedule.beans.WeekDay.Companion.orderedValue
 import tool.xfy9326.schedule.tools.MaterialColorHelper
 import tool.xfy9326.schedule.utils.view.ViewUtils
+import kotlin.math.floor
 import kotlin.properties.Delegates
 
 
 @SuppressLint("ViewConstructor")
 class ScheduleCellView private constructor(context: Context, private val predefine: SchedulePredefine, private val styles: ScheduleStyles) :
     LinearLayoutCompat(context) {
+    private val ellipsis by lazy { context.getString(R.string.ellipsis) }
     private var courseCellClickListener: ((CourseCell) -> Unit)? = null
 
     var column by Delegates.notNull<Int>()
@@ -78,32 +82,24 @@ class ScheduleCellView private constructor(context: Context, private val predefi
         alpha = styles.scheduleViewAlpha
         orientation = VERTICAL
         setPadding(predefine.gridCellPadding)
+        isHorizontalScrollBarEnabled = false
+        isVerticalScrollBarEnabled = false
         layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
     }
 
     private fun initAsCourseCell(courseCell: CourseCell) {
         addViewPreventLayout(
             TextView(context).apply {
-                val showText = buildString {
-                    if (courseCell.courseLocation == null) {
-                        append(courseCell.courseName)
-                    } else {
-                        append(context.getString(R.string.course_cell_text, courseCell.courseName, courseCell.courseLocation))
-                    }
-                }
-                text = if (!courseCell.isThisWeekCourse && NotThisWeekCourseShowStyle.SHOW_NOT_THIS_WEEK_TEXT in styles.notThisWeekCourseShowStyle) {
-                    val notThisWeekText = context.getString(R.string.not_this_week) + NEW_LINE
-                    SpannableStringBuilder(notThisWeekText + showText).apply {
-                        setSpan(StyleSpan(Typeface.BOLD), 0, notThisWeekText.length, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
-                    }
-                } else {
-                    showText
-                }
+                text = generateCourseCellShowText(courseCell)
                 layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
                 background = ViewUtils.buildBackground(courseCell.cellColor, predefine.courseCellRippleColor, predefine.courseCellBackgroundRadius)
 
                 textSize = styles.textSize[ScheduleText.COURSE_TEXT]
                 setPadding(predefine.courseCellTextPadding)
+
+                if (styles.rowHeight != null && styles.courseCellTextLength == null) {
+                    setAutoLinesForTextView(this)
+                }
 
                 setTextColor(
                     if (MaterialColorHelper.isLightColor(courseCell.cellColor)) {
@@ -133,11 +129,67 @@ class ScheduleCellView private constructor(context: Context, private val predefi
                 isClickable = true
                 isFocusable = true
 
+                isHorizontalScrollBarEnabled = false
+                isVerticalScrollBarEnabled = false
+
                 setOnSingleClickListener {
                     courseCellClickListener?.invoke(courseCell)
                 }
             }
         )
+    }
+
+    private fun generateCourseCellShowText(courseCell: CourseCell) =
+        courseCell.courseName.appendEllipsisStyle(styles.courseCellCourseTextLength).let {
+            if (courseCell.courseLocation == null || !styles.showCourseCellLocation) {
+                it
+            } else {
+                val resId = if (styles.courseCellTextNoChangeLine) R.string.course_cell_text_no_change_line else R.string.course_cell_text
+                context.getString(resId, it, courseCell.courseLocation)
+            }
+        }.appendEllipsisStyle(styles.courseCellTextLength).let {
+            if (!courseCell.isThisWeekCourse && NotThisWeekCourseShowStyle.SHOW_NOT_THIS_WEEK_TEXT in styles.notThisWeekCourseShowStyle) {
+                val notThisWeekText = context.getString(R.string.not_this_week) + NEW_LINE
+                SpannableStringBuilder(notThisWeekText + it).apply {
+                    setSpan(StyleSpan(Typeface.BOLD), 0, notThisWeekText.length, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+                }
+            } else {
+                it
+            }
+        }
+
+    private fun String.appendEllipsisStyle(textLength: Int?) =
+        if (textLength != null && length > textLength) {
+            substring(0, textLength) + ellipsis
+        } else {
+            this
+        }
+
+    private fun getTextViewDrawHeight(textView: TextView, layout: Layout) =
+        layout.getLineTop(layout.lineCount) + textView.compoundPaddingTop + textView.compoundPaddingBottom
+
+    private fun setAutoLinesForTextView(textView: TextView) {
+        textView.ellipsize = TextUtils.TruncateAt.END
+        viewTreeObserver.addOnPreDrawListener {
+            val textLayout = textView.layout
+            if (textLayout == null) {
+                true
+            } else {
+                val drawHeight = getTextViewDrawHeight(textView, textLayout)
+                if (drawHeight > measuredHeight) {
+                    val lineHeight = drawHeight.toFloat() / textLayout.lineCount
+                    val showLines = floor(measuredHeight / lineHeight).toInt()
+                    if (showLines == textView.maxLines) {
+                        true
+                    } else {
+                        textView.maxLines = showLines
+                        false
+                    }
+                } else {
+                    true
+                }
+            }
+        }
     }
 
     private fun initAsScheduleTimeCell(index: Int, scheduleTime: ScheduleTime) {
@@ -158,6 +210,9 @@ class ScheduleCellView private constructor(context: Context, private val predefi
                 gravity = Gravity.CENTER
 
                 layoutParams = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
+
+                isHorizontalScrollBarEnabled = false
+                isVerticalScrollBarEnabled = false
             }
         )
 
@@ -176,6 +231,9 @@ class ScheduleCellView private constructor(context: Context, private val predefi
                     layoutParams = LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply {
                         setMargins(0, predefine.timeCellTimeDivideTopMargin, 0, 0)
                     }
+
+                    isHorizontalScrollBarEnabled = false
+                    isVerticalScrollBarEnabled = false
                 }
             )
         }

@@ -1,5 +1,6 @@
 package tool.xfy9326.schedule.data
 
+import androidx.datastore.preferences.core.Preferences
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
@@ -18,11 +19,8 @@ object ScheduleDataStore : AbstractDataStore("ScheduleSettings") {
     private val forceShowWeekendColumn by booleanPreferencesKey()
     private val showNotThisWeekCourse by booleanPreferencesKey()
     private val customScheduleTextColor by booleanPreferencesKey()
-    val timeTextColor by intPreferencesKey()
-    val toolBarTintColor by intPreferencesKey()
     private val cornerScreenMargin by booleanPreferencesKey()
     private val highlightShowTodayCell by booleanPreferencesKey()
-    val highlightShowTodayCellColor by intPreferencesKey()
     private val scheduleBackgroundImage by stringPreferencesKey()
     private val scheduleBackgroundImageQuality by intPreferencesKey()
     private val scheduleBackgroundImageAlpha by intPreferencesKey()
@@ -35,7 +33,20 @@ object ScheduleDataStore : AbstractDataStore("ScheduleSettings") {
     private val verticalCourseCellText by booleanPreferencesKey()
     private val enableScheduleGridScroll by booleanPreferencesKey()
     private val notThisWeekCourseCellAlpha by intPreferencesKey()
+    private val courseCellTextNoChangeLine by booleanPreferencesKey()
+    private val showCourseCellLocation by booleanPreferencesKey()
+
+    val timeTextColor by intPreferencesKey()
+    val toolBarTintColor by intPreferencesKey()
+    val highlightShowTodayCellColor by intPreferencesKey()
     val notThisWeekCourseShowStyle by stringSetPreferencesKey()
+
+    private val courseCellAutoHeight by booleanPreferencesKey()
+    val courseCellHeight by intPreferencesKey()
+    private val courseCellAutoTextLength by booleanPreferencesKey()
+    val courseCellTextLength by intPreferencesKey()
+    private val courseCellShowAllCourseText by booleanPreferencesKey()
+    val courseCellCourseTextLength by intPreferencesKey()
 
     val courseTextSize by intPreferencesKey()
     val scheduleTimeTextSize by intPreferencesKey()
@@ -66,13 +77,32 @@ object ScheduleDataStore : AbstractDataStore("ScheduleSettings") {
             showScheduleTimes = it[showScheduleTimes] ?: true,
             horizontalCourseCellText = it[horizontalCourseCellText] ?: false,
             verticalCourseCellText = it[verticalCourseCellText] ?: false,
-            notThisWeekCourseShowStyle = tryEnumValueOf(it[notThisWeekCourseShowStyle])
-                ?: setOf(NotThisWeekCourseShowStyle.SHOW_NOT_THIS_WEEK_TEXT, NotThisWeekCourseShowStyle.USE_TRANSPARENT_BACKGROUND),
+            notThisWeekCourseShowStyle = tryEnumValueOf(it[notThisWeekCourseShowStyle]) ?: NotThisWeekCourseShowStyle.valueSet,
             enableScheduleGridScroll = it[enableScheduleGridScroll] ?: true,
             textSize = ScheduleText.TextSize.create(it),
-            notThisWeekCourseCellAlpha = it[notThisWeekCourseCellAlpha] ?: IOManager.resources.getInteger(R.integer.default_schedule_not_this_week_course_alpha)
+            notThisWeekCourseCellAlpha = it[notThisWeekCourseCellAlpha] ?: IOManager.resources.getInteger(R.integer.default_schedule_not_this_week_course_alpha),
+            courseCellHeight = if (it[courseCellAutoHeight] == false) getCourseCellHeightFromPref(it) else null,
+            courseCellTextLength = if (it[courseCellAutoTextLength] == false) getCourseCellTextLengthFromPref(it) else null,
+            courseCellTextNoChangeLine = it[courseCellTextNoChangeLine] ?: false,
+            courseCellCourseTextLength = if (it[courseCellShowAllCourseText] == false) getCourseCellCourseTextLengthFromPref(it) else null,
+            showCourseCellLocation = it[showCourseCellLocation] ?: true,
         )
     }.distinctUntilChanged()
+
+    val courseCellHeightFlow = read { getCourseCellHeightFromPref(it) }
+
+    val courseCellTextLengthFlow = read { getCourseCellTextLengthFromPref(it) }
+
+    val courseCellCourseTextLengthFlow = read { getCourseCellCourseTextLengthFromPref(it) }
+
+    private fun getCourseCellHeightFromPref(pref: Preferences): Int =
+        pref[courseCellHeight] ?: IOManager.resources.getInteger(R.integer.default_schedule_course_cell_height)
+
+    private fun getCourseCellTextLengthFromPref(pref: Preferences): Int =
+        pref[courseCellTextLength] ?: IOManager.resources.getInteger(R.integer.default_schedule_course_cell_text_length)
+
+    private fun getCourseCellCourseTextLengthFromPref(pref: Preferences): Int =
+        pref[courseCellCourseTextLength] ?: IOManager.resources.getInteger(R.integer.default_schedule_course_cell_course_text_length)
 
     val defaultFirstDayOfWeekFlow = defaultFirstDayOfWeek.readEnumAsFlow(WeekDay.MONDAY)
 

@@ -14,7 +14,7 @@ import tool.xfy9326.schedule.utils.CalendarUtils
 import java.util.*
 
 object ScheduleUtils {
-    const val MAX_WEEK_NUM = 100 * 12 * 4 // 100 years
+    const val MAX_WEEK_NUM = 5 * 12 * 4 // 5 years
     private val DEFAULT_SCHEDULE_TIMES by lazy {
         ScheduleTime.listOf(
             8, 0, 8, 45,
