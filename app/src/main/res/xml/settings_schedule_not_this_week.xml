@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <androidx.preference.PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="@string/basic_settings">
+
+        <androidx.preference.CheckBoxPreference
+            app:defaultValue="true"
+            app:iconSpaceReserved="false"
+            app:key="showNotThisWeekCourse"
+            app:summary="@string/show_not_this_week_course_sum"
+            app:title="@string/show_not_this_week_course" />
+
+    </androidx.preference.PreferenceCategory>
+
+    <androidx.preference.PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="@string/style_settings">
+
+        <androidx.preference.MultiSelectListPreference
+            app:defaultValue="@array/not_this_week_course_show_style_value_default"
+            app:dependency="showNotThisWeekCourse"
+            app:entries="@array/not_this_week_course_show_style"
+            app:entryValues="@array/not_this_week_course_show_style_values"
+            app:iconSpaceReserved="false"
+            app:key="notThisWeekCourseShowStyle"
+            app:summary="@string/not_this_week_course_show_style_sum"
+            app:title="@string/not_this_week_course_show_style" />
+
+    </androidx.preference.PreferenceCategory>
+
+</androidx.preference.PreferenceScreen>

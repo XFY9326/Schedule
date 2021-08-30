@@ -418,6 +418,9 @@
     <string name="app_crash_relaunch">运行时出现严重错误，无法重新启动！</string>
     <string name="input_value_too_large">输入数值过大！</string>
     <string name="schedule_term_too_long">学期时间过长！</string>
+    <string name="schedule_not_this_week_style">非本周课程显示设置</string>
+    <string name="schedule_not_this_week_style_sum">调整非本周课程的样式</string>
+    <string name="style_settings">样式设置</string>
 
     <string name="js_config_read_failed">配置文件读取错误！</string>
     <string name="js_config_invalid">导入的配置文件不合法！</string>
