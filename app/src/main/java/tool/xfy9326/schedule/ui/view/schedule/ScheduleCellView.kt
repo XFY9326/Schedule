@@ -3,7 +3,6 @@ package tool.xfy9326.schedule.ui.view.schedule
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Typeface
-import android.text.Layout
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.TextUtils
@@ -97,10 +96,6 @@ class ScheduleCellView private constructor(context: Context, private val predefi
                 textSize = styles.textSize[ScheduleText.COURSE_TEXT]
                 setPadding(predefine.courseCellTextPadding)
 
-                if (styles.rowHeight != null && styles.courseCellTextLength == null) {
-                    setAutoLinesForTextView(this)
-                }
-
                 setTextColor(
                     if (MaterialColorHelper.isLightColor(courseCell.cellColor)) {
                         predefine.courseCellTextColorDark
@@ -124,6 +119,13 @@ class ScheduleCellView private constructor(context: Context, private val predefi
                     gravity = Gravity.CENTER_HORIZONTAL
                 } else {
                     textAlignment = View.TEXT_ALIGNMENT_VIEW_START
+                }
+
+                if (styles.rowHeight != null && styles.courseCellTextLength == null) {
+                    ellipsize = TextUtils.TruncateAt.END
+                    val targetHeight = rowSpan * styles.rowHeight - predefine.gridCellPadding * 2 - compoundPaddingTop - compoundPaddingBottom
+                    val lineHeight = paint.fontMetrics.bottom - paint.fontMetrics.top
+                    maxLines = floor(targetHeight / lineHeight).toInt()
                 }
 
                 isClickable = true
@@ -150,8 +152,9 @@ class ScheduleCellView private constructor(context: Context, private val predefi
         }.appendEllipsisStyle(styles.courseCellTextLength).let {
             if (!courseCell.isThisWeekCourse && NotThisWeekCourseShowStyle.SHOW_NOT_THIS_WEEK_TEXT in styles.notThisWeekCourseShowStyle) {
                 val notThisWeekText = context.getString(R.string.not_this_week) + NEW_LINE
-                SpannableStringBuilder(notThisWeekText + it).apply {
-                    setSpan(StyleSpan(Typeface.BOLD), 0, notThisWeekText.length, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+                SpannableStringBuilder().apply {
+                    append(notThisWeekText, StyleSpan(Typeface.BOLD), Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+                    append(it)
                 }
             } else {
                 it
@@ -164,33 +167,6 @@ class ScheduleCellView private constructor(context: Context, private val predefi
         } else {
             this
         }
-
-    private fun getTextViewDrawHeight(textView: TextView, layout: Layout) =
-        layout.getLineTop(layout.lineCount) + textView.compoundPaddingTop + textView.compoundPaddingBottom
-
-    private fun setAutoLinesForTextView(textView: TextView) {
-        textView.ellipsize = TextUtils.TruncateAt.END
-        viewTreeObserver.addOnPreDrawListener {
-            val textLayout = textView.layout
-            if (textLayout == null) {
-                true
-            } else {
-                val drawHeight = getTextViewDrawHeight(textView, textLayout)
-                if (drawHeight > measuredHeight) {
-                    val lineHeight = drawHeight.toFloat() / textLayout.lineCount
-                    val showLines = floor(measuredHeight / lineHeight).toInt()
-                    if (showLines == textView.maxLines) {
-                        true
-                    } else {
-                        textView.maxLines = showLines
-                        false
-                    }
-                } else {
-                    true
-                }
-            }
-        }
-    }
 
     private fun initAsScheduleTimeCell(index: Int, scheduleTime: ScheduleTime) {
         val courseTimeNumText = (index + 1).toString()

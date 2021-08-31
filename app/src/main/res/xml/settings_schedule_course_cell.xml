@@ -32,6 +32,13 @@
         <androidx.preference.CheckBoxPreference
             app:defaultValue="true"
             app:iconSpaceReserved="false"
+            app:key="showScheduleTimes"
+            app:summary="@string/show_schedule_times_sum"
+            app:title="@string/show_schedule_times" />
+
+        <androidx.preference.CheckBoxPreference
+            app:defaultValue="true"
+            app:iconSpaceReserved="false"
             app:key="courseCellAutoTextLength"
             app:summary="@string/schedule_course_cell_auto_text_length_sum"
             app:title="@string/schedule_course_cell_auto_text_length" />

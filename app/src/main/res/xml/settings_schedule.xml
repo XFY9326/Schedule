@@ -51,13 +51,6 @@
         <androidx.preference.CheckBoxPreference
             app:defaultValue="true"
             app:iconSpaceReserved="false"
-            app:key="showScheduleTimes"
-            app:summary="@string/show_schedule_times_sum"
-            app:title="@string/show_schedule_times" />
-
-        <androidx.preference.CheckBoxPreference
-            app:defaultValue="true"
-            app:iconSpaceReserved="false"
             app:key="highlightShowTodayCell"
             app:summary="@string/highlight_show_today_cell_sum"
             app:title="@string/highlight_show_today_cell" />
