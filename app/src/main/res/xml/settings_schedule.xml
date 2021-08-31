@@ -35,18 +35,18 @@
             app:summary="@string/lock_schedule_header_scroll_sum"
             app:title="@string/lock_schedule_header_scroll" />
 
+        <androidx.preference.Preference
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_schedule_course_cell"
+            app:persistent="false"
+            app:summary="@string/schedule_course_cell_settings_sum"
+            app:title="@string/schedule_course_cell_settings" />
+
     </androidx.preference.PreferenceCategory>
 
     <androidx.preference.PreferenceCategory
         app:iconSpaceReserved="false"
         app:title="@string/schedule_style_settings">
-
-        <androidx.preference.CheckBoxPreference
-            app:defaultValue="true"
-            app:iconSpaceReserved="false"
-            app:key="showScheduleTimes"
-            app:summary="@string/show_schedule_times_sum"
-            app:title="@string/show_schedule_times" />
 
         <androidx.preference.CheckBoxPreference
             app:defaultValue="true"

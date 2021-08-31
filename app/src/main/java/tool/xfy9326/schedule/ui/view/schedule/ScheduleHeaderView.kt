@@ -2,16 +2,20 @@ package tool.xfy9326.schedule.ui.view.schedule
 
 import android.content.Context
 import android.graphics.Typeface
+import android.text.Spannable
+import android.text.SpannableStringBuilder
+import android.text.style.AbsoluteSizeSpan
 import android.util.AttributeSet
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.annotation.Px
-import androidx.appcompat.widget.LinearLayoutCompat
+import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.view.children
 import androidx.core.view.setPadding
 import lib.xfy9326.android.kit.getStringArray
+import lib.xfy9326.android.kit.spToPx
+import lib.xfy9326.kit.NEW_LINE
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.*
 import tool.xfy9326.schedule.utils.view.ViewUtils
@@ -24,7 +28,7 @@ class ScheduleHeaderView @JvmOverloads constructor(context: Context, attrs: Attr
     private var predefine: SchedulePredefine? = null
     private var days: Array<Day>? = null
 
-    private val unspecifiedHeightSpec = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)
+    private val unspecifiedSpec = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)
     private val weekDayStrArr = context.getStringArray(R.array.weekday)
 
     private var headerHeight = minimumHeight
@@ -75,27 +79,27 @@ class ScheduleHeaderView @JvmOverloads constructor(context: Context, attrs: Attr
     }
 
     private fun buildMonthView(month: Int, styles: ScheduleStyles) =
-        TextView(context).apply {
+        AppCompatTextView(context).apply {
             text = context.getString(R.string.month, month)
             textSize = styles.textSize[ScheduleText.HEADER_MONTH_TEXT]
-            gravity = Gravity.CENTER
             setTextColor(styles.getTimeTextColor(context))
             typeface = Typeface.defaultFromStyle(Typeface.BOLD)
 
-            textAlignment = View.TEXT_ALIGNMENT_INHERIT
             gravity = Gravity.CENTER
+            textAlignment = View.TEXT_ALIGNMENT_GRAVITY
 
-            layoutParams = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT)
+            layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
         }
 
     private fun buildDayView(day: Day, styles: ScheduleStyles, predefine: SchedulePredefine) =
-        LinearLayoutCompat(context).apply {
+        AppCompatTextView(context).apply {
             val isToday = day.isToday
-            val timeTextColor = styles.getTimeTextColor(context)
+            setTextColor(styles.getTimeTextColor(context))
+            typeface = Typeface.defaultFromStyle(Typeface.BOLD)
 
-            orientation = LinearLayoutCompat.VERTICAL
             gravity = Gravity.CENTER
-            layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
+            textAlignment = View.TEXT_ALIGNMENT_GRAVITY
+
             setPadding(predefine.courseCellTextPadding / 2)
 
             if (styles.highlightShowTodayCell && isToday) {
@@ -106,28 +110,23 @@ class ScheduleHeaderView @JvmOverloads constructor(context: Context, attrs: Attr
                 )
             }
 
-            addView(TextView(context).apply {
-                text = context.getString(R.string.month_date_simple, day.month, day.day)
-                setTextColor(timeTextColor)
-                textSize = styles.textSize[ScheduleText.HEADER_MONTH_DATE_TEXT]
-                typeface = Typeface.defaultFromStyle(Typeface.BOLD)
-                layoutParams = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
-            })
-            addView(TextView(context).apply {
-                text = weekDayStrArr[day.weekDay.ordinal]
-                setTextColor(timeTextColor)
-                textSize = styles.textSize[ScheduleText.HEADER_WEEKDAY_TEXT]
-                typeface = Typeface.defaultFromStyle(Typeface.BOLD)
-                layoutParams = LinearLayoutCompat.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT).apply {
-                    setMargins(0, predefine.timeCellTimeDivideTopMargin, 0, 0)
-                }
-            })
+            val monthText = context.getString(R.string.month_date_simple, day.month, day.day)
+            val weekDayText = weekDayStrArr[day.weekDay.ordinal]
+
+            text = SpannableStringBuilder().apply {
+                append(monthText, AbsoluteSizeSpan(styles.textSize[ScheduleText.HEADER_MONTH_DATE_TEXT].spToPx().toInt()), Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+                append(NEW_LINE)
+                append(weekDayText, AbsoluteSizeSpan(styles.textSize[ScheduleText.HEADER_WEEKDAY_TEXT].spToPx().toInt()), Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+            }
+            setLineSpacing(predefine.timeCellTimeDivideTopMargin.toFloat(), 1f)
+
+            layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
         }
 
     fun measureMonthViewWidth(@Px maxWidth: Int): Int {
         val monthWidthSpec = MeasureSpec.makeMeasureSpec(maxWidth, MeasureSpec.AT_MOST)
         return getChildAt(0).run {
-            measure(monthWidthSpec, unspecifiedHeightSpec)
+            measure(monthWidthSpec, unspecifiedSpec)
             measuredWidth
         }
     }
@@ -140,21 +139,12 @@ class ScheduleHeaderView @JvmOverloads constructor(context: Context, attrs: Attr
         headerHeight = 0
 
         for ((i, view) in children.withIndex()) {
-            headerHeight = if (i == 0) {
-                view.measure(monthWidthSpec, unspecifiedHeightSpec)
-                max(headerHeight, view.measuredHeight)
-            } else {
-                view.measure(dayWidthSpec, unspecifiedHeightSpec)
-                max(headerHeight, view.measuredHeight)
-            }
+            view.measure(if (i == 0) monthWidthSpec else dayWidthSpec, unspecifiedSpec)
+            headerHeight = max(headerHeight, view.measuredHeight)
         }
 
         for ((i, view) in children.withIndex()) {
-            if (i == 0) {
-                view.measure(monthWidthSpec, MeasureSpec.makeMeasureSpec(headerHeight, MeasureSpec.EXACTLY))
-            } else {
-                view.measure(dayWidthSpec, MeasureSpec.makeMeasureSpec(headerHeight, MeasureSpec.EXACTLY))
-            }
+            view.measure(if (i == 0) monthWidthSpec else dayWidthSpec, MeasureSpec.makeMeasureSpec(headerHeight, MeasureSpec.EXACTLY))
         }
 
         super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(headerHeight + doublePadding, MeasureSpec.EXACTLY))

@@ -27,7 +27,7 @@ android {
 
         applicationVariants.all {
             outputs.all {
-                if (this is BaseVariantOutputImpl) {
+                if (this is BaseVariantOutputImpl && buildType.name != "debug") {
                     outputFileName = "${ProjectName}_v${versionName}_${versionCode}_${GitCommitShortId}_${buildType.name}.apk"
                 }
             }
@@ -67,7 +67,6 @@ android {
 
     buildTypes {
         withDebug {
-            versionNameSuffix = "-$GitCommitShortId"
             applicationIdSuffix = ".debug"
             manifestPlaceholders["ApplicationId"] = Android.applicationId + applicationIdSuffix
         }
@@ -75,11 +74,12 @@ android {
             initWith(getByName("release"))
             buildConfigField("boolean", "IS_BETA", "true")
 
+            versionNameSuffix = "-$GitCommitShortId"
+
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
 
-            matchingFallbacks.add("beta")
             matchingFallbacks.add("release")
         }
         withRelease {

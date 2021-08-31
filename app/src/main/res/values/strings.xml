@@ -321,7 +321,6 @@
     <string name="schedule_week_num">设定最大周数</string>
     <string name="schedule_week_num_sum">通过开始日期和周数推算结束日期</string>
     <string name="schedule_week_num_hint">共%1$d周</string>
-    <string name="schedule_week_num_error">周数必须大于0！</string>
     <string name="schedule_week_start">设定每周的第一天</string>
     <string name="schedule_week_start_sum">修改后将会影响周数计算与课表显示</string>
     <string name="select_opposite_weeks">反选</string>
@@ -417,12 +416,37 @@
     <string name="json_course_import_msg">请选择课程导入方式</string>
     <string name="app_crash_relaunch">运行时出现严重错误，无法重新启动！</string>
     <string name="input_value_too_large">输入数值过大！</string>
+    <string name="input_value_too_small">输入数值过小！</string>
     <string name="schedule_term_too_long">学期时间过长！</string>
     <string name="schedule_not_this_week_style">非本周课程显示设置</string>
     <string name="schedule_not_this_week_style_sum">调整非本周课程的样式</string>
     <string name="style_settings">样式设置</string>
     <string name="schedule_not_this_week_alpha">半透明样式的透明度设置</string>
     <string name="schedule_not_this_week_alpha_sum">仅在启用半透明样式时有效</string>
+    <string name="schedule_course_cell_settings">课程格设置</string>
+    <string name="schedule_course_cell_settings_sum">调整课程格高度以及文字显示设置</string>
+    <string name="schedule_course_cell_attention">注意：\n自定义课程格高度将可能会影响文字显示效果\n建议通过调整文字大小或显示长度来影响课程格高度</string>
+    <string name="schedule_course_cell_height">课程格高度</string>
+    <string name="schedule_course_cell_auto_height">自动设置课程格高度</string>
+    <string name="schedule_course_cell_auto_height_sum">将会根据文字大小与长度自动平均设置高度</string>
+    <string name="schedule_course_cell_specific_height">单节课程的课程格高度（行高）</string>
+    <string name="schedule_course_cell_specific_height_sum">当前高度：%1$ddp</string>
+    <string name="schedule_course_cell_specific_height_hint">高度(dp) [%1$d, %2$d]</string>
+    <string name="schedule_course_cell_text">课程格文字</string>
+    <string name="schedule_course_cell_auto_text_length">自动调整课程格文字长度</string>
+    <string name="schedule_course_cell_auto_text_length_sum">自动课程格高度时显示全部文字</string>
+    <string name="schedule_course_cell_text_length">课程格内所有文字最大长度</string>
+    <string name="schedule_course_cell_text_length_sum">当前长度：%1$d个字符 (不包含\'非本周\'与省略号)</string>
+    <string name="input_text_length_hint">最大长度(字符) [%1$d, %2$d]</string>
+    <string name="input_number_error">输入数值错误！</string>
+    <string name="schedule_course_cell_all_course_text">显示完整课程名称</string>
+    <string name="schedule_course_cell_all_course_text_sum">最终会被所有文字最大长度的限制</string>
+    <string name="schedule_course_cell_course_text_length">课程名称最大显示长度</string>
+    <string name="schedule_course_cell_course_text_length_sum">当前长度：%1$d个字符</string>
+    <string name="schedule_course_cell_show_course_location">显示上课地点</string>
+    <string name="schedule_course_cell_show_course_location_sum">若不存在上课地点则默认不会显示</string>
+    <string name="schedule_course_cell_text_no_change_line">课程名称与上课地点文字不换行</string>
+    <string name="schedule_course_cell_text_no_change_line_sum">课程名称后不换行显示上课地点</string>
 
     <string name="js_config_read_failed">配置文件读取错误！</string>
     <string name="js_config_invalid">导入的配置文件不合法！</string>
@@ -510,7 +534,9 @@
 
     <string name="month_date_simple" translatable="false">%1$d/%2$d</string>
     <string name="course_cell_text" translatable="false">%1$s\n\n@%2$s</string>
+    <string name="course_cell_text_no_change_line" translatable="false">%1$s@%2$s</string>
     <string name="adapter_author" translatable="false">\@%1$s</string>
+    <string name="ellipsis" translatable="false">...</string>
 
     <string name="javascript" translatable="false">JS</string>
 

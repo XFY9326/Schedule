@@ -40,4 +40,8 @@
     <string name="pref_accurate_app_widget_update" translatable="false">AccurateAppWidgetUpdate</string>
     <string name="pref_schedule_next_alarm_permission" translatable="false">ScheduleNextAlarmPermission</string>
     <string name="pref_schedule_not_this_week_style" translatable="false">ScheduleNotThisWeekStyle</string>
+    <string name="pref_schedule_course_cell" translatable="false">ScheduleCourseCell</string>
+    <string name="pref_schedule_course_cell_specific_height" translatable="false">ScheduleCourseCellSpecificHeight</string>
+    <string name="pref_schedule_course_cell_text_length" translatable="false">ScheduleCourseCellTextLength</string>
+    <string name="pref_schedule_course_cell_course_text_length" translatable="false">ScheduleCourseCellCourseTextLength</string>
 </resources>

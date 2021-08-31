@@ -84,18 +84,25 @@ class ScheduleGridView @JvmOverloads constructor(context: Context, attrs: Attrib
         val timeColumnWidthSpec = MeasureSpec.makeMeasureSpec(timeColumnWidth, MeasureSpec.EXACTLY)
         val courseColumnWidthSpec = MeasureSpec.makeMeasureSpec(courseColumnWidth, MeasureSpec.EXACTLY)
 
-        rowHeight = MeasureSpec.getSize(heightMeasureSpec) / rowAmount
+        val styleCourseCellHeight = styles?.rowHeight
+        rowHeight = if (styleCourseCellHeight != null) {
+            styleCourseCellHeight
+        } else {
+            var tempRowHeight = MeasureSpec.getSize(heightMeasureSpec) / rowAmount
 
-        for (child in children) {
-            child as ScheduleCellView
+            for (child in children) {
+                child as ScheduleCellView
 
-            rowHeight = if (child.column == 0) {
-                child.measure(timeColumnWidthSpec, unspecifiedHeightSpec)
-                max(child.measuredHeight, rowHeight)
-            } else {
-                child.measure(courseColumnWidthSpec, unspecifiedHeightSpec)
-                max(ceil(child.measuredHeight * 1f / child.rowSpan).toInt(), rowHeight)
+                tempRowHeight = if (child.column == 0) {
+                    child.measure(timeColumnWidthSpec, unspecifiedHeightSpec)
+                    max(child.measuredHeight, tempRowHeight)
+                } else {
+                    child.measure(courseColumnWidthSpec, unspecifiedHeightSpec)
+                    max(ceil(child.measuredHeight * 1f / child.rowSpan).toInt(), tempRowHeight)
+                }
             }
+
+            tempRowHeight
         }
 
         for (child in children) {

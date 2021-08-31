@@ -60,7 +60,7 @@ class DebugSettingsFragment : AbstractSettingsFragment() {
     }
 
     override fun onBindLiveDataFromSettingsViewMode(viewModel: SettingsViewModel) {
-        viewModel.allDebugLogs.observeEvent(this) {
+        viewModel.allDebugLogs.observeEvent(viewLifecycleOwner) {
             when (it.first) {
                 TAG_READ_DEBUG_LOGS -> showDebugLogsSelectDialog(it.second, R.string.read_debug_logs) { log ->
                     viewModel.showDebugLog(log)
@@ -74,10 +74,10 @@ class DebugSettingsFragment : AbstractSettingsFragment() {
                 }
             }
         }
-        viewModel.showDebugLog.observeEvent(this) {
+        viewModel.showDebugLog.observeEvent(viewLifecycleOwner) {
             CrashViewDialog.showDialog(childFragmentManager, it)
         }
-        viewModel.outputLogFileToUriResult.observeEvent(this) {
+        viewModel.outputLogFileToUriResult.observeEvent(viewLifecycleOwner) {
             requireRootLayout()?.showSnackBar(
                 if (it) R.string.output_file_success else R.string.output_file_failed
             )

@@ -82,7 +82,7 @@ class CalendarSyncSettingsFragment : AbstractSettingsFragment() {
     }
 
     override fun onBindLiveDataFromSettingsViewMode(viewModel: SettingsViewModel) {
-        viewModel.syncToCalendarStatus.observeEvent(this) {
+        viewModel.syncToCalendarStatus.observeEvent(viewLifecycleOwner) {
             if (it.success) {
                 if (it.failedAmount == 0) {
                     requireRootLayout()?.showSnackBar(R.string.calendar_sync_success)
@@ -93,7 +93,7 @@ class CalendarSyncSettingsFragment : AbstractSettingsFragment() {
                 requireRootLayout()?.showSnackBar(R.string.calendar_sync_error)
             }
         }
-        viewModel.scheduleSyncEdit.observeEvent(this) {
+        viewModel.scheduleSyncEdit.observeEvent(viewLifecycleOwner) {
             MultiItemSelectDialog.showDialog(
                 childFragmentManager,
                 it.first,

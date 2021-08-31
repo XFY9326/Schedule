@@ -8,9 +8,10 @@ import tool.xfy9326.schedule.databinding.ActivityScheduleEditBinding
 import tool.xfy9326.schedule.ui.activity.ScheduleEditActivity
 import tool.xfy9326.schedule.ui.activity.base.AbstractViewModelActivityModule
 import tool.xfy9326.schedule.ui.dialog.DatePickerDialog
-import tool.xfy9326.schedule.ui.dialog.MaxWeekNumEditDialog
+import tool.xfy9326.schedule.ui.dialog.NumberEditDialog
 import tool.xfy9326.schedule.ui.vm.ScheduleEditViewModel
 import tool.xfy9326.schedule.utils.schedule.CourseTimeUtils
+import tool.xfy9326.schedule.utils.schedule.ScheduleUtils
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -40,7 +41,7 @@ class ScheduleTermEditModule(activity: ScheduleEditActivity) :
             requireViewModel().selectScheduleDate(false, requireViewModel().editSchedule.endDate)
         }
         requireViewBinding().layoutScheduleWeekNum.setOnSingleClickListener {
-            MaxWeekNumEditDialog.showDialog(requireActivity().supportFragmentManager, getMaxWeekNum())
+            showMaxWeekNumEditDialog()
         }
 
         DatePickerDialog.setOnDateSetListener(requireActivity().supportFragmentManager, requireActivity()) { tag, date ->
@@ -50,11 +51,25 @@ class ScheduleTermEditModule(activity: ScheduleEditActivity) :
                 updateScheduleDate(false, date, true)
             }
         }
-        MaxWeekNumEditDialog.setOnWeekNumChangedListener(requireActivity().supportFragmentManager, requireActivity()) { num ->
+        NumberEditDialog.setOnNumberChangedListener(requireActivity().supportFragmentManager, requireActivity()) { _, num ->
             val newTermEnd = requireViewModel().editSchedule.let {
                 CourseTimeUtils.calculateTermEndDate(it.startDate, num, it.weekStart)
             }
             updateScheduleDate(false, newTermEnd, true)
+        }
+    }
+
+    private fun showMaxWeekNumEditDialog() {
+        requireActivity().apply {
+            NumberEditDialog.showDialog(
+                fragmentManager = supportFragmentManager,
+                tag = null,
+                number = getMaxWeekNum(),
+                minNumber = 1,
+                maxNumber = ScheduleUtils.MAX_WEEK_NUM,
+                title = getString(R.string.schedule_week_num),
+                editHint = getString(R.string.week_num_title)
+            )
         }
     }
 

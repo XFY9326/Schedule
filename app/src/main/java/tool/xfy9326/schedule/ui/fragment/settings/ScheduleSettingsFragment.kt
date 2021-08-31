@@ -14,6 +14,7 @@ class ScheduleSettingsFragment : AbstractSettingsFragment() {
     override val preferenceDataStore: PreferenceDataStore = ScheduleDataStore.getPreferenceDataStore(lifecycleScope)
 
     override fun onPrefInit(savedInstanceState: Bundle?) {
+        bindPrefFragment<ScheduleCourseCellSettingsFragment>(R.string.pref_schedule_course_cell)
         bindPrefFragment<ScheduleTextSettingsFragment>(R.string.pref_schedule_text)
         bindPrefFragment<ScheduleBackgroundSettingsFragment>(R.string.pref_schedule_background)
         bindPrefFragment<ScheduleColorSettingsFragment>(R.string.pref_schedule_color)

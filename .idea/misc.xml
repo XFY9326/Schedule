@@ -75,6 +75,7 @@
         <entry key="app/src/main/res/layout/layout_list_loading.xml" value="0.2504273504273504" />
         <entry key="app/src/main/res/layout/layout_nav_header.xml" value="0.12489557226399331" />
         <entry key="app/src/main/res/layout/layout_toolbar_general.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/test.xml" value="0.25555555555555554" />
         <entry key="app/src/main/res/layout/widget_next_course_2x1.xml" value="0.2716049382716049" />
         <entry key="app/src/main/res/layout/widget_next_course_2x1_msg.xml" value="0.19671052631578947" />
         <entry key="app/src/main/res/layout/widget_next_course_2x2.xml" value="0.4693333333333333" />
@@ -95,6 +96,7 @@
         <entry key="app/src/main/res/xml/settings_schedule.xml" value="0.2510245901639344" />
         <entry key="app/src/main/res/xml/settings_schedule_background.xml" value="0.2523206751054852" />
         <entry key="app/src/main/res/xml/settings_schedule_color.xml" value="0.2523206751054852" />
+        <entry key="app/src/main/res/xml/settings_schedule_course_cell.xml" value="0.25555555555555554" />
         <entry key="app/src/main/res/xml/settings_schedule_not_this_week.xml" value="0.25555555555555554" />
         <entry key="app/src/main/res/xml/settings_schedule_text.xml" value="0.2523206751054852" />
       </map>

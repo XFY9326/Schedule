@@ -35,7 +35,7 @@ class ScheduleBackgroundSettingsFragment : AbstractSettingsFragment() {
     }
 
     override fun onBindLiveDataFromSettingsViewMode(viewModel: SettingsViewModel) {
-        viewModel.importScheduleImage.observeEvent(this) {
+        viewModel.importScheduleImage.observeEvent(viewLifecycleOwner) {
             loadingDialogController.hide()
             requireRootLayout()?.showSnackBar(if (it) R.string.schedule_background_set_success else R.string.schedule_background_set_failed)
         }

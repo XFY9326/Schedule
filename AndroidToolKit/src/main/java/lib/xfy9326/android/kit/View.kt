@@ -21,13 +21,19 @@ import lib.xfy9326.kit.tryCast
 fun Float.dpToPx() = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, this, Resources.getSystem().displayMetrics)
 
 @Px
-fun Int.dpToPx() = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, this.toFloat(), Resources.getSystem().displayMetrics).toInt()
+fun Int.dpToPx() = dpToPxFloat().toInt()
+
+@Px
+fun Int.dpToPxFloat() = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, this.toFloat(), Resources.getSystem().displayMetrics)
 
 @Px
 fun Float.spToPx() = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, this, Resources.getSystem().displayMetrics)
 
 @Px
-fun Int.spToPx() = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, this.toFloat(), Resources.getSystem().displayMetrics).toInt()
+fun Int.spToPx() = spToPxFloat().toInt()
+
+@Px
+fun Int.spToPxFloat() = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, this.toFloat(), Resources.getSystem().displayMetrics)
 
 fun ViewGroup.setAllEnable(enabled: Boolean) {
     isEnabled = enabled

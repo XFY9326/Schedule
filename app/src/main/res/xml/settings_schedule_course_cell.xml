@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.preference.Preference
+        app:iconSpaceReserved="false"
+        app:summary="@string/schedule_course_cell_attention" />
+
+    <androidx.preference.PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="@string/schedule_course_cell_height">
+
+        <androidx.preference.CheckBoxPreference
+            app:defaultValue="true"
+            app:iconSpaceReserved="false"
+            app:key="courseCellAutoHeight"
+            app:summary="@string/schedule_course_cell_auto_height_sum"
+            app:title="@string/schedule_course_cell_auto_height" />
+
+        <androidx.preference.Preference
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_schedule_course_cell_specific_height"
+            app:persistent="false"
+            app:summary="@string/schedule_course_cell_specific_height_sum"
+            app:title="@string/schedule_course_cell_specific_height" />
+
+    </androidx.preference.PreferenceCategory>
+
+    <androidx.preference.PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="@string/schedule_course_cell_text">
+
+        <androidx.preference.CheckBoxPreference
+            app:defaultValue="true"
+            app:iconSpaceReserved="false"
+            app:key="showScheduleTimes"
+            app:summary="@string/show_schedule_times_sum"
+            app:title="@string/show_schedule_times" />
+
+        <androidx.preference.CheckBoxPreference
+            app:defaultValue="true"
+            app:iconSpaceReserved="false"
+            app:key="courseCellAutoTextLength"
+            app:summary="@string/schedule_course_cell_auto_text_length_sum"
+            app:title="@string/schedule_course_cell_auto_text_length" />
+
+        <androidx.preference.Preference
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_schedule_course_cell_text_length"
+            app:persistent="false"
+            app:summary="@string/schedule_course_cell_text_length_sum"
+            app:title="@string/schedule_course_cell_text_length" />
+
+        <androidx.preference.CheckBoxPreference
+            app:defaultValue="true"
+            app:iconSpaceReserved="false"
+            app:key="courseCellShowAllCourseText"
+            app:summary="@string/schedule_course_cell_all_course_text_sum"
+            app:title="@string/schedule_course_cell_all_course_text" />
+
+        <androidx.preference.Preference
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_schedule_course_cell_course_text_length"
+            app:persistent="false"
+            app:summary="@string/schedule_course_cell_course_text_length_sum"
+            app:title="@string/schedule_course_cell_course_text_length" />
+
+        <androidx.preference.CheckBoxPreference
+            app:defaultValue="true"
+            app:iconSpaceReserved="false"
+            app:key="showCourseCellLocation"
+            app:summary="@string/schedule_course_cell_show_course_location_sum"
+            app:title="@string/schedule_course_cell_show_course_location" />
+
+        <androidx.preference.CheckBoxPreference
+            app:defaultValue="false"
+            app:iconSpaceReserved="false"
+            app:key="courseCellTextNoChangeLine"
+            app:summary="@string/schedule_course_cell_text_no_change_line_sum"
+            app:title="@string/schedule_course_cell_text_no_change_line" />
+
+    </androidx.preference.PreferenceCategory>
+
+</androidx.preference.PreferenceScreen>
