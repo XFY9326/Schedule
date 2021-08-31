@@ -445,7 +445,7 @@
     <string name="schedule_course_cell_course_text_length_sum">当前长度：%1$d个字符</string>
     <string name="schedule_course_cell_show_course_location">显示上课地点</string>
     <string name="schedule_course_cell_show_course_location_sum">若不存在上课地点则默认不会显示</string>
-    <string name="schedule_course_cell_text_no_change_line">课程格内文字不换行</string>
+    <string name="schedule_course_cell_text_no_change_line">课程名称与上课地点文字不换行</string>
     <string name="schedule_course_cell_text_no_change_line_sum">课程名称后不换行显示上课地点</string>
 
     <string name="js_config_read_failed">配置文件读取错误！</string>
