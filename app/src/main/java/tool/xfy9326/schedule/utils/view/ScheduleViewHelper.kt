@@ -70,15 +70,15 @@ object ScheduleViewHelper {
         val schedulePredefine = SchedulePredefine.content
         val showWeekend = viewData.styles.forceShowWeekendColumn || viewData.hasWeekendCourse
 
-        val cellsDeferred = ArrayList<Deferred<ScheduleCellView>>(viewData.times.size + viewData.cells.size)
+        val cellsDeferred = ArrayList<Deferred<IScheduleCell>>(viewData.times.size + viewData.cells.size)
 
         for ((i, time) in viewData.times.withIndex()) {
-            cellsDeferred.add(async { ScheduleCellView(context, i, time, schedulePredefine, viewData.styles) })
+            cellsDeferred.add(async { ScheduleTimeCellView(context, i, time, schedulePredefine, viewData.styles) })
         }
 
         for (cell in viewData.cells) {
             if (cell.isThisWeekCourse || viewData.styles.showNotThisWeekCourse) {
-                cellsDeferred.add(async { ScheduleCellView(context, showWeekend, cell, schedulePredefine, viewData.styles, viewData.weekStart) })
+                cellsDeferred.add(async { ScheduleCourseCellView(context, showWeekend, cell, schedulePredefine, viewData.styles, viewData.weekStart) })
             }
         }
 

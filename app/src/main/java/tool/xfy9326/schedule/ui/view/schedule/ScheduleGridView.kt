@@ -69,7 +69,7 @@ class ScheduleGridView @JvmOverloads constructor(context: Context, attrs: Attrib
         val widthSpec = MeasureSpec.makeMeasureSpec(maxWidth, MeasureSpec.AT_MOST)
 
         for (child in children) {
-            child as ScheduleCellView
+            child as IScheduleCell
 
             if (child.column == 0) {
                 child.measure(widthSpec, unspecifiedHeightSpec)
@@ -91,7 +91,7 @@ class ScheduleGridView @JvmOverloads constructor(context: Context, attrs: Attrib
             var tempRowHeight = MeasureSpec.getSize(heightMeasureSpec) / rowAmount
 
             for (child in children) {
-                child as ScheduleCellView
+                child as IScheduleCell
 
                 tempRowHeight = if (child.column == 0) {
                     child.measure(timeColumnWidthSpec, unspecifiedHeightSpec)
@@ -106,7 +106,7 @@ class ScheduleGridView @JvmOverloads constructor(context: Context, attrs: Attrib
         }
 
         for (child in children) {
-            child as ScheduleCellView
+            child as IScheduleCell
 
             val courseColumnHeightSpec = MeasureSpec.makeMeasureSpec(rowHeight * child.rowSpan, MeasureSpec.EXACTLY)
             child.measure(courseColumnWidthSpec, courseColumnHeightSpec)
@@ -141,7 +141,7 @@ class ScheduleGridView @JvmOverloads constructor(context: Context, attrs: Attrib
             val leftToRight = layoutDirection == LAYOUT_DIRECTION_LTR
 
             for (child in children) {
-                child as ScheduleCellView
+                child as IScheduleCell
 
                 val startY = rowHeight * child.row
                 val endY = rowHeight * (child.row + child.rowSpan)
@@ -155,10 +155,12 @@ class ScheduleGridView @JvmOverloads constructor(context: Context, attrs: Attrib
         }
     }
 
-    fun addScheduleCellPreventLayout(cellView: ScheduleCellView) {
-        if (cellView.row in 0 until rowAmount && cellView.column in 0 until columnAmount) {
+    fun addScheduleCellPreventLayout(cellView: IScheduleCell) {
+        if (cellView is View && cellView.row in 0 until rowAmount && cellView.column in 0 until columnAmount) {
             addViewPreventLayout(cellView)
-            if (!cellView.isTimeColumn) cellView.setOnCourseCellClickListener(internalCellClickListener)
+            if (cellView is ScheduleCourseCellView) {
+                cellView.setOnCourseCellClickListener(internalCellClickListener)
+            }
         }
     }
 
@@ -169,12 +171,12 @@ class ScheduleGridView @JvmOverloads constructor(context: Context, attrs: Attrib
     }
 
     override fun addView(child: View?, index: Int, params: LayoutParams?) {
-        require(child is ScheduleCellView)
+        require(child is IScheduleCell)
         super.addView(child, index, params)
     }
 
     override fun addViewInLayout(child: View?, index: Int, params: LayoutParams?, preventRequestLayout: Boolean): Boolean {
-        require(child is ScheduleCellView)
+        require(child is IScheduleCell)
         return super.addViewInLayout(child, index, params, preventRequestLayout)
     }
 }

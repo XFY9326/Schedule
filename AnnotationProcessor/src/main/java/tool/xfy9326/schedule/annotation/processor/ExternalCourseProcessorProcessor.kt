@@ -10,7 +10,7 @@ import javax.lang.model.SourceVersion
 import javax.lang.model.element.TypeElement
 import javax.tools.Diagnostic
 
-@SupportedSourceVersion(SourceVersion.RELEASE_8)
+@SupportedSourceVersion(SourceVersion.RELEASE_11)
 @SupportedAnnotationTypes(ExternalCourseProcessorProcessor.CODE_ANNOTATION_CLASS)
 @SupportedOptions(ProcessorUtils.KAPT_KOTLIN_GENERATED_OPTION_NAME)
 class ExternalCourseProcessorProcessor : AbstractProcessor() {
