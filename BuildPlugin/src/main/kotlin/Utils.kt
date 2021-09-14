@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 import org.gradle.api.NamedDomainObjectCollection
 import org.gradle.api.Project
 import java.util.concurrent.TimeUnit

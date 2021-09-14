@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package tool.xfy9326.build.plugin.config
 
 object AndroidConfig {
