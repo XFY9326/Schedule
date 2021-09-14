@@ -132,9 +132,10 @@ class ScheduleHeaderView @JvmOverloads constructor(context: Context, attrs: Attr
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        val doublePadding = (predefine?.gridCellPadding ?: 0) * 2
-        val monthWidthSpec = MeasureSpec.makeMeasureSpec(timeColumnWidth - doublePadding, MeasureSpec.EXACTLY)
-        val dayWidthSpec = MeasureSpec.makeMeasureSpec(courseColumnWidth - doublePadding, MeasureSpec.EXACTLY)
+        val verticalDoublePadding = (predefine?.gridCellVerticalPadding ?: 0) * 2
+        val horizontalDoublePadding = (predefine?.gridCellHorizontalPadding ?: 0) * 2
+        val monthWidthSpec = MeasureSpec.makeMeasureSpec(timeColumnWidth - horizontalDoublePadding, MeasureSpec.EXACTLY)
+        val dayWidthSpec = MeasureSpec.makeMeasureSpec(courseColumnWidth - horizontalDoublePadding, MeasureSpec.EXACTLY)
 
         headerHeight = 0
 
@@ -147,32 +148,21 @@ class ScheduleHeaderView @JvmOverloads constructor(context: Context, attrs: Attr
             view.measure(if (i == 0) monthWidthSpec else dayWidthSpec, MeasureSpec.makeMeasureSpec(headerHeight, MeasureSpec.EXACTLY))
         }
 
-        super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(headerHeight + doublePadding, MeasureSpec.EXACTLY))
+        super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(headerHeight + verticalDoublePadding, MeasureSpec.EXACTLY))
     }
 
     override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
-        val gridCellPadding = predefine?.gridCellPadding ?: 0
         if (childCount > 0) {
             val height = b - t
             val leftToRight = layoutDirection == LAYOUT_DIRECTION_LTR
+            val verticalCellPadding = predefine?.gridCellVerticalPadding ?: 0
+            val horizontalCellPadding = predefine?.gridCellHorizontalPadding ?: 0
 
             for (i in 0 until columnAmount) {
                 val view = getChildAt(i)
-                if (leftToRight) {
-                    view.layout(
-                        xRecords[i] + gridCellPadding,
-                        gridCellPadding,
-                        xRecords[i + 1] - gridCellPadding,
-                        height - gridCellPadding
-                    )
-                } else {
-                    view.layout(
-                        xRecords[columnAmount - i - 1] + gridCellPadding,
-                        gridCellPadding,
-                        xRecords[columnAmount - i] - gridCellPadding,
-                        height - gridCellPadding
-                    )
-                }
+                val left = xRecords[if (leftToRight) i else columnAmount - i - 1] + horizontalCellPadding
+                val right = xRecords[if (leftToRight) i + 1 else columnAmount - i] - horizontalCellPadding
+                view.layout(left, verticalCellPadding, right, height - verticalCellPadding)
             }
         }
     }

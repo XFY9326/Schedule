@@ -34,7 +34,7 @@ class ScheduleCourseCellView(
 
     init {
         alpha = styles.scheduleViewAlpha
-        setPadding(predefine.gridCellPadding)
+        setPadding(predefine.gridCellHorizontalPadding, predefine.gridCellVerticalPadding, predefine.gridCellHorizontalPadding, predefine.gridCellVerticalPadding)
         isHorizontalScrollBarEnabled = false
         isVerticalScrollBarEnabled = false
         layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
@@ -45,20 +45,20 @@ class ScheduleCourseCellView(
         }
     }
 
-    private val ellipsis by lazy { context.getString(R.string.ellipsis) }
-    private var cellClickListener: ((CourseCell) -> Unit)? = null
-
-    override val column: Int by lazy {
+    private val innerColumn by lazy {
         if (showWeekend || weekStart == WeekDay.MONDAY) {
             courseCell.sectionTime.weekDay.orderedValue(weekStart)
         } else {
             courseCell.sectionTime.weekDay.orderedValue(weekStart) - 1
         }
     }
+    private var cellClickListener: ((CourseCell) -> Unit)? = null
 
-    override val row: Int = courseCell.sectionTime.start - 1
+    override fun getColumn(): Int = innerColumn
 
-    override val rowSpan: Int = courseCell.sectionTime.duration
+    override fun getRow(): Int = courseCell.sectionTime.start - 1
+
+    override fun getRowSpan(): Int = courseCell.sectionTime.duration
 
     fun setOnCourseCellClickListener(listener: ((CourseCell) -> Unit)?) {
         this.cellClickListener = listener
@@ -99,7 +99,7 @@ class ScheduleCourseCellView(
 
             if (styles.rowHeight != null && styles.courseCellTextLength == null) {
                 ellipsize = TextUtils.TruncateAt.END
-                val targetHeight = rowSpan * styles.rowHeight - predefine.gridCellPadding * 2 - compoundPaddingTop - compoundPaddingBottom
+                val targetHeight = getRowSpan() * styles.rowHeight - predefine.gridCellVerticalPadding * 2 - compoundPaddingTop - compoundPaddingBottom
                 val lineHeight = paint.fontMetrics.bottom - paint.fontMetrics.top
                 maxLines = floor(targetHeight / lineHeight).toInt()
             }
@@ -137,7 +137,7 @@ class ScheduleCourseCellView(
 
     private fun String.appendEllipsisStyle(textLength: Int?) =
         if (textLength != null && length > textLength) {
-            substring(0, textLength) + ellipsis
+            substring(0, textLength) + context.getString(R.string.ellipsis)
         } else {
             this
         }

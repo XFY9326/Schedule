@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.widget.LinearLayoutCompat
-import androidx.core.view.setPadding
 import lib.xfy9326.kit.NEW_LINE
 import tool.xfy9326.schedule.beans.SchedulePredefine
 import tool.xfy9326.schedule.beans.ScheduleStyles
@@ -25,15 +24,17 @@ class ScheduleTimeCellView(
     private val predefine: SchedulePredefine,
     private val styles: ScheduleStyles,
 ) : LinearLayoutCompat(context), IScheduleCell {
-    override val column: Int = 0
-    override val row: Int = index
-    override val rowSpan: Int = 1
+    override fun getColumn(): Int = 0
+
+    override fun getRow(): Int = index
+
+    override fun getRowSpan(): Int = 1
 
     init {
         alpha = styles.scheduleViewAlpha
         orientation = VERTICAL
         gravity = Gravity.CENTER
-        setPadding(predefine.gridCellPadding)
+        setPadding(predefine.gridCellHorizontalPadding, predefine.gridCellVerticalPadding, predefine.gridCellHorizontalPadding, predefine.gridCellVerticalPadding)
         isHorizontalScrollBarEnabled = false
         isVerticalScrollBarEnabled = false
         layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)

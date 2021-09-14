@@ -71,7 +71,7 @@ class ScheduleGridView @JvmOverloads constructor(context: Context, attrs: Attrib
         for (child in children) {
             child as IScheduleCell
 
-            if (child.column == 0) {
+            if (child.getColumn() == 0) {
                 child.measure(widthSpec, unspecifiedHeightSpec)
                 timeColumnWidth = max(child.measuredWidth, timeColumnWidth)
             }
@@ -93,12 +93,12 @@ class ScheduleGridView @JvmOverloads constructor(context: Context, attrs: Attrib
             for (child in children) {
                 child as IScheduleCell
 
-                tempRowHeight = if (child.column == 0) {
+                tempRowHeight = if (child.getColumn() == 0) {
                     child.measure(timeColumnWidthSpec, unspecifiedHeightSpec)
                     max(child.measuredHeight, tempRowHeight)
                 } else {
                     child.measure(courseColumnWidthSpec, unspecifiedHeightSpec)
-                    max(ceil(child.measuredHeight * 1f / child.rowSpan).toInt(), tempRowHeight)
+                    max(ceil(child.measuredHeight * 1f / child.getRowSpan()).toInt(), tempRowHeight)
                 }
             }
 
@@ -108,7 +108,7 @@ class ScheduleGridView @JvmOverloads constructor(context: Context, attrs: Attrib
         for (child in children) {
             child as IScheduleCell
 
-            val courseColumnHeightSpec = MeasureSpec.makeMeasureSpec(rowHeight * child.rowSpan, MeasureSpec.EXACTLY)
+            val courseColumnHeightSpec = MeasureSpec.makeMeasureSpec(rowHeight * child.getRowSpan(), MeasureSpec.EXACTLY)
             child.measure(courseColumnWidthSpec, courseColumnHeightSpec)
         }
 
@@ -143,20 +143,20 @@ class ScheduleGridView @JvmOverloads constructor(context: Context, attrs: Attrib
             for (child in children) {
                 child as IScheduleCell
 
-                val startY = rowHeight * child.row
-                val endY = rowHeight * (child.row + child.rowSpan)
+                val startY = rowHeight * child.getRow()
+                val endY = rowHeight * (child.getRow() + child.getRowSpan())
 
                 if (leftToRight) {
-                    child.layout(xRecords[child.column], startY, xRecords[child.column + 1], endY)
+                    child.layout(xRecords[child.getColumn()], startY, xRecords[child.getColumn() + 1], endY)
                 } else {
-                    child.layout(xRecords[columnAmount - child.column - 1], startY, xRecords[columnAmount - child.column], endY)
+                    child.layout(xRecords[columnAmount - child.getColumn() - 1], startY, xRecords[columnAmount - child.getColumn()], endY)
                 }
             }
         }
     }
 
     fun addScheduleCellPreventLayout(cellView: IScheduleCell) {
-        if (cellView is View && cellView.row in 0 until rowAmount && cellView.column in 0 until columnAmount) {
+        if (cellView is View && cellView.getRow() in 0 until rowAmount && cellView.getColumn() in 0 until columnAmount) {
             addViewPreventLayout(cellView)
             if (cellView is ScheduleCourseCellView) {
                 cellView.setOnCourseCellClickListener(internalCellClickListener)
