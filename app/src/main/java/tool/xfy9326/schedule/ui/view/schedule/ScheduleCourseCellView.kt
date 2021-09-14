@@ -34,7 +34,7 @@ class ScheduleCourseCellView(
 
     init {
         alpha = styles.scheduleViewAlpha
-        setPadding(predefine.gridCellHorizontalPadding, predefine.gridCellVerticalPadding, predefine.gridCellHorizontalPadding, predefine.gridCellVerticalPadding)
+        setPadding(styles.courseCellHorizontalPadding, styles.courseCellVerticalPadding, styles.courseCellHorizontalPadding, styles.courseCellVerticalPadding)
         isHorizontalScrollBarEnabled = false
         isVerticalScrollBarEnabled = false
         layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
@@ -99,7 +99,7 @@ class ScheduleCourseCellView(
 
             if (styles.rowHeight != null && styles.courseCellTextLength == null) {
                 ellipsize = TextUtils.TruncateAt.END
-                val targetHeight = getRowSpan() * styles.rowHeight - predefine.gridCellVerticalPadding * 2 - compoundPaddingTop - compoundPaddingBottom
+                val targetHeight = getRowSpan() * styles.rowHeight - styles.courseCellVerticalPadding * 2 - compoundPaddingTop - compoundPaddingBottom
                 val lineHeight = paint.fontMetrics.bottom - paint.fontMetrics.top
                 maxLines = floor(targetHeight / lineHeight).toInt()
             }

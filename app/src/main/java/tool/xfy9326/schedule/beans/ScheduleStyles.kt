@@ -31,6 +31,10 @@ data class ScheduleStyles(
     val courseCellTextNoChangeLine: Boolean,
     val courseCellCourseTextLength: Int?, // null -> auto,
     val showCourseCellLocation: Boolean,
+    @Px
+    val courseCellVerticalPadding: Int,
+    @Px
+    val courseCellHorizontalPadding: Int,
 ) {
     val scheduleViewAlpha = viewAlpha / 100f
 

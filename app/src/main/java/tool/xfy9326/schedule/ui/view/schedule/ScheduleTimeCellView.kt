@@ -34,7 +34,7 @@ class ScheduleTimeCellView(
         alpha = styles.scheduleViewAlpha
         orientation = VERTICAL
         gravity = Gravity.CENTER
-        setPadding(predefine.gridCellHorizontalPadding, predefine.gridCellVerticalPadding, predefine.gridCellHorizontalPadding, predefine.gridCellVerticalPadding)
+        setPadding(styles.courseCellHorizontalPadding, styles.courseCellVerticalPadding, styles.courseCellHorizontalPadding, styles.courseCellVerticalPadding)
         isHorizontalScrollBarEnabled = false
         isVerticalScrollBarEnabled = false
         layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)

@@ -132,8 +132,8 @@ class ScheduleHeaderView @JvmOverloads constructor(context: Context, attrs: Attr
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        val verticalDoublePadding = (predefine?.gridCellVerticalPadding ?: 0) * 2
-        val horizontalDoublePadding = (predefine?.gridCellHorizontalPadding ?: 0) * 2
+        val verticalDoublePadding = (styles?.courseCellVerticalPadding ?: 0) * 2
+        val horizontalDoublePadding = (styles?.courseCellHorizontalPadding ?: 0) * 2
         val monthWidthSpec = MeasureSpec.makeMeasureSpec(timeColumnWidth - horizontalDoublePadding, MeasureSpec.EXACTLY)
         val dayWidthSpec = MeasureSpec.makeMeasureSpec(courseColumnWidth - horizontalDoublePadding, MeasureSpec.EXACTLY)
 
@@ -155,8 +155,8 @@ class ScheduleHeaderView @JvmOverloads constructor(context: Context, attrs: Attr
         if (childCount > 0) {
             val height = b - t
             val leftToRight = layoutDirection == LAYOUT_DIRECTION_LTR
-            val verticalCellPadding = predefine?.gridCellVerticalPadding ?: 0
-            val horizontalCellPadding = predefine?.gridCellHorizontalPadding ?: 0
+            val verticalCellPadding = styles?.courseCellVerticalPadding ?: 0
+            val horizontalCellPadding = styles?.courseCellHorizontalPadding ?: 0
 
             for (i in 0 until columnAmount) {
                 val view = getChildAt(i)

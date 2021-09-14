@@ -25,12 +25,18 @@
     <integer name="default_schedule_course_cell_height">40</integer>
     <integer name="default_schedule_course_cell_text_length">15</integer>
     <integer name="default_schedule_course_cell_course_text_length">10</integer>
+    <integer name="default_schedule_course_cell_vertical_padding">4</integer>
+    <integer name="default_schedule_course_cell_horizontal_padding">4</integer>
 
     <integer name="min_schedule_course_cell_height">20</integer>
     <integer name="min_schedule_course_cell_text_length">1</integer>
     <integer name="min_schedule_course_cell_course_text_length">1</integer>
+    <integer name="min_schedule_course_cell_vertical_padding">0</integer>
+    <integer name="min_schedule_course_cell_horizontal_padding">0</integer>
 
     <integer name="max_schedule_course_cell_height">300</integer>
     <integer name="max_schedule_course_cell_text_length">150</integer>
     <integer name="max_schedule_course_cell_course_text_length">100</integer>
+    <integer name="max_schedule_course_cell_vertical_padding">100</integer>
+    <integer name="max_schedule_course_cell_horizontal_padding">100</integer>
 </resources>

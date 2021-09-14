@@ -36,6 +36,9 @@ object ScheduleDataStore : AbstractDataStore("ScheduleSettings") {
     private val courseCellTextNoChangeLine by booleanPreferencesKey()
     private val showCourseCellLocation by booleanPreferencesKey()
 
+    val courseCellVerticalPadding by intPreferencesKey()
+    val courseCellHorizontalPadding by intPreferencesKey()
+
     val timeTextColor by intPreferencesKey()
     val toolBarTintColor by intPreferencesKey()
     val highlightShowTodayCellColor by intPreferencesKey()
@@ -86,6 +89,8 @@ object ScheduleDataStore : AbstractDataStore("ScheduleSettings") {
             courseCellTextNoChangeLine = it[courseCellTextNoChangeLine] ?: false,
             courseCellCourseTextLength = if (it[courseCellShowAllCourseText] == false) getCourseCellCourseTextLengthFromPref(it) else null,
             showCourseCellLocation = it[showCourseCellLocation] ?: true,
+            courseCellVerticalPadding = getCourseCellVerticalPaddingFromPref(it),
+            courseCellHorizontalPadding = getCourseCellHorizontalPaddingFromPref(it),
         )
     }.distinctUntilChanged()
 
@@ -95,6 +100,10 @@ object ScheduleDataStore : AbstractDataStore("ScheduleSettings") {
 
     val courseCellCourseTextLengthFlow = read { getCourseCellCourseTextLengthFromPref(it) }
 
+    val courseCellVerticalPaddingFlow = read { getCourseCellVerticalPaddingFromPref(it) }
+
+    val courseCellHorizontalPaddingFlow = read { getCourseCellHorizontalPaddingFromPref(it) }
+
     private fun getCourseCellHeightFromPref(pref: Preferences): Int =
         pref[courseCellHeight] ?: IOManager.resources.getInteger(R.integer.default_schedule_course_cell_height)
 
@@ -103,6 +112,12 @@ object ScheduleDataStore : AbstractDataStore("ScheduleSettings") {
 
     private fun getCourseCellCourseTextLengthFromPref(pref: Preferences): Int =
         pref[courseCellCourseTextLength] ?: IOManager.resources.getInteger(R.integer.default_schedule_course_cell_course_text_length)
+
+    private fun getCourseCellVerticalPaddingFromPref(pref: Preferences): Int =
+        pref[courseCellVerticalPadding] ?: IOManager.resources.getInteger(R.integer.default_schedule_course_cell_vertical_padding)
+
+    private fun getCourseCellHorizontalPaddingFromPref(pref: Preferences): Int =
+        pref[courseCellHorizontalPadding] ?: IOManager.resources.getInteger(R.integer.default_schedule_course_cell_horizontal_padding)
 
     val defaultFirstDayOfWeekFlow = defaultFirstDayOfWeek.readEnumAsFlow(WeekDay.MONDAY)
 

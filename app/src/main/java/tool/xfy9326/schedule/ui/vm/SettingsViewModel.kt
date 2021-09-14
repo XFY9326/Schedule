@@ -47,10 +47,6 @@ class SettingsViewModel : AbstractViewModel() {
     val scheduleBackground by lazy { ScheduleDataProcessor.scheduleBackgroundFlow.asDistinctLiveData() }
     val schedulePreviewPreviewWidth by lazy { MutableEventLiveData<Boolean>() }
 
-    val courseCellHeight by lazy { ScheduleDataStore.courseCellHeightFlow.asDistinctLiveData() }
-    val courseCellTextLength by lazy { ScheduleDataStore.courseCellTextLengthFlow.asDistinctLiveData() }
-    val courseCellCourseTextLength by lazy { ScheduleDataStore.courseCellCourseTextLengthFlow.asDistinctLiveData() }
-
     val importScheduleImage by lazy { MutableEventLiveData<Boolean>() }
     val allDebugLogs by lazy { MutableEventLiveData<Pair<String, List<String>>>() }
     val showDebugLog by lazy { MutableEventLiveData<String>() }
