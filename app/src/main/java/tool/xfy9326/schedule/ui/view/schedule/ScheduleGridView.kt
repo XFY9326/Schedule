@@ -1,8 +1,8 @@
 package tool.xfy9326.schedule.ui.view.schedule
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
-import android.util.AttributeSet
 import android.view.RoundedCorner
 import android.view.View
 import android.view.ViewGroup
@@ -12,23 +12,22 @@ import androidx.core.view.children
 import tool.xfy9326.schedule.beans.CourseCell
 import tool.xfy9326.schedule.beans.SchedulePredefine
 import tool.xfy9326.schedule.beans.ScheduleStyles
-import tool.xfy9326.schedule.beans.ScheduleViewData
 import kotlin.math.ceil
 import kotlin.math.max
 
-class ScheduleGridView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0, defStyleRes: Int = 0) :
-    ViewGroup(context, attrs, defStyleAttr, defStyleRes) {
-
-    private var styles: ScheduleStyles? = null
-    private var rowAmount = 0
-    private var columnAmount = 0
-    private var predefine: SchedulePredefine? = null
-
+@SuppressLint("ViewConstructor")
+class ScheduleGridView constructor(
+    context: Context,
+    private val columnAmount: Int,
+    private val rowAmount: Int,
+    private val predefine: SchedulePredefine,
+    private val styles: ScheduleStyles,
+) : ViewGroup(context), IScheduleMeasure {
     private val unspecifiedHeightSpec = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)
 
     private var timeColumnWidth = 0
     private var courseColumnWidth = 0
-    private lateinit var xRecords: IntArray
+    private var xRecords: IntArray = IntArray(0)
     private var rowHeight = 0
 
     private var courseCellClickListener: ((CourseCell) -> Unit)? = null
@@ -36,29 +35,7 @@ class ScheduleGridView @JvmOverloads constructor(context: Context, attrs: Attrib
         courseCellClickListener?.invoke(it)
     }
 
-    fun setSchedulePredefine(schedulePredefine: SchedulePredefine) {
-        if (predefine != schedulePredefine) {
-            predefine = schedulePredefine
-            requestLayout()
-        }
-    }
-
-    fun setScheduleViewData(viewData: ScheduleViewData) {
-        if (styles != viewData.styles || rowAmount != viewData.times.size) {
-            styles = viewData.styles
-            rowAmount = viewData.times.size
-            requestLayout()
-        }
-    }
-
-    fun setColumnAmount(num: Int) {
-        if (columnAmount != num) {
-            columnAmount = num
-            requestLayout()
-        }
-    }
-
-    fun setMeasureConfig(timeColumnWidth: Int, courseColumnWidth: Int, xRecords: IntArray) {
+    override fun setMeasureConfig(timeColumnWidth: Int, courseColumnWidth: Int, xRecords: IntArray) {
         this.timeColumnWidth = timeColumnWidth
         this.courseColumnWidth = courseColumnWidth
         this.xRecords = xRecords
@@ -84,7 +61,7 @@ class ScheduleGridView @JvmOverloads constructor(context: Context, attrs: Attrib
         val timeColumnWidthSpec = MeasureSpec.makeMeasureSpec(timeColumnWidth, MeasureSpec.EXACTLY)
         val courseColumnWidthSpec = MeasureSpec.makeMeasureSpec(courseColumnWidth, MeasureSpec.EXACTLY)
 
-        val styleCourseCellHeight = styles?.rowHeight
+        val styleCourseCellHeight = styles.rowHeight
         rowHeight = if (styleCourseCellHeight != null) {
             styleCourseCellHeight
         } else {
@@ -118,14 +95,13 @@ class ScheduleGridView @JvmOverloads constructor(context: Context, attrs: Attrib
             } ?: 0
 
         val actualHeight =
-            if (styles?.cornerScreenMargin == true) {
-                val defaultScreenCornerMargin = predefine?.gridBottomCornerScreenMargin ?: 0
+            if (styles.cornerScreenMargin) {
                 val screenCornerMargin = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                     val bottomLeftCorner = rootWindowInsets.getRoundedCorner(RoundedCorner.POSITION_BOTTOM_LEFT)
                     val bottomRightCorner = rootWindowInsets.getRoundedCorner(RoundedCorner.POSITION_BOTTOM_RIGHT)
-                    max(bottomLeftCorner?.radius ?: defaultScreenCornerMargin, bottomRightCorner?.radius ?: defaultScreenCornerMargin)
+                    max(bottomLeftCorner?.radius ?: predefine.gridBottomCornerScreenMargin, bottomRightCorner?.radius ?: predefine.gridBottomCornerScreenMargin)
                 } else {
-                    defaultScreenCornerMargin
+                    predefine.gridBottomCornerScreenMargin
                 }
                 rowHeight * rowAmount + max(screenCornerMargin, bottomInset)
             } else {
@@ -143,19 +119,17 @@ class ScheduleGridView @JvmOverloads constructor(context: Context, attrs: Attrib
             for (child in children) {
                 child as IScheduleCell
 
-                val startY = rowHeight * child.getRow()
-                val endY = rowHeight * (child.getRow() + child.getRowSpan())
+                val left = xRecords[if (leftToRight) child.getColumn() else columnAmount - child.getColumn() - 1]
+                val top = rowHeight * child.getRow()
+                val right = xRecords[if (leftToRight) child.getColumn() + 1 else columnAmount - child.getColumn()]
+                val bottom = rowHeight * (child.getRow() + child.getRowSpan())
 
-                if (leftToRight) {
-                    child.layout(xRecords[child.getColumn()], startY, xRecords[child.getColumn() + 1], endY)
-                } else {
-                    child.layout(xRecords[columnAmount - child.getColumn() - 1], startY, xRecords[columnAmount - child.getColumn()], endY)
-                }
+                child.layout(left, top, right, bottom)
             }
         }
     }
 
-    fun addScheduleCellPreventLayout(cellView: IScheduleCell) {
+    fun addScheduleCell(cellView: IScheduleCell) {
         if (cellView is View && cellView.getRow() in 0 until rowAmount && cellView.getColumn() in 0 until columnAmount) {
             addViewPreventLayout(cellView)
             if (cellView is ScheduleCourseCellView) {

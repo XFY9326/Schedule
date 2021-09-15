@@ -1,11 +1,11 @@
 package tool.xfy9326.schedule.ui.view.schedule
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Typeface
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.AbsoluteSizeSpan
-import android.util.AttributeSet
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
@@ -17,16 +17,21 @@ import lib.xfy9326.android.kit.getStringArray
 import lib.xfy9326.android.kit.spToPx
 import lib.xfy9326.kit.NEW_LINE
 import tool.xfy9326.schedule.R
-import tool.xfy9326.schedule.beans.*
+import tool.xfy9326.schedule.beans.Day
+import tool.xfy9326.schedule.beans.SchedulePredefine
+import tool.xfy9326.schedule.beans.ScheduleStyles
+import tool.xfy9326.schedule.beans.ScheduleText
 import tool.xfy9326.schedule.utils.view.ViewUtils
 import kotlin.math.max
 
-class ScheduleHeaderView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0, defStyleRes: Int = 0) :
-    ViewGroup(context, attrs, defStyleAttr, defStyleRes) {
-    private var styles: ScheduleStyles? = null
-    private var columnAmount = 0
-    private var predefine: SchedulePredefine? = null
-    private var days: Array<Day>? = null
+@SuppressLint("ViewConstructor")
+class ScheduleHeaderView constructor(
+    context: Context,
+    private val days: Array<Day>,
+    private val predefine: SchedulePredefine,
+    private val styles: ScheduleStyles,
+) : ViewGroup(context), IScheduleMeasure {
+    private val columnAmount: Int
 
     private val unspecifiedSpec = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)
     private val weekDayStrArr = context.getStringArray(R.array.weekday)
@@ -34,45 +39,22 @@ class ScheduleHeaderView @JvmOverloads constructor(context: Context, attrs: Attr
     private var headerHeight = minimumHeight
     private var timeColumnWidth: Int = 0
     private var courseColumnWidth: Int = 0
-    private lateinit var xRecords: IntArray
+    private var xRecords: IntArray = IntArray(0)
 
     init {
-        alpha = styles?.scheduleViewAlpha ?: 1f
-    }
-
-    fun setDays(days: Array<Day>) {
-        val styles = this.styles
-        val predefine = this.predefine
-        if (styles != null && predefine != null && !days.contentEquals(this.days)) {
-            buildMonthView(days[0].month, styles).also {
+        alpha = styles.scheduleViewAlpha
+        buildMonthView(days[0].month, styles).also {
+            addViewInLayout(it, -1, it.layoutParams, true)
+        }
+        repeat(days.size) { i ->
+            buildDayView(days[i], styles, predefine).also {
                 addViewInLayout(it, -1, it.layoutParams, true)
             }
-            repeat(days.size) { i ->
-                buildDayView(days[i], styles, predefine).also {
-                    addViewInLayout(it, -1, it.layoutParams, true)
-                }
-            }
-            columnAmount = days.size + 1
-            this.days = days
-            requestLayout()
         }
+        columnAmount = days.size + 1
     }
 
-    fun setScheduleViewData(viewData: ScheduleViewData) {
-        if (styles != viewData.styles) {
-            styles = viewData.styles
-            requestLayout()
-        }
-    }
-
-    fun setSchedulePredefine(schedulePredefine: SchedulePredefine) {
-        if (predefine != schedulePredefine) {
-            predefine = schedulePredefine
-            requestLayout()
-        }
-    }
-
-    fun setMeasureConfig(timeColumnWidth: Int, courseColumnWidth: Int, xRecords: IntArray) {
+    override fun setMeasureConfig(timeColumnWidth: Int, courseColumnWidth: Int, xRecords: IntArray) {
         this.timeColumnWidth = timeColumnWidth
         this.courseColumnWidth = courseColumnWidth
         this.xRecords = xRecords
@@ -132,8 +114,8 @@ class ScheduleHeaderView @JvmOverloads constructor(context: Context, attrs: Attr
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        val verticalDoublePadding = (styles?.courseCellVerticalPadding ?: 0) * 2
-        val horizontalDoublePadding = (styles?.courseCellHorizontalPadding ?: 0) * 2
+        val verticalDoublePadding = styles.courseCellVerticalPadding * 2
+        val horizontalDoublePadding = styles.courseCellHorizontalPadding * 2
         val monthWidthSpec = MeasureSpec.makeMeasureSpec(timeColumnWidth - horizontalDoublePadding, MeasureSpec.EXACTLY)
         val dayWidthSpec = MeasureSpec.makeMeasureSpec(courseColumnWidth - horizontalDoublePadding, MeasureSpec.EXACTLY)
 
@@ -155,14 +137,12 @@ class ScheduleHeaderView @JvmOverloads constructor(context: Context, attrs: Attr
         if (childCount > 0) {
             val height = b - t
             val leftToRight = layoutDirection == LAYOUT_DIRECTION_LTR
-            val verticalCellPadding = styles?.courseCellVerticalPadding ?: 0
-            val horizontalCellPadding = styles?.courseCellHorizontalPadding ?: 0
 
             for (i in 0 until columnAmount) {
                 val view = getChildAt(i)
-                val left = xRecords[if (leftToRight) i else columnAmount - i - 1] + horizontalCellPadding
-                val right = xRecords[if (leftToRight) i + 1 else columnAmount - i] - horizontalCellPadding
-                view.layout(left, verticalCellPadding, right, height - verticalCellPadding)
+                val left = xRecords[if (leftToRight) i else columnAmount - i - 1] + styles.courseCellHorizontalPadding
+                val right = xRecords[if (leftToRight) i + 1 else columnAmount - i] - styles.courseCellHorizontalPadding
+                view.layout(left, styles.courseCellVerticalPadding, right, height - styles.courseCellVerticalPadding)
             }
         }
     }

@@ -84,22 +84,14 @@ object ScheduleViewHelper {
 
         val scheduleHeaderViewDeferred = async {
             val days = CourseTimeUtils.getDayInWeek(viewData.weekNum, viewData.startDate, viewData.weekStart, showWeekend)
-            ScheduleHeaderView(context).apply {
-                setSchedulePredefine(schedulePredefine)
-                setScheduleViewData(viewData)
-                setDays(days)
-            }
+            ScheduleHeaderView(context, days, schedulePredefine, viewData.styles)
         }
 
         val columnAmount = if (showWeekend) MAX_SCHEDULE_COLUMN_COUNT else MIN_SCHEDULE_COLUMN_COUNT
-        val scheduleGridView = ScheduleGridView(context).apply {
-            setSchedulePredefine(schedulePredefine)
-            setScheduleViewData(viewData)
-            setColumnAmount(columnAmount)
-        }
+        val scheduleGridView = ScheduleGridView(context, columnAmount, viewData.rowAmount, schedulePredefine, viewData.styles)
 
         for (viewDeferred in cellsDeferred) {
-            scheduleGridView.addScheduleCellPreventLayout(viewDeferred.await())
+            scheduleGridView.addScheduleCell(viewDeferred.await())
         }
 
         val scheduleView = ScheduleView(context, viewData.styles, columnAmount, scheduleHeaderViewDeferred.await(), scheduleGridView)

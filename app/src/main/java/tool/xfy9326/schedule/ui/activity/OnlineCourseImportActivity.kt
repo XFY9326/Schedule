@@ -15,6 +15,7 @@ import lib.xfy9326.android.kit.show
 import lib.xfy9326.livedata.observeEvent
 import lib.xfy9326.livedata.observeNotify
 import tool.xfy9326.schedule.R
+import tool.xfy9326.schedule.content.CourseImportConfigManager.Type.Companion.getText
 import tool.xfy9326.schedule.content.beans.JSConfig
 import tool.xfy9326.schedule.content.utils.BaseCourseImportConfig
 import tool.xfy9326.schedule.data.AppDataStore
