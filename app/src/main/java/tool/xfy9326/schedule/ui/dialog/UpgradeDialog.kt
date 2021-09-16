@@ -24,7 +24,7 @@ import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.databinding.DialogUpgradeBinding
 import tool.xfy9326.schedule.json.upgrade.DownloadSource
 import tool.xfy9326.schedule.json.upgrade.UpdateInfo
-import tool.xfy9326.schedule.kt.APP_ID
+import tool.xfy9326.schedule.kt.PROJECT_ID
 import tool.xfy9326.schedule.utils.DownloadUtils
 
 class UpgradeDialog : AppCompatDialogFragment() {
@@ -131,7 +131,7 @@ class UpgradeDialog : AppCompatDialogFragment() {
             if (downloadSource.isDirectLink && !AppSettingsDataStore.useBrowserDownloadUpgradeFileFlow.first()) {
                 val title = getString(R.string.app_name)
                 val description = getString(R.string.downloading_update_description, BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE)
-                val fileName = "${APP_ID}_v${BuildConfig.VERSION_NAME}_${BuildConfig.VERSION_CODE}.apk"
+                val fileName = "${PROJECT_ID}_v${BuildConfig.VERSION_NAME}_${BuildConfig.VERSION_CODE}.apk"
                 val downloadId = DownloadUtils.requestDownloadFileDirectly(requireContext(), downloadSource.url, fileName, title, description, MIMEConst.MIME_APK)
                 if (downloadId == null) {
                     showToast(R.string.directly_download_failed)

@@ -22,6 +22,7 @@ android {
         resourceConfigurations.add("zh")
 
         buildConfigField("String", "BASE_APPLICATION_ID", "\"${Android.applicationId}\"")
+        buildConfigField("String", "PROJECT_NAME", "\"$ProjectName\"")
         buildConfigField("boolean", "IS_BETA", "false")
         manifestPlaceholders["ApplicationId"] = Android.applicationId
         manifestPlaceholders["BaseApplicationId"] = Android.applicationId

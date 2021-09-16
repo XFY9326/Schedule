@@ -13,11 +13,12 @@ import androidx.lifecycle.distinctUntilChanged
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.flow.Flow
 import lib.xfy9326.android.kit.*
+import tool.xfy9326.schedule.BuildConfig
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.SystemBarAppearance
 import tool.xfy9326.schedule.ui.activity.module.ScheduleLaunchModule
 
-const val APP_ID = "PureSchedule"
+const val PROJECT_ID = BuildConfig.PROJECT_NAME
 
 fun Context.crashRelaunch() {
     relaunchApp(1) {

@@ -5,11 +5,11 @@ import android.content.Context
 import android.net.Uri
 import android.os.Environment
 import androidx.core.content.getSystemService
-import tool.xfy9326.schedule.kt.APP_ID
+import tool.xfy9326.schedule.kt.PROJECT_ID
 import java.io.File
 
 object DownloadUtils {
-    private const val DOWNLOAD_SUB_DIR = APP_ID
+    private const val DOWNLOAD_SUB_DIR = PROJECT_ID
 
     fun requestDownloadFileDirectly(
         context: Context,
