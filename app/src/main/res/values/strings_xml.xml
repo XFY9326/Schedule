@@ -44,4 +44,6 @@
     <string name="pref_schedule_course_cell_specific_height" translatable="false">ScheduleCourseCellSpecificHeight</string>
     <string name="pref_schedule_course_cell_text_length" translatable="false">ScheduleCourseCellTextLength</string>
     <string name="pref_schedule_course_cell_course_text_length" translatable="false">ScheduleCourseCellCourseTextLength</string>
+    <string name="pref_schedule_course_cell_horizontal_padding" translatable="false">ScheduleCourseCellHorizontalPadding</string>
+    <string name="pref_schedule_course_cell_vertical_padding" translatable="false">ScheduleCourseCellVerticalPadding</string>
 </resources>

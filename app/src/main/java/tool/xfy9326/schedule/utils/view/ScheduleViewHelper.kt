@@ -70,36 +70,28 @@ object ScheduleViewHelper {
         val schedulePredefine = SchedulePredefine.content
         val showWeekend = viewData.styles.forceShowWeekendColumn || viewData.hasWeekendCourse
 
-        val cellsDeferred = ArrayList<Deferred<ScheduleCellView>>(viewData.times.size + viewData.cells.size)
+        val cellsDeferred = ArrayList<Deferred<IScheduleCell>>(viewData.times.size + viewData.cells.size)
 
         for ((i, time) in viewData.times.withIndex()) {
-            cellsDeferred.add(async { ScheduleCellView(context, i, time, schedulePredefine, viewData.styles) })
+            cellsDeferred.add(async { ScheduleTimeCellView(context, i, time, schedulePredefine, viewData.styles) })
         }
 
         for (cell in viewData.cells) {
             if (cell.isThisWeekCourse || viewData.styles.showNotThisWeekCourse) {
-                cellsDeferred.add(async { ScheduleCellView(context, showWeekend, cell, schedulePredefine, viewData.styles, viewData.weekStart) })
+                cellsDeferred.add(async { ScheduleCourseCellView(context, showWeekend, cell, schedulePredefine, viewData.styles, viewData.weekStart) })
             }
         }
 
         val scheduleHeaderViewDeferred = async {
             val days = CourseTimeUtils.getDayInWeek(viewData.weekNum, viewData.startDate, viewData.weekStart, showWeekend)
-            ScheduleHeaderView(context).apply {
-                setSchedulePredefine(schedulePredefine)
-                setScheduleViewData(viewData)
-                setDays(days)
-            }
+            ScheduleHeaderView(context, days, schedulePredefine, viewData.styles)
         }
 
         val columnAmount = if (showWeekend) MAX_SCHEDULE_COLUMN_COUNT else MIN_SCHEDULE_COLUMN_COUNT
-        val scheduleGridView = ScheduleGridView(context).apply {
-            setSchedulePredefine(schedulePredefine)
-            setScheduleViewData(viewData)
-            setColumnAmount(columnAmount)
-        }
+        val scheduleGridView = ScheduleGridView(context, columnAmount, viewData.rowAmount, schedulePredefine, viewData.styles)
 
         for (viewDeferred in cellsDeferred) {
-            scheduleGridView.addScheduleCellPreventLayout(viewDeferred.await())
+            scheduleGridView.addScheduleCell(viewDeferred.await())
         }
 
         val scheduleView = ScheduleView(context, viewData.styles, columnAmount, scheduleHeaderViewDeferred.await(), scheduleGridView)

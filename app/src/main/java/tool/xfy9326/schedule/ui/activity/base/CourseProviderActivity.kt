@@ -77,8 +77,8 @@ abstract class CourseProviderActivity<I, P1 : AbstractCourseProvider<*>, P2 : Ab
             }
         }
         ImportCourseConflictDialog.setOnReadImportCourseConflictListener(supportFragmentManager, this) {
-            it?.getLong(EXTRA_EDIT_SCHEDULE_ID)?.let {
-                ScheduleImportSuccessDialog.showDialog(supportFragmentManager, it)
+            it?.getLong(EXTRA_EDIT_SCHEDULE_ID)?.let { id ->
+                ScheduleImportSuccessDialog.showDialog(supportFragmentManager, id)
             }
         }
     }

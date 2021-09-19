@@ -9,8 +9,6 @@ import tool.xfy9326.schedule.R
 
 class SchedulePredefine private constructor(
     @Px
-    val gridCellPadding: Int,
-    @Px
     val timeCellVerticalPadding: Int,
     @Px
     val timeCellTimeDivideTopMargin: Int,
@@ -30,7 +28,6 @@ class SchedulePredefine private constructor(
     companion object {
         val content by lazy(LazyThreadSafetyMode.NONE) {
             SchedulePredefine(
-                gridCellPadding = IOManager.resources.getDimensionPixelSize(R.dimen.schedule_grid_cell_padding),
                 timeCellVerticalPadding = IOManager.resources.getDimensionPixelSize(R.dimen.schedule_time_cell_vertical_padding),
                 timeCellTimeDivideTopMargin = IOManager.resources.getDimensionPixelSize(R.dimen.schedule_time_divide_top_margin),
                 gridBottomCornerScreenMargin = IOManager.resources.getDimensionPixelSize(R.dimen.schedule_grid_bottom_corner_screen_margin),

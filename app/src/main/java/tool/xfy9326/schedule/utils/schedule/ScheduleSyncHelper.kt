@@ -16,13 +16,13 @@ import tool.xfy9326.schedule.beans.*
 import tool.xfy9326.schedule.beans.Course.Companion.iterateAll
 import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
-import tool.xfy9326.schedule.kt.APP_ID
+import tool.xfy9326.schedule.kt.PROJECT_ID
 import tool.xfy9326.schedule.tools.NumberPattern
 import tool.xfy9326.schedule.utils.ics.ScheduleICSWriter
 import java.util.*
 
 object ScheduleSyncHelper {
-    private const val SYNC_ACCOUNT_NAME = APP_ID
+    private const val SYNC_ACCOUNT_NAME = PROJECT_ID
     private const val SYNC_ACCOUNT_TYPE = CalendarContract.ACCOUNT_TYPE_LOCAL
 
     private const val CALENDAR_ID_SELECTION = "${CalendarContract.Calendars._ID}=?"

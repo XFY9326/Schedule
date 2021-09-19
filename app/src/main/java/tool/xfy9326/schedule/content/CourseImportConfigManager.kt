@@ -2,7 +2,6 @@ package tool.xfy9326.schedule.content
 
 import android.content.Context
 import android.net.Uri
-import androidx.annotation.StringRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import io.ktor.client.*
@@ -211,16 +210,29 @@ class CourseImportConfigManager(scope: CoroutineScope) : CoroutineScope by scope
         cancel()
     }
 
-    enum class Type(@StringRes val msgId: Int) {
-        ADD_SUCCESS(R.string.js_config_config_add_success),
-        REMOVE_SUCCESS(R.string.js_config_config_remove_success),
+    enum class Type {
+        ADD_SUCCESS,
+        REMOVE_SUCCESS,
 
-        CHECK_UPDATE(R.string.js_config_check_update),
-        PREPARE_PROVIDER(R.string.js_config_prepare_provider),
-        PREPARE_PARSER(R.string.js_config_prepare_parser),
-        PREPARE_DEPENDENCIES(R.string.js_config_prepare_dependencies),
-        PREPARE_FINISH(R.string.js_config_prepare_finish);
+        CHECK_UPDATE,
+        PREPARE_PROVIDER,
+        PREPARE_PARSER,
+        PREPARE_DEPENDENCIES,
+        PREPARE_FINISH;
 
-        fun getText(context: Context) = context.getString(msgId)
+        companion object {
+            fun Type.getText(context: Context) =
+                context.getString(
+                    when (this) {
+                        ADD_SUCCESS -> R.string.js_config_config_add_success
+                        REMOVE_SUCCESS -> R.string.js_config_config_remove_success
+                        CHECK_UPDATE -> R.string.js_config_check_update
+                        PREPARE_PROVIDER -> R.string.js_config_prepare_provider
+                        PREPARE_PARSER -> R.string.js_config_prepare_parser
+                        PREPARE_DEPENDENCIES -> R.string.js_config_prepare_dependencies
+                        PREPARE_FINISH -> R.string.js_config_prepare_finish
+                    }
+                )
+        }
     }
 }

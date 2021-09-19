@@ -27,6 +27,26 @@
 
     <androidx.preference.PreferenceCategory
         app:iconSpaceReserved="false"
+        app:title="@string/schedule_course_cell_padding">
+
+        <androidx.preference.Preference
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_schedule_course_cell_vertical_padding"
+            app:persistent="false"
+            app:summary="@string/schedule_course_cell_padding_sum"
+            app:title="@string/schedule_course_cell_vertical_padding" />
+
+        <androidx.preference.Preference
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_schedule_course_cell_horizontal_padding"
+            app:persistent="false"
+            app:summary="@string/schedule_course_cell_padding_sum"
+            app:title="@string/schedule_course_cell_horizontal_padding" />
+
+    </androidx.preference.PreferenceCategory>
+
+    <androidx.preference.PreferenceCategory
+        app:iconSpaceReserved="false"
         app:title="@string/schedule_course_cell_text">
 
         <androidx.preference.CheckBoxPreference

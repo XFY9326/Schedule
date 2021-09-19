@@ -16,6 +16,9 @@ data class ScheduleViewData(
     val hasWeekendCourse
         get() = CourseUtils.hasWeekendCourse(cells)
 
+    val rowAmount
+        get() = times.size
+
     constructor(weekNum: Int, schedule: Schedule, cells: List<CourseCell>, styles: ScheduleStyles) :
             this(schedule.scheduleId, schedule.startDate, schedule.endDate, weekNum, schedule.weekStart, schedule.times, cells, styles)
 }

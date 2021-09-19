@@ -3,13 +3,13 @@ package tool.xfy9326.schedule.utils.ics
 import tool.xfy9326.schedule.BuildConfig
 import tool.xfy9326.schedule.beans.WeekDay
 import tool.xfy9326.schedule.beans.WeekDay.Companion.shortName
-import tool.xfy9326.schedule.kt.APP_ID
+import tool.xfy9326.schedule.kt.PROJECT_ID
 import java.text.SimpleDateFormat
 import java.util.*
 
 class ScheduleICSWriter {
     companion object {
-        private const val CAL_ID = APP_ID
+        private const val CAL_ID = PROJECT_ID
         private const val PRODID = "-//Produced By: $CAL_ID//App Version: ${BuildConfig.VERSION_CODE}"
 
         private const val BEGIN_CALENDAR = "BEGIN:VCALENDAR"

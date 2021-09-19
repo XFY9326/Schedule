@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="PxUsage">
-    <dimen name="schedule_grid_cell_padding">4px</dimen>
     <dimen name="schedule_grid_cell_radius">6dp</dimen>
     <dimen name="schedule_course_cell_text_padding">4dp</dimen>
     <dimen name="schedule_time_divide_top_margin">1dp</dimen>

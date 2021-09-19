@@ -16,6 +16,7 @@ import lib.xfy9326.livedata.observeEvent
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.content.CourseImportConfigManager
 import tool.xfy9326.schedule.content.CourseImportConfigManager.Type.*
+import tool.xfy9326.schedule.content.CourseImportConfigManager.Type.Companion.getText
 import tool.xfy9326.schedule.content.beans.JSConfig
 import tool.xfy9326.schedule.content.utils.JSConfigException
 import tool.xfy9326.schedule.databinding.DialogJsConfigPrepareBinding

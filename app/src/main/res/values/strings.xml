@@ -279,7 +279,7 @@
     <string name="sync_operation">同步操作</string>
     <string name="calendar_sync_attention">注意事项：\n1. 所有数据修改后必须同步一次到日历方可生效\n2. 如果同步的数据出现错误建议清空同步数据后重试\n3. App卸载后日历数据依然存在且账户无法直接删除\n4. 建议卸载App前手动清空数据删除日历账户\n5. 课程提醒可以在日历中单独设置或者此处整体配置</string>
     <string name="calendar_sync_attention_dialog_title">日历同步注意事项</string>
-    <string name="calendar_sync_attention_dialog_msg">\u3000\u3000所有数据修改后必须同步一次到日历方可生效，如果同步的数据出现错误建议清空同步数据后重试。\n\u3000\u3000App卸载后日历数据依然存在且账户无法直接删除，建议卸载App前手动清空数据删除日历账户。</string>
+    <string name="calendar_sync_attention_dialog_msg">\u3000\u3000所有数据修改后必须同步一次到日历方可生效，如果同步的数据出现错误建议清空同步数据后重试。\n\u3000\u3000App卸载后日历数据依然存在且账户无法直接删除，建议卸载App前手动清空数据删除日历账户。\n\u3000\u3000默认将会同步所有课表的日程安排，如有特殊需求可以在\'设置-日历同步\'中修改。</string>
     <string name="sync_settings">同步设置</string>
     <string name="calendar_sync_schedule">新增同步的课表默认允许同步</string>
     <string name="calendar_sync_schedule_sum">不进行同步的课表将不会同步到日历</string>
@@ -440,13 +440,18 @@
     <string name="input_text_length_hint">最大长度(字符) [%1$d, %2$d]</string>
     <string name="input_number_error">输入数值错误！</string>
     <string name="schedule_course_cell_all_course_text">显示完整课程名称</string>
-    <string name="schedule_course_cell_all_course_text_sum">最终会被所有文字最大长度的限制</string>
+    <string name="schedule_course_cell_all_course_text_sum">优先满足所有文字最大长度的限制</string>
     <string name="schedule_course_cell_course_text_length">课程名称最大显示长度</string>
     <string name="schedule_course_cell_course_text_length_sum">当前长度：%1$d个字符</string>
     <string name="schedule_course_cell_show_course_location">显示上课地点</string>
     <string name="schedule_course_cell_show_course_location_sum">若不存在上课地点则默认不会显示</string>
     <string name="schedule_course_cell_text_no_change_line">课程名称与上课地点文字不换行</string>
     <string name="schedule_course_cell_text_no_change_line_sum">课程名称后不换行显示上课地点</string>
+    <string name="schedule_course_cell_padding">课程格间距</string>
+    <string name="schedule_course_cell_horizontal_padding">课程格横向间距（左右）</string>
+    <string name="schedule_course_cell_vertical_padding">课程格纵向间距（上下）</string>
+    <string name="schedule_course_cell_padding_sum">当前间距：%1$dpx</string>
+    <string name="schedule_course_cell_padding_hint">间距(px) [%1$d, %2$d]</string>
 
     <string name="js_config_read_failed">配置文件读取错误！</string>
     <string name="js_config_invalid">导入的配置文件不合法！</string>
@@ -476,11 +481,11 @@
     <string name="app_widget_settings">桌面部件</string>
     <string name="app_widget_settings_sum">控制桌面部件相关功能</string>
     <string name="app_widget_alarm_auto_launch">自启动权限</string>
-    <string name="app_widget_alarm_auto_launch_attention">\u3000\u3000由于安卓平台碎片化，部分手机系统提供了\'自启动\'权限限制APP的自启动行为以降低电耗，但是该权限同样可能限制Pure课程表自动更新桌面部件。\n\u3000\u3000建议您手动开启该权限以确保桌面部件能够在后台及时更新，Pure课程表会根据实际情况，在指定时间控制桌面部件的更新，并不会造成大量电耗</string>
+    <string name="app_widget_alarm_auto_launch_attention">\u3000\u3000由于安卓平台碎片化，部分手机系统提供了\'自启动\'权限限制APP的自启动行为以降低耗电，但是该权限同样可能限制Pure课程表自动更新桌面部件。\n\u3000\u3000建议您手动开启该权限以确保桌面部件能够在后台及时更新，Pure课程表会根据实际情况，在指定时间控制桌面部件的更新，并不会造成大量耗电。</string>
     <string name="app_widget_alarm_auto_launch_settings">打开应用设置</string>
     <string name="app_widget_alarm_auto_launch_settings_sum">设置Pure课程表的\'自启动\'权限</string>
     <string name="app_widget_alarm_schedule_next_alarm">精确的桌面部件更新</string>
-    <string name="app_widget_alarm_schedule_next_alarm_attention">\u3000\u3000由于Android 12平台限制，若您不授予\'精确计时\'的权限以允许设定任务和事件的通知，系统为了降低功耗可能不会及时更新桌面部件。\n\u3000\u3000您可以根据实际的使用情况灵活控制该权限的授予，APP将会在拥有权限的情况下自动使用更为精准的桌面部件更新方式。\n\u3000\u3000建议您手动开启该权限以确保使用体验，因为Pure课程表桌面部件的更新并不会造成大量电耗。</string>
+    <string name="app_widget_alarm_schedule_next_alarm_attention">\u3000\u3000由于Android 12平台限制，若您不授予\'精确计时\'的权限以允许设定任务和事件的通知，系统为了降低功耗可能不会及时更新桌面部件。\n\u3000\u3000您可以根据实际的使用情况灵活控制该权限的授予，APP将会在拥有权限的情况下自动使用更为精准的桌面部件更新方式。\n\u3000\u3000建议您手动开启该权限以确保使用体验，因为Pure课程表桌面部件的更新并不会造成大量耗电。</string>
     <string name="app_widget_alarm_schedule_next_alarm_settings">设置\'精确计时\'权限</string>
     <string name="permission_status_granted">当前权限状态：已授予</string>
     <string name="permission_status_not_granted">当前权限状态：未授予</string>

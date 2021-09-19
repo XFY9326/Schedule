@@ -16,7 +16,7 @@ import lib.xfy9326.android.kit.showGlobalToast
 import lib.xfy9326.android.kit.showToast
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.databinding.DialogCrashViewBinding
-import tool.xfy9326.schedule.kt.APP_ID
+import tool.xfy9326.schedule.kt.PROJECT_ID
 
 class CrashViewDialog : AppCompatDialogFragment() {
     companion object {
@@ -25,7 +25,7 @@ class CrashViewDialog : AppCompatDialogFragment() {
         private const val ARGUMENT_OUTPUT_CRASH_LOG = "OUTPUT_CRASH_LOG"
         private const val WINDOW_WIDTH_PERCENT = 1.0
 
-        private const val DEFAULT_EXPORT_LOG_NAME = "${APP_ID}_ExportLog_%d.log"
+        private const val DEFAULT_EXPORT_LOG_NAME = "${PROJECT_ID}_ExportLog_%d.log"
 
         fun showDialog(fragmentManager: FragmentManager, crashLog: String, outputCrashLog: Boolean = true) {
             CrashViewDialog().apply {
