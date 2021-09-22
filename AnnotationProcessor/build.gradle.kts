@@ -18,5 +18,5 @@ compileKotlin.kotlinOptions {
 
 dependencies {
     implementation(project(path = ":Annotation"))
-    implementation(group = "com.squareup", name = "kotlinpoet", version = "1.9.0")
+    implementation(group = "com.squareup", name = "kotlinpoet", version = "1.10.1")
 }
