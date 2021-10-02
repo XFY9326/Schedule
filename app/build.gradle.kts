@@ -159,14 +159,14 @@ dependencies {
     implementation(group = "io.coil-kt", name = "coil", version = "1.3.2")
 
     // OkHttp
-    implementation(group = "com.squareup.okhttp3", name = "okhttp", version = "4.9.0")
+    implementation(group = "com.squareup.okhttp3", name = "okhttp", version = "4.9.2")
 
     // Ktor
     implementation(group = "io.ktor", name = "ktor-client-okhttp", version = Dependencies.ktor)
     implementation(group = "io.ktor", name = "ktor-client-serialization", version = Dependencies.ktor)
 
     // Jsoup
-    implementation(group = "org.jsoup", name = "jsoup", version = "1.14.2")
+    implementation(group = "org.jsoup", name = "jsoup", version = "1.14.3")
 
     // ColorPicker
     implementation(group = "com.jaredrummler", name = "colorpicker", version = "1.1.0")
