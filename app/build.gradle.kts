@@ -127,7 +127,7 @@ dependencies {
     // AndroidX
     implementation(group = "androidx.core", name = "core-ktx", version = Dependencies.androidx_core)
 
-    implementation(group = "androidx.core", name = "core-splashscreen", version = "1.0.0-alpha01")
+    implementation(group = "androidx.core", name = "core-splashscreen", version = "1.0.0-alpha02")
 
     implementation(group = "androidx.appcompat", name = "appcompat", version = Dependencies.androidx_appcompat)
     implementation(group = "androidx.appcompat", name = "appcompat-resources", version = Dependencies.androidx_appcompat)
