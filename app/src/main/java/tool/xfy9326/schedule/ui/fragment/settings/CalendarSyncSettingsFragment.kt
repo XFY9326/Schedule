@@ -29,32 +29,27 @@ class CalendarSyncSettingsFragment : AbstractSettingsFragment() {
     override val titleName: Int = R.string.calendar_sync
     override val preferenceResId: Int = R.xml.settings_calendar_sync
     override val preferenceDataStore: PreferenceDataStore = AppSettingsDataStore.getPreferenceDataStore(lifecycleScope)
-    private val requestCalendarPermission = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
-        if (PermissionUtils.checkGrantResults(it)) {
-            requireSettingsViewModel()?.syncToCalendar()
-        } else {
-            requireRootLayout()?.showSnackBar(R.string.calendar_permission_get_failed)
-        }
+    private val requestSyncCalendarPermission = createCalendarPermissionLauncher {
+        requireSettingsViewModel()?.syncToCalendar()
+    }
+    private val requestClearCalendarPermission = createCalendarPermissionLauncher {
+        clearCalendar()
     }
 
     override fun onPrefInit(savedInstanceState: Bundle?) {
         setOnPrefClickListener(R.string.pref_sync_to_calendar) {
             lifecycleScope.launch {
-                if (PermissionUtils.checkCalendarPermission(requireContext(), requestCalendarPermission)) {
+                if (PermissionUtils.checkCalendarPermission(requireContext(), requestSyncCalendarPermission)) {
                     requireSettingsViewModel()?.syncToCalendar()
                 }
             }
         }
         setOnPrefClickListener(R.string.pref_clear_calendar) {
-            MaterialAlertDialogBuilder(requireContext()).apply {
-                setTitle(R.string.clear_calendar)
-                setMessage(R.string.clear_calendar_msg)
-                setNegativeButton(android.R.string.cancel, null)
-                setPositiveButton(android.R.string.ok) { _, _ ->
-                    requireSettingsViewModel()?.clearCalendar()
-                    requireRootLayout()?.showSnackBar(R.string.clear_calendar_success)
+            lifecycleScope.launch {
+                if (PermissionUtils.checkCalendarPermission(requireContext(), requestClearCalendarPermission)) {
+                    clearCalendar()
                 }
-            }.show(viewLifecycleOwner)
+            }
         }
         setOnPrefClickListener(R.string.pref_clear_sync_settings) {
             MaterialAlertDialogBuilder(requireContext()).apply {
@@ -129,5 +124,26 @@ class CalendarSyncSettingsFragment : AbstractSettingsFragment() {
                 }
             }
         }
+    }
+
+    private fun createCalendarPermissionLauncher(action: () -> Unit) =
+        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
+            if (PermissionUtils.checkGrantResults(it)) {
+                action()
+            } else {
+                requireRootLayout()?.showSnackBar(R.string.calendar_permission_get_failed)
+            }
+        }
+
+    private fun clearCalendar() {
+        MaterialAlertDialogBuilder(requireContext()).apply {
+            setTitle(R.string.clear_calendar)
+            setMessage(R.string.clear_calendar_msg)
+            setNegativeButton(android.R.string.cancel, null)
+            setPositiveButton(android.R.string.ok) { _, _ ->
+                requireSettingsViewModel()?.clearCalendar()
+                requireRootLayout()?.showSnackBar(R.string.clear_calendar_success)
+            }
+        }.show(viewLifecycleOwner)
     }
 }
