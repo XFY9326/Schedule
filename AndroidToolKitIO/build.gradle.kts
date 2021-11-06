@@ -22,19 +22,19 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = PROJECT_JAVA_VERSION
+        targetCompatibility = PROJECT_JAVA_VERSION
     }
 
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_11.toString()
+        jvmTarget = PROJECT_JAVA_VERSION.toString()
     }
 }
 
 dependencies {
     implementation(project(path = ":AndroidToolKit"))
 
-    api(group = "com.squareup.okio", name = "okio", version = "2.10.0")
+    api(group = "com.squareup.okio", name = "okio", version = "3.0.0")
 
     testImplementation(group = "junit", name = "junit", version = Dependencies.junit)
     androidTestImplementation(group = "androidx.test.ext", name = "junit", version = Dependencies.androidx_junit)

@@ -16,6 +16,6 @@ object DependenciesConfig {
     const val androidx_junit = "1.1.3"
     const val androidx_espresso = "3.4.0"
 
-    const val ktor = "1.6.4"
+    const val ktor = "1.6.5"
     const val junit = "4.13.2"
 }

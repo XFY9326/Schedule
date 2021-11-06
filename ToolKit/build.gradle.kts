@@ -1,19 +1,17 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
     id("java-library")
     id("kotlin")
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
+    sourceCompatibility = PROJECT_JAVA_VERSION
+    targetCompatibility = PROJECT_JAVA_VERSION
 }
 
-val compileKotlin: KotlinCompile by tasks
-
-compileKotlin.kotlinOptions {
-    jvmTarget = JavaVersion.VERSION_11.toString()
+tasks.compileKotlin {
+    kotlinOptions {
+        jvmTarget = PROJECT_JAVA_VERSION.toString()
+    }
 }
 
 dependencies {
