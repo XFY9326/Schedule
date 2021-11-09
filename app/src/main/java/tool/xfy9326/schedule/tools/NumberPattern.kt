@@ -74,12 +74,8 @@ class NumberPattern(boolArray: BooleanArray) {
             return result.toTypedArray()
         }
 
-        private fun parseSpacedTimePeriodArray(start: Int, end: Int, interval: Int): Array<TimePeriod> {
-            val result = ArrayList<TimePeriod>(((end - start) / (interval + 1)) + 1)
-            for (i in start..end step interval) {
-                result.add(TimePeriod(i))
-            }
-            return result.toTypedArray()
+        private fun parseSpacedTimePeriodArray(amount: Int, start: Int, interval: Int) = Array(amount) {
+            TimePeriod(start + it * interval)
         }
     }
 
@@ -156,8 +152,8 @@ class NumberPattern(boolArray: BooleanArray) {
                 start = startIndex
                 end = endIndex
                 interval = indexInterval
-                amount = ((endIndex - startIndex) / (indexInterval + 1)) + 1
-                timePeriodArray = parseSpacedTimePeriodArray(start, end, interval)
+                amount = ((endIndex - startIndex) / indexInterval) + 1
+                timePeriodArray = parseSpacedTimePeriodArray(amount, start, interval)
                 SPACED
             }
         }
