@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
     `kotlin-dsl`
     `java-gradle-plugin`
@@ -16,10 +14,10 @@ java {
     targetCompatibility = JavaVersion.VERSION_11
 }
 
-val compileKotlin: KotlinCompile by tasks
-
-compileKotlin.kotlinOptions {
-    jvmTarget = JavaVersion.VERSION_11.toString()
+tasks.compileKotlin {
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_11.toString()
+    }
 }
 
 gradlePlugin {

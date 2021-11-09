@@ -96,12 +96,12 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = PROJECT_JAVA_VERSION
+        targetCompatibility = PROJECT_JAVA_VERSION
     }
 
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_11.toString()
+        jvmTarget = PROJECT_JAVA_VERSION.toString()
         freeCompilerArgs = freeCompilerArgs + "-Xopt-in=kotlinx.serialization.ExperimentalSerializationApi"
     }
 
@@ -127,7 +127,7 @@ dependencies {
     // AndroidX
     implementation(group = "androidx.core", name = "core-ktx", version = Dependencies.androidx_core)
 
-    implementation(group = "androidx.core", name = "core-splashscreen", version = "1.0.0-alpha01")
+    implementation(group = "androidx.core", name = "core-splashscreen", version = "1.0.0-alpha02")
 
     implementation(group = "androidx.appcompat", name = "appcompat", version = Dependencies.androidx_appcompat)
     implementation(group = "androidx.appcompat", name = "appcompat-resources", version = Dependencies.androidx_appcompat)
@@ -159,14 +159,14 @@ dependencies {
     implementation(group = "io.coil-kt", name = "coil", version = "1.3.2")
 
     // OkHttp
-    implementation(group = "com.squareup.okhttp3", name = "okhttp", version = "4.9.0")
+    implementation(group = "com.squareup.okhttp3", name = "okhttp", version = "4.9.2")
 
     // Ktor
     implementation(group = "io.ktor", name = "ktor-client-okhttp", version = Dependencies.ktor)
     implementation(group = "io.ktor", name = "ktor-client-serialization", version = Dependencies.ktor)
 
     // Jsoup
-    implementation(group = "org.jsoup", name = "jsoup", version = "1.14.2")
+    implementation(group = "org.jsoup", name = "jsoup", version = "1.14.3")
 
     // ColorPicker
     implementation(group = "com.jaredrummler", name = "colorpicker", version = "1.1.0")

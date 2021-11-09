@@ -4,8 +4,14 @@ plugins {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
+    sourceCompatibility = PROJECT_JAVA_VERSION
+    targetCompatibility = PROJECT_JAVA_VERSION
+}
+
+tasks.compileKotlin {
+    kotlinOptions {
+        jvmTarget = PROJECT_JAVA_VERSION.toString()
+    }
 }
 
 dependencies {

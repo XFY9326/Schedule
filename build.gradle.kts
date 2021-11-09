@@ -4,7 +4,7 @@ plugins {
 }
 
 buildscript {
-    val kotlinVersion = "1.5.30"
+    val kotlinVersion = "1.5.31"
 
     repositories {
         google()
@@ -12,7 +12,7 @@ buildscript {
     }
 
     dependencies {
-        classpath(group = "com.android.tools.build", name = "gradle", version = "7.0.2")
+        classpath(group = "com.android.tools.build", name = "gradle", version = "7.0.3")
         classpath(kotlin(module = "gradle-plugin", version = kotlinVersion))
         classpath(kotlin(module = "serialization", version = kotlinVersion))
 
