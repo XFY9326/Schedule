@@ -74,7 +74,7 @@ checkAndroidCmdLineTools() {
         mv $ANDROID_HOME_CACHE/cmdline-tools $ANDROID_HOME/cmdline-tools/latest
 
         echo "" >> /etc/profile
-        echo "# Andorid command line tools" >> /etc/profile
+        echo "# Android command line tools" >> /etc/profile
         echo "export PATH=\$PATH:$ANDROID_HOME/cmdline-tools/latest/bin" >> $PATH_PROFILE
         . $PATH_PROFILE
 
