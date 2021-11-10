@@ -1,5 +1,6 @@
 package tool.xfy9326.schedule.ui.activity.module
 
+import lib.xfy9326.android.kit.setOnSingleClickListener
 import lib.xfy9326.livedata.observeEvent
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.databinding.ActivityScheduleEditBinding
@@ -19,6 +20,9 @@ class ScheduleTimeImportModule(activity: ScheduleEditActivity) :
     }
 
     override fun onInit() {
+        requireViewBinding().buttonScheduleTimeImport.setOnSingleClickListener {
+            requireViewModel().loadAllSchedules()
+        }
         requireViewModel().loadAllSchedules.observeEvent(requireActivity()) {
             if (it.isEmpty()) {
                 requireViewBinding().layoutScheduleEdit.showSnackBar(R.string.empty_schedule_list)
@@ -37,9 +41,5 @@ class ScheduleTimeImportModule(activity: ScheduleEditActivity) :
                 requireViewBinding().layoutScheduleEdit.showSnackBar(R.string.schedule_time_import_success)
             }
         }
-    }
-
-    fun importScheduleTime() {
-        requireViewModel().loadAllSchedules()
     }
 }

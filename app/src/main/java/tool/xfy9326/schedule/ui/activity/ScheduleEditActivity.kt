@@ -125,7 +125,6 @@ class ScheduleEditActivity : ViewModelActivity<ScheduleEditViewModel, ActivitySc
                 saveSchedule()
             }
             R.id.menu_scheduleEditDelete -> deleteScheduleAttention()
-            R.id.menu_scheduleEditImport -> scheduleTimeImportModule.importScheduleTime()
         }
         return super.onOptionsItemSelected(item)
     }

@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/menu_courseEditCopy"
-        android:icon="@drawable/ic_transform_24"
+        android:icon="@drawable/ic_content_copy_24"
         android:title="@string/copy_to_other_schedule"
         app:showAsAction="ifRoom" />
     <item
