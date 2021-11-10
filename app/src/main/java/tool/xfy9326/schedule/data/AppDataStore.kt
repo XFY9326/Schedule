@@ -5,7 +5,7 @@ import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
 
 object AppDataStore : AbstractDataStore("App") {
     private val currentScheduleId by longPreferencesKey()
-    private val acceptEULA by booleanPreferencesKey()
+    private val acceptEULAVersion by intPreferencesKey()
     private val shownFeedbackAttention by booleanPreferencesKey()
     private val shownCalendarSyncAttention by booleanPreferencesKey()
     private val agreeCourseImportPolicy by booleanPreferencesKey()
@@ -20,7 +20,9 @@ object AppDataStore : AbstractDataStore("App") {
 
     suspend fun hasCurrentScheduleId() = currentScheduleId.hasValue()
 
-    val acceptEULAFlow = acceptEULA.readAsFlow(false)
+    suspend fun hasAcceptedEULA() = acceptEULAVersion.hasValue()
+
+    val acceptEULAVersionFlow = acceptEULAVersion.readAsFlow(0)
 
     val ignoreUpdateVersionCodeFlow = ignoreUpdateVersionCode.readAsFlow(0)
 
@@ -46,7 +48,7 @@ object AppDataStore : AbstractDataStore("App") {
 
     suspend fun setAgreeCourseImportPolicy() = agreeCourseImportPolicy.saveData(true)
 
-    suspend fun setAcceptEULA(data: Boolean) = acceptEULA.saveData(data)
+    suspend fun setAcceptEULAVersion(data: Int) = acceptEULAVersion.saveData(data)
 
     suspend fun setIgnoreUpdateVersionCode(data: Int) = ignoreUpdateVersionCode.saveData(data)
 

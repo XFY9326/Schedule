@@ -143,6 +143,8 @@
     <string name="open_source_website">开源网址</string>
     <string name="license">协议</string>
     <string name="eula_license">使用协议</string>
+    <string name="eula_license_update">\u3000\u3000最终用户许可协议已更新到版本%1$d，只有在您同意该协议的情况下才能继续使用本应用。</string>
+    <string name="show_eula_license">查看</string>
     <string name="open_source_license">开源协议</string>
     <string name="developer">开发者</string>
     <string name="author_title">作者</string>

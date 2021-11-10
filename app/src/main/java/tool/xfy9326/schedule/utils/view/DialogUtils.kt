@@ -156,6 +156,20 @@ object DialogUtils {
         }.show(activity)
     }
 
+    fun showEULAUpdateDialog(activity: AppCompatActivity, onOperate: (continueOp: Boolean) -> Unit) {
+        MaterialAlertDialogBuilder(activity).apply {
+            setTitle(R.string.eula_license)
+            setMessage(activity.getString(R.string.eula_license_update, activity.resources.getInteger(R.integer.eula_version)))
+            setCancelable(false)
+            setPositiveButton(R.string.show_eula_license) { _, _ ->
+                onOperate(true)
+            }
+            setNegativeButton(android.R.string.cancel) { _, _ ->
+                onOperate(false)
+            }
+        }.show(activity)
+    }
+
     fun showEULADialog(activity: AppCompatActivity, content: String, cancelable: Boolean = true, onOperate: (agree: Boolean) -> Unit = {}) {
         MaterialAlertDialogBuilder(activity).apply {
             setTitle(R.string.eula_license)
