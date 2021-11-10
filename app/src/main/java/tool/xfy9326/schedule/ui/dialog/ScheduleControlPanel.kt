@@ -10,9 +10,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import tool.xfy9326.schedule.R
-import tool.xfy9326.schedule.beans.SystemBarAppearance
 import tool.xfy9326.schedule.databinding.DialogScheduleControlPanelBinding
-import tool.xfy9326.schedule.kt.setSystemBarAppearance
 
 class ScheduleControlPanel : BottomSheetDialogFragment() {
     companion object {
@@ -22,9 +20,8 @@ class ScheduleControlPanel : BottomSheetDialogFragment() {
         private const val ARGUMENT_CURRENT_SHOW_WEEK_NUM = "CURRENT_SHOW_WEEK_NUM"
         private const val ARGUMENT_NOW_WEEK_NUM = "NOW_WEEK_NUM"
         private const val ARGUMENT_MAX_WEEK_NUM = "MAX_WEEK_NUM"
-        private const val ARGUMENT_SYSTEM_BAR_APPEARANCE = "ARGUMENT_SYSTEM_BAR_APPEARANCE"
 
-        fun showDialog(fragmentManager: FragmentManager, currentShowWeekNum: Int, nowWeekNum: Int, maxWeekNum: Int, systemBarAppearance: SystemBarAppearance) {
+        fun showDialog(fragmentManager: FragmentManager, currentShowWeekNum: Int, nowWeekNum: Int, maxWeekNum: Int) {
             if (fragmentManager.findFragmentByTag(DIALOG_TAG) != null) return
 
             ScheduleControlPanel().apply {
@@ -32,7 +29,6 @@ class ScheduleControlPanel : BottomSheetDialogFragment() {
                     ARGUMENT_CURRENT_SHOW_WEEK_NUM to currentShowWeekNum,
                     ARGUMENT_NOW_WEEK_NUM to nowWeekNum,
                     ARGUMENT_MAX_WEEK_NUM to maxWeekNum,
-                    ARGUMENT_SYSTEM_BAR_APPEARANCE to systemBarAppearance
                 )
             }.show(fragmentManager, DIALOG_TAG)
         }
@@ -68,12 +64,6 @@ class ScheduleControlPanel : BottomSheetDialogFragment() {
 
             behavior.state = BottomSheetBehavior.STATE_EXPANDED
         }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        val systemBarAppearance = requireArguments().getSerializable(ARGUMENT_SYSTEM_BAR_APPEARANCE) as SystemBarAppearance
-        requireDialog().window?.setSystemBarAppearance(systemBarAppearance)
     }
 
     private fun changeShowWeekNum(value: Float) {

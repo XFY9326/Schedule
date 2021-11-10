@@ -65,7 +65,7 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
         scheduleBackgroundModule.init()
         viewModel.scrollToWeek.observeEvent(this, observer = ::scrollToWeek)
         viewModel.showScheduleControlPanel.observeEvent(this) {
-            ScheduleControlPanel.showDialog(supportFragmentManager, getCurrentShowWeekNum(), it.first, it.second, it.third)
+            ScheduleControlPanel.showDialog(supportFragmentManager, getCurrentShowWeekNum(), it.first, it.second)
         }
         viewModel.showCourseDetailDialog.observeEvent(this) {
             CourseDetailDialog.showDialog(supportFragmentManager, it)
