@@ -44,7 +44,7 @@ class JSConfigImportDialog : AppCompatDialogFragment() {
         return MaterialAlertDialogBuilder(requireContext()).apply {
             setTitle(R.string.add_course_import)
             setView(binding.root)
-            binding.textLayoutDialogText.setHint(R.string.please_input_course_import_config_url)
+            binding.textLayoutDialogText.setHint(R.string.course_import_config_url_hint)
             binding.textLayoutDialogText.endIconMode = TextInputLayout.END_ICON_CLEAR_TEXT
             binding.editTextDialogText.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_MULTI_LINE
 
