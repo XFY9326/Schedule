@@ -156,10 +156,10 @@ dependencies {
     implementation(group = "com.google.android.material", name = "material", version = "1.4.0")
 
     // Coil
-    implementation(group = "io.coil-kt", name = "coil", version = "1.3.2")
+    implementation(group = "io.coil-kt", name = "coil", version = "1.4.0")
 
     // OkHttp
-    implementation(group = "com.squareup.okhttp3", name = "okhttp", version = "4.9.2")
+    implementation(group = "com.squareup.okhttp3", name = "okhttp", version = "4.9.3")
 
     // Ktor
     implementation(group = "io.ktor", name = "ktor-client-okhttp", version = Dependencies.ktor)

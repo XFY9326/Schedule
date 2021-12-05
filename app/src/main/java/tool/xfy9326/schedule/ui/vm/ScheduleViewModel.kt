@@ -37,7 +37,7 @@ class ScheduleViewModel : AbstractViewModel() {
     val nowDay = MutableLiveData<Day>()
     val scrollToWeek = MutableEventLiveData<Int>()
     val showWeekChanged = MutableEventLiveData<Pair<Int, WeekNumType>>()
-    val showScheduleControlPanel = MutableEventLiveData<Triple<Int, Int, SystemBarAppearance>>()
+    val showScheduleControlPanel = MutableEventLiveData<Pair<Int, Int>>()
     val showCourseDetailDialog = MutableEventLiveData<CourseDetail>()
     val openCourseManageActivity = MutableEventLiveData<Long>()
     val exitAppDirectly = MutableEventLiveData<Boolean>()
@@ -83,9 +83,7 @@ class ScheduleViewModel : AbstractViewModel() {
 
     fun showScheduleControlPanel() {
         viewModelScope.launch(Dispatchers.IO) {
-            val weekNumInfo = ScheduleDataProcessor.weekNumInfoFlow.first()
-            val systemBarAppearance = ScheduleDataStore.scheduleSystemBarAppearanceFlow.first()
-            showScheduleControlPanel.postEvent(Triple(weekNumInfo.first, weekNumInfo.second, systemBarAppearance))
+            showScheduleControlPanel.postEvent(ScheduleDataProcessor.weekNumInfoFlow.first())
         }
     }
 

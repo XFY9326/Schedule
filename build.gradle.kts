@@ -4,7 +4,7 @@ plugins {
 }
 
 buildscript {
-    val kotlinVersion = "1.5.31"
+    val kotlinVersion = "1.5.32"
 
     repositories {
         google()

@@ -61,7 +61,7 @@
     <string name="course_list_num">第%1$d节课</string>
     <string name="course_list_num_simple">第%1$d节</string>
     <string name="save">保存</string>
-    <string name="schedule_time_list">所有课程时间（点击时间进行编辑）</string>
+    <string name="schedule_time_list">所有课程时间</string>
     <string name="long_click_to_set_current_schedule">Tips：长按切换课表，点击右下角图标可编辑课表</string>
     <string name="swipe_to_delete_course">Tips：侧滑可以删除课程</string>
     <string name="course_cost_time_same_mode">所有课程上课时间相等</string>
@@ -143,6 +143,8 @@
     <string name="open_source_website">开源网址</string>
     <string name="license">协议</string>
     <string name="eula_license">使用协议</string>
+    <string name="eula_license_update">\u3000\u3000最终用户许可协议已更新到版本%1$d，只有在您同意该协议的情况下才能继续使用本应用。</string>
+    <string name="show_eula_license">查看</string>
     <string name="open_source_license">开源协议</string>
     <string name="developer">开发者</string>
     <string name="author_title">作者</string>
@@ -366,7 +368,7 @@
     <string name="add_course_import_attention_title">添加课程导入须知</string>
     <string name="add_course_import_attention">\u3000\u3000本APP支持自定义的方式快速添加需要的课程解析器，但是由于该功能依赖于JS并且来自未经审核的第三方，因此可能会造成安全问题。\n\u3000\u3000目前支持Pure课程表自有的JS接口与小爱课表JS接口，您可以快速定义或接入课程解析方式。\n\u3000\u3000请在了解以上风险并愿意承担由于导入JS导致的一切问题的基础上，再使用自定义课程解析功能！</string>
     <string name="agree_policy">我同意并愿意承担风险</string>
-    <string name="please_input_course_import_config_url">配置文件Url</string>
+    <string name="course_import_config_url_hint">JS课程解析配置文件Url</string>
     <string name="add_course_import_wiki">适配文档</string>
     <string name="js_confirm_title">来自网页的消息</string>
     <string name="advanced_settings">高级设置</string>

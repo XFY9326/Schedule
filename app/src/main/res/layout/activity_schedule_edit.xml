@@ -19,7 +19,8 @@
         android:layout_marginTop="?attr/actionBarSize"
         android:clipChildren="false"
         android:fillViewport="true"
-        android:fitsSystemWindows="true">
+        android:fitsSystemWindows="true"
+        android:overScrollMode="never">
 
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
@@ -102,7 +103,7 @@
                     android:layout_marginStart="8dp"
                     android:layout_marginEnd="8dp"
                     android:layout_weight="1"
-                    android:background="@drawable/background_date_text_edit"
+                    android:background="@drawable/shape_round_corner_rectangle"
                     android:lines="1"
                     android:paddingStart="10dp"
                     android:paddingTop="5dp"
@@ -142,7 +143,7 @@
                     android:layout_marginStart="8dp"
                     android:layout_marginEnd="8dp"
                     android:layout_weight="1"
-                    android:background="@drawable/background_date_text_edit"
+                    android:background="@drawable/shape_round_corner_rectangle"
                     android:lines="1"
                     android:paddingStart="10dp"
                     android:paddingTop="5dp"
@@ -430,20 +431,41 @@
                 android:valueFrom="5"
                 android:valueTo="30" />
 
-            <com.google.android.material.textview.MaterialTextView
+            <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
+                android:gravity="center_vertical"
                 android:paddingStart="10dp"
-                android:paddingEnd="10dp"
-                android:text="@string/schedule_time_list"
-                android:textSize="13sp" />
+                android:paddingEnd="10dp">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/schedule_time_list"
+                    android:textColor="@color/theme_color_primary_text"
+                    android:textSize="14sp" />
+
+                <androidx.appcompat.widget.AppCompatImageButton
+                    android:id="@+id/button_scheduleTimeImport"
+                    style="@style/AppTheme.SelectableItemBackgroundBorderless"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
+                    android:background="@android:color/transparent"
+                    android:contentDescription="@string/import_times_from_other_schedule"
+                    android:padding="2dp"
+                    android:src="@drawable/ic_content_paste_24"
+                    android:textSize="13sp" />
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView_scheduleTimeList"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="8dp"
                 android:clipChildren="false"
                 android:clipToPadding="false"
                 android:overScrollMode="never"

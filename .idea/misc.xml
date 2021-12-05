@@ -18,6 +18,8 @@
         <entry key="app/src/main/res/drawable-v31/background_app_widget.xml" value="0.1174342105263158" />
         <entry key="app/src/main/res/drawable/avd_delete.xml" value="0.18611111111111112" />
         <entry key="app/src/main/res/drawable/background_app_widget.xml" value="0.33519736842105263" />
+        <entry key="app/src/main/res/drawable/background_bottom_button.xml" value="0.2683544303797468" />
+        <entry key="app/src/main/res/drawable/background_date_text_edit.xml" value="0.2683544303797468" />
         <entry key="app/src/main/res/drawable/background_launch_screen.xml" value="0.2069078947368421" />
         <entry key="app/src/main/res/drawable/background_progress_bar.xml" value="0.46962025316455697" />
         <entry key="app/src/main/res/drawable/background_progress_bar_circle.xml" value="0.46962025316455697" />
@@ -31,6 +33,8 @@
         <entry key="app/src/main/res/drawable/ic_cancel_24.xml" value="0.46962025316455697" />
         <entry key="app/src/main/res/drawable/ic_check_24.xml" value="0.46962025316455697" />
         <entry key="app/src/main/res/drawable/ic_cloud_download_24.xml" value="0.2069078947368421" />
+        <entry key="app/src/main/res/drawable/ic_content_copy_24.xml" value="0.2683544303797468" />
+        <entry key="app/src/main/res/drawable/ic_content_paste_24.xml" value="0.2683544303797468" />
         <entry key="app/src/main/res/drawable/ic_data_24.xml" value="0.33519736842105263" />
         <entry key="app/src/main/res/drawable/ic_delete_24.xml" value="0.46962025316455697" />
         <entry key="app/src/main/res/drawable/ic_edit_24.xml" value="0.3661184210526316" />
@@ -40,6 +44,7 @@
         <entry key="app/src/main/res/drawable/ic_launcher_round.xml" value="0.35" />
         <entry key="app/src/main/res/drawable/ic_share_24.xml" value="0.12269736842105264" />
         <entry key="app/src/main/res/drawable/ic_surfing_24.xml" value="0.33519736842105263" />
+        <entry key="app/src/main/res/drawable/ic_transform_24.xml" value="0.2683544303797468" />
         <entry key="app/src/main/res/drawable/ic_tune_dark_24.xml" value="0.12269736842105264" />
         <entry key="app/src/main/res/drawable/ic_widgets_24.xml" value="0.2069078947368421" />
         <entry key="app/src/main/res/drawable/shape_circle_20.xml" value="0.33519736842105263" />
@@ -71,7 +76,7 @@
         <entry key="app/src/main/res/layout/item_course_detail_time.xml" value="0.291213768115942" />
         <entry key="app/src/main/res/layout/item_course_time.xml" value="0.2794871794871795" />
         <entry key="app/src/main/res/layout/item_schedule.xml" value="0.2510245901639344" />
-        <entry key="app/src/main/res/layout/item_schedule_time.xml" value="0.12489557226399331" />
+        <entry key="app/src/main/res/layout/item_schedule_time.xml" value="0.335" />
         <entry key="app/src/main/res/layout/layout_list_loading.xml" value="0.2504273504273504" />
         <entry key="app/src/main/res/layout/layout_nav_header.xml" value="0.12489557226399331" />
         <entry key="app/src/main/res/layout/layout_toolbar_general.xml" value="0.1" />
@@ -84,6 +89,7 @@
         <entry key="app/src/main/res/layout/widget_next_course_4x1_msg.xml" value="0.19671052631578947" />
         <entry key="app/src/main/res/layout/widget_next_course_initial.xml" value="0.35592105263157897" />
         <entry key="app/src/main/res/layout/widget_next_course_msg.xml" value="0.325" />
+        <entry key="app/src/main/res/menu/menu_course_edit.xml" value="0.2552742616033755" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.2069078947368421" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.10328947368421053" />
         <entry key="app/src/main/res/xml/settings_app_widget.xml" value="0.19671052631578947" />

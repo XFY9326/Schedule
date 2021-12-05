@@ -27,15 +27,30 @@ class ScheduleLaunchModule(activity: ScheduleActivity) : AbstractActivityModule<
 
         fun tryShowEula(activity: AppCompatActivity) {
             activity.lifecycleScope.launch {
-                if (!AppDataStore.acceptEULAFlow.first()) {
-                    val eula = FileManager.readEULA()
-                    DialogUtils.showEULADialog(activity, eula, false) {
-                        if (it) {
-                            ApplicationScope.launch { AppDataStore.setAcceptEULA(true) }
-                        } else {
-                            activity.finishAndRemoveTask()
+                val currentEULAVersion = activity.resources.getInteger(R.integer.eula_version)
+                if (AppDataStore.hasAcceptedEULA()) {
+                    if (AppDataStore.acceptEULAVersionFlow.first() < currentEULAVersion) {
+                        val eula = FileManager.readEULA()
+                        DialogUtils.showEULAUpdateDialog(activity) {
+                            if (it) {
+                                showEULADialog(activity, eula, currentEULAVersion)
+                            } else {
+                                activity.finishAndRemoveTask()
+                            }
                         }
                     }
+                } else {
+                    showEULADialog(activity, FileManager.readEULA(), currentEULAVersion)
+                }
+            }
+        }
+
+        private fun showEULADialog(activity: AppCompatActivity, eula: String, newEULAVersion: Int) {
+            DialogUtils.showEULADialog(activity, eula, false) {
+                if (it) {
+                    ApplicationScope.launch { AppDataStore.setAcceptEULAVersion(newEULAVersion) }
+                } else {
+                    activity.finishAndRemoveTask()
                 }
             }
         }
