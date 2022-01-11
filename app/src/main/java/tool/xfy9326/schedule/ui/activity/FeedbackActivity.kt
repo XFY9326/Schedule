@@ -111,7 +111,7 @@ class FeedbackActivity : ViewBindingActivity<ActivityFeedbackBinding>() {
         super.onSaveInstanceState(outState)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_feedback, menu)
         return super.onCreateOptionsMenu(menu)
     }
@@ -164,12 +164,8 @@ class FeedbackActivity : ViewBindingActivity<ActivityFeedbackBinding>() {
     }
 
     private class WebViewSelectFile : ActivityResultContract<Intent, Uri?>() {
-        override fun createIntent(context: Context, input: Intent?): Intent {
-            if (input != null) {
-                return Intent(input)
-            } else {
-                error("Input is null!")
-            }
+        override fun createIntent(context: Context, input: Intent): Intent {
+            return Intent(input)
         }
 
         override fun parseResult(resultCode: Int, intent: Intent?): Uri? {

@@ -1,9 +1,6 @@
 package tool.xfy9326.schedule.beans
 
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.ForeignKey
-import androidx.room.PrimaryKey
+import androidx.room.*
 import tool.xfy9326.schedule.db.DBConst
 
 @Entity(
@@ -27,6 +24,7 @@ data class ScheduleSync(
     var editable: Boolean,
     var addReminder: Boolean,
 ) {
+    @Ignore
     constructor(scheduleId: Long, syncable: Boolean, defaultVisible: Boolean, editable: Boolean, addReminder: Boolean) :
             this(DBConst.DEFAULT_ID, scheduleId, syncable, defaultVisible, editable, addReminder)
 

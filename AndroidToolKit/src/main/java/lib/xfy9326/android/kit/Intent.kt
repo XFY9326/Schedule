@@ -23,14 +23,14 @@ fun ClipData.getItemUriList(): List<Uri> {
 
 @RequiresApi(Build.VERSION_CODES.S)
 class ScheduleNextAlarmPermissionContact : ActivityResultContract<Nothing, Boolean>() {
-    override fun createIntent(context: Context, input: Nothing?) =
+    override fun createIntent(context: Context, input: Nothing) =
         Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM, context.packageUri)
 
     override fun parseResult(resultCode: Int, intent: Intent?) = resultCode == Activity.RESULT_OK
 }
 
 class PackageInstallPermissionContact : ActivityResultContract<Nothing, Boolean>() {
-    override fun createIntent(context: Context, input: Nothing?): Intent {
+    override fun createIntent(context: Context, input: Nothing): Intent {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES, context.packageUri)
         } else {

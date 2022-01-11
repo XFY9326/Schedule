@@ -60,9 +60,11 @@ data class CourseTime(
         }
     }
 
+    @Ignore
     constructor(weekNum: BooleanArray, weekDay: WeekDay, start: Int, duration: Int, location: String? = null) :
             this(weekNum, SectionTime(weekDay, start, duration), location)
 
+    @Ignore
     constructor(weekNum: BooleanArray, sectionTime: SectionTime, location: String? = null) :
             this(DBConst.DEFAULT_ID, DBConst.DEFAULT_ID, weekNum, sectionTime, location)
 

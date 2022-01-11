@@ -48,7 +48,7 @@ object CourseUtils {
                                 a.sectionTime.compareTo(b.sectionTime)
                             }
                         }
-                        result.removeAll(this)
+                        result.removeAll(toSet())
                         result.add(first())
                     }
                 }
