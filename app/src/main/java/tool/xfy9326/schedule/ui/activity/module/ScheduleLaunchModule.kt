@@ -59,14 +59,14 @@ class ScheduleLaunchModule(activity: ScheduleActivity) : AbstractActivityModule<
     private var isPreloadReady = false
 
     override fun onInit() {
-        val splashScreen = requireActivity().installSplashScreen()
-        splashScreen.setKeepVisibleCondition {
+        requireActivity().installSplashScreen().setKeepVisibleCondition {
             !isPreloadReady
         }
 
         if (isFirstLaunch) {
             if (requireActivity().intent.getBooleanExtra(INTENT_EXTRA_APP_ERROR, false)) {
                 startAppErrorActivity()
+                isPreloadReady = true
                 requireActivity().finish()
                 return
             }
