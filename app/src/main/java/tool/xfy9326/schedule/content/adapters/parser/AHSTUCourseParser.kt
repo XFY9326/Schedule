@@ -1,17 +1,23 @@
 package tool.xfy9326.schedule.content.adapters.parser
 
+import lib.xfy9326.kit.EMPTY
+import lib.xfy9326.kit.cast
 import org.json.JSONObject
-import tool.xfy9326.schedule.beans.*
+import tool.xfy9326.schedule.beans.Course
+import tool.xfy9326.schedule.beans.CourseTime
+import tool.xfy9326.schedule.beans.ScheduleTime
+import tool.xfy9326.schedule.beans.WeekDay
 import tool.xfy9326.schedule.content.base.NetworkCourseParser
 import tool.xfy9326.schedule.content.utils.CourseParseResult
-import java.util.*
-import java.util.regex.Matcher
-import java.util.regex.Pattern
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 
 class AHSTUCourseParser : NetworkCourseParser<Nothing>() {
+    @Suppress("RegExpRedundantEscape")
+    private val patternTeacher = "\\[\\{id:\\d+,name:\"(.*?)\",lab:(false|true)\\}\\];".toRegex()
+    private val patternCourseInfo = "actTeacherName.join\\(','\\),\"(.*?)\",\"(.*?)\",\".*?\",\"(.*?)\",\"(.*?)\",.*?assistantName,\".*?\",\"(.*?)\"".toRegex()
+    private val patternDay = "(\\d+)\\*[\\s]*unitCount[\\s]*\\+(\\d+)".toRegex()
 
+    @Suppress("RegExpRedundantEscape")
+    private val splitRegex = "var\\s*teachers\\s*=\\s*\\[.*?\\];".toRegex()
 
     override fun onParseScheduleTimes(importOption: Int, content: String?) =
         ScheduleTime.listOf(
@@ -40,30 +46,22 @@ class AHSTUCourseParser : NetworkCourseParser<Nothing>() {
         val result = parse(content)
         val builder = CourseParseResult.Builder(result.size)
 
-        for (i in result.values) {
-            val courseTimes: ArrayList<CourseTime> = ArrayList()
-            for (j in i) {//同一classid的课程
-                val tp_hmap = j["time"] as HashMap<Int, IntArray>
-                for (k: Int in (tp_hmap).keys) {//星期几  [第几节课,持续几节]
-                    courseTimes.add(CourseTime(j["week"] as BooleanArray, WeekDay.of(k), tp_hmap[k]!![0], tp_hmap[k]!![1], j["classRoom"].toString()))
+        for (jsonObjects in result.values) {
+            val courseTimes = ArrayList<CourseTime>()
+            for (jsonObject in jsonObjects) { // 同一classId的课程
+                val tpHMap = jsonObject["time"].cast<HashMap<Int, IntArray>>()
+                for (k: Int in (tpHMap).keys) { // 星期几  [第几节课,持续几节]
+                    courseTimes.add(CourseTime(jsonObject["week"].cast(), WeekDay.of(k), tpHMap[k]!![0], tpHMap[k]!![1], jsonObject["classRoom"].toString()))
                 }
-
             }
-            val tp = Course(i[0]["className"].toString(), i[0]["teacherName"].toString(), courseTimes.toList())
-            builder.add(tp)
+            builder.add(Course(jsonObjects[0]["className"].toString(), jsonObjects[0]["teacherName"].toString(), courseTimes.toList()))
         }
 
         return builder.build()
     }
 
-
-    override fun onParseTerm(importOption: Int, content: String?): Pair<Date, Date>? {
-        return null
-    }
-
-
     //xk
-    private fun parse_Week(str: String): BooleanArray {
+    private fun parseWeek(str: String): BooleanArray {
         //00000100011111100000000
         val tp = BooleanArray(str.length - 1)
         var i = 0
@@ -74,10 +72,9 @@ class AHSTUCourseParser : NetworkCourseParser<Nothing>() {
         return tp
     }
 
-
-    private fun parse(course_js: String): HashMap<String, ArrayList<JSONObject>> {
+    private fun parse(courseJs: String): HashMap<String, ArrayList<JSONObject>> {
         val ret: HashMap<String, ArrayList<JSONObject>> = HashMap()//课程id
-        val items = course_js.split(Regex(split_regex))
+        val items = courseJs.split(splitRegex)
         var i = 1
         while (i < items.size) {
             val tp1 = parseItem(items[i])
@@ -85,63 +82,55 @@ class AHSTUCourseParser : NetworkCourseParser<Nothing>() {
             if (ret.containsKey(classId)) {
                 ret[classId]?.add(tp1)
             } else {
-                ret.put(classId, arrayListOf(tp1))
+                ret[classId] = arrayListOf(tp1)
             }
             i++
         }
         return ret
     }
 
-    var pattern_teacher = Pattern.compile("\\[\\{id:\\d+,name:\"(.*?)\",lab:(false|true)\\}\\];")
-    var pattern_course_info = Pattern.compile("actTeacherName.join\\(','\\),\"(.*?)\",\"(.*?)\",\".*?\",\"(.*?)\",\"(.*?)\",.*?assistantName,\".*?\",\"(.*?)\"")
-    var pattern_day = Pattern.compile("(\\d+)\\*[\\s]*unitCount[\\s]*\\+(\\d+)")
-    var split_regex = "var\\s*teachers\\s*=\\s*\\[.*?\\];"
-
-
     private fun parseItem(item: String): JSONObject {
         val ret = JSONObject()
-        //匹配教师姓名
-        val matcher_teacher: Matcher = pattern_teacher.matcher(item)
-        matcher_teacher.find()
-        ret.put("teacherName", matcher_teacher.group(1))//教师姓名
-        //匹配课程信息
-        val matcher_info = pattern_course_info.matcher(item)
-        matcher_info.find()
+        // 匹配教师姓名
+        val matchesTeacher = patternTeacher.find(item)!!
+        ret.put("teacherName", matchesTeacher.groupValues[1]) // 教师姓名
+        // 匹配课程信息
+        val matchesInfo = patternCourseInfo.find(item)!!
 
-        var tpname = ""
-        if (matcher_info.group(5) != "") {
-            tpname = " 组" + matcher_info.group(5)
+        val tpName = if (matchesInfo.groupValues[5].isNotEmpty()) {
+            "组${matchesInfo.groupValues[5]}"
+        } else {
+            EMPTY
         }
-        ret.put("classId", matcher_info.group(1))
-        ret.put("className", parseClassname(matcher_info.group(2)))
-        ret.put("classRoom", matcher_info.group(3) + tpname)
-        ret.put("week", parse_Week(matcher_info.group(4)))
+        ret.put("classId", matchesInfo.groupValues[1])
+        ret.put("className", parseClassname(matchesInfo.groupValues[2]))
+        ret.put("classRoom", "${matchesInfo.groupValues[3]} $tpName")
+        ret.put("week", parseWeek(matchesInfo.groupValues[4]))
 
-
-        val tp: HashMap<Int, IntArray> = HashMap()//星期几  [第几节课,持续几节]
-        val matcher_time = pattern_day.matcher(item)
-        while (matcher_time.find()) {
-            val w: Int = matcher_time.group(1).toInt() + 1
+        val tp = HashMap<Int, IntArray>() // 星期几  [第几节课,持续几节]
+        val matcherTime = patternDay.findAll(item)
+        for (timeMatchResult in matcherTime.iterator()) {
+            val w = timeMatchResult.groupValues[1].toInt() + 1
             if (tp.containsKey(w)) {
                 tp[w]!![1] = tp[w]!![1] + 1
             } else {
-                tp[w] = intArrayOf(matcher_time.group(2).toInt() + 1, 1)
+                tp[w] = intArrayOf(timeMatchResult.groupValues[2].toInt() + 1, 1)
             }
         }
         ret.put("time", tp)
         return ret
     }
 
-    private fun parseClassname(ClassName: String): String {
-        var tp_i = 0
-        for (i in ClassName.length - 1 downTo 0) {
-            when (ClassName[i]) {
-                ')' -> tp_i++
-                '(' -> tp_i--
+    private fun parseClassname(className: String): String {
+        var tpI = 0
+        for (i in className.length - 1 downTo 0) {
+            when (className[i]) {
+                ')' -> tpI++
+                '(' -> tpI--
                 else -> continue
             }
-            if (tp_i == 0) {
-                return ClassName.substring(0, i)
+            if (tpI == 0) {
+                return className.substring(0, i)
             }
         }
         return ""

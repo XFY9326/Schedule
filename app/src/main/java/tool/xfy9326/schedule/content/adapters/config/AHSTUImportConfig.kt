@@ -13,5 +13,5 @@ class AHSTUImportConfig : AbstractCourseImportConfig<Nothing, AHSTUCourseProvide
     systemNameResId = R.string.system_sso,
     providerClass = AHSTUCourseProvider::class,
     parserClass = AHSTUCourseParser::class,
-    sortingBasis = "an_hui_science_and_technology_university"
+    sortingBasis = "AnHuiKeJiXueYuan"
 )
