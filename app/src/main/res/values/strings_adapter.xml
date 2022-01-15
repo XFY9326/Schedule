@@ -3,6 +3,7 @@
     <!-- School Field -->
     <string name="school_nanjing_audit_university">南京审计大学</string>
     <string name="school_cheng_du_jin_cheng_college">成都锦城学院</string>
+    <string name="school_an_hui_science_and_technology_university">安徽科技学院</string>
 
     <!-- System Field -->
     <string name="system_zhen_fang">正方教务管理系统</string>
@@ -11,6 +12,7 @@
 
     <!-- Author Field -->
     <string name="adapter_author_xfy9326" translatable="false">XFY9326</string>
+    <string name="adapter_author_xuke" translatable="false">许可</string>
 
     <!-- Option Field -->
     <string name="adapter_option_this_term">本学期</string>
