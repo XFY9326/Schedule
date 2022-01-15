@@ -147,25 +147,3 @@ class AHSTUCourseParser : NetworkCourseParser<Nothing>() {
         return ""
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
