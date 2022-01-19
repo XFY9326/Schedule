@@ -1,4 +1,4 @@
-import com.android.build.gradle.internal.api.BaseVariantOutputImpl
+import com.android.build.gradle.internal.api.ApkVariantOutputImpl
 
 plugins {
     id("com.android.application")
@@ -28,10 +28,13 @@ android {
         manifestPlaceholders["BaseApplicationId"] = ProjectConfig.applicationId
 
         applicationVariants.all {
-            outputs.all {
-                if (this is BaseVariantOutputImpl && buildType.name != "debug") {
-                    outputFileName = "${ProjectConfig.name}_v${versionName}_${versionCode}_${buildType.name}.apk"
+            outputs.filterIsInstance<ApkVariantOutputImpl>().forEach {
+                if (buildType.name != "debug") {
+                    it.outputFileName = "${ProjectConfig.name}_v${versionName}_${versionCode}_${buildType.name}.apk"
                 }
+            }
+            kotlin.sourceSets.main {
+                addJavaSourceFoldersToModel(file("$buildDir/generated/ksp/${this@all.name}/kotlin"))
             }
         }
 
@@ -108,7 +111,7 @@ ksp {
 
 dependencies {
     implementation(project(path = ":Annotation"))
-    kapt(project(path = ":AnnotationProcessor"))
+    ksp(project(path = ":AnnotationKSP"))
 
     implementation(project(path = ":LiveDataTools"))
     implementation(project(path = ":AndroidToolKit"))
@@ -144,7 +147,6 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.4.0")
 
     // Room
-    implementation("androidx.room:room-runtime:2.4.1")
     implementation("androidx.room:room-ktx:2.4.1")
     ksp("androidx.room:room-compiler:2.4.1")
     testImplementation("androidx.room:room-testing:2.4.1")

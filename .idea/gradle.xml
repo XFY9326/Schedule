@@ -14,7 +14,7 @@
             <option value="$PROJECT_DIR$/AndroidToolKit" />
             <option value="$PROJECT_DIR$/AndroidToolKitIO" />
             <option value="$PROJECT_DIR$/Annotation" />
-            <option value="$PROJECT_DIR$/AnnotationProcessor" />
+            <option value="$PROJECT_DIR$/AnnotationKSP" />
             <option value="$PROJECT_DIR$/LiveDataTools" />
             <option value="$PROJECT_DIR$/ToolKit" />
             <option value="$PROJECT_DIR$/app" />
