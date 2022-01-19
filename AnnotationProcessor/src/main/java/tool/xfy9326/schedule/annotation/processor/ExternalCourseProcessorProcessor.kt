@@ -62,7 +62,6 @@ class ExternalCourseProcessorProcessor : AbstractProcessor() {
             generateClass.addFunction(getProcessorFunction)
             generateFile
                 .addType(generateClass.build())
-                .indent(ProcessorUtils.INDENT)
                 .build()
                 .writeTo(processingEnv.kaptSourceDir)
         } catch (e: Exception) {

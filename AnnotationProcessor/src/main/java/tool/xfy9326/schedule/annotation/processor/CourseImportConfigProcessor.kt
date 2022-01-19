@@ -59,7 +59,6 @@ class CourseImportConfigProcessor : AbstractProcessor() {
             generateClass.addFunction(configFunction)
             generateFile
                 .addType(generateClass.build())
-                .indent(ProcessorUtils.INDENT)
                 .build()
                 .writeTo(processingEnv.kaptSourceDir)
         } catch (e: Exception) {

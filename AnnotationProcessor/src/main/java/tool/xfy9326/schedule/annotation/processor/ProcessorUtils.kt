@@ -14,8 +14,6 @@ object ProcessorUtils {
 
     const val KAPT_KOTLIN_GENERATED_OPTION_NAME = "kapt.kotlin.generated"
 
-    const val INDENT = "    "
-
     val KOTLIN_LIST = List::class.asClassName()
     val KOTLIN_MAP = Map::class.asClassName()
     val KOTLIN_CLASS = KClass::class.asClassName()
