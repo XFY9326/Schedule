@@ -59,7 +59,7 @@ class ScheduleLaunchModule(activity: ScheduleActivity) : AbstractActivityModule<
     private var isPreloadReady = false
 
     override fun onInit() {
-        requireActivity().installSplashScreen().setKeepVisibleCondition {
+        requireActivity().installSplashScreen().setKeepOnScreenCondition {
             !isPreloadReady
         }
 

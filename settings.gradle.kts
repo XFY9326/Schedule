@@ -1,5 +1,3 @@
-includeBuild("BuildPlugin")
-
 include(":AnnotationProcessor")
 include(":Annotation")
 include(":LiveDataTools")

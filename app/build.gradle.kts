@@ -6,32 +6,31 @@ plugins {
     kotlin("kapt")
     id("kotlin-parcelize")
     id("kotlinx-serialization")
-    id("com.google.devtools.ksp") version Dependencies.kotlin_ksp
+    id("com.google.devtools.ksp") version "${ProjectConfig.kotlinVersion}-1.0.2"
 }
 
 android {
-    compileSdk = Android.compileSdk
+    compileSdk = ProjectConfig.compileSdk
 
     defaultConfig {
-        applicationId = Android.applicationId
-        minSdk = Android.minSdk
-        targetSdk = Android.targetSdk
-        versionCode = Android.versionCode
-        versionName = Android.versionName
+        applicationId = ProjectConfig.applicationId
+        minSdk = ProjectConfig.minSdk
+        targetSdk = ProjectConfig.targetSdk
+        versionCode = ProjectConfig.versionCode
+        versionName = ProjectConfig.versionName
 
-        resourceConfigurations.clear()
-        resourceConfigurations.add("zh")
+        resourceConfigurations += "zh"
 
-        buildConfigField("String", "BASE_APPLICATION_ID", "\"${Android.applicationId}\"")
-        buildConfigField("String", "PROJECT_NAME", "\"$ProjectName\"")
+        buildConfigField("String", "BASE_APPLICATION_ID", "\"${ProjectConfig.applicationId}\"")
+        buildConfigField("String", "PROJECT_NAME", "\"${ProjectConfig.name}\"")
         buildConfigField("boolean", "IS_BETA", "false")
-        manifestPlaceholders["ApplicationId"] = Android.applicationId
-        manifestPlaceholders["BaseApplicationId"] = Android.applicationId
+        manifestPlaceholders["ApplicationId"] = ProjectConfig.applicationId
+        manifestPlaceholders["BaseApplicationId"] = ProjectConfig.applicationId
 
         applicationVariants.all {
             outputs.all {
                 if (this is BaseVariantOutputImpl && buildType.name != "debug") {
-                    outputFileName = "${ProjectName}_v${versionName}_${versionCode}_${GitCommitShortId}_${buildType.name}.apk"
+                    outputFileName = "${ProjectConfig.name}_v${versionName}_${versionCode}_${buildType.name}.apk"
                 }
             }
         }
@@ -53,49 +52,47 @@ android {
     }
 
     signingConfigs {
-        withDebug {
-            storeFile = file("key/${ProjectName}_debug.keystore")
+        getByName("debug") {
+            storeFile = file("key/${ProjectConfig.name}_debug.keystore")
             storePassword = "debug_key"
-            keyAlias = ProjectName
+            keyAlias = ProjectConfig.name
             keyPassword = "debug_key"
         }
     }
 
     buildTypes {
-        withDebug {
+        debug {
             applicationIdSuffix = ".debug"
-            manifestPlaceholders["ApplicationId"] = Android.applicationId + applicationIdSuffix
+            manifestPlaceholders["ApplicationId"] = ProjectConfig.applicationId + applicationIdSuffix
         }
         register("beta") {
             initWith(getByName("release"))
-            buildConfigField("boolean", "IS_BETA", "true")
+            matchingFallbacks += "release"
 
-            versionNameSuffix = "-$GitCommitShortId"
+            buildConfigField("boolean", "IS_BETA", "true")
 
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-
-            matchingFallbacks.add("release")
         }
-        withRelease {
+        release {
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
 
             packagingOptions {
-                resources.excludes.add("DebugProbesKt.bin")
+                resources.excludes += "DebugProbesKt.bin"
             }
         }
     }
 
     compileOptions {
-        sourceCompatibility = PROJECT_JAVA_VERSION
-        targetCompatibility = PROJECT_JAVA_VERSION
+        sourceCompatibility = ProjectConfig.javaVersion
+        targetCompatibility = ProjectConfig.javaVersion
     }
 
     kotlinOptions {
-        jvmTarget = PROJECT_JAVA_VERSION.toString()
+        jvmTarget = ProjectConfig.javaVersion.toString()
         freeCompilerArgs = freeCompilerArgs + "-Xopt-in=kotlinx.serialization.ExperimentalSerializationApi"
     }
 
@@ -117,65 +114,65 @@ dependencies {
     implementation(project(path = ":AndroidToolKit"))
     implementation(project(path = ":AndroidToolKitIO"))
 
-    // Kotlin
-    implementation(group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version = Dependencies.kotlinx_coroutines)
+    // Kotlin Coroutines
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0")
 
     // Kotlin Serialization
-    implementation(group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version = Dependencies.kotlinx_serialization)
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2")
 
     // AndroidX
-    implementation(group = "androidx.core", name = "core-ktx", version = Dependencies.androidx_core)
+    implementation("androidx.core:core-ktx:1.7.0")
 
-    implementation(group = "androidx.core", name = "core-splashscreen", version = "1.0.0-alpha02")
+    implementation("androidx.core:core-splashscreen:1.0.0-beta01")
 
-    implementation(group = "androidx.appcompat", name = "appcompat", version = Dependencies.androidx_appcompat)
-    implementation(group = "androidx.appcompat", name = "appcompat-resources", version = Dependencies.androidx_appcompat)
+    implementation("androidx.appcompat:appcompat:1.4.1")
+    implementation("androidx.appcompat:appcompat-resources:1.4.1")
 
-    implementation(group = "androidx.activity", name = "activity-ktx", version = Dependencies.androidx_activity)
-    implementation(group = "androidx.fragment", name = "fragment-ktx", version = Dependencies.androidx_fragment)
+    implementation("androidx.activity:activity-ktx:1.4.0")
+    implementation("androidx.fragment:fragment-ktx:1.4.0")
 
-    implementation(group = "androidx.drawerlayout", name = "drawerlayout", version = "1.1.1")
-    implementation(group = "androidx.constraintlayout", name = "constraintlayout", version = "2.1.0")
+    implementation("androidx.drawerlayout:drawerlayout:1.1.1")
+    implementation("androidx.constraintlayout:constraintlayout:2.1.3")
 
-    implementation(group = "androidx.preference", name = "preference-ktx", version = "1.1.1")
-    implementation(group = "androidx.datastore", name = "datastore-preferences", version = "1.0.0")
+    implementation("androidx.preference:preference-ktx:1.1.1")
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
 
     // LifeCycle, ViewModel, LiveData
-    implementation(group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version = Dependencies.androidx_lifecycle)
-    implementation(group = "androidx.lifecycle", name = "lifecycle-common-java8", version = Dependencies.androidx_lifecycle)
-    implementation(group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version = Dependencies.androidx_lifecycle)
-    implementation(group = "androidx.lifecycle", name = "lifecycle-livedata-ktx", version = Dependencies.androidx_lifecycle)
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.4.0")
+    implementation("androidx.lifecycle:lifecycle-common-java8:2.4.0")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.4.0")
 
     // Room
-    implementation(group = "androidx.room", name = "room-runtime", version = Dependencies.androidx_room)
-    implementation(group = "androidx.room", name = "room-ktx", version = Dependencies.androidx_room)
-    ksp(group = "androidx.room", name = "room-compiler", version = Dependencies.androidx_room)
+    implementation("androidx.room:room-runtime:2.4.1")
+    implementation("androidx.room:room-ktx:2.4.1")
+    ksp("androidx.room:room-compiler:2.4.1")
+    testImplementation("androidx.room:room-testing:2.4.1")
 
     // Material Design
-    implementation(group = "com.google.android.material", name = "material", version = "1.4.0")
+    implementation("com.google.android.material:material:1.5.0")
 
     // Coil
-    implementation(group = "io.coil-kt", name = "coil", version = "1.4.0")
+    implementation("io.coil-kt:coil:1.4.0")
 
     // OkHttp
-    implementation(group = "com.squareup.okhttp3", name = "okhttp", version = "4.9.3")
+    implementation("com.squareup.okhttp3:okhttp:4.9.3")
 
     // Ktor
-    implementation(group = "io.ktor", name = "ktor-client-okhttp", version = Dependencies.ktor)
-    implementation(group = "io.ktor", name = "ktor-client-serialization", version = Dependencies.ktor)
+    implementation("io.ktor:ktor-client-okhttp:1.6.7")
+    implementation("io.ktor:ktor-client-serialization:1.6.7")
 
     // Jsoup
-    implementation(group = "org.jsoup", name = "jsoup", version = "1.14.3")
+    implementation("org.jsoup:jsoup:1.14.3")
 
     // ColorPicker
-    implementation(group = "com.jaredrummler", name = "colorpicker", version = "1.1.0")
+    implementation("com.jaredrummler:colorpicker:1.1.0")
 
     // Test
-    testImplementation(group = "junit", name = "junit", version = Dependencies.junit)
-    testImplementation(group = "androidx.room", name = "room-testing", version = Dependencies.androidx_room)
-    androidTestImplementation(group = "androidx.test.ext", name = "junit", version = Dependencies.androidx_junit)
-    androidTestImplementation(group = "androidx.test.espresso", name = "espresso-core", version = Dependencies.androidx_espresso)
+    testImplementation("junit:junit:4.13.2")
+    androidTestImplementation("androidx.test.ext:junit:1.1.3")
+    // androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
 
     // Debug
-    // debugImplementation(group = "com.squareup.leakcanary", name = "leakcanary-android", version = "2.6")
+    // debugImplementation("com.squareup.leakcanary:leakcanary-android:2.6")
 }

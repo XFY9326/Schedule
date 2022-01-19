@@ -4,17 +4,17 @@ plugins {
 }
 
 java {
-    sourceCompatibility = PROJECT_JAVA_VERSION
-    targetCompatibility = PROJECT_JAVA_VERSION
+    sourceCompatibility = ProjectConfig.javaVersion
+    targetCompatibility = ProjectConfig.javaVersion
 }
 
 tasks.compileKotlin {
     kotlinOptions {
-        jvmTarget = PROJECT_JAVA_VERSION.toString()
+        jvmTarget = ProjectConfig.javaVersion.toString()
     }
 }
 
 dependencies {
     implementation(project(path = ":Annotation"))
-    implementation(group = "com.squareup", name = "kotlinpoet", version = "1.10.2")
+    implementation("com.squareup:kotlinpoet:1.10.2")
 }

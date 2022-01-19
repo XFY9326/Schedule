@@ -4,16 +4,16 @@ plugins {
 }
 
 java {
-    sourceCompatibility = PROJECT_JAVA_VERSION
-    targetCompatibility = PROJECT_JAVA_VERSION
+    sourceCompatibility = ProjectConfig.javaVersion
+    targetCompatibility = ProjectConfig.javaVersion
 }
 
 tasks.compileKotlin {
     kotlinOptions {
-        jvmTarget = PROJECT_JAVA_VERSION.toString()
+        jvmTarget = ProjectConfig.javaVersion.toString()
     }
 }
 
 dependencies {
-    api(group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version = Dependencies.kotlinx_coroutines)
+    api("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0")
 }
