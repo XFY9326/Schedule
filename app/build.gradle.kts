@@ -6,6 +6,7 @@ plugins {
     kotlin("kapt")
     id("kotlin-parcelize")
     id("kotlinx-serialization")
+    id("com.google.devtools.ksp") version Dependencies.kotlin_ksp
 }
 
 android {
@@ -45,15 +46,6 @@ android {
         }
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-
-        javaCompileOptions {
-            annotationProcessorOptions {
-                arguments += mapOf(
-                    "room.schemaLocation" to "$projectDir/schemas",
-                    "room.incremental" to "true"
-                )
-            }
-        }
     }
 
     buildFeatures {
@@ -112,6 +104,11 @@ android {
     }
 }
 
+ksp {
+    arg("room.schemaLocation", "$projectDir/schemas")
+    arg("room.incremental", "true")
+}
+
 dependencies {
     implementation(project(path = ":Annotation"))
     kapt(project(path = ":AnnotationProcessor"))
@@ -152,7 +149,7 @@ dependencies {
     // Room
     implementation(group = "androidx.room", name = "room-runtime", version = Dependencies.androidx_room)
     implementation(group = "androidx.room", name = "room-ktx", version = Dependencies.androidx_room)
-    kapt(group = "androidx.room", name = "room-compiler", version = Dependencies.androidx_room)
+    ksp(group = "androidx.room", name = "room-compiler", version = Dependencies.androidx_room)
 
     // Material Design
     implementation(group = "com.google.android.material", name = "material", version = "1.4.0")

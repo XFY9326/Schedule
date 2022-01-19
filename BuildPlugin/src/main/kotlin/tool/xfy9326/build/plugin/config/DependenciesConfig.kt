@@ -3,6 +3,8 @@
 package tool.xfy9326.build.plugin.config
 
 object DependenciesConfig {
+    const val kotlin_ksp = "1.6.10-1.0.2"
+
     const val kotlinx_coroutines = "1.6.0"
     const val kotlinx_serialization = "1.3.2"
 
@@ -12,7 +14,7 @@ object DependenciesConfig {
     const val androidx_activity = "1.4.0"
     const val androidx_fragment = "1.4.0"
     const val androidx_lifecycle = "2.4.0"
-    const val androidx_room = "2.4.0"
+    const val androidx_room = "2.4.1"
     const val androidx_junit = "1.1.3"
     const val androidx_espresso = "3.4.0"
 
