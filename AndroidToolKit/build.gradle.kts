@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    compileSdk = Android.compileSdk
+    compileSdk = ProjectConfig.compileSdk
 
     defaultConfig {
-        minSdk = Android.minSdk
-        targetSdk = Android.targetSdk
+        minSdk = ProjectConfig.minSdk
+        targetSdk = ProjectConfig.targetSdk
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -22,29 +22,29 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = PROJECT_JAVA_VERSION
-        targetCompatibility = PROJECT_JAVA_VERSION
+        sourceCompatibility = ProjectConfig.javaVersion
+        targetCompatibility = ProjectConfig.javaVersion
     }
 
     kotlinOptions {
-        jvmTarget = PROJECT_JAVA_VERSION.toString()
+        jvmTarget = ProjectConfig.javaVersion.toString()
     }
 }
 
 dependencies {
     api(project(path = ":ToolKit"))
 
-    api(group = "androidx.annotation", name = "annotation", version = Dependencies.androidx_annotation)
+    api("androidx.annotation:annotation:1.3.0")
 
-    api(group = "androidx.core", name = "core-ktx", version = Dependencies.androidx_core)
-    api(group = "androidx.appcompat", name = "appcompat", version = Dependencies.androidx_appcompat)
+    api("androidx.core:core-ktx:1.7.0")
+    api("androidx.appcompat:appcompat:1.4.1")
 
-    api(group = "androidx.activity", name = "activity-ktx", version = Dependencies.androidx_activity)
-    api(group = "androidx.fragment", name = "fragment-ktx", version = Dependencies.androidx_fragment)
+    api("androidx.activity:activity-ktx:1.4.0")
+    api("androidx.fragment:fragment-ktx:1.4.0")
 
-    api(group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version = Dependencies.androidx_lifecycle)
-    api(group = "androidx.lifecycle", name = "lifecycle-common-java8", version = Dependencies.androidx_lifecycle)
+    api("androidx.lifecycle:lifecycle-runtime-ktx:2.4.0")
+    api("androidx.lifecycle:lifecycle-common-java8:2.4.0")
 
-    testImplementation(group = "junit", name = "junit", version = Dependencies.junit)
-    androidTestImplementation(group = "androidx.test.ext", name = "junit", version = Dependencies.androidx_junit)
+    testImplementation("junit:junit:4.13.2")
+    androidTestImplementation("androidx.test.ext:junit:1.1.3")
 }

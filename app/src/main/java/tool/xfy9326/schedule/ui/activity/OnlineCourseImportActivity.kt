@@ -148,7 +148,7 @@ class OnlineCourseImportActivity : ViewModelActivity<OnlineCourseImportViewModel
         )
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_online_course_import, menu)
         return super.onCreateOptionsMenu(menu)
     }
@@ -183,7 +183,7 @@ class OnlineCourseImportActivity : ViewModelActivity<OnlineCourseImportViewModel
     }
 
     private fun openCourseImportActivity(config: BaseCourseImportConfig) {
-        val importMethod = CourseImportUtils.getCourseImportMethod(config,
+        CourseImportUtils.getCourseImportMethod(config,
             onInterfaceProviderError = {
                 showAttention(R.string.interface_provider_error)
             },
@@ -193,12 +193,13 @@ class OnlineCourseImportActivity : ViewModelActivity<OnlineCourseImportViewModel
             onUnknownProviderError = {
                 showAttention(R.string.unknown_provider_error)
             }
-        )
-        when (importMethod) {
-            CourseImportUtils.ImportMethod.LOGIN_IMPORT, CourseImportUtils.ImportMethod.NETWORK_IMPORT ->
-                CourseProviderActivity.startProviderActivity<NetworkCourseProviderActivity>(this, config)
-            CourseImportUtils.ImportMethod.WEB_IMPORT -> CourseProviderActivity.startProviderActivity<WebCourseProviderActivity>(this, config)
-            CourseImportUtils.ImportMethod.WEB_JS_IMPORT -> CourseProviderActivity.startProviderActivity<JSCourseProviderActivity>(this, config)
+        )?.let {
+            when (it) {
+                CourseImportUtils.ImportMethod.LOGIN_IMPORT, CourseImportUtils.ImportMethod.NETWORK_IMPORT ->
+                    CourseProviderActivity.startProviderActivity<NetworkCourseProviderActivity>(this, config)
+                CourseImportUtils.ImportMethod.WEB_IMPORT -> CourseProviderActivity.startProviderActivity<WebCourseProviderActivity>(this, config)
+                CourseImportUtils.ImportMethod.WEB_JS_IMPORT -> CourseProviderActivity.startProviderActivity<JSCourseProviderActivity>(this, config)
+            }
         }
     }
 

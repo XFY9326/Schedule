@@ -26,10 +26,18 @@ object CourseAdapterUtils {
      *
      * @param supportJson 是否支持JSON（Ktor对Kotlin serialization的支持）
      * @param hasRedirect 是否允许重定向
+     * @param cookiesStorage Cookie存储器
      * @return HttpClient
      */
-    fun buildSimpleHttpClient(supportJson: Boolean = false, hasRedirect: Boolean = true): HttpClient = HttpClient(OkHttp) {
-        install(HttpCookies)
+    fun buildSimpleHttpClient(
+        supportJson: Boolean = false,
+        hasRedirect: Boolean = true,
+        cookiesStorage: CookiesStorage = AcceptAllCookiesStorage(),
+    ): HttpClient = HttpClient(OkHttp) {
+        BrowserUserAgent()
+        install(HttpCookies) {
+            storage = cookiesStorage
+        }
         if (hasRedirect) {
             install(HttpRedirect) {
                 // 修复 Http 302 Post 错误
@@ -38,10 +46,12 @@ object CourseAdapterUtils {
         }
         if (supportJson) {
             install(JsonFeature) {
-                serializer = KotlinxSerializer()
+                serializer = KotlinxSerializer(kotlinx.serialization.json.Json {
+                    ignoreUnknownKeys = true
+                    encodeDefaults = true
+                })
             }
         }
-        BrowserUserAgent()
     }
 
     /**

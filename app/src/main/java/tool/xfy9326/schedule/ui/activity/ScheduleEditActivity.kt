@@ -94,10 +94,10 @@ class ScheduleEditActivity : ViewModelActivity<ScheduleEditViewModel, ActivitySc
 
     override fun onDialogDismissed(dialogId: Int) {}
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_schedule_edit, menu)
         if (!requireViewModel().isEdit) {
-            menu?.findItem(R.id.menu_scheduleEditDelete)?.let {
+            menu.findItem(R.id.menu_scheduleEditDelete)?.let {
                 it.isVisible = false
             }
         }

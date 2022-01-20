@@ -4,6 +4,7 @@ import android.os.Parcelable
 import androidx.annotation.ColorInt
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import kotlinx.parcelize.Parcelize
 import tool.xfy9326.schedule.db.DBConst
@@ -27,6 +28,7 @@ data class Schedule(
     var weekStart: WeekDay,
 ) {
 
+    @Ignore
     constructor(
         name: String,
         startDate: Date,

@@ -47,7 +47,7 @@ object ExternalCourseImportUtils {
         } else {
             try {
                 return ViewModelProvider(activity, object : ViewModelProvider.NewInstanceFactory() {
-                    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+                    override fun <T : ViewModel> create(modelClass: Class<T>): T {
                         return super.create(modelClass).also {
                             if (it is ExternalCourseImportViewModel) {
                                 it.importParams = parseResult

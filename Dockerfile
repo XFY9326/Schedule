@@ -1,55 +1,42 @@
-FROM ubuntu:20.04
+FROM ubuntu:latest
 
-LABEL maintainer="XFY9326@xfy9326.top"
+LABEL maintainer="XFY9326@xfy9326.github.io"
+
+# WorkDir
+WORKDIR /Android
 
 # Environment
 ENV DEBIAN_FRONTEND noninteractive
 
-# For users in china, use tuna mirrors instead
-RUN sed -i s@/archive.ubuntu.com/@/mirrors.tuna.tsinghua.edu.cn/@g /etc/apt/sources.list
+# Change apt source for users in China 
+# RUN sed -i s@/archive.ubuntu.com/@/mirrors.tuna.tsinghua.edu.cn/@g /etc/apt/sources.list
 
-RUN apt clean
-RUN apt update
-RUN apt install git wget unzip openjdk-11-jdk -y --fix-missing
+# Init environment
+RUN apt-get update
+RUN apt-get install -y --fix-missing git curl wget unzip
+# ----- Add apt package here -----
 
-# JAVA
-ENV JAVA_HOME /usr/lib/jvm/java-11-openjdk-amd64
-ENV PATH ${JAVA_HOME}/bin:$PATH
+# Install JDK
+ARG JDK_VERSION=11
+RUN apt-get install -y --fix-missing openjdk-${JDK_VERSION}-jdk 
 
-# Gradle
-ENV GRADLE_DISTS ~/.gradle/wrapper/dists
-ENV GRADLE_VERSION 7.0.2
-ENV GRADLE_TYPE all
-ENV GRADLE_DIGEST 7era6s5ay7zsbhuvl0oc9g94s
+# Android SDK manager
+ENV ANDROID_HOME /root/Android/Sdk
+ENV ANDROID_SDK_ROOT ${ANDROID_HOME}
+ENV PATH ${PATH}:${ANDROID_HOME}/cmdline-tools/latest/bin
 
-# For users in china, use tencent mirrors instead
-# ENV GRADLE_DISTRIBUTIONS_URL https://services.gradle.org/distributions
-ENV GRADLE_DISTRIBUTIONS_URL https://mirrors.cloud.tencent.com/gradle
+RUN mkdir -p ${ANDROID_HOME}/.cache
+RUN wget --no-check-certificate -O "${ANDROID_HOME}/.cache/commandlinetools.zip" "$(curl -s 'https://developer.android.com/studio' | grep -Eo 'https://dl.google.com/android/repository/commandlinetools-linux-.*_latest.zip')"
+RUN unzip -d "${ANDROID_HOME}/cmdline-tools" "${ANDROID_HOME}/.cache/commandlinetools.zip" && rm -rf "${ANDROID_HOME}/.cache/commandlinetools.zip"
+RUN mv "${ANDROID_HOME}/cmdline-tools/cmdline-tools" "${ANDROID_HOME}/cmdline-tools/latest"
 
-RUN mkdir -p ${GRADLE_DISTS}/gradle-${GRADLE_VERSION}-${GRADLE_TYPE}/${GRADLE_DIGEST}/
-RUN wget --no-check-certificate -O ${GRADLE_DISTS}/gradle-${GRADLE_VERSION}-${GRADLE_TYPE}/${GRADLE_DIGEST}/gradle-${GRADLE_VERSION}-${GRADLE_TYPE}.zip "${GRADLE_DISTRIBUTIONS_URL}/gradle-${GRADLE_VERSION}-${GRADLE_TYPE}.zip"
+# Android repo config
+RUN mkdir ${HOME}/.android
+RUN touch ${HOME}/.android/repositories.cfg
 
-# Android SDK
-WORKDIR /Android
+# Install Android SDK
+ENV PATH ${PATH}:${ANDROID_HOME}/platform-tools
 
-ENV ANDROID_SDK /Android/sdk
-ENV ANDROID_HOME $ANDROID_SDK
-
-RUN mkdir -p ${ANDROID_HOME}
-RUN mkdir ~/.android
-RUN touch ~/.android/repositories.cfg
-
-ENV ANDROID_COMMAND_LINE_TOOLS_VERSION 7583922
-
-RUN wget --no-check-certificate -O ${ANDROID_HOME}/tools.zip "https://dl.google.com/android/repository/commandlinetools-linux-${ANDROID_COMMAND_LINE_TOOLS_VERSION}_latest.zip"
-RUN unzip -d ${ANDROID_HOME} ${ANDROID_HOME}/tools.zip > /dev/null
-RUN rm -rf ${ANDROID_HOME}/tools.zip
-ENV PATH ${ANDROID_HOME}/cmdline-tools/bin:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:$PATH
-
-ENV ANDROID_PLATFORM_VERSION 31
-ENV ANDROID_BUILD_TOOLS_VERSION 31.0.0
-
-RUN yes | sdkmanager --sdk_root=${ANDROID_HOME} "tools" "platform-tools"
-RUN yes | sdkmanager --sdk_root=${ANDROID_HOME} "build-tools;${ANDROID_BUILD_TOOLS_VERSION}"
-RUN yes | sdkmanager --sdk_root=${ANDROID_HOME} "platforms;android-${ANDROID_PLATFORM_VERSION}"
-ENV PATH ${ANDROID_HOME}/platform-tools:${ANDROID_HOME}/build-tools/${ANDROID_BUILD_TOOLS_VERSION}:$PATH
+RUN yes | sdkmanager --licenses
+RUN sdkmanager "tools" "platform-tools"
+# ----- Add SDK package here -----

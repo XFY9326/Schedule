@@ -4,16 +4,16 @@ plugins {
 }
 
 java {
-    sourceCompatibility = PROJECT_JAVA_VERSION
-    targetCompatibility = PROJECT_JAVA_VERSION
+    sourceCompatibility = ProjectConfig.javaVersion
+    targetCompatibility = ProjectConfig.javaVersion
 }
 
 tasks.compileKotlin {
     kotlinOptions {
-        jvmTarget = PROJECT_JAVA_VERSION.toString()
+        jvmTarget = ProjectConfig.javaVersion.toString()
     }
 }
 
 dependencies {
-    api(group = "androidx.annotation", name = "annotation", version = Dependencies.androidx_annotation)
+    api("androidx.annotation:annotation:1.3.0")
 }

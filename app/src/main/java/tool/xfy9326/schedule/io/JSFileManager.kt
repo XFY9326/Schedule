@@ -92,13 +92,13 @@ object JSFileManager {
             if (it.isFile && EXTENSION_DOWNLOAD.equals(it.extension, true)) it.deleteOnExit()
         }
         if (getJSProviderFile(config.id, false).exists() && getJSParserFile(config.id, false).exists()) {
-            val jsDependencies = config.dependenciesJSUrls.map { it.md5() }
+            val jsDependencies = config.dependenciesJSUrls.map { it.md5() }.toSet()
             val dependenciesDir = getJSDependenciesDir(config.id)
             val localJSDependencies =
                 if (dependenciesDir.exists()) {
-                    dependenciesDir.listFiles { file -> file.isFile }?.map { it.nameWithoutExtension } ?: emptyList()
+                    dependenciesDir.listFiles { file -> file.isFile }?.map { it.nameWithoutExtension }?.toSet() ?: emptySet()
                 } else {
-                    emptyList()
+                    emptySet()
                 }
             jsDependencies.subtract(localJSDependencies).isEmpty() && localJSDependencies.subtract(jsDependencies).isEmpty()
         } else {

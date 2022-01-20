@@ -111,10 +111,10 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
         scheduleLaunchModule.checkUpgrade()
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_schedule, menu)
         requireViewModel().toolBarTintColor.value?.let {
-            menu?.setIconTint(it)
+            menu.setIconTint(it)
         }
         return super.onCreateOptionsMenu(menu)
     }

@@ -4,6 +4,8 @@ import androidx.room.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import tool.xfy9326.schedule.beans.ScheduleSync
 import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.db.DBConst
@@ -11,18 +13,21 @@ import tool.xfy9326.schedule.db.query.ScheduleSyncsInfo
 
 @Dao
 abstract class ScheduleSyncDAO {
-    @Transaction
+    private val newScheduleSyncLock = Mutex()
+
     open suspend fun getScheduleSync(scheduleId: Long): Flow<ScheduleSync> {
-        val data = getScheduleSyncByScheduleId(scheduleId)
-        return if (data == null) {
-            val newData = AppSettingsDataStore.getDefaultScheduleSyncFlow(scheduleId).first()
-            newData.syncId = putScheduleSync(newData)
-            flow {
-                emit(newData)
-            }
-        } else {
-            flow {
-                emit(data)
+        newScheduleSyncLock.withLock(this) {
+            val data = getScheduleSyncByScheduleId(scheduleId)
+            return if (data == null) {
+                val newData = AppSettingsDataStore.getDefaultScheduleSyncFlow(scheduleId).first()
+                newData.syncId = putScheduleSync(newData)
+                flow {
+                    emit(newData)
+                }
+            } else {
+                flow {
+                    emit(data)
+                }
             }
         }
     }

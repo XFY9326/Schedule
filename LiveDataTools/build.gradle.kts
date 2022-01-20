@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    compileSdk = Android.compileSdk
+    compileSdk = ProjectConfig.compileSdk
 
     defaultConfig {
-        minSdk = Android.minSdk
-        targetSdk = Android.targetSdk
+        minSdk = ProjectConfig.minSdk
+        targetSdk = ProjectConfig.targetSdk
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -22,18 +22,18 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = PROJECT_JAVA_VERSION
-        targetCompatibility = PROJECT_JAVA_VERSION
+        sourceCompatibility = ProjectConfig.javaVersion
+        targetCompatibility = ProjectConfig.javaVersion
     }
 
     kotlinOptions {
-        jvmTarget = PROJECT_JAVA_VERSION.toString()
+        jvmTarget = ProjectConfig.javaVersion.toString()
     }
 }
 
 dependencies {
-    api(group = "androidx.lifecycle", name = "lifecycle-livedata-ktx", version = Dependencies.androidx_lifecycle)
+    api("androidx.lifecycle:lifecycle-livedata-ktx:2.4.0")
 
-    testImplementation(group = "junit", name = "junit", version = Dependencies.junit)
-    androidTestImplementation(group = "androidx.test.ext", name = "junit", version = Dependencies.androidx_junit)
+    testImplementation("junit:junit:4.13.2")
+    androidTestImplementation("androidx.test.ext:junit:1.1.3")
 }

@@ -61,6 +61,26 @@ fun Collection<Int>.toBooleanArray(): BooleanArray =
     }
 
 /**
+ * 字符串转BooleanArray
+ * 1 -> true
+ * 0 -> false
+ *
+ * @return BooleanArray
+ */
+fun String.toBooleanArray(): BooleanArray {
+    if (length == 0) return BooleanArray(0)
+    val result = BooleanArray(length)
+    var index = 0
+    for (element in this)
+        result[index++] = when (element) {
+            '1' -> true
+            '0' -> false
+            else -> error("Unknown character '$element' when parsing String to BooleanArray!")
+        }
+    return result
+}
+
+/**
  * Jsoup选择单个元素，若不存在则报错
  *
  * @param cssQuery CSS查询语句
