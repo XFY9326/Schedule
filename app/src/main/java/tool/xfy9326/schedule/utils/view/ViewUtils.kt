@@ -8,6 +8,7 @@ import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.RippleDrawable
 import android.net.Uri
 import androidx.annotation.ColorInt
+import androidx.annotation.IdRes
 import androidx.annotation.Px
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -62,7 +63,7 @@ object ViewUtils {
      * Reference: [PreferenceFragmentCompat.onPreferenceTreeClick]
      * Deprecated API usage: [androidx.fragment.app.Fragment.setTargetFragment]
      */
-    fun navigatePreferenceFragmentWithAnimation(context: Context, fragmentManager: FragmentManager, pref: Preference): Boolean {
+    fun navigatePreferenceFragmentWithAnimation(context: Context, fragmentManager: FragmentManager, @IdRes containerId: Int, pref: Preference): Boolean {
         val targetFragment = pref.fragment ?: return false
         val fragment = fragmentManager.fragmentFactory.instantiate(context.classLoader, targetFragment)
         fragment.arguments = pref.extras
@@ -74,7 +75,7 @@ object ViewUtils {
                 R.anim.anim_scroll_in_left,
                 R.anim.anim_scroll_out_right
             )
-            replace(R.id.fragmentContainer, fragment)
+            replace(containerId, fragment)
             addToBackStack(null)
         }
         return true

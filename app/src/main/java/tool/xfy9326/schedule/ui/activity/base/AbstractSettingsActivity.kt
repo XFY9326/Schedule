@@ -49,7 +49,7 @@ abstract class AbstractSettingsActivity : ViewBindingActivity<ActivityFragmentCo
     }
 
     override fun onPreferenceStartFragment(caller: PreferenceFragmentCompat, pref: Preference): Boolean {
-        return ViewUtils.navigatePreferenceFragmentWithAnimation(this, supportFragmentManager, pref)
+        return ViewUtils.navigatePreferenceFragmentWithAnimation(this, supportFragmentManager, R.id.fragmentContainer, pref)
     }
 
     override fun onBackPressed() {

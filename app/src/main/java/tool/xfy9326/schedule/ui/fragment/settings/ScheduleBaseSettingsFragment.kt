@@ -83,7 +83,7 @@ class ScheduleBaseSettingsFragment : ViewBindingFragment<FragmentScheduleSetting
     }
 
     override fun onPreferenceStartFragment(caller: PreferenceFragmentCompat, pref: Preference): Boolean {
-        return ViewUtils.navigatePreferenceFragmentWithAnimation(requireContext(), childFragmentManager, pref)
+        return ViewUtils.navigatePreferenceFragmentWithAnimation(requireContext(), childFragmentManager, R.id.container_fragmentSettings, pref)
     }
 
     override fun onRequestBack(): Boolean {
