@@ -3,7 +3,6 @@ import com.android.build.gradle.internal.api.ApkVariantOutputImpl
 plugins {
     id("com.android.application")
     kotlin("android")
-    kotlin("kapt")
     id("kotlin-parcelize")
     id("kotlinx-serialization")
     id("com.google.devtools.ksp") version "${ProjectConfig.kotlinVersion}-1.0.2"
