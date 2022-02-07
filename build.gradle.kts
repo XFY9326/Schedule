@@ -1,25 +1,10 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
-buildscript {
-    repositories {
-        google()
-        mavenCentral()
-    }
-
-    dependencies {
-        classpath("com.android.tools.build:gradle:7.1.1")
-        classpath(kotlin(module = "gradle-plugin", version = ProjectConfig.kotlinVersion))
-        classpath(kotlin(module = "serialization", version = ProjectConfig.kotlinVersion))
-
-        // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files
-    }
-}
-
-allprojects {
-    repositories {
-        google()
-        mavenCentral()
-    }
+plugins {
+    id("com.android.application") version ProjectConfig.androidGradlePluginVersion apply false
+    id("com.android.library") version ProjectConfig.androidGradlePluginVersion apply false
+    kotlin("android") version ProjectConfig.kotlinVersion apply false
+    kotlin("jvm") version ProjectConfig.kotlinVersion apply false
+    kotlin("plugin.serialization") version ProjectConfig.kotlinVersion apply false
 }
 
 tasks.register<Delete>("clean") {

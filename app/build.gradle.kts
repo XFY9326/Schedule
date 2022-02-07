@@ -4,7 +4,7 @@ plugins {
     id("com.android.application")
     kotlin("android")
     id("kotlin-parcelize")
-    id("kotlinx-serialization")
+    kotlin("plugin.serialization")
     id("com.google.devtools.ksp") version "${ProjectConfig.kotlinVersion}-1.0.2"
 }
 
