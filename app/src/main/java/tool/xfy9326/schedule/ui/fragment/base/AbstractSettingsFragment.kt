@@ -1,5 +1,6 @@
 package tool.xfy9326.schedule.ui.fragment.base
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -47,6 +48,7 @@ abstract class AbstractSettingsFragment : PreferenceFragmentCompat() {
         }
     }
 
+    @SuppressLint("RestrictedApi")
     override fun getCallbackFragment() = parentFragment
 
     protected open fun onBindLiveDataFromSettingsViewMode(viewModel: SettingsViewModel) {}

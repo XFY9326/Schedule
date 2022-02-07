@@ -43,7 +43,6 @@ class JSConfigImportDialog : AppCompatDialogFragment() {
 
         return MaterialAlertDialogBuilder(requireContext()).apply {
             setTitle(R.string.add_course_import)
-            setView(binding.root)
             binding.textLayoutDialogText.setHint(R.string.course_import_config_url_hint)
             binding.textLayoutDialogText.endIconMode = TextInputLayout.END_ICON_CLEAR_TEXT
             binding.editTextDialogText.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_MULTI_LINE
@@ -53,6 +52,7 @@ class JSConfigImportDialog : AppCompatDialogFragment() {
             setNeutralButton(R.string.from_file) { _, _ ->
                 setFragmentResult(DIALOG_TAG, Bundle.EMPTY)
             }
+            setView(binding.root)
         }.create().also { dialog ->
             dialog.setOnShowListener {
                 dialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener {
