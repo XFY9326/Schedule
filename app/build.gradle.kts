@@ -1,4 +1,5 @@
-import com.android.build.gradle.internal.api.ApkVariantOutputImpl
+import com.android.build.api.variant.impl.VariantImpl
+import com.android.build.api.variant.impl.VariantOutputImpl
 
 plugins {
     id("com.android.application")
@@ -26,14 +27,16 @@ android {
         manifestPlaceholders["ApplicationId"] = ProjectConfig.applicationId
         manifestPlaceholders["BaseApplicationId"] = ProjectConfig.applicationId
 
-        applicationVariants.all {
-            outputs.filterIsInstance<ApkVariantOutputImpl>().forEach {
-                if (buildType.name != "debug") {
-                    it.outputFileName = "${ProjectConfig.name}_v${versionName}_${versionCode}_${buildType.name}.apk"
+        androidComponents {
+            onVariants { variants ->
+                if (variants is VariantImpl) {
+                    variants.variantData.addJavaSourceFoldersToModel(file("$buildDir/generated/ksp/${variants.buildType}/kotlin"))
                 }
-            }
-            kotlin.sourceSets.main {
-                addJavaSourceFoldersToModel(file("$buildDir/generated/ksp/${this@all.name}/kotlin"))
+                variants.outputs.forEach {
+                    if (it is VariantOutputImpl && variants.buildType != "debug") {
+                        it.outputFileName.set("${ProjectConfig.name}_v${versionName}_${versionCode}_${variants.buildType}.apk")
+                    }
+                }
             }
         }
 
