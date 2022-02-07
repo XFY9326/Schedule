@@ -2,5 +2,6 @@
 <project version="4">
   <component name="Statistic">
     <option name="fileTypes" value="class;svn-base;svn-work;Extra;gif;png;jpg;jpeg;bmp;tga;tiff;ear;war;zip;jar;iml;iws;ipr;bz2;gz;apk;ds_store;gitignore;bat;gradle;json;pro;properties" />
+    <option name="excludeDotArtifactDirectory" value="true" />
   </component>
 </project>

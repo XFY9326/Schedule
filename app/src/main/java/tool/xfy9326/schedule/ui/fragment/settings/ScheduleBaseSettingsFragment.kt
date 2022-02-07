@@ -18,6 +18,7 @@ import tool.xfy9326.schedule.ui.base.OnRequestBackCallback
 import tool.xfy9326.schedule.ui.fragment.SchedulePreviewFragment
 import tool.xfy9326.schedule.ui.fragment.base.ViewBindingFragment
 import tool.xfy9326.schedule.ui.vm.SettingsViewModel
+import tool.xfy9326.schedule.utils.view.ViewUtils
 import kotlin.properties.Delegates
 
 class ScheduleBaseSettingsFragment : ViewBindingFragment<FragmentScheduleSettingsBinding>(), PreferenceFragmentCompat.OnPreferenceStartFragmentCallback, OnRequestBackCallback {
@@ -81,25 +82,8 @@ class ScheduleBaseSettingsFragment : ViewBindingFragment<FragmentScheduleSetting
         return super.onOptionsItemSelected(item)
     }
 
-    /**
-     * Reference: [PreferenceFragmentCompat.onPreferenceTreeClick]
-     * Deprecated API usage: [androidx.fragment.app.Fragment.setTargetFragment]
-     */
     override fun onPreferenceStartFragment(caller: PreferenceFragmentCompat, pref: Preference): Boolean {
-        val fragment = childFragmentManager.fragmentFactory.instantiate(requireContext().classLoader, pref.fragment)
-        fragment.arguments = pref.extras
-
-        childFragmentManager.commit {
-            setCustomAnimations(
-                R.anim.anim_scroll_in_right,
-                R.anim.anim_scroll_out_left,
-                R.anim.anim_scroll_in_left,
-                R.anim.anim_scroll_out_right
-            )
-            replace(R.id.container_fragmentSettings, fragment)
-            addToBackStack(null)
-        }
-        return true
+        return ViewUtils.navigatePreferenceFragmentWithAnimation(requireContext(), childFragmentManager, pref)
     }
 
     override fun onRequestBack(): Boolean {

@@ -28,8 +28,8 @@ abstract class AbstractSettingsFragment : PreferenceFragmentCompat() {
         onPrefInit(savedInstanceState)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return super.onCreateView(inflater, container, savedInstanceState)?.also {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        return super.onCreateView(inflater, container, savedInstanceState).also {
             it.setBackgroundColor(requireContext().getDefaultBackgroundColor())
         }
     }

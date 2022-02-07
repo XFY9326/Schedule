@@ -100,7 +100,7 @@ android {
     }
 
     lint {
-        isCheckReleaseBuilds = false
+        checkReleaseBuilds = false
     }
 }
 
@@ -132,12 +132,12 @@ dependencies {
     implementation("androidx.appcompat:appcompat-resources:1.4.1")
 
     implementation("androidx.activity:activity-ktx:1.4.0")
-    implementation("androidx.fragment:fragment-ktx:1.4.0")
+    implementation("androidx.fragment:fragment-ktx:1.4.1")
 
     implementation("androidx.drawerlayout:drawerlayout:1.1.1")
     implementation("androidx.constraintlayout:constraintlayout:2.1.3")
 
-    implementation("androidx.preference:preference-ktx:1.1.1")
+    implementation("androidx.preference:preference-ktx:1.2.0")
     implementation("androidx.datastore:datastore-preferences:1.0.0")
 
     // LifeCycle, ViewModel, LiveData

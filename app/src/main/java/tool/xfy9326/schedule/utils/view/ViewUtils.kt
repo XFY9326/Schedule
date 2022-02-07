@@ -1,5 +1,6 @@
 package tool.xfy9326.schedule.utils.view
 
+import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.drawable.Drawable
@@ -11,6 +12,10 @@ import androidx.annotation.Px
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.commit
+import androidx.preference.Preference
+import androidx.preference.PreferenceFragmentCompat
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
@@ -51,5 +56,27 @@ object ViewUtils {
         runBlocking {
             AppCompatDelegate.setDefaultNightMode(AppSettingsDataStore.nightModeTypeFlow.first().modeInt)
         }
+    }
+
+    /**
+     * Reference: [PreferenceFragmentCompat.onPreferenceTreeClick]
+     * Deprecated API usage: [androidx.fragment.app.Fragment.setTargetFragment]
+     */
+    fun navigatePreferenceFragmentWithAnimation(context: Context, fragmentManager: FragmentManager, pref: Preference): Boolean {
+        val targetFragment = pref.fragment ?: return false
+        val fragment = fragmentManager.fragmentFactory.instantiate(context.classLoader, targetFragment)
+        fragment.arguments = pref.extras
+
+        fragmentManager.commit {
+            setCustomAnimations(
+                R.anim.anim_scroll_in_right,
+                R.anim.anim_scroll_out_left,
+                R.anim.anim_scroll_in_left,
+                R.anim.anim_scroll_out_right
+            )
+            replace(R.id.fragmentContainer, fragment)
+            addToBackStack(null)
+        }
+        return true
     }
 }
