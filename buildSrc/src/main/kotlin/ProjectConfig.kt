@@ -10,6 +10,4 @@ object ProjectConfig {
     const val versionName = "1.3.8"
 
     val javaVersion = JavaVersion.VERSION_11
-    const val kotlinVersion = "1.6.10"
-    const val androidGradlePluginVersion = "7.1.1"
 }

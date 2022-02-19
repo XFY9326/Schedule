@@ -6,7 +6,7 @@ plugins {
     kotlin("android")
     id("kotlin-parcelize")
     kotlin("plugin.serialization")
-    id("com.google.devtools.ksp") version "${ProjectConfig.kotlinVersion}-1.0.2"
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -143,15 +143,15 @@ dependencies {
     implementation("androidx.datastore:datastore-preferences:1.0.0")
 
     // LifeCycle, ViewModel, LiveData
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.4.0")
-    implementation("androidx.lifecycle:lifecycle-common-java8:2.4.0")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0")
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.4.0")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.4.1")
+    implementation("androidx.lifecycle:lifecycle-common-java8:2.4.1")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.4.1")
 
     // Room
-    implementation("androidx.room:room-ktx:2.4.1")
-    ksp("androidx.room:room-compiler:2.4.1")
-    testImplementation("androidx.room:room-testing:2.4.1")
+    implementation("androidx.room:room-ktx:2.4.2")
+    ksp("androidx.room:room-compiler:2.4.2")
+    testImplementation("androidx.room:room-testing:2.4.2")
 
     // Material Design
     implementation("com.google.android.material:material:1.5.0")

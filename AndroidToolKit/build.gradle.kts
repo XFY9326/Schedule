@@ -42,8 +42,8 @@ dependencies {
     api("androidx.activity:activity-ktx:1.4.0")
     api("androidx.fragment:fragment-ktx:1.4.1")
 
-    api("androidx.lifecycle:lifecycle-runtime-ktx:2.4.0")
-    api("androidx.lifecycle:lifecycle-common-java8:2.4.0")
+    api("androidx.lifecycle:lifecycle-runtime-ktx:2.4.1")
+    api("androidx.lifecycle:lifecycle-common-java8:2.4.1")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.3")
