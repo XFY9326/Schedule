@@ -128,7 +128,7 @@ dependencies {
     // AndroidX
     implementation("androidx.core:core-ktx:1.7.0")
 
-    implementation("androidx.core:core-splashscreen:1.0.0-beta01")
+    implementation("androidx.core:core-splashscreen:1.0.0-beta02")
 
     implementation("androidx.appcompat:appcompat:1.4.1")
     implementation("androidx.appcompat:appcompat-resources:1.4.1")
@@ -163,8 +163,8 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.9.3")
 
     // Ktor
-    implementation("io.ktor:ktor-client-okhttp:1.6.7")
-    implementation("io.ktor:ktor-client-serialization:1.6.7")
+    implementation("io.ktor:ktor-client-okhttp:1.6.8")
+    implementation("io.ktor:ktor-client-serialization:1.6.8")
 
     // Jsoup
     implementation("org.jsoup:jsoup:1.14.3")

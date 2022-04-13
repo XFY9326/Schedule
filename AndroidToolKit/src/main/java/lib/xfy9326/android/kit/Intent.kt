@@ -22,8 +22,8 @@ fun ClipData.getItemUriList(): List<Uri> {
 }
 
 @RequiresApi(Build.VERSION_CODES.S)
-class ScheduleNextAlarmPermissionContact : ActivityResultContract<Nothing, Boolean>() {
-    override fun createIntent(context: Context, input: Nothing) =
+class ScheduleNextAlarmPermissionContact : ActivityResultContract<Unit?, Boolean>() {
+    override fun createIntent(context: Context, input: Unit?) =
         Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM, context.packageUri)
 
     override fun parseResult(resultCode: Int, intent: Intent?) = resultCode == Activity.RESULT_OK
