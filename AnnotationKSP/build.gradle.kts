@@ -11,8 +11,8 @@ tasks.compileKotlin {
     kotlinOptions {
         jvmTarget = ProjectConfig.javaVersion.toString()
         freeCompilerArgs = freeCompilerArgs + listOf(
-            "-Xopt-in=com.google.devtools.ksp.KspExperimental",
-            "-Xopt-in=com.squareup.kotlinpoet.ksp.KotlinPoetKspPreview"
+            "-opt-in=com.google.devtools.ksp.KspExperimental",
+            "-opt-in=com.squareup.kotlinpoet.ksp.KotlinPoetKspPreview"
         )
     }
 }

@@ -89,7 +89,7 @@ class WebCourseProviderFragment : ViewBindingFragment<FragmentWebCourseProviderB
                     return super.onJsConfirm(view, url, message, result)
                 }
 
-                @Suppress("DEPRECATION")
+                @Suppress("DEPRECATION", "OVERRIDE_DEPRECATION")
                 override fun onConsoleMessage(message: String?, lineNumber: Int, sourceID: String?) {
                     if (isWebViewDebugLogEnabled) {
                         super.onConsoleMessage(message, lineNumber, sourceID)
@@ -112,7 +112,7 @@ class WebCourseProviderFragment : ViewBindingFragment<FragmentWebCourseProviderB
                     super.onPageFinished(view, url)
                 }
 
-                @Suppress("DEPRECATION")
+                @Suppress("DEPRECATION", "OVERRIDE_DEPRECATION")
                 override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
                     return false
                 }
