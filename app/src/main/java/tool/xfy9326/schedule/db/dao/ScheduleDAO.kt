@@ -92,7 +92,7 @@ abstract class ScheduleDAO {
         val courseId = putCourseRaw(course)
         for (time in course.times) {
             time.courseId = courseId
-            time.weekNum = time.weekNum.arrangeWeekNum()
+            time.weekNumArray = time.weekNumArray.arrangeWeekNum()
             putCourseTime(time)
         }
         return courseId
@@ -104,7 +104,7 @@ abstract class ScheduleDAO {
         updateCourseRaw(course)
         for (time in course.times) {
             time.courseId = course.courseId
-            time.weekNum = time.weekNum.arrangeWeekNum()
+            time.weekNumArray = time.weekNumArray.arrangeWeekNum()
             putCourseTime(time)
         }
         return course.courseId

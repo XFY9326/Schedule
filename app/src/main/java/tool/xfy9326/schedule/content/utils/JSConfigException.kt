@@ -11,7 +11,7 @@ class JSConfigException : CourseImportException {
 
     companion object {
         @Suppress("NOTHING_TO_INLINE")
-        inline fun Error.report(cause: Throwable? = null): Unit = throw make(cause)
+        inline fun Error.report(cause: Throwable? = null): Nothing = throw make(cause)
 
         fun Error.make(cause: Throwable? = null) =
             if (cause == null) {

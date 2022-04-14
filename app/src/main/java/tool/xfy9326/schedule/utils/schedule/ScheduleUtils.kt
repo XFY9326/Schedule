@@ -189,7 +189,7 @@ object ScheduleUtils {
             if (courseTime.sectionTime.end > schedule.times.size) {
                 return EditError.Type.SCHEDULE_COURSE_NUM_ERROR.make(course.name)
             }
-            if (courseTime.weekNum.size > maxWeekNum) {
+            if (courseTime.weekNumArray.size > maxWeekNum) {
                 return EditError.Type.SCHEDULE_COURSE_WEEK_NUM_ERROR.make(course.name)
             }
         }

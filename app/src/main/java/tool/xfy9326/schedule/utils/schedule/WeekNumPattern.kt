@@ -14,7 +14,7 @@ object WeekNumPattern {
 
     fun parsePattern(courseTime: CourseTime, scheduleCalculateTimes: ScheduleCalculateTimes): NumberPattern {
         // 根据课表学期时间修正该周是否需要上课
-        val tempWeekNum = courseTime.weekNum
+        val tempWeekNum = courseTime.weekNumArray
         val maxWeekNum = scheduleCalculateTimes.maxWeekNum
         val weekStart = scheduleCalculateTimes.weekStart
 

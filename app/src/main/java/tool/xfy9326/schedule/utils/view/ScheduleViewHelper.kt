@@ -18,15 +18,13 @@ import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.*
 import tool.xfy9326.schedule.data.ScheduleDataStore
 import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
-import tool.xfy9326.schedule.kt.*
+import tool.xfy9326.schedule.kt.getDefaultBackgroundColor
 import tool.xfy9326.schedule.tools.MaterialColorHelper
-import tool.xfy9326.schedule.ui.view.*
 import tool.xfy9326.schedule.ui.view.schedule.*
 import tool.xfy9326.schedule.utils.CalendarUtils
 import tool.xfy9326.schedule.utils.schedule.CourseTimeUtils
 import tool.xfy9326.schedule.utils.schedule.CourseUtils
 import java.util.*
-import kotlin.collections.ArrayList
 
 object ScheduleViewHelper {
     private const val MIN_SCHEDULE_COLUMN_COUNT = 5 + 1
@@ -51,13 +49,13 @@ object ScheduleViewHelper {
         val sampleName = IOManager.resources.getString(R.string.sample_course_name)
         val sampleLocation = IOManager.resources.getString(R.string.sample_course_location)
         listOf(
-            CourseCell(0, 0, sampleName, sampleLocation, SectionTime(WeekDay.MONDAY, 1, 2), colors[0], true),
-            CourseCell(0, 1, sampleName, null, SectionTime(WeekDay.MONDAY, 5, 2), colors[2], false),
-            CourseCell(0, 2, sampleName, sampleLocation, SectionTime(WeekDay.TUESDAY, 5, 4), colors[4], true),
-            CourseCell(0, 3, sampleName, sampleLocation, SectionTime(WeekDay.WEDNESDAY, 2, 2), colors[6], true),
-            CourseCell(1, 4, sampleName, null, SectionTime(WeekDay.WEDNESDAY, 5, 2), colors[8], false),
-            CourseCell(1, 5, sampleName, null, SectionTime(WeekDay.FRIDAY, 4, 3), colors[10], false),
-            CourseCell(1, 6, sampleName, sampleLocation, SectionTime(WeekDay.FRIDAY, 8, 2), colors[12], true),
+            CourseCell(0, 0, sampleName, sampleLocation, SectionTime(WeekDay.MONDAY, 1, 2), colors[0], 1, true),
+            CourseCell(0, 1, sampleName, null, SectionTime(WeekDay.MONDAY, 5, 2), colors[2], 1, false),
+            CourseCell(0, 2, sampleName, sampleLocation, SectionTime(WeekDay.TUESDAY, 5, 4), colors[4], 1, true),
+            CourseCell(0, 3, sampleName, sampleLocation, SectionTime(WeekDay.WEDNESDAY, 2, 2), colors[6], 1, true),
+            CourseCell(1, 4, sampleName, null, SectionTime(WeekDay.WEDNESDAY, 5, 2), colors[8], 1, false),
+            CourseCell(1, 5, sampleName, null, SectionTime(WeekDay.FRIDAY, 4, 3), colors[10], 1, false),
+            CourseCell(1, 6, sampleName, sampleLocation, SectionTime(WeekDay.FRIDAY, 8, 2), colors[12], 1, true),
         )
     }
 

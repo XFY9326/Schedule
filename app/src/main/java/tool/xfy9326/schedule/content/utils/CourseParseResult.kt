@@ -22,7 +22,7 @@ class CourseParseResult private constructor(val courses: List<Course>, val ignor
             name.hashCode() + 31 * (teacher?.hashCode() ?: 0)
 
         private fun CourseTime.combinableHashCode() =
-            weekNum.contentHashCode() + 31 * sectionTime.weekDay.hashCode() + 31 * (location?.hashCode() ?: 0)
+            weekNumArray.contentHashCode() + 31 * sectionTime.weekDay.hashCode() + 31 * (location?.hashCode() ?: 0)
 
         fun add(course: Course) {
             course.arrangeWeekNum()
