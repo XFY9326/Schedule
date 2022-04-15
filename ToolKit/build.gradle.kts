@@ -15,5 +15,5 @@ tasks.compileKotlin {
 }
 
 dependencies {
-    api("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0")
+    api("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.1")
 }

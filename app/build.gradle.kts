@@ -120,7 +120,7 @@ dependencies {
     implementation(project(path = ":AndroidToolKitIO"))
 
     // Kotlin Coroutines
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.1")
 
     // Kotlin Serialization
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2")
@@ -163,8 +163,9 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.9.3")
 
     // Ktor
-    implementation("io.ktor:ktor-client-okhttp:1.6.8")
-    implementation("io.ktor:ktor-client-serialization:1.6.8")
+    implementation("io.ktor:ktor-client-okhttp:2.0.0")
+    implementation("io.ktor:ktor-client-content-negotiation:2.0.0")
+    implementation("io.ktor:ktor-serialization-kotlinx-json:2.0.0")
 
     // Jsoup
     implementation("org.jsoup:jsoup:1.14.3")

@@ -4,6 +4,8 @@ package tool.xfy9326.schedule.io
 
 import io.ktor.client.*
 import io.ktor.client.request.*
+import io.ktor.client.statement.*
+import io.ktor.utils.io.jvm.javaio.*
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import lib.xfy9326.android.kit.io.kt.useBuffer
@@ -18,7 +20,6 @@ import tool.xfy9326.schedule.content.utils.JSConfigException.Companion.report
 import tool.xfy9326.schedule.io.JSFileManager.SaveType.*
 import tool.xfy9326.schedule.io.utils.readJSON
 import tool.xfy9326.schedule.io.utils.writeJSON
-import java.io.InputStream
 
 /**
  * Dir sample:
@@ -108,7 +109,7 @@ object JSFileManager {
 
     suspend fun downloadJS(httpClient: HttpClient, uuid: String, url: String, errorType: JSConfigException.Error, saveType: SaveType) = runUnsafeIOJob {
         try {
-            httpClient.get<InputStream>(url).source().use {
+            httpClient.get(url).bodyAsChannel().toInputStream().source().use {
                 val result = when (saveType) {
                     PROVIDER -> writeJSProvider(uuid, it)
                     PARSER -> writeJSParser(uuid, it)

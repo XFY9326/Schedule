@@ -6,8 +6,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import io.ktor.client.*
 import io.ktor.client.engine.okhttp.*
-import io.ktor.client.features.*
+import io.ktor.client.plugins.*
 import io.ktor.client.request.*
+import io.ktor.client.statement.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -82,7 +83,7 @@ class CourseImportConfigManager(scope: CoroutineScope) : CoroutineScope by scope
 
     fun addJSConfig(url: String) = launch {
         try {
-            val content = httpClient.get<String>(url)
+            val content = httpClient.get(url).bodyAsText()
             addJSConfig(JSFileManager.parserJSConfig(content), false)
         } catch (e: JSConfigException) {
             operationError.postEvent(e)
@@ -153,7 +154,7 @@ class CourseImportConfigManager(scope: CoroutineScope) : CoroutineScope by scope
             return jsConfig
         } else {
             try {
-                val content = httpClient.get<String>(jsConfig.updateUrl)
+                val content = httpClient.get(jsConfig.updateUrl).bodyAsText()
                 val config = JSFileManager.parserJSConfig(content)
                 return when {
                     config == jsConfig -> jsConfig

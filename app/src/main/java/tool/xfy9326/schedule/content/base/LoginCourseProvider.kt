@@ -4,10 +4,11 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import androidx.annotation.CallSuper
 import io.ktor.client.request.*
+import io.ktor.client.statement.*
+import io.ktor.utils.io.jvm.javaio.*
 import tool.xfy9326.schedule.content.beans.LoginPageInfo
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
 import tool.xfy9326.schedule.content.utils.CourseAdapterException.Companion.report
-import java.io.InputStream
 import java.io.Serializable
 
 abstract class LoginCourseProvider<P : Serializable> : NetworkCourseProvider<P>() {
@@ -40,7 +41,7 @@ abstract class LoginCourseProvider<P : Serializable> : NetworkCourseProvider<P>(
     protected abstract suspend fun onLogin(userId: String, userPw: String, captchaCode: String?, loginPageInfo: LoginPageInfo, importOption: Int)
 
     protected open suspend fun onDownloadCaptchaImage(captchaUrl: String, importOption: Int): Bitmap? =
-        httpClient.get<InputStream>(captchaUrl).use(BitmapFactory::decodeStream)
+        httpClient.get(captchaUrl).bodyAsChannel().toInputStream().use(BitmapFactory::decodeStream)
 
     @CallSuper
     override suspend fun onClearConnection() {

@@ -1,6 +1,5 @@
 package tool.xfy9326.schedule.content.adapters.provider
 
-import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.client.request.forms.*
 import io.ktor.client.statement.*
@@ -79,10 +78,10 @@ class NAUJwcCourseProvider : LoginCourseProvider<Nothing>() {
     override val enableCaptcha = true
 
     override suspend fun onLoadLoginPage(importOption: Int): LoginPageInfo {
-        var content: String = httpClient.get(JWC_LOGIN_URL)
+        var content: String = httpClient.get(JWC_LOGIN_URL).bodyAsText()
         if (LOGIN_PAGE_CONTENT !in content) {
             logout()
-            content = httpClient.get(JWC_LOGIN_URL)
+            content = httpClient.get(JWC_LOGIN_URL).bodyAsText()
         }
         val htmlContent = Jsoup.parse(content, SSO_URL).body()
         val captchaUrl = htmlContent.selectSingle(SELECTOR_CHECK_CODE).absUrl(HTML_ATTR_SRC)
@@ -103,16 +102,16 @@ class NAUJwcCourseProvider : LoginCourseProvider<Nothing>() {
         loginParams += parametersOf(LOGIN_PARAMS_PASSWORD, encryptPassword(userPw))
         loginParams += parametersOf(LOGIN_PARAMS_AUTH_CODE, captchaCode)
         val loginResponse = httpClient.runResponseCatching(
-            action = { submitForm<HttpResponse>(JWC_LOGIN_URL, loginParams) },
+            action = { submitForm(JWC_LOGIN_URL, loginParams) },
             handleError = {
-                CourseAdapterException.Error.LOGIN_SERVER_ERROR.report(msg = "Response: $this\nContent: \n${response.receive<String>()}")
+                CourseAdapterException.Error.LOGIN_SERVER_ERROR.report(msg = "Response: $this\nContent: \n${response.bodyAsText()}")
             }
         )
         val loginResponseUrl = loginResponse.request.url
         when (loginResponseUrl.host) {
             JWC_HOST -> studentDefaultPageUrl = loginResponseUrl
             SSO_HOST -> {
-                val loginResponseContent = loginResponse.readText()
+                val loginResponseContent = loginResponse.bodyAsText()
                 val msgElement = Jsoup.parse(loginResponseContent).body().selectSingle(SELECTOR_LOGIN_ERROR_MSG)
                 CourseAdapterException.reportCustomError(msgElement.text())
             }
@@ -121,21 +120,21 @@ class NAUJwcCourseProvider : LoginCourseProvider<Nothing>() {
     }
 
     private suspend fun logout() {
-        httpClient.get<Unit>(JWC_LOGOUT_URL)
-        httpClient.get<Unit>(SSO_LOGOUT_URL)
+        httpClient.get(JWC_LOGOUT_URL)
+        httpClient.get(SSO_LOGOUT_URL)
         studentDefaultPageUrl = null
     }
 
     override suspend fun onLoadCoursesHtml(importOption: Int): String =
         when (importOption) {
-            IMPORT_OPTION_THIS_TERM -> httpClient.get(JWC_COURSE_THIS_TERM_URL)
-            IMPORT_OPTION_NEXT_TERM -> httpClient.get(JWC_COURSE_NEXT_TERM_URL)
+            IMPORT_OPTION_THIS_TERM -> httpClient.get(JWC_COURSE_THIS_TERM_URL).bodyAsText()
+            IMPORT_OPTION_NEXT_TERM -> httpClient.get(JWC_COURSE_NEXT_TERM_URL).bodyAsText()
             else -> CourseAdapterException.Error.IMPORT_SELECT_OPTION_ERROR.report()
         }
 
     override suspend fun onLoadTermHtml(importOption: Int): String? =
         when (importOption) {
-            IMPORT_OPTION_THIS_TERM -> studentDefaultPageUrl?.let { httpClient.get(it) }
+            IMPORT_OPTION_THIS_TERM -> studentDefaultPageUrl?.let { httpClient.get(it).bodyAsText() }
             IMPORT_OPTION_NEXT_TERM -> null
             else -> CourseAdapterException.Error.IMPORT_SELECT_OPTION_ERROR.report()
         }
