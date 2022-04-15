@@ -1,5 +1,5 @@
 plugins {
-    id("kotlin")
+    kotlin("jvm")
 }
 
 java {
@@ -11,8 +11,8 @@ tasks.compileKotlin {
     kotlinOptions {
         jvmTarget = ProjectConfig.javaVersion.toString()
         freeCompilerArgs = freeCompilerArgs + listOf(
-            "-Xopt-in=com.google.devtools.ksp.KspExperimental",
-            "-Xopt-in=com.squareup.kotlinpoet.ksp.KotlinPoetKspPreview"
+            "-opt-in=com.google.devtools.ksp.KspExperimental",
+            "-opt-in=com.squareup.kotlinpoet.ksp.KotlinPoetKspPreview"
         )
     }
 }
@@ -20,5 +20,5 @@ tasks.compileKotlin {
 dependencies {
     implementation(project(path = ":Annotation"))
     implementation("com.squareup:kotlinpoet-ksp:1.10.2")
-    implementation("com.google.devtools.ksp:symbol-processing-api:1.6.10-1.0.2")
+    implementation("com.google.devtools.ksp:symbol-processing-api:1.6.20-1.0.5")
 }

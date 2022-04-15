@@ -46,7 +46,7 @@ data class Course(
 
         fun Course.arrangeWeekNum() {
             this.times.forEach {
-                it.weekNum = it.weekNum.arrangeWeekNum()
+                it.weekNumArray = it.weekNumArray.arrangeWeekNum()
             }
         }
 

@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 import tool.xfy9326.schedule.databinding.LayoutSwipeItemBinding
 
-abstract class SwipeListViewBindingAdapter<E, V : ViewBinding>(callBack: DiffUtil.ItemCallback<E>? = null) :
+abstract class SwipeListViewBindingAdapter<E : Any, V : ViewBinding>(callBack: DiffUtil.ItemCallback<E>? = null) :
     ListViewBindingAdapter<E, LayoutSwipeItemBinding, SwipeItemViewHolder<V>>(callBack) {
 
     @CallSuper

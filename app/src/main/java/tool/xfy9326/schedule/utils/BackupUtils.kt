@@ -77,7 +77,7 @@ object BackupUtils {
                 val jsonCourseTimes = ArrayList<CourseTimeJSON>(course.times.size)
                 for (time in course.times) {
                     jsonCourseTimes.add(CourseTimeJSON(
-                        weekNum = time.weekNum,
+                        weekNum = time.weekNumArray,
                         weekDay = time.sectionTime.weekDay,
                         start = time.sectionTime.start,
                         duration = time.sectionTime.duration,

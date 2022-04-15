@@ -66,10 +66,10 @@ class CrashViewDialog : AppCompatDialogFragment() {
         setTitle(R.string.crash_detail)
         val binding = DialogCrashViewBinding.inflate(layoutInflater)
         binding.textViewCrashDetail.text = crashLog
-        setView(binding.root)
         setNeutralButton(R.string.export, null)
         setNegativeButton(android.R.string.cancel, null)
         setPositiveButton(R.string.print_error_log, null)
+        setView(binding.root)
     }.create().also { dialog ->
         dialog.setOnShowListener {
             dialog.getButton(DialogInterface.BUTTON_NEUTRAL).setOnClickListener {

@@ -32,7 +32,7 @@ android {
 }
 
 dependencies {
-    api("androidx.lifecycle:lifecycle-livedata-ktx:2.4.0")
+    api("androidx.lifecycle:lifecycle-livedata-ktx:2.4.1")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.3")

@@ -5,82 +5,82 @@ import lib.xfy9326.kit.forEachTwo
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.*
 import tool.xfy9326.schedule.beans.Course.Companion.iterateAll
+import tool.xfy9326.schedule.beans.CourseTime.Companion.getFromWeekNum
+import tool.xfy9326.schedule.beans.CourseTime.Companion.hasThisWeekCourse
 import tool.xfy9326.schedule.beans.CourseTime.Companion.intersect
 import tool.xfy9326.schedule.beans.SectionTime.Companion.end
 import tool.xfy9326.schedule.beans.SectionTime.Companion.intersect
 import tool.xfy9326.schedule.beans.WeekDay.Companion.isWeekend
-import tool.xfy9326.schedule.beans.WeekDay.Companion.orderedValue
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
 import tool.xfy9326.schedule.content.utils.CourseAdapterException.Companion.report
 import tool.xfy9326.schedule.content.utils.arrangeWeekNum
-import tool.xfy9326.schedule.content.utils.hasCourse
 import tool.xfy9326.schedule.tools.MaterialColorHelper
 import tool.xfy9326.schedule.utils.CalendarUtils
+import java.util.*
 import kotlin.math.max
 
 object CourseUtils {
     fun getScheduleViewDataByWeek(weekNum: Int, bundle: ScheduleBuildBundle): ScheduleViewData {
-        val result = ArrayList<CourseCell>()
+        val resultSet = TreeSet<CourseCell> { o1, o2 -> o1.compareTo(o2) }
         val showNotThisWeekCourse = bundle.scheduleStyles.showNotThisWeekCourse
         val maxWeekNum = CourseTimeUtils.getMaxWeekNum(bundle.schedule.startDate, bundle.schedule.endDate, bundle.schedule.weekStart)
         val startWeekDay = CalendarUtils.getWeekDay(bundle.schedule.startDate)
         val endWeekDay = CalendarUtils.getWeekDay(bundle.schedule.endDate)
 
+        val replaceList = ArrayList<CourseCell>()
         bundle.courses.iterateAll { course, courseTime ->
-            val isThisWeekCourse =
-                hasThisWeekCourseBySchedule(courseTime, weekNum, maxWeekNum, startWeekDay, endWeekDay, bundle.schedule.weekStart)
+            val isThisWeekCourse = courseTime.hasThisWeekCourse(
+                weekNum = weekNum, maxWeekNum = maxWeekNum,
+                startWeekDay = startWeekDay, endWeekDay = endWeekDay,
+                weekStart = bundle.schedule.weekStart
+            )
             if (isThisWeekCourse || showNotThisWeekCourse) {
-                val intersectCells = result.filter {
-                    it.sectionTime intersect courseTime.sectionTime
-                }
-
-                if (intersectCells.isEmpty()) {
-                    result.add(CourseCell(course, courseTime, isThisWeekCourse))
-                } else {
-                    intersectCells.toMutableList().apply {
-                        add(CourseCell(course, courseTime, isThisWeekCourse))
-                        sortWith { a, b ->
-                            if (a.isThisWeekCourse && !b.isThisWeekCourse) {
-                                -1
-                            } else if (b.isThisWeekCourse && !a.isThisWeekCourse) {
-                                1
+                val fromWeekNum = courseTime.getFromWeekNum(weekNum)
+                if (fromWeekNum != null) {
+                    replaceList.clear()
+                    val weekNumDiff = weekNum - fromWeekNum
+                    var isIntersectWithThisWeekCourse = false
+                    var needReplace = true
+                    for (cell in resultSet) {
+                        if (cell.sectionTime intersect courseTime.sectionTime) {
+                            if (isThisWeekCourse && !cell.isThisWeekCourse) {
+                                replaceList.add(cell)
+                                continue
+                            }
+                            if (!isThisWeekCourse && cell.isThisWeekCourse) {
+                                isIntersectWithThisWeekCourse = true
+                                needReplace = false
+                                break
+                            }
+                            val cellWeekNumDiff = weekNum - cell.fromWeekNum
+                            if (
+                                (weekNumDiff > 0 && cellWeekNumDiff > 0 && weekNumDiff < cellWeekNumDiff) ||
+                                (weekNumDiff > 0 && cellWeekNumDiff <= 0) ||
+                                (weekNumDiff <= 0 && cellWeekNumDiff <= 0 && weekNumDiff > cellWeekNumDiff)
+                            ) {
+                                replaceList.add(cell)
                             } else {
-                                a.sectionTime.compareTo(b.sectionTime)
+                                needReplace = false
+                                break
                             }
                         }
-                        result.removeAll(toSet())
-                        result.add(first())
+                    }
+                    if (!isIntersectWithThisWeekCourse && needReplace) {
+                        if (replaceList.isNotEmpty()) resultSet.removeAll(replaceList)
+                        resultSet.add(CourseCell(course, courseTime, fromWeekNum, isThisWeekCourse))
                     }
                 }
             }
         }
 
-        return ScheduleViewData(weekNum, bundle.schedule, result, bundle.scheduleStyles)
+        return ScheduleViewData(weekNum, bundle.schedule, resultSet.toList(), bundle.scheduleStyles)
     }
-
-    private fun hasThisWeekCourseBySchedule(
-        courseTime: CourseTime,
-        weekNum: Int,
-        maxWeekNum: Int,
-        startWeekDay: WeekDay,
-        endWeekDay: WeekDay,
-        weekStart: WeekDay,
-    ) =
-        if (courseTime.weekNum.hasCourse(weekNum)) {
-            when (weekNum) {
-                1 -> startWeekDay.orderedValue(weekStart) <= courseTime.sectionTime.weekDay.orderedValue(weekStart)
-                maxWeekNum -> endWeekDay.orderedValue(weekStart) >= courseTime.sectionTime.weekDay.orderedValue(weekStart)
-                else -> true
-            }
-        } else {
-            false
-        }
 
     fun getMaxWeekNum(courses: List<Course>): Int {
         var defaultValue = 1
         courses.iterateAll { _, courseTime ->
-            courseTime.weekNum = courseTime.weekNum.arrangeWeekNum()
-            defaultValue = max(defaultValue, courseTime.weekNum.size)
+            courseTime.weekNumArray = courseTime.weekNumArray.arrangeWeekNum()
+            defaultValue = max(defaultValue, courseTime.weekNumArray.size)
         }
         return defaultValue
     }
@@ -108,7 +108,7 @@ object CourseUtils {
         allTimes.forEachTwo { _, t1, _, t2 ->
             if (t1 intersect t2) {
                 foundConflicts = true
-                t2.weekNum = BooleanArray(0)
+                t2.weekNumArray = BooleanArray(0)
             }
         }
 

@@ -88,7 +88,7 @@ class CourseTimeEditDialog : AppCompatDialogFragment() {
             setView(DialogCourseTimeEditBinding.inflate(layoutInflater).apply {
                 viewBinding = this
 
-                viewWeekNumEdit.setWeekNum(editCourseTime.weekNum, maxWeekNum)
+                viewWeekNumEdit.setWeekNum(editCourseTime.weekNumArray, maxWeekNum)
 
                 buildWeekNumModeButton(this)
                 buildCourseTimeWheel(this)
@@ -131,7 +131,7 @@ class CourseTimeEditDialog : AppCompatDialogFragment() {
             editCourseTime.sectionTime.weekDay = WeekDay.from(pickerCourseTimeWeekDay.value)
             editCourseTime.sectionTime.start = pickerCourseStartTime.value
             editCourseTime.sectionTime.duration = pickerCourseEndTime.value - pickerCourseStartTime.value + 1
-            editCourseTime.weekNum = viewWeekNumEdit.getWeekNumArray()
+            editCourseTime.weekNumArray = viewWeekNumEdit.getWeekNumArray()
         }
     }
 

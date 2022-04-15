@@ -28,7 +28,7 @@ data class SectionTime(
             get() = start + duration - 1
 
         infix fun SectionTime.intersect(sectionTime: SectionTime): Boolean =
-            weekDay == sectionTime.weekDay && start <= sectionTime.end && end >= sectionTime.start
+            this == sectionTime || (weekDay == sectionTime.weekDay && start <= sectionTime.end && end >= sectionTime.start)
 
         val SectionTime.description
             get() = if (duration > 1) {
@@ -42,14 +42,15 @@ data class SectionTime(
     }
 
     operator fun compareTo(sectionTime: SectionTime): Int {
+        if (this === sectionTime) return 0
         if (weekDay != sectionTime.weekDay) {
-            return -weekDay.compareTo(sectionTime.weekDay)
+            return weekDay.compareTo(sectionTime.weekDay)
         }
         if (start != sectionTime.start) {
-            return -start.compareTo(sectionTime.start)
+            return start.compareTo(sectionTime.start)
         }
         if (duration != sectionTime.duration) {
-            return -duration.compareTo(sectionTime.duration)
+            return duration.compareTo(sectionTime.duration)
         }
         return 0
     }

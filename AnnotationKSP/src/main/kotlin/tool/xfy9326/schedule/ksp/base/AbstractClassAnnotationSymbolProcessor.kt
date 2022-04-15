@@ -18,22 +18,21 @@ abstract class AbstractClassAnnotationSymbolProcessor<T : Annotation>(
 
     final override fun process(resolver: Resolver): List<KSAnnotated> {
         val annotationName = annotationKClass.qualifiedName ?: return emptyList()
-        val symbols = resolver.getSymbolsWithAnnotation(annotationName)
+        val symbols = resolver.getSymbolsWithAnnotation(annotationName).filterIsInstance<KSClassDeclaration>()
+        if (!symbols.iterator().hasNext()) return emptyList()
         val result = ArrayList<KSAnnotated>()
         val classes = ArrayList<AnnotatedClass<T>>()
         try {
             symbols.forEach {
-                if (it is KSClassDeclaration) {
-                    if (it.validate()) {
-                        val annotations = it.getAnnotationsByType(annotationKClass).toList()
-                        if (annotations.isEmpty()) {
-                            result.add(it)
-                        } else {
-                            classes.add(AnnotatedClass(it, annotations))
-                        }
-                    } else {
+                if (it.validate()) {
+                    val annotations = it.getAnnotationsByType(annotationKClass).toList()
+                    if (annotations.isEmpty()) {
                         result.add(it)
+                    } else {
+                        classes.add(AnnotatedClass(it, annotations))
                     }
+                } else {
+                    result.add(it)
                 }
             }
             if (classes.isNotEmpty()) {

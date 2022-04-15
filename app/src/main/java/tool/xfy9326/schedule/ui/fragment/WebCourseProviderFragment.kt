@@ -1,7 +1,6 @@
 package tool.xfy9326.schedule.ui.fragment
 
 import android.annotation.SuppressLint
-import android.net.http.SslError
 import android.os.Bundle
 import android.view.*
 import android.view.animation.AnimationUtils
@@ -15,7 +14,6 @@ import lib.xfy9326.android.kit.*
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.databinding.FragmentWebCourseProviderBinding
-import tool.xfy9326.schedule.kt.*
 import tool.xfy9326.schedule.ui.dialog.WebCourseProviderBottomPanel
 import tool.xfy9326.schedule.ui.fragment.base.IWebCourseProvider
 import tool.xfy9326.schedule.ui.fragment.base.ViewBindingFragment
@@ -91,7 +89,7 @@ class WebCourseProviderFragment : ViewBindingFragment<FragmentWebCourseProviderB
                     return super.onJsConfirm(view, url, message, result)
                 }
 
-                @Suppress("DEPRECATION")
+                @Suppress("DEPRECATION", "OVERRIDE_DEPRECATION")
                 override fun onConsoleMessage(message: String?, lineNumber: Int, sourceID: String?) {
                     if (isWebViewDebugLogEnabled) {
                         super.onConsoleMessage(message, lineNumber, sourceID)
@@ -107,10 +105,6 @@ class WebCourseProviderFragment : ViewBindingFragment<FragmentWebCourseProviderB
                 }
             }
             webViewClient = object : WebViewClient() {
-                override fun onReceivedSslError(view: WebView?, handler: SslErrorHandler?, error: SslError?) {
-                    handler?.proceed()
-                }
-
                 override fun onPageFinished(view: WebView?, url: String?) {
                     if (enableDebug) {
                         view?.evaluateJavascript(JSBridge.V_CONSOLE_INJECT, null)
@@ -118,7 +112,7 @@ class WebCourseProviderFragment : ViewBindingFragment<FragmentWebCourseProviderB
                     super.onPageFinished(view, url)
                 }
 
-                @Suppress("DEPRECATION")
+                @Suppress("DEPRECATION", "OVERRIDE_DEPRECATION")
                 override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
                     return false
                 }

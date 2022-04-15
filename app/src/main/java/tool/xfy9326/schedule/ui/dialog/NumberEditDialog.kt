@@ -81,7 +81,6 @@ class NumberEditDialog : AppCompatDialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog =
         MaterialAlertDialogBuilder(requireContext()).apply {
             setTitle(requireArguments().getString(EXTRA_TITLE))
-            setView(binding.root)
             binding.textLayoutDialogText.hint = requireArguments().getString(EXTRA_EDIT_HINT)
             binding.textLayoutDialogText.isErrorEnabled = true
             binding.textLayoutDialogText.isCounterEnabled = true
@@ -97,6 +96,7 @@ class NumberEditDialog : AppCompatDialogFragment() {
 
             setPositiveButton(android.R.string.ok, null)
             setNegativeButton(android.R.string.cancel, null)
+            setView(binding.root)
         }.create().also { dialog ->
             dialog.setOnShowListener {
                 dialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener {

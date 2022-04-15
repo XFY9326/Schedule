@@ -11,6 +11,7 @@ import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.databinding.ActivityFragmentContainerBinding
 import tool.xfy9326.schedule.ui.base.OnRequestBackCallback
 import tool.xfy9326.schedule.ui.fragment.base.AbstractSettingsFragment
+import tool.xfy9326.schedule.utils.view.ViewUtils
 
 
 abstract class AbstractSettingsActivity : ViewBindingActivity<ActivityFragmentContainerBinding>(), PreferenceFragmentCompat.OnPreferenceStartFragmentCallback {
@@ -47,25 +48,8 @@ abstract class AbstractSettingsActivity : ViewBindingActivity<ActivityFragmentCo
         return super.onOptionsItemSelected(item)
     }
 
-    /**
-     * Reference: [PreferenceFragmentCompat.onPreferenceTreeClick]
-     * Deprecated API usage: [androidx.fragment.app.Fragment.setTargetFragment]
-     */
     override fun onPreferenceStartFragment(caller: PreferenceFragmentCompat, pref: Preference): Boolean {
-        val fragment = supportFragmentManager.fragmentFactory.instantiate(classLoader, pref.fragment)
-        fragment.arguments = pref.extras
-
-        supportFragmentManager.commit {
-            setCustomAnimations(
-                R.anim.anim_scroll_in_right,
-                R.anim.anim_scroll_out_left,
-                R.anim.anim_scroll_in_left,
-                R.anim.anim_scroll_out_right
-            )
-            replace(R.id.fragmentContainer, fragment)
-            addToBackStack(null)
-        }
-        return true
+        return ViewUtils.navigatePreferenceFragmentWithAnimation(this, supportFragmentManager, R.id.fragmentContainer, pref)
     }
 
     override fun onBackPressed() {
