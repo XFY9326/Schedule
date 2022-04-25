@@ -1,9 +1,9 @@
 package tool.xfy9326.schedule.ui.activity
 
 import androidx.core.view.isVisible
-import lib.xfy9326.android.kit.setOnSingleClickListener
-import lib.xfy9326.android.kit.startActivity
-import lib.xfy9326.livedata.observeEvent
+import io.github.xfy9326.atools.livedata.observeEvent
+import io.github.xfy9326.atools.ui.setOnSingleClickListener
+import io.github.xfy9326.atools.ui.startActivity
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.databinding.ActivityAppErrorBinding
 import tool.xfy9326.schedule.kt.showSnackBar

@@ -13,8 +13,8 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.LifecycleOwner
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import lib.xfy9326.android.kit.getText
-import lib.xfy9326.android.kit.showToast
+import io.github.xfy9326.atools.ui.getText
+import io.github.xfy9326.atools.ui.showToast
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.databinding.DialogEditTextBinding
 import kotlin.properties.Delegates
@@ -105,7 +105,8 @@ class NumberEditDialog : AppCompatDialogFragment() {
                     if (msg == null) {
                         val number = input!!.toInt()
                         if (number != requireArguments().getInt(EXTRA_NUMBER)) {
-                            setFragmentResult(DIALOG_TAG,
+                            setFragmentResult(
+                                DIALOG_TAG,
                                 bundleOf(
                                     EXTRA_TAG to requireArguments().getString(EXTRA_TAG),
                                     EXTRA_NUMBER to number
@@ -114,7 +115,7 @@ class NumberEditDialog : AppCompatDialogFragment() {
                         }
                         dismiss()
                     } else {
-                        showToast(msg)
+                        requireContext().showToast(msg)
                     }
                 }
             }

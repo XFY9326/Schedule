@@ -1,13 +1,13 @@
 package tool.xfy9326.schedule.tools
 
 import android.os.Build
+import io.github.xfy9326.atools.core.AppContext
+import io.github.xfy9326.atools.ui.showGlobalToast
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
-import lib.xfy9326.android.kit.ApplicationInstance
-import lib.xfy9326.android.kit.showGlobalToast
 import tool.xfy9326.schedule.BuildConfig
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.data.AppSettingsDataStore
@@ -49,10 +49,10 @@ object ExceptionHandler : Thread.UncaughtExceptionHandler {
                             if (checkResult.second) {
                                 crashExit(t, e)
                             } else {
-                                ApplicationInstance.appErrorRelaunch(if (crashSaveSuccess) crashFileName else null)
+                                AppContext.appErrorRelaunch(if (crashSaveSuccess) crashFileName else null)
                             }
                         } else {
-                            ApplicationInstance.crashRelaunch()
+                            AppContext.crashRelaunch()
                         }
                     }
                 }

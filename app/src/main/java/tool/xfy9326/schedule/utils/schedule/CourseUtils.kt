@@ -1,7 +1,6 @@
 package tool.xfy9326.schedule.utils.schedule
 
-import lib.xfy9326.android.kit.io.IOManager
-import lib.xfy9326.kit.forEachTwo
+import io.github.xfy9326.atools.io.IOManager
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.*
 import tool.xfy9326.schedule.beans.Course.Companion.iterateAll
@@ -16,6 +15,7 @@ import tool.xfy9326.schedule.content.utils.CourseAdapterException.Companion.repo
 import tool.xfy9326.schedule.content.utils.arrangeWeekNum
 import tool.xfy9326.schedule.tools.MaterialColorHelper
 import tool.xfy9326.schedule.utils.CalendarUtils
+import tool.xfy9326.schedule.utils.forEachTwo
 import java.util.*
 import kotlin.math.max
 

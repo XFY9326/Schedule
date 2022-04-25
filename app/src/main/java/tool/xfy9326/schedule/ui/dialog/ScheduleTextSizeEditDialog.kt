@@ -8,8 +8,8 @@ import androidx.lifecycle.LifecycleOwner
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import lib.xfy9326.android.kit.setOnSingleClickListener
-import lib.xfy9326.kit.castNonNull
+import io.github.xfy9326.atools.core.castNonNull
+import io.github.xfy9326.atools.ui.setOnSingleClickListener
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.ScheduleText
 import tool.xfy9326.schedule.databinding.DialogScheduleTextSizeEditBinding
@@ -77,9 +77,11 @@ class ScheduleTextSizeEditDialog : BottomSheetDialogFragment() {
     }
 
     private fun reportResult(value: Int) {
-        setFragmentResult(TAG_DIALOG, bundleOf(
-            EXTRA_TEXT_TYPE to textType,
-            EXTRA_TEXT_SIZE_VALUE to value
-        ))
+        setFragmentResult(
+            TAG_DIALOG, bundleOf(
+                EXTRA_TEXT_TYPE to textType,
+                EXTRA_TEXT_SIZE_VALUE to value
+            )
+        )
     }
 }

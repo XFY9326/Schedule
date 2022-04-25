@@ -1,7 +1,7 @@
 package tool.xfy9326.schedule.utils.schedule
 
+import io.github.xfy9326.atools.io.IOManager
 import kotlinx.coroutines.flow.first
-import lib.xfy9326.android.kit.io.IOManager
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.*
 import tool.xfy9326.schedule.beans.Course.Companion.iterateAll

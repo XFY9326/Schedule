@@ -6,8 +6,8 @@ import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
-import lib.xfy9326.kit.deserializeToBooleanArray
-import lib.xfy9326.kit.serializeToString
+import tool.xfy9326.schedule.utils.deserializeToBooleanArray
+import tool.xfy9326.schedule.utils.serializeToString
 
 class WeekNumStringSerializer : KSerializer<BooleanArray> {
     override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor(javaClass.simpleName, PrimitiveKind.STRING)

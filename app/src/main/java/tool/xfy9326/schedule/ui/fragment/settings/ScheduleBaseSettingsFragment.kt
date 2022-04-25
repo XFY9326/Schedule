@@ -9,8 +9,8 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.commit
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
-import lib.xfy9326.android.kit.getRealScreenSize
-import lib.xfy9326.livedata.postEvent
+import io.github.xfy9326.atools.livedata.postEvent
+import io.github.xfy9326.atools.ui.getRealScreenSize
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.databinding.FragmentScheduleSettingsBinding
 import tool.xfy9326.schedule.kt.getDefaultBackgroundColor

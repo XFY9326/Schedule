@@ -12,8 +12,8 @@ import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.LifecycleOwner
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputLayout
-import lib.xfy9326.android.kit.getText
-import lib.xfy9326.android.kit.showToast
+import io.github.xfy9326.atools.ui.getText
+import io.github.xfy9326.atools.ui.showToast
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.databinding.DialogEditTextBinding
 
@@ -61,7 +61,7 @@ class JSConfigImportDialog : AppCompatDialogFragment() {
                         setFragmentResult(DIALOG_TAG, bundleOf(EXTRA_URL to inputUrl))
                         dismiss()
                     } else {
-                        showToast(R.string.url_invalid)
+                        requireContext().showToast(R.string.url_invalid)
                     }
                 }
             }

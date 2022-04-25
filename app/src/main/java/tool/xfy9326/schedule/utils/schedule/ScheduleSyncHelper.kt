@@ -4,13 +4,13 @@ import android.content.ContentResolver
 import android.content.ContentUris
 import android.content.ContentValues
 import android.provider.CalendarContract
+import io.github.xfy9326.atools.core.asArray
+import io.github.xfy9326.atools.coroutines.withTryLock
+import io.github.xfy9326.atools.io.IOManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.withContext
-import lib.xfy9326.android.kit.io.IOManager
-import lib.xfy9326.kit.asArray
-import lib.xfy9326.kit.withTryLock
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.*
 import tool.xfy9326.schedule.beans.Course.Companion.iterateAll
@@ -51,40 +51,43 @@ object ScheduleSyncHelper {
     }
 
     suspend fun syncCalendar(): BatchResult? = withContext(Dispatchers.Default) {
-        syncLock.withTryLock {
-            val contentResolver = IOManager.contentResolver
-            try {
-                clearAllCalendar(contentResolver)
+        syncLock.withTryLock(
+            action = {
+                val contentResolver = IOManager.contentResolver
+                try {
+                    clearAllCalendar(contentResolver)
 
-                val reminderMinutes = AppSettingsDataStore.calendarSyncReminderMinutesFlow.first()
-                val schedules = ScheduleDBProvider.db.scheduleDAO.getSchedules().first()
-                var totalSchedule = 0
-                var errorScheduleAmount = 0
-                for (schedule in schedules) {
-                    val calIdInfo = getCalendarId(contentResolver, schedule)
+                    val reminderMinutes = AppSettingsDataStore.calendarSyncReminderMinutesFlow.first()
+                    val schedules = ScheduleDBProvider.db.scheduleDAO.getSchedules().first()
+                    var totalSchedule = 0
+                    var errorScheduleAmount = 0
+                    for (schedule in schedules) {
+                        val calIdInfo = getCalendarId(contentResolver, schedule)
 
-                    if (calIdInfo.second.syncable) {
-                        val calId = calIdInfo.first
-                        if (calId == null) {
-                            errorScheduleAmount++
-                            totalSchedule++
-                        } else {
-                            val courses = ScheduleDBProvider.db.scheduleDAO.getScheduleCourses(schedule.scheduleId).first()
-                            if (!syncSchedule(calId, contentResolver, schedule, courses, calIdInfo.second, reminderMinutes)) {
+                        if (calIdInfo.second.syncable) {
+                            val calId = calIdInfo.first
+                            if (calId == null) {
                                 errorScheduleAmount++
+                                totalSchedule++
+                            } else {
+                                val courses = ScheduleDBProvider.db.scheduleDAO.getScheduleCourses(schedule.scheduleId).first()
+                                if (!syncSchedule(calId, contentResolver, schedule, courses, calIdInfo.second, reminderMinutes)) {
+                                    errorScheduleAmount++
+                                }
+                                totalSchedule++
                             }
-                            totalSchedule++
                         }
                     }
-                }
 
-                return@withTryLock BatchResult(true, totalSchedule, errorScheduleAmount)
-            } catch (e: Exception) {
-                clearAllCalendar(contentResolver)
-                e.printStackTrace()
-                return@withTryLock BatchResult(false)
-            }
-        }
+                    return@withTryLock BatchResult(true, totalSchedule, errorScheduleAmount)
+                } catch (e: Exception) {
+                    clearAllCalendar(contentResolver)
+                    e.printStackTrace()
+                    return@withTryLock BatchResult(false)
+                }
+            },
+            onHasLocked = { null }
+        )
     }
 
     private suspend fun getCalendarId(contentResolver: ContentResolver, schedule: Schedule): Pair<Int?, ScheduleSync> {
@@ -111,8 +114,10 @@ object ScheduleSyncHelper {
             put(CalendarContract.Calendars.NAME, "$SYNC_ACCOUNT_NAME-${schedule.name}")
             put(CalendarContract.Calendars.CALENDAR_COLOR, schedule.color)
             put(CalendarContract.Calendars.VISIBLE, if (scheduleSync.defaultVisible) 1 else 0)
-            put(CalendarContract.Calendars.CALENDAR_ACCESS_LEVEL,
-                if (scheduleSync.editable) CalendarContract.Calendars.CAL_ACCESS_OWNER else CalendarContract.Calendars.CAL_ACCESS_READ)
+            put(
+                CalendarContract.Calendars.CALENDAR_ACCESS_LEVEL,
+                if (scheduleSync.editable) CalendarContract.Calendars.CAL_ACCESS_OWNER else CalendarContract.Calendars.CAL_ACCESS_READ
+            )
             put(CalendarContract.Calendars.SYNC_EVENTS, 1)
             put(CalendarContract.Calendars.CALENDAR_TIME_ZONE, TIMEZONE_ID)
             put(CalendarContract.Calendars.OWNER_ACCOUNT, SYNC_ACCOUNT_NAME)

@@ -6,7 +6,7 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
-import lib.xfy9326.android.kit.setOnSingleClickListener
+import io.github.xfy9326.atools.ui.setOnSingleClickListener
 import tool.xfy9326.schedule.content.base.ICourseImportConfig
 import tool.xfy9326.schedule.content.beans.JSConfig
 import tool.xfy9326.schedule.content.utils.BaseCourseImportConfig

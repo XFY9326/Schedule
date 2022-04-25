@@ -1,8 +1,8 @@
 package tool.xfy9326.schedule.ui.activity.module
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import lib.xfy9326.android.kit.getStringArray
-import lib.xfy9326.android.kit.show
+import io.github.xfy9326.atools.ui.getStringArray
+import io.github.xfy9326.atools.ui.show
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.WeekDay
 import tool.xfy9326.schedule.databinding.ActivityScheduleEditBinding

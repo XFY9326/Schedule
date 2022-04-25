@@ -3,11 +3,11 @@ package tool.xfy9326.schedule.ui.activity.module
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
+import io.github.xfy9326.atools.coroutines.AppScope
+import io.github.xfy9326.atools.ui.showToast
+import io.github.xfy9326.atools.ui.startActivity
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import lib.xfy9326.android.kit.ApplicationScope
-import lib.xfy9326.android.kit.showToast
-import lib.xfy9326.android.kit.startActivity
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.data.AppDataStore
 import tool.xfy9326.schedule.io.FileManager
@@ -48,7 +48,7 @@ class ScheduleLaunchModule(activity: ScheduleActivity) : AbstractActivityModule<
         private fun showEULADialog(activity: AppCompatActivity, eula: String, newEULAVersion: Int) {
             DialogUtils.showEULADialog(activity, eula, false) {
                 if (it) {
-                    ApplicationScope.launch { AppDataStore.setAcceptEULAVersion(newEULAVersion) }
+                    AppScope.launch { AppDataStore.setAcceptEULAVersion(newEULAVersion) }
                 } else {
                     activity.finishAndRemoveTask()
                 }

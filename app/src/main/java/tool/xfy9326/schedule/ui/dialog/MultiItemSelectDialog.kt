@@ -68,11 +68,13 @@ class MultiItemSelectDialog : AppCompatDialogFragment() {
             }
             setNegativeButton(android.R.string.cancel, null)
             setPositiveButton(android.R.string.ok) { _, _ ->
-                setFragmentResult(DIALOG_TAG, bundleOf(
-                    EXTRA_TAG to requireArguments().getString(EXTRA_TAG),
-                    EXTRA_ID_ARR to idArr,
-                    EXTRA_SELECTED_ARR to selectedArr
-                ))
+                setFragmentResult(
+                    DIALOG_TAG, bundleOf(
+                        EXTRA_TAG to requireArguments().getString(EXTRA_TAG),
+                        EXTRA_ID_ARR to idArr,
+                        EXTRA_SELECTED_ARR to selectedArr
+                    )
+                )
             }
         }.create()
 

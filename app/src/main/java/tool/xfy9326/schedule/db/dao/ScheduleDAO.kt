@@ -1,12 +1,11 @@
 package tool.xfy9326.schedule.db.dao
 
 import androidx.room.*
+import io.github.xfy9326.atools.coroutines.AppScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.shareIn
-import lib.xfy9326.android.kit.ApplicationScope
-import lib.xfy9326.kit.CHAR_ONE
 import tool.xfy9326.schedule.beans.Course
 import tool.xfy9326.schedule.beans.CourseTime
 import tool.xfy9326.schedule.beans.Schedule
@@ -15,6 +14,7 @@ import tool.xfy9326.schedule.beans.WeekDay.Companion.value
 import tool.xfy9326.schedule.content.utils.arrangeWeekNum
 import tool.xfy9326.schedule.db.DBConst
 import tool.xfy9326.schedule.db.query.CourseBundle
+import tool.xfy9326.schedule.utils.CHAR_ONE
 import tool.xfy9326.schedule.utils.schedule.ScheduleUtils
 
 @Dao
@@ -56,7 +56,7 @@ abstract class ScheduleDAO {
         return scheduleId
     }
 
-    fun getScheduleCourses(scheduleId: Long) = getCourses(scheduleId).convertCourseList().shareIn(ApplicationScope, SharingStarted.Lazily, 1)
+    fun getScheduleCourses(scheduleId: Long) = getCourses(scheduleId).convertCourseList().shareIn(AppScope, SharingStarted.Lazily, 1)
 
     fun getScheduleCoursesWithoutId(scheduleId: Long, courseId: Long) = getCoursesWithoutId(scheduleId, courseId).convertCourseList()
 

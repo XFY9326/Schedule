@@ -76,30 +76,36 @@ object BackupUtils {
             for (course in datum.courses) {
                 val jsonCourseTimes = ArrayList<CourseTimeJSON>(course.times.size)
                 for (time in course.times) {
-                    jsonCourseTimes.add(CourseTimeJSON(
-                        weekNum = time.weekNumArray,
-                        weekDay = time.sectionTime.weekDay,
-                        start = time.sectionTime.start,
-                        duration = time.sectionTime.duration,
-                        location = time.location
-                    ))
+                    jsonCourseTimes.add(
+                        CourseTimeJSON(
+                            weekNum = time.weekNumArray,
+                            weekDay = time.sectionTime.weekDay,
+                            start = time.sectionTime.start,
+                            duration = time.sectionTime.duration,
+                            location = time.location
+                        )
+                    )
                 }
-                jsonCourses.add(CourseJSON(
-                    name = course.name,
-                    teacher = course.teacher,
-                    color = course.color,
-                    times = jsonCourseTimes
-                ))
+                jsonCourses.add(
+                    CourseJSON(
+                        name = course.name,
+                        teacher = course.teacher,
+                        color = course.color,
+                        times = jsonCourseTimes
+                    )
+                )
             }
-            scheduleJsonList.add(ScheduleJSON(
-                name = datum.schedule.name,
-                times = datum.schedule.times.map { ScheduleTimeJSON.fromScheduleTime(it) },
-                color = datum.schedule.color,
-                weekStart = datum.schedule.weekStart,
-                startDate = datum.schedule.startDate,
-                endDate = datum.schedule.endDate,
-                courses = jsonCourses
-            ))
+            scheduleJsonList.add(
+                ScheduleJSON(
+                    name = datum.schedule.name,
+                    times = datum.schedule.times.map { ScheduleTimeJSON.fromScheduleTime(it) },
+                    color = datum.schedule.color,
+                    weekStart = datum.schedule.weekStart,
+                    startDate = datum.schedule.startDate,
+                    endDate = datum.schedule.endDate,
+                    courses = jsonCourses
+                )
+            )
         }
 
         return BackupWrapperJSON(data = scheduleJsonList)
@@ -122,20 +128,24 @@ object BackupUtils {
             for (courseJson in scheduleJson.courses) {
                 val courseTimes = ArrayList<CourseTime>(courseJson.times.size)
                 for (timeJson in courseJson.times) {
-                    courseTimes.add(CourseTime(
-                        weekNum = timeJson.weekNum,
-                        weekDay = timeJson.weekDay,
-                        start = timeJson.start,
-                        duration = timeJson.duration,
-                        location = timeJson.location
-                    ))
+                    courseTimes.add(
+                        CourseTime(
+                            weekNum = timeJson.weekNum,
+                            weekDay = timeJson.weekDay,
+                            start = timeJson.start,
+                            duration = timeJson.duration,
+                            location = timeJson.location
+                        )
+                    )
                 }
-                courses.add(Course(
-                    name = courseJson.name,
-                    teacher = courseJson.teacher,
-                    color = courseJson.color,
-                    times = courseTimes
-                ))
+                courses.add(
+                    Course(
+                        name = courseJson.name,
+                        teacher = courseJson.teacher,
+                        color = courseJson.color,
+                        times = courseTimes
+                    )
+                )
             }
             scheduleList.add(ScheduleCourseBundle(schedule, courses))
         }

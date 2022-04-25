@@ -3,15 +3,15 @@
 package tool.xfy9326.schedule.io
 
 import android.graphics.Bitmap
-import lib.xfy9326.android.kit.io.kt.rawResFile
-import lib.xfy9326.android.kit.io.kt.source
-import lib.xfy9326.android.kit.io.kt.useBuffer
-import lib.xfy9326.android.kit.io.kt.writeBitmap
-import lib.xfy9326.android.kit.tryRecycle
-import lib.xfy9326.kit.asParentOf
-import lib.xfy9326.kit.runSafeIOJob
-import lib.xfy9326.kit.runUnsafeIOJob
-import lib.xfy9326.kit.withPreparedDir
+import android.net.Uri
+import io.github.xfy9326.atools.io.file.rawResFile
+import io.github.xfy9326.atools.io.okio.source
+import io.github.xfy9326.atools.io.okio.useBuffer
+import io.github.xfy9326.atools.io.okio.writeBitmap
+import io.github.xfy9326.atools.io.utils.asParentOf
+import io.github.xfy9326.atools.io.utils.preparedParentFolder
+import io.github.xfy9326.atools.io.utils.runIOJob
+import io.github.xfy9326.atools.io.utils.tryRecycle
 import okio.sink
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.io.utils.getUriByFileProvider
@@ -20,23 +20,23 @@ object FileManager {
     private val FILE_EULA = rawResFile(R.raw.eula)
     private val FILE_LICENSE = rawResFile(R.raw.license)
 
-    suspend fun readEULA() = runUnsafeIOJob {
+    suspend fun readEULA() = runIOJob {
         FILE_EULA.source().useBuffer {
             readUtf8()
         }
-    }
+    }.getOrThrow()
 
-    suspend fun readLicense() = runUnsafeIOJob {
+    suspend fun readLicense() = runIOJob {
         FILE_LICENSE.source().useBuffer {
             readUtf8()
         }
-    }
+    }.getOrThrow()
 
     fun getAppPictureFile(name: String) = PathManager.PictureAppDir.asParentOf(name)
 
-    suspend fun createShareImage(name: String, bitmap: Bitmap, format: Bitmap.CompressFormat, quality: Int = 100, recycle: Boolean = true) = runSafeIOJob {
+    suspend fun createShareImage(name: String, bitmap: Bitmap, format: Bitmap.CompressFormat, quality: Int = 100, recycle: Boolean = true): Uri? = runIOJob {
         val imageFile = PathManager.SharedFileDir.asParentOf(name)
-        imageFile.withPreparedDir {
+        imageFile.preparedParentFolder().let {
             val result = imageFile.sink().useBuffer {
                 writeBitmap(bitmap, format, quality)
             }
@@ -47,5 +47,5 @@ object FileManager {
                 null
             }
         }
-    }
+    }.getOrNull()
 }

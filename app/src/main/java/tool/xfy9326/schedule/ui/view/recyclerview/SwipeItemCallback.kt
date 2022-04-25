@@ -13,8 +13,8 @@ import android.view.animation.ScaleAnimation
 import androidx.core.animation.addListener
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import lib.xfy9326.android.kit.dpToPx
-import lib.xfy9326.android.kit.tryStartAnimateDrawable
+import io.github.xfy9326.atools.ui.dpToPx
+import io.github.xfy9326.atools.ui.tryStartAnimation
 import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.math.abs
 import kotlin.math.max
@@ -145,11 +145,11 @@ class SwipeItemCallback : ItemTouchHelper.Callback() {
 
         if (edgeSwiped) {
             if (hasAnimatedIcon.compareAndSet(true, false)) {
-                viewHolder.swipeIconView.drawable.tryStartAnimateDrawable()
+                viewHolder.swipeIconView.drawable.tryStartAnimation()
             }
         } else {
             if (hasAnimatedIcon.compareAndSet(false, true)) {
-                if (isCurrentlyActive) viewHolder.swipeIconView.drawable.tryStartAnimateDrawable()
+                if (isCurrentlyActive) viewHolder.swipeIconView.drawable.tryStartAnimation()
             }
         }
     }
@@ -187,8 +187,10 @@ class SwipeItemCallback : ItemTouchHelper.Callback() {
         val viewHeight = viewHolder.backgroundSwipeView.measuredHeight
         val iconX = viewHolder.swipeIconView.x + viewHolder.swipeIconView.measuredWidth / 2
         val iconY = viewHolder.swipeIconView.y + viewHolder.swipeIconView.measuredHeight / 2
-        val maxRadius = max(sqrt((viewWidth - iconX) * (viewWidth - iconX) + (viewHeight - iconY) * (viewHeight - iconY)),
-            sqrt(iconX * iconX + (viewHeight - iconY) * (viewHeight - iconY)))
+        val maxRadius = max(
+            sqrt((viewWidth - iconX) * (viewWidth - iconX) + (viewHeight - iconY) * (viewHeight - iconY)),
+            sqrt(iconX * iconX + (viewHeight - iconY) * (viewHeight - iconY))
+        )
 
         val startRadius = if (showSwipeBackground) 0f else maxRadius
         val finalRadius = if (showSwipeBackground) maxRadius else 0f

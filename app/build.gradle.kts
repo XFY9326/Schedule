@@ -115,9 +115,13 @@ dependencies {
     implementation(project(path = ":Annotation"))
     ksp(project(path = ":AnnotationKSP"))
 
-    implementation(project(path = ":LiveDataTools"))
-    implementation(project(path = ":AndroidToolKit"))
-    implementation(project(path = ":AndroidToolKitIO"))
+    // ATools
+    val atoolsVersion = "0.0.4"
+    implementation("io.github.xfy9326.atools:atools-io:$atoolsVersion")
+    implementation("io.github.xfy9326.atools:atools-ui:$atoolsVersion")
+    implementation("io.github.xfy9326.atools:atools-coroutines:$atoolsVersion")
+    implementation("io.github.xfy9326.atools:atools-livedata:$atoolsVersion")
+    implementation("io.github.xfy9326.atools:atools-datastore-preference:$atoolsVersion")
 
     // Kotlin Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.1")
@@ -143,15 +147,17 @@ dependencies {
     implementation("androidx.datastore:datastore-preferences:1.0.0")
 
     // LifeCycle, ViewModel, LiveData
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.4.1")
-    implementation("androidx.lifecycle:lifecycle-common-java8:2.4.1")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1")
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.4.1")
+    val lifeCycleVersion = "2.4.1"
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:$lifeCycleVersion")
+    implementation("androidx.lifecycle:lifecycle-common-java8:$lifeCycleVersion")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifeCycleVersion")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:$lifeCycleVersion")
 
     // Room
-    implementation("androidx.room:room-ktx:2.4.2")
-    ksp("androidx.room:room-compiler:2.4.2")
-    testImplementation("androidx.room:room-testing:2.4.2")
+    val roomVersion = "2.4.2"
+    implementation("androidx.room:room-ktx:$roomVersion")
+    ksp("androidx.room:room-compiler:$roomVersion")
+    testImplementation("androidx.room:room-testing:$roomVersion")
 
     // Material Design
     implementation("com.google.android.material:material:1.5.0")
@@ -163,9 +169,10 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.9.3")
 
     // Ktor
-    implementation("io.ktor:ktor-client-okhttp:2.0.0")
-    implementation("io.ktor:ktor-client-content-negotiation:2.0.0")
-    implementation("io.ktor:ktor-serialization-kotlinx-json:2.0.0")
+    val ktorVersion = "2.0.0"
+    implementation("io.ktor:ktor-client-okhttp:$ktorVersion")
+    implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
+    implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
 
     // Jsoup
     implementation("org.jsoup:jsoup:1.14.3")

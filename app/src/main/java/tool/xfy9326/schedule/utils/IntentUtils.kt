@@ -4,15 +4,16 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
-import lib.xfy9326.android.kit.io.MIMEConst
-import lib.xfy9326.android.kit.packageUri
-import lib.xfy9326.kit.asArray
-import lib.xfy9326.kit.asParentOf
+import io.github.xfy9326.atools.core.asArray
+import io.github.xfy9326.atools.io.utils.ImageMimeType
+import io.github.xfy9326.atools.io.utils.asParentOf
+import io.github.xfy9326.atools.ui.packageUri
 import tool.xfy9326.schedule.BuildConfig
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.io.PathManager
 import tool.xfy9326.schedule.io.utils.getUriByFileProvider
 import tool.xfy9326.schedule.kt.tryStartActivity
+import tool.xfy9326.schedule.tools.MIMEConst
 import java.util.*
 
 object IntentUtils {
@@ -40,16 +41,16 @@ object IntentUtils {
     fun seeImage(context: Context, uri: Uri) {
         context.tryStartActivity(Intent(Intent.ACTION_VIEW).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_GRANT_READ_URI_PERMISSION
-            setDataAndType(uri, MIMEConst.MIME_IMAGE)
+            setDataAndType(uri, ImageMimeType.IMAGE)
         })
     }
 
     fun getShareImageIntent(context: Context, uri: Uri): Intent =
         Intent.createChooser(Intent(Intent.ACTION_SEND).apply {
-            type = MIMEConst.MIME_IMAGE
+            type = ImageMimeType.IMAGE
             flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
             putExtra(Intent.EXTRA_STREAM, uri)
-            putExtra(Intent.EXTRA_MIME_TYPES, MIMEConst.MIME_IMAGE)
+            putExtra(Intent.EXTRA_MIME_TYPES, ImageMimeType.IMAGE)
         }, context.getString(R.string.share_image))
 
     fun sendCrashReport(context: Context, logName: String) {

@@ -17,13 +17,12 @@ import androidx.core.os.bundleOf
 import androidx.core.view.drawToBitmap
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
+import io.github.xfy9326.atools.io.utils.tryRecycle
+import io.github.xfy9326.atools.ui.setListener
+import io.github.xfy9326.atools.ui.showToast
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import lib.xfy9326.android.kit.isUsingNightMode
-import lib.xfy9326.android.kit.setListener
-import lib.xfy9326.android.kit.showToast
-import lib.xfy9326.android.kit.tryRecycle
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.NightMode
 import tool.xfy9326.schedule.beans.NightMode.Companion.modeInt
@@ -32,6 +31,7 @@ import tool.xfy9326.schedule.databinding.ActivityScheduleBinding
 import tool.xfy9326.schedule.databinding.LayoutNavHeaderBinding
 import tool.xfy9326.schedule.kt.getDefaultBackgroundColor
 import tool.xfy9326.schedule.ui.vm.ScheduleViewModel
+import tool.xfy9326.schedule.utils.isUsingNightMode
 import kotlin.math.max
 import kotlin.math.sqrt
 
@@ -136,15 +136,19 @@ object NightModeViewUtils {
         val viewHeight = rootView.measuredHeight
 
         val finalRadius =
-            max(sqrt((viewWidth - startX) * (viewWidth - startX) + (viewHeight - startY) * (viewHeight - startY)),
-                sqrt(startX * startX + (viewHeight - startY) * (viewHeight - startY)))
+            max(
+                sqrt((viewWidth - startX) * (viewWidth - startX) + (viewHeight - startY) * (viewHeight - startY)),
+                sqrt(startX * startX + (viewHeight - startY) * (viewHeight - startY))
+            )
 
-        intent.putExtra(EXTRA_ANIMATE_NIGHT_MODE_CHANGED_BUNDLE, bundleOf(
-            EXTRA_START_X to startX,
-            EXTRA_START_Y to startY,
-            EXTRA_FINAL_RADIUS to finalRadius,
-            EXTRA_SET_NIGHT_MODE to setNightMode
-        ))
+        intent.putExtra(
+            EXTRA_ANIMATE_NIGHT_MODE_CHANGED_BUNDLE, bundleOf(
+                EXTRA_START_X to startX,
+                EXTRA_START_Y to startY,
+                EXTRA_FINAL_RADIUS to finalRadius,
+                EXTRA_SET_NIGHT_MODE to setNightMode
+            )
+        )
     }
 
     private fun animateNightModeChanged(

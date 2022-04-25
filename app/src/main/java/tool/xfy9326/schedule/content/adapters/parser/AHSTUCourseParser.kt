@@ -1,7 +1,7 @@
 package tool.xfy9326.schedule.content.adapters.parser
 
-import lib.xfy9326.kit.EMPTY
-import lib.xfy9326.kit.cast
+import io.github.xfy9326.atools.core.EMPTY
+import io.github.xfy9326.atools.core.cast
 import org.json.JSONObject
 import tool.xfy9326.schedule.beans.Course
 import tool.xfy9326.schedule.beans.CourseTime

@@ -67,8 +67,10 @@ class ScheduleControlPanel : BottomSheetDialogFragment() {
     }
 
     private fun changeShowWeekNum(value: Float) {
-        setFragmentResult(DIALOG_TAG, bundleOf(
-            EXTRA_SCROLL_TO_WEEK to value.toInt()
-        ))
+        setFragmentResult(
+            DIALOG_TAG, bundleOf(
+                EXTRA_SCROLL_TO_WEEK to value.toInt()
+            )
+        )
     }
 }

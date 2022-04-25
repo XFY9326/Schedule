@@ -5,9 +5,9 @@ import android.net.Uri
 import androidx.activity.ComponentActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import lib.xfy9326.android.kit.getItemUriList
-import lib.xfy9326.android.kit.showGlobalToast
-import lib.xfy9326.kit.asList
+import io.github.xfy9326.atools.core.asList
+import io.github.xfy9326.atools.ui.getItemUris
+import io.github.xfy9326.atools.ui.showGlobalToast
 import tool.xfy9326.schedule.BuildConfig
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.content.beans.ExternalCourseImportData
@@ -37,7 +37,7 @@ object ExternalCourseImportUtils {
     }
 
     private fun getReceivedUriList(intent: Intent): List<Uri>? =
-        (intent.data?.asList() ?: intent.clipData?.getItemUriList())?.takeIf { it.isNotEmpty() }
+        (intent.data?.asList() ?: intent.clipData?.getItemUris())?.takeIf { it.isNotEmpty() }
 
     fun prepareRunningEnvironment(activity: ComponentActivity): ExternalCourseImportViewModel? {
         val parseResult = parseReceivedIntent(activity.intent)

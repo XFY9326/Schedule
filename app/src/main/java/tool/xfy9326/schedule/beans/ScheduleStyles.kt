@@ -3,10 +3,10 @@ package tool.xfy9326.schedule.beans
 import android.content.Context
 import androidx.annotation.ColorInt
 import androidx.annotation.Px
-import lib.xfy9326.android.kit.Dp
-import lib.xfy9326.android.kit.dpToPx
-import lib.xfy9326.android.kit.getColorCompat
+import io.github.xfy9326.atools.ui.dpToPx
+import io.github.xfy9326.atools.ui.getColorCompat
 import tool.xfy9326.schedule.R
+import tool.xfy9326.schedule.annotation.Dp
 
 data class ScheduleStyles(
     private val viewAlpha: Int,

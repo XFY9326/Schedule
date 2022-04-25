@@ -2,7 +2,7 @@
 
 package tool.xfy9326.schedule.beans
 
-import lib.xfy9326.kit.EMPTY
+import io.github.xfy9326.atools.core.EMPTY
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
 import tool.xfy9326.schedule.content.utils.CourseAdapterException.Companion.report
 

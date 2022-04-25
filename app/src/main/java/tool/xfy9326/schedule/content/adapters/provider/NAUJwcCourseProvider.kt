@@ -1,10 +1,10 @@
 package tool.xfy9326.schedule.content.adapters.provider
 
+import io.github.xfy9326.atools.core.toHex
 import io.ktor.client.request.*
 import io.ktor.client.request.forms.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
-import lib.xfy9326.kit.toHex
 import org.jsoup.Jsoup
 import tool.xfy9326.schedule.content.base.LoginCourseProvider
 import tool.xfy9326.schedule.content.beans.LoginPageInfo

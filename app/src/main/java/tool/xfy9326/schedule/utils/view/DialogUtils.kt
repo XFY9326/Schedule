@@ -7,14 +7,14 @@ import androidx.lifecycle.LifecycleOwner
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputLayout
 import com.jaredrummler.android.colorpicker.ColorPickerDialog
-import lib.xfy9326.android.kit.getText
-import lib.xfy9326.android.kit.show
-import lib.xfy9326.android.kit.showToast
-import lib.xfy9326.kit.NEW_LINE
+import io.github.xfy9326.atools.ui.getText
+import io.github.xfy9326.atools.ui.show
+import io.github.xfy9326.atools.ui.showToast
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.Schedule
 import tool.xfy9326.schedule.databinding.DialogEditTextBinding
 import tool.xfy9326.schedule.tools.MaterialColorHelper
+import tool.xfy9326.schedule.utils.NEW_LINE
 
 object DialogUtils {
     fun showAdvancedFunctionDialog(context: Context, lifecycleOwner: LifecycleOwner, onConfirm: () -> Unit) {

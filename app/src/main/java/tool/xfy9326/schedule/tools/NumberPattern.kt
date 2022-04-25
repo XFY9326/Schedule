@@ -2,7 +2,7 @@
 
 package tool.xfy9326.schedule.tools
 
-import lib.xfy9326.kit.asArray
+import io.github.xfy9326.atools.core.asArray
 import tool.xfy9326.schedule.beans.TimePeriod
 import tool.xfy9326.schedule.tools.NumberPattern.PatternType.*
 

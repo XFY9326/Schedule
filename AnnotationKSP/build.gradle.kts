@@ -7,7 +7,7 @@ java {
     targetCompatibility = ProjectConfig.javaVersion
 }
 
-tasks.compileKotlin {
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
     kotlinOptions {
         jvmTarget = ProjectConfig.javaVersion.toString()
         freeCompilerArgs = freeCompilerArgs + listOf(

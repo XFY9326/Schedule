@@ -5,8 +5,8 @@ import android.os.Bundle
 import androidx.annotation.RequiresApi
 import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
-import lib.xfy9326.android.kit.PermissionCompat
-import lib.xfy9326.android.kit.ScheduleNextAlarmPermissionContact
+import io.github.xfy9326.atools.ui.PermissionCompat
+import io.github.xfy9326.atools.ui.contract.ScheduleExactAlarmPermissionContract
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.kt.findPreference
 import tool.xfy9326.schedule.kt.setOnPrefClickListener
@@ -18,7 +18,7 @@ class AppWidgetSettingsFragment : AbstractSettingsFragment() {
     override val preferenceResId: Int = R.xml.settings_app_widget
 
     @RequiresApi(Build.VERSION_CODES.S)
-    private val requestScheduleNextAlarmPermission = registerForActivityResult(ScheduleNextAlarmPermissionContact()) {
+    private val requestScheduleNextAlarmPermission = registerForActivityResult(ScheduleExactAlarmPermissionContract()) {
         findPreference<Preference>(R.string.pref_schedule_next_alarm_permission)?.setSummary(getScheduleNextAlarmPreferenceSummaryResId())
     }
 

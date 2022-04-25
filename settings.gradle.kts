@@ -12,15 +12,12 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven { url = uri("https://jitpack.io") }
     }
 }
 
 include(":Annotation")
 include(":AnnotationKSP")
-include(":LiveDataTools")
-include(":ToolKit")
-include(":AndroidToolKit")
-include(":AndroidToolKitIO")
 include(":app")
 
 rootProject.name = "Schedule"

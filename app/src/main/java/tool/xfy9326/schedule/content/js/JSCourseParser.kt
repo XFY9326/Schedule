@@ -1,8 +1,8 @@
 package tool.xfy9326.schedule.content.js
 
+import io.github.xfy9326.atools.core.nullIfBlank
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
-import lib.xfy9326.kit.nullIfBlank
 import tool.xfy9326.schedule.beans.Course
 import tool.xfy9326.schedule.beans.ScheduleImportContent
 import tool.xfy9326.schedule.beans.ScheduleTime

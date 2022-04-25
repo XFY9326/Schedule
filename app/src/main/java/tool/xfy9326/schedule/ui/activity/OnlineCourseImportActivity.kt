@@ -7,13 +7,12 @@ import androidx.annotation.StringRes
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import io.github.xfy9326.atools.livedata.observeEvent
+import io.github.xfy9326.atools.livedata.observeNotify
+import io.github.xfy9326.atools.ui.setOnSingleClickListener
+import io.github.xfy9326.atools.ui.show
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import lib.xfy9326.android.kit.io.MIMEConst
-import lib.xfy9326.android.kit.setOnSingleClickListener
-import lib.xfy9326.android.kit.show
-import lib.xfy9326.livedata.observeEvent
-import lib.xfy9326.livedata.observeNotify
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.content.CourseImportConfigManager.Type.Companion.getText
 import tool.xfy9326.schedule.content.beans.JSConfig
@@ -22,6 +21,7 @@ import tool.xfy9326.schedule.data.AppDataStore
 import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.databinding.ActivityOnlineCourseImportBinding
 import tool.xfy9326.schedule.kt.showSnackBar
+import tool.xfy9326.schedule.tools.MIMEConst
 import tool.xfy9326.schedule.ui.activity.base.CourseProviderActivity
 import tool.xfy9326.schedule.ui.activity.base.ViewModelActivity
 import tool.xfy9326.schedule.ui.adapter.CourseImportAdapter
@@ -168,12 +168,16 @@ class OnlineCourseImportActivity : ViewModelActivity<OnlineCourseImportViewModel
         val updateUrlChanged = importConfig.updateUrl != existConfig.updateUrl
         MaterialAlertDialogBuilder(this)
             .setTitle(R.string.js_config_exist_title)
-            .setMessage(getString(R.string.js_config_exist_msg,
-                importConfig.schoolName,
-                importConfig.authorName,
-                existConfig.schoolName,
-                existConfig.authorName,
-                if (updateUrlChanged) getString(R.string.js_config_update_url_changed) else getString(R.string.js_config_update_url_not_changed)))
+            .setMessage(
+                getString(
+                    R.string.js_config_exist_msg,
+                    importConfig.schoolName,
+                    importConfig.authorName,
+                    existConfig.schoolName,
+                    existConfig.authorName,
+                    if (updateUrlChanged) getString(R.string.js_config_update_url_changed) else getString(R.string.js_config_update_url_not_changed)
+                )
+            )
             .setPositiveButton(android.R.string.ok) { _, _ ->
                 requireViewModel().forceAddJSConfig(importConfig)
                 loadingController.show()

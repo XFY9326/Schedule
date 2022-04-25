@@ -7,13 +7,13 @@ import android.graphics.Rect
 import android.view.View
 import androidx.annotation.Px
 import androidx.core.graphics.applyCanvas
+import io.github.xfy9326.atools.core.AppContext
+import io.github.xfy9326.atools.io.IOManager
+import io.github.xfy9326.atools.ui.getColorCompat
+import io.github.xfy9326.atools.ui.textBaselineHeight
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
-import lib.xfy9326.android.kit.ApplicationInstance
-import lib.xfy9326.android.kit.getColorCompat
-import lib.xfy9326.android.kit.io.IOManager
-import lib.xfy9326.android.kit.textBaselineHeight
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.*
 import tool.xfy9326.schedule.data.ScheduleDataStore
@@ -114,9 +114,9 @@ object ScheduleViewHelper {
             enableScheduleGridScroll = false
         ) ?: return@withContext null
 
-        val backgroundColor = ApplicationInstance.getDefaultBackgroundColor()
+        val backgroundColor = AppContext.getDefaultBackgroundColor()
         val viewData = CourseUtils.getScheduleViewDataByWeek(weekNum, ScheduleBuildBundle(schedule, courses, styles))
-        val scheduleView = buildScheduleView(ApplicationInstance, viewData, noScroll = true)
+        val scheduleView = buildScheduleView(AppContext, viewData, noScroll = true)
 
         val widthSpec = View.MeasureSpec.makeMeasureSpec(targetWidth, View.MeasureSpec.AT_MOST)
         val heightSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
@@ -128,7 +128,7 @@ object ScheduleViewHelper {
             drawColor(backgroundColor)
             scheduleView.draw(this)
         }.apply {
-            if (waterMark) drawWaterMark(ApplicationInstance, this, ApplicationInstance.getString(R.string.app_name))
+            if (waterMark) drawWaterMark(AppContext, this, AppContext.getString(R.string.app_name))
         }
     }
 

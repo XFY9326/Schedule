@@ -9,8 +9,8 @@ import android.view.MenuItem
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.jaredrummler.android.colorpicker.ColorPickerDialogListener
-import lib.xfy9326.android.kit.*
-import lib.xfy9326.livedata.observeEvent
+import io.github.xfy9326.atools.livedata.observeEvent
+import io.github.xfy9326.atools.ui.*
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.EditError.Companion.getText
 import tool.xfy9326.schedule.beans.Schedule

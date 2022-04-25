@@ -13,9 +13,9 @@ import android.webkit.*
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import io.github.xfy9326.atools.core.asArray
+import io.github.xfy9326.atools.ui.bindLifeCycle
 import kotlinx.coroutines.launch
-import lib.xfy9326.android.kit.bindLifeCycle
-import lib.xfy9326.kit.asArray
 import tool.xfy9326.schedule.BuildConfig
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.data.AppDataStore

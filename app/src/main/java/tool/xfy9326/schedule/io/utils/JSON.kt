@@ -3,14 +3,13 @@
 package tool.xfy9326.schedule.io.utils
 
 import android.net.Uri
+import io.github.xfy9326.atools.io.okio.sink
+import io.github.xfy9326.atools.io.okio.source
+import io.github.xfy9326.atools.io.okio.useBuffer
+import io.github.xfy9326.atools.io.utils.runIOJob
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import lib.xfy9326.android.kit.io.kt.sink
-import lib.xfy9326.android.kit.io.kt.source
-import lib.xfy9326.android.kit.io.kt.useBuffer
-import lib.xfy9326.kit.runOnlyResultIOJob
-import lib.xfy9326.kit.runSafeIOJob
 import okio.*
 import java.io.File
 
@@ -26,13 +25,13 @@ suspend inline fun <reified T> Uri.readJSON(json: Json) = readJSON<T>(source(), 
 
 suspend inline fun <reified T> Uri.writeJSON(data: T, json: Json) = writeJSON(sink(), data, json)
 
-suspend inline fun <reified T> readJSON(source: Source?, json: Json) = runSafeIOJob {
+suspend inline fun <reified T> readJSON(source: Source?, json: Json): T? = runIOJob {
     source?.useBuffer { readJSON<T>(json) }
-}
+}.getOrNull()
 
-suspend inline fun <reified T> writeJSON(sink: Sink?, data: T, json: Json) = runOnlyResultIOJob {
+suspend inline fun <reified T> writeJSON(sink: Sink?, data: T, json: Json): Boolean = runIOJob {
     sink?.useBuffer {
         writeJSON(json, data)
         true
     } ?: false
-}
+}.getOrDefault(false)

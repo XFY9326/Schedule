@@ -4,6 +4,11 @@ import android.content.Context
 import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import io.github.xfy9326.atools.io.okio.source
+import io.github.xfy9326.atools.io.okio.useBuffer
+import io.github.xfy9326.atools.livedata.EventLiveData
+import io.github.xfy9326.atools.livedata.MutableEventLiveData
+import io.github.xfy9326.atools.livedata.postEvent
 import io.ktor.client.*
 import io.ktor.client.engine.okhttp.*
 import io.ktor.client.plugins.*
@@ -12,11 +17,6 @@ import io.ktor.client.statement.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
-import lib.xfy9326.android.kit.io.kt.source
-import lib.xfy9326.android.kit.io.kt.useBuffer
-import lib.xfy9326.livedata.EventLiveData
-import lib.xfy9326.livedata.MutableEventLiveData
-import lib.xfy9326.livedata.postEvent
 import okhttp3.internal.closeQuietly
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.content.base.ICourseImportConfig
@@ -72,7 +72,7 @@ class CourseImportConfigManager(scope: CoroutineScope) : CoroutineScope by scope
 
     fun addJSConfig(uri: Uri) = launch {
         try {
-            val content = uri.source()?.useBuffer { readUtf8() } ?: error("Empty uri! Uri $uri")
+            val content = uri.source().useBuffer { readUtf8() }
             addJSConfig(JSFileManager.parserJSConfig(content), false)
         } catch (e: JSConfigException) {
             operationError.postEvent(e)
@@ -146,8 +146,9 @@ class CourseImportConfigManager(scope: CoroutineScope) : CoroutineScope by scope
         preparedConfig.postEvent(latestConfig.toCourseImportConfig())
     }
 
-    private suspend fun downloadJS(uuid: String, url: String, errorType: JSConfigException.Error, saveType: JSFileManager.SaveType) =
+    private suspend fun downloadJS(uuid: String, url: String, errorType: JSConfigException.Error, saveType: JSFileManager.SaveType) {
         JSFileManager.downloadJS(httpClient, uuid, url, errorType, saveType)
+    }
 
     private suspend fun getLatestConfig(jsConfig: JSConfig): JSConfig {
         if (jsConfig.updateUrl == null) {

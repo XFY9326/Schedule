@@ -3,9 +3,8 @@ package tool.xfy9326.schedule.ui.activity
 import android.os.Bundle
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.isVisible
-import lib.xfy9326.android.kit.setOnSingleClickListener
-import lib.xfy9326.kit.getDeepStackTraceString
-import lib.xfy9326.livedata.observeEvent
+import io.github.xfy9326.atools.livedata.observeEvent
+import io.github.xfy9326.atools.ui.setOnSingleClickListener
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.content.beans.ExternalCourseImportData
 import tool.xfy9326.schedule.content.utils.CourseAdapterException.Companion.strictModeOnly
@@ -17,6 +16,7 @@ import tool.xfy9326.schedule.ui.dialog.ScheduleImportSuccessDialog
 import tool.xfy9326.schedule.ui.dialog.StrictImportModeWarningDialog
 import tool.xfy9326.schedule.ui.vm.ExternalCourseImportViewModel
 import tool.xfy9326.schedule.utils.IntentUtils
+import tool.xfy9326.schedule.utils.getDeepStackTraceString
 import tool.xfy9326.schedule.utils.schedule.ExternalCourseImportUtils
 import tool.xfy9326.schedule.utils.schedule.ScheduleImportManager
 import tool.xfy9326.schedule.utils.view.DialogUtils

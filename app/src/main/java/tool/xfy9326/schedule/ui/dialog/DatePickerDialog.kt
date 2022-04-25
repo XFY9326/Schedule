@@ -9,7 +9,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.LifecycleOwner
-import lib.xfy9326.kit.castNonNull
+import io.github.xfy9326.atools.core.castNonNull
 import tool.xfy9326.schedule.utils.CalendarUtils
 import java.util.*
 
@@ -61,9 +61,11 @@ class DatePickerDialog : AppCompatDialogFragment(), DatePickerDialog.OnDateSetLi
     }
 
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
-        setFragmentResult(DIALOG_TAG, bundleOf(
-            EXTRA_TAG to requireArguments().getString(EXTRA_TAG),
-            EXTRA_DATE to getDate(year, month, dayOfMonth)
-        ))
+        setFragmentResult(
+            DIALOG_TAG, bundleOf(
+                EXTRA_TAG to requireArguments().getString(EXTRA_TAG),
+                EXTRA_DATE to getDate(year, month, dayOfMonth)
+            )
+        )
     }
 }

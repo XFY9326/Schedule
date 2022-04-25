@@ -13,14 +13,14 @@ import androidx.annotation.Px
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.view.children
 import androidx.core.view.setPadding
-import lib.xfy9326.android.kit.getStringArray
-import lib.xfy9326.android.kit.spToPx
-import lib.xfy9326.kit.NEW_LINE
+import io.github.xfy9326.atools.ui.getStringArray
+import io.github.xfy9326.atools.ui.spToPx
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.Day
 import tool.xfy9326.schedule.beans.SchedulePredefine
 import tool.xfy9326.schedule.beans.ScheduleStyles
 import tool.xfy9326.schedule.beans.ScheduleText
+import tool.xfy9326.schedule.utils.NEW_LINE
 import tool.xfy9326.schedule.utils.view.ViewUtils
 import kotlin.math.max
 

@@ -6,8 +6,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.preference.ListPreference
 import androidx.preference.PreferenceDataStore
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import lib.xfy9326.android.kit.show
-import lib.xfy9326.kit.tryEnumValueOf
+import io.github.xfy9326.atools.core.tryCast
+import io.github.xfy9326.atools.core.tryEnumValueOf
+import io.github.xfy9326.atools.ui.show
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.NightMode
 import tool.xfy9326.schedule.beans.NightMode.Companion.modeInt
@@ -23,7 +24,7 @@ class GeneralSettingsFragment : AbstractSettingsFragment() {
 
     override fun onPrefInit(savedInstanceState: Bundle?) {
         findPreference<ListPreference>(AppSettingsDataStore.nightModeType.name)?.setOnPreferenceChangeListener { _, newValue ->
-            tryEnumValueOf<NightMode>(newValue as? String)?.let(::changeNightMode)
+            newValue.tryCast<String>()?.let { tryEnumValueOf<NightMode>(it) }?.let(::changeNightMode)
             true
         }
         setOnPrefClickListener(R.string.pref_clear_cache) {

@@ -18,13 +18,13 @@ import androidx.core.app.AlarmManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 import androidx.core.graphics.drawable.toBitmap
+import io.github.xfy9326.atools.core.AppContext
+import io.github.xfy9326.atools.coroutines.AppScope
+import io.github.xfy9326.atools.ui.PermissionCompat
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
-import lib.xfy9326.android.kit.ApplicationInstance
-import lib.xfy9326.android.kit.ApplicationScope
-import lib.xfy9326.android.kit.PermissionCompat
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.NextCourse
 import tool.xfy9326.schedule.beans.NextCourseInfo
@@ -43,14 +43,14 @@ object NextCourseWidgetUtils {
     private var observerJob: Job? = null
 
     fun initDataObserver() {
-        if (hasNextCourseWidget(ApplicationInstance)) {
-            ApplicationScope.launch {
+        if (hasNextCourseWidget(AppContext)) {
+            AppScope.launch {
                 observerJobLock.withLock {
                     if (observerJob?.isActive != true) {
                         observerJob = ScheduleDataProcessor.addCurrentScheduleCourseDataGlobalListener { schedule ->
-                            if (hasNextCourseWidget(ApplicationInstance)) {
+                            if (hasNextCourseWidget(AppContext)) {
                                 val nextCourse = NextCourseUtils.getNextCourseByDate(schedule)
-                                updateAllNextCourseWidget(ApplicationInstance, nextCourse)
+                                updateAllNextCourseWidget(AppContext, nextCourse)
                             } else {
                                 stopDataObserver()
                             }
@@ -146,10 +146,12 @@ object NextCourseWidgetUtils {
         }
 
     private fun getContentClickPendingIntent(context: Context) =
-        PendingIntent.getActivity(context,
+        PendingIntent.getActivity(
+            context,
             REQUEST_CODE_WIDGET_NEXT_COURSE_LAUNCH_APP,
             IntentUtils.getLaunchAppIntent(context),
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
 
     private fun buildWidgetMessageView(context: Context, @LayoutRes layoutRes: Int, @DrawableRes iconRes: Int, @StringRes msgRes: Int) =
         RemoteViews(context.packageName, layoutRes).apply {
