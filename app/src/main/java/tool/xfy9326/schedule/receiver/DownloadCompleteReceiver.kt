@@ -6,12 +6,12 @@ import android.content.Context
 import android.content.Intent
 import androidx.core.content.getSystemService
 import io.github.xfy9326.atools.ui.PermissionCompat
+import io.github.xfy9326.atools.ui.installPackage
 import io.github.xfy9326.atools.ui.showGlobalToast
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.runBlocking
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.data.AppDataStore
-import tool.xfy9326.schedule.utils.IntentUtils
 
 class DownloadCompleteReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
@@ -22,7 +22,7 @@ class DownloadCompleteReceiver : BroadcastReceiver() {
                     context.applicationContext.getSystemService<DownloadManager>()?.getUriForDownloadedFile(downloadId)?.let {
                         showGlobalToast(R.string.update_download_success)
                         if (PermissionCompat.canInstallPackage(context)) {
-                            IntentUtils.installPackage(context, it)
+                            context.installPackage(it)
                         }
                         AppDataStore.removeApkUpdateDownloadId()
                     }

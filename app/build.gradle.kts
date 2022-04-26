@@ -116,12 +116,14 @@ dependencies {
     ksp(project(path = ":AnnotationKSP"))
 
     // ATools
-    val atoolsVersion = "0.0.4"
+    val atoolsVersion = "0.0.6"
     implementation("io.github.xfy9326.atools:atools-io:$atoolsVersion")
     implementation("io.github.xfy9326.atools:atools-ui:$atoolsVersion")
+    implementation("io.github.xfy9326.atools:atools-crash:$atoolsVersion")
     implementation("io.github.xfy9326.atools:atools-coroutines:$atoolsVersion")
     implementation("io.github.xfy9326.atools:atools-livedata:$atoolsVersion")
     implementation("io.github.xfy9326.atools:atools-datastore-preference:$atoolsVersion")
+    implementation("io.github.xfy9326.atools:atools-io-serialization-json:$atoolsVersion")
 
     // Kotlin Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.1")

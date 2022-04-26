@@ -10,10 +10,11 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import io.github.xfy9326.atools.io.okio.writeText
-import io.github.xfy9326.atools.io.utils.runIOJob
 import io.github.xfy9326.atools.ui.showGlobalToast
 import io.github.xfy9326.atools.ui.showToast
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.databinding.DialogCrashViewBinding
 import tool.xfy9326.schedule.kt.PROJECT_ID
@@ -42,10 +43,11 @@ class CrashViewDialog : AppCompatDialogFragment() {
     private val outputLogFile = registerForActivityResult(ActivityResultContracts.CreateDocument()) {
         if (it != null) {
             lifecycleScope.launch {
-                @Suppress("BlockingMethodInNonBlockingContext")
-                val result = runIOJob {
-                    it.writeText(requireArguments().getString(ARGUMENT_CRASH_LOG, null))
-                }.isSuccess
+                val result = withContext(Dispatchers.IO) {
+                    runCatching {
+                        it.writeText(requireArguments().getString(ARGUMENT_CRASH_LOG, null))
+                    }.isSuccess
+                }
                 requireContext().showToast(if (result) R.string.output_file_success else R.string.output_file_failed)
                 dismissAllowingStateLoss()
             }

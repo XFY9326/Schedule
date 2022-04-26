@@ -4,7 +4,8 @@ import android.content.Context
 import android.net.Uri
 import io.github.xfy9326.atools.io.IOManager
 import io.github.xfy9326.atools.io.okio.writeText
-import io.github.xfy9326.atools.io.utils.runIOJob
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.Course
 import tool.xfy9326.schedule.beans.Course.Companion.iterateAll
@@ -22,14 +23,17 @@ class ScheduleICSHelper constructor(schedule: Schedule, private val courses: Lis
 
     private val scheduleCalculateTimes = ScheduleCalculateTimes(schedule)
 
-    @Suppress("BlockingMethodInNonBlockingContext")
     suspend fun dumpICS(uri: Uri): Boolean {
         try {
             val iCal = ScheduleICSWriter()
             courses.iterateAll { course, courseTime ->
                 createCourseTimeVEvent(iCal, course, courseTime)
             }
-            return runIOJob { uri.writeText(iCal.build()) }.isSuccess
+            return withContext(Dispatchers.IO) {
+                runCatching {
+                    uri.writeText(iCal.build())
+                }.isSuccess
+            }
         } catch (e: Exception) {
             e.printStackTrace()
         }

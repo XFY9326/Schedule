@@ -19,5 +19,3 @@ fun Context.getBackgroundColor(@ColorInt default: Int): Int {
         }
     }
 }
-
-fun <T> Fragment.requireOwner() = (parentFragment ?: requireActivity()).tryCast<T>()

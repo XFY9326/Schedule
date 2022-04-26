@@ -4,11 +4,13 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.StringRes
+import androidx.core.net.toUri
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import io.github.xfy9326.atools.livedata.observeEvent
 import io.github.xfy9326.atools.livedata.observeNotify
+import io.github.xfy9326.atools.ui.openUrlInBrowser
 import io.github.xfy9326.atools.ui.setOnSingleClickListener
 import io.github.xfy9326.atools.ui.show
 import kotlinx.coroutines.flow.first
@@ -157,7 +159,7 @@ class OnlineCourseImportActivity : ViewModelActivity<OnlineCourseImportViewModel
         if (item.itemId == R.id.menu_onlineCourseImportAttention) {
             DialogUtils.showOnlineImportAttentionDialog(this, false,
                 onNeutral = {
-                    IntentUtils.openUrlInBrowser(this, IntentUtils.COURSE_IMPORT_WIKI_URL)
+                    openUrlInBrowser(IntentUtils.COURSE_IMPORT_WIKI_URL.toUri())
                 })
         }
         return super.onOptionsItemSelected(item)

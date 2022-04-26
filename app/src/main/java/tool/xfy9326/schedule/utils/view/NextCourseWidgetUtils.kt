@@ -21,6 +21,7 @@ import androidx.core.graphics.drawable.toBitmap
 import io.github.xfy9326.atools.core.AppContext
 import io.github.xfy9326.atools.coroutines.AppScope
 import io.github.xfy9326.atools.ui.PermissionCompat
+import io.github.xfy9326.atools.ui.getLaunchAppIntent
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
@@ -28,7 +29,6 @@ import kotlinx.coroutines.sync.withLock
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.NextCourse
 import tool.xfy9326.schedule.beans.NextCourseInfo
-import tool.xfy9326.schedule.utils.IntentUtils
 import tool.xfy9326.schedule.utils.schedule.NextCourseUtils
 import tool.xfy9326.schedule.utils.schedule.ScheduleDataProcessor
 import tool.xfy9326.schedule.widget.NextCourseWidget
@@ -149,7 +149,7 @@ object NextCourseWidgetUtils {
         PendingIntent.getActivity(
             context,
             REQUEST_CODE_WIDGET_NEXT_COURSE_LAUNCH_APP,
-            IntentUtils.getLaunchAppIntent(context),
+            context.getLaunchAppIntent(),
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 

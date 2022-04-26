@@ -14,7 +14,6 @@ import tool.xfy9326.schedule.beans.WeekDay.Companion.value
 import tool.xfy9326.schedule.content.utils.arrangeWeekNum
 import tool.xfy9326.schedule.db.DBConst
 import tool.xfy9326.schedule.db.query.CourseBundle
-import tool.xfy9326.schedule.utils.CHAR_ONE
 import tool.xfy9326.schedule.utils.schedule.ScheduleUtils
 
 @Dao
@@ -70,7 +69,7 @@ abstract class ScheduleDAO {
             repeat(weekNum - 1) {
                 append(DBConst.LIKE_SINGLE)
             }
-            append(CHAR_ONE + DBConst.LIKE_MORE)
+            append('1' + DBConst.LIKE_MORE)
         }
 
         val courseTime = getNextCourseTimeByDate(scheduleId, weekNumLike, weekDay.value, currentClassNum) ?: return null

@@ -4,7 +4,6 @@ import io.github.xfy9326.atools.coroutines.AppScope
 import io.github.xfy9326.atools.coroutines.combine
 import io.github.xfy9326.atools.coroutines.combineTransform
 import io.github.xfy9326.atools.coroutines.withTryLock
-import io.github.xfy9326.atools.io.utils.runIOJob
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.sync.Mutex
@@ -19,15 +18,17 @@ object ScheduleDataProcessor {
 
     private fun <T> Flow<T>.preload() = flowOn(Dispatchers.IO).shareIn(AppScope, SharingStarted.Eagerly, 1)
 
-    suspend fun preload() = runIOJob {
-        hasPreloadLock.withTryLock {
-            listOf(
-                async { weekNumInfoFlow.firstOrNull() },
-                async { scheduleViewDataFlow.firstOrNull() },
-                async { scheduleBackgroundFlow.firstOrNull() }
-            ).awaitAll()
-        }
-    }.isSuccess
+    suspend fun preload() = withContext(Dispatchers.Default) {
+        runCatching {
+            hasPreloadLock.withTryLock {
+                listOf(
+                    async { weekNumInfoFlow.firstOrNull() },
+                    async { scheduleViewDataFlow.firstOrNull() },
+                    async { scheduleBackgroundFlow.firstOrNull() }
+                ).awaitAll()
+            }
+        }.isSuccess
+    }
 
     val currentScheduleFlow =
         AppDataStore.currentScheduleIdFlow.combine {

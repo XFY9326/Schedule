@@ -2,13 +2,15 @@ package tool.xfy9326.schedule.utils
 
 import android.content.Context
 import android.net.Uri
+import io.github.xfy9326.atools.io.serialization.json.readJSON
+import io.github.xfy9326.atools.io.serialization.json.writeJSON
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.*
 import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
-import tool.xfy9326.schedule.io.utils.readJSON
-import tool.xfy9326.schedule.io.utils.writeJSON
 import tool.xfy9326.schedule.json.ScheduleTimeJSON
 import tool.xfy9326.schedule.json.backup.BackupWrapperJSON
 import tool.xfy9326.schedule.json.backup.CourseJSON
@@ -36,7 +38,11 @@ object BackupUtils {
                     ScheduleCourseBundle(schedule, courses)
                 }
             }
-            return uri.writeJSON(getParsableClass(allBundles), JSON)
+            return withContext(Dispatchers.IO) {
+                runCatching {
+                    uri.writeJSON(getParsableClass(allBundles), JSON)
+                }
+            }.isSuccess
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -47,25 +53,26 @@ object BackupUtils {
         var totalAmount = 0
         var errorAmount = 0
         var hasConflicts = false
-        try {
-            uri.readJSON<BackupWrapperJSON>(JSON)?.let {
-                val originalData = fromParsableClass(it)
-                for (bundle in originalData) {
-                    totalAmount++
-                    val scheduleTimeValid = ScheduleUtils.validateScheduleTime(bundle.schedule.times)
-                    if (!scheduleTimeValid) {
-                        errorAmount++
-                        continue
-                    }
-                    hasConflicts = CourseUtils.solveConflicts(bundle.schedule.times, bundle.courses)
-                    ScheduleUtils.saveNewSchedule(bundle.schedule, bundle.courses)
-                }
-                return BatchResult(true, totalAmount, errorAmount) to hasConflicts
+        return withContext(Dispatchers.IO) {
+            runCatching {
+                uri.readJSON<BackupWrapperJSON>(JSON)
             }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-        return BatchResult(false) to hasConflicts
+        }.mapCatching {
+            val originalData = fromParsableClass(it)
+            for (bundle in originalData) {
+                totalAmount++
+                val scheduleTimeValid = ScheduleUtils.validateScheduleTime(bundle.schedule.times)
+                if (!scheduleTimeValid) {
+                    errorAmount++
+                    continue
+                }
+                hasConflicts = CourseUtils.solveConflicts(bundle.schedule.times, bundle.courses)
+                ScheduleUtils.saveNewSchedule(bundle.schedule, bundle.courses)
+            }
+            BatchResult(true, totalAmount, errorAmount) to hasConflicts
+        }.onFailure {
+            it.printStackTrace()
+        }.getOrDefault(BatchResult(false) to hasConflicts)
     }
 
     private fun getParsableClass(data: Array<out ScheduleCourseBundle>): BackupWrapperJSON {

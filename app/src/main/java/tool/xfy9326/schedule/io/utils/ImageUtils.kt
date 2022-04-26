@@ -1,5 +1,3 @@
-@file:Suppress("BlockingMethodInNonBlockingContext")
-
 package tool.xfy9326.schedule.io.utils
 
 import android.graphics.Bitmap
@@ -9,7 +7,8 @@ import io.github.xfy9326.atools.io.okio.copyBitmapTo
 import io.github.xfy9326.atools.io.utils.WEBPCompat
 import io.github.xfy9326.atools.io.utils.asParentOf
 import io.github.xfy9326.atools.io.utils.newFileName
-import io.github.xfy9326.atools.io.utils.runIOJob
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import tool.xfy9326.schedule.io.FileManager
 import tool.xfy9326.schedule.io.PathManager
 import java.io.File
@@ -31,9 +30,11 @@ object ImageUtils {
 
     suspend fun importImageFromUri(fromUri: Uri, toDir: File, quality: Int): String? {
         val imageFile = generateNewImageFile(toDir)
-        val copyResult = runIOJob {
-            fromUri.copyBitmapTo(imageFile, compressFormat = PRIVATE_STORAGE_BITMAP_COMPRESS_FORMAT, quality = quality)
-        }.isSuccess
+        val copyResult = withContext(Dispatchers.IO) {
+            runCatching {
+                fromUri.copyBitmapTo(imageFile, compressFormat = PRIVATE_STORAGE_BITMAP_COMPRESS_FORMAT, quality = quality)
+            }.isSuccess
+        }
         return if (copyResult) {
             imageFile.name
         } else {

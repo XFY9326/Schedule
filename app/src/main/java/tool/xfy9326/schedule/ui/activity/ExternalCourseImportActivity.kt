@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.isVisible
 import io.github.xfy9326.atools.livedata.observeEvent
+import io.github.xfy9326.atools.ui.getLaunchAppIntent
 import io.github.xfy9326.atools.ui.setOnSingleClickListener
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.content.beans.ExternalCourseImportData
@@ -15,7 +16,6 @@ import tool.xfy9326.schedule.ui.dialog.ImportCourseConflictDialog
 import tool.xfy9326.schedule.ui.dialog.ScheduleImportSuccessDialog
 import tool.xfy9326.schedule.ui.dialog.StrictImportModeWarningDialog
 import tool.xfy9326.schedule.ui.vm.ExternalCourseImportViewModel
-import tool.xfy9326.schedule.utils.IntentUtils
 import tool.xfy9326.schedule.utils.getDeepStackTraceString
 import tool.xfy9326.schedule.utils.schedule.ExternalCourseImportUtils
 import tool.xfy9326.schedule.utils.schedule.ScheduleImportManager
@@ -77,7 +77,7 @@ class ExternalCourseImportActivity : ViewBindingActivity<ActivityExternalCourseI
             finish()
         }
         viewBinding.buttonExternalCourseOpenApp.setOnSingleClickListener {
-            startActivity(IntentUtils.getLaunchAppIntent(this))
+            startActivity(getLaunchAppIntent()!!)
             finish()
         }
 

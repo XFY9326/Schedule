@@ -4,9 +4,6 @@ import io.github.xfy9326.atools.core.tryEnumValueOf
 import kotlin.math.max
 import kotlin.math.min
 
-const val CHAR_ZERO = '0'
-const val CHAR_ONE = '1'
-
 const val NEW_LINE = "\n"
 
 inline fun <T> List<T>.forEachTwo(action: (Int, T, Int, T) -> Unit) {
@@ -63,13 +60,13 @@ inline fun <reified E : Enum<E>> tryEnumSetValueOf(names: Set<String>): Set<E> {
 fun BooleanArray.serializeToString(): String {
     return buildString(size) {
         this@serializeToString.forEach { b ->
-            append(if (b) CHAR_ONE else CHAR_ZERO)
+            append(if (b) '1' else '0')
         }
     }
 }
 
 fun String.deserializeToBooleanArray(): BooleanArray {
     return BooleanArray(length) { p ->
-        this[p] == CHAR_ONE
+        this[p] == '1'
     }
 }

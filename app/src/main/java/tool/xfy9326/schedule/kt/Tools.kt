@@ -32,10 +32,10 @@ fun Context.crashRelaunch() {
     }
 }
 
-fun Context.appErrorRelaunch(crashLogName: String?) {
+fun Context.appErrorRelaunch(crashLogPath: String) {
     relaunchApp(1) {
         putExtra(ScheduleLaunchModule.INTENT_EXTRA_APP_ERROR, true)
-        putExtra(ScheduleLaunchModule.INTENT_EXTRA_APP_ERROR_CRASH_LOG, crashLogName)
+        putExtra(ScheduleLaunchModule.INTENT_EXTRA_APP_ERROR_CRASH_LOG, crashLogPath)
     }
 }
 

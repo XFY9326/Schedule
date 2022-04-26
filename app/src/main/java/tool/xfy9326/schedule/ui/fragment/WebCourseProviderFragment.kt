@@ -8,10 +8,7 @@ import android.webkit.*
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import io.github.xfy9326.atools.ui.bindLifeCycle
-import io.github.xfy9326.atools.ui.clearAll
-import io.github.xfy9326.atools.ui.show
-import io.github.xfy9326.atools.ui.showToast
+import io.github.xfy9326.atools.ui.*
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import tool.xfy9326.schedule.BuildConfig
@@ -22,7 +19,6 @@ import tool.xfy9326.schedule.ui.dialog.WebCourseProviderBottomPanel
 import tool.xfy9326.schedule.ui.fragment.base.IWebCourseProvider
 import tool.xfy9326.schedule.ui.fragment.base.ViewBindingFragment
 import tool.xfy9326.schedule.utils.JSBridge
-import tool.xfy9326.schedule.utils.requireOwner
 import java.lang.ref.WeakReference
 
 class WebCourseProviderFragment : ViewBindingFragment<FragmentWebCourseProviderBinding>(), IWebCourseProvider.IFragmentContact {
