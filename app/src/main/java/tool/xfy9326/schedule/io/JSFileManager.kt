@@ -1,8 +1,10 @@
 package tool.xfy9326.schedule.io
 
 import io.github.xfy9326.atools.core.md5
-import io.github.xfy9326.atools.io.okio.useBuffer
-import io.github.xfy9326.atools.io.serialization.json.readJSON
+import io.github.xfy9326.atools.io.okio.copyTo
+import io.github.xfy9326.atools.io.okio.readText
+import io.github.xfy9326.atools.io.okio.readTextAsync
+import io.github.xfy9326.atools.io.serialization.json.readJSONAsync
 import io.github.xfy9326.atools.io.serialization.json.writeJSON
 import io.github.xfy9326.atools.io.utils.asParentOf
 import io.github.xfy9326.atools.io.utils.preparedParentFolder
@@ -67,11 +69,7 @@ object JSFileManager {
                 val uuid = it.name
                 val file = it.asParentOf(FILE_NAME_JS_CONFIG)
                 if (file.exists()) {
-                    val config = withContext(Dispatchers.IO) {
-                        runCatching {
-                            file.readJSON<JSConfig>(JSON)
-                        }
-                    }.getOrNull()
+                    val config = file.readJSONAsync<JSConfig>(JSON).getOrNull()
                     if (config == null || config.id != uuid) {
                         file.parentFile?.deleteRecursively()
                         null
@@ -134,22 +132,16 @@ object JSFileManager {
     private fun getJSProviderFile(uuid: String, download: Boolean): File =
         PathManager.JSConfigs.asParentOf(uuid, DIR_SRC, if (download) "$FILE_NAME_JS_PROVIDER.$EXTENSION_DOWNLOAD" else FILE_NAME_JS_PROVIDER)
 
-    suspend fun readJSProvider(uuid: String): String? = withContext(Dispatchers.IO) {
-        runCatching {
-            getJSProviderFile(uuid, false).source().useBuffer {
-                readUtf8()
-            }.takeIf {
+    suspend fun readJSProvider(uuid: String): String? =
+        getJSProviderFile(uuid, false).readTextAsync()
+            .getOrNull()?.takeIf {
                 it.isNotBlank()
             }
-        }.getOrNull()
-    }
 
     private suspend fun writeJSProvider(uuid: String, source: Source): Boolean = withContext(Dispatchers.IO) {
         runCatching {
             getJSProviderFile(uuid, true).preparedParentFolder().let {
-                it.sink().useBuffer {
-                    writeAll(source)
-                }
+                source.copyTo(it.sink())
                 val jsFile = getJSProviderFile(uuid, false)
                 if (jsFile.exists()) jsFile.delete()
                 it.renameTo(jsFile)
@@ -160,22 +152,17 @@ object JSFileManager {
     private fun getJSParserFile(uuid: String, download: Boolean) =
         PathManager.JSConfigs.asParentOf(uuid, DIR_SRC, if (download) "$FILE_NAME_JS_PARSER.$EXTENSION_DOWNLOAD" else FILE_NAME_JS_PARSER)
 
-    suspend fun readJSParser(uuid: String): String? = withContext(Dispatchers.IO) {
-        runCatching {
-            getJSParserFile(uuid, false).source().useBuffer {
-                readUtf8()
-            }.takeIf {
+    suspend fun readJSParser(uuid: String): String? =
+        getJSParserFile(uuid, false)
+            .readTextAsync()
+            .getOrNull()?.takeIf {
                 it.isNotBlank()
             }
-        }.getOrNull()
-    }
 
     private suspend fun writeJSParser(uuid: String, source: Source): Boolean = withContext(Dispatchers.IO) {
         runCatching {
             getJSParserFile(uuid, true).preparedParentFolder().let {
-                it.sink().useBuffer {
-                    writeAll(source)
-                }
+                source.copyTo(it.sink())
                 val jsFile = getJSParserFile(uuid, false)
                 if (jsFile.exists()) jsFile.delete()
                 it.renameTo(jsFile)
@@ -190,9 +177,7 @@ object JSFileManager {
             getJSDependenciesDir(uuid).listFiles { file ->
                 file.isFile && EXTENSION_JS.equals(file.extension, true)
             }?.mapNotNull {
-                it.source().useBuffer {
-                    readUtf8()
-                }.takeIf { str ->
+                it.readText().takeIf { str ->
                     str.isNotBlank()
                 }
             }
@@ -205,9 +190,7 @@ object JSFileManager {
             val downloadFile = getJSDependenciesDir(uuid).asParentOf("$fileName.$EXTENSION_JS.$EXTENSION_DOWNLOAD")
             val jsFile = getJSDependenciesDir(uuid).asParentOf("$fileName.$EXTENSION_JS")
             downloadFile.preparedParentFolder().let {
-                it.sink().useBuffer {
-                    writeAll(source)
-                }
+                source.copyTo(it.sink())
                 if (jsFile.exists()) jsFile.delete()
                 it.renameTo(jsFile)
             }

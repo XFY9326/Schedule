@@ -116,7 +116,7 @@ dependencies {
     ksp(project(path = ":AnnotationKSP"))
 
     // ATools
-    val atoolsVersion = "0.0.6"
+    val atoolsVersion = "0.0.7"
     implementation("io.github.xfy9326.atools:atools-io:$atoolsVersion")
     implementation("io.github.xfy9326.atools:atools-ui:$atoolsVersion")
     implementation("io.github.xfy9326.atools:atools-crash:$atoolsVersion")
@@ -162,7 +162,7 @@ dependencies {
     testImplementation("androidx.room:room-testing:$roomVersion")
 
     // Material Design
-    implementation("com.google.android.material:material:1.5.0")
+    implementation("com.google.android.material:material:1.6.0")
 
     // Coil
     implementation("io.coil-kt:coil:1.4.0")
@@ -171,7 +171,7 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.9.3")
 
     // Ktor
-    val ktorVersion = "2.0.0"
+    val ktorVersion = "2.0.1"
     implementation("io.ktor:ktor-client-okhttp:$ktorVersion")
     implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
     implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
