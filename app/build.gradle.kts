@@ -127,18 +127,19 @@ dependencies {
     implementation("io.github.xfy9326.atools:atools-io-serialization-json:$atoolsVersion")
 
     // Kotlin Coroutines
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.2")
 
     // Kotlin Serialization
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.3")
 
     // AndroidX
-    implementation("androidx.core:core-ktx:1.7.0")
+    implementation("androidx.core:core-ktx:1.8.0")
 
     implementation("androidx.core:core-splashscreen:1.0.0-rc01")
 
-    implementation("androidx.appcompat:appcompat:1.4.1")
-    implementation("androidx.appcompat:appcompat-resources:1.4.1")
+    val appCompatVersion = "1.4.2"
+    implementation("androidx.appcompat:appcompat:$appCompatVersion")
+    implementation("androidx.appcompat:appcompat-resources:$appCompatVersion")
 
     implementation("androidx.activity:activity-ktx:1.4.0")
     implementation("androidx.fragment:fragment-ktx:1.4.1")
@@ -163,7 +164,7 @@ dependencies {
     testImplementation("androidx.room:room-testing:$roomVersion")
 
     // Material Design
-    implementation("com.google.android.material:material:1.6.0")
+    implementation("com.google.android.material:material:1.6.1")
 
     // Coil
     implementation("io.coil-kt:coil:2.1.0")
