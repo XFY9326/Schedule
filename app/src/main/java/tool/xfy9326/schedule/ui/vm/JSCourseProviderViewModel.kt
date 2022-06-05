@@ -1,10 +1,10 @@
 package tool.xfy9326.schedule.ui.vm
 
+import io.github.xfy9326.atools.livedata.MutableEventLiveData
+import io.github.xfy9326.atools.livedata.postEvent
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
-import lib.xfy9326.livedata.MutableEventLiveData
-import lib.xfy9326.livedata.postEvent
 import tool.xfy9326.schedule.beans.ScheduleImportContent
 import tool.xfy9326.schedule.content.js.JSCourseParser
 import tool.xfy9326.schedule.content.js.JSCourseProvider

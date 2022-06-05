@@ -2,8 +2,8 @@ package tool.xfy9326.schedule.ui.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import lib.xfy9326.android.kit.getStringArray
-import lib.xfy9326.android.kit.setOnSingleClickListener
+import io.github.xfy9326.atools.ui.getStringArray
+import io.github.xfy9326.atools.ui.setOnSingleClickListener
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.CourseTime
 import tool.xfy9326.schedule.beans.CourseTime.Companion.getWeeksDescriptionText

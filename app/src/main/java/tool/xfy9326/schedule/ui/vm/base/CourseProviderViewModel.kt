@@ -4,12 +4,12 @@ package tool.xfy9326.schedule.ui.vm.base
 
 import androidx.annotation.CallSuper
 import androidx.lifecycle.viewModelScope
+import io.github.xfy9326.atools.livedata.MutableEventLiveData
+import io.github.xfy9326.atools.livedata.postEvent
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
-import lib.xfy9326.livedata.MutableEventLiveData
-import lib.xfy9326.livedata.postEvent
 import tool.xfy9326.schedule.beans.ScheduleImportContent
 import tool.xfy9326.schedule.content.base.AbstractCourseImportConfig
 import tool.xfy9326.schedule.content.base.AbstractCourseParser

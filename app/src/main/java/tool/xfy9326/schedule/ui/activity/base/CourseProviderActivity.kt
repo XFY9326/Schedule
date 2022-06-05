@@ -5,12 +5,11 @@ import androidx.annotation.CallSuper
 import androidx.core.os.bundleOf
 import androidx.lifecycle.lifecycleScope
 import androidx.viewbinding.ViewBinding
+import io.github.xfy9326.atools.core.castNonNull
+import io.github.xfy9326.atools.livedata.observeEvent
+import io.github.xfy9326.atools.ui.startActivity
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import lib.xfy9326.android.kit.startActivity
-import lib.xfy9326.kit.castNonNull
-import lib.xfy9326.kit.getDeepStackTraceString
-import lib.xfy9326.livedata.observeEvent
 import tool.xfy9326.schedule.beans.ScheduleImportRequestParams
 import tool.xfy9326.schedule.content.base.AbstractCourseParser
 import tool.xfy9326.schedule.content.base.AbstractCourseProvider
@@ -23,6 +22,7 @@ import tool.xfy9326.schedule.ui.dialog.ImportCourseConflictDialog
 import tool.xfy9326.schedule.ui.dialog.ScheduleImportSuccessDialog
 import tool.xfy9326.schedule.ui.dialog.StrictImportModeWarningDialog
 import tool.xfy9326.schedule.ui.vm.base.CourseProviderViewModel
+import tool.xfy9326.schedule.utils.getDeepStackTraceString
 import tool.xfy9326.schedule.utils.schedule.ScheduleImportManager
 import tool.xfy9326.schedule.utils.view.DialogUtils
 
@@ -102,9 +102,11 @@ abstract class CourseProviderActivity<I, P1 : AbstractCourseProvider<*>, P2 : Ab
     private fun internalCourseImportFinish(result: ScheduleImportManager.ImportResult, editScheduleId: Long?) {
         if (editScheduleId != null) {
             if (result == ScheduleImportManager.ImportResult.SUCCESS_WITH_IGNORABLE_CONFLICTS) {
-                ImportCourseConflictDialog.showDialog(supportFragmentManager, bundleOf(
-                    EXTRA_EDIT_SCHEDULE_ID to editScheduleId
-                ))
+                ImportCourseConflictDialog.showDialog(
+                    supportFragmentManager, bundleOf(
+                        EXTRA_EDIT_SCHEDULE_ID to editScheduleId
+                    )
+                )
             } else if (result == ScheduleImportManager.ImportResult.SUCCESS) {
                 ScheduleImportSuccessDialog.showDialog(supportFragmentManager, editScheduleId)
             }

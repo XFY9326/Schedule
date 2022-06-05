@@ -15,11 +15,11 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.transition.Fade
 import com.google.android.material.button.MaterialButton
+import io.github.xfy9326.atools.ui.getDrawableCompat
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import lib.xfy9326.android.kit.getDrawableCompat
 import tool.xfy9326.schedule.R
 import java.lang.ref.WeakReference
 

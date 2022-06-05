@@ -1,7 +1,7 @@
 package tool.xfy9326.schedule.ui.activity.module
 
 import androidx.activity.result.contract.ActivityResultContracts
-import lib.xfy9326.livedata.observeEvent
+import io.github.xfy9326.atools.livedata.observeEvent
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.databinding.ActivityScheduleBinding
 import tool.xfy9326.schedule.kt.showSnackBar

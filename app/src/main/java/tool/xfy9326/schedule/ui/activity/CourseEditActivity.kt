@@ -7,10 +7,10 @@ import android.view.Menu
 import android.view.MenuItem
 import com.google.android.material.snackbar.Snackbar
 import com.jaredrummler.android.colorpicker.ColorPickerDialogListener
-import lib.xfy9326.android.kit.getText
-import lib.xfy9326.android.kit.hideKeyboard
-import lib.xfy9326.android.kit.setOnSingleClickListener
-import lib.xfy9326.livedata.observeEvent
+import io.github.xfy9326.atools.livedata.observeEvent
+import io.github.xfy9326.atools.ui.getText
+import io.github.xfy9326.atools.ui.hideKeyboard
+import io.github.xfy9326.atools.ui.setOnSingleClickListener
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.Course
 import tool.xfy9326.schedule.beans.CourseTime

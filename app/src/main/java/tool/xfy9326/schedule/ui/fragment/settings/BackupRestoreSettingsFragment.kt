@@ -4,12 +4,12 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.os.bundleOf
-import lib.xfy9326.android.kit.io.MIMEConst
-import lib.xfy9326.livedata.observeEvent
+import io.github.xfy9326.atools.livedata.observeEvent
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.BatchResult
 import tool.xfy9326.schedule.kt.setOnPrefClickListener
 import tool.xfy9326.schedule.kt.showSnackBar
+import tool.xfy9326.schedule.tools.MIMEConst
 import tool.xfy9326.schedule.ui.dialog.ImportCourseConflictDialog
 import tool.xfy9326.schedule.ui.dialog.MultiItemSelectDialog
 import tool.xfy9326.schedule.ui.fragment.base.AbstractSettingsFragment
@@ -72,9 +72,11 @@ class BackupRestoreSettingsFragment : AbstractSettingsFragment() {
         }
         viewModel.restoreScheduleFromUriResult.observeEvent(viewLifecycleOwner) {
             if (it.second) {
-                ImportCourseConflictDialog.showDialog(childFragmentManager, bundleOf(
-                    EXTRA_BATCH_RESULT to it.first
-                ))
+                ImportCourseConflictDialog.showDialog(
+                    childFragmentManager, bundleOf(
+                        EXTRA_BATCH_RESULT to it.first
+                    )
+                )
             } else {
                 showRestoreResult(it.first)
             }

@@ -5,6 +5,8 @@ import android.content.Context
 import android.net.Uri
 import android.os.Environment
 import androidx.core.content.getSystemService
+import androidx.core.net.toUri
+import io.github.xfy9326.atools.ui.openUrlInBrowser
 import tool.xfy9326.schedule.kt.PROJECT_ID
 import java.io.File
 
@@ -40,6 +42,6 @@ object DownloadUtils {
     }
 
     fun requestDownloadFileByBrowser(context: Context, url: String) {
-        IntentUtils.openUrlInBrowser(context, url)
+        context.openUrlInBrowser(url.toUri())
     }
 }

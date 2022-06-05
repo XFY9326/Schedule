@@ -5,8 +5,8 @@ import android.view.HapticFeedbackConstants
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.isVisible
-import lib.xfy9326.android.kit.getColorCompat
-import lib.xfy9326.android.kit.setOnSingleClickListener
+import io.github.xfy9326.atools.ui.getColorCompat
+import io.github.xfy9326.atools.ui.setOnSingleClickListener
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.Schedule
 import tool.xfy9326.schedule.beans.ScheduleWrapper

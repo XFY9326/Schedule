@@ -11,12 +11,18 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.distinctUntilChanged
 import com.google.android.material.snackbar.Snackbar
+import io.github.xfy9326.atools.ui.getColorCompat
+import io.github.xfy9326.atools.ui.relaunchApp
+import io.github.xfy9326.atools.ui.setLightSystemBar
+import io.github.xfy9326.atools.ui.showToast
+import io.github.xfy9326.atools.ui.tryStartActivity
 import kotlinx.coroutines.flow.Flow
-import lib.xfy9326.android.kit.*
 import tool.xfy9326.schedule.BuildConfig
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.SystemBarAppearance
 import tool.xfy9326.schedule.ui.activity.module.ScheduleLaunchModule
+import tool.xfy9326.schedule.utils.getBackgroundColor
+import tool.xfy9326.schedule.utils.isUsingNightMode
 
 const val PROJECT_ID = BuildConfig.PROJECT_NAME
 
@@ -26,16 +32,16 @@ fun Context.crashRelaunch() {
     }
 }
 
-fun Context.appErrorRelaunch(crashLogName: String?) {
+fun Context.appErrorRelaunch(crashLogPath: String) {
     relaunchApp(1) {
         putExtra(ScheduleLaunchModule.INTENT_EXTRA_APP_ERROR, true)
-        putExtra(ScheduleLaunchModule.INTENT_EXTRA_APP_ERROR_CRASH_LOG, crashLogName)
+        putExtra(ScheduleLaunchModule.INTENT_EXTRA_APP_ERROR_CRASH_LOG, crashLogPath)
     }
 }
 
 fun Context.tryStartActivity(intent: Intent, options: Bundle? = null, showToast: Boolean = true) =
-    tryStartActivity(intent, options) {
-        if (showToast) showToast(R.string.application_launch_failed)
+    tryStartActivity(intent, options).also {
+        if (!it && showToast) showToast(R.string.application_launch_failed)
     }
 
 fun Window.setSystemBarAppearance(systemBarAppearance: SystemBarAppearance) {

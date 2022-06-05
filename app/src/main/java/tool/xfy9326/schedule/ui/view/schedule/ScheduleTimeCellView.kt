@@ -8,13 +8,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.widget.LinearLayoutCompat
-import lib.xfy9326.kit.NEW_LINE
 import tool.xfy9326.schedule.beans.SchedulePredefine
 import tool.xfy9326.schedule.beans.ScheduleStyles
 import tool.xfy9326.schedule.beans.ScheduleText
 import tool.xfy9326.schedule.beans.ScheduleTime
 import tool.xfy9326.schedule.beans.ScheduleTime.Companion.endTimeStr
 import tool.xfy9326.schedule.beans.ScheduleTime.Companion.startTimeStr
+import tool.xfy9326.schedule.utils.NEW_LINE
 
 @SuppressLint("ViewConstructor")
 class ScheduleTimeCellView(

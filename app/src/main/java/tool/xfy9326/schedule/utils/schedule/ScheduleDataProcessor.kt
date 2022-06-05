@@ -1,12 +1,12 @@
 package tool.xfy9326.schedule.utils.schedule
 
+import io.github.xfy9326.atools.coroutines.AppScope
+import io.github.xfy9326.atools.coroutines.combine
+import io.github.xfy9326.atools.coroutines.combineTransform
+import io.github.xfy9326.atools.coroutines.withTryLock
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.sync.Mutex
-import lib.xfy9326.android.kit.ApplicationScope
-import lib.xfy9326.kit.combine
-import lib.xfy9326.kit.combineTransform
-import lib.xfy9326.kit.withTryLock
 import tool.xfy9326.schedule.beans.Schedule
 import tool.xfy9326.schedule.beans.ScheduleBuildBundle
 import tool.xfy9326.schedule.data.AppDataStore
@@ -16,16 +16,18 @@ import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
 object ScheduleDataProcessor {
     private val hasPreloadLock = Mutex()
 
-    private fun <T> Flow<T>.preload() = flowOn(Dispatchers.IO).shareIn(ApplicationScope, SharingStarted.Eagerly, 1)
+    private fun <T> Flow<T>.preload() = flowOn(Dispatchers.IO).shareIn(AppScope, SharingStarted.Eagerly, 1)
 
-    suspend fun preload() = withContext(Dispatchers.IO + SupervisorJob()) {
-        hasPreloadLock.withTryLock {
-            listOf(
-                async { weekNumInfoFlow.firstOrNull() },
-                async { scheduleViewDataFlow.firstOrNull() },
-                async { scheduleBackgroundFlow.firstOrNull() }
-            ).awaitAll()
-        }
+    suspend fun preload() = withContext(Dispatchers.Default) {
+        runCatching {
+            hasPreloadLock.withTryLock {
+                listOf(
+                    async { weekNumInfoFlow.firstOrNull() },
+                    async { scheduleViewDataFlow.firstOrNull() },
+                    async { scheduleBackgroundFlow.firstOrNull() }
+                ).awaitAll()
+            }
+        }.isSuccess
     }
 
     val currentScheduleFlow =
@@ -48,7 +50,7 @@ object ScheduleDataProcessor {
     ).preload()
 
     fun addCurrentScheduleCourseDataGlobalListener(listener: suspend (Schedule) -> Unit): Job =
-        ApplicationScope.launch(Dispatchers.IO) {
+        AppScope.launch(Dispatchers.IO) {
             currentScheduleCourseDataFlow.collect {
                 listener(it.first)
             }

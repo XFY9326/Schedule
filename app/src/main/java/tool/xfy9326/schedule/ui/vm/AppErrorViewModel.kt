@@ -1,23 +1,24 @@
 package tool.xfy9326.schedule.ui.vm
 
 import androidx.lifecycle.viewModelScope
+import io.github.xfy9326.atools.io.okio.readText
+import io.github.xfy9326.atools.livedata.MutableEventLiveData
+import io.github.xfy9326.atools.livedata.postEvent
+import io.github.xfy9326.atools.livedata.setEvent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import lib.xfy9326.livedata.MutableEventLiveData
-import lib.xfy9326.livedata.postEvent
-import lib.xfy9326.livedata.setEvent
-import tool.xfy9326.schedule.io.CrashFileManager
 import tool.xfy9326.schedule.ui.vm.base.AbstractViewModel
+import java.io.File
 
 class AppErrorViewModel : AbstractViewModel() {
     val crashLog = MutableEventLiveData<String?>()
 
-    fun loadCrashLogDetail(crashLogFileName: String?) {
-        if (crashLogFileName == null) {
+    fun loadCrashLogDetail(crashLogFilePath: String?) {
+        if (crashLogFilePath == null) {
             crashLog.setEvent(null)
         } else {
             viewModelScope.launch(Dispatchers.IO) {
-                crashLog.postEvent(CrashFileManager.readCrashLog(crashLogFileName))
+                crashLog.postEvent(File(crashLogFilePath).readText())
             }
         }
     }

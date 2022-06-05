@@ -2,8 +2,8 @@ package tool.xfy9326.schedule.utils.ics
 
 import android.content.Context
 import android.net.Uri
-import lib.xfy9326.android.kit.io.IOManager
-import lib.xfy9326.android.kit.io.kt.writeText
+import io.github.xfy9326.atools.io.IOManager
+import io.github.xfy9326.atools.io.serialization.json.writeJSONAsync
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.Course
 import tool.xfy9326.schedule.beans.Course.Companion.iterateAll
@@ -27,7 +27,7 @@ class ScheduleICSHelper constructor(schedule: Schedule, private val courses: Lis
             courses.iterateAll { course, courseTime ->
                 createCourseTimeVEvent(iCal, course, courseTime)
             }
-            return uri.writeText(iCal.build())
+            return uri.writeJSONAsync(iCal.build()).isSuccess
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -42,10 +42,12 @@ class ScheduleICSHelper constructor(schedule: Schedule, private val courses: Lis
             }
         } else if (weekNumPattern.type == SPACED || weekNumPattern.type == SERIAL) {
             CourseTimeUtils.getRealSectionTime(scheduleCalculateTimes, weekNumPattern.start + 1, sectionTime = courseTime.sectionTime).let { time ->
-                val rrule = ScheduleICSWriter.RRULE(weekNumPattern.interval,
+                val rrule = ScheduleICSWriter.RRULE(
+                    weekNumPattern.interval,
                     weekNumPattern.amount,
                     courseTime.sectionTime.weekDay,
-                    scheduleCalculateTimes.weekStart)
+                    scheduleCalculateTimes.weekStart
+                )
                 iCal.addEvent(time.first, time.second, course.name, courseTime.location, getEventDescription(course), rrule)
             }
         } else if (weekNumPattern.type == MESSY) {

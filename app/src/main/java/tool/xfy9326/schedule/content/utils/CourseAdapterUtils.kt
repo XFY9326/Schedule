@@ -2,22 +2,21 @@
 
 package tool.xfy9326.schedule.content.utils
 
+import io.github.xfy9326.atools.core.isEven
+import io.github.xfy9326.atools.core.isOdd
 import io.ktor.client.*
 import io.ktor.client.engine.okhttp.*
-import io.ktor.client.features.*
-import io.ktor.client.features.cookies.*
-import io.ktor.client.features.json.*
-import io.ktor.client.features.json.serializer.*
-import lib.xfy9326.kit.isEven
-import lib.xfy9326.kit.isOdd
-import lib.xfy9326.kit.minAndMax
+import io.ktor.client.plugins.*
+import io.ktor.client.plugins.contentnegotiation.*
+import io.ktor.client.plugins.cookies.*
+import io.ktor.serialization.kotlinx.json.*
+import kotlinx.serialization.json.Json
 import tool.xfy9326.schedule.beans.CourseTime
 import tool.xfy9326.schedule.beans.TimePeriod
 import tool.xfy9326.schedule.beans.WeekDay
+import tool.xfy9326.schedule.utils.minAndMax
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.collections.HashSet
 
 object CourseAdapterUtils {
 
@@ -45,11 +44,13 @@ object CourseAdapterUtils {
             }
         }
         if (supportJson) {
-            install(JsonFeature) {
-                serializer = KotlinxSerializer(kotlinx.serialization.json.Json {
-                    ignoreUnknownKeys = true
-                    encodeDefaults = true
-                })
+            install(ContentNegotiation) {
+                json(
+                    Json {
+                        ignoreUnknownKeys = true
+                        encodeDefaults = true
+                    }
+                )
             }
         }
     }

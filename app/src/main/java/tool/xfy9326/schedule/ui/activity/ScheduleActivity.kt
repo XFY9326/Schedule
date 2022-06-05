@@ -4,28 +4,27 @@ import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.os.Build
 import android.os.Bundle
-import android.view.*
-import androidx.core.view.*
+import android.view.Menu
+import android.view.MenuItem
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.navigation.NavigationView
-import lib.xfy9326.android.kit.getColorCompat
-import lib.xfy9326.android.kit.setIconTint
-import lib.xfy9326.android.kit.setOnSingleClickListener
-import lib.xfy9326.android.kit.startActivity
-import lib.xfy9326.livedata.observeEvent
+import io.github.xfy9326.atools.livedata.observeEvent
+import io.github.xfy9326.atools.ui.getColorCompat
+import io.github.xfy9326.atools.ui.setIconTint
+import io.github.xfy9326.atools.ui.setOnSingleClickListener
+import io.github.xfy9326.atools.ui.startActivity
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.Day
 import tool.xfy9326.schedule.beans.WeekNumType
 import tool.xfy9326.schedule.beans.WeekNumType.Companion.getText
 import tool.xfy9326.schedule.databinding.ActivityScheduleBinding
-import tool.xfy9326.schedule.kt.*
+import tool.xfy9326.schedule.kt.setSystemBarAppearance
 import tool.xfy9326.schedule.ui.activity.base.ViewModelActivity
 import tool.xfy9326.schedule.ui.activity.module.*
 import tool.xfy9326.schedule.ui.adapter.ScheduleViewPagerAdapter
 import tool.xfy9326.schedule.ui.dialog.CourseDetailDialog
 import tool.xfy9326.schedule.ui.dialog.ScheduleControlPanel
 import tool.xfy9326.schedule.ui.vm.ScheduleViewModel
-import tool.xfy9326.schedule.utils.*
 import tool.xfy9326.schedule.utils.view.NightModeViewUtils
 
 class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBinding>(), NavigationView.OnNavigationItemSelectedListener {

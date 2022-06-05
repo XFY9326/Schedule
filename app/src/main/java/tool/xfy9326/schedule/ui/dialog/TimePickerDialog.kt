@@ -46,10 +46,12 @@ class TimePickerDialog : AppCompatDialogFragment(), TimePickerDialog.OnTimeSetLi
         )
 
     override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
-        setFragmentResult(DIALOG_TAG, bundleOf(
-            EXTRA_TAG to requireArguments().getString(EXTRA_TAG),
-            EXTRA_HOUR to hourOfDay,
-            EXTRA_MINUTE to minute
-        ))
+        setFragmentResult(
+            DIALOG_TAG, bundleOf(
+                EXTRA_TAG to requireArguments().getString(EXTRA_TAG),
+                EXTRA_HOUR to hourOfDay,
+                EXTRA_MINUTE to minute
+            )
+        )
     }
 }

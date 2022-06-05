@@ -1,8 +1,8 @@
 package tool.xfy9326.schedule.io
 
 import android.os.Environment
-import lib.xfy9326.android.kit.AppDir
-import lib.xfy9326.kit.asParentOf
+import io.github.xfy9326.atools.io.AppDir
+import io.github.xfy9326.atools.io.utils.asParentOf
 
 object PathManager {
     private const val DIR_SHARE = "SharedFiles"

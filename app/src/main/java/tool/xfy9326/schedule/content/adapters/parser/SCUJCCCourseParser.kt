@@ -1,7 +1,7 @@
 package tool.xfy9326.schedule.content.adapters.parser
 
-import lib.xfy9326.kit.EMPTY
-import lib.xfy9326.kit.nullIfBlank
+import io.github.xfy9326.atools.core.EMPTY
+import io.github.xfy9326.atools.core.nullIfBlank
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
 import tool.xfy9326.schedule.beans.*

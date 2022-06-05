@@ -4,17 +4,17 @@ import android.os.Bundle
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceDataStore
 import com.jaredrummler.android.colorpicker.ColorPreferenceCompat
-import lib.xfy9326.android.kit.getColorCompat
+import io.github.xfy9326.atools.datastore.preference.DataStorePreferenceAdapter
+import io.github.xfy9326.atools.ui.getColorCompat
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.data.ScheduleDataStore
-import tool.xfy9326.schedule.data.base.DataStorePreferenceAdapter
 import tool.xfy9326.schedule.tools.MaterialColorHelper
 import tool.xfy9326.schedule.ui.fragment.base.AbstractSettingsFragment
 
 class ScheduleColorSettingsFragment : AbstractSettingsFragment() {
     override val titleName: Int = R.string.schedule_color
     override val preferenceResId: Int = R.xml.settings_schedule_color
-    override val preferenceDataStore: PreferenceDataStore = object : DataStorePreferenceAdapter(ScheduleDataStore, lifecycleScope) {
+    override val preferenceDataStore: PreferenceDataStore = object : DataStorePreferenceAdapter(ScheduleDataStore.dataStore, lifecycleScope) {
         override fun getInt(key: String, defValue: Int): Int {
             when (key) {
                 ScheduleDataStore.toolBarTintColor.name ->

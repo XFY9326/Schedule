@@ -5,8 +5,8 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceDataStore
-import lib.xfy9326.android.kit.io.MIMEConst
-import lib.xfy9326.livedata.observeEvent
+import io.github.xfy9326.atools.io.utils.ImageMimeType
+import io.github.xfy9326.atools.livedata.observeEvent
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.data.ScheduleDataStore
 import tool.xfy9326.schedule.kt.setOnPrefClickListener
@@ -30,7 +30,7 @@ class ScheduleBackgroundSettingsFragment : AbstractSettingsFragment() {
 
     override fun onPrefInit(savedInstanceState: Bundle?) {
         setOnPrefClickListener(R.string.pref_select_schedule_background_image) {
-            selectBackgroundImage.launch(MIMEConst.MIME_IMAGE)
+            selectBackgroundImage.launch(ImageMimeType.IMAGE)
         }
     }
 

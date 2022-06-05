@@ -17,8 +17,10 @@ data class CourseCell(
 ) {
 
     constructor(course: Course, courseTime: CourseTime, weekNum: Int, isThisWeekCourse: Boolean) :
-            this(course.courseId, courseTime.timeId, course.name, courseTime.location,
-                courseTime.sectionTime, course.color, weekNum, isThisWeekCourse)
+            this(
+                course.courseId, courseTime.timeId, course.name, courseTime.location,
+                courseTime.sectionTime, course.color, weekNum, isThisWeekCourse
+            )
 
     operator fun compareTo(courseCell: CourseCell): Int {
         if (this === courseCell) return 0

@@ -2,16 +2,20 @@ package tool.xfy9326.schedule.utils
 
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
+import io.github.xfy9326.atools.coroutines.withTryLock
 import io.ktor.client.*
+import io.ktor.client.call.*
 import io.ktor.client.engine.okhttp.*
-import io.ktor.client.features.*
-import io.ktor.client.features.json.*
-import io.ktor.client.features.json.serializer.*
+import io.ktor.client.plugins.*
+import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.request.*
-import kotlinx.coroutines.*
+import io.ktor.serialization.kotlinx.json.*
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
-import lib.xfy9326.kit.withTryLock
+import kotlinx.coroutines.withContext
+import kotlinx.serialization.json.Json
 import tool.xfy9326.schedule.BuildConfig
 import tool.xfy9326.schedule.data.AppDataStore
 import tool.xfy9326.schedule.json.upgrade.UpdateIndex
@@ -98,13 +102,13 @@ object UpgradeUtils {
         return false
     }
 
-    private suspend fun getLatestVersion(client: HttpClient) = client.get<UpdateInfo>(LATEST_VERSION_CHECK_URL)
+    private suspend fun getLatestVersion(client: HttpClient) = client.get(LATEST_VERSION_CHECK_URL).body<UpdateInfo>()
 
-    private suspend fun getIndex(client: HttpClient) = client.get<List<UpdateIndex>>(INDEX_VERSION_URL)
+    private suspend fun getIndex(client: HttpClient) = client.get(INDEX_VERSION_URL).body<List<UpdateIndex>>()
 
     private fun getDefaultClient() = HttpClient(OkHttp) {
-        install(JsonFeature) {
-            serializer = KotlinxSerializer(kotlinx.serialization.json.Json { ignoreUnknownKeys = true })
+        install(ContentNegotiation) {
+            json(Json { ignoreUnknownKeys = true })
         }
         install(HttpRedirect)
     }

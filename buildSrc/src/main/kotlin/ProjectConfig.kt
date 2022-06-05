@@ -6,8 +6,8 @@ object ProjectConfig {
     const val targetSdk = 31
     const val minSdk = 23
     const val applicationId = "tool.xfy9326.schedule"
-    const val versionCode = 28
-    const val versionName = "1.3.9"
+    const val versionCode = 29
+    const val versionName = "1.4.0"
 
     val javaVersion = JavaVersion.VERSION_11
 }

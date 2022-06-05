@@ -9,10 +9,8 @@ import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.activityViewModels
-import lib.xfy9326.android.kit.setWindowPercent
-import lib.xfy9326.android.kit.showToast
-import lib.xfy9326.kit.getDeepStackTraceString
-import lib.xfy9326.livedata.observeEvent
+import io.github.xfy9326.atools.livedata.observeEvent
+import io.github.xfy9326.atools.ui.showToast
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.content.CourseImportConfigManager
 import tool.xfy9326.schedule.content.CourseImportConfigManager.Type.*
@@ -21,6 +19,8 @@ import tool.xfy9326.schedule.content.beans.JSConfig
 import tool.xfy9326.schedule.content.utils.JSConfigException
 import tool.xfy9326.schedule.databinding.DialogJsConfigPrepareBinding
 import tool.xfy9326.schedule.ui.vm.OnlineCourseImportViewModel
+import tool.xfy9326.schedule.utils.getDeepStackTraceString
+import tool.xfy9326.schedule.utils.setWindowPercent
 
 class JSConfigPrepareDialog : AppCompatDialogFragment() {
     companion object {
@@ -71,7 +71,7 @@ class JSConfigPrepareDialog : AppCompatDialogFragment() {
         binding.textViewConfigPrepareErrorDetail.setOnClickListener {
             val exception = lastRunException
             if (exception == null) {
-                showToast(R.string.crash_detail_not_found)
+                requireContext().showToast(R.string.crash_detail_not_found)
             } else {
                 CrashViewDialog.showDialog(childFragmentManager, exception.getDeepStackTraceString())
             }
@@ -98,11 +98,11 @@ class JSConfigPrepareDialog : AppCompatDialogFragment() {
             isRunning = false
             setShowView(true)
             lastRunException = it
-            showToast(it.getText(requireContext()))
+            requireContext().showToast(it.getText(requireContext()))
             requireDialog().setCancelable(true)
         }
         viewModel.configIgnorableWarning.observeEvent(this, javaClass.simpleName) {
-            showToast(it.getText(requireContext()))
+            requireContext().showToast(it.getText(requireContext()))
         }
 
         runPreparing()

@@ -2,22 +2,24 @@
 
 package tool.xfy9326.schedule.data.base
 
-import android.app.Application
-import androidx.datastore.preferences.core.*
+import android.content.Context
+import androidx.datastore.preferences.core.MutablePreferences
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.preferencesDataStore
+import io.github.xfy9326.atools.core.AppContext
+import io.github.xfy9326.atools.core.tryEnumValueOf
+import io.github.xfy9326.atools.coroutines.AppScope
+import io.github.xfy9326.atools.datastore.preference.DataStorePreferenceAdapter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.*
-import lib.xfy9326.android.kit.ApplicationInstance
-import lib.xfy9326.android.kit.ApplicationScope
-import lib.xfy9326.kit.tryEnumValueOf
-import kotlin.properties.ReadOnlyProperty
 
 abstract class AbstractDataStore(val name: String) {
-    private val Application.dataStore by preferencesDataStore(name)
-    val dataStore by lazy { ApplicationInstance.dataStore }
-    protected val readOnlyFlow = dataStore.data.shareIn(ApplicationScope, SharingStarted.Eagerly, 1)
+    private val Context.dataStore by preferencesDataStore(name)
+    val dataStore by lazy { AppContext.dataStore }
+    protected val readOnlyFlow = dataStore.data.shareIn(AppScope, SharingStarted.Eagerly, 1)
 
-    fun getPreferenceDataStore(scope: CoroutineScope) = DataStorePreferenceAdapter(this, scope)
+    fun getPreferenceDataStore(scope: CoroutineScope) = DataStorePreferenceAdapter(dataStore, scope)
 
     fun <R> read(transform: suspend (pref: Preferences) -> R) = readOnlyFlow.map(transform).distinctUntilChanged()
 
@@ -48,7 +50,9 @@ abstract class AbstractDataStore(val name: String) {
     }.first()
 
     protected inline fun <reified E : Enum<E>> Preferences.Key<String>.readEnumAsFlow(defaultValue: E) = read {
-        tryEnumValueOf(it[this]) ?: defaultValue
+        it[this]?.let { value ->
+            tryEnumValueOf(value)
+        } ?: defaultValue
     }
 
     protected fun <T> Preferences.Key<T>.readAndInitAsFlow(initBlock: suspend () -> T?) = read {
@@ -85,25 +89,4 @@ abstract class AbstractDataStore(val name: String) {
             it.clear()
         }
     }
-
-    protected fun booleanPreferencesKey() =
-        ReadOnlyProperty<Any, Preferences.Key<Boolean>> { _, property -> booleanPreferencesKey(property.name) }
-
-    protected fun stringPreferencesKey() =
-        ReadOnlyProperty<Any, Preferences.Key<String>> { _, property -> stringPreferencesKey(property.name) }
-
-    protected fun intPreferencesKey() =
-        ReadOnlyProperty<Any, Preferences.Key<Int>> { _, property -> intPreferencesKey(property.name) }
-
-    protected fun longPreferencesKey() =
-        ReadOnlyProperty<Any, Preferences.Key<Long>> { _, property -> longPreferencesKey(property.name) }
-
-    protected fun floatPreferencesKey() =
-        ReadOnlyProperty<Any, Preferences.Key<Float>> { _, property -> floatPreferencesKey(property.name) }
-
-    protected fun doublePreferencesKey() =
-        ReadOnlyProperty<Any, Preferences.Key<Double>> { _, property -> doublePreferencesKey(property.name) }
-
-    protected fun stringSetPreferencesKey() =
-        ReadOnlyProperty<Any, Preferences.Key<Set<String>>> { _, property -> stringSetPreferencesKey(property.name) }
 }

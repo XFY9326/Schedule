@@ -12,11 +12,11 @@ import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
+import io.github.xfy9326.atools.livedata.observeEvent
+import io.github.xfy9326.atools.ui.getRealScreenSize
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import lib.xfy9326.android.kit.getRealScreenSize
-import lib.xfy9326.livedata.observeEvent
 import tool.xfy9326.schedule.ui.activity.module.ScheduleBackgroundModule
 import tool.xfy9326.schedule.ui.vm.SettingsViewModel
 import tool.xfy9326.schedule.utils.view.ScheduleViewHelper

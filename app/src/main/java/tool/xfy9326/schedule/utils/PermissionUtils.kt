@@ -5,10 +5,10 @@ import android.content.Context
 import android.content.pm.PackageManager
 import androidx.activity.result.ActivityResultLauncher
 import androidx.core.content.ContextCompat
+import io.github.xfy9326.atools.coroutines.withTryLock
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.withContext
-import lib.xfy9326.kit.withTryLock
 
 
 object PermissionUtils {
@@ -26,16 +26,21 @@ object PermissionUtils {
 
     private suspend fun checkPermission(context: Context, launcher: ActivityResultLauncher<Array<String>>, permissions: Array<String>): Boolean =
         withContext(Dispatchers.Main.immediate) {
-            permissionRequestLock.withTryLock {
-                val invalidPermissions = permissions.filter {
-                    ContextCompat.checkSelfPermission(context, it) != PackageManager.PERMISSION_GRANTED
-                }
-                return@withTryLock if (invalidPermissions.isEmpty()) {
-                    true
-                } else {
-                    launcher.launch(invalidPermissions.toTypedArray())
+            permissionRequestLock.withTryLock(
+                action = {
+                    val invalidPermissions = permissions.filter {
+                        ContextCompat.checkSelfPermission(context, it) != PackageManager.PERMISSION_GRANTED
+                    }
+                    return@withTryLock if (invalidPermissions.isEmpty()) {
+                        true
+                    } else {
+                        launcher.launch(invalidPermissions.toTypedArray())
+                        false
+                    }
+                },
+                onHasLocked = {
                     false
                 }
-            } ?: false
+            )
         }
 }

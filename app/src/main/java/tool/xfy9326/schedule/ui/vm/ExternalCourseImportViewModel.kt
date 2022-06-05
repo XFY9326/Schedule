@@ -2,9 +2,9 @@ package tool.xfy9326.schedule.ui.vm
 
 import androidx.annotation.CallSuper
 import androidx.lifecycle.viewModelScope
-import lib.xfy9326.android.kit.io.kt.readText
-import lib.xfy9326.livedata.MutableEventLiveData
-import lib.xfy9326.livedata.postEvent
+import io.github.xfy9326.atools.io.okio.readText
+import io.github.xfy9326.atools.livedata.MutableEventLiveData
+import io.github.xfy9326.atools.livedata.postEvent
 import tool.xfy9326.schedule.content.ExternalCourseProcessorRegistry
 import tool.xfy9326.schedule.content.beans.ExternalCourseImportData
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
@@ -52,7 +52,11 @@ class ExternalCourseImportViewModel : AbstractViewModel() {
         scheduleImportManager.importCourse(viewModelScope, currentSchedule, newScheduleName) {
             val params = importParams
             val fileContentList = params.fileUriList.map {
-                it.readText() ?: CourseAdapterException.Error.PARSE_PAGE_ERROR.report(msg = "Failed to read $it")
+                try {
+                    it.readText()
+                } catch (e: Exception) {
+                    CourseAdapterException.Error.PARSE_PAGE_ERROR.report(msg = "Failed to read $it")
+                }
             }
             when (params) {
                 is ExternalCourseImportData.Origin.External ->

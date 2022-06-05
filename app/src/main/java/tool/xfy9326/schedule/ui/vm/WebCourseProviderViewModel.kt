@@ -1,9 +1,9 @@
 package tool.xfy9326.schedule.ui.vm
 
+import io.github.xfy9326.atools.livedata.MutableEventLiveData
+import io.github.xfy9326.atools.livedata.postEvent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.sync.Mutex
-import lib.xfy9326.livedata.MutableEventLiveData
-import lib.xfy9326.livedata.postEvent
 import tool.xfy9326.schedule.beans.ScheduleImportContent
 import tool.xfy9326.schedule.beans.ScheduleImportRequestParams
 import tool.xfy9326.schedule.beans.WebPageContent
@@ -26,11 +26,13 @@ class WebCourseProviderViewModel : AbstractWebCourseProviderViewModel<WebPageCon
                 onRun = {
                     val result = CourseImportHelper.analyseWebPage(importParams, it)
                     if (result != null) {
-                        validateHtmlPage.postEvent(ScheduleImportRequestParams(
-                            isCurrentSchedule,
-                            result.second,
-                            result.first
-                        ))
+                        validateHtmlPage.postEvent(
+                            ScheduleImportRequestParams(
+                                isCurrentSchedule,
+                                result.second,
+                                result.first
+                            )
+                        )
                     } else {
                         validateHtmlPage.postEvent(null)
                     }

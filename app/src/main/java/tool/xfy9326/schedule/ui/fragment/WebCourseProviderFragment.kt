@@ -8,9 +8,10 @@ import android.webkit.*
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import io.github.xfy9326.atools.ui.*
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
-import lib.xfy9326.android.kit.*
+import tool.xfy9326.schedule.BuildConfig
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.databinding.FragmentWebCourseProviderBinding
@@ -74,7 +75,7 @@ class WebCourseProviderFragment : ViewBindingFragment<FragmentWebCourseProviderB
 
                 override fun onJsAlert(view: WebView?, url: String?, message: String?, result: JsResult?): Boolean {
                     if (message != null && result != null) {
-                        showToast(message)
+                        requireContext().showToast(message)
                         result.confirm()
                         return true
                     }

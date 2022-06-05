@@ -5,10 +5,10 @@ package tool.xfy9326.schedule.beans
 import android.os.Parcelable
 import androidx.annotation.IntegerRes
 import androidx.datastore.preferences.core.Preferences
+import io.github.xfy9326.atools.io.IOManager
 import kotlinx.parcelize.Parcelize
-import lib.xfy9326.android.kit.Sp
-import lib.xfy9326.android.kit.io.IOManager
 import tool.xfy9326.schedule.R
+import tool.xfy9326.schedule.annotation.Sp
 import tool.xfy9326.schedule.data.ScheduleDataStore
 
 enum class ScheduleText(val prefKey: Preferences.Key<Int>, @IntegerRes private val defaultTextSize: Int) {
@@ -54,6 +54,7 @@ enum class ScheduleText(val prefKey: Preferences.Key<Int>, @IntegerRes private v
         operator fun get(textType: ScheduleText) = (getRaw(textType) + sizeOffset).toFloat()
 
         fun getRaw(textType: ScheduleText) =
-            sizeMap[textType] ?: throw NoSuchElementException("This text type can't be found! May be you specific text type when create? Text type: $textType")
+            sizeMap[textType]
+                ?: throw NoSuchElementException("This text type can't be found! May be you specific text type when create? Text type: $textType")
     }
 }

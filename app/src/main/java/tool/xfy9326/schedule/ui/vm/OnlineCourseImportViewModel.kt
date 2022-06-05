@@ -2,14 +2,14 @@ package tool.xfy9326.schedule.ui.vm
 
 import android.net.Uri
 import androidx.lifecycle.viewModelScope
+import io.github.xfy9326.atools.livedata.MutableEventLiveData
+import io.github.xfy9326.atools.livedata.MutableNotifyLiveData
+import io.github.xfy9326.atools.livedata.postEvent
+import io.github.xfy9326.atools.livedata.postNotify
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import lib.xfy9326.livedata.MutableEventLiveData
-import lib.xfy9326.livedata.MutableNotifyLiveData
-import lib.xfy9326.livedata.postEvent
-import lib.xfy9326.livedata.postNotify
 import tool.xfy9326.schedule.content.CourseImportConfigManager
 import tool.xfy9326.schedule.content.beans.JSConfig
 import tool.xfy9326.schedule.data.AppDataStore

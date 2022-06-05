@@ -2,8 +2,8 @@ package tool.xfy9326.schedule.ui.vm
 
 import android.graphics.Bitmap
 import androidx.lifecycle.MutableLiveData
+import io.github.xfy9326.atools.io.utils.tryRecycle
 import kotlinx.coroutines.sync.Mutex
-import lib.xfy9326.android.kit.tryRecycle
 import tool.xfy9326.schedule.beans.NetworkCourseImportParams
 import tool.xfy9326.schedule.beans.NetworkProviderParams
 import tool.xfy9326.schedule.beans.ScheduleImportContent

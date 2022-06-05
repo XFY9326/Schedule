@@ -6,8 +6,8 @@ import androidx.annotation.StringRes
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceDataStore
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import lib.xfy9326.android.kit.show
-import lib.xfy9326.livedata.observeEvent
+import io.github.xfy9326.atools.livedata.observeEvent
+import io.github.xfy9326.atools.ui.show
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.kt.setOnPrefClickListener
@@ -16,6 +16,7 @@ import tool.xfy9326.schedule.ui.dialog.CrashViewDialog
 import tool.xfy9326.schedule.ui.fragment.base.AbstractSettingsFragment
 import tool.xfy9326.schedule.ui.vm.SettingsViewModel
 import tool.xfy9326.schedule.utils.IntentUtils
+import java.io.File
 
 class DebugSettingsFragment : AbstractSettingsFragment() {
     companion object {
@@ -67,7 +68,7 @@ class DebugSettingsFragment : AbstractSettingsFragment() {
                 }
                 TAG_OUTPUT_DEBUG_LOGS -> showDebugLogsSelectDialog(it.second, R.string.output_debug_logs) { log ->
                     viewModel.waitCreateLogFileName.write(log)
-                    outputLogFile.launch(log)
+                    outputLogFile.launch(log.name)
                 }
                 TAG_SEND_DEBUG_LOG -> showDebugLogsSelectDialog(it.second, R.string.send_debug_log) { log ->
                     IntentUtils.sendCrashReport(requireContext(), log)
@@ -84,13 +85,13 @@ class DebugSettingsFragment : AbstractSettingsFragment() {
         }
     }
 
-    private fun showDebugLogsSelectDialog(logNames: List<String>, @StringRes titleId: Int, onSelect: (String) -> Unit) {
+    private fun showDebugLogsSelectDialog(logNames: List<File>, @StringRes titleId: Int, onSelect: (File) -> Unit) {
         if (logNames.isEmpty()) {
             requireRootLayout()?.showSnackBar(R.string.no_debug_logs)
         } else {
             MaterialAlertDialogBuilder(requireContext()).apply {
                 setTitle(titleId)
-                setItems(logNames.map { it.substringBeforeLast(".") }.toTypedArray()) { _, i ->
+                setItems(logNames.map { it.nameWithoutExtension }.toTypedArray()) { _, i ->
                     onSelect(logNames[i])
                 }
                 setNegativeButton(android.R.string.cancel, null)

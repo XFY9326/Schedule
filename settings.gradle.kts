@@ -10,17 +10,15 @@ pluginManagement {
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
+        mavenLocal()
         google()
         mavenCentral()
+        maven { url = uri("https://jitpack.io") }
     }
 }
 
 include(":Annotation")
 include(":AnnotationKSP")
-include(":LiveDataTools")
-include(":ToolKit")
-include(":AndroidToolKit")
-include(":AndroidToolKitIO")
 include(":app")
 
 rootProject.name = "Schedule"

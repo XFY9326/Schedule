@@ -5,7 +5,6 @@ import androidx.annotation.IntRange
 import kotlinx.parcelize.Parcelize
 import tool.xfy9326.schedule.utils.CalendarUtils
 import java.util.*
-import kotlin.collections.ArrayList
 
 @Parcelize
 data class ScheduleTime(

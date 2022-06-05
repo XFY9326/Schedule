@@ -12,64 +12,14 @@
       <option name="url" value="https://repository.jboss.org/nexus/content/repositories/public/" />
     </remote-repository>
     <remote-repository>
-      <option name="id" value="MavenRepo" />
-      <option name="name" value="MavenRepo" />
-      <option name="url" value="https://repo.maven.apache.org/maven2/" />
-    </remote-repository>
-    <remote-repository>
-      <option name="id" value="maven2" />
-      <option name="name" value="maven2" />
-      <option name="url" value="https://maven.aliyun.com/repository/google" />
-    </remote-repository>
-    <remote-repository>
-      <option name="id" value="maven4" />
-      <option name="name" value="maven4" />
-      <option name="url" value="https://maven.aliyun.com/repository/central" />
-    </remote-repository>
-    <remote-repository>
-      <option name="id" value="maven" />
-      <option name="name" value="maven" />
-      <option name="url" value="https://maven.aliyun.com/repository/public" />
-    </remote-repository>
-    <remote-repository>
-      <option name="id" value="maven5" />
-      <option name="name" value="maven5" />
-      <option name="url" value="https://jitpack.io" />
-    </remote-repository>
-    <remote-repository>
-      <option name="id" value="BintrayJCenter" />
-      <option name="name" value="BintrayJCenter" />
-      <option name="url" value="https://jcenter.bintray.com/" />
-    </remote-repository>
-    <remote-repository>
-      <option name="id" value="maven3" />
-      <option name="name" value="maven3" />
-      <option name="url" value="https://maven.aliyun.com/repository/jcenter" />
-    </remote-repository>
-    <remote-repository>
-      <option name="id" value="Google" />
-      <option name="name" value="Google" />
+      <option name="id" value="eb87648f-28af-448e-b788-94a663ccea51" />
+      <option name="name" value="eb87648f-28af-448e-b788-94a663ccea51" />
       <option name="url" value="https://dl.google.com/dl/android/maven2/" />
     </remote-repository>
     <remote-repository>
-      <option name="id" value="MavenLocal" />
-      <option name="name" value="MavenLocal" />
-      <option name="url" value="file:$USER_HOME$/.m2/repository/" />
-    </remote-repository>
-    <remote-repository>
-      <option name="id" value="maven2" />
-      <option name="name" value="maven2" />
-      <option name="url" value="http://mirrors.163.com/maven/repository/maven-public" />
-    </remote-repository>
-    <remote-repository>
-      <option name="id" value="maven2" />
-      <option name="name" value="maven2" />
-      <option name="url" value="https://mirrors.163.com/maven/repository/maven-public" />
-    </remote-repository>
-    <remote-repository>
-      <option name="id" value="Gradle Central Plugin Repository" />
-      <option name="name" value="Gradle Central Plugin Repository" />
-      <option name="url" value="https://plugins.gradle.org/m2" />
+      <option name="id" value="fe741e92-c744-48fa-bfc7-bb510e88b1aa" />
+      <option name="name" value="fe741e92-c744-48fa-bfc7-bb510e88b1aa" />
+      <option name="url" value="https://jitpack.io" />
     </remote-repository>
   </component>
 </project>

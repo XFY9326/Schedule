@@ -13,10 +13,12 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import io.github.xfy9326.atools.ui.PermissionCompat
+import io.github.xfy9326.atools.ui.contract.PackageInstallPermissionContract
+import io.github.xfy9326.atools.ui.show
+import io.github.xfy9326.atools.ui.showToast
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import lib.xfy9326.android.kit.*
-import lib.xfy9326.android.kit.io.MIMEConst
 import tool.xfy9326.schedule.BuildConfig
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.data.AppDataStore
@@ -25,7 +27,9 @@ import tool.xfy9326.schedule.databinding.DialogUpgradeBinding
 import tool.xfy9326.schedule.json.upgrade.DownloadSource
 import tool.xfy9326.schedule.json.upgrade.UpdateInfo
 import tool.xfy9326.schedule.kt.PROJECT_ID
+import tool.xfy9326.schedule.tools.MIMEConst
 import tool.xfy9326.schedule.utils.DownloadUtils
+import tool.xfy9326.schedule.utils.setWindowPercent
 
 class UpgradeDialog : AppCompatDialogFragment() {
     companion object {
@@ -53,12 +57,12 @@ class UpgradeDialog : AppCompatDialogFragment() {
     private lateinit var updateInfo: UpdateInfo
     private var selectedSource: DownloadSource? = null
 
-    private val packageInstallPermission = registerForActivityResult(PackageInstallPermissionContact()) {
-        if (it) {
+    private val packageInstallPermission = registerForActivityResult(PackageInstallPermissionContract()) {
+        if (PermissionCompat.canInstallPackage(requireContext())) {
             selectedSource?.let(::downloadFile)
             selectedSource = null
         } else {
-            showToast(R.string.package_install_permission_denied)
+            requireContext().showToast(R.string.package_install_permission_denied)
         }
     }
 
@@ -107,7 +111,7 @@ class UpgradeDialog : AppCompatDialogFragment() {
                     val source = updateInfo.downloadSource.first()
                     withPackageInstallPermission(source, ::downloadFile)
                 }
-                else -> showToast(R.string.no_update_source)
+                else -> requireContext().showToast(R.string.no_update_source)
             }
         }
     }
@@ -134,10 +138,10 @@ class UpgradeDialog : AppCompatDialogFragment() {
                 val fileName = "${PROJECT_ID}_v${BuildConfig.VERSION_NAME}_${BuildConfig.VERSION_CODE}.apk"
                 val downloadId = DownloadUtils.requestDownloadFileDirectly(requireContext(), downloadSource.url, fileName, title, description, MIMEConst.MIME_APK)
                 if (downloadId == null) {
-                    showToast(R.string.directly_download_failed)
+                    requireContext().showToast(R.string.directly_download_failed)
                     DownloadUtils.requestDownloadFileByBrowser(requireContext(), downloadSource.url)
                 } else {
-                    showToast(R.string.start_download_update)
+                    requireContext().showToast(R.string.start_download_update)
                     AppDataStore.setApkUpdateDownloadId(downloadId)
                 }
             } else {

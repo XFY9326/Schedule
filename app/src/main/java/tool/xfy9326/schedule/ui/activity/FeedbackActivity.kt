@@ -11,17 +11,18 @@ import android.view.MenuItem
 import android.view.View
 import android.webkit.*
 import androidx.activity.result.contract.ActivityResultContract
+import androidx.core.net.toUri
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import io.github.xfy9326.atools.core.asArray
+import io.github.xfy9326.atools.ui.bindLifeCycle
+import io.github.xfy9326.atools.ui.openUrlInBrowser
 import kotlinx.coroutines.launch
-import lib.xfy9326.android.kit.bindLifeCycle
-import lib.xfy9326.kit.asArray
 import tool.xfy9326.schedule.BuildConfig
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.data.AppDataStore
 import tool.xfy9326.schedule.databinding.ActivityFeedbackBinding
 import tool.xfy9326.schedule.ui.activity.base.ViewBindingActivity
-import tool.xfy9326.schedule.utils.IntentUtils
 
 class FeedbackActivity : ViewBindingActivity<ActivityFeedbackBinding>() {
     companion object {
@@ -123,7 +124,7 @@ class FeedbackActivity : ViewBindingActivity<ActivityFeedbackBinding>() {
                 return true
             }
             R.id.menu_feedbackRefresh -> requireViewBinding().webViewFeedback.reload()
-            R.id.menu_feedbackOpenInBrowser -> IntentUtils.openUrlInBrowser(this, ONLINE_FEEDBACK_URL)
+            R.id.menu_feedbackOpenInBrowser -> openUrlInBrowser(ONLINE_FEEDBACK_URL.toUri())
         }
         return super.onOptionsItemSelected(item)
     }

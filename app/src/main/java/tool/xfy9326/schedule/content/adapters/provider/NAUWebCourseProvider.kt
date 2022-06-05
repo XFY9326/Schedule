@@ -1,6 +1,6 @@
 package tool.xfy9326.schedule.content.adapters.provider
 
-import lib.xfy9326.kit.asArray
+import io.github.xfy9326.atools.core.asArray
 import tool.xfy9326.schedule.content.base.WebCourseProvider
 import tool.xfy9326.schedule.content.beans.WebPageInfo
 

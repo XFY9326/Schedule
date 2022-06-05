@@ -5,7 +5,7 @@ import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.content.Intent
-import lib.xfy9326.android.kit.goAsync
+import io.github.xfy9326.atools.coroutines.goAsync
 import tool.xfy9326.schedule.BuildConfig
 import tool.xfy9326.schedule.utils.schedule.NextCourseUtils
 import tool.xfy9326.schedule.utils.view.NextCourseWidgetUtils

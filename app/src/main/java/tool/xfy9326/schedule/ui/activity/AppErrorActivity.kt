@@ -1,9 +1,9 @@
 package tool.xfy9326.schedule.ui.activity
 
 import androidx.core.view.isVisible
-import lib.xfy9326.android.kit.setOnSingleClickListener
-import lib.xfy9326.android.kit.startActivity
-import lib.xfy9326.livedata.observeEvent
+import io.github.xfy9326.atools.livedata.observeEvent
+import io.github.xfy9326.atools.ui.setOnSingleClickListener
+import io.github.xfy9326.atools.ui.startActivity
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.databinding.ActivityAppErrorBinding
 import tool.xfy9326.schedule.kt.showSnackBar
@@ -13,6 +13,7 @@ import tool.xfy9326.schedule.ui.dialog.UpgradeDialog
 import tool.xfy9326.schedule.ui.vm.AppErrorViewModel
 import tool.xfy9326.schedule.utils.IntentUtils
 import tool.xfy9326.schedule.utils.UpgradeUtils
+import java.io.File
 
 class AppErrorActivity : ViewModelActivity<AppErrorViewModel, ActivityAppErrorBinding>() {
     companion object {
@@ -47,13 +48,13 @@ class AppErrorActivity : ViewModelActivity<AppErrorViewModel, ActivityAppErrorBi
             startActivity<FeedbackActivity>()
         }
 
-        val crashLogFileName = intent?.getStringExtra(INTENT_EXTRA_CRASH_LOG)
-        if (crashLogFileName != null) {
+        val crashLogFilePath = intent?.getStringExtra(INTENT_EXTRA_CRASH_LOG)
+        if (crashLogFilePath != null) {
             viewBinding.cardViewAppErrorDetail.setOnSingleClickListener {
-                viewModel.loadCrashLogDetail(crashLogFileName)
+                viewModel.loadCrashLogDetail(crashLogFilePath)
             }
             viewBinding.cardViewAppErrorSend.setOnSingleClickListener {
-                IntentUtils.sendCrashReport(this, crashLogFileName)
+                IntentUtils.sendCrashReport(this, File(crashLogFilePath))
             }
         } else {
             viewBinding.cardViewAppErrorDetail.isVisible = false

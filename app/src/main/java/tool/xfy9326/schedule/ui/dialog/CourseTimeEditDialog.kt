@@ -9,16 +9,16 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.LifecycleOwner
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import lib.xfy9326.android.kit.getStringArray
-import lib.xfy9326.android.kit.getText
-import lib.xfy9326.android.kit.hideKeyboard
-import lib.xfy9326.android.kit.setWindowPercent
+import io.github.xfy9326.atools.ui.getStringArray
+import io.github.xfy9326.atools.ui.getText
+import io.github.xfy9326.atools.ui.hideKeyboard
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.CourseTime
 import tool.xfy9326.schedule.beans.SectionTime.Companion.end
 import tool.xfy9326.schedule.beans.WeekDay
 import tool.xfy9326.schedule.databinding.DialogCourseTimeEditBinding
 import tool.xfy9326.schedule.utils.schedule.CourseUtils
+import tool.xfy9326.schedule.utils.setWindowPercent
 import kotlin.properties.Delegates
 
 class CourseTimeEditDialog : AppCompatDialogFragment() {

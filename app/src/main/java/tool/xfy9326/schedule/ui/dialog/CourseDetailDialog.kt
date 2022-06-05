@@ -8,10 +8,9 @@ import androidx.appcompat.app.AppCompatDialogFragment
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
-import lib.xfy9326.android.kit.getColorCompat
-import lib.xfy9326.android.kit.getStringArray
-import lib.xfy9326.android.kit.setWindowPercent
-import lib.xfy9326.android.kit.startActivity
+import io.github.xfy9326.atools.ui.getColorCompat
+import io.github.xfy9326.atools.ui.getStringArray
+import io.github.xfy9326.atools.ui.startActivity
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.Course
 import tool.xfy9326.schedule.beans.CourseDetail
@@ -21,6 +20,7 @@ import tool.xfy9326.schedule.databinding.DialogCourseDetailBinding
 import tool.xfy9326.schedule.tools.MaterialColorHelper
 import tool.xfy9326.schedule.ui.activity.CourseEditActivity
 import tool.xfy9326.schedule.ui.adapter.CourseDetailAdapter
+import tool.xfy9326.schedule.utils.setWindowPercent
 
 class CourseDetailDialog : AppCompatDialogFragment() {
     companion object {

@@ -2,9 +2,13 @@ package tool.xfy9326.schedule.io.utils
 
 import android.graphics.Bitmap
 import android.net.Uri
-import lib.xfy9326.android.kit.io.FileHelper
-import lib.xfy9326.android.kit.io.ImageHelper
-import lib.xfy9326.android.kit.io.kt.WEBPCompat
+import io.github.xfy9326.atools.io.helper.ImageHelper
+import io.github.xfy9326.atools.io.okio.copyBitmapTo
+import io.github.xfy9326.atools.io.utils.WEBPCompat
+import io.github.xfy9326.atools.io.utils.asParentOf
+import io.github.xfy9326.atools.io.utils.newFileName
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import tool.xfy9326.schedule.io.FileManager
 import tool.xfy9326.schedule.io.PathManager
 import java.io.File
@@ -14,10 +18,24 @@ object ImageUtils {
     private val PRIVATE_STORAGE_BITMAP_COMPRESS_FORMAT = WEBPCompat
     private val OUTPUT_BITMAP_COMPRESS_FORMAT = Bitmap.CompressFormat.PNG
 
-    suspend fun importImageFromUri(fromUri: Uri, toDir: File, quality: Int): String? {
-        val imageFile = ImageHelper.generateNewImageFile(toDir, PRIVATE_STORAGE_BITMAP_COMPRESS_FORMAT)
+    private fun generateNewImageFile(dir: File): File {
+        require(dir.isDirectory) { "New image parent file must be directory!" }
+        var newName: String
+        val currentFilesNames = dir.list()
+        do {
+            newName = PRIVATE_STORAGE_BITMAP_COMPRESS_FORMAT.newFileName(UUID.randomUUID().toString())
+        } while (currentFilesNames != null && newName in currentFilesNames)
+        return dir.asParentOf(newName)
+    }
 
-        return if (FileHelper.copyBitmap(fromUri, imageFile, PRIVATE_STORAGE_BITMAP_COMPRESS_FORMAT, quality)) {
+    suspend fun importImageFromUri(fromUri: Uri, toDir: File, quality: Int): String? {
+        val imageFile = generateNewImageFile(toDir)
+        val copyResult = withContext(Dispatchers.IO) {
+            runCatching {
+                fromUri.copyBitmapTo(imageFile, compressFormat = PRIVATE_STORAGE_BITMAP_COMPRESS_FORMAT, quality = quality)
+            }.isSuccess
+        }
+        return if (copyResult) {
             imageFile.name
         } else {
             null
@@ -25,13 +43,12 @@ object ImageUtils {
     }
 
     suspend fun outputImageToAlbum(bitmap: Bitmap, recycle: Boolean = true): Uri? {
-        val newFileName = ImageHelper.getNewFileNameByBitmapCompressFormat(UUID.randomUUID().toString(), OUTPUT_BITMAP_COMPRESS_FORMAT)
-        val imageContentValues = ImageHelper.createImageContentValues(newFileName, OUTPUT_BITMAP_COMPRESS_FORMAT, bitmap.width, bitmap.height, PathManager.DIR_SCHEDULE)
-        return FileHelper.writeBitmapToAlbum(bitmap, imageContentValues, OUTPUT_BITMAP_COMPRESS_FORMAT, recycle = recycle)
+        val newFileName = OUTPUT_BITMAP_COMPRESS_FORMAT.newFileName(UUID.randomUUID().toString())
+        return ImageHelper.exportBitmapToPublicAlbum(bitmap, newFileName, PathManager.DIR_SCHEDULE, OUTPUT_BITMAP_COMPRESS_FORMAT, recycle = recycle).getOrNull()
     }
 
     suspend fun createShareCacheImage(bitmap: Bitmap, recycle: Boolean = true): Uri? {
-        val newFileName = ImageHelper.getNewFileNameByBitmapCompressFormat(UUID.randomUUID().toString(), OUTPUT_BITMAP_COMPRESS_FORMAT)
+        val newFileName = OUTPUT_BITMAP_COMPRESS_FORMAT.newFileName(UUID.randomUUID().toString())
         return FileManager.createShareImage(newFileName, bitmap, OUTPUT_BITMAP_COMPRESS_FORMAT, recycle = recycle)
     }
 }

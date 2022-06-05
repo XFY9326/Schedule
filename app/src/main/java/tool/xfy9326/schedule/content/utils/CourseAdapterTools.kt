@@ -4,7 +4,7 @@ package tool.xfy9326.schedule.content.utils
 
 import androidx.annotation.IntRange
 import io.ktor.client.*
-import io.ktor.client.features.*
+import io.ktor.client.plugins.*
 import org.jsoup.nodes.Element
 import tool.xfy9326.schedule.content.base.AbstractCourseImportConfig
 

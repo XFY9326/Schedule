@@ -2,13 +2,13 @@ package tool.xfy9326.schedule.utils
 
 import android.content.Context
 import android.net.Uri
+import io.github.xfy9326.atools.io.serialization.json.readJSONAsync
+import io.github.xfy9326.atools.io.serialization.json.writeJSONAsync
 import kotlinx.coroutines.flow.first
 import kotlinx.serialization.json.Json
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.*
 import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
-import tool.xfy9326.schedule.io.utils.readJSON
-import tool.xfy9326.schedule.io.utils.writeJSON
 import tool.xfy9326.schedule.json.ScheduleTimeJSON
 import tool.xfy9326.schedule.json.backup.BackupWrapperJSON
 import tool.xfy9326.schedule.json.backup.CourseJSON
@@ -36,7 +36,7 @@ object BackupUtils {
                     ScheduleCourseBundle(schedule, courses)
                 }
             }
-            return uri.writeJSON(getParsableClass(allBundles), JSON)
+            return uri.writeJSONAsync(getParsableClass(allBundles), JSON).isSuccess
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -47,25 +47,22 @@ object BackupUtils {
         var totalAmount = 0
         var errorAmount = 0
         var hasConflicts = false
-        try {
-            uri.readJSON<BackupWrapperJSON>(JSON)?.let {
-                val originalData = fromParsableClass(it)
-                for (bundle in originalData) {
-                    totalAmount++
-                    val scheduleTimeValid = ScheduleUtils.validateScheduleTime(bundle.schedule.times)
-                    if (!scheduleTimeValid) {
-                        errorAmount++
-                        continue
-                    }
-                    hasConflicts = CourseUtils.solveConflicts(bundle.schedule.times, bundle.courses)
-                    ScheduleUtils.saveNewSchedule(bundle.schedule, bundle.courses)
+        return uri.readJSONAsync<BackupWrapperJSON>(JSON).mapCatching {
+            val originalData = fromParsableClass(it)
+            for (bundle in originalData) {
+                totalAmount++
+                val scheduleTimeValid = ScheduleUtils.validateScheduleTime(bundle.schedule.times)
+                if (!scheduleTimeValid) {
+                    errorAmount++
+                    continue
                 }
-                return BatchResult(true, totalAmount, errorAmount) to hasConflicts
+                hasConflicts = CourseUtils.solveConflicts(bundle.schedule.times, bundle.courses)
+                ScheduleUtils.saveNewSchedule(bundle.schedule, bundle.courses)
             }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-        return BatchResult(false) to hasConflicts
+            BatchResult(true, totalAmount, errorAmount) to hasConflicts
+        }.onFailure {
+            it.printStackTrace()
+        }.getOrDefault(BatchResult(false) to hasConflicts)
     }
 
     private fun getParsableClass(data: Array<out ScheduleCourseBundle>): BackupWrapperJSON {
@@ -76,30 +73,36 @@ object BackupUtils {
             for (course in datum.courses) {
                 val jsonCourseTimes = ArrayList<CourseTimeJSON>(course.times.size)
                 for (time in course.times) {
-                    jsonCourseTimes.add(CourseTimeJSON(
-                        weekNum = time.weekNumArray,
-                        weekDay = time.sectionTime.weekDay,
-                        start = time.sectionTime.start,
-                        duration = time.sectionTime.duration,
-                        location = time.location
-                    ))
+                    jsonCourseTimes.add(
+                        CourseTimeJSON(
+                            weekNum = time.weekNumArray,
+                            weekDay = time.sectionTime.weekDay,
+                            start = time.sectionTime.start,
+                            duration = time.sectionTime.duration,
+                            location = time.location
+                        )
+                    )
                 }
-                jsonCourses.add(CourseJSON(
-                    name = course.name,
-                    teacher = course.teacher,
-                    color = course.color,
-                    times = jsonCourseTimes
-                ))
+                jsonCourses.add(
+                    CourseJSON(
+                        name = course.name,
+                        teacher = course.teacher,
+                        color = course.color,
+                        times = jsonCourseTimes
+                    )
+                )
             }
-            scheduleJsonList.add(ScheduleJSON(
-                name = datum.schedule.name,
-                times = datum.schedule.times.map { ScheduleTimeJSON.fromScheduleTime(it) },
-                color = datum.schedule.color,
-                weekStart = datum.schedule.weekStart,
-                startDate = datum.schedule.startDate,
-                endDate = datum.schedule.endDate,
-                courses = jsonCourses
-            ))
+            scheduleJsonList.add(
+                ScheduleJSON(
+                    name = datum.schedule.name,
+                    times = datum.schedule.times.map { ScheduleTimeJSON.fromScheduleTime(it) },
+                    color = datum.schedule.color,
+                    weekStart = datum.schedule.weekStart,
+                    startDate = datum.schedule.startDate,
+                    endDate = datum.schedule.endDate,
+                    courses = jsonCourses
+                )
+            )
         }
 
         return BackupWrapperJSON(data = scheduleJsonList)
@@ -122,20 +125,24 @@ object BackupUtils {
             for (courseJson in scheduleJson.courses) {
                 val courseTimes = ArrayList<CourseTime>(courseJson.times.size)
                 for (timeJson in courseJson.times) {
-                    courseTimes.add(CourseTime(
-                        weekNum = timeJson.weekNum,
-                        weekDay = timeJson.weekDay,
-                        start = timeJson.start,
-                        duration = timeJson.duration,
-                        location = timeJson.location
-                    ))
+                    courseTimes.add(
+                        CourseTime(
+                            weekNum = timeJson.weekNum,
+                            weekDay = timeJson.weekDay,
+                            start = timeJson.start,
+                            duration = timeJson.duration,
+                            location = timeJson.location
+                        )
+                    )
                 }
-                courses.add(Course(
-                    name = courseJson.name,
-                    teacher = courseJson.teacher,
-                    color = courseJson.color,
-                    times = courseTimes
-                ))
+                courses.add(
+                    Course(
+                        name = courseJson.name,
+                        teacher = courseJson.teacher,
+                        color = courseJson.color,
+                        times = courseTimes
+                    )
+                )
             }
             scheduleList.add(ScheduleCourseBundle(schedule, courses))
         }
