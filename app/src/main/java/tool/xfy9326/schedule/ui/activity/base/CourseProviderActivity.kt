@@ -6,8 +6,8 @@ import androidx.core.os.bundleOf
 import androidx.lifecycle.lifecycleScope
 import androidx.viewbinding.ViewBinding
 import io.github.xfy9326.atools.core.castNonNull
+import io.github.xfy9326.atools.core.startActivity
 import io.github.xfy9326.atools.livedata.observeEvent
-import io.github.xfy9326.atools.ui.startActivity
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import tool.xfy9326.schedule.beans.ScheduleImportRequestParams

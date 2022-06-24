@@ -2,7 +2,7 @@ package tool.xfy9326.schedule.io.utils
 
 import android.graphics.Bitmap
 import android.net.Uri
-import io.github.xfy9326.atools.io.helper.ImageHelper
+import io.github.xfy9326.atools.io.helper.exportToPublicAlbum
 import io.github.xfy9326.atools.io.okio.copyBitmapTo
 import io.github.xfy9326.atools.io.utils.WEBPCompat
 import io.github.xfy9326.atools.io.utils.asParentOf
@@ -44,7 +44,7 @@ object ImageUtils {
 
     suspend fun outputImageToAlbum(bitmap: Bitmap, recycle: Boolean = true): Uri? {
         val newFileName = OUTPUT_BITMAP_COMPRESS_FORMAT.newFileName(UUID.randomUUID().toString())
-        return ImageHelper.exportBitmapToPublicAlbum(bitmap, newFileName, PathManager.DIR_SCHEDULE, OUTPUT_BITMAP_COMPRESS_FORMAT, recycle = recycle).getOrNull()
+        return bitmap.exportToPublicAlbum(newFileName, PathManager.DIR_SCHEDULE, OUTPUT_BITMAP_COMPRESS_FORMAT, recycle = recycle).getOrNull()
     }
 
     suspend fun createShareCacheImage(bitmap: Bitmap, recycle: Boolean = true): Uri? {

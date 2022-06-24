@@ -3,7 +3,7 @@ package tool.xfy9326.schedule.io
 import android.graphics.Bitmap
 import android.net.Uri
 import io.github.xfy9326.atools.io.file.rawResFile
-import io.github.xfy9326.atools.io.okio.source
+import io.github.xfy9326.atools.io.okio.readTextAsync
 import io.github.xfy9326.atools.io.okio.useBuffer
 import io.github.xfy9326.atools.io.okio.writeBitmap
 import io.github.xfy9326.atools.io.utils.asParentOf
@@ -19,21 +19,9 @@ object FileManager {
     private val FILE_EULA = rawResFile(R.raw.eula)
     private val FILE_LICENSE = rawResFile(R.raw.license)
 
-    suspend fun readEULA() = withContext(Dispatchers.IO) {
-        runCatching {
-            FILE_EULA.source().useBuffer {
-                readUtf8()
-            }
-        }.getOrThrow()
-    }
+    suspend fun readEULA() = FILE_EULA.readTextAsync().getOrThrow()
 
-    suspend fun readLicense() = withContext(Dispatchers.IO) {
-        runCatching {
-            FILE_LICENSE.source().useBuffer {
-                readUtf8()
-            }
-        }.getOrThrow()
-    }
+    suspend fun readLicense() = FILE_LICENSE.readTextAsync().getOrThrow()
 
     fun getAppPictureFile(name: String) = PathManager.PictureAppDir.asParentOf(name)
 

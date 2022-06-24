@@ -8,7 +8,11 @@ import android.webkit.*
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import io.github.xfy9326.atools.ui.*
+import io.github.xfy9326.atools.core.showToast
+import io.github.xfy9326.atools.ui.bindLifeCycle
+import io.github.xfy9326.atools.ui.clearAll
+import io.github.xfy9326.atools.ui.requireOwner
+import io.github.xfy9326.atools.ui.show
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import tool.xfy9326.schedule.BuildConfig

@@ -1,7 +1,7 @@
 package tool.xfy9326.schedule.ui.fragment.settings
 
 import android.os.Bundle
-import io.github.xfy9326.atools.ui.startActivity
+import io.github.xfy9326.atools.core.startActivity
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.kt.bindPrefFragment
 import tool.xfy9326.schedule.kt.setOnPrefClickListener

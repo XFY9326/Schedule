@@ -9,15 +9,18 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.preferencesDataStore
 import io.github.xfy9326.atools.core.AppContext
 import io.github.xfy9326.atools.core.tryEnumValueOf
-import io.github.xfy9326.atools.coroutines.AppScope
 import io.github.xfy9326.atools.datastore.preference.DataStorePreferenceAdapter
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.*
 
 abstract class AbstractDataStore(val name: String) {
     private val Context.dataStore by preferencesDataStore(name)
     val dataStore by lazy { AppContext.dataStore }
-    protected val readOnlyFlow = dataStore.data.shareIn(AppScope, SharingStarted.Eagerly, 1)
+
+    @OptIn(DelicateCoroutinesApi::class)
+    protected val readOnlyFlow = dataStore.data.shareIn(GlobalScope, SharingStarted.Eagerly, 1)
 
     fun getPreferenceDataStore(scope: CoroutineScope) = DataStorePreferenceAdapter(dataStore, scope)
 

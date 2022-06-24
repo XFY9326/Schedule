@@ -7,9 +7,9 @@ import android.view.Menu
 import android.view.MenuItem
 import com.google.android.material.snackbar.Snackbar
 import com.jaredrummler.android.colorpicker.ColorPickerDialogListener
+import io.github.xfy9326.atools.core.hideKeyboard
 import io.github.xfy9326.atools.livedata.observeEvent
 import io.github.xfy9326.atools.ui.getText
-import io.github.xfy9326.atools.ui.hideKeyboard
 import io.github.xfy9326.atools.ui.setOnSingleClickListener
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.Course

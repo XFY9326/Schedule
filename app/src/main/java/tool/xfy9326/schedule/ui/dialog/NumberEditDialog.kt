@@ -13,8 +13,8 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.LifecycleOwner
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import io.github.xfy9326.atools.core.showToast
 import io.github.xfy9326.atools.ui.getText
-import io.github.xfy9326.atools.ui.showToast
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.databinding.DialogEditTextBinding
 import kotlin.properties.Delegates

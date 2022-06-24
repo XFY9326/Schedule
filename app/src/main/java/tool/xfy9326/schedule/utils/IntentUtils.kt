@@ -5,8 +5,8 @@ import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
 import io.github.xfy9326.atools.core.asArray
+import io.github.xfy9326.atools.core.packageUri
 import io.github.xfy9326.atools.io.utils.ImageMimeType
-import io.github.xfy9326.atools.ui.packageUri
 import tool.xfy9326.schedule.BuildConfig
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.io.utils.getUriByFileProvider

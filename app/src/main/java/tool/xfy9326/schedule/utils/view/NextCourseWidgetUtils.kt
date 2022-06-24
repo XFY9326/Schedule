@@ -19,9 +19,10 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 import androidx.core.graphics.drawable.toBitmap
 import io.github.xfy9326.atools.core.AppContext
-import io.github.xfy9326.atools.coroutines.AppScope
-import io.github.xfy9326.atools.ui.PermissionCompat
-import io.github.xfy9326.atools.ui.getLaunchAppIntent
+import io.github.xfy9326.atools.core.canScheduleNextAlarm
+import io.github.xfy9326.atools.core.getLaunchAppIntent
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
@@ -42,9 +43,10 @@ object NextCourseWidgetUtils {
     private val observerJobLock = Mutex()
     private var observerJob: Job? = null
 
+    @OptIn(DelicateCoroutinesApi::class)
     fun initDataObserver() {
         if (hasNextCourseWidget(AppContext)) {
-            AppScope.launch {
+            GlobalScope.launch {
                 observerJobLock.withLock {
                     if (observerJob?.isActive != true) {
                         observerJob = ScheduleDataProcessor.addCurrentScheduleCourseDataGlobalListener { schedule ->
@@ -106,7 +108,7 @@ object NextCourseWidgetUtils {
         val pendingIntent = getWidgetRefreshPendingIntent(context)
         context.getSystemService<AlarmManager>()?.apply {
             if (nextCourse.nextAutoRefreshTimeMills > 0) {
-                if (PermissionCompat.canScheduleNextAlarm(context)) {
+                if (context.canScheduleNextAlarm()) {
                     AlarmManagerCompat.setExactAndAllowWhileIdle(this, AlarmManager.RTC, nextCourse.nextAutoRefreshTimeMills, pendingIntent)
                 } else {
                     set(AlarmManager.RTC, nextCourse.nextAutoRefreshTimeMills, pendingIntent)

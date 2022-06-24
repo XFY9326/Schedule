@@ -8,9 +8,9 @@ import androidx.core.net.toUri
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import io.github.xfy9326.atools.core.openUrlInBrowser
 import io.github.xfy9326.atools.livedata.observeEvent
 import io.github.xfy9326.atools.livedata.observeNotify
-import io.github.xfy9326.atools.ui.openUrlInBrowser
 import io.github.xfy9326.atools.ui.setOnSingleClickListener
 import io.github.xfy9326.atools.ui.show
 import kotlinx.coroutines.flow.first
