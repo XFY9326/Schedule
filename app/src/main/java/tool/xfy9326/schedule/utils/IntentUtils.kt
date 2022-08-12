@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
-import io.github.xfy9326.atools.core.asArray
+import io.github.xfy9326.atools.base.asArray
 import io.github.xfy9326.atools.core.packageUri
 import io.github.xfy9326.atools.io.utils.ImageMimeType
 import tool.xfy9326.schedule.BuildConfig

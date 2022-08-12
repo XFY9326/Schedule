@@ -5,7 +5,7 @@ import android.net.Uri
 import androidx.activity.ComponentActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import io.github.xfy9326.atools.core.asList
+import io.github.xfy9326.atools.base.asList
 import io.github.xfy9326.atools.ui.getItemUris
 import io.github.xfy9326.atools.ui.showGlobalToast
 import tool.xfy9326.schedule.BuildConfig

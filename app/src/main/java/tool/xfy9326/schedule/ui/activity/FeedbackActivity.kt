@@ -14,7 +14,7 @@ import androidx.activity.result.contract.ActivityResultContract
 import androidx.core.net.toUri
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import io.github.xfy9326.atools.core.asArray
+import io.github.xfy9326.atools.base.asArray
 import io.github.xfy9326.atools.core.openUrlInBrowser
 import io.github.xfy9326.atools.ui.bindLifeCycle
 import kotlinx.coroutines.launch

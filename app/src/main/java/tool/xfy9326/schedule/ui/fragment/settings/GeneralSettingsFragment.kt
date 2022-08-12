@@ -6,8 +6,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.preference.ListPreference
 import androidx.preference.PreferenceDataStore
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import io.github.xfy9326.atools.core.tryCast
-import io.github.xfy9326.atools.core.tryEnumValueOf
+import io.github.xfy9326.atools.base.tryCast
+import io.github.xfy9326.atools.base.tryEnumValueOf
 import io.github.xfy9326.atools.ui.show
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.NightMode

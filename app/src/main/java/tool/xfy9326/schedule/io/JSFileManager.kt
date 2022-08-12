@@ -1,6 +1,6 @@
 package tool.xfy9326.schedule.io
 
-import io.github.xfy9326.atools.core.md5
+import io.github.xfy9326.atools.base.md5
 import io.github.xfy9326.atools.io.okio.copyTo
 import io.github.xfy9326.atools.io.okio.readText
 import io.github.xfy9326.atools.io.okio.readTextAsync

@@ -5,7 +5,7 @@ import androidx.annotation.CallSuper
 import androidx.core.os.bundleOf
 import androidx.lifecycle.lifecycleScope
 import androidx.viewbinding.ViewBinding
-import io.github.xfy9326.atools.core.castNonNull
+import io.github.xfy9326.atools.base.castNonNull
 import io.github.xfy9326.atools.core.startActivity
 import io.github.xfy9326.atools.livedata.observeEvent
 import kotlinx.coroutines.flow.first

@@ -13,7 +13,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.LifecycleOwner
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import io.github.xfy9326.atools.core.EMPTY
+import io.github.xfy9326.atools.base.EMPTY
 import tool.xfy9326.schedule.R
 
 class ScheduleImportSuccessDialog : AppCompatDialogFragment() {

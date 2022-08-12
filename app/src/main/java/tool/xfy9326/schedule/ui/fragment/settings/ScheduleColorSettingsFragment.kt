@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceDataStore
 import com.jaredrummler.android.colorpicker.ColorPreferenceCompat
-import io.github.xfy9326.atools.datastore.preference.DataStorePreferenceAdapter
+import io.github.xfy9326.atools.datastore.preference.adapter.DataStorePreferenceAdapter
 import io.github.xfy9326.atools.ui.getColorCompat
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.data.ScheduleDataStore

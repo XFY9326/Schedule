@@ -1,6 +1,6 @@
 package tool.xfy9326.schedule.content.adapters.provider
 
-import io.github.xfy9326.atools.core.toHex
+import io.github.xfy9326.atools.base.toHex
 import io.ktor.client.request.*
 import io.ktor.client.request.forms.*
 import io.ktor.client.statement.*

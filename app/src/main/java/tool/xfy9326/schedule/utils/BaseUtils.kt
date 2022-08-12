@@ -1,6 +1,6 @@
 package tool.xfy9326.schedule.utils
 
-import io.github.xfy9326.atools.core.tryEnumValueOf
+import io.github.xfy9326.atools.base.tryEnumValueOf
 import kotlin.math.max
 import kotlin.math.min
 

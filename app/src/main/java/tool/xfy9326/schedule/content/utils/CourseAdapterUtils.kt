@@ -2,8 +2,8 @@
 
 package tool.xfy9326.schedule.content.utils
 
-import io.github.xfy9326.atools.core.isEven
-import io.github.xfy9326.atools.core.isOdd
+import io.github.xfy9326.atools.base.isEven
+import io.github.xfy9326.atools.base.isOdd
 import io.ktor.client.*
 import io.ktor.client.engine.okhttp.*
 import io.ktor.client.plugins.*

@@ -4,8 +4,8 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.View
 import androidx.core.view.children
-import io.github.xfy9326.atools.core.isEven
-import io.github.xfy9326.atools.core.isOdd
+import io.github.xfy9326.atools.base.isEven
+import io.github.xfy9326.atools.base.isOdd
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.content.utils.arrangeWeekNum
 import tool.xfy9326.schedule.content.utils.hasCourse
