@@ -23,7 +23,7 @@ class BackupRestoreSettingsFragment : AbstractSettingsFragment() {
 
     override val titleName: Int = R.string.backup_and_restore
     override val preferenceResId: Int = R.xml.settings_backup_restore
-    private val backupSchedule = registerForActivityResult(ActivityResultContracts.CreateDocument()) {
+    private val backupSchedule = registerForActivityResult(ActivityResultContracts.CreateDocument(MIMEConst.MIME_APPLICATION_JSON)) {
         if (it != null) {
             requireSettingsViewModel()?.backupScheduleToUri(it)
         } else {

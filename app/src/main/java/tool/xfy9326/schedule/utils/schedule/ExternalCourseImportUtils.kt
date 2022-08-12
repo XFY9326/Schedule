@@ -5,7 +5,7 @@ import android.net.Uri
 import androidx.activity.ComponentActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import io.github.xfy9326.atools.core.asList
+import io.github.xfy9326.atools.base.asList
 import io.github.xfy9326.atools.ui.getItemUris
 import io.github.xfy9326.atools.ui.showGlobalToast
 import tool.xfy9326.schedule.BuildConfig
@@ -42,7 +42,7 @@ object ExternalCourseImportUtils {
     fun prepareRunningEnvironment(activity: ComponentActivity): ExternalCourseImportViewModel? {
         val parseResult = parseReceivedIntent(activity.intent)
         return if (parseResult == null) {
-            showGlobalToast(R.string.external_course_import_params_incomplete, showLong = true)
+            showGlobalToast(R.string.external_course_import_params_incomplete, lengthLong = true)
             null
         } else {
             try {
@@ -57,10 +57,10 @@ object ExternalCourseImportUtils {
                 })[ExternalCourseImportViewModel::class.java]
             } catch (e: IllegalStateException) {
                 e.printStackTrace()
-                showGlobalToast(R.string.external_course_processor_name_error, showLong = true)
+                showGlobalToast(R.string.external_course_processor_name_error, lengthLong = true)
             } catch (e: Exception) {
                 e.printStackTrace()
-                showGlobalToast(R.string.external_course_init_error, showLong = true)
+                showGlobalToast(R.string.external_course_init_error, lengthLong = true)
             }
             null
         }

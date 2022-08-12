@@ -100,14 +100,7 @@ class NetworkCourseProviderViewModel : CourseProviderViewModel<NetworkCourseImpo
     ): ScheduleImportContent = CourseImportHelper.importNetworkCourse(importParams, importOption, courseProvider, courseParser)
 
     override fun onProviderDestroy() {
-        providerFunctionRunner(
-            onRun = {
-                courseProvider.close()
-
-                val captcha = loginCaptcha.value
-                loginCaptcha.postValue(null)
-                captcha?.tryRecycle()
-            }
-        )
+        loginCaptcha.value?.tryRecycle()
+        courseProvider.close()
     }
 }

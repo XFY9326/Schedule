@@ -5,9 +5,9 @@ import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
 import com.google.android.material.navigation.NavigationView
+import io.github.xfy9326.atools.core.startActivity
 import io.github.xfy9326.atools.ui.getColorCompat
 import io.github.xfy9326.atools.ui.setOnSingleClickListener
-import io.github.xfy9326.atools.ui.startActivity
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import tool.xfy9326.schedule.R

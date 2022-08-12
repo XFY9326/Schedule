@@ -1,7 +1,7 @@
 package tool.xfy9326.schedule.utils.schedule
 
 import android.content.Context
-import io.github.xfy9326.atools.core.isEven
+import io.github.xfy9326.atools.base.isEven
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.CourseTime
 import tool.xfy9326.schedule.beans.ScheduleCalculateTimes

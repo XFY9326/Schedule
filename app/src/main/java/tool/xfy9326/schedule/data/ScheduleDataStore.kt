@@ -1,7 +1,7 @@
 package tool.xfy9326.schedule.data
 
 import androidx.datastore.preferences.core.Preferences
-import io.github.xfy9326.atools.core.tryEnumValueOf
+import io.github.xfy9326.atools.base.tryEnumValueOf
 import io.github.xfy9326.atools.datastore.preference.booleanPrefKey
 import io.github.xfy9326.atools.datastore.preference.intPrefKey
 import io.github.xfy9326.atools.datastore.preference.stringPrefKey

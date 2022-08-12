@@ -1,6 +1,6 @@
 package tool.xfy9326.schedule.content.adapters.processor
 
-import io.github.xfy9326.atools.core.asArray
+import io.github.xfy9326.atools.base.asArray
 import tool.xfy9326.schedule.annotation.ExternalCourseProcessor
 import tool.xfy9326.schedule.beans.ScheduleImportContent
 import tool.xfy9326.schedule.beans.WebPageContent

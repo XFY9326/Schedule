@@ -8,11 +8,11 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.navigation.NavigationView
+import io.github.xfy9326.atools.core.startActivity
 import io.github.xfy9326.atools.livedata.observeEvent
 import io.github.xfy9326.atools.ui.getColorCompat
 import io.github.xfy9326.atools.ui.setIconTint
 import io.github.xfy9326.atools.ui.setOnSingleClickListener
-import io.github.xfy9326.atools.ui.startActivity
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.Day
 import tool.xfy9326.schedule.beans.WeekNumType

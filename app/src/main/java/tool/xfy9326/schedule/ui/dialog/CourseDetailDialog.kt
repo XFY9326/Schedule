@@ -8,9 +8,9 @@ import androidx.appcompat.app.AppCompatDialogFragment
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
+import io.github.xfy9326.atools.core.startActivity
 import io.github.xfy9326.atools.ui.getColorCompat
 import io.github.xfy9326.atools.ui.getStringArray
-import io.github.xfy9326.atools.ui.startActivity
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.Course
 import tool.xfy9326.schedule.beans.CourseDetail

@@ -11,11 +11,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.distinctUntilChanged
 import com.google.android.material.snackbar.Snackbar
+import io.github.xfy9326.atools.core.relaunchApplication
+import io.github.xfy9326.atools.core.tryStartActivity
 import io.github.xfy9326.atools.ui.getColorCompat
-import io.github.xfy9326.atools.ui.relaunchApp
 import io.github.xfy9326.atools.ui.setLightSystemBar
 import io.github.xfy9326.atools.ui.showToast
-import io.github.xfy9326.atools.ui.tryStartActivity
 import kotlinx.coroutines.flow.Flow
 import tool.xfy9326.schedule.BuildConfig
 import tool.xfy9326.schedule.R
@@ -27,13 +27,13 @@ import tool.xfy9326.schedule.utils.isUsingNightMode
 const val PROJECT_ID = BuildConfig.PROJECT_NAME
 
 fun Context.crashRelaunch() {
-    relaunchApp(1) {
+    relaunchApplication(1) {
         putExtra(ScheduleLaunchModule.INTENT_EXTRA_CRASH_RELAUNCH, true)
     }
 }
 
 fun Context.appErrorRelaunch(crashLogPath: String) {
-    relaunchApp(1) {
+    relaunchApplication(1) {
         putExtra(ScheduleLaunchModule.INTENT_EXTRA_APP_ERROR, true)
         putExtra(ScheduleLaunchModule.INTENT_EXTRA_APP_ERROR_CRASH_LOG, crashLogPath)
     }

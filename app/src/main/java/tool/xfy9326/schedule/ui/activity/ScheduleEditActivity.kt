@@ -9,8 +9,12 @@ import android.view.MenuItem
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.jaredrummler.android.colorpicker.ColorPickerDialogListener
+import io.github.xfy9326.atools.core.hideKeyboard
+import io.github.xfy9326.atools.core.startActivity
 import io.github.xfy9326.atools.livedata.observeEvent
-import io.github.xfy9326.atools.ui.*
+import io.github.xfy9326.atools.ui.setOnSingleClickListener
+import io.github.xfy9326.atools.ui.show
+import io.github.xfy9326.atools.ui.showToast
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.EditError.Companion.getText
 import tool.xfy9326.schedule.beans.Schedule

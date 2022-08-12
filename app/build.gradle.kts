@@ -117,17 +117,18 @@ dependencies {
     ksp(project(path = ":AnnotationKSP"))
 
     // ATools
-    val atoolsVersion = "0.0.7"
+    val atoolsVersion = "0.0.18"
     implementation("io.github.xfy9326.atools:atools-io:$atoolsVersion")
     implementation("io.github.xfy9326.atools:atools-ui:$atoolsVersion")
     implementation("io.github.xfy9326.atools:atools-crash:$atoolsVersion")
     implementation("io.github.xfy9326.atools:atools-coroutines:$atoolsVersion")
     implementation("io.github.xfy9326.atools:atools-livedata:$atoolsVersion")
     implementation("io.github.xfy9326.atools:atools-datastore-preference:$atoolsVersion")
+    implementation("io.github.xfy9326.atools:atools-datastore-preference-adapter:$atoolsVersion")
     implementation("io.github.xfy9326.atools:atools-io-serialization-json:$atoolsVersion")
 
     // Kotlin Coroutines
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.2")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
 
     // Kotlin Serialization
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.3")
@@ -135,14 +136,14 @@ dependencies {
     // AndroidX
     implementation("androidx.core:core-ktx:1.8.0")
 
-    implementation("androidx.core:core-splashscreen:1.0.0-rc01")
+    implementation("androidx.core:core-splashscreen:1.0.0")
 
-    val appCompatVersion = "1.4.2"
+    val appCompatVersion = "1.5.0"
     implementation("androidx.appcompat:appcompat:$appCompatVersion")
     implementation("androidx.appcompat:appcompat-resources:$appCompatVersion")
 
-    implementation("androidx.activity:activity-ktx:1.4.0")
-    implementation("androidx.fragment:fragment-ktx:1.4.1")
+    implementation("androidx.activity:activity-ktx:1.5.1")
+    implementation("androidx.fragment:fragment-ktx:1.5.2")
 
     implementation("androidx.drawerlayout:drawerlayout:1.1.1")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
@@ -151,14 +152,14 @@ dependencies {
     implementation("androidx.datastore:datastore-preferences:1.0.0")
 
     // LifeCycle, ViewModel, LiveData
-    val lifeCycleVersion = "2.4.1"
+    val lifeCycleVersion = "2.5.1"
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:$lifeCycleVersion")
     implementation("androidx.lifecycle:lifecycle-common-java8:$lifeCycleVersion")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifeCycleVersion")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:$lifeCycleVersion")
 
     // Room
-    val roomVersion = "2.4.2"
+    val roomVersion = "2.4.3"
     implementation("androidx.room:room-ktx:$roomVersion")
     ksp("androidx.room:room-compiler:$roomVersion")
     testImplementation("androidx.room:room-testing:$roomVersion")
@@ -170,16 +171,16 @@ dependencies {
     implementation("io.coil-kt:coil:2.1.0")
 
     // OkHttp
-    implementation("com.squareup.okhttp3:okhttp:4.9.3")
+    implementation("com.squareup.okhttp3:okhttp:4.10.0")
 
     // Ktor
-    val ktorVersion = "2.0.1"
+    val ktorVersion = "2.1.0"
     implementation("io.ktor:ktor-client-okhttp:$ktorVersion")
     implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
     implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
 
     // Jsoup
-    implementation("org.jsoup:jsoup:1.14.3")
+    implementation("org.jsoup:jsoup:1.15.2")
 
     // ColorPicker
     implementation("com.jaredrummler:colorpicker:1.1.0")

@@ -1,7 +1,8 @@
 package tool.xfy9326.schedule.db.dao
 
 import androidx.room.*
-import io.github.xfy9326.atools.coroutines.AppScope
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
@@ -55,7 +56,8 @@ abstract class ScheduleDAO {
         return scheduleId
     }
 
-    fun getScheduleCourses(scheduleId: Long) = getCourses(scheduleId).convertCourseList().shareIn(AppScope, SharingStarted.Lazily, 1)
+    @OptIn(DelicateCoroutinesApi::class)
+    fun getScheduleCourses(scheduleId: Long) = getCourses(scheduleId).convertCourseList().shareIn(GlobalScope, SharingStarted.Lazily, 1)
 
     fun getScheduleCoursesWithoutId(scheduleId: Long, courseId: Long) = getCoursesWithoutId(scheduleId, courseId).convertCourseList()
 

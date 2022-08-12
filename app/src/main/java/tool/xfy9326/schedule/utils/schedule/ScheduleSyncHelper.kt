@@ -4,7 +4,7 @@ import android.content.ContentResolver
 import android.content.ContentUris
 import android.content.ContentValues
 import android.provider.CalendarContract
-import io.github.xfy9326.atools.core.asArray
+import io.github.xfy9326.atools.base.asArray
 import io.github.xfy9326.atools.coroutines.withTryLock
 import io.github.xfy9326.atools.io.IOManager
 import kotlinx.coroutines.Dispatchers

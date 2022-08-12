@@ -11,14 +11,13 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach 
     kotlinOptions {
         jvmTarget = ProjectConfig.javaVersion.toString()
         freeCompilerArgs = freeCompilerArgs + listOf(
-            "-opt-in=com.google.devtools.ksp.KspExperimental",
-            "-opt-in=com.squareup.kotlinpoet.ksp.KotlinPoetKspPreview"
+            "-opt-in=com.google.devtools.ksp.KspExperimental"
         )
     }
 }
 
 dependencies {
     implementation(project(path = ":Annotation"))
-    implementation("com.squareup:kotlinpoet-ksp:1.11.0")
-    implementation("com.google.devtools.ksp:symbol-processing-api:1.6.21-1.0.5")
+    implementation("com.squareup:kotlinpoet-ksp:1.12.0")
+    implementation("com.google.devtools.ksp:symbol-processing-api:1.7.10-1.0.6")
 }

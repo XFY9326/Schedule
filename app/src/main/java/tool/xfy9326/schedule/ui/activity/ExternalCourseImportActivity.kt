@@ -3,8 +3,8 @@ package tool.xfy9326.schedule.ui.activity
 import android.os.Bundle
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.isVisible
+import io.github.xfy9326.atools.core.getLaunchAppIntent
 import io.github.xfy9326.atools.livedata.observeEvent
-import io.github.xfy9326.atools.ui.getLaunchAppIntent
 import io.github.xfy9326.atools.ui.setOnSingleClickListener
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.content.beans.ExternalCourseImportData

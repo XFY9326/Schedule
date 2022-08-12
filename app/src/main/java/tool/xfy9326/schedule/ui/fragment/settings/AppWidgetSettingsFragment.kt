@@ -5,8 +5,8 @@ import android.os.Bundle
 import androidx.annotation.RequiresApi
 import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
-import io.github.xfy9326.atools.ui.PermissionCompat
-import io.github.xfy9326.atools.ui.contract.ScheduleExactAlarmPermissionContract
+import io.github.xfy9326.atools.core.ScheduleExactAlarmPermissionContract
+import io.github.xfy9326.atools.core.canScheduleNextAlarm
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.kt.findPreference
 import tool.xfy9326.schedule.kt.setOnPrefClickListener
@@ -41,7 +41,7 @@ class AppWidgetSettingsFragment : AbstractSettingsFragment() {
     }
 
     private fun getScheduleNextAlarmPreferenceSummaryResId() =
-        if (PermissionCompat.canScheduleNextAlarm(requireContext())) {
+        if (requireContext().canScheduleNextAlarm()) {
             R.string.permission_status_granted
         } else {
             R.string.permission_status_not_granted

@@ -1,6 +1,5 @@
 package tool.xfy9326.schedule.utils.schedule
 
-import io.github.xfy9326.atools.coroutines.AppScope
 import io.github.xfy9326.atools.coroutines.combine
 import io.github.xfy9326.atools.coroutines.combineTransform
 import io.github.xfy9326.atools.coroutines.withTryLock
@@ -16,7 +15,8 @@ import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
 object ScheduleDataProcessor {
     private val hasPreloadLock = Mutex()
 
-    private fun <T> Flow<T>.preload() = flowOn(Dispatchers.IO).shareIn(AppScope, SharingStarted.Eagerly, 1)
+    @OptIn(DelicateCoroutinesApi::class)
+    private fun <T> Flow<T>.preload() = flowOn(Dispatchers.IO).shareIn(GlobalScope, SharingStarted.Eagerly, 1)
 
     suspend fun preload() = withContext(Dispatchers.Default) {
         runCatching {
@@ -49,8 +49,9 @@ object ScheduleDataProcessor {
         }
     ).preload()
 
+    @OptIn(DelicateCoroutinesApi::class)
     fun addCurrentScheduleCourseDataGlobalListener(listener: suspend (Schedule) -> Unit): Job =
-        AppScope.launch(Dispatchers.IO) {
+        GlobalScope.launch(Dispatchers.IO) {
             currentScheduleCourseDataFlow.collect {
                 listener(it.first)
             }

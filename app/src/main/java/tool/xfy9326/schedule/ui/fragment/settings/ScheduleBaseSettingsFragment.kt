@@ -4,6 +4,7 @@ import android.content.res.Configuration
 import android.os.Bundle
 import android.view.*
 import androidx.appcompat.widget.LinearLayoutCompat
+import androidx.core.view.MenuProvider
 import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.commit
@@ -29,16 +30,12 @@ class ScheduleBaseSettingsFragment : ViewBindingFragment<FragmentScheduleSetting
     private val viewModel by activityViewModels<SettingsViewModel>()
     private var isCurrentPreviewLandMode by Delegates.notNull<Boolean>()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
-    }
-
     override fun onCreateViewBinding(inflater: LayoutInflater, container: ViewGroup?) = FragmentScheduleSettingsBinding.inflate(inflater, container, false)
 
     override fun onBindViewBinding(view: View) = FragmentScheduleSettingsBinding.bind(view)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        addMenuInActivity()
         return super.onCreateView(inflater, container, savedInstanceState)?.also {
             it.setBackgroundColor(requireContext().getDefaultBackgroundColor())
         }
@@ -69,17 +66,21 @@ class ScheduleBaseSettingsFragment : ViewBindingFragment<FragmentScheduleSetting
         super.onSaveInstanceState(outState)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_schedule_settings, menu)
-    }
+    private fun addMenuInActivity() {
+        requireActivity().addMenuProvider(object : MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.menu_schedule_settings, menu)
+            }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.menu_schedulePreviewRatio) {
-            isCurrentPreviewLandMode = !isCurrentPreviewLandMode
-            viewModel.schedulePreviewPreviewWidth.postEvent(isCurrentPreviewLandMode)
-            return true
-        }
-        return super.onOptionsItemSelected(item)
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                if (menuItem.itemId == R.id.menu_schedulePreviewRatio) {
+                    isCurrentPreviewLandMode = !isCurrentPreviewLandMode
+                    viewModel.schedulePreviewPreviewWidth.postEvent(isCurrentPreviewLandMode)
+                    return true
+                }
+                return false
+            }
+        }, viewLifecycleOwner)
     }
 
     override fun onPreferenceStartFragment(caller: PreferenceFragmentCompat, pref: Preference): Boolean {

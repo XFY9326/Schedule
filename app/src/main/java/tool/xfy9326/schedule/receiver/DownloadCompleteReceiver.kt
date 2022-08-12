@@ -5,8 +5,8 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import androidx.core.content.getSystemService
-import io.github.xfy9326.atools.ui.PermissionCompat
-import io.github.xfy9326.atools.ui.installPackage
+import io.github.xfy9326.atools.core.canInstallPackage
+import io.github.xfy9326.atools.core.installPackage
 import io.github.xfy9326.atools.ui.showGlobalToast
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.runBlocking
@@ -21,7 +21,7 @@ class DownloadCompleteReceiver : BroadcastReceiver() {
                 if (downloadId == intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1)) {
                     context.applicationContext.getSystemService<DownloadManager>()?.getUriForDownloadedFile(downloadId)?.let {
                         showGlobalToast(R.string.update_download_success)
-                        if (PermissionCompat.canInstallPackage(context)) {
+                        if (context.canInstallPackage()) {
                             context.installPackage(it)
                         }
                         AppDataStore.removeApkUpdateDownloadId()

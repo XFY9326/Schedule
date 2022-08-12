@@ -13,8 +13,8 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import io.github.xfy9326.atools.ui.PermissionCompat
-import io.github.xfy9326.atools.ui.contract.PackageInstallPermissionContract
+import io.github.xfy9326.atools.core.PackageInstallPermissionContract
+import io.github.xfy9326.atools.core.canInstallPackage
 import io.github.xfy9326.atools.ui.show
 import io.github.xfy9326.atools.ui.showToast
 import kotlinx.coroutines.flow.first
@@ -58,7 +58,7 @@ class UpgradeDialog : AppCompatDialogFragment() {
     private var selectedSource: DownloadSource? = null
 
     private val packageInstallPermission = registerForActivityResult(PackageInstallPermissionContract()) {
-        if (PermissionCompat.canInstallPackage(requireContext())) {
+        if (requireContext().canInstallPackage()) {
             selectedSource?.let(::downloadFile)
             selectedSource = null
         } else {
@@ -151,7 +151,7 @@ class UpgradeDialog : AppCompatDialogFragment() {
     }
 
     private fun withPackageInstallPermission(downloadSource: DownloadSource, block: (DownloadSource) -> Unit) {
-        if (PermissionCompat.canInstallPackage(requireContext())) {
+        if (requireContext().canInstallPackage()) {
             block(downloadSource)
         } else {
             lifecycleScope.launch {

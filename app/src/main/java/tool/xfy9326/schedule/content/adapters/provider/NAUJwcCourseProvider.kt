@@ -1,10 +1,12 @@
 package tool.xfy9326.schedule.content.adapters.provider
 
-import io.github.xfy9326.atools.core.toHex
+import android.util.Log
+import io.github.xfy9326.atools.base.toHex
 import io.ktor.client.request.*
 import io.ktor.client.request.forms.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
+import io.ktor.util.*
 import org.jsoup.Jsoup
 import tool.xfy9326.schedule.content.base.LoginCourseProvider
 import tool.xfy9326.schedule.content.beans.LoginPageInfo
@@ -120,7 +122,11 @@ class NAUJwcCourseProvider : LoginCourseProvider<Nothing>() {
     }
 
     private suspend fun logout() {
-        httpClient.get(JWC_LOGOUT_URL)
+        httpClient.get(JWC_LOGOUT_URL) {
+            studentDefaultPageUrl?.toString()?.let {
+                header(HttpHeaders.Referrer, it)
+            }
+        }
         httpClient.get(SSO_LOGOUT_URL)
         studentDefaultPageUrl = null
     }

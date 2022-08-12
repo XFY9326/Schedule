@@ -5,6 +5,7 @@ import io.github.xfy9326.atools.livedata.observeEvent
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.databinding.ActivityScheduleBinding
 import tool.xfy9326.schedule.kt.showSnackBar
+import tool.xfy9326.schedule.tools.MIMEConst
 import tool.xfy9326.schedule.ui.activity.ScheduleActivity
 import tool.xfy9326.schedule.ui.activity.base.AbstractViewModelActivityModule
 import tool.xfy9326.schedule.ui.vm.ScheduleViewModel
@@ -12,7 +13,7 @@ import tool.xfy9326.schedule.utils.ics.ScheduleICSHelper
 import tool.xfy9326.schedule.utils.view.DialogUtils
 
 class ICSExportModule(activity: ScheduleActivity) : AbstractViewModelActivityModule<ScheduleViewModel, ActivityScheduleBinding, ScheduleActivity>(activity) {
-    private val exportICSFile = activity.registerForActivityResult(ActivityResultContracts.CreateDocument()) {
+    private val exportICSFile = activity.registerForActivityResult(ActivityResultContracts.CreateDocument(MIMEConst.MIME_CALENDAR)) {
         if (it != null) {
             requireViewModel().exportICS(it)
         } else {

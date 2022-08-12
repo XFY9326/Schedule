@@ -34,6 +34,7 @@
     <string name="adapter_exception_captcha_download_error">验证码加载时出现错误</string>
     <string name="adapter_exception_captcha_code_error">验证码错误</string>
     <string name="adapter_exception_init_error">初始化错误</string>
+    <string name="adapter_exception_clear_error">网络连接清空错误</string>
     <string name="adapter_exception_close_error">资源关闭错误</string>
     <string name="adapter_exception_incomplete_course_info">课程信息不完整</string>
     <string name="adapter_exception_max_course_num_error">导入课程中存在超过当前最大课程节数的课程！</string>

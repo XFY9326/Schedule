@@ -35,11 +35,20 @@ abstract class NetworkCourseProvider<P : Serializable> : AbstractCourseProvider<
 
     suspend fun loadTermHtml(importOption: Int) = onLoadTermHtml(importOption)
 
-    suspend fun close() {
+    suspend fun clearConnection() {
         try {
             onClearConnection()
+        } catch (e: Exception) {
+            CourseAdapterException.Error.CLEAR_ERROR.report(e)
+        }
+    }
+
+    fun close() {
+        try {
             internalHttpClient.cancel()
             internalHttpClient.close()
+        } catch (e: CourseAdapterException) {
+            throw e
         } catch (e: Exception) {
             CourseAdapterException.Error.CLOSE_ERROR.report(e)
         }

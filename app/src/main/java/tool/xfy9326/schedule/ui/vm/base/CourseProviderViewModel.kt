@@ -100,7 +100,7 @@ abstract class CourseProviderViewModel<I, T1 : AbstractCourseProvider<*>, T2 : A
 
     @CallSuper
     override fun onCleared() {
-        scheduleImportManager.finishImport()
+        finishImport()
         onProviderDestroy()
     }
 

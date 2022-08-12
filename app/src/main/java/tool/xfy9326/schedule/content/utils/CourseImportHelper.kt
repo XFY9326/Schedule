@@ -1,6 +1,6 @@
 package tool.xfy9326.schedule.content.utils
 
-import io.github.xfy9326.atools.core.nullIfBlank
+import io.github.xfy9326.atools.base.nullIfBlank
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import tool.xfy9326.schedule.beans.*
@@ -28,6 +28,8 @@ object CourseImportHelper {
         val scheduleTimes = parser.parseScheduleTimes(importOption, scheduleTimesHtml)
         val coursesParseResult = parser.parseCourses(importOption, coursesHtml)
         val term = parser.parseTerm(importOption, termHtml)
+
+        provider.clearConnection()
 
         return ScheduleImportContent(scheduleTimes, coursesParseResult, term)
     }

@@ -2,7 +2,7 @@ package tool.xfy9326.schedule.beans
 
 import android.content.Context
 import android.os.Parcelable
-import io.github.xfy9326.atools.core.nullIfBlank
+import io.github.xfy9326.atools.base.nullIfBlank
 import kotlinx.parcelize.Parcelize
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.ScheduleTime.Companion.startTimeStr

@@ -4,7 +4,7 @@ package tool.xfy9326.schedule.content.base
 
 import androidx.annotation.ArrayRes
 import androidx.annotation.StringRes
-import io.github.xfy9326.atools.core.deepClone
+import io.github.xfy9326.atools.base.deepClone
 import io.github.xfy9326.atools.io.IOManager
 import tool.xfy9326.schedule.content.beans.CourseImportInstance
 import java.io.Serializable
