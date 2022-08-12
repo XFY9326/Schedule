@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.*
 import android.view.animation.AnimationUtils
 import android.webkit.*
+import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -47,7 +48,7 @@ class WebCourseProviderFragment : ViewBindingFragment<FragmentWebCourseProviderB
 
     @SuppressLint("SetJavaScriptEnabled")
     override fun onInitView(viewBinding: FragmentWebCourseProviderBinding) {
-        setHasOptionsMenu(true)
+        addMenuInActivity()
 
         val enableDebug = runBlocking {
             if (!AppSettingsDataStore.keepWebProviderCacheFlow.first()) {
@@ -179,15 +180,20 @@ class WebCourseProviderFragment : ViewBindingFragment<FragmentWebCourseProviderB
         })
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_web_course_provider, menu)
-    }
+    private fun addMenuInActivity() {
+        requireActivity().addMenuProvider(object : MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.menu_web_course_provider, menu)
+            }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.menu_webCourseProviderRefresh) {
-            requireViewBinding().webViewWebCourseProvider.reload()
-        }
-        return super.onOptionsItemSelected(item)
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                if (menuItem.itemId == R.id.menu_webCourseProviderRefresh) {
+                    requireViewBinding().webViewWebCourseProvider.reload()
+                    return true
+                }
+                return false
+            }
+        }, viewLifecycleOwner)
     }
 
     private fun showJSConfirmDialog(msg: String, jsResult: JsResult) {

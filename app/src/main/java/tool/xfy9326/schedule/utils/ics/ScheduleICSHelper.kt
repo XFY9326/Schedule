@@ -36,32 +36,37 @@ class ScheduleICSHelper constructor(schedule: Schedule, private val courses: Lis
 
     private fun createCourseTimeVEvent(iCal: ScheduleICSWriter, course: Course, courseTime: CourseTime) {
         val weekNumPattern = WeekNumPattern.parsePattern(courseTime, scheduleCalculateTimes)
-        if (weekNumPattern.type == SINGLE) {
-            CourseTimeUtils.getRealSectionTime(scheduleCalculateTimes, weekNumPattern.start + 1, courseTime.sectionTime).let { time ->
-                iCal.addEvent(time.first, time.second, course.name, courseTime.location, getEventDescription(course))
+        when (weekNumPattern.type) {
+            SINGLE -> {
+                CourseTimeUtils.getRealSectionTime(scheduleCalculateTimes, weekNumPattern.start + 1, courseTime.sectionTime).let { time ->
+                    iCal.addEvent(time.first, time.second, course.name, courseTime.location, getEventDescription(course))
+                }
             }
-        } else if (weekNumPattern.type == SPACED || weekNumPattern.type == SERIAL) {
-            CourseTimeUtils.getRealSectionTime(scheduleCalculateTimes, weekNumPattern.start + 1, sectionTime = courseTime.sectionTime).let { time ->
-                val rrule = ScheduleICSWriter.RRULE(
-                    weekNumPattern.interval,
-                    weekNumPattern.amount,
-                    courseTime.sectionTime.weekDay,
-                    scheduleCalculateTimes.weekStart
-                )
-                iCal.addEvent(time.first, time.second, course.name, courseTime.location, getEventDescription(course), rrule)
-            }
-        } else if (weekNumPattern.type == MESSY) {
-            for (period in weekNumPattern.timePeriodArray) {
-                CourseTimeUtils.getRealSectionTime(scheduleCalculateTimes, period.start + 1, courseTime.sectionTime).let { time ->
-                    val rrule =
-                        if (period.length > 1) {
-                            ScheduleICSWriter.RRULE(1, period.length, courseTime.sectionTime.weekDay, scheduleCalculateTimes.weekStart)
-                        } else {
-                            null
-                        }
+            SPACED, SERIAL -> {
+                CourseTimeUtils.getRealSectionTime(scheduleCalculateTimes, weekNumPattern.start + 1, sectionTime = courseTime.sectionTime).let { time ->
+                    val rrule = ScheduleICSWriter.RRULE(
+                        weekNumPattern.interval,
+                        weekNumPattern.amount,
+                        courseTime.sectionTime.weekDay,
+                        scheduleCalculateTimes.weekStart
+                    )
                     iCal.addEvent(time.first, time.second, course.name, courseTime.location, getEventDescription(course), rrule)
                 }
             }
+            MESSY -> {
+                for (period in weekNumPattern.timePeriodArray) {
+                    CourseTimeUtils.getRealSectionTime(scheduleCalculateTimes, period.start + 1, courseTime.sectionTime).let { time ->
+                        val rrule =
+                            if (period.length > 1) {
+                                ScheduleICSWriter.RRULE(1, period.length, courseTime.sectionTime.weekDay, scheduleCalculateTimes.weekStart)
+                            } else {
+                                null
+                            }
+                        iCal.addEvent(time.first, time.second, course.name, courseTime.location, getEventDescription(course), rrule)
+                    }
+                }
+            }
+            EMPTY -> Unit
         }
     }
 

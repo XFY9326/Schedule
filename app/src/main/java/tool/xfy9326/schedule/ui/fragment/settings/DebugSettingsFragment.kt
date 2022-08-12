@@ -12,6 +12,7 @@ import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.kt.setOnPrefClickListener
 import tool.xfy9326.schedule.kt.showSnackBar
+import tool.xfy9326.schedule.tools.MIMEConst
 import tool.xfy9326.schedule.ui.dialog.CrashViewDialog
 import tool.xfy9326.schedule.ui.fragment.base.AbstractSettingsFragment
 import tool.xfy9326.schedule.ui.vm.SettingsViewModel
@@ -28,7 +29,7 @@ class DebugSettingsFragment : AbstractSettingsFragment() {
     override val titleName: Int = R.string.debug_settings
     override val preferenceResId: Int = R.xml.settings_debug
     override val preferenceDataStore: PreferenceDataStore = AppSettingsDataStore.getPreferenceDataStore(lifecycleScope)
-    private val outputLogFile = registerForActivityResult(ActivityResultContracts.CreateDocument()) {
+    private val outputLogFile = registerForActivityResult(ActivityResultContracts.CreateDocument(MIMEConst.MIME_TEXT)) {
         if (it != null) {
             requireSettingsViewModel()?.outputLogFileToUri(it)
         } else {

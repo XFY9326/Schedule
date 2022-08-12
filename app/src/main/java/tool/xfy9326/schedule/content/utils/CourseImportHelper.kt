@@ -29,6 +29,8 @@ object CourseImportHelper {
         val coursesParseResult = parser.parseCourses(importOption, coursesHtml)
         val term = parser.parseTerm(importOption, termHtml)
 
+        provider.clearConnection()
+
         return ScheduleImportContent(scheduleTimes, coursesParseResult, term)
     }
 

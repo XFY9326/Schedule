@@ -55,6 +55,7 @@ class CourseAdapterException : CourseImportException {
                 Error.UNKNOWN_ERROR -> R.string.adapter_exception_unknown_error
 
                 Error.INIT_ERROR -> R.string.adapter_exception_init_error
+                Error.CLEAR_ERROR -> R.string.adapter_exception_clear_error
                 Error.CLOSE_ERROR -> R.string.adapter_exception_close_error
 
                 Error.MAX_COURSE_NUM_ERROR -> R.string.adapter_exception_max_course_num_error
@@ -94,6 +95,7 @@ class CourseAdapterException : CourseImportException {
         UNKNOWN_ERROR,
 
         INIT_ERROR,
+        CLEAR_ERROR,
         CLOSE_ERROR,
 
         MAX_COURSE_NUM_ERROR,

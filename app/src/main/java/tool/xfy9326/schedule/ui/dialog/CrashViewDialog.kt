@@ -18,6 +18,7 @@ import kotlinx.coroutines.withContext
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.databinding.DialogCrashViewBinding
 import tool.xfy9326.schedule.kt.PROJECT_ID
+import tool.xfy9326.schedule.tools.MIMEConst
 import tool.xfy9326.schedule.utils.setWindowPercent
 
 class CrashViewDialog : AppCompatDialogFragment() {
@@ -40,7 +41,7 @@ class CrashViewDialog : AppCompatDialogFragment() {
     }
 
     private lateinit var crashLog: String
-    private val outputLogFile = registerForActivityResult(ActivityResultContracts.CreateDocument()) {
+    private val outputLogFile = registerForActivityResult(ActivityResultContracts.CreateDocument(MIMEConst.MIME_TEXT)) {
         if (it != null) {
             lifecycleScope.launch {
                 val result = withContext(Dispatchers.IO) {
