@@ -124,9 +124,11 @@ class AHSTUCourseProvider : LoginCourseProvider<Nothing>() {
     }
 
     private fun logout() {
-        Jsoup.connect(SSO_LOGOUT_URL)
-            .cookies(cookieMap)
-            .execute()
+        try {
+            Jsoup.connect(SSO_LOGOUT_URL)
+                .cookies(cookieMap)
+                .execute()
+        }catch (e: HttpStatusException){}
     }
 
     override suspend fun onLoadCoursesHtml(importOption: Int): String {
