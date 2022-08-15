@@ -3,9 +3,11 @@ package tool.xfy9326.schedule.content.adapters.provider
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Base64
+import io.github.xfy9326.atools.base.EMPTY
 import org.json.JSONArray
 import org.json.JSONObject
 import org.jsoup.Connection
+import org.jsoup.HttpStatusException
 import org.jsoup.Jsoup
 import tool.xfy9326.schedule.content.base.LoginCourseProvider
 import tool.xfy9326.schedule.content.beans.LoginPageInfo
@@ -13,6 +15,7 @@ import tool.xfy9326.schedule.content.utils.CourseAdapterException
 import tool.xfy9326.schedule.content.utils.CourseAdapterException.Companion.report
 import tool.xfy9326.schedule.content.utils.selectSingle
 
+@Suppress("BlockingMethodInNonBlockingContext")
 class AHSTUCourseProvider : LoginCourseProvider<Nothing>() {
     companion object {
         private const val JWXT_HOST = "jwxt.ahstu.edu.cn"
@@ -37,24 +40,20 @@ class AHSTUCourseProvider : LoginCourseProvider<Nothing>() {
     private var getImportOptFail = false // 如果出错就调用教务系统里已经选择的学年学期
 
     override suspend fun onLoadLoginPage(importOption: Int): LoginPageInfo {
-        cookieMap = runCatching {
-            Jsoup.connect(SSO_LOGIN_URL)
-                .method(Connection.Method.GET)
-                .execute()
-                .cookies()
-        }.getOrThrow()
+        cookieMap = Jsoup.connect(SSO_LOGIN_URL)
+            .method(Connection.Method.GET)
+            .execute()
+            .cookies()
         return LoginPageInfo(SSO_CHECK_CODE_URL)
     }
 
     override suspend fun onLoadImportOptions(): Array<String> {
         val tpr = ArrayList<String>()
         try {
-            val resTp = runCatching {
-                Jsoup.connect("http://app.xukela.top/data/pure_course_opt.json")
-                    .ignoreContentType(true)
-                    .execute()
-                    .body()
-            }.getOrThrow()
+            val resTp = Jsoup.connect("http://app.xukela.top/data/pure_course_opt.json")
+                .ignoreContentType(true)
+                .execute()
+                .body()
             val options = JSONArray(resTp)
             var i = 0
             while (i < options.length()) {
@@ -75,13 +74,11 @@ class AHSTUCourseProvider : LoginCourseProvider<Nothing>() {
     }
 
     override suspend fun onDownloadCaptchaImage(captchaUrl: String, importOption: Int): Bitmap? {
-        val codeStream = runCatching {
-            Jsoup.connect(captchaUrl)
-                .cookies(cookieMap)
-                .ignoreContentType(true)
-                .execute()
-                .bodyStream()
-        }.getOrThrow()
+        val codeStream = Jsoup.connect(captchaUrl)
+            .cookies(cookieMap)
+            .ignoreContentType(true)
+            .execute()
+            .bodyStream()
 
         return BitmapFactory.decodeStream(codeStream)
     }
@@ -89,38 +86,32 @@ class AHSTUCourseProvider : LoginCourseProvider<Nothing>() {
     override suspend fun onLogin(userId: String, userPw: String, captchaCode: String?, loginPageInfo: LoginPageInfo, importOption: Int) {
         if (captchaCode == null || captchaCode.length != 4) CourseAdapterException.Error.CAPTCHA_CODE_ERROR.report() // 验证码错误
 
-        val verifyCodeResTp: String = runCatching {
-            Jsoup.connect("$SSO_CHECK_CODE_VERIFY_URL?code=$captchaCode")
-                .cookies(cookieMap)
-                .execute()
-                .body()
-        }.getOrThrow()
+        val verifyCodeResTp: String = Jsoup.connect("$SSO_CHECK_CODE_VERIFY_URL?code=$captchaCode")
+            .cookies(cookieMap)
+            .execute()
+            .body()
         val verifyCodeRes = JSONObject(verifyCodeResTp)
         if (!verifyCodeRes.getBoolean("success")) CourseAdapterException.Error.CAPTCHA_CODE_ERROR.report() // 验证码错误
         val passwordB64 = Base64.encodeToString(userPw.toByteArray(), Base64.NO_WRAP) // base64密码
-        val loginRes = runCatching {
-            Jsoup.connect(SSO_LOGIN_URL)
-                .method(Connection.Method.POST)
-                .cookies(cookieMap)
-                .data("username", userId)
-                .data("password", passwordB64)
-                .data("code", captchaCode)
-                .data("lt", "e1s1")
-                .data("_eventId", "submit")
-                .followRedirects(false)
-                .execute()
-        }.getOrThrow()
+        val loginRes = Jsoup.connect(SSO_LOGIN_URL)
+            .method(Connection.Method.POST)
+            .cookies(cookieMap)
+            .data("username", userId)
+            .data("password", passwordB64)
+            .data("code", captchaCode)
+            .data("lt", "e1s1")
+            .data("_eventId", "submit")
+            .followRedirects(false)
+            .execute()
 
         if (!loginRes.hasHeader("Location")) CourseAdapterException.Error.LOGIN_SERVER_ERROR.report(msg = "登录失败了")
-        val loginUrl = loginRes.header("Location") ?: ""
-        cookieMap = runCatching {
-            Jsoup.connect(loginUrl)
-                .method(Connection.Method.GET)
-                .followRedirects(false)
-                .ignoreHttpErrors(true)
-                .execute()
-                .cookies()
-        }.getOrThrow()
+        val loginUrl = loginRes.header("Location") ?: EMPTY
+        cookieMap = Jsoup.connect(loginUrl)
+            .method(Connection.Method.GET)
+            .followRedirects(false)
+            .ignoreHttpErrors(true)
+            .execute()
+            .cookies()
     }
 
     private fun logout() {
@@ -128,16 +119,16 @@ class AHSTUCourseProvider : LoginCourseProvider<Nothing>() {
             Jsoup.connect(SSO_LOGOUT_URL)
                 .cookies(cookieMap)
                 .execute()
-        }catch (e: HttpStatusException){}
+        } catch (e: HttpStatusException) {
+            // Ignore
+        }
     }
 
     override suspend fun onLoadCoursesHtml(importOption: Int): String {
-        val tp1 = runCatching {
-            Jsoup.connect("$JWXT_URL/eams/courseTableForStd.action")
-                .method(Connection.Method.GET)
-                .cookies(cookieMap)
-                .execute().body()
-        }.getOrThrow()
+        val tp1 = Jsoup.connect("$JWXT_URL/eams/courseTableForStd.action")
+            .method(Connection.Method.GET)
+            .cookies(cookieMap)
+            .execute().body()
 
         val idsMatcher = idsPattern.find(tp1)!!
         val ids = idsMatcher.groupValues[1]
@@ -146,16 +137,14 @@ class AHSTUCourseProvider : LoginCourseProvider<Nothing>() {
         } else {
             importOptionMap[importOption]["id"].toString()
         }
-        val courseHtml: String = runCatching {
-            Jsoup.connect("$JWXT_URL/eams/courseTableForStd!courseTable.action")
-                .method(Connection.Method.GET)
-                .cookies(cookieMap)
-                .data("setting.kind", "std")
-                .data("semester.id", semesterId)
-                .data("ids", ids)
-                .execute()
-                .body()
-        }.getOrThrow()
+        val courseHtml: String = Jsoup.connect("$JWXT_URL/eams/courseTableForStd!courseTable.action")
+            .method(Connection.Method.GET)
+            .cookies(cookieMap)
+            .data("setting.kind", "std")
+            .data("semester.id", semesterId)
+            .data("ids", ids)
+            .execute()
+            .body()
 
         // 从html中解析js
         val html = Jsoup.parse(courseHtml)
