@@ -12,13 +12,13 @@ import com.jaredrummler.android.colorpicker.ColorPickerDialogListener
 import io.github.xfy9326.atools.core.hideKeyboard
 import io.github.xfy9326.atools.livedata.observeEvent
 import io.github.xfy9326.atools.ui.getText
+import io.github.xfy9326.atools.ui.resume
 import io.github.xfy9326.atools.ui.setOnSingleClickListener
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.Course
 import tool.xfy9326.schedule.beans.CourseTime
 import tool.xfy9326.schedule.beans.EditError.Companion.getText
 import tool.xfy9326.schedule.databinding.ActivityCourseEditBinding
-import tool.xfy9326.schedule.kt.resume
 import tool.xfy9326.schedule.kt.showSnackBar
 import tool.xfy9326.schedule.ui.activity.base.ViewModelActivity
 import tool.xfy9326.schedule.ui.adapter.CourseTimeAdapter

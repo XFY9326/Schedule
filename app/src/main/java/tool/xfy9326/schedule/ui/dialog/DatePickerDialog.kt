@@ -9,7 +9,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.LifecycleOwner
-import tool.xfy9326.schedule.kt.getSerializableCompat
+import io.github.xfy9326.atools.core.getSerializableCompat
 import tool.xfy9326.schedule.utils.CalendarUtils
 import java.util.*
 

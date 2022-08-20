@@ -19,12 +19,12 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import io.github.xfy9326.atools.base.asArray
 import io.github.xfy9326.atools.core.openUrlInBrowser
 import io.github.xfy9326.atools.ui.bindLifeCycle
+import io.github.xfy9326.atools.ui.resume
 import kotlinx.coroutines.launch
 import tool.xfy9326.schedule.BuildConfig
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.data.AppDataStore
 import tool.xfy9326.schedule.databinding.ActivityFeedbackBinding
-import tool.xfy9326.schedule.kt.resume
 import tool.xfy9326.schedule.ui.activity.base.ViewBindingActivity
 
 class FeedbackActivity : ViewBindingActivity<ActivityFeedbackBinding>() {

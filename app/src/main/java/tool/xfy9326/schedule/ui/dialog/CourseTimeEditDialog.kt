@@ -9,6 +9,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.LifecycleOwner
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import io.github.xfy9326.atools.core.getParcelableCompat
 import io.github.xfy9326.atools.core.hideKeyboard
 import io.github.xfy9326.atools.ui.getStringArray
 import io.github.xfy9326.atools.ui.getText
@@ -17,7 +18,6 @@ import tool.xfy9326.schedule.beans.CourseTime
 import tool.xfy9326.schedule.beans.SectionTime.Companion.end
 import tool.xfy9326.schedule.beans.WeekDay
 import tool.xfy9326.schedule.databinding.DialogCourseTimeEditBinding
-import tool.xfy9326.schedule.kt.getParcelableCompat
 import tool.xfy9326.schedule.utils.schedule.CourseUtils
 import tool.xfy9326.schedule.utils.setWindowPercent
 import kotlin.properties.Delegates

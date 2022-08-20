@@ -9,6 +9,7 @@ import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.activityViewModels
+import io.github.xfy9326.atools.core.getParcelableCompat
 import io.github.xfy9326.atools.core.showToast
 import io.github.xfy9326.atools.livedata.observeEvent
 import io.github.xfy9326.atools.ui.showToast
@@ -19,7 +20,6 @@ import tool.xfy9326.schedule.content.CourseImportConfigManager.Type.Companion.ge
 import tool.xfy9326.schedule.content.beans.JSConfig
 import tool.xfy9326.schedule.content.utils.JSConfigException
 import tool.xfy9326.schedule.databinding.DialogJsConfigPrepareBinding
-import tool.xfy9326.schedule.kt.getParcelableCompat
 import tool.xfy9326.schedule.ui.vm.OnlineCourseImportViewModel
 import tool.xfy9326.schedule.utils.getDeepStackTraceString
 import tool.xfy9326.schedule.utils.setWindowPercent

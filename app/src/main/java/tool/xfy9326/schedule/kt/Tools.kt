@@ -54,11 +54,6 @@ fun Window.setSystemBarAppearance(systemBarAppearance: SystemBarAppearance) {
     }
 }
 
-fun OnBackPressedCallback.resume(dispatcher: OnBackPressedDispatcher) {
-    isEnabled = false
-    dispatcher.onBackPressed()
-}
-
 @ColorInt
 fun Context.getDefaultBackgroundColor() = getBackgroundColor(getColorCompat(R.color.default_background))
 

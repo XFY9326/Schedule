@@ -7,12 +7,12 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.isVisible
 import io.github.xfy9326.atools.core.getLaunchAppIntent
 import io.github.xfy9326.atools.livedata.observeEvent
+import io.github.xfy9326.atools.ui.resume
 import io.github.xfy9326.atools.ui.setOnSingleClickListener
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.content.beans.ExternalCourseImportData
 import tool.xfy9326.schedule.content.utils.CourseAdapterException.Companion.strictModeOnly
 import tool.xfy9326.schedule.databinding.ActivityExternalCourseImportBinding
-import tool.xfy9326.schedule.kt.resume
 import tool.xfy9326.schedule.ui.activity.base.ViewBindingActivity
 import tool.xfy9326.schedule.ui.activity.module.ScheduleLaunchModule
 import tool.xfy9326.schedule.ui.dialog.ImportCourseConflictDialog

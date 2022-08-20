@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatDialogFragment
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
+import io.github.xfy9326.atools.core.getParcelableCompat
 import io.github.xfy9326.atools.core.startActivity
 import io.github.xfy9326.atools.ui.getColorCompat
 import io.github.xfy9326.atools.ui.getStringArray
@@ -17,7 +18,6 @@ import tool.xfy9326.schedule.beans.CourseDetail
 import tool.xfy9326.schedule.beans.CourseTime
 import tool.xfy9326.schedule.beans.ScheduleTime
 import tool.xfy9326.schedule.databinding.DialogCourseDetailBinding
-import tool.xfy9326.schedule.kt.getParcelableCompat
 import tool.xfy9326.schedule.tools.MaterialColorHelper
 import tool.xfy9326.schedule.ui.activity.CourseEditActivity
 import tool.xfy9326.schedule.ui.adapter.CourseDetailAdapter

@@ -8,12 +8,12 @@ import androidx.lifecycle.LifecycleOwner
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import io.github.xfy9326.atools.core.getParcelableCompat
+import io.github.xfy9326.atools.core.getSerializableCompat
 import io.github.xfy9326.atools.ui.setOnSingleClickListener
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.ScheduleText
 import tool.xfy9326.schedule.databinding.DialogScheduleTextSizeEditBinding
-import tool.xfy9326.schedule.kt.getParcelableCompat
-import tool.xfy9326.schedule.kt.getSerializableCompat
 
 class ScheduleTextSizeEditDialog : BottomSheetDialogFragment() {
     companion object {

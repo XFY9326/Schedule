@@ -5,6 +5,7 @@ import androidx.annotation.CallSuper
 import androidx.core.os.bundleOf
 import androidx.lifecycle.lifecycleScope
 import androidx.viewbinding.ViewBinding
+import io.github.xfy9326.atools.core.getSerializableExtraCompat
 import io.github.xfy9326.atools.core.startActivity
 import io.github.xfy9326.atools.livedata.observeEvent
 import kotlinx.coroutines.flow.first
@@ -16,7 +17,6 @@ import tool.xfy9326.schedule.content.utils.BaseCourseImportConfig
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
 import tool.xfy9326.schedule.content.utils.CourseAdapterException.Companion.strictModeOnly
 import tool.xfy9326.schedule.data.AppDataStore
-import tool.xfy9326.schedule.kt.getSerializableExtraCompat
 import tool.xfy9326.schedule.ui.activity.ScheduleEditActivity
 import tool.xfy9326.schedule.ui.dialog.ImportCourseConflictDialog
 import tool.xfy9326.schedule.ui.dialog.ScheduleImportSuccessDialog

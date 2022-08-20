@@ -13,6 +13,7 @@ import androidx.annotation.StringRes
 import androidx.core.view.isVisible
 import coil.load
 import io.github.xfy9326.atools.ui.getText
+import io.github.xfy9326.atools.ui.resume
 import io.github.xfy9326.atools.ui.setAllEnable
 import io.github.xfy9326.atools.ui.setOnSingleClickListener
 import tool.xfy9326.schedule.R
@@ -23,7 +24,6 @@ import tool.xfy9326.schedule.content.base.NetworkCourseParser
 import tool.xfy9326.schedule.content.base.NetworkCourseProvider
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
 import tool.xfy9326.schedule.databinding.ActivityNetworkCourseProviderBinding
-import tool.xfy9326.schedule.kt.resume
 import tool.xfy9326.schedule.kt.showSnackBar
 import tool.xfy9326.schedule.ui.activity.base.CourseProviderActivity
 import tool.xfy9326.schedule.ui.vm.NetworkCourseProviderViewModel
