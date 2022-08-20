@@ -58,6 +58,4 @@ abstract class AbstractSettingsFragment : PreferenceFragmentCompat() {
     protected fun requireSettingsViewModel() = (activity as? SettingsActivity)?.settingsViewModel
 
     protected fun requireRootLayout() = (activity as AbstractSettingsActivity?)?.rootLayout
-
-    protected fun requestBack() = (activity as AbstractSettingsActivity?)?.requestBack()
 }

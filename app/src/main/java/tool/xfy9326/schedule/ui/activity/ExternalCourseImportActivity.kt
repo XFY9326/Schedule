@@ -1,6 +1,8 @@
 package tool.xfy9326.schedule.ui.activity
 
 import android.os.Bundle
+import androidx.activity.OnBackPressedCallback
+import androidx.activity.addCallback
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.isVisible
 import io.github.xfy9326.atools.core.getLaunchAppIntent
@@ -10,6 +12,7 @@ import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.content.beans.ExternalCourseImportData
 import tool.xfy9326.schedule.content.utils.CourseAdapterException.Companion.strictModeOnly
 import tool.xfy9326.schedule.databinding.ActivityExternalCourseImportBinding
+import tool.xfy9326.schedule.kt.resume
 import tool.xfy9326.schedule.ui.activity.base.ViewBindingActivity
 import tool.xfy9326.schedule.ui.activity.module.ScheduleLaunchModule
 import tool.xfy9326.schedule.ui.dialog.ImportCourseConflictDialog
@@ -39,6 +42,7 @@ class ExternalCourseImportActivity : ViewBindingActivity<ActivityExternalCourseI
 
     override fun onContentViewPreload(savedInstanceState: Bundle?) {
         installSplashScreen()
+        onBackPressedDispatcher.addCallback(this, true, this::onBackPressed)
     }
 
     override fun onInitView(viewBinding: ActivityExternalCourseImportBinding) {
@@ -119,14 +123,14 @@ class ExternalCourseImportActivity : ViewBindingActivity<ActivityExternalCourseI
         viewBinding.textViewExternalCourseSuccessMsg.text = ScheduleImportSuccessDialog.getImportSuccessMsg(this, false)
     }
 
-    override fun onBackPressed() {
+    private fun onBackPressed(callback: OnBackPressedCallback) {
         if (viewModel.isImportingCourses) {
             DialogUtils.showCancelScheduleImportDialog(this) {
                 viewModel.finishImport()
-                finish()
+                callback.resume(onBackPressedDispatcher)
             }
         } else {
-            super.onBackPressed()
+            callback.resume(onBackPressedDispatcher)
         }
     }
 

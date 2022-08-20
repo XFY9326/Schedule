@@ -6,6 +6,8 @@ import android.graphics.Color
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.activity.OnBackPressedCallback
+import androidx.activity.addCallback
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.jaredrummler.android.colorpicker.ColorPickerDialogListener
@@ -19,6 +21,7 @@ import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.EditError.Companion.getText
 import tool.xfy9326.schedule.beans.Schedule
 import tool.xfy9326.schedule.databinding.ActivityScheduleEditBinding
+import tool.xfy9326.schedule.kt.resume
 import tool.xfy9326.schedule.kt.showSnackBar
 import tool.xfy9326.schedule.ui.activity.base.ViewModelActivity
 import tool.xfy9326.schedule.ui.activity.module.ScheduleTermEditModule
@@ -51,6 +54,10 @@ class ScheduleEditActivity : ViewModelActivity<ScheduleEditViewModel, ActivitySc
     private val scheduleWeekStartModule = ScheduleWeekStartModule(this)
 
     private lateinit var scheduleTimeAdapter: ScheduleTimeAdapter
+
+    override fun onContentViewPreload(savedInstanceState: Bundle?, viewModel: ScheduleEditViewModel) {
+        onBackPressedDispatcher.addCallback(this, true, this::onBackPressed)
+    }
 
     override fun onCreateViewBinding() = ActivityScheduleEditBinding.inflate(layoutInflater)
 
@@ -138,16 +145,16 @@ class ScheduleEditActivity : ViewModelActivity<ScheduleEditViewModel, ActivitySc
         super.onSaveInstanceState(outState)
     }
 
-    override fun onBackPressed() {
+    private fun onBackPressed(callback: OnBackPressedCallback) {
         updateTextData()
         if (requireViewModel().hasDataChanged()) {
             Snackbar.make(requireViewBinding().layoutScheduleEdit, R.string.ask_whether_exit_without_save, Snackbar.LENGTH_LONG)
                 .setActionTextColor(Color.RED)
                 .setAction(android.R.string.ok) {
-                    super.onBackPressed()
+                    callback.resume(onBackPressedDispatcher)
                 }.show()
         } else {
-            super.onBackPressed()
+            callback.resume(onBackPressedDispatcher)
         }
     }
 

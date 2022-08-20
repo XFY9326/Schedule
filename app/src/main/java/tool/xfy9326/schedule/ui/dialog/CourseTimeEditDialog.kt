@@ -17,6 +17,7 @@ import tool.xfy9326.schedule.beans.CourseTime
 import tool.xfy9326.schedule.beans.SectionTime.Companion.end
 import tool.xfy9326.schedule.beans.WeekDay
 import tool.xfy9326.schedule.databinding.DialogCourseTimeEditBinding
+import tool.xfy9326.schedule.kt.getParcelableCompat
 import tool.xfy9326.schedule.utils.schedule.CourseUtils
 import tool.xfy9326.schedule.utils.setWindowPercent
 import kotlin.properties.Delegates
@@ -46,7 +47,7 @@ class CourseTimeEditDialog : AppCompatDialogFragment() {
         fun setCourseTimeEditListener(fragmentManager: FragmentManager, lifecycleOwner: LifecycleOwner, block: (courseTime: CourseTime, position: Int?) -> Unit) {
             fragmentManager.setFragmentResultListener(DIALOG_TAG, lifecycleOwner) { _, bundle ->
                 block(
-                    bundle.getParcelable(EXTRA_COURSE_TIME)!!,
+                    bundle.getParcelableCompat(EXTRA_COURSE_TIME)!!,
                     if (bundle.containsKey(EXTRA_EDIT_POSITION)) {
                         bundle.getInt(EXTRA_EDIT_POSITION, -1)
                     } else {
@@ -73,7 +74,7 @@ class CourseTimeEditDialog : AppCompatDialogFragment() {
         super.onCreate(savedInstanceState)
         maxWeekNum = requireArguments().getInt(EXTRA_MAX_WEEK_NUM)
         maxCourseNum = requireArguments().getInt(EXTRA_MAX_COURSE_NUM)
-        editCourseTime = (requireArguments().getParcelable(EXTRA_COURSE_TIME)) ?: CourseUtils.createNewCourseTime(maxWeekNum)
+        editCourseTime = (requireArguments().getParcelableCompat(EXTRA_COURSE_TIME)) ?: CourseUtils.createNewCourseTime(maxWeekNum)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

@@ -10,6 +10,8 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.webkit.*
+import androidx.activity.OnBackPressedCallback
+import androidx.activity.addCallback
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.core.net.toUri
 import androidx.lifecycle.lifecycleScope
@@ -22,6 +24,7 @@ import tool.xfy9326.schedule.BuildConfig
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.data.AppDataStore
 import tool.xfy9326.schedule.databinding.ActivityFeedbackBinding
+import tool.xfy9326.schedule.kt.resume
 import tool.xfy9326.schedule.ui.activity.base.ViewBindingActivity
 
 class FeedbackActivity : ViewBindingActivity<ActivityFeedbackBinding>() {
@@ -41,6 +44,10 @@ class FeedbackActivity : ViewBindingActivity<ActivityFeedbackBinding>() {
         } else {
             filePathCallback?.onReceiveValue(it.asArray())
         }
+    }
+
+    override fun onContentViewPreload(savedInstanceState: Bundle?) {
+        onBackPressedDispatcher.addCallback(this, true, this::onBackPressed)
     }
 
     override fun onCreateViewBinding() = ActivityFeedbackBinding.inflate(layoutInflater)
@@ -149,12 +156,12 @@ class FeedbackActivity : ViewBindingActivity<ActivityFeedbackBinding>() {
         }
     }
 
-    override fun onBackPressed() {
+    private fun onBackPressed(callback: OnBackPressedCallback) {
         requireViewBinding().webViewFeedback.apply {
             if (canGoBack()) {
                 goBack()
             } else {
-                super.onBackPressed()
+                callback.resume(onBackPressedDispatcher)
             }
         }
     }

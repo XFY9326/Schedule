@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.*
 import android.view.animation.AnimationUtils
 import android.webkit.*
+import androidx.activity.addCallback
 import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
@@ -20,6 +21,7 @@ import tool.xfy9326.schedule.BuildConfig
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.databinding.FragmentWebCourseProviderBinding
+import tool.xfy9326.schedule.kt.resume
 import tool.xfy9326.schedule.ui.dialog.WebCourseProviderBottomPanel
 import tool.xfy9326.schedule.ui.fragment.base.IWebCourseProvider
 import tool.xfy9326.schedule.ui.fragment.base.ViewBindingFragment
@@ -49,6 +51,7 @@ class WebCourseProviderFragment : ViewBindingFragment<FragmentWebCourseProviderB
     @SuppressLint("SetJavaScriptEnabled")
     override fun onInitView(viewBinding: FragmentWebCourseProviderBinding) {
         addMenuInActivity()
+        addRequestBackCallback()
 
         val enableDebug = runBlocking {
             if (!AppSettingsDataStore.keepWebProviderCacheFlow.first()) {
@@ -231,16 +234,16 @@ class WebCourseProviderFragment : ViewBindingFragment<FragmentWebCourseProviderB
         }
     }
 
-    override fun onBackPressed(): Boolean {
-        if (isAdded) {
+    private fun addRequestBackCallback() {
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
             requireViewBinding().webViewWebCourseProvider.apply {
                 if (canGoBack()) {
                     goBack()
-                    return true
+                } else {
+                    resume(requireActivity().onBackPressedDispatcher)
                 }
             }
         }
-        return false
     }
 
     override fun evaluateJavascript(content: String, callback: ((String) -> Unit)?) {

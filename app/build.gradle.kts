@@ -1,6 +1,3 @@
-import com.android.build.api.variant.impl.VariantImpl
-import com.android.build.api.variant.impl.VariantOutputImpl
-
 plugins {
     id("com.android.application")
     kotlin("android")
@@ -30,14 +27,9 @@ android {
 
         androidComponents {
             onVariants { variants ->
-                if (variants is VariantImpl) {
-                    variants.variantData.addJavaSourceFoldersToModel(file("$buildDir/generated/ksp/${variants.buildType}/kotlin"))
-                }
-                variants.outputs.forEach {
-                    if (it is VariantOutputImpl && variants.buildType != "debug") {
-                        it.outputFileName.set("${ProjectConfig.name}_v${versionName}_${versionCode}_${variants.buildType}.apk")
-                    }
-                }
+                kotlin.sourceSets.findByName(variants.name)?.kotlin?.srcDirs(
+                    file("$buildDir/generated/ksp/${variants.buildType}/kotlin")
+                )
             }
         }
 

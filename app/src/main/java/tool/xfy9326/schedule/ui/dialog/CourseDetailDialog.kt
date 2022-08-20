@@ -17,6 +17,7 @@ import tool.xfy9326.schedule.beans.CourseDetail
 import tool.xfy9326.schedule.beans.CourseTime
 import tool.xfy9326.schedule.beans.ScheduleTime
 import tool.xfy9326.schedule.databinding.DialogCourseDetailBinding
+import tool.xfy9326.schedule.kt.getParcelableCompat
 import tool.xfy9326.schedule.tools.MaterialColorHelper
 import tool.xfy9326.schedule.ui.activity.CourseEditActivity
 import tool.xfy9326.schedule.ui.adapter.CourseDetailAdapter
@@ -47,7 +48,7 @@ class CourseDetailDialog : AppCompatDialogFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
         DialogCourseDetailBinding.inflate(layoutInflater, container, false).apply {
             val expandView = savedInstanceState?.getBoolean(EXTRA_VIEW_LOAD_MODE, false) ?: false
-            val courseDetail = requireArguments().getParcelable<CourseDetail>(ARGUMENT_COURSE_DETAIL)
+            val courseDetail = requireArguments().getParcelableCompat<CourseDetail>(ARGUMENT_COURSE_DETAIL)
 
             if (courseDetail != null) {
                 initHeader(this, courseDetail.course)

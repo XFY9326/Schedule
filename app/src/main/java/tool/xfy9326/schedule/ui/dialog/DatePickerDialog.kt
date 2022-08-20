@@ -9,7 +9,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.LifecycleOwner
-import io.github.xfy9326.atools.base.castNonNull
+import tool.xfy9326.schedule.kt.getSerializableCompat
 import tool.xfy9326.schedule.utils.CalendarUtils
 import java.util.*
 
@@ -33,7 +33,7 @@ class DatePickerDialog : AppCompatDialogFragment(), DatePickerDialog.OnDateSetLi
 
         fun setOnDateSetListener(fragmentManager: FragmentManager, lifecycleOwner: LifecycleOwner, block: (tag: String?, date: Date) -> Unit) {
             fragmentManager.setFragmentResultListener(DIALOG_TAG, lifecycleOwner) { _, bundle ->
-                block(bundle.getString(EXTRA_TAG), bundle.getSerializable(EXTRA_DATE).castNonNull())
+                block(bundle.getString(EXTRA_TAG), bundle.getSerializableCompat(EXTRA_DATE)!!)
             }
         }
 
@@ -48,7 +48,7 @@ class DatePickerDialog : AppCompatDialogFragment(), DatePickerDialog.OnDateSetLi
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val calendar = CalendarUtils.getCalendar(requireArguments().getSerializable(EXTRA_DATE) as Date)
+        val calendar = CalendarUtils.getCalendar(requireArguments().getSerializableCompat(EXTRA_DATE)!!)
         return DatePickerDialog(
             requireContext(),
             this,

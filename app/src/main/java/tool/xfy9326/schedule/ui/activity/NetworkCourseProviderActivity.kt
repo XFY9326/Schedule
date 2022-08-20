@@ -1,11 +1,14 @@
 package tool.xfy9326.schedule.ui.activity
 
 import android.graphics.Bitmap
+import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.Spinner
+import androidx.activity.OnBackPressedCallback
+import androidx.activity.addCallback
 import androidx.annotation.StringRes
 import androidx.core.view.isVisible
 import coil.load
@@ -20,6 +23,7 @@ import tool.xfy9326.schedule.content.base.NetworkCourseParser
 import tool.xfy9326.schedule.content.base.NetworkCourseProvider
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
 import tool.xfy9326.schedule.databinding.ActivityNetworkCourseProviderBinding
+import tool.xfy9326.schedule.kt.resume
 import tool.xfy9326.schedule.kt.showSnackBar
 import tool.xfy9326.schedule.ui.activity.base.CourseProviderActivity
 import tool.xfy9326.schedule.ui.vm.NetworkCourseProviderViewModel
@@ -33,6 +37,10 @@ class NetworkCourseProviderActivity :
     override val exitIfImportSuccess = true
 
     override val vmClass = NetworkCourseProviderViewModel::class
+
+    override fun onContentViewPreload(savedInstanceState: Bundle?, viewModel: NetworkCourseProviderViewModel) {
+        onBackPressedDispatcher.addCallback(this, true, this::onBackPressed)
+    }
 
     override fun onCreateViewBinding() = ActivityNetworkCourseProviderBinding.inflate(layoutInflater)
 
@@ -116,16 +124,16 @@ class NetworkCourseProviderActivity :
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onBackPressed() {
+    private fun onBackPressed(callback: OnBackPressedCallback) {
         requireViewBinding().layoutCourseImportContent.clearFocus()
 
         if (requireViewModel().isImportingCourses) {
             DialogUtils.showCancelScheduleImportDialog(this) {
                 requireViewModel().finishImport()
-                finish()
+                callback.resume(onBackPressedDispatcher)
             }
         } else {
-            super.onBackPressed()
+            callback.resume(onBackPressedDispatcher)
         }
     }
 

@@ -7,6 +7,7 @@ import androidx.core.os.bundleOf
 import io.github.xfy9326.atools.livedata.observeEvent
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.BatchResult
+import tool.xfy9326.schedule.kt.getParcelableCompat
 import tool.xfy9326.schedule.kt.setOnPrefClickListener
 import tool.xfy9326.schedule.kt.showSnackBar
 import tool.xfy9326.schedule.tools.MIMEConst
@@ -97,7 +98,7 @@ class BackupRestoreSettingsFragment : AbstractSettingsFragment() {
             }
         }
         ImportCourseConflictDialog.setOnReadImportCourseConflictListener(childFragmentManager, viewLifecycleOwner) {
-            it?.getParcelable<BatchResult>(EXTRA_BATCH_RESULT)?.let(::showRestoreResult)
+            it?.getParcelableCompat<BatchResult>(EXTRA_BATCH_RESULT)?.let(::showRestoreResult)
         }
     }
 

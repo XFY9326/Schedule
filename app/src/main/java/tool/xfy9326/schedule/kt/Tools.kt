@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.Window
+import androidx.activity.OnBackPressedCallback
+import androidx.activity.OnBackPressedDispatcher
 import androidx.annotation.ColorInt
 import androidx.annotation.StringRes
 import androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -50,6 +52,11 @@ fun Window.setSystemBarAppearance(systemBarAppearance: SystemBarAppearance) {
         SystemBarAppearance.USE_LIGHT -> setLightSystemBar(true)
         SystemBarAppearance.USE_DARK -> setLightSystemBar(false)
     }
+}
+
+fun OnBackPressedCallback.resume(dispatcher: OnBackPressedDispatcher) {
+    isEnabled = false
+    dispatcher.onBackPressed()
 }
 
 @ColorInt

@@ -66,7 +66,7 @@ object CourseUtils {
                         }
                     }
                     if (!isIntersectWithThisWeekCourse && needReplace) {
-                        if (replaceList.isNotEmpty()) resultSet.removeAll(replaceList)
+                        if (replaceList.isNotEmpty()) resultSet.removeAll(replaceList.toSet())
                         resultSet.add(CourseCell(course, courseTime, fromWeekNum, isThisWeekCourse))
                     }
                 }

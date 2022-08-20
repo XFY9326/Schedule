@@ -27,6 +27,7 @@ import tool.xfy9326.schedule.databinding.DialogUpgradeBinding
 import tool.xfy9326.schedule.json.upgrade.DownloadSource
 import tool.xfy9326.schedule.json.upgrade.UpdateInfo
 import tool.xfy9326.schedule.kt.PROJECT_ID
+import tool.xfy9326.schedule.kt.getParcelableCompat
 import tool.xfy9326.schedule.tools.MIMEConst
 import tool.xfy9326.schedule.utils.DownloadUtils
 import tool.xfy9326.schedule.utils.setWindowPercent
@@ -68,8 +69,8 @@ class UpgradeDialog : AppCompatDialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        updateInfo = requireArguments().getParcelable(UPDATE_INFO)!!
-        selectedSource = savedInstanceState?.getParcelable(EXTRA_DOWNLOAD_SOURCE)
+        updateInfo = requireArguments().getParcelableCompat(UPDATE_INFO)!!
+        selectedSource = savedInstanceState?.getParcelableCompat(EXTRA_DOWNLOAD_SOURCE)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

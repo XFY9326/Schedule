@@ -153,36 +153,38 @@ object ScheduleSyncHelper {
         reminderMinutes: Int,
     ): Boolean {
         val weekNumPattern = WeekNumPattern.parsePattern(courseTime, scheduleCalculateTimes)
-        if (weekNumPattern.type == NumberPattern.PatternType.SINGLE) {
-            CourseTimeUtils.getRealSectionTime(scheduleCalculateTimes, weekNumPattern.start + 1, courseTime.sectionTime).let { time ->
-                if (!insertEvent(contentResolver, sync, reminderMinutes, ContentValues().apply {
-                        addBasicInfoToCalendarEvent(this, calId, time, course, courseTime)
-                    })) return false
-            }
-        } else if (weekNumPattern.type == NumberPattern.PatternType.SPACED || weekNumPattern.type == NumberPattern.PatternType.SERIAL) {
-            CourseTimeUtils.getRealSectionTime(scheduleCalculateTimes, weekNumPattern.start + 1, courseTime.sectionTime).let { time ->
-                if (!insertEvent(contentResolver, sync, reminderMinutes, ContentValues().apply {
-                        put(
-                            CalendarContract.Events.RRULE,
-                            ScheduleICSWriter.RRULE(weekNumPattern.interval, weekNumPattern.amount, courseTime.sectionTime.weekDay, scheduleCalculateTimes.weekStart).text
-                        )
-                        addBasicInfoToCalendarEvent(this, calId, time, course, courseTime)
-                    })) return false
-            }
-        } else if (weekNumPattern.type == NumberPattern.PatternType.MESSY) {
-            for (period in weekNumPattern.timePeriodArray) {
-                CourseTimeUtils.getRealSectionTime(scheduleCalculateTimes, period.start + 1, courseTime.sectionTime).let { time ->
+        when (weekNumPattern.type) {
+            NumberPattern.PatternType.SINGLE ->
+                CourseTimeUtils.getRealSectionTime(scheduleCalculateTimes, weekNumPattern.start + 1, courseTime.sectionTime).let { time ->
                     if (!insertEvent(contentResolver, sync, reminderMinutes, ContentValues().apply {
-                            if (period.length > 1) {
-                                put(
-                                    CalendarContract.Events.RRULE,
-                                    ScheduleICSWriter.RRULE(1, period.length, courseTime.sectionTime.weekDay, scheduleCalculateTimes.weekStart).text
-                                )
-                            }
                             addBasicInfoToCalendarEvent(this, calId, time, course, courseTime)
                         })) return false
                 }
-            }
+            NumberPattern.PatternType.SPACED, NumberPattern.PatternType.SERIAL ->
+                CourseTimeUtils.getRealSectionTime(scheduleCalculateTimes, weekNumPattern.start + 1, courseTime.sectionTime).let { time ->
+                    if (!insertEvent(contentResolver, sync, reminderMinutes, ContentValues().apply {
+                            put(
+                                CalendarContract.Events.RRULE,
+                                ScheduleICSWriter.RRULE(weekNumPattern.interval, weekNumPattern.amount, courseTime.sectionTime.weekDay, scheduleCalculateTimes.weekStart).text
+                            )
+                            addBasicInfoToCalendarEvent(this, calId, time, course, courseTime)
+                        })) return false
+                }
+            NumberPattern.PatternType.MESSY ->
+                for (period in weekNumPattern.timePeriodArray) {
+                    CourseTimeUtils.getRealSectionTime(scheduleCalculateTimes, period.start + 1, courseTime.sectionTime).let { time ->
+                        if (!insertEvent(contentResolver, sync, reminderMinutes, ContentValues().apply {
+                                if (period.length > 1) {
+                                    put(
+                                        CalendarContract.Events.RRULE,
+                                        ScheduleICSWriter.RRULE(1, period.length, courseTime.sectionTime.weekDay, scheduleCalculateTimes.weekStart).text
+                                    )
+                                }
+                                addBasicInfoToCalendarEvent(this, calId, time, course, courseTime)
+                            })) return false
+                    }
+                }
+            else -> Unit
         }
         return true
     }

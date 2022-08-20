@@ -19,6 +19,7 @@ import tool.xfy9326.schedule.content.CourseImportConfigManager.Type.Companion.ge
 import tool.xfy9326.schedule.content.beans.JSConfig
 import tool.xfy9326.schedule.content.utils.JSConfigException
 import tool.xfy9326.schedule.databinding.DialogJsConfigPrepareBinding
+import tool.xfy9326.schedule.kt.getParcelableCompat
 import tool.xfy9326.schedule.ui.vm.OnlineCourseImportViewModel
 import tool.xfy9326.schedule.utils.getDeepStackTraceString
 import tool.xfy9326.schedule.utils.setWindowPercent
@@ -50,7 +51,7 @@ class JSConfigPrepareDialog : AppCompatDialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        jsConfig = requireArguments().getParcelable(EXTRA_JS_CONFIG)!!
+        jsConfig = requireArguments().getParcelableCompat(EXTRA_JS_CONFIG)!!
         isRunning = savedInstanceState?.getBoolean(EXTRA_PREPARE_RUNNING, false) ?: false
     }
 

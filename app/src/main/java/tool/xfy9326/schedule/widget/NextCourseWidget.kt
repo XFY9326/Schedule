@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.Intent
 import io.github.xfy9326.atools.coroutines.goAsync
 import tool.xfy9326.schedule.BuildConfig
+import tool.xfy9326.schedule.kt.getParcelableExtraCompat
 import tool.xfy9326.schedule.utils.schedule.NextCourseUtils
 import tool.xfy9326.schedule.utils.view.NextCourseWidgetUtils
 
@@ -43,7 +44,7 @@ open class NextCourseWidget : AppWidgetProvider() {
             goAsync {
                 val appWidgetIds = NextCourseWidgetUtils.getAllNextCourseWidgetId(context)
                 if (NextCourseWidgetUtils.hasNextCourseWidget(context, appWidgetIds)) {
-                    val nextCourse = intent.getParcelableExtra(EXTRA_NEXT_COURSE) ?: NextCourseUtils.getCurrentScheduleNextCourse()
+                    val nextCourse = intent.getParcelableExtraCompat(EXTRA_NEXT_COURSE) ?: NextCourseUtils.getCurrentScheduleNextCourse()
                     NextCourseWidgetUtils.setupNextAlarm(context, nextCourse)
                     for ((clazz, idArray) in appWidgetIds) {
                         val remoteViews = NextCourseWidgetUtils.generateRemoteViews(context, nextCourse, clazz)
