@@ -8,7 +8,7 @@ import tool.xfy9326.schedule.content.utils.selectSingle
 
 class SCUJCCCourseProvider : WebCourseProvider<Nothing>() {
     companion object {
-        private const val LOGIN_PAGE = "http://jwweb.scujcc.cn/default2.aspx"
+        private const val LOGIN_PAGE = "https://jwweb.scujcc.cn/default2.aspx"
         private const val MAIN_CONTENT_SELECTOR = "div.main_box"
         private const val TAG_ID_TABLE_1 = "Table1" // ImportOption 0
         private const val TAG_ID_TABLE_6 = "Table6" // ImportOption 1
