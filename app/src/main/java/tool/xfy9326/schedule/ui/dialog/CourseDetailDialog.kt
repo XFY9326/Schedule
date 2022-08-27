@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatDialogFragment
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
+import io.github.xfy9326.atools.core.getParcelableCompat
 import io.github.xfy9326.atools.core.startActivity
 import io.github.xfy9326.atools.ui.getColorCompat
 import io.github.xfy9326.atools.ui.getStringArray
@@ -47,7 +48,7 @@ class CourseDetailDialog : AppCompatDialogFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
         DialogCourseDetailBinding.inflate(layoutInflater, container, false).apply {
             val expandView = savedInstanceState?.getBoolean(EXTRA_VIEW_LOAD_MODE, false) ?: false
-            val courseDetail = requireArguments().getParcelable<CourseDetail>(ARGUMENT_COURSE_DETAIL)
+            val courseDetail = requireArguments().getParcelableCompat<CourseDetail>(ARGUMENT_COURSE_DETAIL)
 
             if (courseDetail != null) {
                 initHeader(this, courseDetail.course)

@@ -9,6 +9,7 @@ import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.activityViewModels
+import io.github.xfy9326.atools.core.getParcelableCompat
 import io.github.xfy9326.atools.core.showToast
 import io.github.xfy9326.atools.livedata.observeEvent
 import io.github.xfy9326.atools.ui.showToast
@@ -50,7 +51,7 @@ class JSConfigPrepareDialog : AppCompatDialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        jsConfig = requireArguments().getParcelable(EXTRA_JS_CONFIG)!!
+        jsConfig = requireArguments().getParcelableCompat(EXTRA_JS_CONFIG)!!
         isRunning = savedInstanceState?.getBoolean(EXTRA_PREPARE_RUNNING, false) ?: false
     }
 

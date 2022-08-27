@@ -42,7 +42,7 @@ abstract class AbstractActivity : AppCompatActivity() {
     @CallSuper
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (useBackInsteadOfNavigateHome && item.itemId == android.R.id.home) {
-            onBackPressed()
+            finish()
             return true
         }
         return super.onOptionsItemSelected(item)

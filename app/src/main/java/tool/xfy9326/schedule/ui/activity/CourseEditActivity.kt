@@ -5,11 +5,14 @@ import android.graphics.Color
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.activity.OnBackPressedCallback
+import androidx.activity.addCallback
 import com.google.android.material.snackbar.Snackbar
 import com.jaredrummler.android.colorpicker.ColorPickerDialogListener
 import io.github.xfy9326.atools.core.hideKeyboard
 import io.github.xfy9326.atools.livedata.observeEvent
 import io.github.xfy9326.atools.ui.getText
+import io.github.xfy9326.atools.ui.resume
 import io.github.xfy9326.atools.ui.setOnSingleClickListener
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.Course
@@ -34,6 +37,10 @@ class CourseEditActivity : ViewModelActivity<CourseEditViewModel, ActivityCourse
 
     private var currentEditScheduleId by Delegates.notNull<Long>()
     private lateinit var courseTimeAdapter: CourseTimeAdapter
+
+    override fun onContentViewPreload(savedInstanceState: Bundle?, viewModel: CourseEditViewModel) {
+        onBackPressedDispatcher.addCallback(this, true, this::onBackPressed)
+    }
 
     override fun onCreateViewBinding() = ActivityCourseEditBinding.inflate(layoutInflater)
 
@@ -126,16 +133,16 @@ class CourseEditActivity : ViewModelActivity<CourseEditViewModel, ActivityCourse
         super.onSaveInstanceState(outState)
     }
 
-    override fun onBackPressed() {
+    private fun onBackPressed(callback: OnBackPressedCallback) {
         updateTextData()
         if (requireViewModel().hasDataChanged()) {
             Snackbar.make(requireViewBinding().layoutCourseEdit, R.string.ask_whether_exit_without_save, Snackbar.LENGTH_LONG)
                 .setActionTextColor(Color.RED)
                 .setAction(android.R.string.ok) {
-                    super.onBackPressed()
+                    callback.resume(onBackPressedDispatcher)
                 }.show()
         } else {
-            super.onBackPressed()
+            callback.resume(onBackPressedDispatcher)
         }
     }
 

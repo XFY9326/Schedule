@@ -15,6 +15,7 @@ import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import io.github.xfy9326.atools.core.PackageInstallPermissionContract
 import io.github.xfy9326.atools.core.canInstallPackage
+import io.github.xfy9326.atools.core.getParcelableCompat
 import io.github.xfy9326.atools.ui.show
 import io.github.xfy9326.atools.ui.showToast
 import kotlinx.coroutines.flow.first
@@ -68,8 +69,8 @@ class UpgradeDialog : AppCompatDialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        updateInfo = requireArguments().getParcelable(UPDATE_INFO)!!
-        selectedSource = savedInstanceState?.getParcelable(EXTRA_DOWNLOAD_SOURCE)
+        updateInfo = requireArguments().getParcelableCompat(UPDATE_INFO)!!
+        selectedSource = savedInstanceState?.getParcelableCompat(EXTRA_DOWNLOAD_SOURCE)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

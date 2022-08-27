@@ -8,7 +8,8 @@ import androidx.lifecycle.LifecycleOwner
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import io.github.xfy9326.atools.base.castNonNull
+import io.github.xfy9326.atools.core.getParcelableCompat
+import io.github.xfy9326.atools.core.getSerializableCompat
 import io.github.xfy9326.atools.ui.setOnSingleClickListener
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.ScheduleText
@@ -35,15 +36,15 @@ class ScheduleTextSizeEditDialog : BottomSheetDialogFragment() {
         fun setTextSizeEditListener(fragmentManager: FragmentManager, lifecycleOwner: LifecycleOwner, listener: (ScheduleText, Int) -> Unit) {
             fragmentManager.setFragmentResultListener(TAG_DIALOG, lifecycleOwner) { _, result ->
                 listener.invoke(
-                    result.getSerializable(EXTRA_TEXT_TYPE).castNonNull(),
+                    result.getSerializableCompat(EXTRA_TEXT_TYPE)!!,
                     result.getInt(EXTRA_TEXT_SIZE_VALUE)
                 )
             }
         }
     }
 
-    private val textSize by lazy { requireArguments().getParcelable<ScheduleText.TextSize>(EXTRA_TEXT_SIZE)!! }
-    private val textType by lazy { requireArguments().getSerializable(EXTRA_TEXT_TYPE).castNonNull<ScheduleText>() }
+    private val textSize by lazy { requireArguments().getParcelableCompat<ScheduleText.TextSize>(EXTRA_TEXT_SIZE)!! }
+    private val textType by lazy { requireArguments().getSerializableCompat<ScheduleText>(EXTRA_TEXT_TYPE)!! }
     private val binding by lazy { DialogScheduleTextSizeEditBinding.inflate(layoutInflater) }
 
     override fun onCreateDialog(savedInstanceState: Bundle?) = BottomSheetDialog(requireContext(), R.style.AppTheme_TransparentBottomSheetDialog).apply {

@@ -3,6 +3,7 @@ package tool.xfy9326.schedule.ui.fragment.settings
 import android.content.res.Configuration
 import android.os.Bundle
 import android.view.*
+import androidx.activity.addCallback
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.core.view.MenuProvider
 import androidx.core.view.updateLayoutParams
@@ -12,17 +13,17 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import io.github.xfy9326.atools.livedata.postEvent
 import io.github.xfy9326.atools.ui.getRealScreenSize
+import io.github.xfy9326.atools.ui.resume
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.databinding.FragmentScheduleSettingsBinding
 import tool.xfy9326.schedule.kt.getDefaultBackgroundColor
-import tool.xfy9326.schedule.ui.base.OnRequestBackCallback
 import tool.xfy9326.schedule.ui.fragment.SchedulePreviewFragment
 import tool.xfy9326.schedule.ui.fragment.base.ViewBindingFragment
 import tool.xfy9326.schedule.ui.vm.SettingsViewModel
 import tool.xfy9326.schedule.utils.view.ViewUtils
 import kotlin.properties.Delegates
 
-class ScheduleBaseSettingsFragment : ViewBindingFragment<FragmentScheduleSettingsBinding>(), PreferenceFragmentCompat.OnPreferenceStartFragmentCallback, OnRequestBackCallback {
+class ScheduleBaseSettingsFragment : ViewBindingFragment<FragmentScheduleSettingsBinding>(), PreferenceFragmentCompat.OnPreferenceStartFragmentCallback {
     companion object {
         private const val EXTRA_IS_PREVIEW_LAND_MODE = "EXTRA_IS_PREVIEW_LAND_MODE"
     }
@@ -36,6 +37,7 @@ class ScheduleBaseSettingsFragment : ViewBindingFragment<FragmentScheduleSetting
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         addMenuInActivity()
+        addRequestBackCallback()
         return super.onCreateView(inflater, container, savedInstanceState)?.also {
             it.setBackgroundColor(requireContext().getDefaultBackgroundColor())
         }
@@ -87,12 +89,13 @@ class ScheduleBaseSettingsFragment : ViewBindingFragment<FragmentScheduleSetting
         return ViewUtils.navigatePreferenceFragmentWithAnimation(requireContext(), childFragmentManager, R.id.container_fragmentSettings, pref)
     }
 
-    override fun onRequestBack(): Boolean {
-        return if (childFragmentManager.backStackEntryCount == 0) {
-            false
-        } else {
-            childFragmentManager.popBackStack()
-            true
+    private fun addRequestBackCallback() {
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+            if (childFragmentManager.backStackEntryCount == 0) {
+                resume(requireActivity().onBackPressedDispatcher)
+            } else {
+                childFragmentManager.popBackStack()
+            }
         }
     }
 }

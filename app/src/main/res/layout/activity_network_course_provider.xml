@@ -124,6 +124,7 @@
                             android:id="@+id/editText_userId"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:autofillHints="username"
                             android:inputType="text"
                             android:singleLine="true"
                             android:textSize="13sp" />
@@ -143,6 +144,7 @@
                             android:id="@+id/editText_userPw"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:autofillHints="password"
                             android:inputType="textPassword"
                             android:singleLine="true"
                             android:textSize="13sp" />
@@ -202,8 +204,7 @@
                         <com.google.android.material.textview.MaterialTextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="5dp"
-                            android:layout_marginEnd="20dp"
+                            android:layout_marginEnd="8dp"
                             android:text="@string/options"
                             android:textSize="14sp" />
 

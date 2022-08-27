@@ -1,6 +1,3 @@
-import com.android.build.api.variant.impl.VariantImpl
-import com.android.build.api.variant.impl.VariantOutputImpl
-
 plugins {
     id("com.android.application")
     kotlin("android")
@@ -30,14 +27,9 @@ android {
 
         androidComponents {
             onVariants { variants ->
-                if (variants is VariantImpl) {
-                    variants.variantData.addJavaSourceFoldersToModel(file("$buildDir/generated/ksp/${variants.buildType}/kotlin"))
-                }
-                variants.outputs.forEach {
-                    if (it is VariantOutputImpl && variants.buildType != "debug") {
-                        it.outputFileName.set("${ProjectConfig.name}_v${versionName}_${versionCode}_${variants.buildType}.apk")
-                    }
-                }
+                kotlin.sourceSets.findByName(variants.name)?.kotlin?.srcDirs(
+                    file("$buildDir/generated/ksp/${variants.buildType}/kotlin")
+                )
             }
         }
 
@@ -117,7 +109,7 @@ dependencies {
     ksp(project(path = ":AnnotationKSP"))
 
     // ATools
-    val atoolsVersion = "0.0.18"
+    val atoolsVersion = "0.0.19"
     implementation("io.github.xfy9326.atools:atools-io:$atoolsVersion")
     implementation("io.github.xfy9326.atools:atools-ui:$atoolsVersion")
     implementation("io.github.xfy9326.atools:atools-crash:$atoolsVersion")
@@ -131,7 +123,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
 
     // Kotlin Serialization
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.3")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.0")
 
     // AndroidX
     implementation("androidx.core:core-ktx:1.8.0")
@@ -168,7 +160,7 @@ dependencies {
     implementation("com.google.android.material:material:1.6.1")
 
     // Coil
-    implementation("io.coil-kt:coil:2.1.0")
+    implementation("io.coil-kt:coil:2.2.0")
 
     // OkHttp
     implementation("com.squareup.okhttp3:okhttp:4.10.0")

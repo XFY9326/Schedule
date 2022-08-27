@@ -27,7 +27,7 @@ class ScheduleInsetsModule(activity: ScheduleActivity) : AbstractViewModelActivi
             WindowInsetsCompat.Builder(WindowInsetsCompat.toWindowInsetsCompat(insets))
                 .setInsets(WindowInsetsCompat.Type.systemBars(), Insets.of(systemBarInset.left, 0, systemBarInset.right, 0))
                 .build()
-                .toWindowInsets()
+                .toWindowInsets() ?: error("WindowInsets API requires API 20!")
         }
     }
 }

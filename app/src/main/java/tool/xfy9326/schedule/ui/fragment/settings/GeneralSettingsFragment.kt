@@ -60,7 +60,7 @@ class GeneralSettingsFragment : AbstractSettingsFragment() {
 
     private fun restoreSettings() {
         requireSettingsViewModel()?.restoreSettings()
-        requestBack()
+        requireActivity().onBackPressedDispatcher.onBackPressed()
         requireRootLayout()?.showSnackBar(R.string.restore_settings_success)
     }
 }

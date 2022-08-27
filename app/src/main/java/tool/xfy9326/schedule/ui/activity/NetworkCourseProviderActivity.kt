@@ -1,15 +1,19 @@
 package tool.xfy9326.schedule.ui.activity
 
 import android.graphics.Bitmap
+import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.Spinner
+import androidx.activity.OnBackPressedCallback
+import androidx.activity.addCallback
 import androidx.annotation.StringRes
 import androidx.core.view.isVisible
 import coil.load
 import io.github.xfy9326.atools.ui.getText
+import io.github.xfy9326.atools.ui.resume
 import io.github.xfy9326.atools.ui.setAllEnable
 import io.github.xfy9326.atools.ui.setOnSingleClickListener
 import tool.xfy9326.schedule.R
@@ -33,6 +37,10 @@ class NetworkCourseProviderActivity :
     override val exitIfImportSuccess = true
 
     override val vmClass = NetworkCourseProviderViewModel::class
+
+    override fun onContentViewPreload(savedInstanceState: Bundle?, viewModel: NetworkCourseProviderViewModel) {
+        onBackPressedDispatcher.addCallback(this, true, this::onBackPressed)
+    }
 
     override fun onCreateViewBinding() = ActivityNetworkCourseProviderBinding.inflate(layoutInflater)
 
@@ -116,16 +124,16 @@ class NetworkCourseProviderActivity :
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onBackPressed() {
+    private fun onBackPressed(callback: OnBackPressedCallback) {
         requireViewBinding().layoutCourseImportContent.clearFocus()
 
         if (requireViewModel().isImportingCourses) {
             DialogUtils.showCancelScheduleImportDialog(this) {
                 requireViewModel().finishImport()
-                finish()
+                callback.resume(onBackPressedDispatcher)
             }
         } else {
-            super.onBackPressed()
+            callback.resume(onBackPressedDispatcher)
         }
     }
 

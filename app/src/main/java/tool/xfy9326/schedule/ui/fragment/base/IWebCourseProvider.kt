@@ -10,8 +10,6 @@ class IWebCourseProvider {
     }
 
     interface IFragmentContact {
-        fun onBackPressed(): Boolean
-
         fun evaluateJavascript(content: String, callback: ((String) -> Unit)? = null)
 
         fun refresh()

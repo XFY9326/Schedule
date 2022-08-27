@@ -6,12 +6,15 @@ import android.graphics.Color
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.activity.OnBackPressedCallback
+import androidx.activity.addCallback
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.jaredrummler.android.colorpicker.ColorPickerDialogListener
 import io.github.xfy9326.atools.core.hideKeyboard
 import io.github.xfy9326.atools.core.startActivity
 import io.github.xfy9326.atools.livedata.observeEvent
+import io.github.xfy9326.atools.ui.resume
 import io.github.xfy9326.atools.ui.setOnSingleClickListener
 import io.github.xfy9326.atools.ui.show
 import io.github.xfy9326.atools.ui.showToast
@@ -51,6 +54,10 @@ class ScheduleEditActivity : ViewModelActivity<ScheduleEditViewModel, ActivitySc
     private val scheduleWeekStartModule = ScheduleWeekStartModule(this)
 
     private lateinit var scheduleTimeAdapter: ScheduleTimeAdapter
+
+    override fun onContentViewPreload(savedInstanceState: Bundle?, viewModel: ScheduleEditViewModel) {
+        onBackPressedDispatcher.addCallback(this, true, this::onBackPressed)
+    }
 
     override fun onCreateViewBinding() = ActivityScheduleEditBinding.inflate(layoutInflater)
 
@@ -138,16 +145,16 @@ class ScheduleEditActivity : ViewModelActivity<ScheduleEditViewModel, ActivitySc
         super.onSaveInstanceState(outState)
     }
 
-    override fun onBackPressed() {
+    private fun onBackPressed(callback: OnBackPressedCallback) {
         updateTextData()
         if (requireViewModel().hasDataChanged()) {
             Snackbar.make(requireViewBinding().layoutScheduleEdit, R.string.ask_whether_exit_without_save, Snackbar.LENGTH_LONG)
                 .setActionTextColor(Color.RED)
                 .setAction(android.R.string.ok) {
-                    super.onBackPressed()
+                    callback.resume(onBackPressedDispatcher)
                 }.show()
         } else {
-            super.onBackPressed()
+            callback.resume(onBackPressedDispatcher)
         }
     }
 

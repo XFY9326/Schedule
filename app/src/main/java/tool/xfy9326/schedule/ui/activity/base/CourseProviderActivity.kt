@@ -5,7 +5,7 @@ import androidx.annotation.CallSuper
 import androidx.core.os.bundleOf
 import androidx.lifecycle.lifecycleScope
 import androidx.viewbinding.ViewBinding
-import io.github.xfy9326.atools.base.castNonNull
+import io.github.xfy9326.atools.core.getSerializableExtraCompat
 import io.github.xfy9326.atools.core.startActivity
 import io.github.xfy9326.atools.livedata.observeEvent
 import kotlinx.coroutines.flow.first
@@ -45,7 +45,7 @@ abstract class CourseProviderActivity<I, P1 : AbstractCourseProvider<*>, P2 : Ab
     // 应该在Override方法开始执行时CallSuper
     @CallSuper
     override fun onPrepare(viewBinding: V, viewModel: M) {
-        viewModel.registerConfig(intent.getSerializableExtra(EXTRA_COURSE_IMPORT_CONFIG_CLASS).castNonNull())
+        viewModel.registerConfig(intent.getSerializableExtraCompat(EXTRA_COURSE_IMPORT_CONFIG_CLASS)!!)
     }
 
     @CallSuper

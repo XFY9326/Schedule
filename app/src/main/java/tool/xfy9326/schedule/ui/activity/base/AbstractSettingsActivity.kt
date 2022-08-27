@@ -9,7 +9,6 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.databinding.ActivityFragmentContainerBinding
-import tool.xfy9326.schedule.ui.base.OnRequestBackCallback
 import tool.xfy9326.schedule.ui.fragment.base.AbstractSettingsFragment
 import tool.xfy9326.schedule.utils.view.ViewUtils
 
@@ -42,7 +41,7 @@ abstract class AbstractSettingsActivity : ViewBindingActivity<ActivityFragmentCo
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == android.R.id.home) {
-            requestBack()
+            onBackPressedDispatcher.onBackPressed()
             return true
         }
         return super.onOptionsItemSelected(item)
@@ -50,20 +49,5 @@ abstract class AbstractSettingsActivity : ViewBindingActivity<ActivityFragmentCo
 
     override fun onPreferenceStartFragment(caller: PreferenceFragmentCompat, pref: Preference): Boolean {
         return ViewUtils.navigatePreferenceFragmentWithAnimation(this, supportFragmentManager, R.id.fragmentContainer, pref)
-    }
-
-    override fun onBackPressed() {
-        requestBack()
-    }
-
-    fun requestBack() {
-        if (supportFragmentManager.backStackEntryCount == 0) {
-            super.onBackPressed()
-        } else {
-            val backStackFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainer)
-            if (backStackFragment !is OnRequestBackCallback || !backStackFragment.onRequestBack()) {
-                supportFragmentManager.popBackStack()
-            }
-        }
     }
 }

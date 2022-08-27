@@ -55,13 +55,6 @@ abstract class AbstractWebCourseProviderActivity<I, P1 : AbstractCourseProvider<
         return super.onOptionsItemSelected(item)
     }
 
-    @CallSuper
-    override fun onBackPressed() {
-        if (!iFragmentContact.onBackPressed()) {
-            super.onBackPressed()
-        }
-    }
-
     final override fun onShowCourseAdapterError(exception: CourseAdapterException) {
         ViewUtils.showCourseImportErrorSnackBar(this, requireViewBinding().layoutFragmentContainer, exception)
     }
