@@ -1,7 +1,6 @@
 package tool.xfy9326.schedule.utils
 
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.*
 import io.github.xfy9326.atools.coroutines.withTryLock
 import io.ktor.client.*
 import io.ktor.client.call.*
@@ -48,12 +47,12 @@ object UpgradeUtils {
                     if (it.first) {
                         val info = it.second
                         if (info == null) {
-                            if (onNoUpgrade != null) lifecycleOwner.lifecycleScope.launchWhenStarted { onNoUpgrade() }
+                            if (onNoUpgrade != null) lifecycleOwner.withStarted { onNoUpgrade() }
                         } else {
-                            if (onFoundUpgrade != null) lifecycleOwner.lifecycleScope.launchWhenStarted { onFoundUpgrade(info) }
+                            if (onFoundUpgrade != null) lifecycleOwner.withStarted { onFoundUpgrade(info) }
                         }
                     } else {
-                        if (onFailed != null) lifecycleOwner.lifecycleScope.launchWhenStarted { onFailed() }
+                        if (onFailed != null) lifecycleOwner.withStarted { onFailed() }
                     }
                 }
             }
