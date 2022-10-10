@@ -26,9 +26,9 @@ android {
         manifestPlaceholders["BaseApplicationId"] = ProjectConfig.applicationId
 
         androidComponents {
-            onVariants { variants ->
-                kotlin.sourceSets.findByName(variants.name)?.kotlin?.srcDirs(
-                    file("$buildDir/generated/ksp/${variants.buildType}/kotlin")
+            onVariants { variant ->
+                kotlin.sourceSets.findByName(variant.name)?.kotlin?.srcDirs(
+                    file("$buildDir/generated/ksp/${variant.buildType}/kotlin")
                 )
             }
         }
@@ -126,16 +126,16 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.0")
 
     // AndroidX
-    implementation("androidx.core:core-ktx:1.8.0")
+    implementation("androidx.core:core-ktx:1.9.0")
 
     implementation("androidx.core:core-splashscreen:1.0.0")
 
-    val appCompatVersion = "1.5.0"
+    val appCompatVersion = "1.5.1"
     implementation("androidx.appcompat:appcompat:$appCompatVersion")
     implementation("androidx.appcompat:appcompat-resources:$appCompatVersion")
 
-    implementation("androidx.activity:activity-ktx:1.5.1")
-    implementation("androidx.fragment:fragment-ktx:1.5.2")
+    implementation("androidx.activity:activity-ktx:1.6.0")
+    implementation("androidx.fragment:fragment-ktx:1.5.3")
 
     implementation("androidx.drawerlayout:drawerlayout:1.1.1")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
@@ -160,19 +160,19 @@ dependencies {
     implementation("com.google.android.material:material:1.6.1")
 
     // Coil
-    implementation("io.coil-kt:coil:2.2.0")
+    implementation("io.coil-kt:coil:2.2.2")
 
     // OkHttp
     implementation("com.squareup.okhttp3:okhttp:4.10.0")
 
     // Ktor
-    val ktorVersion = "2.1.0"
+    val ktorVersion = "2.1.2"
     implementation("io.ktor:ktor-client-okhttp:$ktorVersion")
     implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
     implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
 
     // Jsoup
-    implementation("org.jsoup:jsoup:1.15.2")
+    implementation("org.jsoup:jsoup:1.15.3")
 
     // ColorPicker
     implementation("com.jaredrummler:colorpicker:1.1.0")
