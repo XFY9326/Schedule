@@ -39,6 +39,15 @@ android {
                 add("META-INF/CHANGES")
                 add("META-INF/README.md")
                 add("okhttp3/internal/publicsuffix/NOTICE")
+                add("META-INF/DEPENDENCIES")
+                add("META-INF/LICENSE")
+                add("META-INF/LICENSE.txt")
+                add("META-INF/license.txt")
+                add("META-INF/NOTICE")
+                add("META-INF/NOTICE.txt")
+                add("META-INF/notice.txt")
+                add("META-INF/ASL2.0")
+                add("META-INF/INDEX.LIST")
             }
         }
 
@@ -183,5 +192,7 @@ dependencies {
     // androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
 
     // Debug
-    // debugImplementation("com.squareup.leakcanary:leakcanary-android:2.6")
+    debugImplementation("io.ktor:ktor-client-logging:$ktorVersion")
+
+    // debugImplementation("com.squareup.leakcanary:leakcanary-android:2.9.1")
 }
