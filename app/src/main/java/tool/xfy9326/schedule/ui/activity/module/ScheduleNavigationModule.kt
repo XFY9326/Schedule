@@ -6,6 +6,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
 import com.google.android.material.navigation.NavigationView
 import io.github.xfy9326.atools.core.startActivity
+import io.github.xfy9326.atools.livedata.observeEvent
 import io.github.xfy9326.atools.ui.getColorCompat
 import io.github.xfy9326.atools.ui.setOnSingleClickListener
 import kotlinx.coroutines.delay
@@ -13,10 +14,7 @@ import kotlinx.coroutines.launch
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.databinding.ActivityScheduleBinding
 import tool.xfy9326.schedule.databinding.LayoutNavHeaderBinding
-import tool.xfy9326.schedule.ui.activity.OnlineCourseImportActivity
-import tool.xfy9326.schedule.ui.activity.ScheduleActivity
-import tool.xfy9326.schedule.ui.activity.ScheduleManageActivity
-import tool.xfy9326.schedule.ui.activity.SettingsActivity
+import tool.xfy9326.schedule.ui.activity.*
 import tool.xfy9326.schedule.ui.activity.base.AbstractViewModelActivityModule
 import tool.xfy9326.schedule.ui.vm.ScheduleViewModel
 import tool.xfy9326.schedule.utils.view.NightModeViewUtils
@@ -28,6 +26,18 @@ class ScheduleNavigationModule(activity: ScheduleActivity, private val icsExport
         get() = actionBarDrawerToggle
 
     override fun onInit() {
+        requireViewModel().exitAppDirectly.observeEvent(requireActivity()) {
+            if (it) {
+                requireActivity().finish()
+            } else {
+                requireActivity().moveTaskToBack(false)
+            }
+        }
+        requireViewModel().openCourseManageActivity.observeEvent(requireActivity()) {
+            requireActivity().startActivity<CourseManageActivity> {
+                putExtra(CourseManageActivity.EXTRA_SCHEDULE_ID, it)
+            }
+        }
         requireViewModel().onlineCourseImportEnabled.observe(requireActivity()) {
             requireViewBinding().navSchedule.menu.findItem(R.id.menu_navOnlineCourseImport)?.isVisible = it
         }
@@ -61,12 +71,12 @@ class ScheduleNavigationModule(activity: ScheduleActivity, private val icsExport
         return true
     }
 
-    fun onBackPressed(): Boolean {
+    fun onBackPressed() {
         if (requireViewBinding().drawerSchedule.isDrawerOpen(GravityCompat.START)) {
             requireViewBinding().drawerSchedule.closeDrawers()
-            return true
+        } else {
+            requireViewModel().exitAppDirectly()
         }
-        return false
     }
 
     private fun setupDrawer(viewBinding: ActivityScheduleBinding, viewModel: ScheduleViewModel) {
