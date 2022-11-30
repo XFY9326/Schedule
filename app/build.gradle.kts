@@ -27,7 +27,7 @@ android {
 
         androidComponents {
             onVariants { variant ->
-                kotlin.sourceSets.findByName(variant.name)?.kotlin?.srcDirs(
+                sourceSets.findByName(variant.name)?.kotlin?.srcDirs(
                     file("$buildDir/generated/ksp/${variant.buildType}/kotlin")
                 )
             }
