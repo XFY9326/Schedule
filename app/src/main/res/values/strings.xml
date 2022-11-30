@@ -416,7 +416,6 @@
     <string name="launch_pure_schedule">打开Pure课程表</string>
     <string name="json_course_import_title">欢迎使用Pure课程表</string>
     <string name="json_course_import_msg">请选择课程导入方式</string>
-    <string name="app_crash_relaunch">运行时出现严重错误，无法重新启动！</string>
     <string name="input_value_too_large">输入数值过大！</string>
     <string name="input_value_too_small">输入数值过小！</string>
     <string name="schedule_term_too_long">学期时间过长！</string>
