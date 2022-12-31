@@ -144,7 +144,7 @@ dependencies {
     implementation("androidx.appcompat:appcompat-resources:$appCompatVersion")
 
     implementation("androidx.activity:activity-ktx:1.6.1")
-    implementation("androidx.fragment:fragment-ktx:1.5.4")
+    implementation("androidx.fragment:fragment-ktx:1.5.5")
 
     implementation("androidx.drawerlayout:drawerlayout:1.1.1")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
@@ -175,7 +175,7 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.10.0")
 
     // Ktor
-    val ktorVersion = "2.1.3"
+    val ktorVersion = "2.2.1"
     implementation("io.ktor:ktor-client-okhttp:$ktorVersion")
     implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
     implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
