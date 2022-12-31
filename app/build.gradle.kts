@@ -100,7 +100,6 @@ android {
 
     kotlinOptions {
         jvmTarget = ProjectConfig.javaVersion.toString()
-        freeCompilerArgs = freeCompilerArgs + "-opt-in=kotlinx.serialization.ExperimentalSerializationApi"
     }
 
     lint {
