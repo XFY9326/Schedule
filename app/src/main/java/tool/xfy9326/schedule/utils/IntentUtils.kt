@@ -18,15 +18,15 @@ import java.io.File
 import java.util.*
 
 object IntentUtils {
-    private val FEEDBACK_URL = "https://github.com/XFY9326/Schedule/issues".toUri()
     private val WIKI_URL = "https://github.com/XFY9326/Schedule/wiki".toUri()
+    private val FEEDBACK_URL = "https://github.com/XFY9326/Schedule/issues".toUri()
+
+    fun openWikiUrl(context: Context) {
+        context.openUrlInBrowser(WIKI_URL)
+    }
 
     fun openFeedbackUrl(context: Context) {
         context.openUrlInBrowser(FEEDBACK_URL)
-    }
-
-    fun openCourseAdapterWikiUrl(context: Context) {
-        context.openUrlInBrowser(WIKI_URL)
     }
 
     fun seeImage(context: Context, uri: Uri) {

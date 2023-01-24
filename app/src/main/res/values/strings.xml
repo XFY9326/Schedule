@@ -140,6 +140,7 @@
     <string name="course_color_edit">课程颜色编辑</string>
     <string name="schedule_color_edit">课表颜色编辑</string>
     <string name="version_title">版本</string>
+    <string name="project_website">项目主页</string>
     <string name="open_source_website">开源网址</string>
     <string name="license">协议</string>
     <string name="eula_license">使用协议</string>
@@ -553,4 +554,5 @@
     <string name="author" translatable="false">逸雪飞扬 (XFY9326)</string>
     <string name="email" translatable="false">xfy9326@qq.com</string>
     <string name="open_source_website_url" translatable="false">https://github.com/xfy9326/Schedule</string>
+    <string name="project_website_url" translatable="false">https://xfy9326.github.io/Schedule/</string>
 </resources>

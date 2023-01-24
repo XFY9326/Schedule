@@ -157,7 +157,7 @@ class OnlineCourseImportActivity : ViewModelActivity<OnlineCourseImportViewModel
         if (item.itemId == R.id.menu_onlineCourseImportAttention) {
             DialogUtils.showOnlineImportAttentionDialog(this, false,
                 onNeutral = {
-                    IntentUtils.openCourseAdapterWikiUrl(this)
+                    IntentUtils.openWikiUrl(this)
                 })
         }
         return super.onOptionsItemSelected(item)
