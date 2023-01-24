@@ -1,3 +1,7 @@
+@file:Suppress("UnstableApiUsage")
+
+import com.android.build.gradle.AppExtension
+
 plugins {
     id("com.android.application")
     kotlin("android")
@@ -25,30 +29,24 @@ android {
         manifestPlaceholders["ApplicationId"] = ProjectConfig.applicationId
         manifestPlaceholders["BaseApplicationId"] = ProjectConfig.applicationId
 
-        androidComponents {
-            onVariants { variant ->
-                sourceSets.findByName(variant.name)?.kotlin?.srcDirs(
-                    file("$buildDir/generated/ksp/${variant.buildType}/kotlin")
-                )
-            }
-        }
-
         packagingOptions {
-            resources.excludes.apply {
-                add("META-INF/*.version")
-                add("META-INF/CHANGES")
-                add("META-INF/README.md")
-                add("okhttp3/internal/publicsuffix/NOTICE")
-                add("META-INF/DEPENDENCIES")
-                add("META-INF/LICENSE")
-                add("META-INF/LICENSE.txt")
-                add("META-INF/license.txt")
-                add("META-INF/NOTICE")
-                add("META-INF/NOTICE.txt")
-                add("META-INF/notice.txt")
-                add("META-INF/ASL2.0")
-                add("META-INF/INDEX.LIST")
-            }
+            resources.excludes.addAll(
+                arrayOf(
+                    "META-INF/*.version",
+                    "META-INF/CHANGES",
+                    "META-INF/README.md",
+                    "okhttp3/internal/publicsuffix/NOTICE",
+                    "META-INF/DEPENDENCIES",
+                    "META-INF/LICENSE",
+                    "META-INF/LICENSE.txt",
+                    "META-INF/license.txt",
+                    "META-INF/NOTICE",
+                    "META-INF/NOTICE.txt",
+                    "META-INF/notice.txt",
+                    "META-INF/ASL2.0",
+                    "META-INF/INDEX.LIST"
+                )
+            )
         }
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -59,7 +57,7 @@ android {
     }
 
     signingConfigs {
-        getByName("debug") {
+        named("debug") {
             storeFile = file("key/${ProjectConfig.name}_debug.keystore")
             storePassword = "debug_key"
             keyAlias = ProjectConfig.name
@@ -112,12 +110,18 @@ ksp {
     arg("room.incremental", "true")
 }
 
+extensions.getByType<AppExtension>().apply {
+    applicationVariants.all {
+        addJavaSourceFoldersToModel(file("$buildDir/generated/ksp/$name/kotlin"))
+    }
+}
+
 dependencies {
     implementation(project(path = ":Annotation"))
     ksp(project(path = ":AnnotationKSP"))
 
     // ATools
-    val atoolsVersion = "0.0.19"
+    val atoolsVersion = "0.0.20"
     implementation("io.github.xfy9326.atools:atools-io:$atoolsVersion")
     implementation("io.github.xfy9326.atools:atools-ui:$atoolsVersion")
     implementation("io.github.xfy9326.atools:atools-crash:$atoolsVersion")
@@ -138,7 +142,7 @@ dependencies {
 
     implementation("androidx.core:core-splashscreen:1.0.0")
 
-    val appCompatVersion = "1.5.1"
+    val appCompatVersion = "1.6.0"
     implementation("androidx.appcompat:appcompat:$appCompatVersion")
     implementation("androidx.appcompat:appcompat-resources:$appCompatVersion")
 
@@ -159,7 +163,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:$lifeCycleVersion")
 
     // Room
-    val roomVersion = "2.4.3"
+    val roomVersion = "2.5.0"
     implementation("androidx.room:room-ktx:$roomVersion")
     ksp("androidx.room:room-compiler:$roomVersion")
     testImplementation("androidx.room:room-testing:$roomVersion")
@@ -174,7 +178,7 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.10.0")
 
     // Ktor
-    val ktorVersion = "2.2.1"
+    val ktorVersion = "2.2.2"
     implementation("io.ktor:ktor-client-okhttp:$ktorVersion")
     implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
     implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
@@ -187,7 +191,7 @@ dependencies {
 
     // Test
     testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.4")
+    androidTestImplementation("androidx.test.ext:junit:1.1.5")
     // androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
 
     // Debug
