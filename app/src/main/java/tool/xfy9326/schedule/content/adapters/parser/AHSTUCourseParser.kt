@@ -14,6 +14,8 @@ class AHSTUCourseParser : NetworkCourseParser<Nothing>() {
     @Suppress("RegExpRedundantEscape")
     private val patternTeacher = "\\[\\{id:\\d+,name:\"(.*?)\",lab:(false|true)\\}\\];".toRegex()
     private val patternCourseInfo = "actTeacherName.join\\(','\\),\"(.*?)\",\"(.*?)\",\".*?\",\"(.*?)\",\"(.*?)\",.*?assistantName,\".*?\",\"(.*?)\"".toRegex()
+
+    @Suppress("RegExpSimplifiable")
     private val patternDay = "(\\d+)\\*[\\s]*unitCount[\\s]*\\+(\\d+)".toRegex()
 
     @Suppress("RegExpRedundantEscape")
