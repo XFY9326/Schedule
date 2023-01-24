@@ -1,7 +1,6 @@
 package tool.xfy9326.schedule.ui.activity
 
 import androidx.core.view.isVisible
-import io.github.xfy9326.atools.core.startActivity
 import io.github.xfy9326.atools.livedata.observeEvent
 import io.github.xfy9326.atools.ui.setOnSingleClickListener
 import tool.xfy9326.schedule.R
@@ -45,7 +44,7 @@ class AppErrorActivity : ViewModelActivity<AppErrorViewModel, ActivityAppErrorBi
             )
         }
         viewBinding.cardViewAppErrorFeedback.setOnSingleClickListener {
-            startActivity<FeedbackActivity>()
+            IntentUtils.openFeedbackUrl(this)
         }
 
         val crashLogFilePath = intent?.getStringExtra(INTENT_EXTRA_CRASH_LOG)

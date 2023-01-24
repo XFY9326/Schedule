@@ -9,7 +9,6 @@ import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
 object AppDataStore : AbstractDataStore("App") {
     private val currentScheduleId by longPrefKey()
     private val acceptEULAVersion by intPrefKey()
-    private val shownFeedbackAttention by booleanPrefKey()
     private val shownCalendarSyncAttention by booleanPrefKey()
     private val agreeCourseImportPolicy by booleanPrefKey()
     private val ignoreUpdateVersionCode by intPrefKey()
@@ -44,8 +43,6 @@ object AppDataStore : AbstractDataStore("App") {
     suspend fun removeApkUpdateDownloadId() = apkUpdateDownloadId.remove()
 
     suspend fun setReadOnlineImportAttention(data: Boolean) = readOnlineImportAttention.saveData(data)
-
-    suspend fun hasShownFeedbackAttention() = shownFeedbackAttention.readAsShownOnce()
 
     suspend fun hasShownCalendarSyncAttention() = shownCalendarSyncAttention.readAsShownOnce()
 
