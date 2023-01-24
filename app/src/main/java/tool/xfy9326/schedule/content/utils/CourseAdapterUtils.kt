@@ -25,22 +25,33 @@ object CourseAdapterUtils {
      *
      * @param supportJson 是否支持JSON（Ktor对Kotlin serialization的支持）
      * @param hasRedirect 是否允许重定向
+     * @param autoRetry 网络错误时自动重试
      * @param cookiesStorage Cookie存储器
+     * @param engineConfiguration 网络引擎配置
      * @return HttpClient
      */
     fun buildSimpleHttpClient(
         supportJson: Boolean = false,
         hasRedirect: Boolean = true,
+        autoRetry: Boolean = true,
+        unsafeRedirect: Boolean = false,
         cookiesStorage: CookiesStorage = AcceptAllCookiesStorage(),
+        engineConfiguration: (OkHttpConfig.() -> Unit)? = null
     ): HttpClient = HttpClient(OkHttp) {
         BrowserUserAgent()
+        engineConfiguration?.let(::engine)
+        if (autoRetry) {
+            install(HttpRequestRetry)
+        }
         install(HttpCookies) {
             storage = cookiesStorage
         }
         if (hasRedirect) {
             install(HttpRedirect) {
-                // 修复 Http 302 Post 错误
-                checkHttpMethod = false
+                if (unsafeRedirect) {
+                    checkHttpMethod = false
+                    allowHttpsDowngrade = true
+                }
             }
         }
         if (supportJson) {

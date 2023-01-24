@@ -7,9 +7,9 @@ import tool.xfy9326.schedule.kt.bindPrefFragment
 import tool.xfy9326.schedule.kt.setOnPrefClickListener
 import tool.xfy9326.schedule.kt.showSnackBar
 import tool.xfy9326.schedule.ui.activity.AboutActivity
-import tool.xfy9326.schedule.ui.activity.FeedbackActivity
 import tool.xfy9326.schedule.ui.dialog.UpgradeDialog
 import tool.xfy9326.schedule.ui.fragment.base.AbstractSettingsFragment
+import tool.xfy9326.schedule.utils.IntentUtils
 import tool.xfy9326.schedule.utils.UpgradeUtils
 
 class MainSettingsFragment : AbstractSettingsFragment() {
@@ -28,7 +28,7 @@ class MainSettingsFragment : AbstractSettingsFragment() {
             requireActivity().startActivity<AboutActivity>()
         }
         setOnPrefClickListener(R.string.pref_feedback) {
-            requireActivity().startActivity<FeedbackActivity>()
+            IntentUtils.openFeedbackUrl(requireContext())
         }
         setOnPrefClickListener(R.string.pref_check_upgrade) {
             UpgradeUtils.checkUpgrade(this, true,

@@ -1,6 +1,7 @@
 package tool.xfy9326.schedule.content.adapters.provider
 
 import io.github.xfy9326.atools.base.toHex
+import io.ktor.client.*
 import io.ktor.client.request.*
 import io.ktor.client.request.forms.*
 import io.ktor.client.statement.*
@@ -10,6 +11,7 @@ import tool.xfy9326.schedule.content.base.LoginCourseProvider
 import tool.xfy9326.schedule.content.beans.LoginPageInfo
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
 import tool.xfy9326.schedule.content.utils.CourseAdapterException.Companion.report
+import tool.xfy9326.schedule.content.utils.CourseAdapterUtils
 import tool.xfy9326.schedule.content.utils.runResponseCatching
 import tool.xfy9326.schedule.content.utils.selectSingle
 import java.math.BigInteger
@@ -76,6 +78,10 @@ class NAUJwcCourseProvider : LoginCourseProvider<Nothing>() {
     private var studentDefaultPageUrl: Url? = null
 
     override val enableCaptcha = true
+
+    override fun onPrepareClient(): HttpClient {
+        return CourseAdapterUtils.buildSimpleHttpClient(unsafeRedirect = true)
+    }
 
     override suspend fun onLoadLoginPage(importOption: Int): LoginPageInfo {
         var content: String = httpClient.get(JWC_LOGIN_URL).bodyAsText()

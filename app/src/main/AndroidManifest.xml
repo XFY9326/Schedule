@@ -97,10 +97,6 @@
             android:label="@string/web_page_js_import_course" />
 
         <activity
-            android:name=".ui.activity.FeedbackActivity"
-            android:label="@string/online_feedback" />
-
-        <activity
             android:name=".ui.activity.SettingsActivity"
             android:label="@string/settings" />
 

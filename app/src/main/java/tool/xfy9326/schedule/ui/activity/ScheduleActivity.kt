@@ -6,9 +6,9 @@ import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.activity.addCallback
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.navigation.NavigationView
-import io.github.xfy9326.atools.core.startActivity
 import io.github.xfy9326.atools.livedata.observeEvent
 import io.github.xfy9326.atools.ui.getColorCompat
 import io.github.xfy9326.atools.ui.setIconTint
@@ -69,18 +69,6 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
         viewModel.showCourseDetailDialog.observeEvent(this) {
             CourseDetailDialog.showDialog(supportFragmentManager, it)
         }
-        viewModel.openCourseManageActivity.observeEvent(this) {
-            startActivity<CourseManageActivity> {
-                putExtra(CourseManageActivity.EXTRA_SCHEDULE_ID, it)
-            }
-        }
-        viewModel.exitAppDirectly.observeEvent(this) {
-            if (it) {
-                finish()
-            } else {
-                moveTaskToBack(false)
-            }
-        }
         viewModel.toolBarTintColor.observe(this, ::setToolBarTintColor)
         viewModel.scheduleSystemBarAppearance.observe(this) {
             window.setSystemBarAppearance(it)
@@ -92,6 +80,10 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
 
     override fun onInitView(viewBinding: ActivityScheduleBinding, viewModel: ScheduleViewModel) {
         scheduleNavigationModule.init()
+        onBackPressedDispatcher.addCallback(this, true) {
+            scheduleNavigationModule.onBackPressed()
+        }
+
         NightModeViewUtils.checkNightModeChangedAnimation(this, viewBinding, viewModel)
 
         viewBinding.viewPagerSchedulePanel.registerOnPageChangeCallback(ScheduleViewPagerChangeCallback())
@@ -124,12 +116,6 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
             R.id.menu_scheduleShare -> scheduleShareModule.shareSchedule(getCurrentShowWeekNum())
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    override fun onBackPressed() {
-        if (!scheduleNavigationModule.onBackPressed()) {
-            requireViewModel().exitAppDirectly()
-        }
     }
 
     override fun onNavigationItemSelected(item: MenuItem) =

@@ -12,7 +12,7 @@ inline fun <T> List<T>.forEachTwo(action: (Int, T, Int, T) -> Unit) {
 
 // O(3/2n)
 fun List<Int>.minAndMax(): Pair<Int, Int>? {
-    if (size == 0) return null
+    if (isEmpty()) return null
     if (size == 1) return this[0] to this[0]
     if (size == 2) return if (this[0] < this[1]) this[0] to this[1] else this[1] to this[0]
     var minValue: Int

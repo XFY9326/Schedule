@@ -68,7 +68,7 @@ fun Collection<Int>.toBooleanArray(): BooleanArray =
  * @return BooleanArray
  */
 fun String.toBooleanArray(): BooleanArray {
-    if (length == 0) return BooleanArray(0)
+    if (isEmpty()) return BooleanArray(0)
     val result = BooleanArray(length)
     var index = 0
     for (element in this)
