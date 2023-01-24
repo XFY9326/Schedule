@@ -19,14 +19,14 @@ import java.util.*
 
 object IntentUtils {
     private val FEEDBACK_URL = "https://github.com/XFY9326/Schedule/issues".toUri()
-    private val COURSE_IMPORT_WIKI_URL = "https://github.com/XFY9326/Schedule/wiki".toUri()
+    private val WIKI_URL = "https://github.com/XFY9326/Schedule/wiki".toUri()
 
     fun openFeedbackUrl(context: Context) {
-        context.openUrlInBrowser(COURSE_IMPORT_WIKI_URL)
+        context.openUrlInBrowser(FEEDBACK_URL)
     }
 
     fun openCourseAdapterWikiUrl(context: Context) {
-        context.openUrlInBrowser(FEEDBACK_URL)
+        context.openUrlInBrowser(WIKI_URL)
     }
 
     fun seeImage(context: Context, uri: Uri) {
