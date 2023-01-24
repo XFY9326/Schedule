@@ -9,7 +9,7 @@ Course Adapter Wiki: [Wiki](https://github.com/XFY9326/Schedule/wiki)
 -----
 
 ```
-Copyright 2022 XFY9326
+Copyright 2023 XFY9326
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
