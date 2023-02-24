@@ -39,6 +39,8 @@ object UpgradeUtils {
         "https://update.xfy9326.top",
         "https://xfy9326.gitee.io/updates",
         "https://xfy9326.github.io/Updates",
+        "https://gitee.com/XFY9326/updates/raw/master",
+        "https://raw.githubusercontent.com/XFY9326/Updates/master"
     )
 
     private val UPDATE_CHECK_MUTEX = Mutex()
