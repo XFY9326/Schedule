@@ -24,10 +24,8 @@ import tool.xfy9326.schedule.data.AppDataStore
 import tool.xfy9326.schedule.json.upgrade.UpdateIndex
 import tool.xfy9326.schedule.json.upgrade.UpdateInfo
 import java.net.ConnectException
-import java.util.concurrent.TimeUnit
 
 object UpgradeUtils {
-    private const val CONNECT_TIMEOUT_SECONDS = 5L
     private const val CURRENT_VERSION = BuildConfig.VERSION_CODE
     private const val IS_BETA = BuildConfig.IS_BETA
 
@@ -149,8 +147,5 @@ object UpgradeUtils {
             json(Json { ignoreUnknownKeys = true }, contentType = ContentType.Any)
         }
         install(HttpRedirect)
-        install(HttpTimeout) {
-            connectTimeoutMillis = TimeUnit.SECONDS.toMillis(CONNECT_TIMEOUT_SECONDS)
-        }
     }
 }
