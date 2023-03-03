@@ -135,7 +135,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
 
     // Kotlin Serialization
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0")
 
     // AndroidX
     implementation("androidx.core:core-ktx:1.9.0")
@@ -178,7 +178,7 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.10.0")
 
     // Ktor
-    val ktorVersion = "2.2.3"
+    val ktorVersion = "2.2.4"
     implementation("io.ktor:ktor-client-okhttp:$ktorVersion")
     implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
     implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
