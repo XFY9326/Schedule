@@ -7,7 +7,6 @@ import io.github.xfy9326.atools.coroutines.withTryLock
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.engine.okhttp.*
-import io.ktor.client.network.sockets.*
 import io.ktor.client.plugins.*
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.request.*
@@ -122,8 +121,6 @@ object UpgradeUtils {
                 client.get(it).body<UpdateInfo>()
             }.onSuccess {
                 return it
-            }.onFailure {
-                if (it !is ConnectTimeoutException) throw it
             }
         }
         throw ConnectException("Unable to connect any server!")
@@ -135,8 +132,6 @@ object UpgradeUtils {
                 client.get(it).body<List<UpdateIndex>>()
             }.onSuccess {
                 return it
-            }.onFailure {
-                if (it !is ConnectTimeoutException) throw it
             }
         }
         throw ConnectException("Unable to connect any server!")
