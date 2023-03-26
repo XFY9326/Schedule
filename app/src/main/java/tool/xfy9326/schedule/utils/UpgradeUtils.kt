@@ -34,10 +34,9 @@ object UpgradeUtils {
 
     private val UPDATE_SERVERS = arrayOf(
         "https://update.xfy9326.top",
+        "https://cdn.jsdelivr.net/gh/XFY9326/Updates@master",
         "https://xfy9326.gitee.io/updates",
-        "https://xfy9326.github.io/Updates",
-        "https://gitee.com/XFY9326/updates/raw/master",
-        "https://raw.githubusercontent.com/XFY9326/Updates/master"
+        "https://xfy9326.github.io/Updates"
     )
 
     private val UPDATE_CHECK_MUTEX = Mutex()
