@@ -1,5 +1,3 @@
-@file:Suppress("MemberVisibilityCanBePrivate", "CanBeParameter")
-
 package tool.xfy9326.schedule.ui.viewholder
 
 import android.content.Context

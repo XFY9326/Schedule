@@ -29,7 +29,7 @@ android {
         manifestPlaceholders["ApplicationId"] = ProjectConfig.applicationId
         manifestPlaceholders["BaseApplicationId"] = ProjectConfig.applicationId
 
-        packagingOptions {
+        packaging {
             resources.excludes.addAll(
                 arrayOf(
                     "META-INF/*.version",
@@ -85,7 +85,7 @@ android {
             isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
 
-            packagingOptions {
+            packaging {
                 resources.excludes += "DebugProbesKt.bin"
             }
         }
@@ -138,7 +138,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0")
 
     // AndroidX
-    implementation("androidx.core:core-ktx:1.9.0")
+    implementation("androidx.core:core-ktx:1.10.0")
 
     implementation("androidx.core:core-splashscreen:1.0.0")
 

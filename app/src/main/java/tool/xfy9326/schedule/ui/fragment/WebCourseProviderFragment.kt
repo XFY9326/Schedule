@@ -8,11 +8,14 @@ import android.webkit.*
 import androidx.activity.addCallback
 import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.withStateAtLeast
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import io.github.xfy9326.atools.core.showToast
 import io.github.xfy9326.atools.ui.*
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import tool.xfy9326.schedule.BuildConfig
 import tool.xfy9326.schedule.R
@@ -40,7 +43,8 @@ class WebCourseProviderFragment : ViewBindingFragment<FragmentWebCourseProviderB
     private val hideBottomPanelAnimation by lazy { AnimationUtils.loadAnimation(requireContext(), R.anim.anim_bottom_button_out) }
     private val showBottomPanelAnimation by lazy { AnimationUtils.loadAnimation(requireContext(), R.anim.anim_bottom_button_in) }
 
-    override fun onCreateViewBinding(inflater: LayoutInflater, container: ViewGroup?) = FragmentWebCourseProviderBinding.inflate(inflater, container, false)
+    override fun onCreateViewBinding(inflater: LayoutInflater, container: ViewGroup?) =
+        FragmentWebCourseProviderBinding.inflate(inflater, container, false)
 
     override fun onBindViewBinding(view: View) = FragmentWebCourseProviderBinding.bind(view)
 
@@ -117,7 +121,7 @@ class WebCourseProviderFragment : ViewBindingFragment<FragmentWebCourseProviderB
                     super.onPageFinished(view, url)
                 }
 
-                @Suppress("DEPRECATION", "OVERRIDE_DEPRECATION")
+                @Suppress("OVERRIDE_DEPRECATION")
                 override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
                     return false
                 }
@@ -136,10 +140,12 @@ class WebCourseProviderFragment : ViewBindingFragment<FragmentWebCourseProviderB
 
         WebCourseProviderBottomPanel.setBottomPanelActionListener(childFragmentManager, viewLifecycleOwner,
             onDismiss = {
-                lifecycleScope.launchWhenStarted {
-                    requireViewBinding().buttonWebCourseProviderPanel.apply {
-                        isVisible = true
-                        startAnimation(showBottomPanelAnimation)
+                lifecycleScope.launch {
+                    withStateAtLeast(Lifecycle.State.STARTED) {
+                        requireViewBinding().buttonWebCourseProviderPanel.apply {
+                            isVisible = true
+                            startAnimation(showBottomPanelAnimation)
+                        }
                     }
                 }
             },
@@ -212,21 +218,25 @@ class WebCourseProviderFragment : ViewBindingFragment<FragmentWebCourseProviderB
     }
 
     private fun changeProgressBar(newProgress: Int) {
-        lifecycleScope.launchWhenStarted {
-            requireViewBinding().progressBarWebCourseProvider.apply {
-                visibility = if (newProgress != 100) View.VISIBLE else View.INVISIBLE
-                progress = newProgress
+        lifecycleScope.launch {
+            withStateAtLeast(Lifecycle.State.STARTED) {
+                requireViewBinding().progressBarWebCourseProvider.apply {
+                    visibility = if (newProgress != 100) View.VISIBLE else View.INVISIBLE
+                    progress = newProgress
+                }
             }
         }
     }
 
     private fun showBottomPanel() {
-        lifecycleScope.launchWhenStarted {
-            requireViewBinding().buttonWebCourseProviderPanel.apply {
-                isVisible = false
-                startAnimation(hideBottomPanelAnimation)
+        lifecycleScope.launch {
+            withStateAtLeast(Lifecycle.State.STARTED) {
+                requireViewBinding().buttonWebCourseProviderPanel.apply {
+                    isVisible = false
+                    startAnimation(hideBottomPanelAnimation)
+                }
+                WebCourseProviderBottomPanel.showDialog(childFragmentManager, requireArguments().getString(EXTRA_AUTHOR_NAME).orEmpty())
             }
-            WebCourseProviderBottomPanel.showDialog(childFragmentManager, requireArguments().getString(EXTRA_AUTHOR_NAME).orEmpty())
         }
     }
 
@@ -243,24 +253,30 @@ class WebCourseProviderFragment : ViewBindingFragment<FragmentWebCourseProviderB
     }
 
     override fun evaluateJavascript(content: String, callback: ((String) -> Unit)?) {
-        lifecycleScope.launchWhenStarted {
-            requireViewBinding().webViewWebCourseProvider.evaluateJavascript(content, callback)
+        lifecycleScope.launch {
+            withStateAtLeast(Lifecycle.State.STARTED) {
+                requireViewBinding().webViewWebCourseProvider.evaluateJavascript(content, callback)
+            }
         }
     }
 
     override fun refresh() {
-        lifecycleScope.launchWhenStarted {
-            requireViewBinding().webViewWebCourseProvider.reload()
+        lifecycleScope.launch {
+            withStateAtLeast(Lifecycle.State.STARTED) {
+                requireViewBinding().webViewWebCourseProvider.reload()
+            }
         }
     }
 
     override fun setWebViewConnection(enabled: Boolean, autoRefresh: Boolean) {
-        lifecycleScope.launchWhenStarted {
-            isWebViewConnectionEnabled = enabled
-            requireViewBinding().webViewWebCourseProvider.apply {
-                settings.blockNetworkLoads = !enabled
-                if (autoRefresh) {
-                    reload()
+        lifecycleScope.launch {
+            withStateAtLeast(Lifecycle.State.STARTED) {
+                isWebViewConnectionEnabled = enabled
+                requireViewBinding().webViewWebCourseProvider.apply {
+                    settings.blockNetworkLoads = !enabled
+                    if (autoRefresh) {
+                        reload()
+                    }
                 }
             }
         }

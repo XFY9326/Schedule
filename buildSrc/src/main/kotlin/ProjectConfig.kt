@@ -9,5 +9,5 @@ object ProjectConfig {
     const val versionCode = 33
     const val versionName = "1.4.4"
 
-    val javaVersion = JavaVersion.VERSION_11
+    val javaVersion = JavaVersion.VERSION_17
 }

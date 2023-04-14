@@ -4,7 +4,6 @@ import androidx.annotation.FloatRange
 import androidx.core.graphics.ColorUtils
 import androidx.core.graphics.toColorInt
 
-@Suppress("SpellCheckingInspection")
 object MaterialColorHelper {
     @FloatRange(from = 0.0, to = 1.0)
     private const val LUMINANCE_IS_LIGHT_COLOR = 0.7f

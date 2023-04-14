@@ -15,7 +15,6 @@ import tool.xfy9326.schedule.content.utils.CourseAdapterException
 import tool.xfy9326.schedule.content.utils.CourseAdapterException.Companion.report
 import tool.xfy9326.schedule.content.utils.selectSingle
 
-@Suppress("BlockingMethodInNonBlockingContext")
 class AHSTUCourseProvider : LoginCourseProvider<Nothing>() {
     companion object {
         private const val JWXT_HOST = "jwxt.ahstu.edu.cn"
@@ -23,7 +22,6 @@ class AHSTUCourseProvider : LoginCourseProvider<Nothing>() {
         private const val JWXT_URL = "http://$JWXT_HOST"
         private const val SSO_URL = "http://$SSO_HOST"
 
-        @Suppress("SpellCheckingInspection")
         private const val SSO_LOGIN_URL = "$SSO_URL/sso/login?service=http://jwxt.ahstu.edu.cn/eams/login.action" // 登录地址
         private const val SSO_LOGOUT_URL = "$SSO_URL/sso/logout?service=http://jwxt.ahstu.edu.cn" // 退出地址
         private const val SSO_CHECK_CODE_URL = "$SSO_URL/sso/code/code.jsp" // 验证码地址
