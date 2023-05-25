@@ -54,9 +54,9 @@ class TableFragment : Fragment(), Observer<ScheduleBuildBundle> {
         viewModel.scheduleBuildData.observeForever(this)
     }
 
-    override fun onChanged(data: ScheduleBuildBundle) {
+    override fun onChanged(value: ScheduleBuildBundle) {
         lifecycleScope.launch(Dispatchers.Default) {
-            val viewData = CourseUtils.getScheduleViewDataByWeek(weekNum, data)
+            val viewData = CourseUtils.getScheduleViewDataByWeek(weekNum, value)
             val scheduleView = ScheduleViewHelper.buildScheduleView(requireContext(), viewData, ::onCourseCellClick)
             updateScheduleView(scheduleView)
         }

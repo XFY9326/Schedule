@@ -1,5 +1,3 @@
-@file:Suppress("MemberVisibilityCanBePrivate")
-
 package tool.xfy9326.schedule.tools
 
 import io.github.xfy9326.atools.base.asArray

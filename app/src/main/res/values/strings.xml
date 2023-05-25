@@ -133,7 +133,6 @@
     <string name="import_course_has_conflict">导入的课程存在时间冲突！</string>
     <string name="import_course_has_conflict_msg">导入的课程中存在上课时间冲突的问题，该部分课程时间的上课周数已经被设置为空，您可以稍后手动解决问题。</string>
     <string name="refresh">刷新</string>
-    <string name="open_in_browser">在浏览器中打开</string>
     <string name="import_course_from_browser">从浏览器导入课程</string>
     <string name="import_course_from_browser_msg">登录并打开显示课程的网页，点击导入按钮导入课程</string>
     <string name="invalid_course_import_page">该页面无法导入课程！</string>

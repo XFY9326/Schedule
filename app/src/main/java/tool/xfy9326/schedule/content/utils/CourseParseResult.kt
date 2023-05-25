@@ -1,5 +1,3 @@
-@file:Suppress("MemberVisibilityCanBePrivate")
-
 package tool.xfy9326.schedule.content.utils
 
 import androidx.collection.*

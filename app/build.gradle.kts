@@ -29,7 +29,7 @@ android {
         manifestPlaceholders["ApplicationId"] = ProjectConfig.applicationId
         manifestPlaceholders["BaseApplicationId"] = ProjectConfig.applicationId
 
-        packagingOptions {
+        packaging {
             resources.excludes.addAll(
                 arrayOf(
                     "META-INF/*.version",
@@ -85,7 +85,7 @@ android {
             isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
 
-            packagingOptions {
+            packaging {
                 resources.excludes += "DebugProbesKt.bin"
             }
         }
@@ -121,7 +121,7 @@ dependencies {
     ksp(project(path = ":AnnotationKSP"))
 
     // ATools
-    val atoolsVersion = "0.0.20"
+    val atoolsVersion = "0.0.21"
     implementation("io.github.xfy9326.atools:atools-io:$atoolsVersion")
     implementation("io.github.xfy9326.atools:atools-ui:$atoolsVersion")
     implementation("io.github.xfy9326.atools:atools-crash:$atoolsVersion")
@@ -132,59 +132,59 @@ dependencies {
     implementation("io.github.xfy9326.atools:atools-io-serialization-json:$atoolsVersion")
 
     // Kotlin Coroutines
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1")
 
     // Kotlin Serialization
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
 
     // AndroidX
-    implementation("androidx.core:core-ktx:1.9.0")
+    implementation("androidx.core:core-ktx:1.10.1")
 
-    implementation("androidx.core:core-splashscreen:1.0.0")
+    implementation("androidx.core:core-splashscreen:1.0.1")
 
-    val appCompatVersion = "1.6.0"
+    val appCompatVersion = "1.6.1"
     implementation("androidx.appcompat:appcompat:$appCompatVersion")
     implementation("androidx.appcompat:appcompat-resources:$appCompatVersion")
 
-    implementation("androidx.activity:activity-ktx:1.6.1")
-    implementation("androidx.fragment:fragment-ktx:1.5.5")
+    implementation("androidx.activity:activity-ktx:1.7.2")
+    implementation("androidx.fragment:fragment-ktx:1.5.7")
 
-    implementation("androidx.drawerlayout:drawerlayout:1.1.1")
+    implementation("androidx.drawerlayout:drawerlayout:1.2.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
 
     implementation("androidx.preference:preference-ktx:1.2.0")
     implementation("androidx.datastore:datastore-preferences:1.0.0")
 
     // LifeCycle, ViewModel, LiveData
-    val lifeCycleVersion = "2.5.1"
+    val lifeCycleVersion = "2.6.1"
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:$lifeCycleVersion")
     implementation("androidx.lifecycle:lifecycle-common-java8:$lifeCycleVersion")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifeCycleVersion")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:$lifeCycleVersion")
 
     // Room
-    val roomVersion = "2.5.0"
+    val roomVersion = "2.5.1"
     implementation("androidx.room:room-ktx:$roomVersion")
     ksp("androidx.room:room-compiler:$roomVersion")
     testImplementation("androidx.room:room-testing:$roomVersion")
 
     // Material Design
-    implementation("com.google.android.material:material:1.7.0")
+    implementation("com.google.android.material:material:1.9.0")
 
     // Coil
-    implementation("io.coil-kt:coil:2.2.2")
+    implementation("io.coil-kt:coil:2.4.0")
 
     // OkHttp
-    implementation("com.squareup.okhttp3:okhttp:4.10.0")
+    implementation("com.squareup.okhttp3:okhttp:4.11.0")
 
     // Ktor
-    val ktorVersion = "2.2.2"
+    val ktorVersion = "2.3.0"
     implementation("io.ktor:ktor-client-okhttp:$ktorVersion")
     implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
     implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
 
     // Jsoup
-    implementation("org.jsoup:jsoup:1.15.3")
+    implementation("org.jsoup:jsoup:1.16.1")
 
     // ColorPicker
     implementation("com.jaredrummler:colorpicker:1.1.0")

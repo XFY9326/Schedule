@@ -1,4 +1,4 @@
-@file:Suppress("MemberVisibilityCanBePrivate", "unused")
+@file:Suppress("MemberVisibilityCanBePrivate")
 
 package tool.xfy9326.schedule.ui.view.recyclerview
 
