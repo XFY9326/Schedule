@@ -121,7 +121,7 @@ dependencies {
     ksp(project(path = ":AnnotationKSP"))
 
     // ATools
-    val atoolsVersion = "0.0.20"
+    val atoolsVersion = "0.0.21"
     implementation("io.github.xfy9326.atools:atools-io:$atoolsVersion")
     implementation("io.github.xfy9326.atools:atools-ui:$atoolsVersion")
     implementation("io.github.xfy9326.atools:atools-crash:$atoolsVersion")
@@ -132,13 +132,13 @@ dependencies {
     implementation("io.github.xfy9326.atools:atools-io-serialization-json:$atoolsVersion")
 
     // Kotlin Coroutines
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1")
 
     // Kotlin Serialization
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
 
     // AndroidX
-    implementation("androidx.core:core-ktx:1.10.0")
+    implementation("androidx.core:core-ktx:1.10.1")
 
     implementation("androidx.core:core-splashscreen:1.0.1")
 
@@ -146,7 +146,7 @@ dependencies {
     implementation("androidx.appcompat:appcompat:$appCompatVersion")
     implementation("androidx.appcompat:appcompat-resources:$appCompatVersion")
 
-    implementation("androidx.activity:activity-ktx:1.7.1")
+    implementation("androidx.activity:activity-ktx:1.7.2")
     implementation("androidx.fragment:fragment-ktx:1.5.7")
 
     implementation("androidx.drawerlayout:drawerlayout:1.2.0")
@@ -172,10 +172,10 @@ dependencies {
     implementation("com.google.android.material:material:1.9.0")
 
     // Coil
-    implementation("io.coil-kt:coil:2.3.0")
+    implementation("io.coil-kt:coil:2.4.0")
 
     // OkHttp
-    implementation("com.squareup.okhttp3:okhttp:4.10.0")
+    implementation("com.squareup.okhttp3:okhttp:4.11.0")
 
     // Ktor
     val ktorVersion = "2.3.0"
