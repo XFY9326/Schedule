@@ -30,6 +30,15 @@
 -keepclassmembers @tool.xfy9326.schedule.annotation.CourseImportConfig class * {
      <init>(...);
 }
+-keepclassmembers class * extends tool.xfy9326.schedule.content.base.AbstractCourseParser {
+     <init>(...);
+}
+-keepclassmembers class * extends tool.xfy9326.schedule.content.base.AbstractCourseProvider {
+     <init>(...);
+}
+-keepclassmembers class * extends tool.xfy9326.schedule.content.base.AbstractExternalCourseProcessor {
+     <init>(...);
+}
 
 # Kotlin Serialization
 -dontnote kotlinx.serialization.AnnotationsKt # core serialization annotations
