@@ -1,40 +1,27 @@
 package tool.xfy9326.schedule.ui.activity
 
-import io.github.xfy9326.atools.livedata.observeEvent
 import io.github.xfy9326.atools.ui.setOnSingleClickListener
 import tool.xfy9326.schedule.BuildConfig
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.databinding.ActivityAboutBinding
-import tool.xfy9326.schedule.ui.activity.base.ViewModelActivity
-import tool.xfy9326.schedule.ui.vm.AboutViewModel
-import tool.xfy9326.schedule.utils.view.DialogUtils
+import tool.xfy9326.schedule.ui.activity.base.ViewBindingActivity
 
-class AboutActivity : ViewModelActivity<AboutViewModel, ActivityAboutBinding>() {
-    override val vmClass = AboutViewModel::class
-
+class AboutActivity : ViewBindingActivity<ActivityAboutBinding>() {
     override fun onCreateViewBinding() = ActivityAboutBinding.inflate(layoutInflater)
 
-    override fun onPrepare(viewBinding: ActivityAboutBinding, viewModel: AboutViewModel) {
+    override fun onBindView(viewBinding: ActivityAboutBinding) {
+        super.onBindView(viewBinding)
         setSupportActionBar(viewBinding.toolBarAbout.toolBarGeneral)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
-    override fun onBindLiveData(viewBinding: ActivityAboutBinding, viewModel: AboutViewModel) {
-        viewModel.showEULA.observeEvent(this) {
-            DialogUtils.showEULADialog(this, it, true)
-        }
-        viewModel.showOpenSourceLicense.observeEvent(this) {
-            DialogUtils.showOpenSourceLicenseDialog(this, it)
-        }
-    }
-
-    override fun onInitView(viewBinding: ActivityAboutBinding, viewModel: AboutViewModel) {
+    override fun onInitView(viewBinding: ActivityAboutBinding) {
         viewBinding.textViewAppVersion.text = getString(R.string.version, BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE)
         viewBinding.layoutEULA.setOnSingleClickListener {
-            viewModel.showEULA()
+            RawTextActivity.launch(this, R.string.eula_license, R.raw.eula)
         }
         viewBinding.layoutOpenSourceLicense.setOnSingleClickListener {
-            viewModel.showOpenSourceLicense()
+            RawTextActivity.launch(this, R.string.open_source_license, R.raw.license)
         }
     }
 }

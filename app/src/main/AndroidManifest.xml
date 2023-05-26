@@ -89,6 +89,8 @@
 
         <activity android:name=".ui.activity.NetworkCourseProviderActivity" />
 
+        <activity android:name=".ui.activity.RawTextActivity" />
+
         <activity
             android:name=".ui.activity.WebCourseProviderActivity"
             android:label="@string/web_page_import_course" />

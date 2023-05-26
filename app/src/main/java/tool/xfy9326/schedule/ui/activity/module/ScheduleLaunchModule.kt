@@ -12,7 +12,6 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.data.AppDataStore
-import tool.xfy9326.schedule.io.FileManager
 import tool.xfy9326.schedule.ui.activity.AppErrorActivity
 import tool.xfy9326.schedule.ui.activity.ScheduleActivity
 import tool.xfy9326.schedule.ui.activity.base.AbstractActivityModule
@@ -31,26 +30,19 @@ class ScheduleLaunchModule(activity: ScheduleActivity) : AbstractActivityModule<
         fun tryShowEula(activity: AppCompatActivity) {
             activity.lifecycleScope.launch {
                 val currentEULAVersion = activity.resources.getInteger(R.integer.eula_version)
-                if (AppDataStore.hasAcceptedEULA()) {
+                if (!AppDataStore.hasAcceptedEULA()) {
                     if (AppDataStore.acceptEULAVersionFlow.first() < currentEULAVersion) {
-                        val eula = FileManager.readEULA()
-                        DialogUtils.showEULAUpdateDialog(activity) {
-                            if (it) {
-                                showEULADialog(activity, eula, currentEULAVersion)
-                            } else {
-                                activity.finishAndRemoveTask()
-                            }
-                        }
+                        showEULADialog(activity, true, currentEULAVersion)
                     }
                 } else {
-                    showEULADialog(activity, FileManager.readEULA(), currentEULAVersion)
+                    showEULADialog(activity, false, currentEULAVersion)
                 }
             }
         }
 
         @OptIn(DelicateCoroutinesApi::class)
-        private fun showEULADialog(activity: AppCompatActivity, eula: String, newEULAVersion: Int) {
-            DialogUtils.showEULADialog(activity, eula, false) {
+        private fun showEULADialog(activity: AppCompatActivity, isUpdate: Boolean, newEULAVersion: Int) {
+            DialogUtils.showEULADialog(activity, isUpdate) {
                 if (it) {
                     GlobalScope.launch { AppDataStore.setAcceptEULAVersion(newEULAVersion) }
                 } else {
