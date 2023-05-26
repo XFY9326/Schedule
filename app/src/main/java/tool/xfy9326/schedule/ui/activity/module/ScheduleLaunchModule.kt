@@ -30,7 +30,7 @@ class ScheduleLaunchModule(activity: ScheduleActivity) : AbstractActivityModule<
         fun tryShowEula(activity: AppCompatActivity) {
             activity.lifecycleScope.launch {
                 val currentEULAVersion = activity.resources.getInteger(R.integer.eula_version)
-                if (!AppDataStore.hasAcceptedEULA()) {
+                if (AppDataStore.hasAcceptedEULA()) {
                     if (AppDataStore.acceptEULAVersionFlow.first() < currentEULAVersion) {
                         showEULADialog(activity, true, currentEULAVersion)
                     }
