@@ -1,6 +1,7 @@
 package tool.xfy9326.schedule.utils.view
 
 import android.content.Context
+import android.content.DialogInterface
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LifecycleOwner
@@ -14,6 +15,7 @@ import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.Schedule
 import tool.xfy9326.schedule.databinding.DialogEditTextBinding
 import tool.xfy9326.schedule.tools.MaterialColorHelper
+import tool.xfy9326.schedule.ui.activity.RawTextActivity
 import tool.xfy9326.schedule.utils.NEW_LINE
 
 object DialogUtils {
@@ -156,40 +158,29 @@ object DialogUtils {
         }.show(activity)
     }
 
-    fun showEULAUpdateDialog(activity: AppCompatActivity, onOperate: (continueOp: Boolean) -> Unit) {
+    fun showEULADialog(activity: AppCompatActivity, isUpdate: Boolean, onOperate: (agree: Boolean) -> Unit = {}) {
         MaterialAlertDialogBuilder(activity).apply {
+            val showText = if (isUpdate) {
+                activity.getString(R.string.eula_license_update, activity.resources.getInteger(R.integer.eula_version))
+            } else {
+                activity.getString(R.string.eula_license_msg, activity.getString(R.string.app_name))
+            }
             setTitle(R.string.eula_license)
-            setMessage(activity.getString(R.string.eula_license_update, activity.resources.getInteger(R.integer.eula_version)))
+            setMessage(showText)
             setCancelable(false)
-            setPositiveButton(R.string.show_eula_license) { _, _ ->
+            setPositiveButton(R.string.agree) { _, _ ->
                 onOperate(true)
             }
-            setNegativeButton(android.R.string.cancel) { _, _ ->
+            setNegativeButton(R.string.disagree) { _, _ ->
                 onOperate(false)
             }
-        }.show(activity)
-    }
-
-    fun showEULADialog(activity: AppCompatActivity, content: String, cancelable: Boolean = true, onOperate: (agree: Boolean) -> Unit = {}) {
-        MaterialAlertDialogBuilder(activity).apply {
-            setTitle(R.string.eula_license)
-            setMessage(content)
-            setCancelable(cancelable)
-            if (!cancelable) {
-                setPositiveButton(R.string.agree) { _, _ ->
-                    onOperate(true)
-                }
-                setNegativeButton(R.string.disagree) { _, _ ->
-                    onOperate(false)
+            setNeutralButton(R.string.eula_license_view, null)
+        }.show(activity, onCreate = { dialog ->
+            dialog.setOnShowListener {
+                dialog.getButton(DialogInterface.BUTTON_NEUTRAL).setOnClickListener {
+                    RawTextActivity.launch(activity, R.string.eula_license, R.raw.eula)
                 }
             }
-        }.show(activity)
-    }
-
-    fun showOpenSourceLicenseDialog(activity: AppCompatActivity, content: String) {
-        MaterialAlertDialogBuilder(activity).apply {
-            setTitle(R.string.open_source_license)
-            setMessage(content)
-        }.show(activity)
+        })
     }
 }

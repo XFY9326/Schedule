@@ -1,7 +1,6 @@
 package tool.xfy9326.schedule.ui.activity.base
 
 import android.os.Bundle
-import androidx.annotation.CallSuper
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.viewbinding.ViewBinding
@@ -34,13 +33,9 @@ abstract class ViewModelActivity<M : AbstractViewModel, V : ViewBinding> : Abstr
 
     protected open fun onHandleSavedInstanceState(bundle: Bundle?, viewBinding: V, viewModel: M) {}
 
-    @CallSuper
-    override fun onCreate(savedInstanceState: Bundle?) {
-        viewModel = onCreateViewModel(onGetViewModelStoreOwner(), vmClass)
-        super.onCreate(savedInstanceState)
-    }
-
     final override fun onActivityInit(savedInstanceState: Bundle?) {
+        viewModel = onCreateViewModel(onGetViewModelStoreOwner(), vmClass)
+
         onContentViewPreload(savedInstanceState, viewModel)
 
         viewBinding = onCreateViewBinding()

@@ -97,17 +97,30 @@ def upload_github_artifact(token: str, artifact: dict):
         else:
             raise ConnectionError(f"Unable to connect '{tag_url}' with code {r.status_code}")
     if version_tag is not None:
+        assets_not_exist = True
+        release_not_exists = True
+        release_id = None
         release_tag_url = GITHUB_API_URL + "/releases/tags/" + version_tag
         with requests.get(release_tag_url, headers=github_headers) as r:
-            not_exist = True
-            release_id = None
             if r.status_code == 200:
                 release_info = r.json()
-                not_exist = len(release_info["assets"]) == 0
+                assets_not_exist = len(release_info["assets"]) == 0
                 release_id = release_info["id"]
+                release_not_exists = False
             elif r.status_code != 404:
                 raise ConnectionError(f"Unable to connect '{release_tag_url}' with code {r.status_code}")
-        if not_exist:
+        if release_not_exists:
+            create_release_url = GITHUB_API_URL + "/releases"
+            create_release_json = {"tag_name": version_tag, "name": version_tag, "generate_release_notes": True}
+            with requests.get(create_release_url, json=create_release_json, headers=github_headers) as r:
+                if r.status_code == 201:
+                    create_release_info = r.json()
+                    assets_not_exist = True
+                    release_id = create_release_info["id"]
+                    release_not_exists = False
+                else:
+                    raise ConnectionError(f"Unable to connect '{release_tag_url}' with code {r.status_code}")
+        if assets_not_exist:
             if release_id is None:
                 release_json = {"tag_name": version_tag, "name": version_tag}
                 with requests.post(release_tag_url, json=release_json, headers=github_headers) as r:
@@ -172,18 +185,27 @@ def main():
     print(f"Version: {artifact['version_name']} ({artifact['version_code']})")
     print(f"File: {os.path.basename(artifact['output_file'])}")
 
+    if ARCHIVE_ARTIFACT:
+        print("\nPackaging outputs ...")
+        try:
+            archive_artifact(artifact)
+            print("Successfully archived!")
+        except BaseException as e:
+            print(e)
+
     if UPLOAD_CODING_ARTIFACT:
         print("\nUploading Coding ...")
-        upload_coding_artifact(coding_user, coding_password, artifact)
+        try:
+            upload_coding_artifact(coding_user, coding_password, artifact)
+        except BaseException as e:
+            print(e)
 
     if UPLOAD_GITHUB_ARTIFACT:
         print("\nUploading GitHub ...")
-        upload_github_artifact(github_token, artifact)
-
-    if ARCHIVE_ARTIFACT:
-        print("\nPackaging outputs ...")
-        archive_artifact(artifact)
-        print("Successfully archived!")
+        try:
+            upload_github_artifact(github_token, artifact)
+        except BaseException as e:
+            print(e)
 
 
 if __name__ == "__main__":

@@ -20,7 +20,13 @@ import tool.xfy9326.schedule.beans.WeekNumType.Companion.getText
 import tool.xfy9326.schedule.databinding.ActivityScheduleBinding
 import tool.xfy9326.schedule.kt.setSystemBarAppearance
 import tool.xfy9326.schedule.ui.activity.base.ViewModelActivity
-import tool.xfy9326.schedule.ui.activity.module.*
+import tool.xfy9326.schedule.ui.activity.module.CalendarSyncModule
+import tool.xfy9326.schedule.ui.activity.module.ICSExportModule
+import tool.xfy9326.schedule.ui.activity.module.ScheduleBackgroundModule
+import tool.xfy9326.schedule.ui.activity.module.ScheduleInsetsModule
+import tool.xfy9326.schedule.ui.activity.module.ScheduleLaunchModule
+import tool.xfy9326.schedule.ui.activity.module.ScheduleNavigationModule
+import tool.xfy9326.schedule.ui.activity.module.ScheduleShareModule
 import tool.xfy9326.schedule.ui.adapter.ScheduleViewPagerAdapter
 import tool.xfy9326.schedule.ui.dialog.CourseDetailDialog
 import tool.xfy9326.schedule.ui.dialog.ScheduleControlPanel
@@ -41,6 +47,10 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
     private val scheduleNavigationModule = ScheduleNavigationModule(this, icsExportModule, calendarSyncModule)
 
     override fun onCreateViewBinding() = ActivityScheduleBinding.inflate(layoutInflater)
+
+    override fun onValidateLaunch(savedInstanceState: Bundle?): Boolean {
+        return savedInstanceState != null || ScheduleLaunchModule.checkDoAppErrorLaunch(this)
+    }
 
     override fun onContentViewPreload(savedInstanceState: Bundle?, viewModel: ScheduleViewModel) {
         scheduleLaunchModule.init()
