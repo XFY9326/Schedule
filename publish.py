@@ -112,7 +112,7 @@ def upload_github_artifact(token: str, artifact: dict):
         if release_not_exists:
             create_release_url = GITHUB_API_URL + "/releases"
             create_release_json = {"tag_name": version_tag, "name": version_tag, "generate_release_notes": True}
-            with requests.get(create_release_url, json=create_release_json, headers=github_headers) as r:
+            with requests.post(create_release_url, json=create_release_json, headers=github_headers) as r:
                 if r.status_code == 201:
                     create_release_info = r.json()
                     assets_not_exist = True
