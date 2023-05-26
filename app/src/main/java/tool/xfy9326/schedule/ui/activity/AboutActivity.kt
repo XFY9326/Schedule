@@ -21,7 +21,7 @@ class AboutActivity : ViewModelActivity<AboutViewModel, ActivityAboutBinding>() 
 
     override fun onBindLiveData(viewBinding: ActivityAboutBinding, viewModel: AboutViewModel) {
         viewModel.showEULA.observeEvent(this) {
-            DialogUtils.showEULADialog(this, it)
+            DialogUtils.showEULADialog(this, it, true)
         }
         viewModel.showOpenSourceLicense.observeEvent(this) {
             DialogUtils.showOpenSourceLicenseDialog(this, it)

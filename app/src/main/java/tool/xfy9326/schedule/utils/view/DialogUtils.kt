@@ -170,7 +170,7 @@ object DialogUtils {
         }.show(activity)
     }
 
-    fun showEULADialog(activity: AppCompatActivity, content: String, cancelable: Boolean = true, onOperate: (agree: Boolean) -> Unit = {}) {
+    fun showEULADialog(activity: AppCompatActivity, content: String, cancelable: Boolean, onOperate: (agree: Boolean) -> Unit = {}) {
         MaterialAlertDialogBuilder(activity).apply {
             setTitle(R.string.eula_license)
             setMessage(content)

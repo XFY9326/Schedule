@@ -12,7 +12,7 @@ import tool.xfy9326.schedule.kt.appErrorRelaunch
 import tool.xfy9326.schedule.kt.crashRelaunch
 
 object CrashLoggerUtils {
-    private const val CRASH_RELAUNCH_PERIOD_MILLS = 3000L
+    private const val CRASH_RELAUNCH_PERIOD_MILLS = 5000L
 
     fun init(context: Context) {
         val (enabled, maxLogAmount) = runBlocking {

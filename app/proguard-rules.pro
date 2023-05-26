@@ -20,17 +20,16 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
-
--optimizationpasses 5
--allowaccessmodification
-
+# Global
 -repackageclasses pkg
--keepattributes SourceFile, LineNumberTable
--keepattributes *Annotation*, InnerClasses
--keepattributes Signature
+-keepattributes LineNumberTable,SourceFile
+-renamesourcefileattribute SourceFile
 
 # App
--keep public class * extends tool.xfy9326.schedule.ui.fragment.base.AbstractSettingsFragment
+-keep class * extends tool.xfy9326.schedule.ui.fragment.base.AbstractSettingsFragment
+-keepclassmembers @tool.xfy9326.schedule.annotation.CourseImportConfig class * {
+     <init>(...);
+}
 
 # Kotlin Serialization
 -dontnote kotlinx.serialization.AnnotationsKt # core serialization annotations

@@ -1,5 +1,6 @@
 package tool.xfy9326.schedule.ui.activity.module
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
@@ -19,6 +20,7 @@ import tool.xfy9326.schedule.ui.dialog.UpgradeDialog
 import tool.xfy9326.schedule.utils.UpgradeUtils
 import tool.xfy9326.schedule.utils.schedule.ScheduleDataProcessor
 import tool.xfy9326.schedule.utils.view.DialogUtils
+import kotlin.system.exitProcess
 
 class ScheduleLaunchModule(activity: ScheduleActivity) : AbstractActivityModule<ScheduleActivity>(activity) {
     companion object {
@@ -56,6 +58,32 @@ class ScheduleLaunchModule(activity: ScheduleActivity) : AbstractActivityModule<
                 }
             }
         }
+
+        fun checkDoAppErrorLaunch(activity: AppCompatActivity): Boolean {
+            val app = activity.applicationContext
+            if (activity.intent.getBooleanExtra(INTENT_EXTRA_CRASH_RELAUNCH, false)) {
+                try {
+                    app.showToast(R.string.crash_relaunch_attention)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+            if (activity.intent.getBooleanExtra(INTENT_EXTRA_APP_ERROR, false)) {
+                try {
+                    val crashLog = activity.intent.getStringExtra(INTENT_EXTRA_APP_ERROR_CRASH_LOG)
+                    app.startActivity<AppErrorActivity> {
+                        addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        putExtra(AppErrorActivity.INTENT_EXTRA_CRASH_LOG, crashLog)
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    exitProcess(1)
+                }
+                return false
+            }
+            return true
+        }
     }
 
     private var isPreloadReady = false
@@ -64,20 +92,6 @@ class ScheduleLaunchModule(activity: ScheduleActivity) : AbstractActivityModule<
         requireActivity().installSplashScreen().setKeepOnScreenCondition {
             !isPreloadReady
         }
-
-        if (isFirstLaunch) {
-            if (requireActivity().intent.getBooleanExtra(INTENT_EXTRA_APP_ERROR, false)) {
-                startAppErrorActivity()
-                isPreloadReady = true
-                requireActivity().finish()
-                return
-            }
-
-            if (requireActivity().intent.getBooleanExtra(INTENT_EXTRA_CRASH_RELAUNCH, false)) {
-                requireActivity().showToast(R.string.crash_relaunch_attention)
-            }
-        }
-
         preloadData()
     }
 
@@ -97,14 +111,6 @@ class ScheduleLaunchModule(activity: ScheduleActivity) : AbstractActivityModule<
             }
         } else {
             isPreloadReady = true
-        }
-    }
-
-    private fun startAppErrorActivity() {
-        requireActivity().apply {
-            startActivity<AppErrorActivity> {
-                putExtra(AppErrorActivity.INTENT_EXTRA_CRASH_LOG, intent.getStringExtra(INTENT_EXTRA_APP_ERROR_CRASH_LOG))
-            }
         }
     }
 }
