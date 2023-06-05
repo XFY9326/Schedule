@@ -121,6 +121,7 @@ class NAUJwcCourseProvider : LoginCourseProvider<Nothing>() {
                 val msgElement = Jsoup.parse(loginResponseContent).body().selectSingle(SELECTOR_LOGIN_ERROR_MSG)
                 CourseAdapterException.reportCustomError(msgElement.text())
             }
+
             else -> CourseAdapterException.Error.UNKNOWN_ERROR.report()
         }
     }

@@ -64,7 +64,12 @@ abstract class ScheduleDAO {
     fun getScheduleCourse(courseId: Long) = getCourse(courseId).convertCourse()
 
     @Transaction
-    open suspend fun getNextScheduleCourseTimeByDate(scheduleId: Long, weekNum: Int, weekDay: WeekDay, currentClassNum: Int): Pair<Course, CourseTime>? {
+    open suspend fun getNextScheduleCourseTimeByDate(
+        scheduleId: Long,
+        weekNum: Int,
+        weekDay: WeekDay,
+        currentClassNum: Int
+    ): Pair<Course, CourseTime>? {
         if (weekNum < 1) return null
 
         val weekNumLike = buildString(weekNum + 2) {

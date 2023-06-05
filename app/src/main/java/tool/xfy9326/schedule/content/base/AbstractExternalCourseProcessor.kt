@@ -5,7 +5,9 @@ import tool.xfy9326.schedule.content.beans.CourseImportInstance
 import tool.xfy9326.schedule.content.beans.ExternalCourseImportData
 import kotlin.reflect.KClass
 
-abstract class AbstractExternalCourseProcessor<T1 : AbstractCourseProvider<*>, T2 : AbstractCourseParser<*>, C : AbstractCourseImportConfig<*, T1, *, T2>>(private val configClass: KClass<C>) {
+abstract class AbstractExternalCourseProcessor<T1 : AbstractCourseProvider<*>, T2 : AbstractCourseParser<*>, C : AbstractCourseImportConfig<*, T1, *, T2>>(
+    private val configClass: KClass<C>
+) {
     private val configInstance: CourseImportInstance<T1, T2> by lazy {
         configClass.java.newInstance().getInstance()
     }

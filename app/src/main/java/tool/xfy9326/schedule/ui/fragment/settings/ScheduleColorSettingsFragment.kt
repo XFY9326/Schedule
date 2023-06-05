@@ -19,8 +19,10 @@ class ScheduleColorSettingsFragment : AbstractSettingsFragment() {
             when (key) {
                 ScheduleDataStore.toolBarTintColor.name ->
                     return super.getInt(key, requireContext().getColorCompat(R.color.schedule_tool_bar_tint))
+
                 ScheduleDataStore.timeTextColor.name ->
                     return super.getInt(key, requireContext().getColorCompat(R.color.course_time_cell_text))
+
                 ScheduleDataStore.highlightShowTodayCellColor.name ->
                     return super.getInt(key, requireContext().getColorCompat(R.color.course_time_today_highlight))
             }

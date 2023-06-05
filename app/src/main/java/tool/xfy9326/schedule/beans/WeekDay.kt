@@ -4,7 +4,8 @@ package tool.xfy9326.schedule.beans
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
-import java.util.*
+import java.util.Calendar
+import java.util.Locale
 
 @Parcelize
 enum class WeekDay : Parcelable {

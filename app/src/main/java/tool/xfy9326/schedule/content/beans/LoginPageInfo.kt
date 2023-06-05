@@ -1,7 +1,7 @@
 package tool.xfy9326.schedule.content.beans
 
 import android.os.Bundle
-import io.ktor.http.*
+import io.ktor.http.Parameters
 
 class LoginPageInfo(
     val captchaUrl: String? = null,

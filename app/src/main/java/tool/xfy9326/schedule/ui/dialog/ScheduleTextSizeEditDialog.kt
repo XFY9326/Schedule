@@ -47,30 +47,32 @@ class ScheduleTextSizeEditDialog : BottomSheetDialogFragment() {
     private val textType by lazy { requireArguments().getSerializableCompat<ScheduleText>(EXTRA_TEXT_TYPE)!! }
     private val binding by lazy { DialogScheduleTextSizeEditBinding.inflate(layoutInflater) }
 
-    override fun onCreateDialog(savedInstanceState: Bundle?) = BottomSheetDialog(requireContext(), R.style.AppTheme_TransparentBottomSheetDialog).apply {
-        binding.apply {
-            val currentTextSize = (savedInstanceState?.getInt(EXTRA_TEXT_SIZE_VALUE, textSize.getRaw(textType)) ?: textSize.getRaw(textType)).toFloat()
-            textViewTextSizeEditSample.textSize = currentTextSize + ScheduleText.TextSize.sizeOffset
-            textViewTextSizeEditTitle.text = requireArguments().getString(EXTRA_TEXT_EDIT_TITLE)
-            sliderTextSizeEdit.apply {
-                value = currentTextSize
-                valueFrom = ScheduleText.TextSize.minSize.toFloat()
-                valueTo = ScheduleText.TextSize.maxSize.toFloat()
-                addOnChangeListener { _, value, _ ->
-                    textViewTextSizeEditSample.textSize = value + ScheduleText.TextSize.sizeOffset
+    override fun onCreateDialog(savedInstanceState: Bundle?) =
+        BottomSheetDialog(requireContext(), R.style.AppTheme_TransparentBottomSheetDialog).apply {
+            binding.apply {
+                val currentTextSize =
+                    (savedInstanceState?.getInt(EXTRA_TEXT_SIZE_VALUE, textSize.getRaw(textType)) ?: textSize.getRaw(textType)).toFloat()
+                textViewTextSizeEditSample.textSize = currentTextSize + ScheduleText.TextSize.sizeOffset
+                textViewTextSizeEditTitle.text = requireArguments().getString(EXTRA_TEXT_EDIT_TITLE)
+                sliderTextSizeEdit.apply {
+                    value = currentTextSize
+                    valueFrom = ScheduleText.TextSize.minSize.toFloat()
+                    valueTo = ScheduleText.TextSize.maxSize.toFloat()
+                    addOnChangeListener { _, value, _ ->
+                        textViewTextSizeEditSample.textSize = value + ScheduleText.TextSize.sizeOffset
+                    }
+                }
+                buttonTextSizeEditCancel.setOnSingleClickListener {
+                    dismiss()
+                }
+                buttonTextSizeEditConfirm.setOnSingleClickListener {
+                    reportResult(binding.sliderTextSizeEdit.value.toInt())
+                    dismiss()
                 }
             }
-            buttonTextSizeEditCancel.setOnSingleClickListener {
-                dismiss()
-            }
-            buttonTextSizeEditConfirm.setOnSingleClickListener {
-                reportResult(binding.sliderTextSizeEdit.value.toInt())
-                dismiss()
-            }
+            setContentView(binding.root)
+            behavior.state = BottomSheetBehavior.STATE_EXPANDED
         }
-        setContentView(binding.root)
-        behavior.state = BottomSheetBehavior.STATE_EXPANDED
-    }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)

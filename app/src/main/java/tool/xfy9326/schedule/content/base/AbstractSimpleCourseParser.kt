@@ -4,7 +4,7 @@ import tool.xfy9326.schedule.beans.Course.Companion.arrangeWeekNum
 import tool.xfy9326.schedule.beans.ScheduleTime
 import tool.xfy9326.schedule.content.utils.CourseParseResult
 import java.io.Serializable
-import java.util.*
+import java.util.Date
 
 abstract class AbstractSimpleCourseParser<P : Serializable, T> : AbstractCourseParser<P>() {
     fun parseScheduleTimes(importOption: Int, content: T) = onParseScheduleTimes(importOption, content)

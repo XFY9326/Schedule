@@ -44,7 +44,11 @@ class CourseTimeEditDialog : AppCompatDialogFragment() {
             }.show(fragmentManager, DIALOG_TAG)
         }
 
-        fun setCourseTimeEditListener(fragmentManager: FragmentManager, lifecycleOwner: LifecycleOwner, block: (courseTime: CourseTime, position: Int?) -> Unit) {
+        fun setCourseTimeEditListener(
+            fragmentManager: FragmentManager,
+            lifecycleOwner: LifecycleOwner,
+            block: (courseTime: CourseTime, position: Int?) -> Unit
+        ) {
             fragmentManager.setFragmentResultListener(DIALOG_TAG, lifecycleOwner) { _, bundle ->
                 block(
                     bundle.getParcelableCompat(EXTRA_COURSE_TIME)!!,

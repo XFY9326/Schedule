@@ -95,9 +95,11 @@ class SCUJCCCourseParser : WebCourseParser<Nothing>() {
 
     private fun parseTimeOption0(details: List<String>): List<CourseTime> {
         val content = details[1].trim()
-        val courseTimeData = courseTimeOption0Reg.matchEntire(content)?.groups ?: CourseAdapterException.Error.CONTENT_PARSE_ERROR.report(msg = "Error content: $content")
+        val courseTimeData = courseTimeOption0Reg.matchEntire(content)?.groups
+            ?: CourseAdapterException.Error.CONTENT_PARSE_ERROR.report(msg = "Error content: $content")
         val weekDayStr = courseTimeData[1]?.value?.trim() ?: CourseAdapterException.Error.CONTENT_PARSE_ERROR.report(msg = "Error content: $content")
-        val sectionTimeStr = courseTimeData[2]?.value?.trim() ?: CourseAdapterException.Error.CONTENT_PARSE_ERROR.report(msg = "Error content: $content")
+        val sectionTimeStr =
+            courseTimeData[2]?.value?.trim() ?: CourseAdapterException.Error.CONTENT_PARSE_ERROR.report(msg = "Error content: $content")
         val weekNumStr = courseTimeData[3]?.value?.trim() ?: CourseAdapterException.Error.CONTENT_PARSE_ERROR.report(msg = "Error content: $content")
         val weekModeStr = courseTimeData[5]?.value?.trim()
 
@@ -139,9 +141,11 @@ class SCUJCCCourseParser : WebCourseParser<Nothing>() {
 
     private fun parseTimeOption1(weekDay: WeekDay, details: List<String>): List<CourseTime> {
         val content = details[1].trim()
-        val courseTimeData = courseTimeOption1Reg.matchEntire(content)?.groups ?: CourseAdapterException.Error.CONTENT_PARSE_ERROR.report(msg = "Error content: $content")
+        val courseTimeData = courseTimeOption1Reg.matchEntire(content)?.groups
+            ?: CourseAdapterException.Error.CONTENT_PARSE_ERROR.report(msg = "Error content: $content")
         var weeksStr = courseTimeData[1]?.value?.trim() ?: CourseAdapterException.Error.CONTENT_PARSE_ERROR.report(msg = "Error content: $content")
-        val sectionTimeStr = courseTimeData[2]?.value?.trim() ?: CourseAdapterException.Error.CONTENT_PARSE_ERROR.report(msg = "Error content: $content")
+        val sectionTimeStr =
+            courseTimeData[2]?.value?.trim() ?: CourseAdapterException.Error.CONTENT_PARSE_ERROR.report(msg = "Error content: $content")
 
         val oddMode = weeksStr.endsWith(ODD_WEEK_STR)
         if (oddMode) {

@@ -29,6 +29,7 @@ class JSCourseProvider : AbstractCourseProvider<JSParams>() {
             JSConfig.TYPE_PURE_SCHEDULE -> {
                 { p0, p1, p2 -> "pureScheduleProvider(${p0.trim()}, ${p1.trim()}, ${p2.trim()})" }
             }
+
             else -> error("Unsupported JS Type! ${requireParams().jsType}")
         }
     }
@@ -43,6 +44,7 @@ class JSCourseProvider : AbstractCourseProvider<JSParams>() {
             JSConfig.TYPE_PURE_SCHEDULE -> {
                 { "pureScheduleParser(${it.trim()})" }
             }
+
             else -> error("Unsupported JS Type! ${requireParams().jsType}")
         }
     }

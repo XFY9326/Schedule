@@ -2,7 +2,12 @@ package tool.xfy9326.schedule.ui.fragment.settings
 
 import android.content.res.Configuration
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import androidx.activity.addCallback
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.core.view.MenuProvider
@@ -23,7 +28,8 @@ import tool.xfy9326.schedule.ui.vm.SettingsViewModel
 import tool.xfy9326.schedule.utils.view.ViewUtils
 import kotlin.properties.Delegates
 
-class ScheduleBaseSettingsFragment : ViewBindingFragment<FragmentScheduleSettingsBinding>(), PreferenceFragmentCompat.OnPreferenceStartFragmentCallback {
+class ScheduleBaseSettingsFragment : ViewBindingFragment<FragmentScheduleSettingsBinding>(),
+    PreferenceFragmentCompat.OnPreferenceStartFragmentCallback {
     companion object {
         private const val EXTRA_IS_PREVIEW_LAND_MODE = "EXTRA_IS_PREVIEW_LAND_MODE"
     }
@@ -31,7 +37,8 @@ class ScheduleBaseSettingsFragment : ViewBindingFragment<FragmentScheduleSetting
     private val viewModel by activityViewModels<SettingsViewModel>()
     private var isCurrentPreviewLandMode by Delegates.notNull<Boolean>()
 
-    override fun onCreateViewBinding(inflater: LayoutInflater, container: ViewGroup?) = FragmentScheduleSettingsBinding.inflate(inflater, container, false)
+    override fun onCreateViewBinding(inflater: LayoutInflater, container: ViewGroup?) =
+        FragmentScheduleSettingsBinding.inflate(inflater, container, false)
 
     override fun onBindViewBinding(view: View) = FragmentScheduleSettingsBinding.bind(view)
 

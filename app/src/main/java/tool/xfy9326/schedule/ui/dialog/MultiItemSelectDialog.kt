@@ -55,7 +55,8 @@ class MultiItemSelectDialog : AppCompatDialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        selectedArr = savedInstanceState?.getBooleanArray(EXTRA_SELECTED_ARR) ?: requireArguments().getBooleanArray(EXTRA_SELECTED_ARR) ?: BooleanArray(0)
+        selectedArr =
+            savedInstanceState?.getBooleanArray(EXTRA_SELECTED_ARR) ?: requireArguments().getBooleanArray(EXTRA_SELECTED_ARR) ?: BooleanArray(0)
         showArr = requireArguments().getStringArray(EXTRA_SHOW_ARR) ?: emptyArray()
         idArr = requireArguments().getLongArray(EXTRA_ID_ARR) ?: LongArray(0)
     }

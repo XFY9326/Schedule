@@ -3,15 +3,20 @@ package tool.xfy9326.schedule.utils.schedule
 import io.github.xfy9326.atools.io.IOManager
 import kotlinx.coroutines.flow.first
 import tool.xfy9326.schedule.R
-import tool.xfy9326.schedule.beans.*
+import tool.xfy9326.schedule.beans.Course
 import tool.xfy9326.schedule.beans.Course.Companion.iterateAll
+import tool.xfy9326.schedule.beans.EditError
+import tool.xfy9326.schedule.beans.Schedule
+import tool.xfy9326.schedule.beans.ScheduleTime
 import tool.xfy9326.schedule.beans.ScheduleTime.Companion.intersect
 import tool.xfy9326.schedule.beans.SectionTime.Companion.end
+import tool.xfy9326.schedule.beans.WeekDay
 import tool.xfy9326.schedule.data.AppDataStore
 import tool.xfy9326.schedule.data.ScheduleDataStore
 import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
 import tool.xfy9326.schedule.utils.CalendarUtils
-import java.util.*
+import java.util.Calendar
+import java.util.Date
 
 object ScheduleUtils {
     const val MAX_WEEK_NUM = 5 * 12 * 4 // 5 years
@@ -124,7 +129,12 @@ object ScheduleUtils {
         return ScheduleDBProvider.db.scheduleDAO.updateScheduleCourses(schedule, courses)
     }
 
-    suspend fun saveNewSchedule(newScheduleName: String?, scheduleTimes: List<ScheduleTime>, courses: List<Course>, term: Pair<Date, Date>? = null): Long {
+    suspend fun saveNewSchedule(
+        newScheduleName: String?,
+        scheduleTimes: List<ScheduleTime>,
+        courses: List<Course>,
+        term: Pair<Date, Date>? = null
+    ): Long {
         val schedule = createNewSchedule(term).also {
             it.times = scheduleTimes
             adjustScheduleDateByCourses(it, courses)

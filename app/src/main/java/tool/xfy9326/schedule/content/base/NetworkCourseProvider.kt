@@ -1,6 +1,6 @@
 package tool.xfy9326.schedule.content.base
 
-import io.ktor.client.*
+import io.ktor.client.HttpClient
 import kotlinx.coroutines.cancel
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
 import tool.xfy9326.schedule.content.utils.CourseAdapterException.Companion.report

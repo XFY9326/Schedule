@@ -10,7 +10,11 @@ import tool.xfy9326.schedule.beans.Course.Companion.iterateAll
 import tool.xfy9326.schedule.beans.CourseTime
 import tool.xfy9326.schedule.beans.Schedule
 import tool.xfy9326.schedule.beans.ScheduleCalculateTimes
-import tool.xfy9326.schedule.tools.NumberPattern.PatternType.*
+import tool.xfy9326.schedule.tools.NumberPattern.PatternType.EMPTY
+import tool.xfy9326.schedule.tools.NumberPattern.PatternType.MESSY
+import tool.xfy9326.schedule.tools.NumberPattern.PatternType.SERIAL
+import tool.xfy9326.schedule.tools.NumberPattern.PatternType.SINGLE
+import tool.xfy9326.schedule.tools.NumberPattern.PatternType.SPACED
 import tool.xfy9326.schedule.utils.schedule.CourseTimeUtils
 import tool.xfy9326.schedule.utils.schedule.WeekNumPattern
 
@@ -42,17 +46,20 @@ class ScheduleICSHelper constructor(schedule: Schedule, private val courses: Lis
                     iCal.addEvent(time.first, time.second, course.name, courseTime.location, getEventDescription(course))
                 }
             }
+
             SPACED, SERIAL -> {
-                CourseTimeUtils.getRealSectionTime(scheduleCalculateTimes, weekNumPattern.start + 1, sectionTime = courseTime.sectionTime).let { time ->
-                    val rrule = ScheduleICSWriter.RRULE(
-                        weekNumPattern.interval,
-                        weekNumPattern.amount,
-                        courseTime.sectionTime.weekDay,
-                        scheduleCalculateTimes.weekStart
-                    )
-                    iCal.addEvent(time.first, time.second, course.name, courseTime.location, getEventDescription(course), rrule)
-                }
+                CourseTimeUtils.getRealSectionTime(scheduleCalculateTimes, weekNumPattern.start + 1, sectionTime = courseTime.sectionTime)
+                    .let { time ->
+                        val rrule = ScheduleICSWriter.RRULE(
+                            weekNumPattern.interval,
+                            weekNumPattern.amount,
+                            courseTime.sectionTime.weekDay,
+                            scheduleCalculateTimes.weekStart
+                        )
+                        iCal.addEvent(time.first, time.second, course.name, courseTime.location, getEventDescription(course), rrule)
+                    }
             }
+
             MESSY -> {
                 for (period in weekNumPattern.timePeriodArray) {
                     CourseTimeUtils.getRealSectionTime(scheduleCalculateTimes, period.start + 1, courseTime.sectionTime).let { time ->
@@ -66,6 +73,7 @@ class ScheduleICSHelper constructor(schedule: Schedule, private val courses: Lis
                     }
                 }
             }
+
             EMPTY -> Unit
         }
     }

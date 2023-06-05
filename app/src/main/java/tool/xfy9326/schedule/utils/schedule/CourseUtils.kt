@@ -2,13 +2,20 @@ package tool.xfy9326.schedule.utils.schedule
 
 import io.github.xfy9326.atools.io.IOManager
 import tool.xfy9326.schedule.R
-import tool.xfy9326.schedule.beans.*
+import tool.xfy9326.schedule.beans.Course
 import tool.xfy9326.schedule.beans.Course.Companion.iterateAll
+import tool.xfy9326.schedule.beans.CourseCell
+import tool.xfy9326.schedule.beans.CourseTime
 import tool.xfy9326.schedule.beans.CourseTime.Companion.getFromWeekNum
 import tool.xfy9326.schedule.beans.CourseTime.Companion.hasThisWeekCourse
 import tool.xfy9326.schedule.beans.CourseTime.Companion.intersect
+import tool.xfy9326.schedule.beans.EditError
+import tool.xfy9326.schedule.beans.ScheduleBuildBundle
+import tool.xfy9326.schedule.beans.ScheduleTime
+import tool.xfy9326.schedule.beans.ScheduleViewData
 import tool.xfy9326.schedule.beans.SectionTime.Companion.end
 import tool.xfy9326.schedule.beans.SectionTime.Companion.intersect
+import tool.xfy9326.schedule.beans.WeekDay
 import tool.xfy9326.schedule.beans.WeekDay.Companion.isWeekend
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
 import tool.xfy9326.schedule.content.utils.CourseAdapterException.Companion.report
@@ -16,7 +23,7 @@ import tool.xfy9326.schedule.content.utils.arrangeWeekNum
 import tool.xfy9326.schedule.tools.MaterialColorHelper
 import tool.xfy9326.schedule.utils.CalendarUtils
 import tool.xfy9326.schedule.utils.forEachTwo
-import java.util.*
+import java.util.TreeSet
 import kotlin.math.max
 
 object CourseUtils {

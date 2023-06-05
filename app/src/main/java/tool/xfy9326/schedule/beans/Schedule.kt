@@ -9,7 +9,7 @@ import androidx.room.PrimaryKey
 import kotlinx.parcelize.Parcelize
 import tool.xfy9326.schedule.db.DBConst
 import tool.xfy9326.schedule.tools.MaterialColorHelper
-import java.util.*
+import java.util.Date
 
 @Entity(
     tableName = DBConst.TABLE_SCHEDULE

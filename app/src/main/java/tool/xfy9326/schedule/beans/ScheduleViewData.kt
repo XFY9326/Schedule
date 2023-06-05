@@ -1,7 +1,7 @@
 package tool.xfy9326.schedule.beans
 
 import tool.xfy9326.schedule.utils.schedule.CourseUtils
-import java.util.*
+import java.util.Date
 
 data class ScheduleViewData(
     val scheduleId: Long,

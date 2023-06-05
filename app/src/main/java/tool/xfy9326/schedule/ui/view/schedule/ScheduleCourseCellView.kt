@@ -34,7 +34,12 @@ class ScheduleCourseCellView(
 
     init {
         alpha = styles.scheduleViewAlpha
-        setPadding(styles.courseCellHorizontalPadding, styles.courseCellVerticalPadding, styles.courseCellHorizontalPadding, styles.courseCellVerticalPadding)
+        setPadding(
+            styles.courseCellHorizontalPadding,
+            styles.courseCellVerticalPadding,
+            styles.courseCellHorizontalPadding,
+            styles.courseCellVerticalPadding
+        )
         isHorizontalScrollBarEnabled = false
         isVerticalScrollBarEnabled = false
         layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)

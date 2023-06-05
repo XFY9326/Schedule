@@ -1,6 +1,10 @@
 package tool.xfy9326.schedule.beans
 
-import androidx.room.*
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.ForeignKey
+import androidx.room.Ignore
+import androidx.room.PrimaryKey
 import tool.xfy9326.schedule.db.DBConst
 
 @Entity(

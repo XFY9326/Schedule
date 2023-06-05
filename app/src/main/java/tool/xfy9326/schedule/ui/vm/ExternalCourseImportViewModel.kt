@@ -60,7 +60,9 @@ class ExternalCourseImportViewModel : AbstractViewModel() {
             }
             when (params) {
                 is ExternalCourseImportData.Origin.External ->
-                    processor.importCourse(ExternalCourseImportData(fileContentList, params.processorExtraData)) ?: CourseAdapterException.Error.PARSE_PAGE_ERROR.report()
+                    processor.importCourse(ExternalCourseImportData(fileContentList, params.processorExtraData))
+                        ?: CourseAdapterException.Error.PARSE_PAGE_ERROR.report()
+
                 is ExternalCourseImportData.Origin.JSON ->
                     CourseImportHelper.parsePureScheduleJSON(fileContentList.first(), params.combineCourse, params.combineCourseTime)
             }

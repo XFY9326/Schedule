@@ -2,7 +2,7 @@ package tool.xfy9326.schedule.beans
 
 import androidx.annotation.IntRange
 import tool.xfy9326.schedule.utils.CalendarUtils
-import java.util.*
+import java.util.Calendar
 
 data class Day(
     @IntRange(from = 1, to = 12)

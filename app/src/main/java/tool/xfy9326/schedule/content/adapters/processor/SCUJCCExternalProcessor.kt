@@ -12,12 +12,17 @@ import tool.xfy9326.schedule.content.beans.ExternalCourseImportData
 import tool.xfy9326.schedule.content.utils.CourseImportHelper
 
 @ExternalCourseProcessor(SCUJCCExternalProcessor.PROCESSOR_NAME)
-class SCUJCCExternalProcessor : AbstractExternalCourseProcessor<SCUJCCCourseProvider, SCUJCCCourseParser, SCUJCCImportConfig>(SCUJCCImportConfig::class) {
+class SCUJCCExternalProcessor :
+    AbstractExternalCourseProcessor<SCUJCCCourseProvider, SCUJCCCourseParser, SCUJCCImportConfig>(SCUJCCImportConfig::class) {
     companion object {
         const val PROCESSOR_NAME = "SCUJCC"
     }
 
-    override suspend fun onImportCourse(data: ExternalCourseImportData, provider: SCUJCCCourseProvider, parser: SCUJCCCourseParser): ScheduleImportContent? {
+    override suspend fun onImportCourse(
+        data: ExternalCourseImportData,
+        provider: SCUJCCCourseProvider,
+        parser: SCUJCCCourseParser
+    ): ScheduleImportContent? {
         val content = WebPageContent(iframeContent = data.fileContentList.first().asArray())
         val pair = CourseImportHelper.analyseWebPage(content, provider)
         return if (pair == null) {

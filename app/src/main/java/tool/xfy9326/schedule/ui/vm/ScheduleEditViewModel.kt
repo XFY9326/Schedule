@@ -17,7 +17,7 @@ import tool.xfy9326.schedule.beans.WeekDay
 import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
 import tool.xfy9326.schedule.ui.vm.base.AbstractViewModel
 import tool.xfy9326.schedule.utils.schedule.ScheduleUtils
-import java.util.*
+import java.util.Date
 
 class ScheduleEditViewModel : AbstractViewModel() {
     var isEdit = false

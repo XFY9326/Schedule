@@ -7,7 +7,7 @@ import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import tool.xfy9326.schedule.content.utils.CourseAdapterUtils
-import java.util.*
+import java.util.Date
 
 class DateFormatStringSerializer : KSerializer<Date> {
     private val termDateFormat = CourseAdapterUtils.newDateFormat()

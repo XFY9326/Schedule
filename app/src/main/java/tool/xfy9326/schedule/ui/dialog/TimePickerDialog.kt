@@ -29,7 +29,11 @@ class TimePickerDialog : AppCompatDialogFragment(), TimePickerDialog.OnTimeSetLi
             }.show(fragmentManager, tag)
         }
 
-        fun setOnTimeSetListener(fragmentManager: FragmentManager, lifecycleOwner: LifecycleOwner, block: (tag: String?, hourOfDay: Int, minute: Int) -> Unit) {
+        fun setOnTimeSetListener(
+            fragmentManager: FragmentManager,
+            lifecycleOwner: LifecycleOwner,
+            block: (tag: String?, hourOfDay: Int, minute: Int) -> Unit
+        ) {
             fragmentManager.setFragmentResultListener(DIALOG_TAG, lifecycleOwner) { _, bundle ->
                 block(bundle.getString(EXTRA_TAG), bundle.getInt(EXTRA_HOUR), bundle.getInt(EXTRA_MINUTE))
             }

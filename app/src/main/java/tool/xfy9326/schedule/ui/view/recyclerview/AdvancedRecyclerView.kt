@@ -95,6 +95,7 @@ class AdvancedRecyclerView @JvmOverloads constructor(
                     startY = ev.y
                     parent?.requestDisallowInterceptTouchEvent(true)
                 }
+
                 MotionEvent.ACTION_MOVE -> {
                     val endX = ev.x
                     val endY = ev.y
@@ -106,6 +107,7 @@ class AdvancedRecyclerView @JvmOverloads constructor(
                         parent?.requestDisallowInterceptTouchEvent(canScrollVertically((startY - endY).toInt()))
                     }
                 }
+
                 MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> parent.requestDisallowInterceptTouchEvent(false)
             }
         }

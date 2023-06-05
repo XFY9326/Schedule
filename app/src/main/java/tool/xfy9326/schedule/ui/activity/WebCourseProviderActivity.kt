@@ -48,7 +48,12 @@ class WebCourseProviderActivity :
     override fun onSetupWebView(webView: WebView) {
         webView.addJavascriptInterface(object : JSBridge.WebCourseProviderJSInterface {
             @JavascriptInterface
-            override fun onReadHtmlContent(htmlContent: String, iframeContent: Array<String>, frameContent: Array<String>, isCurrentSchedule: Boolean) {
+            override fun onReadHtmlContent(
+                htmlContent: String,
+                iframeContent: Array<String>,
+                frameContent: Array<String>,
+                isCurrentSchedule: Boolean
+            ) {
                 onGetCurrentHTML(htmlContent, iframeContent, frameContent, isCurrentSchedule)
             }
         }, JSBridge.WEB_COURSE_PROVIDER_JS_INTERFACE_NAME)

@@ -112,6 +112,7 @@ class UpgradeDialog : AppCompatDialogFragment() {
                     val source = updateInfo.downloadSource.first()
                     withPackageInstallPermission(source, ::downloadFile)
                 }
+
                 else -> requireContext().showToast(R.string.no_update_source)
             }
         }
@@ -137,7 +138,8 @@ class UpgradeDialog : AppCompatDialogFragment() {
                 val title = getString(R.string.app_name)
                 val description = getString(R.string.downloading_update_description, BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE)
                 val fileName = "${PROJECT_ID}_v${BuildConfig.VERSION_NAME}_${BuildConfig.VERSION_CODE}.apk"
-                val downloadId = DownloadUtils.requestDownloadFileDirectly(requireContext(), downloadSource.url, fileName, title, description, MIMEConst.MIME_APK)
+                val downloadId =
+                    DownloadUtils.requestDownloadFileDirectly(requireContext(), downloadSource.url, fileName, title, description, MIMEConst.MIME_APK)
                 if (downloadId == null) {
                     requireContext().showToast(R.string.directly_download_failed)
                     DownloadUtils.requestDownloadFileByBrowser(requireContext(), downloadSource.url)

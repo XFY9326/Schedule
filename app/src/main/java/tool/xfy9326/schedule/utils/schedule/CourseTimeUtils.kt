@@ -1,12 +1,18 @@
 package tool.xfy9326.schedule.utils.schedule
 
-import tool.xfy9326.schedule.beans.*
+import tool.xfy9326.schedule.beans.Day
+import tool.xfy9326.schedule.beans.Schedule
+import tool.xfy9326.schedule.beans.ScheduleCalculateTimes
+import tool.xfy9326.schedule.beans.ScheduleTime
+import tool.xfy9326.schedule.beans.SectionTime
 import tool.xfy9326.schedule.beans.SectionTime.Companion.end
+import tool.xfy9326.schedule.beans.WeekDay
 import tool.xfy9326.schedule.beans.WeekDay.Companion.getWeekDay
 import tool.xfy9326.schedule.beans.WeekDay.Companion.isWeekend
 import tool.xfy9326.schedule.beans.WeekDay.Companion.orderedValue
 import tool.xfy9326.schedule.utils.CalendarUtils
-import java.util.*
+import java.util.Calendar
+import java.util.Date
 import kotlin.math.ceil
 
 object CourseTimeUtils {

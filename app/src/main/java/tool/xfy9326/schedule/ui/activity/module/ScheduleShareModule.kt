@@ -11,7 +11,8 @@ import tool.xfy9326.schedule.ui.vm.ScheduleViewModel
 import tool.xfy9326.schedule.utils.IntentUtils
 import tool.xfy9326.schedule.utils.view.ViewUtils
 
-class ScheduleShareModule(activity: ScheduleActivity) : AbstractViewModelActivityModule<ScheduleViewModel, ActivityScheduleBinding, ScheduleActivity>(activity) {
+class ScheduleShareModule(activity: ScheduleActivity) :
+    AbstractViewModelActivityModule<ScheduleViewModel, ActivityScheduleBinding, ScheduleActivity>(activity) {
     override fun onInit() {
         requireViewModel().scheduleShared.observeEvent(requireActivity()) {
             if (it == null) {

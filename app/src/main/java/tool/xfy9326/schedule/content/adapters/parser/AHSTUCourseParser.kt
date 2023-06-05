@@ -13,7 +13,8 @@ import tool.xfy9326.schedule.content.utils.CourseParseResult
 class AHSTUCourseParser : NetworkCourseParser<Nothing>() {
     @Suppress("RegExpRedundantEscape")
     private val patternTeacher = "\\[\\{id:\\d+,name:\"(.*?)\",lab:(false|true)\\}\\];".toRegex()
-    private val patternCourseInfo = "actTeacherName.join\\(','\\),\"(.*?)\",\"(.*?)\",\".*?\",\"(.*?)\",\"(.*?)\",.*?assistantName,\".*?\",\"(.*?)\"".toRegex()
+    private val patternCourseInfo =
+        "actTeacherName.join\\(','\\),\"(.*?)\",\"(.*?)\",\".*?\",\"(.*?)\",\"(.*?)\",.*?assistantName,\".*?\",\"(.*?)\"".toRegex()
 
     @Suppress("RegExpSimplifiable")
     private val patternDay = "(\\d+)\\*[\\s]*unitCount[\\s]*\\+(\\d+)".toRegex()
@@ -53,7 +54,15 @@ class AHSTUCourseParser : NetworkCourseParser<Nothing>() {
             for (jsonObject in jsonObjects) { // 同一classId的课程
                 val tpHMap = jsonObject["time"].cast<HashMap<Int, IntArray>>()
                 for (k: Int in (tpHMap).keys) { // 星期几  [第几节课,持续几节]
-                    courseTimes.add(CourseTime(jsonObject["week"].cast(), WeekDay.of(k), tpHMap[k]!![0], tpHMap[k]!![1], jsonObject["classRoom"].toString()))
+                    courseTimes.add(
+                        CourseTime(
+                            jsonObject["week"].cast(),
+                            WeekDay.of(k),
+                            tpHMap[k]!![0],
+                            tpHMap[k]!![1],
+                            jsonObject["classRoom"].toString()
+                        )
+                    )
                 }
             }
             builder.add(Course(jsonObjects[0]["className"].toString(), jsonObjects[0]["teacherName"].toString(), courseTimes.toList()))

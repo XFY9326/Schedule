@@ -9,13 +9,12 @@ import io.github.xfy9326.atools.io.serialization.json.writeJSON
 import io.github.xfy9326.atools.io.utils.asParentOf
 import io.github.xfy9326.atools.io.utils.preparedParentFolder
 import io.github.xfy9326.atools.io.utils.takeIfExists
-import io.ktor.client.*
-import io.ktor.client.request.*
-import io.ktor.client.statement.*
-import io.ktor.utils.io.jvm.javaio.*
+import io.ktor.client.HttpClient
+import io.ktor.client.request.get
+import io.ktor.client.statement.bodyAsChannel
+import io.ktor.utils.io.jvm.javaio.toInputStream
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import okio.Source
 import okio.sink
@@ -24,7 +23,9 @@ import tool.xfy9326.schedule.content.beans.JSConfig
 import tool.xfy9326.schedule.content.utils.JSConfigException
 import tool.xfy9326.schedule.content.utils.JSConfigException.Companion.make
 import tool.xfy9326.schedule.content.utils.JSConfigException.Companion.report
-import tool.xfy9326.schedule.io.JSFileManager.SaveType.*
+import tool.xfy9326.schedule.io.JSFileManager.SaveType.DEPENDENCY
+import tool.xfy9326.schedule.io.JSFileManager.SaveType.PARSER
+import tool.xfy9326.schedule.io.JSFileManager.SaveType.PROVIDER
 import java.io.File
 
 /**

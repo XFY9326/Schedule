@@ -6,11 +6,16 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import tool.xfy9326.schedule.R
+import tool.xfy9326.schedule.data.ScheduleDataStore
 import tool.xfy9326.schedule.databinding.DialogScheduleControlPanelBinding
+import tool.xfy9326.schedule.kt.setSystemBarAppearance
 
 class ScheduleControlPanel : BottomSheetDialogFragment() {
     companion object {
@@ -36,6 +41,15 @@ class ScheduleControlPanel : BottomSheetDialogFragment() {
         fun addScrollToWeekListener(fragmentManager: FragmentManager, lifecycleOwner: LifecycleOwner, block: (Int) -> Unit) {
             fragmentManager.setFragmentResultListener(DIALOG_TAG, lifecycleOwner) { _, bundle ->
                 block(bundle.getInt(EXTRA_SCROLL_TO_WEEK))
+            }
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        requireDialog().window?.apply {
+            lifecycleScope.launch {
+                setSystemBarAppearance(ScheduleDataStore.scheduleSystemBarAppearanceFlow.first())
             }
         }
     }

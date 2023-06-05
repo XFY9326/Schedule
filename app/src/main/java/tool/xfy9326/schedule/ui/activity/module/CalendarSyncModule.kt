@@ -13,7 +13,8 @@ import tool.xfy9326.schedule.ui.vm.ScheduleViewModel
 import tool.xfy9326.schedule.utils.PermissionUtils
 import tool.xfy9326.schedule.utils.view.DialogUtils
 
-class CalendarSyncModule(activity: ScheduleActivity) : AbstractViewModelActivityModule<ScheduleViewModel, ActivityScheduleBinding, ScheduleActivity>(activity) {
+class CalendarSyncModule(activity: ScheduleActivity) :
+    AbstractViewModelActivityModule<ScheduleViewModel, ActivityScheduleBinding, ScheduleActivity>(activity) {
     private val requestCalendarPermission = activity.registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
         if (PermissionUtils.checkGrantResults(it)) {
             requireViewModel().syncToCalendar()

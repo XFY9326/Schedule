@@ -12,7 +12,12 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOn
 import tool.xfy9326.schedule.R
-import tool.xfy9326.schedule.beans.*
+import tool.xfy9326.schedule.beans.ImageScaleType
+import tool.xfy9326.schedule.beans.NotThisWeekCourseShowStyle
+import tool.xfy9326.schedule.beans.ScheduleStyles
+import tool.xfy9326.schedule.beans.ScheduleText
+import tool.xfy9326.schedule.beans.SystemBarAppearance
+import tool.xfy9326.schedule.beans.WeekDay
 import tool.xfy9326.schedule.data.base.AbstractDataStore
 import tool.xfy9326.schedule.io.FileManager
 import tool.xfy9326.schedule.utils.tryEnumSetValueOf
@@ -85,10 +90,12 @@ object ScheduleDataStore : AbstractDataStore("ScheduleSettings") {
             showScheduleTimes = it[showScheduleTimes] ?: true,
             horizontalCourseCellText = it[horizontalCourseCellText] ?: false,
             verticalCourseCellText = it[verticalCourseCellText] ?: false,
-            notThisWeekCourseShowStyle = it[notThisWeekCourseShowStyle]?.let { value -> tryEnumSetValueOf(value) } ?: NotThisWeekCourseShowStyle.valueSet,
+            notThisWeekCourseShowStyle = it[notThisWeekCourseShowStyle]?.let { value -> tryEnumSetValueOf(value) }
+                ?: NotThisWeekCourseShowStyle.valueSet,
             enableScheduleGridScroll = it[enableScheduleGridScroll] ?: true,
             textSize = ScheduleText.TextSize.create(it),
-            notThisWeekCourseCellAlpha = it[notThisWeekCourseCellAlpha] ?: IOManager.resources.getInteger(R.integer.default_schedule_not_this_week_course_alpha),
+            notThisWeekCourseCellAlpha = it[notThisWeekCourseCellAlpha]
+                ?: IOManager.resources.getInteger(R.integer.default_schedule_not_this_week_course_alpha),
             courseCellHeight = if (it[courseCellAutoHeight] == false) getCourseCellHeightFromPref(it) else null,
             courseCellTextLength = if (it[courseCellAutoTextLength] == false) getCourseCellTextLengthFromPref(it) else null,
             courseCellTextNoChangeLine = it[courseCellTextNoChangeLine] ?: false,

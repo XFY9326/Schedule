@@ -12,7 +12,7 @@ import tool.xfy9326.schedule.content.utils.CourseAdapterException.Companion.repo
 import tool.xfy9326.schedule.content.utils.CourseAdapterUtils
 import tool.xfy9326.schedule.content.utils.CourseParseResult
 import tool.xfy9326.schedule.content.utils.selectSingle
-import java.util.*
+import java.util.Date
 
 class NAUCourseParser : NetworkCourseParser<Nothing>() {
     companion object {

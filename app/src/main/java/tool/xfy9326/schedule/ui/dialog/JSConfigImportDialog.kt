@@ -27,7 +27,12 @@ class JSConfigImportDialog : AppCompatDialogFragment() {
             JSConfigImportDialog().show(fragmentManager, DIALOG_TAG)
         }
 
-        fun setOnJSConfigImportListener(fragmentManager: FragmentManager, lifecycleOwner: LifecycleOwner, onUrlImport: (String) -> Unit, onFileImport: () -> Unit) {
+        fun setOnJSConfigImportListener(
+            fragmentManager: FragmentManager,
+            lifecycleOwner: LifecycleOwner,
+            onUrlImport: (String) -> Unit,
+            onFileImport: () -> Unit
+        ) {
             fragmentManager.setFragmentResultListener(DIALOG_TAG, lifecycleOwner) { _, bundle ->
                 if (bundle.containsKey(EXTRA_URL)) {
                     onUrlImport(bundle.getString(EXTRA_URL)!!)

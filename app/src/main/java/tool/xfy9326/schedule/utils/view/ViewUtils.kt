@@ -63,7 +63,12 @@ object ViewUtils {
      * Reference: [PreferenceFragmentCompat.onPreferenceTreeClick]
      * Deprecated API usage: [androidx.fragment.app.Fragment.setTargetFragment]
      */
-    fun navigatePreferenceFragmentWithAnimation(context: Context, fragmentManager: FragmentManager, @IdRes containerId: Int, pref: Preference): Boolean {
+    fun navigatePreferenceFragmentWithAnimation(
+        context: Context,
+        fragmentManager: FragmentManager,
+        @IdRes containerId: Int,
+        pref: Preference
+    ): Boolean {
         val targetFragment = pref.fragment ?: return false
         val fragment = fragmentManager.fragmentFactory.instantiate(context.classLoader, targetFragment)
         fragment.arguments = pref.extras

@@ -12,7 +12,8 @@ import tool.xfy9326.schedule.ui.vm.ScheduleViewModel
 import tool.xfy9326.schedule.utils.ics.ScheduleICSHelper
 import tool.xfy9326.schedule.utils.view.DialogUtils
 
-class ICSExportModule(activity: ScheduleActivity) : AbstractViewModelActivityModule<ScheduleViewModel, ActivityScheduleBinding, ScheduleActivity>(activity) {
+class ICSExportModule(activity: ScheduleActivity) :
+    AbstractViewModelActivityModule<ScheduleViewModel, ActivityScheduleBinding, ScheduleActivity>(activity) {
     private val exportICSFile = activity.registerForActivityResult(ActivityResultContracts.CreateDocument(MIMEConst.MIME_CALENDAR)) {
         if (it != null) {
             requireViewModel().exportICS(it)
