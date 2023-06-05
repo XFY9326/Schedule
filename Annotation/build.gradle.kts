@@ -4,12 +4,12 @@ plugins {
 }
 
 java {
-    sourceCompatibility = ProjectConfig.javaVersion
-    targetCompatibility = ProjectConfig.javaVersion
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
 }
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
     kotlinOptions {
-        jvmTarget = ProjectConfig.javaVersion.toString()
+        jvmTarget = JavaVersion.VERSION_17.toString()
     }
 }

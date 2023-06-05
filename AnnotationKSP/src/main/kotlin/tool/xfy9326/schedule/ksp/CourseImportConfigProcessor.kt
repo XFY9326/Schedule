@@ -3,8 +3,15 @@ package tool.xfy9326.schedule.ksp
 import com.google.devtools.ksp.processing.SymbolProcessor
 import com.google.devtools.ksp.processing.SymbolProcessorEnvironment
 import com.google.devtools.ksp.processing.SymbolProcessorProvider
-import com.squareup.kotlinpoet.*
+import com.squareup.kotlinpoet.ClassName
+import com.squareup.kotlinpoet.FileSpec
+import com.squareup.kotlinpoet.FunSpec
+import com.squareup.kotlinpoet.KModifier
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
+import com.squareup.kotlinpoet.PropertySpec
+import com.squareup.kotlinpoet.STAR
+import com.squareup.kotlinpoet.TypeSpec
+import com.squareup.kotlinpoet.WildcardTypeName
 import com.squareup.kotlinpoet.ksp.writeTo
 import tool.xfy9326.schedule.annotation.CourseImportConfig
 import tool.xfy9326.schedule.ksp.base.AbstractClassAnnotationSymbolProcessor
@@ -21,7 +28,11 @@ class CourseImportConfigProcessor(environment: SymbolProcessorEnvironment) :
         private val ABSTRACT_IMPORT_CONFIG =
             ClassName("${PackageName}.content.base", "AbstractCourseImportConfig").parameterizedBy(STAR, STAR, STAR, STAR)
 
-        private val TARGET_PROPERTY_CONFIG_CLASSES_CLASS = KOTLIN_LIST.parameterizedBy(KOTLIN_CLASS.parameterizedBy(WildcardTypeName.producerOf(ABSTRACT_IMPORT_CONFIG)))
+        private val ABSTRACT_IMPORT_CONFIG_LIST =
+            KOTLIN_LIST.parameterizedBy(ABSTRACT_IMPORT_CONFIG)
+
+        private val TARGET_PROPERTY_CONFIG_CLASSES_CLASS =
+            KOTLIN_LIST.parameterizedBy(KOTLIN_CLASS.parameterizedBy(WildcardTypeName.producerOf(ABSTRACT_IMPORT_CONFIG)))
     }
 
     override fun process(classes: List<AnnotatedClass<CourseImportConfig>>) {
@@ -39,13 +50,16 @@ class CourseImportConfigProcessor(environment: SymbolProcessorEnvironment) :
 
         val configFunction = FunSpec.builder(TARGET_FUNCTION_GET_CONFIGS)
             .addModifiers(KModifier.SUSPEND)
-            .addStatement("""
+            .addStatement(
+                """
                     return %M(%M) {
                         $TARGET_PROPERTY_CONFIG_CLASSES.map {
                             it.java.newInstance()
                         }
                     }
-                """.trimIndent(), KOTLIN_COROUTINES_WITH_CONTEXT, KOTLIN_COROUTINES_DISPATCHERS_IO)
+                """.trimIndent(), KOTLIN_COROUTINES_WITH_CONTEXT, KOTLIN_COROUTINES_DISPATCHERS_IO
+            )
+            .returns(ABSTRACT_IMPORT_CONFIG_LIST)
             .build()
 
         generateClass.addProperty(configProperty)

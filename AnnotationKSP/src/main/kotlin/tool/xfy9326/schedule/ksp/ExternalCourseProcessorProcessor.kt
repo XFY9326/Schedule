@@ -3,8 +3,16 @@ package tool.xfy9326.schedule.ksp
 import com.google.devtools.ksp.processing.SymbolProcessor
 import com.google.devtools.ksp.processing.SymbolProcessorEnvironment
 import com.google.devtools.ksp.processing.SymbolProcessorProvider
-import com.squareup.kotlinpoet.*
+import com.squareup.kotlinpoet.ClassName
+import com.squareup.kotlinpoet.FileSpec
+import com.squareup.kotlinpoet.FunSpec
+import com.squareup.kotlinpoet.KModifier
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
+import com.squareup.kotlinpoet.PropertySpec
+import com.squareup.kotlinpoet.STAR
+import com.squareup.kotlinpoet.STRING
+import com.squareup.kotlinpoet.TypeSpec
+import com.squareup.kotlinpoet.WildcardTypeName
 import com.squareup.kotlinpoet.ksp.toClassName
 import com.squareup.kotlinpoet.ksp.writeTo
 import tool.xfy9326.schedule.annotation.ExternalCourseProcessor
@@ -54,9 +62,12 @@ class ExternalCourseProcessorProcessor(environment: SymbolProcessorEnvironment) 
 
         val getProcessorFunction = FunSpec.builder(TARGET_FUNCTION_GET_PROCESSOR)
             .addParameter(TARGET_FUNCTION_GET_PROCESSOR_PARAM, STRING)
-            .addStatement("""
+            .addStatement(
+                """
                     return $TARGET_PROPERTY_PROCESSOR_CLASSES[$TARGET_FUNCTION_GET_PROCESSOR_PARAM]?.java?.newInstance()
-                """.trimIndent())
+                """.trimIndent()
+            )
+            .returns(ABSTRACT_EXTERNAL_PROCESSOR.copy(nullable = true))
             .build()
 
         generateClass.addProperty(mapProperty)
