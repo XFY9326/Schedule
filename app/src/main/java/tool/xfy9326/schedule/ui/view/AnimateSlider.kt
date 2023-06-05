@@ -1,7 +1,6 @@
 package tool.xfy9326.schedule.ui.view
 
 import android.animation.ValueAnimator
-import android.annotation.SuppressLint
 import android.content.Context
 import android.util.AttributeSet
 import android.view.HapticFeedbackConstants
@@ -25,13 +24,11 @@ class AnimateSlider @JvmOverloads constructor(
         addOnSliderTouchListener(this)
     }
 
-    @SuppressLint("RestrictedApi")
     override fun onStartTrackingTouch(slider: Slider) {
         animateSlideThumb(true)
         performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
     }
 
-    @SuppressLint("RestrictedApi")
     override fun onStopTrackingTouch(slider: Slider) {
         animateSlideThumb(false)
         performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
