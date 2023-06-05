@@ -7,7 +7,10 @@ import tool.xfy9326.schedule.beans.CourseTime
 import tool.xfy9326.schedule.beans.ScheduleCalculateTimes
 import tool.xfy9326.schedule.beans.WeekDay.Companion.orderedValue
 import tool.xfy9326.schedule.tools.NumberPattern
-import tool.xfy9326.schedule.tools.NumberPattern.PatternType.*
+import tool.xfy9326.schedule.tools.NumberPattern.PatternType.EMPTY
+import tool.xfy9326.schedule.tools.NumberPattern.PatternType.SERIAL
+import tool.xfy9326.schedule.tools.NumberPattern.PatternType.SINGLE
+import tool.xfy9326.schedule.tools.NumberPattern.PatternType.SPACED
 import tool.xfy9326.schedule.utils.CalendarUtils
 
 object WeekNumPattern {
@@ -42,6 +45,7 @@ object WeekNumPattern {
                     R.string.even_week_description
                 }, "${start + 1}-${end + 1}"
             )
+
             else -> StringBuilder().apply {
                 val lastIndex = timePeriodArray.lastIndex
                 for ((i, period) in timePeriodArray.withIndex()) {

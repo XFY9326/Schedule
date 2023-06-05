@@ -1,6 +1,10 @@
 package tool.xfy9326.schedule.content.utils
 
-import androidx.collection.*
+import androidx.collection.SparseArrayCompat
+import androidx.collection.contains
+import androidx.collection.set
+import androidx.collection.size
+import androidx.collection.valueIterator
 import tool.xfy9326.schedule.beans.Course
 import tool.xfy9326.schedule.beans.Course.Companion.arrangeWeekNum
 import tool.xfy9326.schedule.beans.CourseTime
@@ -66,7 +70,10 @@ class CourseParseResult private constructor(val courses: List<Course>, val ignor
             }
         }
 
-        private fun combinedCourseTime(courseTimeMap: SparseArrayCompat<Pair<CourseTime, HashSet<Int>>>, courseTimes: List<CourseTime>): List<CourseTime> {
+        private fun combinedCourseTime(
+            courseTimeMap: SparseArrayCompat<Pair<CourseTime, HashSet<Int>>>,
+            courseTimes: List<CourseTime>
+        ): List<CourseTime> {
             if (courseTimes.size < 2) return courseTimes
 
             courseTimeMap.clear()

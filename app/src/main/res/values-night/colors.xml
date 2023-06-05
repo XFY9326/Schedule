@@ -14,6 +14,9 @@
     <color name="course_cell_ripple">#1AFFFFFF</color>
     <color name="launch_screen_windows_background">#121212</color>
 
+    <color name="anim_slider_tracker_active">#14598F</color>
+    <color name="anim_slider_tracker_inactive">#5B636A</color>
+
     <color name="dark_icon">#FFFFFF</color>
     <color name="gray_icon">#C6C6C6</color>
     <color name="dark_gray_icon">#B5B5B5</color>

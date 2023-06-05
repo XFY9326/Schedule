@@ -40,6 +40,7 @@ class CourseImportAdapter : ListViewBindingAdapter<ICourseImportConfig, ViewBind
             1 -> LayoutSwipeItemBinding.inflate(layoutInflater, parent, false).run {
                 SwipeItemViewHolder(ItemCourseImportBinding.inflate(layoutInflater, layoutSwipeForeground, true), this)
             }
+
             else -> error("Invalid element type! ViewType: $viewType")
         }
     }

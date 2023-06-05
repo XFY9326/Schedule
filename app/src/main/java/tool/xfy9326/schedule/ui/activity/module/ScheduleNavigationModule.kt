@@ -14,13 +14,22 @@ import kotlinx.coroutines.launch
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.databinding.ActivityScheduleBinding
 import tool.xfy9326.schedule.databinding.LayoutNavHeaderBinding
-import tool.xfy9326.schedule.ui.activity.*
+import tool.xfy9326.schedule.ui.activity.CourseManageActivity
+import tool.xfy9326.schedule.ui.activity.OnlineCourseImportActivity
+import tool.xfy9326.schedule.ui.activity.ScheduleActivity
+import tool.xfy9326.schedule.ui.activity.ScheduleManageActivity
+import tool.xfy9326.schedule.ui.activity.SettingsActivity
 import tool.xfy9326.schedule.ui.activity.base.AbstractViewModelActivityModule
 import tool.xfy9326.schedule.ui.vm.ScheduleViewModel
 import tool.xfy9326.schedule.utils.view.NightModeViewUtils
 
-class ScheduleNavigationModule(activity: ScheduleActivity, private val icsExportModule: ICSExportModule, private val calendarSyncModule: CalendarSyncModule) :
-    AbstractViewModelActivityModule<ScheduleViewModel, ActivityScheduleBinding, ScheduleActivity>(activity), NavigationView.OnNavigationItemSelectedListener {
+class ScheduleNavigationModule(
+    activity: ScheduleActivity,
+    private val icsExportModule: ICSExportModule,
+    private val calendarSyncModule: CalendarSyncModule
+) :
+    AbstractViewModelActivityModule<ScheduleViewModel, ActivityScheduleBinding, ScheduleActivity>(activity),
+    NavigationView.OnNavigationItemSelectedListener {
     private var actionBarDrawerToggle: ActionBarDrawerToggle? = null
     val drawerToggle
         get() = actionBarDrawerToggle
@@ -52,10 +61,12 @@ class ScheduleNavigationModule(activity: ScheduleActivity, private val icsExport
                 icsExportModule.requestExport()
                 delayCloseDrawer = false
             }
+
             R.id.menu_navSyncToCalendar -> {
                 calendarSyncModule.syncCalendar()
                 delayCloseDrawer = false
             }
+
             R.id.menu_navScheduleManage -> requireActivity().startActivity<ScheduleManageActivity>()
             R.id.menu_navCourseManage -> requireViewModel().openCurrentScheduleCourseManageActivity()
             R.id.menu_navSettings -> requireActivity().startActivity<SettingsActivity>()
@@ -91,7 +102,13 @@ class ScheduleNavigationModule(activity: ScheduleActivity, private val icsExport
             }
         }
         actionBarDrawerToggle =
-            ActionBarDrawerToggle(requireActivity(), viewBinding.drawerSchedule, viewBinding.toolBarSchedule, R.string.open_drawer, R.string.close_drawer).apply {
+            ActionBarDrawerToggle(
+                requireActivity(),
+                viewBinding.drawerSchedule,
+                viewBinding.toolBarSchedule,
+                R.string.open_drawer,
+                R.string.close_drawer
+            ).apply {
                 drawerArrowDrawable.color = requireActivity().getColorCompat(R.color.dark_icon)
                 syncState()
                 viewBinding.drawerSchedule.addDrawerListener(this)

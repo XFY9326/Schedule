@@ -159,7 +159,8 @@ class ScheduleTimeEditModule(activity: ScheduleEditActivity) :
                 requireViewModel().editSchedule.times = it
                 scheduleTimeAdapter.submitList(it)
             }
-            requireViewBinding().textViewScheduleTimeNum.text = requireActivity().getString(R.string.course_num, requireViewModel().editSchedule.times.size)
+            requireViewBinding().textViewScheduleTimeNum.text =
+                requireActivity().getString(R.string.course_num, requireViewModel().editSchedule.times.size)
         } else {
             requireViewBinding().textViewScheduleTimeNum.text = requireActivity().getString(R.string.course_num, num)
         }

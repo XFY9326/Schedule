@@ -11,7 +11,8 @@ import tool.xfy9326.schedule.ui.fragment.base.AbstractSettingsFragment
 import tool.xfy9326.schedule.utils.view.ViewUtils
 
 
-abstract class AbstractSettingsActivity : ViewBindingActivity<ActivityFragmentContainerBinding>(), PreferenceFragmentCompat.OnPreferenceStartFragmentCallback {
+abstract class AbstractSettingsActivity : ViewBindingActivity<ActivityFragmentContainerBinding>(),
+    PreferenceFragmentCompat.OnPreferenceStartFragmentCallback {
     val rootLayout by lazy {
         requireViewBinding().layoutFragmentContainer
     }

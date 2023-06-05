@@ -104,7 +104,13 @@ object CourseAdapterUtils {
      * @param evenOnly 仅限奇数
      * @return 整形集合
      */
-    fun parseNumberPeriods(str: String, groupDivider: String = ",", durationDivider: String = "-", oddOnly: Boolean = false, evenOnly: Boolean = false): Set<Int> {
+    fun parseNumberPeriods(
+        str: String,
+        groupDivider: String = ",",
+        durationDivider: String = "-",
+        oddOnly: Boolean = false,
+        evenOnly: Boolean = false
+    ): Set<Int> {
         val result = HashSet<Int>()
         if (str.isBlank()) return result
         str.split(groupDivider).mapNotNull {
@@ -130,7 +136,13 @@ object CourseAdapterUtils {
     fun parseNumberList(str: String, divider: String = ","): List<Int> = str.split(divider).map { it.trim().toInt() }
 
     // 用于周数解析
-    fun parseWeekNum(str: String, groupDivider: String = ",", durationDivider: String = "-", oddOnly: Boolean = false, evenOnly: Boolean = false): BooleanArray =
+    fun parseWeekNum(
+        str: String,
+        groupDivider: String = ",",
+        durationDivider: String = "-",
+        oddOnly: Boolean = false,
+        evenOnly: Boolean = false
+    ): BooleanArray =
         parseNumberPeriods(str, groupDivider, durationDivider, oddOnly, evenOnly).toBooleanArray()
 
     /**

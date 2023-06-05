@@ -6,7 +6,7 @@ import tool.xfy9326.schedule.beans.WeekDay
 import tool.xfy9326.schedule.beans.WeekDay.Companion.value
 import tool.xfy9326.schedule.utils.deserializeToBooleanArray
 import tool.xfy9326.schedule.utils.serializeToString
-import java.util.*
+import java.util.Date
 
 class DBTypeConverter {
     @TypeConverter

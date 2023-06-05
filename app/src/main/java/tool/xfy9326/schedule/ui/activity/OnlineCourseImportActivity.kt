@@ -35,7 +35,8 @@ import tool.xfy9326.schedule.utils.schedule.CourseImportUtils
 import tool.xfy9326.schedule.utils.view.DialogUtils
 import tool.xfy9326.schedule.utils.view.ViewUtils
 
-class OnlineCourseImportActivity : ViewModelActivity<OnlineCourseImportViewModel, ActivityOnlineCourseImportBinding>(), CourseImportAdapter.OnCourseImportItemListener {
+class OnlineCourseImportActivity : ViewModelActivity<OnlineCourseImportViewModel, ActivityOnlineCourseImportBinding>(),
+    CourseImportAdapter.OnCourseImportItemListener {
     private lateinit var courseImportAdapter: CourseImportAdapter
     private val loadingController by lazy { FullScreenLoadingDialog.Controller.newInstance(this, supportFragmentManager) }
     private val selectJSConfig = registerForActivityResult(ActivityResultContracts.GetContent()) {
@@ -201,6 +202,7 @@ class OnlineCourseImportActivity : ViewModelActivity<OnlineCourseImportViewModel
             when (it) {
                 CourseImportUtils.ImportMethod.LOGIN_IMPORT, CourseImportUtils.ImportMethod.NETWORK_IMPORT ->
                     CourseProviderActivity.startProviderActivity<NetworkCourseProviderActivity>(this, config)
+
                 CourseImportUtils.ImportMethod.WEB_IMPORT -> CourseProviderActivity.startProviderActivity<WebCourseProviderActivity>(this, config)
                 CourseImportUtils.ImportMethod.WEB_JS_IMPORT -> CourseProviderActivity.startProviderActivity<JSCourseProviderActivity>(this, config)
             }

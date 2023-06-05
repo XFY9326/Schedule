@@ -99,7 +99,10 @@ class ScheduleGridView constructor(
                 val screenCornerMargin = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                     val bottomLeftCorner = rootWindowInsets.getRoundedCorner(RoundedCorner.POSITION_BOTTOM_LEFT)
                     val bottomRightCorner = rootWindowInsets.getRoundedCorner(RoundedCorner.POSITION_BOTTOM_RIGHT)
-                    max(bottomLeftCorner?.radius ?: predefine.gridBottomCornerScreenMargin, bottomRightCorner?.radius ?: predefine.gridBottomCornerScreenMargin)
+                    max(
+                        bottomLeftCorner?.radius ?: predefine.gridBottomCornerScreenMargin,
+                        bottomRightCorner?.radius ?: predefine.gridBottomCornerScreenMargin
+                    )
                 } else {
                     predefine.gridBottomCornerScreenMargin
                 }

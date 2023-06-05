@@ -135,6 +135,7 @@ class ScheduleEditActivity : ViewModelActivity<ScheduleEditViewModel, ActivitySc
                 updateTextData()
                 saveSchedule()
             }
+
             R.id.menu_scheduleEditDelete -> deleteScheduleAttention()
         }
         return super.onOptionsItemSelected(item)

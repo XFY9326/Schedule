@@ -10,7 +10,8 @@ import tool.xfy9326.schedule.content.base.ICourseImportConfig
 import tool.xfy9326.schedule.content.utils.JSConfigException
 import tool.xfy9326.schedule.content.utils.JSConfigException.Companion.make
 import tool.xfy9326.schedule.content.utils.JSConfigException.Companion.report
-import java.util.*
+import java.util.Locale
+import java.util.UUID
 
 @Parcelize
 @Serializable

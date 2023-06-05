@@ -15,8 +15,12 @@ import io.github.xfy9326.atools.livedata.observeEvent
 import io.github.xfy9326.atools.ui.showToast
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.content.CourseImportConfigManager
-import tool.xfy9326.schedule.content.CourseImportConfigManager.Type.*
+import tool.xfy9326.schedule.content.CourseImportConfigManager.Type.CHECK_UPDATE
 import tool.xfy9326.schedule.content.CourseImportConfigManager.Type.Companion.getText
+import tool.xfy9326.schedule.content.CourseImportConfigManager.Type.PREPARE_DEPENDENCIES
+import tool.xfy9326.schedule.content.CourseImportConfigManager.Type.PREPARE_FINISH
+import tool.xfy9326.schedule.content.CourseImportConfigManager.Type.PREPARE_PARSER
+import tool.xfy9326.schedule.content.CourseImportConfigManager.Type.PREPARE_PROVIDER
 import tool.xfy9326.schedule.content.beans.JSConfig
 import tool.xfy9326.schedule.content.utils.JSConfigException
 import tool.xfy9326.schedule.databinding.DialogJsConfigPrepareBinding
@@ -91,6 +95,7 @@ class JSConfigPrepareDialog : AppCompatDialogFragment() {
                     requireDialog().setCancelable(true)
                     dismiss()
                 }
+
                 else -> {
                     // ignore
                 }

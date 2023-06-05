@@ -123,6 +123,7 @@ class CourseEditActivity : ViewModelActivity<CourseEditViewModel, ActivityCourse
                     saveCourse(currentEditScheduleId)
                 }
             }
+
             R.id.menu_courseEditCopy -> requireViewModel().loadAllSchedules(currentEditScheduleId)
         }
         return super.onOptionsItemSelected(item)

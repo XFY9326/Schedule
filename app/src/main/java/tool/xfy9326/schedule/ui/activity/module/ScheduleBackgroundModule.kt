@@ -10,7 +10,8 @@ import tool.xfy9326.schedule.ui.activity.base.AbstractViewModelActivityModule
 import tool.xfy9326.schedule.ui.vm.ScheduleViewModel
 import kotlin.math.roundToInt
 
-class ScheduleBackgroundModule(activity: ScheduleActivity) : AbstractViewModelActivityModule<ScheduleViewModel, ActivityScheduleBinding, ScheduleActivity>(activity) {
+class ScheduleBackgroundModule(activity: ScheduleActivity) :
+    AbstractViewModelActivityModule<ScheduleViewModel, ActivityScheduleBinding, ScheduleActivity>(activity) {
     companion object {
         fun setBackgroundView(imageView: ImageView, bundle: ScheduleDataStore.ScheduleBackgroundBuildBundle?) {
             imageView.apply {

@@ -7,7 +7,11 @@ import io.github.xfy9326.atools.io.serialization.json.writeJSONAsync
 import kotlinx.coroutines.flow.first
 import kotlinx.serialization.json.Json
 import tool.xfy9326.schedule.R
-import tool.xfy9326.schedule.beans.*
+import tool.xfy9326.schedule.beans.BatchResult
+import tool.xfy9326.schedule.beans.Course
+import tool.xfy9326.schedule.beans.CourseTime
+import tool.xfy9326.schedule.beans.Schedule
+import tool.xfy9326.schedule.beans.ScheduleCourseBundle
 import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
 import tool.xfy9326.schedule.json.ScheduleTimeJSON
 import tool.xfy9326.schedule.json.backup.BackupWrapperJSON

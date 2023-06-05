@@ -11,20 +11,38 @@ import io.github.xfy9326.atools.core.AppContext
 import io.github.xfy9326.atools.io.IOManager
 import io.github.xfy9326.atools.ui.getColorCompat
 import io.github.xfy9326.atools.ui.textBaselineHeight
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineName
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.withContext
 import tool.xfy9326.schedule.R
-import tool.xfy9326.schedule.beans.*
+import tool.xfy9326.schedule.beans.CourseCell
+import tool.xfy9326.schedule.beans.ScheduleBuildBundle
+import tool.xfy9326.schedule.beans.SchedulePredefine
+import tool.xfy9326.schedule.beans.SchedulePreviewStyles
+import tool.xfy9326.schedule.beans.ScheduleTime
+import tool.xfy9326.schedule.beans.ScheduleViewData
+import tool.xfy9326.schedule.beans.SectionTime
+import tool.xfy9326.schedule.beans.WeekDay
 import tool.xfy9326.schedule.data.ScheduleDataStore
 import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
 import tool.xfy9326.schedule.kt.getDefaultBackgroundColor
 import tool.xfy9326.schedule.tools.MaterialColorHelper
-import tool.xfy9326.schedule.ui.view.schedule.*
+import tool.xfy9326.schedule.ui.view.schedule.IScheduleCell
+import tool.xfy9326.schedule.ui.view.schedule.ScheduleCourseCellView
+import tool.xfy9326.schedule.ui.view.schedule.ScheduleGridView
+import tool.xfy9326.schedule.ui.view.schedule.ScheduleHeaderView
+import tool.xfy9326.schedule.ui.view.schedule.ScheduleScrollView
+import tool.xfy9326.schedule.ui.view.schedule.ScheduleTimeCellView
+import tool.xfy9326.schedule.ui.view.schedule.ScheduleView
 import tool.xfy9326.schedule.utils.CalendarUtils
 import tool.xfy9326.schedule.utils.schedule.CourseTimeUtils
 import tool.xfy9326.schedule.utils.schedule.CourseUtils
-import java.util.*
+import java.util.Date
 
 object ScheduleViewHelper {
     private const val MIN_SCHEDULE_COLUMN_COUNT = 5 + 1
@@ -76,7 +94,16 @@ object ScheduleViewHelper {
 
         for (cell in viewData.cells) {
             if (cell.isThisWeekCourse || viewData.styles.showNotThisWeekCourse) {
-                cellsDeferred.add(async { ScheduleCourseCellView(context, showWeekend, cell, schedulePredefine, viewData.styles, viewData.weekStart) })
+                cellsDeferred.add(async {
+                    ScheduleCourseCellView(
+                        context,
+                        showWeekend,
+                        cell,
+                        schedulePredefine,
+                        viewData.styles,
+                        viewData.weekStart
+                    )
+                })
             }
         }
 
@@ -104,33 +131,34 @@ object ScheduleViewHelper {
         }
     }
 
-    suspend fun generateScheduleImageByWeekNum(scheduleId: Long, weekNum: Int, @Px targetWidth: Int, waterMark: Boolean) = withContext(Dispatchers.Default) {
-        val schedule = ScheduleDBProvider.db.scheduleDAO.getSchedule(scheduleId).firstOrNull() ?: return@withContext null
-        val courses = ScheduleDBProvider.db.scheduleDAO.getScheduleCourses(scheduleId).first()
-        val styles = ScheduleDataStore.scheduleStylesFlow.firstOrNull()?.copy(
-            viewAlpha = 100,
-            timeTextColor = null,
-            cornerScreenMargin = false,
-            enableScheduleGridScroll = false
-        ) ?: return@withContext null
+    suspend fun generateScheduleImageByWeekNum(scheduleId: Long, weekNum: Int, @Px targetWidth: Int, waterMark: Boolean) =
+        withContext(Dispatchers.Default) {
+            val schedule = ScheduleDBProvider.db.scheduleDAO.getSchedule(scheduleId).firstOrNull() ?: return@withContext null
+            val courses = ScheduleDBProvider.db.scheduleDAO.getScheduleCourses(scheduleId).first()
+            val styles = ScheduleDataStore.scheduleStylesFlow.firstOrNull()?.copy(
+                viewAlpha = 100,
+                timeTextColor = null,
+                cornerScreenMargin = false,
+                enableScheduleGridScroll = false
+            ) ?: return@withContext null
 
-        val backgroundColor = AppContext.getDefaultBackgroundColor()
-        val viewData = CourseUtils.getScheduleViewDataByWeek(weekNum, ScheduleBuildBundle(schedule, courses, styles))
-        val scheduleView = buildScheduleView(AppContext, viewData, noScroll = true)
+            val backgroundColor = AppContext.getDefaultBackgroundColor()
+            val viewData = CourseUtils.getScheduleViewDataByWeek(weekNum, ScheduleBuildBundle(schedule, courses, styles))
+            val scheduleView = buildScheduleView(AppContext, viewData, noScroll = true)
 
-        val widthSpec = View.MeasureSpec.makeMeasureSpec(targetWidth, View.MeasureSpec.AT_MOST)
-        val heightSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
-        scheduleView.measure(widthSpec, heightSpec)
-        scheduleView.layout(0, 0, scheduleView.measuredWidth, scheduleView.measuredHeight)
-        scheduleView.requestLayout()
+            val widthSpec = View.MeasureSpec.makeMeasureSpec(targetWidth, View.MeasureSpec.AT_MOST)
+            val heightSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
+            scheduleView.measure(widthSpec, heightSpec)
+            scheduleView.layout(0, 0, scheduleView.measuredWidth, scheduleView.measuredHeight)
+            scheduleView.requestLayout()
 
-        return@withContext Bitmap.createBitmap(scheduleView.measuredWidth, scheduleView.measuredHeight, Bitmap.Config.ARGB_8888).applyCanvas {
-            drawColor(backgroundColor)
-            scheduleView.draw(this)
-        }.apply {
-            if (waterMark) drawWaterMark(AppContext, this, AppContext.getString(R.string.app_name))
+            return@withContext Bitmap.createBitmap(scheduleView.measuredWidth, scheduleView.measuredHeight, Bitmap.Config.ARGB_8888).applyCanvas {
+                drawColor(backgroundColor)
+                scheduleView.draw(this)
+            }.apply {
+                if (waterMark) drawWaterMark(AppContext, this, AppContext.getString(R.string.app_name))
+            }
         }
-    }
 
     private fun drawWaterMark(context: Context, bitmap: Bitmap, text: String) {
         val textPadding = context.resources.getDimensionPixelSize(R.dimen.water_mark_text_padding)

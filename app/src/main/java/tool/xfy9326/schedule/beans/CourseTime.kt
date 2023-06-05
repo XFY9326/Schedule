@@ -3,7 +3,13 @@ package tool.xfy9326.schedule.beans
 import android.content.Context
 import android.os.Parcelable
 import androidx.annotation.IntRange
-import androidx.room.*
+import androidx.room.ColumnInfo
+import androidx.room.Embedded
+import androidx.room.Entity
+import androidx.room.ForeignKey
+import androidx.room.Ignore
+import androidx.room.Index
+import androidx.room.PrimaryKey
 import kotlinx.parcelize.Parcelize
 import tool.xfy9326.schedule.beans.SectionTime.Companion.intersect
 import tool.xfy9326.schedule.beans.WeekDay.Companion.orderedValue

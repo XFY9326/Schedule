@@ -31,7 +31,12 @@ class WebCourseProviderBottomPanel : BottomSheetDialogFragment() {
 
         fun isShowing(fragmentManager: FragmentManager) = fragmentManager.findFragmentByTag(DIALOG_TAG) != null
 
-        fun setBottomPanelActionListener(fragmentManager: FragmentManager, lifecycleOwner: LifecycleOwner, onDismiss: () -> Unit, onImport: (Boolean) -> Unit) {
+        fun setBottomPanelActionListener(
+            fragmentManager: FragmentManager,
+            lifecycleOwner: LifecycleOwner,
+            onDismiss: () -> Unit,
+            onImport: (Boolean) -> Unit
+        ) {
             fragmentManager.setFragmentResultListener(DIALOG_TAG, lifecycleOwner) { _, bundle ->
                 if (bundle.containsKey(EXTRA_IS_CURRENT_SCHEDULE)) {
                     onImport(bundle.getBoolean(EXTRA_IS_CURRENT_SCHEDULE))

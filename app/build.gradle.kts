@@ -10,6 +10,16 @@ plugins {
     id("com.google.devtools.ksp")
 }
 
+object ProjectConfig {
+    const val name = "PureSchedule"
+    const val compileSdk = 33
+    const val targetSdk = 33
+    const val minSdk = 23
+    const val applicationId = "tool.xfy9326.schedule"
+    const val versionCode = 37
+    const val versionName = "1.4.8"
+}
+
 android {
     namespace = ProjectConfig.applicationId
     compileSdk = ProjectConfig.compileSdk
@@ -92,12 +102,12 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = ProjectConfig.javaVersion
-        targetCompatibility = ProjectConfig.javaVersion
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
     kotlinOptions {
-        jvmTarget = ProjectConfig.javaVersion.toString()
+        jvmTarget = JavaVersion.VERSION_17.toString()
     }
 
     lint {
@@ -121,7 +131,7 @@ dependencies {
     ksp(project(path = ":AnnotationKSP"))
 
     // ATools
-    val atoolsVersion = "0.0.22"
+    val atoolsVersion = "0.0.23"
     implementation("io.github.xfy9326.atools:atools-io:$atoolsVersion")
     implementation("io.github.xfy9326.atools:atools-ui:$atoolsVersion")
     implementation("io.github.xfy9326.atools:atools-crash:$atoolsVersion")
@@ -178,7 +188,7 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.11.0")
 
     // Ktor
-    val ktorVersion = "2.3.0"
+    val ktorVersion = "2.3.1"
     implementation("io.ktor:ktor-client-okhttp:$ktorVersion")
     implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
     implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
@@ -197,5 +207,5 @@ dependencies {
     // Debug
     debugImplementation("io.ktor:ktor-client-logging:$ktorVersion")
 
-    // debugImplementation("com.squareup.leakcanary:leakcanary-android:2.9.1")
+    // debugImplementation("com.squareup.leakcanary:leakcanary-android:2.11")
 }

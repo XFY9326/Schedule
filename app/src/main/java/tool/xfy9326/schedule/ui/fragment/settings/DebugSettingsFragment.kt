@@ -67,10 +67,12 @@ class DebugSettingsFragment : AbstractSettingsFragment() {
                 TAG_READ_DEBUG_LOGS -> showDebugLogsSelectDialog(it.second, R.string.read_debug_logs) { log ->
                     viewModel.showDebugLog(log)
                 }
+
                 TAG_OUTPUT_DEBUG_LOGS -> showDebugLogsSelectDialog(it.second, R.string.output_debug_logs) { log ->
                     viewModel.waitCreateLogFileName.write(log)
                     outputLogFile.launch(log.name)
                 }
+
                 TAG_SEND_DEBUG_LOG -> showDebugLogsSelectDialog(it.second, R.string.send_debug_log) { log ->
                     IntentUtils.sendCrashReport(requireContext(), log)
                 }

@@ -223,6 +223,7 @@ class NetworkCourseProviderActivity :
                     buttonCourseImportReload.isVisible = true
                     imageViewCourseImportLoadError.isVisible = true
                 }
+
                 isLoading -> {
                     layoutCourseImportLoading.isVisible = true
                     layoutCourseImportContent.isVisible = false
@@ -231,6 +232,7 @@ class NetworkCourseProviderActivity :
                     buttonCourseImportReload.isVisible = false
                     imageViewCourseImportLoadError.isVisible = false
                 }
+
                 else -> {
                     layoutCourseImportLoading.isVisible = false
                     layoutCourseImportContent.isVisible = true

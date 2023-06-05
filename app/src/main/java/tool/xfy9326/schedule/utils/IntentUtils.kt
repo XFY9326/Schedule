@@ -15,7 +15,7 @@ import tool.xfy9326.schedule.io.utils.getUriByFileProvider
 import tool.xfy9326.schedule.kt.tryStartActivity
 import tool.xfy9326.schedule.tools.MIMEConst
 import java.io.File
-import java.util.*
+import java.util.Date
 
 object IntentUtils {
     private val WIKI_URL = "https://github.com/XFY9326/Schedule/wiki".toUri()

@@ -12,14 +12,20 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.withContext
 import tool.xfy9326.schedule.R
-import tool.xfy9326.schedule.beans.*
+import tool.xfy9326.schedule.beans.BatchResult
+import tool.xfy9326.schedule.beans.Course
 import tool.xfy9326.schedule.beans.Course.Companion.iterateAll
+import tool.xfy9326.schedule.beans.CourseTime
+import tool.xfy9326.schedule.beans.Schedule
+import tool.xfy9326.schedule.beans.ScheduleCalculateTimes
+import tool.xfy9326.schedule.beans.ScheduleSync
 import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
 import tool.xfy9326.schedule.kt.PROJECT_ID
 import tool.xfy9326.schedule.tools.NumberPattern
 import tool.xfy9326.schedule.utils.ics.ScheduleICSWriter
-import java.util.*
+import java.util.Date
+import java.util.TimeZone
 
 object ScheduleSyncHelper {
     private const val SYNC_ACCOUNT_NAME = PROJECT_ID
@@ -160,16 +166,23 @@ object ScheduleSyncHelper {
                             addBasicInfoToCalendarEvent(this, calId, time, course, courseTime)
                         })) return false
                 }
+
             NumberPattern.PatternType.SPACED, NumberPattern.PatternType.SERIAL ->
                 CourseTimeUtils.getRealSectionTime(scheduleCalculateTimes, weekNumPattern.start + 1, courseTime.sectionTime).let { time ->
                     if (!insertEvent(contentResolver, sync, reminderMinutes, ContentValues().apply {
                             put(
                                 CalendarContract.Events.RRULE,
-                                ScheduleICSWriter.RRULE(weekNumPattern.interval, weekNumPattern.amount, courseTime.sectionTime.weekDay, scheduleCalculateTimes.weekStart).text
+                                ScheduleICSWriter.RRULE(
+                                    weekNumPattern.interval,
+                                    weekNumPattern.amount,
+                                    courseTime.sectionTime.weekDay,
+                                    scheduleCalculateTimes.weekStart
+                                ).text
                             )
                             addBasicInfoToCalendarEvent(this, calId, time, course, courseTime)
                         })) return false
                 }
+
             NumberPattern.PatternType.MESSY ->
                 for (period in weekNumPattern.timePeriodArray) {
                     CourseTimeUtils.getRealSectionTime(scheduleCalculateTimes, period.start + 1, courseTime.sectionTime).let { time ->
@@ -177,13 +190,19 @@ object ScheduleSyncHelper {
                                 if (period.length > 1) {
                                     put(
                                         CalendarContract.Events.RRULE,
-                                        ScheduleICSWriter.RRULE(1, period.length, courseTime.sectionTime.weekDay, scheduleCalculateTimes.weekStart).text
+                                        ScheduleICSWriter.RRULE(
+                                            1,
+                                            period.length,
+                                            courseTime.sectionTime.weekDay,
+                                            scheduleCalculateTimes.weekStart
+                                        ).text
                                     )
                                 }
                                 addBasicInfoToCalendarEvent(this, calId, time, course, courseTime)
                             })) return false
                     }
                 }
+
             else -> Unit
         }
         return true

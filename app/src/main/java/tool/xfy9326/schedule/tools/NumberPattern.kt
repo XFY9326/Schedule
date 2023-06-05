@@ -2,7 +2,11 @@ package tool.xfy9326.schedule.tools
 
 import io.github.xfy9326.atools.base.asArray
 import tool.xfy9326.schedule.beans.TimePeriod
-import tool.xfy9326.schedule.tools.NumberPattern.PatternType.*
+import tool.xfy9326.schedule.tools.NumberPattern.PatternType.EMPTY
+import tool.xfy9326.schedule.tools.NumberPattern.PatternType.MESSY
+import tool.xfy9326.schedule.tools.NumberPattern.PatternType.SERIAL
+import tool.xfy9326.schedule.tools.NumberPattern.PatternType.SINGLE
+import tool.xfy9326.schedule.tools.NumberPattern.PatternType.SPACED
 
 class NumberPattern(boolArray: BooleanArray) {
     enum class PatternType {
@@ -122,6 +126,7 @@ class NumberPattern(boolArray: BooleanArray) {
                 timePeriodArray = parseTimePeriodArray(boolArray)
                 MESSY
             }
+
             !metFirst -> {
                 start = -1
                 end = -1
@@ -130,6 +135,7 @@ class NumberPattern(boolArray: BooleanArray) {
                 timePeriodArray = emptyArray()
                 EMPTY
             }
+
             startIndex == endIndex && !setInterval -> {
                 start = startIndex
                 end = startIndex
@@ -138,6 +144,7 @@ class NumberPattern(boolArray: BooleanArray) {
                 timePeriodArray = TimePeriod(start).asArray()
                 SINGLE
             }
+
             indexInterval == 1 -> {
                 start = startIndex
                 end = endIndex
@@ -146,6 +153,7 @@ class NumberPattern(boolArray: BooleanArray) {
                 timePeriodArray = TimePeriod(start, end).asArray()
                 SERIAL
             }
+
             else -> {
                 start = startIndex
                 end = endIndex

@@ -10,10 +10,10 @@ from requests.auth import HTTPBasicAuth
 
 UPLOAD_CODING_ARTIFACT = True
 UPLOAD_GITHUB_ARTIFACT = True
-ARCHIVE_ARTIFACT = True
 
 PROJECT_NAME = "PureSchedule"
-PRODUCT_NAME = "tool.xfy9326.schedule.apk"
+CODING_APK_PRODUCT_NAME = "tool.xfy9326.schedule.apk"
+CODING_MAPPING_PRODUCT_NAME = "mapping.zip"
 VARIANT_NAME = "release"
 PROJECT_ROOT = os.path.dirname(os.path.realpath(__file__))
 OUTPUT_DIR = os.path.join(PROJECT_ROOT, "app", VARIANT_NAME)
@@ -21,7 +21,7 @@ BUILD_MAPPING_DIR = os.path.join(PROJECT_ROOT, "app", "build", "outputs", "mappi
 OUTPUT_META_PATH = os.path.join(OUTPUT_DIR, "output-metadata.json")
 LOCAL_PROPERTIES_PATH = os.path.join(PROJECT_ROOT, "local.properties")
 
-CODING_UPLOAD_URL = f"https://XFY9326-generic.pkg.coding.net/Schedule/release/{PRODUCT_NAME}?version=%d"
+CODING_UPLOAD_URL = "https://XFY9326-generic.pkg.coding.net/Schedule/release/%s?version=%d"
 GITHUB_API_URL = "https://api.github.com/repos/XFY9326/Schedule"
 GITHUB_UPLOAD_URL = "https://uploads.github.com/repos/XFY9326/Schedule/releases/%d/assets?name=%s"
 
@@ -35,7 +35,7 @@ def read_properties(file_path: str) -> dict[str, str]:
             if not line.startswith("#") and "=" in line:
                 divider_index = line.index("=")
                 key = line[:divider_index].strip()
-                value = line[divider_index + 1:].strip()
+                value = line[divider_index + 1 :].strip()
                 result[key] = value
             line = f.readline()
     return result
@@ -70,18 +70,22 @@ def get_content_type(file_path: str) -> str:
 
 
 def upload_coding_artifact(user: str, password: str, artifact: dict):
-    url = CODING_UPLOAD_URL % artifact["version_code"]
-    with requests.head(url) as r:
-        not_exist = r.status_code == 404
-    if not_exist:
-        with open(artifact["output_file"], "rb") as f:
-            with requests.put(url, data=f, auth=HTTPBasicAuth(user, password)) as r:
-                if r.status_code != 200:
-                    raise ConnectionError(f"File '{artifact['output_file']}' upload failed!")
-                else:
-                    print("Coding upload success!")
-    else:
-        print(f"Artifact version {artifact['version_code']} already exists!")
+    def _upload(product_name: str, file_path: str) -> None:
+        url = CODING_UPLOAD_URL % (product_name, artifact["version_code"])
+        with requests.head(url) as r:
+            not_exist = r.status_code == 404
+        if not_exist:
+            with open(file_path, "rb") as f:
+                with requests.put(url, data=f, auth=HTTPBasicAuth(user, password)) as r:
+                    if r.status_code != 200:
+                        raise ConnectionError(f"File '{file_path}' upload failed!")
+                    else:
+                        print(f"Coding upload {product_name} success!")
+        else:
+            print(f"Artifact {product_name} version {artifact['version_code']} already exists!")
+
+    _upload(CODING_APK_PRODUCT_NAME, artifact["output_file"])
+    _upload(CODING_MAPPING_PRODUCT_NAME, os.path.join(OUTPUT_DIR, get_publish_mapping_name(artifact)))
 
 
 def upload_github_artifact(token: str, artifact: dict):
@@ -143,16 +147,22 @@ def upload_github_artifact(token: str, artifact: dict):
         raise ValueError(f"Tag for version '{artifact['version_name']}' not exist!")
 
 
+def get_publish_mapping_name(artifact: dict) -> str:
+    return f"mapping_v{artifact['version_name']}_{artifact['version_code']}_{VARIANT_NAME}.zip"
+
+
+def get_publish_apk_name(artifact: dict) -> str:
+    return f"{PROJECT_NAME}_v{artifact['version_name']}_{artifact['version_code']}_{VARIANT_NAME}.apk"
+
+
 def archive_artifact(artifact: dict):
-    archive_apk_name = f"{PROJECT_NAME}_v{artifact['version_name']}_{artifact['version_code']}_{VARIANT_NAME}.apk"
-    archive_apk = os.path.join(OUTPUT_DIR, archive_apk_name)
+    publish_apk_path = os.path.join(OUTPUT_DIR, get_publish_apk_name(artifact))
 
-    archive_mapping_name = f"{artifact['version_name']}.zip"
-    archieve_mapping = os.path.abspath(os.path.join(OUTPUT_DIR, archive_mapping_name))
+    if os.path.isfile(publish_apk_path):
+        os.remove(publish_apk_path)
+    shutil.copyfile(artifact["output_file"], publish_apk_path)
 
-    if os.path.isfile(archive_apk):
-        os.remove(archive_apk)
-    shutil.copyfile(artifact["output_file"], archive_apk)
+    archieve_mapping = os.path.abspath(os.path.join(OUTPUT_DIR, get_publish_mapping_name(artifact)))
 
     if os.path.isfile(archieve_mapping):
         os.remove(archieve_mapping)
@@ -185,13 +195,12 @@ def main():
     print(f"Version: {artifact['version_name']} ({artifact['version_code']})")
     print(f"File: {os.path.basename(artifact['output_file'])}")
 
-    if ARCHIVE_ARTIFACT:
-        print("\nPackaging outputs ...")
-        try:
-            archive_artifact(artifact)
-            print("Successfully archived!")
-        except BaseException as e:
-            print(e)
+    print("\nPackaging ...")
+    try:
+        archive_artifact(artifact)
+        print("Successfully archived!")
+    except BaseException as e:
+        print(e)
 
     if UPLOAD_CODING_ARTIFACT:
         print("\nUploading Coding ...")

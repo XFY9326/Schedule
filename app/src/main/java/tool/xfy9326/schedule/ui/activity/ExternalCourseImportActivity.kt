@@ -108,6 +108,7 @@ class ExternalCourseImportActivity : ViewBindingActivity<ActivityExternalCourseI
                     isVisible = true
                 }
             }
+
             is ExternalCourseImportData.Origin.JSON -> {
                 viewBinding.textViewExternalCourseSchoolName.apply {
                     isSelected = true

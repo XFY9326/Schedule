@@ -1,7 +1,11 @@
 package tool.xfy9326.schedule.ui.dialog
 
 import android.os.Bundle
-import android.view.*
+import android.view.Gravity
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.view.Window
 import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatDialogFragment
 import androidx.appcompat.widget.LinearLayoutCompat
@@ -83,7 +87,8 @@ class FullScreenLoadingDialog : AppCompatDialogFragment() {
         }
     }
 
-    class Controller private constructor(lifecycleOwner: LifecycleOwner, fragmentManager: FragmentManager) : CoroutineScope by lifecycleOwner.lifecycleScope {
+    class Controller private constructor(lifecycleOwner: LifecycleOwner, fragmentManager: FragmentManager) :
+        CoroutineScope by lifecycleOwner.lifecycleScope {
         companion object {
             private const val MIN_SHOW_TIME_MS = 500L
             private const val MIN_DELAY_MS = 200L

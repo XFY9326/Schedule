@@ -21,9 +21,8 @@
 #-renamesourcefileattribute SourceFile
 
 # Global
--repackageclasses pkg
+-repackageclasses cls
 -keepattributes LineNumberTable,SourceFile
--renamesourcefileattribute SourceFile
 
 # App
 -keep class * extends tool.xfy9326.schedule.ui.fragment.base.AbstractSettingsFragment

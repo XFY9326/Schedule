@@ -8,7 +8,8 @@ import tool.xfy9326.schedule.beans.ScheduleTime
 import tool.xfy9326.schedule.beans.ScheduleTime.Companion.compare
 import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
 import tool.xfy9326.schedule.utils.CalendarUtils
-import java.util.*
+import java.util.Calendar
+import java.util.Date
 
 object NextCourseUtils {
     private val EMPTY_NEXT_COURSE = NextCourse(

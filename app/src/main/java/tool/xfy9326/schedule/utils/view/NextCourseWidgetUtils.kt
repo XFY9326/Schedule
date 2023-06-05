@@ -127,10 +127,13 @@ object NextCourseWidgetUtils {
         when {
             nextCourse.isVacation ->
                 buildWidgetMessageView(context, getLayoutId(clazz, true), R.drawable.ic_surfing_24, R.string.next_course_widget_in_vacation)
+
             nextCourse.noNextCourse ->
                 buildWidgetMessageView(context, getLayoutId(clazz, true), R.drawable.ic_break_24, R.string.next_course_widget_no_next_course)
+
             nextCourse.nextCourseInfo != null ->
                 buildWidgetNextCourseView(context, getLayoutId(clazz, false), nextCourse.nextCourseInfo)
+
             else ->
                 buildWidgetMessageView(context, getLayoutId(clazz, true), R.drawable.ic_data_24, R.string.next_course_widget_no_data)
         }
@@ -140,10 +143,13 @@ object NextCourseWidgetUtils {
         when (clazz) {
             NextCourseWidget.Size4x1::class ->
                 if (isMsg) R.layout.widget_next_course_4x1_msg else R.layout.widget_next_course_4x1
+
             NextCourseWidget.Size2x2::class ->
                 if (isMsg) R.layout.widget_next_course_2x2_msg else R.layout.widget_next_course_2x2
+
             NextCourseWidget.Size2x1::class ->
                 if (isMsg) R.layout.widget_next_course_2x1_msg else R.layout.widget_next_course_2x1
+
             else -> error("Unsupported NextCourseWidget size class! Class: $clazz")
         }
 

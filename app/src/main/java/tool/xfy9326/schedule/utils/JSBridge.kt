@@ -115,7 +115,9 @@ object JSBridge {
                     
                     let $htmlContent = $FUNCTION_NAME_HTML_LOADER();
                     
-                    let ${FUN_HEAD}ProviderResult = ${jsCourseProvider.getProviderFunctionCallGenerator().invoke(htmlParam, iframeListParam, frameListParam)};
+                    let ${FUN_HEAD}ProviderResult = ${
+            jsCourseProvider.getProviderFunctionCallGenerator().invoke(htmlParam, iframeListParam, frameListParam)
+        };
                     
                     let ${FUN_HEAD}ParserResult = ${jsCourseProvider.getParserFunctionCallGenerator().invoke("${FUN_HEAD}ProviderResult")};
                     

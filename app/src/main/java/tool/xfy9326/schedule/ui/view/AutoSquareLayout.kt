@@ -44,11 +44,13 @@ open class AutoSquareLayout @JvmOverloads constructor(context: Context, attrs: A
                     rowAmount = 1
                     viewMeasuredWidth = (childCount * childMinSize).coerceAtLeast(suggestedMinimumWidth)
                 }
+
                 MeasureSpec.EXACTLY, MeasureSpec.AT_MOST -> {
                     columnAmount = onMeasureColumnAmount((1f * width / childMinSize).toInt())
                     rowAmount = ceil(1f * childCount / columnAmount).toInt()
                     viewMeasuredWidth = MeasureSpec.getSize(widthMeasureSpec).coerceAtLeast(suggestedMinimumWidth)
                 }
+
                 else -> error("Unknown MeasureSpec Type!")
             }
             val viewExceptHeight = rowAmount * childMinSize

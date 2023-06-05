@@ -55,7 +55,8 @@ fun Window.setSystemBarAppearance(systemBarAppearance: SystemBarAppearance) {
 @ColorInt
 fun Context.getDefaultBackgroundColor() = getBackgroundColor(getColorCompat(R.color.default_background))
 
-fun CoordinatorLayout.showSnackBar(@StringRes strId: Int, vararg params: Any, showLong: Boolean = false) = showSnackBar(context.getString(strId, *params), showLong)
+fun CoordinatorLayout.showSnackBar(@StringRes strId: Int, vararg params: Any, showLong: Boolean = false) =
+    showSnackBar(context.getString(strId, *params), showLong)
 
 fun CoordinatorLayout.showSnackBar(str: String, showLong: Boolean = false) =
     Snackbar.make(this, str, if (showLong) Snackbar.LENGTH_LONG else Snackbar.LENGTH_SHORT).show()

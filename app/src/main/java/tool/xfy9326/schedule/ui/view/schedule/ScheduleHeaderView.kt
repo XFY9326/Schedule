@@ -96,9 +96,17 @@ class ScheduleHeaderView constructor(
             val weekDayText = weekDayStrArr[day.weekDay.ordinal]
 
             text = SpannableStringBuilder().apply {
-                append(monthText, AbsoluteSizeSpan(styles.textSize[ScheduleText.HEADER_MONTH_DATE_TEXT].spToPx().toInt()), Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+                append(
+                    monthText,
+                    AbsoluteSizeSpan(styles.textSize[ScheduleText.HEADER_MONTH_DATE_TEXT].spToPx().toInt()),
+                    Spannable.SPAN_INCLUSIVE_INCLUSIVE
+                )
                 append(NEW_LINE)
-                append(weekDayText, AbsoluteSizeSpan(styles.textSize[ScheduleText.HEADER_WEEKDAY_TEXT].spToPx().toInt()), Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+                append(
+                    weekDayText,
+                    AbsoluteSizeSpan(styles.textSize[ScheduleText.HEADER_WEEKDAY_TEXT].spToPx().toInt()),
+                    Spannable.SPAN_INCLUSIVE_INCLUSIVE
+                )
             }
             setLineSpacing(predefine.timeCellTimeDivideTopMargin.toFloat(), 1f)
 

@@ -12,7 +12,7 @@ import kotlinx.coroutines.withContext
 import tool.xfy9326.schedule.io.FileManager
 import tool.xfy9326.schedule.io.PathManager
 import java.io.File
-import java.util.*
+import java.util.UUID
 
 object ImageUtils {
     private val PRIVATE_STORAGE_BITMAP_COMPRESS_FORMAT = WEBPCompat
