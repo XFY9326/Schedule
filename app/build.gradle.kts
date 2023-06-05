@@ -178,7 +178,7 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.11.0")
 
     // Ktor
-    val ktorVersion = "2.3.0"
+    val ktorVersion = "2.3.1"
     implementation("io.ktor:ktor-client-okhttp:$ktorVersion")
     implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
     implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
@@ -197,5 +197,5 @@ dependencies {
     // Debug
     debugImplementation("io.ktor:ktor-client-logging:$ktorVersion")
 
-    // debugImplementation("com.squareup.leakcanary:leakcanary-android:2.9.1")
+    // debugImplementation("com.squareup.leakcanary:leakcanary-android:2.11")
 }
