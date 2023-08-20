@@ -19,6 +19,8 @@ class JSCourseProvider : AbstractCourseProvider<JSParams>() {
 
     fun isRequireNetwork() = requireParams().requireNetwork
 
+    fun isAsyncEnvironment() = requireParams().asyncEnvironment
+
     fun getProviderFunctionCallGenerator(): (htmlParam: String, iframeListParam: String, frameListParam: String) -> String {
         return when (requireParams().jsType) {
             // String String Document

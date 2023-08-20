@@ -1,6 +1,7 @@
 package tool.xfy9326.schedule.utils
 
 import androidx.annotation.Keep
+import io.github.xfy9326.atools.base.EMPTY
 import kotlinx.serialization.Serializable
 import tool.xfy9326.schedule.content.js.JSCourseProvider
 
@@ -95,10 +96,12 @@ object JSBridge {
         val htmlParam = "$htmlContent[\"html\"]"
         val iframeListParam = "$htmlContent[\"iframe\"]"
         val frameListParam = "$htmlContent[\"frame\"]"
+        val functionType = if (jsCourseProvider.isAsyncEnvironment()) "async function" else "function"
+        val callFunctionAwait = if (jsCourseProvider.isAsyncEnvironment()) "await" else EMPTY
         return """
            javascript:
            $JS_ENV_BACKUP
-           (function (window, undefined) {
+           ($functionType (window, undefined) {
                 let ${FUN_HEAD}LoadJSResult = {
                     "isSuccess": false,
                     "data": "JS launch failed!"
@@ -115,11 +118,13 @@ object JSBridge {
                     
                     let $htmlContent = $FUNCTION_NAME_HTML_LOADER();
                     
-                    let ${FUN_HEAD}ProviderResult = ${
+                    let ${FUN_HEAD}ProviderResult = $callFunctionAwait ${
             jsCourseProvider.getProviderFunctionCallGenerator().invoke(htmlParam, iframeListParam, frameListParam)
         };
-                    
-                    let ${FUN_HEAD}ParserResult = ${jsCourseProvider.getParserFunctionCallGenerator().invoke("${FUN_HEAD}ProviderResult")};
+      
+                    let ${FUN_HEAD}ParserResult = $callFunctionAwait ${
+            jsCourseProvider.getParserFunctionCallGenerator().invoke("${FUN_HEAD}ProviderResult")
+        };
                     
                     ${FUN_HEAD}LoadJSResult["isSuccess"] = true;
                     ${FUN_HEAD}LoadJSResult["data"] = JSON.stringify(${FUN_HEAD}ParserResult);

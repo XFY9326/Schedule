@@ -9,4 +9,5 @@ class JSParams(
     val requireNetwork: Boolean,
     val combineCourse: Boolean,
     val combineCourseTime: Boolean,
+    val asyncEnvironment: Boolean
 ) : Serializable
