@@ -32,9 +32,10 @@ data class JSConfig(
     val requireNetwork: Boolean = false,
     val combineCourse: Boolean = false,
     val combineCourseTime: Boolean = false,
+    val enableAsyncEnvironment: Boolean = true
 ) : Parcelable, ICourseImportConfig {
     companion object {
-        private const val CONFIG = 1
+        private const val CONFIG = 2
         private const val VERSION = 1
 
         const val TYPE_AI_SCHEDULE = "AiSchedule"
@@ -75,5 +76,5 @@ data class JSConfig(
         }
     }
 
-    fun getJSParams() = JSParams(id, jsType, initPageUrl, requireNetwork, combineCourse, combineCourseTime)
+    fun getJSParams() = JSParams(id, jsType, initPageUrl, requireNetwork, combineCourse, combineCourseTime, enableAsyncEnvironment)
 }

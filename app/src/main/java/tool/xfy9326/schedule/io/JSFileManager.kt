@@ -12,6 +12,7 @@ import io.github.xfy9326.atools.io.utils.takeIfExists
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 import io.ktor.client.statement.bodyAsChannel
+import io.ktor.http.isSuccess
 import io.ktor.utils.io.jvm.javaio.toInputStream
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -114,13 +115,18 @@ object JSFileManager {
     suspend fun downloadJS(httpClient: HttpClient, uuid: String, url: String, errorType: JSConfigException.Error, saveType: SaveType) {
         withContext(Dispatchers.IO) {
             try {
-                httpClient.get(url).bodyAsChannel().toInputStream().source().use {
-                    val result = when (saveType) {
-                        PROVIDER -> writeJSProvider(uuid, it)
-                        PARSER -> writeJSParser(uuid, it)
-                        DEPENDENCY -> writeJSDependencies(uuid, url, it)
+                val response = httpClient.get(url)
+                if (response.status.isSuccess()) {
+                    response.bodyAsChannel().toInputStream().source().use {
+                        val result = when (saveType) {
+                            PROVIDER -> writeJSProvider(uuid, it)
+                            PARSER -> writeJSParser(uuid, it)
+                            DEPENDENCY -> writeJSDependencies(uuid, url, it)
+                        }
+                        if (!result) errorType.make()
                     }
-                    if (!result) errorType.make()
+                } else {
+                    errorType.make(IllegalStateException("Response status failed! Status: ${response.status}"))
                 }
             } catch (e: JSConfigException) {
                 throw e

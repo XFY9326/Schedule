@@ -65,6 +65,10 @@ class JSCourseParser : AbstractCourseParser<JSParams>() {
             }
         }
 
-        return ScheduleImportContent(scheduleTimes, builder.build(requireParams().combineCourse, requireParams().combineCourseTime))
+        return ScheduleImportContent(
+            scheduleTimes,
+            builder.build(requireParams().combineCourse, requireParams().combineCourseTime),
+            CourseAdapterUtils.simpleTermFix(scheduleData.pureSchedule?.termStart, scheduleData.pureSchedule?.termEnd)
+        )
     }
 }
