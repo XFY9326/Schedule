@@ -7,6 +7,7 @@ import androidx.datastore.preferences.core.MutablePreferences
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.preferencesDataStore
+import io.github.xfy9326.atools.base.tryEnumSetValueOf
 import io.github.xfy9326.atools.base.tryEnumValueOf
 import io.github.xfy9326.atools.core.AppContext
 import io.github.xfy9326.atools.datastore.preference.adapter.DataStorePreferenceAdapter
@@ -56,6 +57,12 @@ abstract class AbstractDataStore(val name: String) {
         it[this]?.let { value ->
             tryEnumValueOf(value)
         } ?: defaultValue
+    }
+
+    protected inline fun <reified E : Enum<E>, S : Set<E>> Preferences.Key<Set<String>>.readEnumSetAsFlow(defaultValues: S) = read {
+        it[this]?.let { value ->
+            tryEnumSetValueOf(value)
+        } ?: defaultValues
     }
 
     protected fun <T> Preferences.Key<T>.readAndInitAsFlow(initBlock: suspend () -> T?) = read {

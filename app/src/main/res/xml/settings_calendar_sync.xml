@@ -97,6 +97,15 @@
             app:summary="@string/calendar_reminder_minutes_sum"
             app:title="@string/calendar_reminder_minutes" />
 
+        <androidx.preference.MultiSelectListPreference
+            app:defaultValue="@array/calendar_event_descriptions_value_default"
+            app:entries="@array/calendar_event_descriptions"
+            app:entryValues="@array/calendar_event_descriptions_values"
+            app:iconSpaceReserved="false"
+            app:key="calendarEventDescriptions"
+            app:summary="@string/calendar_sync_descriptions_sum"
+            app:title="@string/calendar_sync_descriptions" />
+
         <androidx.preference.Preference
             app:iconSpaceReserved="false"
             app:key="@string/pref_clear_sync_settings"

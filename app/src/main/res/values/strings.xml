@@ -264,6 +264,8 @@
     <string name="output_file_success">已成功导出文件！</string>
     <string name="output_file_failed">导出文件失败！</string>
     <string name="ics_description_teacher">教师名称：%1$s</string>
+    <string name="ics_description_location">上课地点：%1$s</string>
+    <string name="ics_description_sections">课程节数：%1$s</string>
     <string name="import_and_export">导入与导出</string>
     <string name="sync_to_calendar">同步到日历</string>
     <string name="export_to_ics">导出ICS文件</string>
@@ -304,6 +306,8 @@
     <string name="clear_calendar_settings_sum">清空为每个课表设定的日历同步设置数据</string>
     <string name="clear_calendar_settings_msg">是否清空课表的日历同步设置的数据？</string>
     <string name="clear_calendar_settings_success">所有课表的日历同步设置数据清空成功！</string>
+    <string name="calendar_sync_descriptions">自定义同步日历事件中的备注</string>
+    <string name="calendar_sync_descriptions_sum">注：可以避免日历事件不显示地点的问题</string>
     <string name="backup_and_restore">备份与恢复</string>
     <string name="backup_and_restore_sum">管理课表的数据备份与恢复</string>
     <string name="backup">备份</string>
@@ -530,6 +534,10 @@
 
     <string name="first_day_of_week_monday">星期一</string>
     <string name="first_day_of_week_sunday">星期日</string>
+
+    <string name="calendar_sync_descriptions_teacher">教师名称</string>
+    <string name="calendar_sync_descriptions_sections">课程节数</string>
+    <string name="calendar_sync_descriptions_location">上课地点</string>
 
     <string name="crash_report_email_title">%1$s-崩溃反馈报告</string>
     <string name="crash_report_email_content">应用ID：%1$s&lt;br/&gt;当前版本：v%2$s(%3$d)&lt;br/&gt;反馈时间：%4$s&lt;br/&gt;</string>

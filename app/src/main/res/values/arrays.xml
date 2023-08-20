@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- WeekDay -->
     <string-array name="weekday">
         <item>@string/monday</item>
         <item>@string/tuesday</item>
@@ -10,7 +11,6 @@
         <item>@string/sunday</item>
     </string-array>
 
-    <!-- WeekDay -->
     <string-array name="first_day_of_week">
         <item>@string/first_day_of_week_monday</item>
         <item>@string/first_day_of_week_sunday</item>
@@ -76,4 +76,20 @@
         <item>USE_DARK</item>
     </string-array>
 
+    <!-- Calendar event descriptions -->
+    <string-array name="calendar_event_descriptions">
+        <item>@string/calendar_sync_descriptions_teacher</item>
+        <item>@string/calendar_sync_descriptions_sections</item>
+        <item>@string/calendar_sync_descriptions_location</item>
+    </string-array>
+
+    <string-array name="calendar_event_descriptions_values">
+        <item>TEACHER</item>
+        <item>SECTIONS</item>
+        <item>LOCATION</item>
+    </string-array>
+
+    <string-array name="calendar_event_descriptions_value_default">
+        <item>TEACHER</item>
+    </string-array>
 </resources>
