@@ -1,5 +1,3 @@
-@file:Suppress("MemberVisibilityCanBePrivate")
-
 package tool.xfy9326.schedule.content.base
 
 import androidx.annotation.ArrayRes
