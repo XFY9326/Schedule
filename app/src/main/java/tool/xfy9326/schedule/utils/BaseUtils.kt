@@ -1,6 +1,5 @@
 package tool.xfy9326.schedule.utils
 
-import io.github.xfy9326.atools.base.tryEnumValueOf
 import kotlin.math.max
 import kotlin.math.min
 
@@ -50,12 +49,6 @@ fun List<Int>.minAndMax(): Pair<Int, Int>? {
 }
 
 fun Throwable.getDeepStackTraceString() = cause?.stackTraceToString() ?: stackTraceToString()
-
-inline fun <reified E : Enum<E>> tryEnumSetValueOf(names: Set<String>): Set<E> {
-    return names.mapNotNull {
-        tryEnumValueOf<E>(it)
-    }.toSet()
-}
 
 fun BooleanArray.serializeToString(): String {
     return buildString(size) {

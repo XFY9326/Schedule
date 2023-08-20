@@ -13,16 +13,19 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.withContext
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.BatchResult
+import tool.xfy9326.schedule.beans.CalendarEventDescription
 import tool.xfy9326.schedule.beans.Course
 import tool.xfy9326.schedule.beans.Course.Companion.iterateAll
 import tool.xfy9326.schedule.beans.CourseTime
 import tool.xfy9326.schedule.beans.Schedule
 import tool.xfy9326.schedule.beans.ScheduleCalculateTimes
 import tool.xfy9326.schedule.beans.ScheduleSync
+import tool.xfy9326.schedule.beans.SectionTime.Companion.description
 import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
 import tool.xfy9326.schedule.kt.PROJECT_ID
 import tool.xfy9326.schedule.tools.NumberPattern
+import tool.xfy9326.schedule.utils.NEW_LINE
 import tool.xfy9326.schedule.utils.ics.ScheduleICSWriter
 import java.util.Date
 import java.util.TimeZone
@@ -64,6 +67,7 @@ object ScheduleSyncHelper {
                     clearAllCalendar(contentResolver)
 
                     val reminderMinutes = AppSettingsDataStore.calendarSyncReminderMinutesFlow.first()
+                    val eventDescriptions = AppSettingsDataStore.calendarEventDescriptionsFlow.first()
                     val schedules = ScheduleDBProvider.db.scheduleDAO.getSchedules().first()
                     var totalSchedule = 0
                     var errorScheduleAmount = 0
@@ -77,7 +81,7 @@ object ScheduleSyncHelper {
                                 totalSchedule++
                             } else {
                                 val courses = ScheduleDBProvider.db.scheduleDAO.getScheduleCourses(schedule.scheduleId).first()
-                                if (!syncSchedule(calId, contentResolver, schedule, courses, calIdInfo.second, reminderMinutes)) {
+                                if (!syncSchedule(calId, contentResolver, schedule, courses, calIdInfo.second, reminderMinutes, eventDescriptions)) {
                                     errorScheduleAmount++
                                 }
                                 totalSchedule++
@@ -137,11 +141,22 @@ object ScheduleSyncHelper {
         courses: List<Course>,
         sync: ScheduleSync,
         reminderMinutes: Int,
+        eventDescriptions: Set<CalendarEventDescription>
     ): Boolean {
         val scheduleCalculateTimes = ScheduleCalculateTimes(schedule)
 
         courses.iterateAll { course, courseTime ->
-            if (!createCourseTimeCalendarEvent(calId, contentResolver, course, courseTime, scheduleCalculateTimes, sync, reminderMinutes)) {
+            if (!createCourseTimeCalendarEvent(
+                    calId = calId,
+                    contentResolver = contentResolver,
+                    course = course,
+                    courseTime = courseTime,
+                    scheduleCalculateTimes = scheduleCalculateTimes,
+                    sync = sync,
+                    reminderMinutes = reminderMinutes,
+                    eventDescriptions = eventDescriptions
+                )
+            ) {
                 clearCalendar(calId, contentResolver)
                 return false
             }
@@ -157,13 +172,14 @@ object ScheduleSyncHelper {
         scheduleCalculateTimes: ScheduleCalculateTimes,
         sync: ScheduleSync,
         reminderMinutes: Int,
+        eventDescriptions: Set<CalendarEventDescription>
     ): Boolean {
         val weekNumPattern = WeekNumPattern.parsePattern(courseTime, scheduleCalculateTimes)
         when (weekNumPattern.type) {
             NumberPattern.PatternType.SINGLE ->
                 CourseTimeUtils.getRealSectionTime(scheduleCalculateTimes, weekNumPattern.start + 1, courseTime.sectionTime).let { time ->
                     if (!insertEvent(contentResolver, sync, reminderMinutes, ContentValues().apply {
-                            addBasicInfoToCalendarEvent(this, calId, time, course, courseTime)
+                            addBasicInfoToCalendarEvent(this, calId, time, course, courseTime, eventDescriptions)
                         })) return false
                 }
 
@@ -179,7 +195,7 @@ object ScheduleSyncHelper {
                                     scheduleCalculateTimes.weekStart
                                 ).text
                             )
-                            addBasicInfoToCalendarEvent(this, calId, time, course, courseTime)
+                            addBasicInfoToCalendarEvent(this, calId, time, course, courseTime, eventDescriptions)
                         })) return false
                 }
 
@@ -198,7 +214,7 @@ object ScheduleSyncHelper {
                                         ).text
                                     )
                                 }
-                                addBasicInfoToCalendarEvent(this, calId, time, course, courseTime)
+                                addBasicInfoToCalendarEvent(this, calId, time, course, courseTime, eventDescriptions)
                             })) return false
                     }
                 }
@@ -221,7 +237,14 @@ object ScheduleSyncHelper {
         return false
     }
 
-    private fun addBasicInfoToCalendarEvent(values: ContentValues, calId: Int, time: Pair<Date, Date>, course: Course, courseTime: CourseTime) {
+    private fun addBasicInfoToCalendarEvent(
+        values: ContentValues,
+        calId: Int,
+        time: Pair<Date, Date>,
+        course: Course,
+        courseTime: CourseTime,
+        eventDescriptions: Set<CalendarEventDescription>
+    ) {
         values.apply {
             put(CalendarContract.Events.CALENDAR_ID, calId)
             put(CalendarContract.Events.DTSTART, time.first.time)
@@ -229,11 +252,21 @@ object ScheduleSyncHelper {
             put(CalendarContract.Events.TITLE, course.name)
             put(CalendarContract.Events.EVENT_TIMEZONE, TIMEZONE_ID)
             put(CalendarContract.Events.EVENT_COLOR, course.color)
+            val descriptionLines = mutableListOf<String>()
+            if (CalendarEventDescription.SECTIONS in eventDescriptions) {
+                descriptionLines.add(IOManager.resources.getString(R.string.ics_description_sections, courseTime.sectionTime.description))
+            }
+            course.teacher?.takeIf { CalendarEventDescription.TEACHER in eventDescriptions }?.let {
+                descriptionLines.add(IOManager.resources.getString(R.string.ics_description_teacher, it))
+            }
             courseTime.location?.let {
                 put(CalendarContract.Events.EVENT_LOCATION, it)
+                if (CalendarEventDescription.LOCATION in eventDescriptions) {
+                    descriptionLines.add(IOManager.resources.getString(R.string.ics_description_location, it))
+                }
             }
-            course.teacher?.let {
-                put(CalendarContract.Events.DESCRIPTION, IOManager.resources.getString(R.string.ics_description_teacher, it))
+            if (descriptionLines.isNotEmpty()) {
+                put(CalendarContract.Events.DESCRIPTION, descriptionLines.joinToString(NEW_LINE))
             }
         }
     }

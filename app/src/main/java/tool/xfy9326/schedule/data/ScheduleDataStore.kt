@@ -1,6 +1,7 @@
 package tool.xfy9326.schedule.data
 
 import androidx.datastore.preferences.core.Preferences
+import io.github.xfy9326.atools.base.tryEnumSetValueOf
 import io.github.xfy9326.atools.base.tryEnumValueOf
 import io.github.xfy9326.atools.datastore.preference.booleanPrefKey
 import io.github.xfy9326.atools.datastore.preference.intPrefKey
@@ -20,7 +21,6 @@ import tool.xfy9326.schedule.beans.SystemBarAppearance
 import tool.xfy9326.schedule.beans.WeekDay
 import tool.xfy9326.schedule.data.base.AbstractDataStore
 import tool.xfy9326.schedule.io.FileManager
-import tool.xfy9326.schedule.utils.tryEnumSetValueOf
 import java.io.File
 
 object ScheduleDataStore : AbstractDataStore("ScheduleSettings") {
