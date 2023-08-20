@@ -128,8 +128,8 @@ class NumberEditDialog : AppCompatDialogFragment() {
             else -> {
                 val number = input.toLong()
                 when {
-                    number > maxNumber || number > Int.MAX_VALUE -> getString(R.string.input_value_too_large)
-                    number < minNumber || number < Int.MIN_VALUE -> getString(R.string.input_value_too_small)
+                    number > maxNumber -> getString(R.string.input_value_too_large)
+                    number < minNumber -> getString(R.string.input_value_too_small)
                     else -> null
                 }
             }

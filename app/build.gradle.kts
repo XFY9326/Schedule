@@ -131,7 +131,7 @@ dependencies {
     ksp(project(path = ":AnnotationKSP"))
 
     // ATools
-    val atoolsVersion = "0.0.23"
+    val atoolsVersion = "0.0.24"
     implementation("io.github.xfy9326.atools:atools-io:$atoolsVersion")
     implementation("io.github.xfy9326.atools:atools-ui:$atoolsVersion")
     implementation("io.github.xfy9326.atools:atools-crash:$atoolsVersion")
@@ -142,7 +142,7 @@ dependencies {
     implementation("io.github.xfy9326.atools:atools-io-serialization-json:$atoolsVersion")
 
     // Kotlin Coroutines
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
 
     // Kotlin Serialization
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
@@ -157,12 +157,12 @@ dependencies {
     implementation("androidx.appcompat:appcompat-resources:$appCompatVersion")
 
     implementation("androidx.activity:activity-ktx:1.7.2")
-    implementation("androidx.fragment:fragment-ktx:1.5.7")
+    implementation("androidx.fragment:fragment-ktx:1.6.1")
 
     implementation("androidx.drawerlayout:drawerlayout:1.2.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
 
-    implementation("androidx.preference:preference-ktx:1.2.0")
+    implementation("androidx.preference:preference-ktx:1.2.1")
     implementation("androidx.datastore:datastore-preferences:1.0.0")
 
     // LifeCycle, ViewModel, LiveData
@@ -173,7 +173,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:$lifeCycleVersion")
 
     // Room
-    val roomVersion = "2.5.1"
+    val roomVersion = "2.5.2"
     implementation("androidx.room:room-ktx:$roomVersion")
     ksp("androidx.room:room-compiler:$roomVersion")
     testImplementation("androidx.room:room-testing:$roomVersion")
@@ -188,7 +188,7 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.11.0")
 
     // Ktor
-    val ktorVersion = "2.3.1"
+    val ktorVersion = "2.3.3"
     implementation("io.ktor:ktor-client-okhttp:$ktorVersion")
     implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
     implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
