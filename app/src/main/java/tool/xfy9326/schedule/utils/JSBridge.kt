@@ -13,6 +13,7 @@ object JSBridge {
         val randomStr = Array(FUN_HEAD_RANDOM_LENGTH) { randomCharset.random() }.joinToString("")
         FUN_HEAD_PREFIX + randomStr + "_"
     }
+    const val SCRIPT_EXECUTE_SUCCESS_RESULT = "\"Done\""
 
     @Suppress("SpellCheckingInspection")
     private const val V_CONSOLE_URL = "https://unpkg.com/vconsole@latest/dist/vconsole.min.js"
@@ -26,7 +27,8 @@ object JSBridge {
                  window.vConsole = new VConsole();
              };
              document.body.appendChild(${FUN_HEAD}CONSOLE_ELEMENT);
-        })(window, undefined);
+        })(window);
+        $SCRIPT_EXECUTE_SUCCESS_RESULT
     """.trimIndent()
 
     private const val JS_ENV_BACKUP =
@@ -104,6 +106,7 @@ object JSBridge {
                 window.$WEB_COURSE_PROVIDER_JS_INTERFACE_NAME.$WEB_COURSE_PROVIDER_JS_FUNCTION_NAME($htmlParam, $iframeListParam, $frameListParam, $isCurrentSchedule);
             })(window);
             $JS_ENV_RECOVER
+            $SCRIPT_EXECUTE_SUCCESS_RESULT
         """.trimIndent()
     }
 
@@ -139,12 +142,12 @@ object JSBridge {
                     let $providerFunctionName = $callFunctionAwait ($functionType (window, undefined) {
                         ${jsCourseProvider.getJSProvider()}
                         return ${jsCourseProvider.getProviderFunctionName()};
-                    })(window, undefined);
+                    })(window);
                     
                     let $parserFunctionName = $callFunctionAwait ($functionType (window, undefined) {
                         ${jsCourseProvider.getJSParser()}
                         return ${jsCourseProvider.getParserFunctionName()};
-                    })(window, undefined);
+                    })(window);
                     
                     $FUNCTION_HTML_LOADER
                     
@@ -164,6 +167,7 @@ object JSBridge {
                 window.$JS_COURSE_PROVIDER_JS_INTERFACE_NAME.$JS_COURSE_PROVIDER_JS_FUNCTION_NAME(JSON.stringify(${FUN_HEAD}LoadJSResult), $isCurrentSchedule)
            })(window);
            $JS_ENV_RECOVER
+           $SCRIPT_EXECUTE_SUCCESS_RESULT
         """.trimIndent()
     }
 

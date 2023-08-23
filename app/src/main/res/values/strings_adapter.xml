@@ -48,4 +48,5 @@
     <string name="adapter_exception_js_run_failed">JS运行时出现错误！</string>
 
     <!-- Other Field -->
+    <string name="js_syntax_error">JS语法错误！</string>
 </resources>
