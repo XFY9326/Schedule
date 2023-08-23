@@ -11,10 +11,5 @@ data class CourseInfos(
     val teacher: String?,
     val weeks: List<Int>,
     val day: Int,
-    val sections: List<Section>,
-) {
-    @Serializable
-    data class Section(
-        val section: Int,
-    )
-}
+    val sections: List<Int>,
+)
