@@ -22,7 +22,6 @@ import tool.xfy9326.schedule.ui.dialog.ImportCourseConflictDialog
 import tool.xfy9326.schedule.ui.dialog.ScheduleImportSuccessDialog
 import tool.xfy9326.schedule.ui.dialog.StrictImportModeWarningDialog
 import tool.xfy9326.schedule.ui.vm.base.CourseProviderViewModel
-import tool.xfy9326.schedule.utils.getDeepStackTraceString
 import tool.xfy9326.schedule.utils.schedule.ScheduleImportManager
 import tool.xfy9326.schedule.utils.view.DialogUtils
 
@@ -52,7 +51,7 @@ abstract class CourseProviderActivity<I, P1 : AbstractCourseProvider<*>, P2 : Ab
     override fun onBindLiveData(viewBinding: V, viewModel: M) {
         viewModel.providerError.observeEvent(this, javaClass.simpleName) {
             if (it.type.strictModeOnly) {
-                StrictImportModeWarningDialog.showDialog(supportFragmentManager, it.getText(this), it.getDeepStackTraceString())
+                StrictImportModeWarningDialog.showDialog(supportFragmentManager, it.getText(this), it.getDetailLog())
             } else {
                 onShowCourseAdapterError(it)
             }

@@ -21,30 +21,42 @@ class JSCourseProvider : AbstractCourseProvider<JSParams>() {
 
     fun isAsyncEnvironment() = requireParams().asyncEnvironment
 
-    fun getProviderFunctionCallGenerator(): (htmlParam: String, iframeListParam: String, frameListParam: String) -> String {
+    fun getProviderFunctionName(): String = when (requireParams().jsType) {
+        JSConfig.TYPE_AI_SCHEDULE -> "scheduleHtmlProvider"
+        JSConfig.TYPE_PURE_SCHEDULE -> "pureScheduleProvider"
+        else -> error("Unsupported JS Type! ${requireParams().jsType}")
+    }
+
+    fun getParserFunctionName(): String = when (requireParams().jsType) {
+        JSConfig.TYPE_AI_SCHEDULE -> "scheduleHtmlParser"
+        JSConfig.TYPE_PURE_SCHEDULE -> "pureScheduleParser"
+        else -> error("Unsupported JS Type! ${requireParams().jsType}")
+    }
+
+    fun getProviderFunctionCallGenerator(functionName: String): (htmlParam: String, iframeListParam: String, frameListParam: String) -> String {
         return when (requireParams().jsType) {
             // String String Document
             JSConfig.TYPE_AI_SCHEDULE -> {
-                { _, p1, p2 -> "scheduleHtmlProvider(${p1.trim()}.join(\"\"), ${p2.trim()}.join(\"\"), document)" }
+                { _, p1, p2 -> "${functionName}(${p1.trim()}.join(\"\"), ${p2.trim()}.join(\"\"), document)" }
             }
             // String String[] String[]
             JSConfig.TYPE_PURE_SCHEDULE -> {
-                { p0, p1, p2 -> "pureScheduleProvider(${p0.trim()}, ${p1.trim()}, ${p2.trim()})" }
+                { p0, p1, p2 -> "${functionName}(${p0.trim()}, ${p1.trim()}, ${p2.trim()})" }
             }
 
             else -> error("Unsupported JS Type! ${requireParams().jsType}")
         }
     }
 
-    fun getParserFunctionCallGenerator(): (html: String) -> String {
+    fun getParserFunctionCallGenerator(functionName: String): (html: String) -> String {
         return when (requireParams().jsType) {
             // String
             JSConfig.TYPE_AI_SCHEDULE -> {
-                { "scheduleHtmlParser(${it.trim()})" }
+                { "${functionName}(${it.trim()})" }
             }
             // String
             JSConfig.TYPE_PURE_SCHEDULE -> {
-                { "pureScheduleParser(${it.trim()})" }
+                { "${functionName}(${it.trim()})" }
             }
 
             else -> error("Unsupported JS Type! ${requireParams().jsType}")
@@ -73,8 +85,8 @@ class JSCourseProvider : AbstractCourseProvider<JSParams>() {
         try {
             block(requireParams().uuid) ?: JSConfigException.Error.READ_FAILED.report()
         } catch (e: JSConfigException) {
-            CourseAdapterException.Error.JS_HANDLE_ERROR.report(e)
+            CourseAdapterException.Error.JS_LOAD_ERROR.report(e)
         } catch (e: Exception) {
-            CourseAdapterException.Error.JS_HANDLE_ERROR.report(JSConfigException.Error.UNKNOWN_ERROR.make(e))
+            CourseAdapterException.Error.JS_LOAD_ERROR.report(JSConfigException.Error.UNKNOWN_ERROR.make(e))
         }
 }

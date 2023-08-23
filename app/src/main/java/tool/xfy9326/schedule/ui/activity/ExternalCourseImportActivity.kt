@@ -19,7 +19,6 @@ import tool.xfy9326.schedule.ui.dialog.ImportCourseConflictDialog
 import tool.xfy9326.schedule.ui.dialog.ScheduleImportSuccessDialog
 import tool.xfy9326.schedule.ui.dialog.StrictImportModeWarningDialog
 import tool.xfy9326.schedule.ui.vm.ExternalCourseImportViewModel
-import tool.xfy9326.schedule.utils.getDeepStackTraceString
 import tool.xfy9326.schedule.utils.schedule.ExternalCourseImportUtils
 import tool.xfy9326.schedule.utils.schedule.ScheduleImportManager
 import tool.xfy9326.schedule.utils.view.DialogUtils
@@ -51,7 +50,7 @@ class ExternalCourseImportActivity : ViewBindingActivity<ActivityExternalCourseI
         viewModel.providerError.observeEvent(this, javaClass.simpleName) {
             onCourseImportFailed()
             if (it.type.strictModeOnly) {
-                StrictImportModeWarningDialog.showDialog(supportFragmentManager, it.getText(this), it.getDeepStackTraceString())
+                StrictImportModeWarningDialog.showDialog(supportFragmentManager, it.getText(this), it.getDetailLog())
             } else {
                 ViewUtils.showCourseImportErrorSnackBar(this, requireViewBinding().layoutExternalCourse, it)
             }

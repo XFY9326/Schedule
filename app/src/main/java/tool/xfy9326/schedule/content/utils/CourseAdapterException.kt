@@ -61,8 +61,9 @@ class CourseAdapterException : CourseImportException {
                 Error.SCHEDULE_COURSE_IMPORT_EMPTY -> R.string.adapter_exception_schedule_course_empty
                 Error.FAILED_TO_IMPORT_SOME_COURSE -> R.string.adapter_exception_failed_to_import_some_course
 
-                Error.JS_HANDLE_ERROR -> R.string.adapter_exception_js_handle_error
+                Error.JS_LOAD_ERROR -> R.string.adapter_exception_js_load_error
                 Error.JS_RESULT_PARSE_ERROR -> R.string.adapter_exception_js_result_parse_error
+                Error.JS_RUN_FAILED -> R.string.adapter_exception_js_run_failed
             }
     }
 
@@ -107,8 +108,11 @@ class CourseAdapterException : CourseImportException {
         FAILED_TO_IMPORT_SOME_COURSE,
 
         // 只给JSConfigException使用
-        JS_HANDLE_ERROR,
-        JS_RESULT_PARSE_ERROR;
+        JS_LOAD_ERROR,
+        JS_RESULT_PARSE_ERROR,
+
+        // JS执行失败
+        JS_RUN_FAILED;
     }
 
     private constructor(msg: String) : super(msg) {
@@ -132,5 +136,12 @@ class CourseAdapterException : CourseImportException {
             message.orEmpty()
         } else {
             type.msgId?.let { context.getString(it) } ?: error("Unsupported error type!")
+        }
+
+    override fun getDetailLog(): String =
+        if (type == Error.JS_RUN_FAILED) {
+            message ?: super.getDetailLog()
+        } else {
+            super.getDetailLog()
         }
 }

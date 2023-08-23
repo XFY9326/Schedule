@@ -38,11 +38,15 @@ class JSCourseProviderViewModel : AbstractWebCourseProviderViewModel<String, JSC
         courseProvider: JSCourseProvider,
         courseParser: JSCourseParser,
     ): ScheduleImportContent {
-        val resultJSON = resultJSONFormat.decodeFromString<JSBridge.JSProviderResponse>(importParams)
+        val resultJSON = try {
+            resultJSONFormat.decodeFromString<JSBridge.JSProviderResponse>(importParams)
+        } catch (e: Exception) {
+            CourseAdapterException.Error.JS_RESULT_PARSE_ERROR.report(e)
+        }
         if (resultJSON.isSuccess) {
             return courseParser.processJSResult(resultJSON.data)
         } else {
-            CourseAdapterException.Error.JSON_PARSE_ERROR.report()
+            CourseAdapterException.Error.JS_RUN_FAILED.report(msg = resultJSON.data)
         }
     }
 }

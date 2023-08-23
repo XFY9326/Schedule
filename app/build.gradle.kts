@@ -131,7 +131,7 @@ dependencies {
     ksp(project(path = ":AnnotationKSP"))
 
     // ATools
-    val atoolsVersion = "0.0.24"
+    val atoolsVersion = "0.0.25"
     implementation("io.github.xfy9326.atools:atools-io:$atoolsVersion")
     implementation("io.github.xfy9326.atools:atools-ui:$atoolsVersion")
     implementation("io.github.xfy9326.atools:atools-crash:$atoolsVersion")

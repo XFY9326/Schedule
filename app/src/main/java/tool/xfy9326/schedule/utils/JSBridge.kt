@@ -6,10 +6,17 @@ import kotlinx.serialization.Serializable
 import tool.xfy9326.schedule.content.js.JSCourseProvider
 
 object JSBridge {
-    private const val FUN_HEAD = "pureSchedule_"
+    private const val FUN_HEAD_PREFIX = "PureSchedule_"
+    private const val FUN_HEAD_RANDOM_LENGTH = 8
+    private val FUN_HEAD by lazy {
+        val randomCharset = ('a'..'z') + ('A'..'Z') + ('0'..'9')
+        val randomStr = Array(FUN_HEAD_RANDOM_LENGTH) { randomCharset.random() }.joinToString("")
+        FUN_HEAD_PREFIX + randomStr + "_"
+    }
 
-    private const val V_CONSOLE_URL = "https://unpkg.com/vconsole/dist/vconsole.min.js"
-    const val V_CONSOLE_INJECT =
+    @Suppress("SpellCheckingInspection")
+    private const val V_CONSOLE_URL = "https://unpkg.com/vconsole@latest/dist/vconsole.min.js"
+    val V_CONSOLE_INJECT =
         """
         javascript:
         (function (window, undefined) {
@@ -19,8 +26,8 @@ object JSBridge {
                  window.vConsole = new VConsole();
              };
              document.body.appendChild(${FUN_HEAD}CONSOLE_ELEMENT);
-         })(window);
-    """
+        })(window, undefined);
+    """.trimIndent()
 
     private const val JS_ENV_BACKUP =
         """
@@ -41,8 +48,8 @@ object JSBridge {
         var PURE_SCHEDULE_ENV_BACKUP_NAME = undefined;
     """
 
-    private const val FUNCTION_NAME_HTML_LOADER = "${FUN_HEAD}htmlContentLoader"
-    private const val FUNCTION_HTML_LOADER = """
+    private val FUNCTION_NAME_HTML_LOADER = "${FUN_HEAD}htmlContentLoader"
+    private val FUNCTION_HTML_LOADER = """
         function $FUNCTION_NAME_HTML_LOADER() {
             let htmlContent = document.getElementsByTagName("html")[0].outerHTML;
             
@@ -64,7 +71,19 @@ object JSBridge {
                 "frame": frameList
             };
         }
-    """
+    """.trimIndent()
+
+    private val FUNCTION_NAME_EXCEPTION_DUMP = "${FUN_HEAD}exceptionDump"
+    private val FUNCTION_EXCEPTION_DUMP = """
+        function $FUNCTION_NAME_EXCEPTION_DUMP(err) {
+            if (err.hasOwnProperty("stack")) {
+                return err.stack.toString();
+            } else {
+                return err.toString();
+            }
+        }
+    """.trimIndent()
+
 
     const val WEB_COURSE_PROVIDER_JS_INTERFACE_NAME = "WebCourseProvider"
     private const val WEB_COURSE_PROVIDER_JS_FUNCTION_NAME = "onReadHtmlContent"
@@ -77,7 +96,7 @@ object JSBridge {
         return """
             javascript:
             $JS_ENV_BACKUP
-            (function (window, undefined) {
+            (function(window, undefined) {
                 $FUNCTION_HTML_LOADER
                 
                 let $htmlContent = $FUNCTION_NAME_HTML_LOADER();
@@ -98,6 +117,11 @@ object JSBridge {
         val frameListParam = "$htmlContent[\"frame\"]"
         val functionType = if (jsCourseProvider.isAsyncEnvironment()) "async function" else "function"
         val callFunctionAwait = if (jsCourseProvider.isAsyncEnvironment()) "await" else EMPTY
+        val providerFunctionName = "${FUN_HEAD}Provider"
+        val parserFunctionName = "${FUN_HEAD}Parser"
+
+        val providerFunctionCall = jsCourseProvider.getProviderFunctionCallGenerator(providerFunctionName)
+        val parserFunctionCall = jsCourseProvider.getParserFunctionCallGenerator(parserFunctionName)
         return """
            javascript:
            $JS_ENV_BACKUP
@@ -105,32 +129,36 @@ object JSBridge {
                 let ${FUN_HEAD}LoadJSResult = {
                     "isSuccess": false,
                     "data": "JS launch failed!"
-                }
+                };
+                
+                $FUNCTION_EXCEPTION_DUMP
      
                 try {
                     ${jsCourseProvider.getJSDependencies().joinToString(NEW_LINE)}
                     
-                    ${jsCourseProvider.getJSProvider()}
-                
-                    ${jsCourseProvider.getJSParser()}
+                    let $providerFunctionName = $callFunctionAwait ($functionType (window, undefined) {
+                        ${jsCourseProvider.getJSProvider()}
+                        return ${jsCourseProvider.getProviderFunctionName()};
+                    })(window, undefined);
+                    
+                    let $parserFunctionName = $callFunctionAwait ($functionType (window, undefined) {
+                        ${jsCourseProvider.getJSParser()}
+                        return ${jsCourseProvider.getParserFunctionName()};
+                    })(window, undefined);
                     
                     $FUNCTION_HTML_LOADER
                     
                     let $htmlContent = $FUNCTION_NAME_HTML_LOADER();
                     
-                    let ${FUN_HEAD}ProviderResult = $callFunctionAwait ${
-            jsCourseProvider.getProviderFunctionCallGenerator().invoke(htmlParam, iframeListParam, frameListParam)
-        };
+                    let ${FUN_HEAD}ProviderResult = $callFunctionAwait ${providerFunctionCall(htmlParam, iframeListParam, frameListParam)};
       
-                    let ${FUN_HEAD}ParserResult = $callFunctionAwait ${
-            jsCourseProvider.getParserFunctionCallGenerator().invoke("${FUN_HEAD}ProviderResult")
-        };
+                    let ${FUN_HEAD}ParserResult = $callFunctionAwait ${parserFunctionCall("${FUN_HEAD}ProviderResult")};
                     
                     ${FUN_HEAD}LoadJSResult["isSuccess"] = true;
                     ${FUN_HEAD}LoadJSResult["data"] = JSON.stringify(${FUN_HEAD}ParserResult);
                 } catch (err) {
                     ${FUN_HEAD}LoadJSResult["isSuccess"] = false;
-                    ${FUN_HEAD}LoadJSResult["data"] = err.toString();
+                    ${FUN_HEAD}LoadJSResult["data"] = $FUNCTION_NAME_EXCEPTION_DUMP(err);
                 }
                 
                 window.$JS_COURSE_PROVIDER_JS_INTERFACE_NAME.$JS_COURSE_PROVIDER_JS_FUNCTION_NAME(JSON.stringify(${FUN_HEAD}LoadJSResult), $isCurrentSchedule)
