@@ -20,7 +20,7 @@ object JSBridge {
     val V_CONSOLE_INJECT =
         """
         javascript:
-        (function (window, undefined) {
+        (function(window, undefined) {
             let ${FUN_HEAD}CONSOLE_ELEMENT = document.createElement("script");
             ${FUN_HEAD}CONSOLE_ELEMENT.src = "$V_CONSOLE_URL";
             ${FUN_HEAD}CONSOLE_ELEMENT.onload = function() { 
@@ -123,48 +123,70 @@ object JSBridge {
         val providerFunctionName = "${FUN_HEAD}Provider"
         val parserFunctionName = "${FUN_HEAD}Parser"
 
+        val rawProviderFunctionName = jsCourseProvider.getProviderFunctionName()
+        val rawParserFunctionName = jsCourseProvider.getParserFunctionName()
         val providerFunctionCall = jsCourseProvider.getProviderFunctionCallGenerator(providerFunctionName)
         val parserFunctionCall = jsCourseProvider.getParserFunctionCallGenerator(parserFunctionName)
+
+        val responseFunctionName = "${FUN_HEAD}response"
+
         return """
            javascript:
            $JS_ENV_BACKUP
-           ($functionType (window, undefined) {
-                let ${FUN_HEAD}LoadJSResult = {
-                    "isSuccess": false,
-                    "data": "JS launch failed!"
-                };
-                
-                $FUNCTION_EXCEPTION_DUMP
-     
-                try {
-                    ${jsCourseProvider.getJSDependencies().joinToString(NEW_LINE)}
-                    
-                    let $providerFunctionName = $callFunctionAwait ($functionType (window, undefined) {
-                        ${jsCourseProvider.getJSProvider()}
-                        return ${jsCourseProvider.getProviderFunctionName()};
-                    })(window);
-                    
-                    let $parserFunctionName = $callFunctionAwait ($functionType (window, undefined) {
-                        ${jsCourseProvider.getJSParser()}
-                        return ${jsCourseProvider.getParserFunctionName()};
-                    })(window);
-                    
-                    $FUNCTION_HTML_LOADER
-                    
-                    let $htmlContent = $FUNCTION_NAME_HTML_LOADER();
-                    
-                    let ${FUN_HEAD}ProviderResult = $callFunctionAwait ${providerFunctionCall(htmlParam, iframeListParam, frameListParam)};
-      
-                    let ${FUN_HEAD}ParserResult = $callFunctionAwait ${parserFunctionCall("${FUN_HEAD}ProviderResult")};
-                    
-                    ${FUN_HEAD}LoadJSResult["isSuccess"] = true;
-                    ${FUN_HEAD}LoadJSResult["data"] = JSON.stringify(${FUN_HEAD}ParserResult);
-                } catch (err) {
-                    ${FUN_HEAD}LoadJSResult["isSuccess"] = false;
-                    ${FUN_HEAD}LoadJSResult["data"] = $FUNCTION_NAME_EXCEPTION_DUMP(err);
+           ($functionType(window, undefined) {
+                function $responseFunctionName(success, data) {
+                    let outputContent = JSON.stringify({
+                        "isSuccess": success,
+                        "data": data
+                    });
+                    window.$JS_COURSE_PROVIDER_JS_INTERFACE_NAME.$JS_COURSE_PROVIDER_JS_FUNCTION_NAME(outputContent, $isCurrentSchedule)
                 }
                 
-                window.$JS_COURSE_PROVIDER_JS_INTERFACE_NAME.$JS_COURSE_PROVIDER_JS_FUNCTION_NAME(JSON.stringify(${FUN_HEAD}LoadJSResult), $isCurrentSchedule)
+                $FUNCTION_EXCEPTION_DUMP
+                $FUNCTION_HTML_LOADER
+                
+                try {
+                    ${jsCourseProvider.getJSDependencies().joinToString(NEW_LINE)}
+                } catch (err) {
+                    $responseFunctionName(false, "Dependencies error:\n" + $FUNCTION_NAME_EXCEPTION_DUMP(err));
+                    return;
+                }
+                
+                let $htmlContent;
+                try {
+                    $htmlContent = $FUNCTION_NAME_HTML_LOADER();
+                } catch (err) {
+                    $responseFunctionName(false, "Html loader error:\n" + $FUNCTION_NAME_EXCEPTION_DUMP(err));
+                    return;
+                }
+                
+                let ${FUN_HEAD}ProviderResult;
+                try {
+                    let $providerFunctionName = $callFunctionAwait ($functionType(window, undefined) {
+                        ${jsCourseProvider.getJSProvider()}
+                        if (typeof $rawProviderFunctionName !== 'function') throw TypeError("Can't find function '$rawProviderFunctionName'!");
+                        return $rawProviderFunctionName;
+                    })(window);
+                    ${FUN_HEAD}ProviderResult = $callFunctionAwait ${providerFunctionCall(htmlParam, iframeListParam, frameListParam)};
+                } catch (err) {
+                    $responseFunctionName(false, "Provider error:\n" + $FUNCTION_NAME_EXCEPTION_DUMP(err));
+                    return;
+                }
+                
+                let ${FUN_HEAD}ParserResult;
+                try {
+                    let $parserFunctionName = $callFunctionAwait ($functionType(window, undefined) {
+                        ${jsCourseProvider.getJSParser()}
+                        if (typeof $rawParserFunctionName !== 'function') throw TypeError("Can't find function '$rawParserFunctionName'!");
+                        return $rawParserFunctionName;
+                    })(window);
+                    ${FUN_HEAD}ParserResult = $callFunctionAwait ${parserFunctionCall("${FUN_HEAD}ProviderResult")};
+                } catch (err) {
+                    $responseFunctionName(false, "Parser error:\n" + $FUNCTION_NAME_EXCEPTION_DUMP(err));
+                    return;
+                }
+                
+                $responseFunctionName(true, JSON.stringify(${FUN_HEAD}ParserResult));
            })(window);
            $JS_ENV_RECOVER
            $SCRIPT_EXECUTE_SUCCESS_RESULT
