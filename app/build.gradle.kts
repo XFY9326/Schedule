@@ -16,8 +16,8 @@ object ProjectConfig {
     const val targetSdk = 33
     const val minSdk = 23
     const val applicationId = "tool.xfy9326.schedule"
-    const val versionCode = 38
-    const val versionName = "1.4.9"
+    const val versionCode = 39
+    const val versionName = "1.4.10"
 }
 
 android {
@@ -145,7 +145,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
 
     // Kotlin Serialization
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
 
     // AndroidX
     implementation("androidx.core:core-ktx:1.10.1")
