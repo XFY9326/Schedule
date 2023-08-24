@@ -58,7 +58,7 @@ class JSCourseParser : AbstractCourseParser<JSParams>() {
                 val courseTimes = CourseAdapterUtils.parseMultiCourseTimes(
                     weeks,
                     WeekDay.of(info.day),
-                    info.sections.map { it.section },
+                    info.sections,
                     info.position?.nullIfBlank()
                 )
                 Course(info.name, info.teacher?.nullIfBlank(), courseTimes)

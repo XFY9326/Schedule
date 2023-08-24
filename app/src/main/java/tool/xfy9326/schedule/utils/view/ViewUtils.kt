@@ -26,14 +26,13 @@ import tool.xfy9326.schedule.content.base.CourseImportException
 import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.ui.dialog.CrashViewDialog
 import tool.xfy9326.schedule.utils.IntentUtils
-import tool.xfy9326.schedule.utils.getDeepStackTraceString
 
 object ViewUtils {
     fun showCourseImportErrorSnackBar(activity: AppCompatActivity, coordinatorLayout: CoordinatorLayout, exception: CourseImportException) {
         Snackbar.make(coordinatorLayout, exception.getText(activity), Snackbar.LENGTH_LONG)
             .setActionTextColor(Color.RED)
             .setAction(R.string.details) {
-                CrashViewDialog.showDialog(activity.supportFragmentManager, exception.getDeepStackTraceString(), false)
+                CrashViewDialog.showDialog(activity.supportFragmentManager, exception.getDetailLog(), false)
             }.show()
     }
 

@@ -6,43 +6,33 @@ import kotlinx.serialization.Serializable
 import tool.xfy9326.schedule.content.js.JSCourseProvider
 
 object JSBridge {
-    private const val FUN_HEAD = "pureSchedule_"
+    private const val FUN_HEAD_PREFIX = "PureSchedule_"
+    private const val FUN_HEAD_RANDOM_LENGTH = 8
+    private val FUN_HEAD by lazy {
+        val randomCharset = ('a'..'z') + ('A'..'Z') + ('0'..'9')
+        val randomStr = Array(FUN_HEAD_RANDOM_LENGTH) { randomCharset.random() }.joinToString("")
+        FUN_HEAD_PREFIX + randomStr + "_"
+    }
+    const val SCRIPT_EXECUTE_SUCCESS_RESULT = "\"Done\""
 
-    private const val V_CONSOLE_URL = "https://unpkg.com/vconsole/dist/vconsole.min.js"
-    const val V_CONSOLE_INJECT =
+    @Suppress("SpellCheckingInspection")
+    private const val V_CONSOLE_URL = "https://unpkg.com/vconsole@latest/dist/vconsole.min.js"
+    val V_CONSOLE_INJECT =
         """
         javascript:
-        (function (window, undefined) {
+        (function(window, undefined) {
             let ${FUN_HEAD}CONSOLE_ELEMENT = document.createElement("script");
             ${FUN_HEAD}CONSOLE_ELEMENT.src = "$V_CONSOLE_URL";
             ${FUN_HEAD}CONSOLE_ELEMENT.onload = function() { 
                  window.vConsole = new VConsole();
              };
              document.body.appendChild(${FUN_HEAD}CONSOLE_ELEMENT);
-         })(window);
-    """
+        })(window);
+        $SCRIPT_EXECUTE_SUCCESS_RESULT
+    """.trimIndent()
 
-    private const val JS_ENV_BACKUP =
-        """
-        var PURE_SCHEDULE_ENV_BACKUP_LIST = [];
-        for (var PURE_SCHEDULE_ENV_BACKUP_NAME in this) {
-            PURE_SCHEDULE_ENV_BACKUP_LIST[PURE_SCHEDULE_ENV_BACKUP_NAME] = this[PURE_SCHEDULE_ENV_BACKUP_NAME];
-        }
-        var PURE_SCHEDULE_ENV_BACKUP_NAME = undefined;
-    """
-    private const val JS_ENV_RECOVER =
-        """
-        for (var PURE_SCHEDULE_ENV_BACKUP_NAME in PURE_SCHEDULE_ENV_BACKUP_LIST) {
-            if (this[PURE_SCHEDULE_ENV_BACKUP_NAME] !== PURE_SCHEDULE_ENV_BACKUP_LIST[PURE_SCHEDULE_ENV_BACKUP_NAME]) {
-                this[PURE_SCHEDULE_ENV_BACKUP_NAME] = PURE_SCHEDULE_ENV_BACKUP_LIST[PURE_SCHEDULE_ENV_BACKUP_NAME];
-            }
-        }
-        var PURE_SCHEDULE_ENV_BACKUP_LIST = [];
-        var PURE_SCHEDULE_ENV_BACKUP_NAME = undefined;
-    """
-
-    private const val FUNCTION_NAME_HTML_LOADER = "${FUN_HEAD}htmlContentLoader"
-    private const val FUNCTION_HTML_LOADER = """
+    private val FUNCTION_NAME_HTML_LOADER = "${FUN_HEAD}htmlContentLoader"
+    private val FUNCTION_HTML_LOADER = """
         function $FUNCTION_NAME_HTML_LOADER() {
             let htmlContent = document.getElementsByTagName("html")[0].outerHTML;
             
@@ -64,7 +54,19 @@ object JSBridge {
                 "frame": frameList
             };
         }
-    """
+    """.trimIndent()
+
+    private val FUNCTION_NAME_EXCEPTION_DUMP = "${FUN_HEAD}exceptionDump"
+    private val FUNCTION_EXCEPTION_DUMP = """
+        function $FUNCTION_NAME_EXCEPTION_DUMP(err) {
+            if (err.hasOwnProperty("stack")) {
+                return err.stack.toString();
+            } else {
+                return err.toString();
+            }
+        }
+    """.trimIndent()
+
 
     const val WEB_COURSE_PROVIDER_JS_INTERFACE_NAME = "WebCourseProvider"
     private const val WEB_COURSE_PROVIDER_JS_FUNCTION_NAME = "onReadHtmlContent"
@@ -76,66 +78,106 @@ object JSBridge {
         val frameListParam = "$htmlContent[\"frame\"]"
         return """
             javascript:
-            $JS_ENV_BACKUP
-            (function (window, undefined) {
+            (function(window, undefined) {
                 $FUNCTION_HTML_LOADER
                 
                 let $htmlContent = $FUNCTION_NAME_HTML_LOADER();
                 
                 window.$WEB_COURSE_PROVIDER_JS_INTERFACE_NAME.$WEB_COURSE_PROVIDER_JS_FUNCTION_NAME($htmlParam, $iframeListParam, $frameListParam, $isCurrentSchedule);
             })(window);
-            $JS_ENV_RECOVER
+            $SCRIPT_EXECUTE_SUCCESS_RESULT
         """.trimIndent()
     }
 
     const val JS_COURSE_PROVIDER_JS_INTERFACE_NAME = "JSCourseProvider"
     private const val JS_COURSE_PROVIDER_JS_FUNCTION_NAME = "onJSProviderResponse"
 
-    suspend fun buildJSCourseProviderJS(isCurrentSchedule: Boolean, jsCourseProvider: JSCourseProvider): String {
+    suspend fun buildJSCourseProviderJS(isCurrentSchedule: Boolean, jsCourseProvider: JSCourseProvider, isDebug: Boolean): String {
         val htmlContent = "${FUN_HEAD}HtmlContent"
         val htmlParam = "$htmlContent[\"html\"]"
         val iframeListParam = "$htmlContent[\"iframe\"]"
         val frameListParam = "$htmlContent[\"frame\"]"
         val functionType = if (jsCourseProvider.isAsyncEnvironment()) "async function" else "function"
         val callFunctionAwait = if (jsCourseProvider.isAsyncEnvironment()) "await" else EMPTY
+
+        val providerFunctionName = "${FUN_HEAD}Provider"
+        val parserFunctionName = "${FUN_HEAD}Parser"
+
+        val rawProviderFunctionName = jsCourseProvider.getProviderFunctionName()
+        val rawParserFunctionName = jsCourseProvider.getParserFunctionName()
+        val providerFunctionCall = jsCourseProvider.getProviderFunctionCallGenerator(providerFunctionName)
+        val parserFunctionCall = jsCourseProvider.getParserFunctionCallGenerator(parserFunctionName)
+
+        val responseFunctionName = "${FUN_HEAD}response"
+
         return """
            javascript:
-           $JS_ENV_BACKUP
-           ($functionType (window, undefined) {
-                let ${FUN_HEAD}LoadJSResult = {
-                    "isSuccess": false,
-                    "data": "JS launch failed!"
+           ($functionType(window, undefined) {
+                function $responseFunctionName(success, data) {
+                    let outputContent = JSON.stringify({
+                        "isSuccess": success,
+                        "data": data
+                    });
+                    window.$JS_COURSE_PROVIDER_JS_INTERFACE_NAME.$JS_COURSE_PROVIDER_JS_FUNCTION_NAME(outputContent, $isCurrentSchedule)
                 }
-     
+                
+                $FUNCTION_EXCEPTION_DUMP
+                $FUNCTION_HTML_LOADER
+                
+                ${if (isDebug) "console.log('Loading dependencies');" else EMPTY}
                 try {
                     ${jsCourseProvider.getJSDependencies().joinToString(NEW_LINE)}
-                    
-                    ${jsCourseProvider.getJSProvider()}
-                
-                    ${jsCourseProvider.getJSParser()}
-                    
-                    $FUNCTION_HTML_LOADER
-                    
-                    let $htmlContent = $FUNCTION_NAME_HTML_LOADER();
-                    
-                    let ${FUN_HEAD}ProviderResult = $callFunctionAwait ${
-            jsCourseProvider.getProviderFunctionCallGenerator().invoke(htmlParam, iframeListParam, frameListParam)
-        };
-      
-                    let ${FUN_HEAD}ParserResult = $callFunctionAwait ${
-            jsCourseProvider.getParserFunctionCallGenerator().invoke("${FUN_HEAD}ProviderResult")
-        };
-                    
-                    ${FUN_HEAD}LoadJSResult["isSuccess"] = true;
-                    ${FUN_HEAD}LoadJSResult["data"] = JSON.stringify(${FUN_HEAD}ParserResult);
                 } catch (err) {
-                    ${FUN_HEAD}LoadJSResult["isSuccess"] = false;
-                    ${FUN_HEAD}LoadJSResult["data"] = err.toString();
+                    ${if (isDebug) "console.error(err);" else EMPTY}
+                    $responseFunctionName(false, "Dependencies error:\n" + $FUNCTION_NAME_EXCEPTION_DUMP(err));
+                    return;
                 }
                 
-                window.$JS_COURSE_PROVIDER_JS_INTERFACE_NAME.$JS_COURSE_PROVIDER_JS_FUNCTION_NAME(JSON.stringify(${FUN_HEAD}LoadJSResult), $isCurrentSchedule)
+                ${if (isDebug) "console.log('Loading html content');" else EMPTY}
+                let $htmlContent;
+                try {
+                    $htmlContent = $FUNCTION_NAME_HTML_LOADER();
+                } catch (err) {
+                    ${if (isDebug) "console.error(err);" else EMPTY}
+                    $responseFunctionName(false, "Html loader error:\n" + $FUNCTION_NAME_EXCEPTION_DUMP(err));
+                    return;
+                }
+                
+                ${if (isDebug) "console.log('Loading provider result');" else EMPTY}
+                let ${FUN_HEAD}ProviderResult;
+                try {
+                    let $providerFunctionName = $callFunctionAwait ($functionType(window, undefined) {
+                        ${jsCourseProvider.getJSProvider()}
+                        if (typeof $rawProviderFunctionName !== 'function') throw TypeError("Can't find function '$rawProviderFunctionName'!");
+                        return $rawProviderFunctionName;
+                    })(window);
+                    ${FUN_HEAD}ProviderResult = $callFunctionAwait ${providerFunctionCall(htmlParam, iframeListParam, frameListParam)};
+                } catch (err) {
+                    ${if (isDebug) "console.error(err);" else EMPTY}
+                    $responseFunctionName(false, "Provider error:\n" + $FUNCTION_NAME_EXCEPTION_DUMP(err));
+                    return;
+                }
+                ${if (isDebug) "console.log(${FUN_HEAD}ProviderResult);" else EMPTY}
+                
+                ${if (isDebug) "console.log('Loading parser result');" else EMPTY}
+                let ${FUN_HEAD}ParserResult;
+                try {
+                    let $parserFunctionName = $callFunctionAwait ($functionType(window, undefined) {
+                        ${jsCourseProvider.getJSParser()}
+                        if (typeof $rawParserFunctionName !== 'function') throw TypeError("Can't find function '$rawParserFunctionName'!");
+                        return $rawParserFunctionName;
+                    })(window);
+                    ${FUN_HEAD}ParserResult = $callFunctionAwait ${parserFunctionCall("${FUN_HEAD}ProviderResult")};
+                } catch (err) {
+                    ${if (isDebug) "console.error(err);" else EMPTY}
+                    $responseFunctionName(false, "Parser error:\n" + $FUNCTION_NAME_EXCEPTION_DUMP(err));
+                    return;
+                }
+                ${if (isDebug) "console.log(${FUN_HEAD}ParserResult);" else EMPTY}
+                
+                $responseFunctionName(true, JSON.stringify(${FUN_HEAD}ParserResult));
            })(window);
-           $JS_ENV_RECOVER
+           $SCRIPT_EXECUTE_SUCCESS_RESULT
         """.trimIndent()
     }
 

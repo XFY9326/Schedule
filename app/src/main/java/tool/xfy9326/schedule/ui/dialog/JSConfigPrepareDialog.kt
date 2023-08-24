@@ -25,7 +25,6 @@ import tool.xfy9326.schedule.content.beans.JSConfig
 import tool.xfy9326.schedule.content.utils.JSConfigException
 import tool.xfy9326.schedule.databinding.DialogJsConfigPrepareBinding
 import tool.xfy9326.schedule.ui.vm.OnlineCourseImportViewModel
-import tool.xfy9326.schedule.utils.getDeepStackTraceString
 import tool.xfy9326.schedule.utils.setWindowPercent
 
 class JSConfigPrepareDialog : AppCompatDialogFragment() {
@@ -79,7 +78,7 @@ class JSConfigPrepareDialog : AppCompatDialogFragment() {
             if (exception == null) {
                 requireContext().showToast(R.string.crash_detail_not_found)
             } else {
-                CrashViewDialog.showDialog(childFragmentManager, exception.getDeepStackTraceString())
+                CrashViewDialog.showDialog(childFragmentManager, exception.getDetailLog())
             }
         }
 

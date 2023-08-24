@@ -7,11 +7,13 @@ import io.github.xfy9326.atools.livedata.observeEvent
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.ScheduleImportRequestParams
 import tool.xfy9326.schedule.content.js.JSCourseParser
 import tool.xfy9326.schedule.content.js.JSCourseProvider
 import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.databinding.ActivityFragmentContainerBinding
+import tool.xfy9326.schedule.kt.showSnackBar
 import tool.xfy9326.schedule.ui.activity.base.AbstractWebCourseProviderActivity
 import tool.xfy9326.schedule.ui.dialog.FullScreenLoadingDialog
 import tool.xfy9326.schedule.ui.vm.JSCourseProviderViewModel
@@ -60,7 +62,11 @@ class JSCourseProviderActivity : AbstractWebCourseProviderActivity<String, JSCou
     }
 
     private fun onJSLoaded(jsContent: String) {
-        fragmentContact.evaluateJavascript(jsContent)
+        fragmentContact.evaluateJavascript(jsContent) {
+            if (it != JSBridge.SCRIPT_EXECUTE_SUCCESS_RESULT) {
+                requireViewBinding().layoutFragmentContainer.showSnackBar(R.string.js_syntax_error)
+            }
+        }
     }
 
     override fun onReadyImportCourse() {

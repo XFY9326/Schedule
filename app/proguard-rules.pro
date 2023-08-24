@@ -22,7 +22,7 @@
 
 # Global
 -repackageclasses cls
--keepattributes LineNumberTable,SourceFile
+-keepattributes SourceFile,LineNumberTable
 
 # App
 -keep class * extends tool.xfy9326.schedule.ui.fragment.base.AbstractSettingsFragment

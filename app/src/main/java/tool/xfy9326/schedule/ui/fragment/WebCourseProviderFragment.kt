@@ -252,7 +252,7 @@ class WebCourseProviderFragment : ViewBindingFragment<FragmentWebCourseProviderB
         }
     }
 
-    override fun evaluateJavascript(content: String, callback: ((String) -> Unit)?) {
+    override fun evaluateJavascript(content: String, callback: ((String?) -> Unit)?) {
         lifecycleScope.launch {
             withStateAtLeast(Lifecycle.State.STARTED) {
                 requireViewBinding().webViewWebCourseProvider.evaluateJavascript(content, callback)

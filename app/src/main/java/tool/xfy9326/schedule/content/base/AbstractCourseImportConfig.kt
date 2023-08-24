@@ -6,7 +6,7 @@ import io.github.xfy9326.atools.base.deepClone
 import io.github.xfy9326.atools.io.IOManager
 import tool.xfy9326.schedule.content.beans.CourseImportInstance
 import java.io.Serializable
-import java.util.*
+import java.util.Locale
 import kotlin.reflect.KClass
 
 /**

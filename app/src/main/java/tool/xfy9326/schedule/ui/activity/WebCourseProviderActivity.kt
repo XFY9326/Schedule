@@ -60,7 +60,11 @@ class WebCourseProviderActivity :
     }
 
     override fun onImportCourseToSchedule(isCurrentSchedule: Boolean) {
-        fragmentContact.evaluateJavascript(JSBridge.buildWebCourseProviderJS(isCurrentSchedule))
+        fragmentContact.evaluateJavascript(JSBridge.buildWebCourseProviderJS(isCurrentSchedule)) {
+            if (it != JSBridge.SCRIPT_EXECUTE_SUCCESS_RESULT) {
+                requireViewBinding().layoutFragmentContainer.showSnackBar(R.string.js_syntax_error)
+            }
+        }
     }
 
     private fun onGetCurrentHTML(htmlContent: String, iframeContent: Array<String>, frameContent: Array<String>, isCurrentSchedule: Boolean) {

@@ -56,9 +56,9 @@ class ScheduleImportManager {
                         return@launch
                     }
 
-                    val scheduleTimeValid = ScheduleUtils.validateScheduleTime(content.scheduleTimes)
-                    if (!scheduleTimeValid) {
-                        reportError(CourseAdapterException.Error.SCHEDULE_TIMES_ERROR.make())
+                    val scheduleTimeErrorType = ScheduleUtils.validateScheduleTime(content.scheduleTimes)
+                    if (scheduleTimeErrorType != null) {
+                        reportError(CourseAdapterException.Error.SCHEDULE_TIMES_ERROR.make(msg = scheduleTimeErrorType.errorType.name))
                         return@launch
                     }
 

@@ -10,7 +10,7 @@ class IWebCourseProvider {
     }
 
     interface IFragmentContact {
-        fun evaluateJavascript(content: String, callback: ((String) -> Unit)? = null)
+        fun evaluateJavascript(content: String, callback: ((String?) -> Unit)? = null)
 
         fun refresh()
 

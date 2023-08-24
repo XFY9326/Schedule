@@ -44,11 +44,11 @@ class ScheduleWeekStartModule(activity: ScheduleEditActivity) :
 
     fun updateWeekStartText(weekDay: WeekDay) {
         requireViewBinding().textViewScheduleWeekStart.text = requireActivity().getStringArray(R.array.first_day_of_week)[
-                when (weekDay) {
-                    WeekDay.MONDAY -> 0
-                    WeekDay.SUNDAY -> 1
-                    else -> error("Unsupported week start day")
-                }
+            when (weekDay) {
+                WeekDay.MONDAY -> 0
+                WeekDay.SUNDAY -> 1
+                else -> error("Unsupported week start day")
+            }
         ]
     }
 }

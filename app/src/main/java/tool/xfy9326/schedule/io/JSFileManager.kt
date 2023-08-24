@@ -187,7 +187,7 @@ object JSFileManager {
                 it.readText().takeIf { str ->
                     str.isNotBlank()
                 }
-            }
+            } ?: emptyList()
         }.getOrNull()
     }
 
