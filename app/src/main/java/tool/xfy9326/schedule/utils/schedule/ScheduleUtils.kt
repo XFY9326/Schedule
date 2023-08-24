@@ -76,25 +76,25 @@ object ScheduleUtils {
         }
     }
 
-    fun validateScheduleTime(times: List<ScheduleTime>): Boolean {
+    fun validateScheduleTime(times: List<ScheduleTime>): EditError? {
         for (i1 in times.indices) {
             val time1 = times[i1]
 
-            if (time1.startHour >= time1.endHour && time1.startMinute >= time1.endMinute) {
-                return false
+            if (time1.startHour > time1.endHour || time1.startHour == time1.endHour && time1.startMinute > time1.endMinute) {
+                return EditError.Type.SCHEDULE_TIME_START_END_ERROR.make(i1 + 1)
             }
 
             for (i2 in (i1 + 1)..times.lastIndex) {
                 val time2 = times[i2]
                 if (time1 intersect time2) {
-                    return false
+                    return EditError.Type.SCHEDULE_TIME_CONFLICT_ERROR.make(i1 + 1, i2 + 1)
                 }
-                if (time1.endHour >= time2.startHour && time1.endMinute >= time2.startMinute) {
-                    return false
+                if (time1.endHour > time2.startHour || time1.endHour == time2.startHour && time1.endMinute > time2.startMinute) {
+                    return EditError.Type.SCHEDULE_TIME_NOT_IN_ONE_DAY_ERROR.make()
                 }
             }
         }
-        return true
+        return null
     }
 
     suspend fun createDefaultSchedule(): Schedule {
@@ -177,23 +177,7 @@ object ScheduleUtils {
             return EditError.Type.SCHEDULE_MAX_WEEK_NUM_ERROR.make()
         }
 
-        for (i1 in schedule.times.indices) {
-            val time1 = schedule.times[i1]
-
-            if (time1.startHour > time1.endHour || time1.startHour == time1.endHour && time1.startMinute > time1.endMinute) {
-                return EditError.Type.SCHEDULE_TIME_START_END_ERROR.make(i1 + 1)
-            }
-
-            for (i2 in (i1 + 1)..schedule.times.lastIndex) {
-                val time2 = schedule.times[i2]
-                if (time1 intersect time2) {
-                    return EditError.Type.SCHEDULE_TIME_CONFLICT_ERROR.make(i1 + 1, i2 + 1)
-                }
-                if (time1.endHour > time2.startHour || time1.endHour == time2.startHour && time1.endMinute > time2.startMinute) {
-                    return EditError.Type.SCHEDULE_TIME_NOT_IN_ONE_DAY_ERROR.make()
-                }
-            }
-        }
+        validateScheduleTime(schedule.times)?.let { return it }
 
         scheduleCourses.iterateAll { course, courseTime ->
             if (courseTime.sectionTime.end > schedule.times.size) {

@@ -55,8 +55,8 @@ object BackupUtils {
             val originalData = fromParsableClass(it)
             for (bundle in originalData) {
                 totalAmount++
-                val scheduleTimeValid = ScheduleUtils.validateScheduleTime(bundle.schedule.times)
-                if (!scheduleTimeValid) {
+                val scheduleTimeErrorType = ScheduleUtils.validateScheduleTime(bundle.schedule.times)
+                if (scheduleTimeErrorType != null) {
                     errorAmount++
                     continue
                 }

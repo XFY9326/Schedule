@@ -31,25 +31,6 @@ object JSBridge {
         $SCRIPT_EXECUTE_SUCCESS_RESULT
     """.trimIndent()
 
-    private const val JS_ENV_BACKUP =
-        """
-        var PURE_SCHEDULE_ENV_BACKUP_LIST = [];
-        for (var PURE_SCHEDULE_ENV_BACKUP_NAME in this) {
-            PURE_SCHEDULE_ENV_BACKUP_LIST[PURE_SCHEDULE_ENV_BACKUP_NAME] = this[PURE_SCHEDULE_ENV_BACKUP_NAME];
-        }
-        var PURE_SCHEDULE_ENV_BACKUP_NAME = undefined;
-    """
-    private const val JS_ENV_RECOVER =
-        """
-        for (var PURE_SCHEDULE_ENV_BACKUP_NAME in PURE_SCHEDULE_ENV_BACKUP_LIST) {
-            if (this[PURE_SCHEDULE_ENV_BACKUP_NAME] !== PURE_SCHEDULE_ENV_BACKUP_LIST[PURE_SCHEDULE_ENV_BACKUP_NAME]) {
-                this[PURE_SCHEDULE_ENV_BACKUP_NAME] = PURE_SCHEDULE_ENV_BACKUP_LIST[PURE_SCHEDULE_ENV_BACKUP_NAME];
-            }
-        }
-        var PURE_SCHEDULE_ENV_BACKUP_LIST = [];
-        var PURE_SCHEDULE_ENV_BACKUP_NAME = undefined;
-    """
-
     private val FUNCTION_NAME_HTML_LOADER = "${FUN_HEAD}htmlContentLoader"
     private val FUNCTION_HTML_LOADER = """
         function $FUNCTION_NAME_HTML_LOADER() {
@@ -97,7 +78,6 @@ object JSBridge {
         val frameListParam = "$htmlContent[\"frame\"]"
         return """
             javascript:
-            $JS_ENV_BACKUP
             (function(window, undefined) {
                 $FUNCTION_HTML_LOADER
                 
@@ -105,7 +85,6 @@ object JSBridge {
                 
                 window.$WEB_COURSE_PROVIDER_JS_INTERFACE_NAME.$WEB_COURSE_PROVIDER_JS_FUNCTION_NAME($htmlParam, $iframeListParam, $frameListParam, $isCurrentSchedule);
             })(window);
-            $JS_ENV_RECOVER
             $SCRIPT_EXECUTE_SUCCESS_RESULT
         """.trimIndent()
     }
@@ -113,7 +92,7 @@ object JSBridge {
     const val JS_COURSE_PROVIDER_JS_INTERFACE_NAME = "JSCourseProvider"
     private const val JS_COURSE_PROVIDER_JS_FUNCTION_NAME = "onJSProviderResponse"
 
-    suspend fun buildJSCourseProviderJS(isCurrentSchedule: Boolean, jsCourseProvider: JSCourseProvider): String {
+    suspend fun buildJSCourseProviderJS(isCurrentSchedule: Boolean, jsCourseProvider: JSCourseProvider, isDebug: Boolean): String {
         val htmlContent = "${FUN_HEAD}HtmlContent"
         val htmlParam = "$htmlContent[\"html\"]"
         val iframeListParam = "$htmlContent[\"iframe\"]"
@@ -132,7 +111,6 @@ object JSBridge {
 
         return """
            javascript:
-           $JS_ENV_BACKUP
            ($functionType(window, undefined) {
                 function $responseFunctionName(success, data) {
                     let outputContent = JSON.stringify({
@@ -145,21 +123,26 @@ object JSBridge {
                 $FUNCTION_EXCEPTION_DUMP
                 $FUNCTION_HTML_LOADER
                 
+                ${if (isDebug) "console.log('Loading dependencies');" else EMPTY}
                 try {
                     ${jsCourseProvider.getJSDependencies().joinToString(NEW_LINE)}
                 } catch (err) {
+                    ${if (isDebug) "console.error(err);" else EMPTY}
                     $responseFunctionName(false, "Dependencies error:\n" + $FUNCTION_NAME_EXCEPTION_DUMP(err));
                     return;
                 }
                 
+                ${if (isDebug) "console.log('Loading html content');" else EMPTY}
                 let $htmlContent;
                 try {
                     $htmlContent = $FUNCTION_NAME_HTML_LOADER();
                 } catch (err) {
+                    ${if (isDebug) "console.error(err);" else EMPTY}
                     $responseFunctionName(false, "Html loader error:\n" + $FUNCTION_NAME_EXCEPTION_DUMP(err));
                     return;
                 }
                 
+                ${if (isDebug) "console.log('Loading provider result');" else EMPTY}
                 let ${FUN_HEAD}ProviderResult;
                 try {
                     let $providerFunctionName = $callFunctionAwait ($functionType(window, undefined) {
@@ -169,10 +152,13 @@ object JSBridge {
                     })(window);
                     ${FUN_HEAD}ProviderResult = $callFunctionAwait ${providerFunctionCall(htmlParam, iframeListParam, frameListParam)};
                 } catch (err) {
+                    ${if (isDebug) "console.error(err);" else EMPTY}
                     $responseFunctionName(false, "Provider error:\n" + $FUNCTION_NAME_EXCEPTION_DUMP(err));
                     return;
                 }
+                ${if (isDebug) "console.log(${FUN_HEAD}ProviderResult);" else EMPTY}
                 
+                ${if (isDebug) "console.log('Loading parser result');" else EMPTY}
                 let ${FUN_HEAD}ParserResult;
                 try {
                     let $parserFunctionName = $callFunctionAwait ($functionType(window, undefined) {
@@ -182,13 +168,14 @@ object JSBridge {
                     })(window);
                     ${FUN_HEAD}ParserResult = $callFunctionAwait ${parserFunctionCall("${FUN_HEAD}ProviderResult")};
                 } catch (err) {
+                    ${if (isDebug) "console.error(err);" else EMPTY}
                     $responseFunctionName(false, "Parser error:\n" + $FUNCTION_NAME_EXCEPTION_DUMP(err));
                     return;
                 }
+                ${if (isDebug) "console.log(${FUN_HEAD}ParserResult);" else EMPTY}
                 
                 $responseFunctionName(true, JSON.stringify(${FUN_HEAD}ParserResult));
            })(window);
-           $JS_ENV_RECOVER
            $SCRIPT_EXECUTE_SUCCESS_RESULT
         """.trimIndent()
     }

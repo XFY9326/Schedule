@@ -76,5 +76,13 @@ data class JSConfig(
         }
     }
 
-    fun getJSParams() = JSParams(id, jsType, initPageUrl, requireNetwork, combineCourse, combineCourseTime, enableAsyncEnvironment)
+    fun getJSParams() = JSParams(
+        uuid = id,
+        jsType = jsType,
+        initUrl = initPageUrl,
+        requireNetwork = requireNetwork,
+        combineCourse = combineCourse,
+        combineCourseTime = combineCourseTime,
+        asyncEnvironment = enableAsyncEnvironment
+    )
 }

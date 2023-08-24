@@ -2,6 +2,7 @@ package tool.xfy9326.schedule.ui.vm
 
 import io.github.xfy9326.atools.livedata.MutableEventLiveData
 import io.github.xfy9326.atools.livedata.postEvent
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.serialization.json.Json
 import tool.xfy9326.schedule.beans.ScheduleImportContent
@@ -9,6 +10,7 @@ import tool.xfy9326.schedule.content.js.JSCourseParser
 import tool.xfy9326.schedule.content.js.JSCourseProvider
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
 import tool.xfy9326.schedule.content.utils.CourseAdapterException.Companion.report
+import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.ui.vm.base.AbstractWebCourseProviderViewModel
 import tool.xfy9326.schedule.utils.JSBridge
 
@@ -27,7 +29,8 @@ class JSCourseProviderViewModel : AbstractWebCourseProviderViewModel<String, JSC
         if (!isImportingCourses) {
             providerFunctionRunner(jsLoadLock,
                 onRun = {
-                    jsContent.postEvent(JSBridge.buildJSCourseProviderJS(isCurrentSchedule, it))
+                    val isDebug = AppSettingsDataStore.enableWebCourseProviderConsoleDebugFlow.first()
+                    jsContent.postEvent(JSBridge.buildJSCourseProviderJS(isCurrentSchedule, it, isDebug))
                 })
         }
     }
