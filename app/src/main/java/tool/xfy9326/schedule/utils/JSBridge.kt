@@ -99,6 +99,7 @@ object JSBridge {
         val frameListParam = "$htmlContent[\"frame\"]"
         val functionType = if (jsCourseProvider.isAsyncEnvironment()) "async function" else "function"
         val callFunctionAwait = if (jsCourseProvider.isAsyncEnvironment()) "await" else EMPTY
+
         val providerFunctionName = "${FUN_HEAD}Provider"
         val parserFunctionName = "${FUN_HEAD}Parser"
 
