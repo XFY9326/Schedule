@@ -39,8 +39,11 @@ class ExternalCourseImportActivity : ViewBindingActivity<ActivityExternalCourseI
         }
     }
 
-    override fun onContentViewPreload(savedInstanceState: Bundle?) {
+    override fun onActivityCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
+    }
+
+    override fun onContentViewPreload(savedInstanceState: Bundle?) {
         onBackPressedDispatcher.addCallback(this, true, this::onBackPressed)
     }
 

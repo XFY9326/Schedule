@@ -2,10 +2,8 @@ package tool.xfy9326.schedule.utils.schedule
 
 import io.github.xfy9326.atools.coroutines.combine
 import io.github.xfy9326.atools.coroutines.combineTransform
-import io.github.xfy9326.atools.coroutines.withTryLock
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.sync.Mutex
 import tool.xfy9326.schedule.beans.Schedule
 import tool.xfy9326.schedule.beans.ScheduleBuildBundle
 import tool.xfy9326.schedule.data.AppDataStore
@@ -13,22 +11,8 @@ import tool.xfy9326.schedule.data.ScheduleDataStore
 import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
 
 object ScheduleDataProcessor {
-    private val hasPreloadLock = Mutex()
-
     @OptIn(DelicateCoroutinesApi::class)
     private fun <T> Flow<T>.preload() = flowOn(Dispatchers.IO).shareIn(GlobalScope, SharingStarted.Eagerly, 1)
-
-    suspend fun preload() = withContext(Dispatchers.Default) {
-        runCatching {
-            hasPreloadLock.withTryLock {
-                listOf(
-                    async { weekNumInfoFlow.firstOrNull() },
-                    async { scheduleViewDataFlow.firstOrNull() },
-                    async { scheduleBackgroundFlow.firstOrNull() }
-                ).awaitAll()
-            }
-        }.isSuccess
-    }
 
     val currentScheduleFlow =
         AppDataStore.currentScheduleIdFlow.combine {

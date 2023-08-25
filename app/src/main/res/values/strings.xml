@@ -174,8 +174,6 @@
     <string name="corner_screen_adapter_sum">开启后将会在课程表底部预留滑动空间</string>
     <string name="show_not_this_week_course">显示非本周课程</string>
     <string name="show_not_this_week_course_sum">关闭后将不会显示非本周课程</string>
-    <string name="exit_app_directly">返回桌面时直接退出应用</string>
-    <string name="exit_app_directly_sum">开启后将在返回桌面时直接退出应用</string>
     <string name="others">其他</string>
     <string name="schedule_and_courses">课表与课程</string>
     <string name="highlight_show_today_cell">高亮显示今日课程日期格</string>

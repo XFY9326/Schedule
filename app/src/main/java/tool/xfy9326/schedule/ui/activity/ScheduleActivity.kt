@@ -6,7 +6,6 @@ import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import androidx.activity.addCallback
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.navigation.NavigationView
 import io.github.xfy9326.atools.livedata.observeEvent
@@ -48,12 +47,12 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
 
     override fun onCreateViewBinding() = ActivityScheduleBinding.inflate(layoutInflater)
 
-    override fun onValidateLaunch(savedInstanceState: Bundle?): Boolean {
-        return savedInstanceState != null || ScheduleLaunchModule.checkDoAppErrorLaunch(this)
+    override fun onActivityCreate(savedInstanceState: Bundle?) {
+        scheduleLaunchModule.init()
     }
 
-    override fun onContentViewPreload(savedInstanceState: Bundle?, viewModel: ScheduleViewModel) {
-        scheduleLaunchModule.init()
+    override fun onValidateLaunch(savedInstanceState: Bundle?): Boolean {
+        return savedInstanceState != null || ScheduleLaunchModule.checkDoAppErrorLaunch(this)
     }
 
     override fun onPrepare(viewBinding: ActivityScheduleBinding, viewModel: ScheduleViewModel) {
@@ -90,9 +89,6 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
 
     override fun onInitView(viewBinding: ActivityScheduleBinding, viewModel: ScheduleViewModel) {
         scheduleNavigationModule.init()
-        onBackPressedDispatcher.addCallback(this, true) {
-            scheduleNavigationModule.onBackPressed()
-        }
 
         NightModeViewUtils.checkNightModeChangedAnimation(this, viewBinding, viewModel)
 
