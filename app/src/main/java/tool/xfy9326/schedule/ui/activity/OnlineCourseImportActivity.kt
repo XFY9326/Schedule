@@ -1,5 +1,6 @@
 package tool.xfy9326.schedule.ui.activity
 
+import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.result.contract.ActivityResultContracts
@@ -29,6 +30,7 @@ import tool.xfy9326.schedule.ui.dialog.JSConfigImportDialog
 import tool.xfy9326.schedule.ui.dialog.JSConfigPrepareDialog
 import tool.xfy9326.schedule.ui.view.recyclerview.AdvancedDividerItemDecoration
 import tool.xfy9326.schedule.ui.vm.OnlineCourseImportViewModel
+import tool.xfy9326.schedule.utils.AppUriUtils
 import tool.xfy9326.schedule.utils.IntentUtils
 import tool.xfy9326.schedule.utils.schedule.CourseImportUtils
 import tool.xfy9326.schedule.utils.view.DialogUtils
@@ -46,6 +48,10 @@ class OnlineCourseImportActivity : ViewModelActivity<OnlineCourseImportViewModel
 
     override val vmClass = OnlineCourseImportViewModel::class
 
+    override fun onContentViewPreload(savedInstanceState: Bundle?, viewModel: OnlineCourseImportViewModel) {
+        if (savedInstanceState == null) viewModel.pendingExternalCourseImportUrl = AppUriUtils.tryParseJSCourseImport(intent?.data)
+    }
+
     override fun onCreateViewBinding() = ActivityOnlineCourseImportBinding.inflate(layoutInflater)
 
     override fun onPrepare(viewBinding: ActivityOnlineCourseImportBinding, viewModel: OnlineCourseImportViewModel) {
@@ -58,6 +64,7 @@ class OnlineCourseImportActivity : ViewModelActivity<OnlineCourseImportViewModel
             DialogUtils.showOnlineImportAttentionDialog(this, true,
                 onPositive = {
                     requireViewModel().hasReadOnlineImportAttention()
+                    requireViewModel().checkExternalUrlCourseImport()
                 },
                 onNegative = {
                     finish()
@@ -102,6 +109,11 @@ class OnlineCourseImportActivity : ViewModelActivity<OnlineCourseImportViewModel
                 JSConfigPrepareDialog.showDialog(supportFragmentManager, it.first)
             }
         }
+        viewModel.externalUrlCourseImport.observeEvent(this, javaClass.simpleName) {
+            checkAddCourseImportPolicy {
+                JSConfigImportDialog.showDialog(supportFragmentManager, it)
+            }
+        }
     }
 
     private fun showJSRequireNetworkWarning() {
@@ -112,23 +124,29 @@ class OnlineCourseImportActivity : ViewModelActivity<OnlineCourseImportViewModel
         }.show(this)
     }
 
+    private fun checkAddCourseImportPolicy(onAgree: () -> Unit) {
+        lifecycleScope.launch {
+            if (!AppDataStore.agreeCourseImportPolicyFlow.first()) {
+                DialogUtils.showAddCourseImportAttentionDialog(this@OnlineCourseImportActivity) {
+                    onAgree()
+                    lifecycleScope.launch {
+                        AppDataStore.setAgreeCourseImportPolicy(true)
+                    }
+                }
+            } else {
+                onAgree()
+            }
+        }
+    }
+
     override fun onInitView(viewBinding: ActivityOnlineCourseImportBinding, viewModel: OnlineCourseImportViewModel) {
         courseImportAdapter = CourseImportAdapter()
         courseImportAdapter.setOnCourseImportItemListener(this)
         viewBinding.recyclerViewCourseImportList.adapter = courseImportAdapter
         viewBinding.recyclerViewCourseImportList.addItemDecoration(AdvancedDividerItemDecoration(this, DividerItemDecoration.VERTICAL))
         viewBinding.fabAddCourseImport.setOnSingleClickListener {
-            lifecycleScope.launch {
-                if (!AppDataStore.agreeCourseImportPolicyFlow.first()) {
-                    DialogUtils.showAddCourseImportAttentionDialog(this@OnlineCourseImportActivity) {
-                        lifecycleScope.launch {
-                            AppDataStore.setAgreeCourseImportPolicy(true)
-                        }
-                        JSConfigImportDialog.showDialog(supportFragmentManager)
-                    }
-                } else {
-                    JSConfigImportDialog.showDialog(supportFragmentManager)
-                }
+            checkAddCourseImportPolicy {
+                JSConfigImportDialog.showDialog(supportFragmentManager)
             }
         }
         loadingController.setOnRequestCancelListener {

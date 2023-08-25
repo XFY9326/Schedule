@@ -21,6 +21,9 @@ class OnlineCourseImportViewModel : AbstractViewModel() {
     private var jsPrepareJob: Job? = null
     private var jsAddJob: Job? = null
 
+    // Set by OnlineCourseImportActivity.onContentViewPreload
+    var pendingExternalCourseImportUrl: String? = null
+
     val courseImportConfigs = configManager.courseImportConfigs
     val preparedJSConfig = configManager.preparedJSConfig
     val jsConfigPrepareProgress = configManager.jsConfigPrepareProgress
@@ -31,6 +34,7 @@ class OnlineCourseImportViewModel : AbstractViewModel() {
 
     val onlineImportAttention = MutableNotifyLiveData()
     val launchJSConfig = MutableEventLiveData<Pair<JSConfig, Boolean>>()
+    val externalUrlCourseImport = MutableEventLiveData<String>()
 
     override fun onViewInitialized(firstInitialize: Boolean) {
         tryShowOnlineImportAttention()
@@ -46,7 +50,15 @@ class OnlineCourseImportViewModel : AbstractViewModel() {
                     AppDataStore.setAgreeCourseImportPolicy(false)
                 }
                 onlineImportAttention.postNotify()
+            } else {
+                checkExternalUrlCourseImport()
             }
+        }
+    }
+
+    fun checkExternalUrlCourseImport() {
+        pendingExternalCourseImportUrl?.let {
+            externalUrlCourseImport.postEvent(it)
         }
     }
 
