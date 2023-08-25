@@ -44,10 +44,13 @@
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
         <item name="snackbarStyle">@style/AppTheme.SnackBar</item>
+        <item name="dialogCornerRadius">6dp</item>
         <item name="android:dialogTheme">@style/AppTheme.MaterialDialog</item>
         <item name="dialogTheme">@style/AppTheme.MaterialDialog</item>
-        <item name="android:datePickerDialogTheme">@style/AppTheme.DateTimePickerDialog</item>
-        <item name="android:timePickerDialogTheme">@style/AppTheme.DateTimePickerDialog</item>
+        <item name="alertDialogTheme">@style/AppTheme.MaterialDialog</item>
+        <item name="android:alertDialogTheme">@style/AppTheme.MaterialDialog</item>
+        <item name="android:datePickerDialogTheme">@style/AppTheme.MaterialRoundCornerDialog</item>
+        <item name="android:timePickerDialogTheme">@style/AppTheme.MaterialRoundCornerDialog</item>
         <item name="sliderStyle">@style/AppTheme.AnimateSlider</item>
         <item name="materialAlertDialogTheme">@style/AppTheme.MaterialDialog</item>
         <item name="android:forceDarkAllowed" tools:ignore="NewApi">false</item>
@@ -98,7 +101,6 @@
     </style>
 
     <style name="AppTheme.MaterialDialog" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
-        <item name="android:windowBackground">@drawable/background_dialog</item>
         <item name="materialAlertDialogTitlePanelStyle">@style/AppTheme.MaterialDialogTitle</item>
     </style>
 
@@ -116,7 +118,7 @@
         <item name="android:layout_marginBottom">5dp</item>
     </style>
 
-    <style name="AppTheme.DateTimePickerDialog" parent="ThemeOverlay.MaterialComponents.Dialog">
+    <style name="AppTheme.MaterialRoundCornerDialog" parent="ThemeOverlay.MaterialComponents.Dialog">
         <item name="android:windowBackground">@drawable/background_dialog</item>
     </style>
 
