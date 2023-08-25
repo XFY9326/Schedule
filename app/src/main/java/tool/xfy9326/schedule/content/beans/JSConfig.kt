@@ -7,6 +7,7 @@ import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import tool.xfy9326.schedule.content.base.ICourseImportConfig
+import tool.xfy9326.schedule.content.utils.CourseParseResult
 import tool.xfy9326.schedule.content.utils.JSConfigException
 import tool.xfy9326.schedule.content.utils.JSConfigException.Companion.make
 import tool.xfy9326.schedule.content.utils.JSConfigException.Companion.report
@@ -32,6 +33,8 @@ data class JSConfig(
     val requireNetwork: Boolean = false,
     val combineCourse: Boolean = false,
     val combineCourseTime: Boolean = false,
+    val combineCourseTeacher: Boolean = false,
+    val combineCourseTimeLocation: Boolean = false,
     val enableAsyncEnvironment: Boolean = true
 ) : Parcelable, ICourseImportConfig {
     companion object {
@@ -81,8 +84,12 @@ data class JSConfig(
         jsType = jsType,
         initUrl = initPageUrl,
         requireNetwork = requireNetwork,
-        combineCourse = combineCourse,
-        combineCourseTime = combineCourseTime,
+        parseParams = CourseParseResult.Params(
+            combineCourse = combineCourse,
+            combineCourseTime = combineCourseTime,
+            combineCourseTeacher = combineCourseTeacher,
+            combineCourseTimeLocation = combineCourseTimeLocation,
+        ),
         asyncEnvironment = enableAsyncEnvironment
     )
 }

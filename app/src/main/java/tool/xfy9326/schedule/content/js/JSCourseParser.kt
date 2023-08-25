@@ -23,12 +23,7 @@ class JSCourseParser : AbstractCourseParser<JSParams>() {
         try {
             when (requireParams().jsType) {
                 JSConfig.TYPE_AI_SCHEDULE -> processAiScheduleResult(data)
-                JSConfig.TYPE_PURE_SCHEDULE -> CourseImportHelper.parsePureScheduleJSON(
-                    data,
-                    requireParams().combineCourse,
-                    requireParams().combineCourseTime
-                )
-
+                JSConfig.TYPE_PURE_SCHEDULE -> CourseImportHelper.parsePureScheduleJSON(data, requireParams().parseParams)
                 else -> error("Unsupported JS Type! ${requireParams().jsType}")
             }
         } catch (e: Exception) {
@@ -59,15 +54,15 @@ class JSCourseParser : AbstractCourseParser<JSParams>() {
                     weeks,
                     WeekDay.of(info.day),
                     info.sections,
-                    info.position?.nullIfBlank()
+                    info.position?.nullIfBlank()?.trim()
                 )
-                Course(info.name, info.teacher?.nullIfBlank(), courseTimes)
+                Course(info.name.trim(), info.teacher?.nullIfBlank()?.trim(), courseTimes)
             }
         }
 
         return ScheduleImportContent(
             scheduleTimes,
-            builder.build(requireParams().combineCourse, requireParams().combineCourseTime),
+            builder.build(requireParams().parseParams),
             CourseAdapterUtils.simpleTermFix(scheduleData.pureSchedule?.termStart, scheduleData.pureSchedule?.termEnd)
         )
     }

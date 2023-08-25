@@ -57,6 +57,12 @@
         <item name="collapsingToolbarLayoutStyle">@style/AppTheme.CollapsingToolbarLayout</item>
     </style>
 
+    <style name="AppTheme.Settings" parent="AppTheme.Base">
+        <item name="android:textColorPrimary">@color/primary_text_color_selector</item>
+        <item name="android:textColorSecondary">@color/secondary_text_color_selector</item>
+        <item name="android:textColorTertiary">@color/secondary_text_color_selector</item>
+    </style>
+
     <style name="AppTheme.ActivityAnimation" parent="@android:style/Animation.Activity">
         <item name="android:activityOpenEnterAnimation">@anim/anim_scroll_in_right</item>
         <item name="android:activityOpenExitAnimation">@anim/anim_scroll_out_left</item>

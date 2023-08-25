@@ -20,6 +20,8 @@ object ExternalCourseImportUtils {
     private const val EXTRA_PROCESSOR_EXTRA_DATA = "PROCESSOR_EXTRA_DATA"
     private const val EXTRA_COMBINE_COURSE = "COMBINE_COURSE"
     private const val EXTRA_COMBINE_COURSE_TIME = "COMBINE_COURSE_TIME"
+    private const val EXTRA_COMBINE_COURSE_TEACHER = "COMBINE_COURSE_TEACHER"
+    private const val EXTRA_COMBINE_COURSE_TIME_LOCATION = "COMBINE_COURSE_TIME_LOCATION"
 
     private fun parseReceivedIntent(intent: Intent): ExternalCourseImportData.Origin? {
         if (intent.action == ACTION_EXTERNAL_COURSE_IMPORT) {
@@ -31,7 +33,15 @@ object ExternalCourseImportUtils {
             val fileUri = intent.data ?: return null
             val combineCourse = intent.getBooleanExtra(EXTRA_COMBINE_COURSE, false)
             val combineCourseTime = intent.getBooleanExtra(EXTRA_COMBINE_COURSE_TIME, false)
-            return ExternalCourseImportData.Origin.JSON(fileUri.asList(), combineCourse, combineCourseTime)
+            val combineCourseTeacher = intent.getBooleanExtra(EXTRA_COMBINE_COURSE_TEACHER, false)
+            val combineCourseTimeLocation = intent.getBooleanExtra(EXTRA_COMBINE_COURSE_TIME_LOCATION, false)
+            return ExternalCourseImportData.Origin.JSON(
+                fileUriList = fileUri.asList(),
+                combineCourse = combineCourse,
+                combineCourseTime = combineCourseTime,
+                combineCourseTeacher = combineCourseTeacher,
+                combineCourseTimeLocation = combineCourseTimeLocation
+            )
         }
         return null
     }

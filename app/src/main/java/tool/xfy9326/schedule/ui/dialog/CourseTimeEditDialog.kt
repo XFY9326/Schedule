@@ -132,7 +132,7 @@ class CourseTimeEditDialog : AppCompatDialogFragment() {
 
     private fun updateEditData() {
         viewBinding?.apply {
-            editCourseTime.location = editTextCourseLocation.text.getText()
+            editCourseTime.location = editTextCourseLocation.text.getText()?.trim()
             editCourseTime.sectionTime.weekDay = WeekDay.from(pickerCourseTimeWeekDay.value)
             editCourseTime.sectionTime.start = pickerCourseStartTime.value
             editCourseTime.sectionTime.duration = pickerCourseEndTime.value - pickerCourseStartTime.value + 1

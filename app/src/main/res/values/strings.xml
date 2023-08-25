@@ -30,6 +30,7 @@
     <string name="course_detail_section_time">时间：%1$s 第%2$s节\u3000%3$s</string>
     <string name="course_detail_section_time_simple">时间：%1$s 第%2$s节</string>
     <string name="course_detail_location">地点：%1$s</string>
+    <string name="course_detail_location_multiline">地点：\n%1$s</string>
     <string name="open_drawer">打开侧边栏</string>
     <string name="close_drawer">关闭侧边栏</string>
     <string name="schedule_manage">课表管理</string>

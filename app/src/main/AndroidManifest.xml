@@ -114,7 +114,8 @@
 
         <activity
             android:name=".ui.activity.SettingsActivity"
-            android:label="@string/settings" />
+            android:label="@string/settings"
+            android:theme="@style/AppTheme.Settings" />
 
         <activity
             android:name=".ui.activity.AboutActivity"

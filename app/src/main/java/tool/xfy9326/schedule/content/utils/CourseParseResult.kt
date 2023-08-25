@@ -2,29 +2,38 @@ package tool.xfy9326.schedule.content.utils
 
 import androidx.collection.SparseArrayCompat
 import androidx.collection.contains
+import androidx.collection.forEach
 import androidx.collection.set
 import androidx.collection.size
-import androidx.collection.valueIterator
 import tool.xfy9326.schedule.beans.Course
 import tool.xfy9326.schedule.beans.Course.Companion.arrangeWeekNum
 import tool.xfy9326.schedule.beans.CourseTime
 import tool.xfy9326.schedule.content.utils.CourseAdapterException.Companion.make
 import tool.xfy9326.schedule.content.utils.CourseAdapterException.Companion.strictModeOnly
+import tool.xfy9326.schedule.utils.NEW_LINE
+import java.io.Serializable
 
 class CourseParseResult private constructor(val courses: List<Course>, val ignorableError: CourseAdapterException?) {
     companion object {
         val EMPTY = CourseParseResult(emptyList(), null)
     }
 
+    class Params(
+        val combineCourse: Boolean = false,
+        val combineCourseTime: Boolean = false,
+        val combineCourseTeacher: Boolean = false,
+        val combineCourseTimeLocation: Boolean = false
+    ) : Serializable
+
     class Builder(exceptCourseAmount: Int? = null) {
         private val courses: ArrayList<Course> = if (exceptCourseAmount == null) ArrayList() else ArrayList(exceptCourseAmount)
         private var error: CourseAdapterException? = null
 
-        private fun Course.combinableHashCode() =
-            name.hashCode() + 31 * (teacher?.hashCode() ?: 0)
+        private fun Course.combinableHashCode(hashTeacher: Boolean) =
+            name.hashCode() + if (hashTeacher) +31 * (teacher?.hashCode() ?: 0) else 0
 
-        private fun CourseTime.combinableHashCode() =
-            weekNumArray.contentHashCode() + 31 * sectionTime.weekDay.hashCode() + 31 * (location?.hashCode() ?: 0)
+        private fun CourseTime.combinableHashCode(hashLocation: Boolean) =
+            weekNumArray.contentHashCode() + 31 * sectionTime.weekDay.hashCode() + if (hashLocation) 31 * (location?.hashCode() ?: 0) else 0
 
         fun add(course: Course) {
             course.arrangeWeekNum()
@@ -70,15 +79,14 @@ class CourseParseResult private constructor(val courses: List<Course>, val ignor
             }
         }
 
-        private fun combinedCourseTime(
-            courseTimeMap: SparseArrayCompat<Pair<CourseTime, HashSet<Int>>>,
-            courseTimes: List<CourseTime>
-        ): List<CourseTime> {
+        private fun combinedCourseTime(courseTimes: List<CourseTime>, combineLocation: Boolean): List<CourseTime> {
             if (courseTimes.size < 2) return courseTimes
 
-            courseTimeMap.clear()
+            val courseTimeMap = SparseArrayCompat<Pair<CourseTime, HashSet<Int>>>()
+            val locationMap = SparseArrayCompat<MutableSet<String>>()
+
             for (courseTime in courseTimes) {
-                val hashCode = courseTime.combinableHashCode()
+                val hashCode = courseTime.combinableHashCode(!combineLocation)
                 if (hashCode in courseTimeMap) {
                     courseTimeMap[hashCode]?.let {
                         timePeriodAddToHashSet(courseTime.sectionTime.start, courseTime.sectionTime.duration, it.second)
@@ -86,48 +94,76 @@ class CourseParseResult private constructor(val courses: List<Course>, val ignor
                 } else {
                     courseTimeMap[hashCode] = courseTime to timePeriodToHashSet(courseTime.sectionTime.start, courseTime.sectionTime.duration)
                 }
-            }
-            val result = ArrayList<CourseTime>(courseTimeMap.size)
-            for (pair in courseTimeMap.valueIterator()) {
-                val timePeriods = CourseAdapterUtils.parseIntCollectionPeriod(pair.second)
-                for (timePeriod in timePeriods) {
-                    result.add(pair.first.copy(sectionTime = pair.first.sectionTime.copy(start = timePeriod.start, duration = timePeriod.length)))
+                if (combineLocation) {
+                    courseTime.location?.let {
+                        if (hashCode in locationMap) {
+                            locationMap[hashCode]?.add(it)
+                        } else {
+                            locationMap[hashCode] = mutableSetOf(it)
+                        }
+                    }
                 }
             }
-            return result
+
+            return buildList(courseTimeMap.size) {
+                courseTimeMap.forEach { hashCode, (courseTime, timePeriods) ->
+                    val location = if (combineLocation) {
+                        locationMap[hashCode]?.sorted()?.joinToString(NEW_LINE) ?: courseTime.location
+                    } else courseTime.location
+                    for (timePeriod in CourseAdapterUtils.parseIntCollectionPeriod(timePeriods)) {
+                        add(
+                            courseTime.copy(
+                                sectionTime = courseTime.sectionTime.copy(start = timePeriod.start, duration = timePeriod.length),
+                                location = location
+                            )
+                        )
+                    }
+                }
+            }
         }
 
-        private fun combineCourse(courses: List<Course>): List<Course> {
+        private fun combineCourse(courses: List<Course>, combineTeacher: Boolean): List<Course> {
             if (courses.size < 2) return courses
 
             val courseMap = SparseArrayCompat<Pair<Course, LinkedHashSet<CourseTime>>>()
+            val teacherMap = SparseArrayCompat<MutableSet<String>>()
 
             for (course in courses) {
-                val hashCode = course.combinableHashCode()
+                val hashCode = course.combinableHashCode(!combineTeacher)
                 if (hashCode in courseMap) {
                     courseMap[hashCode]?.second?.addAll(course.times)
                 } else {
                     courseMap[hashCode] = course to LinkedHashSet(course.times)
                 }
-            }
-            return courseMap.valueIterator().asSequence().map {
-                it.first.apply {
-                    times = it.second.toList()
+                if (combineTeacher) {
+                    course.teacher?.let {
+                        if (hashCode in teacherMap) {
+                            teacherMap[hashCode]?.add(it)
+                        } else {
+                            teacherMap[hashCode] = mutableSetOf(it)
+                        }
+                    }
                 }
-            }.toList()
+            }
+            return buildList(courseMap.size) {
+                courseMap.forEach { hashCode, (course, courseTimes) ->
+                    if (combineTeacher) course.teacher = teacherMap[hashCode]?.sorted()?.joinToString()
+                    course.times = courseTimes.toList()
+                    add(course)
+                }
+            }
         }
 
-        fun build(combineCourse: Boolean = false, combineCourseTime: Boolean = false): CourseParseResult {
+        fun build(params: Params = Params()): CourseParseResult {
             var resultList: List<Course> = courses
 
-            if (combineCourse) {
-                resultList = combineCourse(resultList)
+            if (params.combineCourse) {
+                resultList = combineCourse(resultList, params.combineCourseTeacher)
             }
 
-            if (combineCourseTime) {
-                val courseTimeMap = SparseArrayCompat<Pair<CourseTime, HashSet<Int>>>()
+            if (params.combineCourseTime) {
                 for (course in resultList) {
-                    course.times = combinedCourseTime(courseTimeMap, course.times)
+                    course.times = combinedCourseTime(course.times, params.combineCourseTimeLocation)
                 }
             }
 

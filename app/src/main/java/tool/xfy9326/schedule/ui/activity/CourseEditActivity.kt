@@ -168,8 +168,8 @@ class CourseEditActivity : ViewModelActivity<CourseEditViewModel, ActivityCourse
 
     private fun updateTextData() {
         requireViewModel().apply {
-            editCourse.name = requireViewBinding().editTextCourseName.text?.toString().orEmpty()
-            editCourse.teacher = requireViewBinding().editTextCourseTeacherName.text.getText()
+            editCourse.name = requireViewBinding().editTextCourseName.text?.toString()?.trim().orEmpty()
+            editCourse.teacher = requireViewBinding().editTextCourseTeacherName.text.getText()?.trim()
         }
     }
 
