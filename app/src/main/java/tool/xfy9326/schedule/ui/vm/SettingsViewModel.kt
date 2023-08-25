@@ -19,6 +19,7 @@ import tool.xfy9326.schedule.beans.BatchResult
 import tool.xfy9326.schedule.beans.Schedule
 import tool.xfy9326.schedule.beans.SchedulePreviewStyles
 import tool.xfy9326.schedule.beans.ScheduleSync
+import tool.xfy9326.schedule.data.AppDataStore
 import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.data.ScheduleDataStore
 import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
@@ -162,6 +163,13 @@ class SettingsViewModel : AbstractViewModel() {
                 ScheduleDataStore.setScheduleBackgroundImage(imageName)
                 importScheduleImage.postEvent(true)
             }
+        }
+    }
+
+    fun disableOnlineCourseImport() {
+        viewModelScope.launch(Dispatchers.IO) {
+            AppDataStore.setReadOnlineImportAttention(false)
+            AppDataStore.setAgreeCourseImportPolicy(false)
         }
     }
 

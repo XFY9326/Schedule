@@ -4,9 +4,7 @@ import android.os.Bundle
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.CheckBoxPreference
 import androidx.preference.PreferenceDataStore
-import kotlinx.coroutines.launch
 import tool.xfy9326.schedule.R
-import tool.xfy9326.schedule.data.AppDataStore
 import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.ui.fragment.base.AbstractSettingsFragment
 import tool.xfy9326.schedule.utils.view.DialogUtils
@@ -19,7 +17,7 @@ class OnlineCourseImportSettingsFragment : AbstractSettingsFragment() {
     override fun onPrefInit(savedInstanceState: Bundle?) {
         findPreference<CheckBoxPreference>(AppSettingsDataStore.enableOnlineCourseImport.name)?.setOnPreferenceChangeListener { _, newValue ->
             if (newValue == false) {
-                lifecycleScope.launch { AppDataStore.setReadOnlineImportAttention(false) }
+                requireSettingsViewModel()?.disableOnlineCourseImport()
             }
             true
         }

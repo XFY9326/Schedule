@@ -18,7 +18,6 @@ import tool.xfy9326.schedule.content.CourseImportConfigManager.Type.Companion.ge
 import tool.xfy9326.schedule.content.beans.JSConfig
 import tool.xfy9326.schedule.content.utils.BaseCourseImportConfig
 import tool.xfy9326.schedule.data.AppDataStore
-import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.databinding.ActivityOnlineCourseImportBinding
 import tool.xfy9326.schedule.kt.showSnackBar
 import tool.xfy9326.schedule.tools.MIMEConst
@@ -52,8 +51,6 @@ class OnlineCourseImportActivity : ViewModelActivity<OnlineCourseImportViewModel
     override fun onPrepare(viewBinding: ActivityOnlineCourseImportBinding, viewModel: OnlineCourseImportViewModel) {
         setSupportActionBar(viewBinding.toolBarCourseImport)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
-        lifecycleScope.launch { if (!AppSettingsDataStore.enableOnlineCourseImportFlow.first()) finish() }
     }
 
     override fun onBindLiveData(viewBinding: ActivityOnlineCourseImportBinding, viewModel: OnlineCourseImportViewModel) {
@@ -67,7 +64,7 @@ class OnlineCourseImportActivity : ViewModelActivity<OnlineCourseImportViewModel
                 },
                 onNeutral = {
                     lifecycleScope.launch {
-                        AppSettingsDataStore.setEnableOnlineCourseImportFlow(false)
+                        requireViewModel().disableOnlineImport()
                         finish()
                     }
                 })
@@ -125,7 +122,7 @@ class OnlineCourseImportActivity : ViewModelActivity<OnlineCourseImportViewModel
                 if (!AppDataStore.agreeCourseImportPolicyFlow.first()) {
                     DialogUtils.showAddCourseImportAttentionDialog(this@OnlineCourseImportActivity) {
                         lifecycleScope.launch {
-                            AppDataStore.setAgreeCourseImportPolicy()
+                            AppDataStore.setAgreeCourseImportPolicy(true)
                         }
                         JSConfigImportDialog.showDialog(supportFragmentManager)
                     }

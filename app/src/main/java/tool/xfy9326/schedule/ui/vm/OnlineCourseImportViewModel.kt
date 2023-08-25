@@ -38,14 +38,29 @@ class OnlineCourseImportViewModel : AbstractViewModel() {
 
     private fun tryShowOnlineImportAttention() {
         viewModelScope.launch(Dispatchers.IO) {
-            if (!AppDataStore.readOnlineImportAttentionFlow.first()) onlineImportAttention.postNotify()
+            val hasRead = AppDataStore.readOnlineImportAttentionFlow.first()
+            val enableFunction = AppSettingsDataStore.enableOnlineCourseImportFlow.first()
+            if (!hasRead || !enableFunction) {
+                if (hasRead) {
+                    AppDataStore.setReadOnlineImportAttention(false)
+                    AppDataStore.setAgreeCourseImportPolicy(false)
+                }
+                onlineImportAttention.postNotify()
+            }
         }
     }
 
     fun hasReadOnlineImportAttention() {
         viewModelScope.launch(Dispatchers.IO) {
             AppDataStore.setReadOnlineImportAttention(true)
+            AppSettingsDataStore.setEnableOnlineCourseImportFlow(true)
         }
+    }
+
+    suspend fun disableOnlineImport() {
+        AppDataStore.setReadOnlineImportAttention(false)
+        AppDataStore.setAgreeCourseImportPolicy(false)
+        AppSettingsDataStore.setEnableOnlineCourseImportFlow(false)
     }
 
     fun launchJSConfig(jsConfig: JSConfig) {
