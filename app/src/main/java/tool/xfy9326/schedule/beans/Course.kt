@@ -54,6 +54,9 @@ data class Course(
             }
         }
 
+        fun Course.hasEmptyWeekNumCourseTime() =
+            times.any { it.weekNumArray.arrangeWeekNum().isEmpty() }
+
         fun Course.clone(scheduleId: Long): Course {
             val timesList = ArrayList<CourseTime>(times.size)
             times.forEach {

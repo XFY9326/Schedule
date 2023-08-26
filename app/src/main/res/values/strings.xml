@@ -63,8 +63,8 @@
     <string name="course_list_num_simple">第%1$d节</string>
     <string name="save">保存</string>
     <string name="schedule_time_list">所有课程时间</string>
-    <string name="long_click_to_set_current_schedule">Tips：长按切换课表，点击右下角图标可编辑课表</string>
-    <string name="swipe_to_delete_course">Tips：侧滑可以删除课程</string>
+    <string name="long_click_to_set_current_schedule">Tips：长按切换课表，点击右下角图标编辑课表</string>
+    <string name="swipe_to_delete_course">Tips：侧滑删除课程，感叹号说明未设定周数</string>
     <string name="course_cost_time_same_mode">所有课程上课时间相等</string>
     <string name="course_cost_time_same_mode_sum">开启后只能编辑课程开始时间，并依次推算时间</string>
     <string name="course_cost_time_same_mode_warning">上课时间相等模式开启时只能编辑课程开始时间！</string>
@@ -132,7 +132,8 @@
     <string name="create_new_schedule">创建新课表</string>
     <string name="new_schedule_name_title">新课表名称</string>
     <string name="import_course_has_conflict">导入的课程存在时间冲突！</string>
-    <string name="import_course_has_conflict_msg">导入的课程中存在上课时间冲突的问题，该部分课程时间的上课周数已经被设置为空，您可以稍后手动解决问题。</string>
+    <string name="import_course_has_conflict_msg">\u3000\u3000导入的课程中存在上课时间冲突的问题，该部分课程时间的上课周数已经被设置为空，您可以稍后手动解决问题。\n</string>
+    <string name="import_course_has_conflict_msg_highlight">\u3000\u3000请注意检查课表导入数据是否正确，在此情况下部分课程可能会不显示或者一直显示为[非本周]。</string>
     <string name="refresh">刷新</string>
     <string name="import_course_from_browser">从浏览器导入课程</string>
     <string name="import_course_from_browser_msg">登录并打开显示课程的网页，点击导入按钮导入课程</string>
