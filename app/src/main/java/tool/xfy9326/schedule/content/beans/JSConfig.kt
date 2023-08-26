@@ -38,7 +38,7 @@ data class JSConfig(
     val enableAsyncEnvironment: Boolean = true
 ) : Parcelable, ICourseImportConfig {
     companion object {
-        private const val CONFIG = 2
+        private const val CONFIG = 3
         private const val VERSION = 1
 
         const val TYPE_AI_SCHEDULE = "AiSchedule"
