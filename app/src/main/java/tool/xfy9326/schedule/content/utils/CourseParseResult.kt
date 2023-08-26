@@ -65,15 +65,15 @@ class CourseParseResult private constructor(val courses: List<Course>, val ignor
                 action()?.let { add(it) }
             }
 
-        private fun timePeriodToHashSet(start: Int, duration: Int): HashSet<Int> {
-            val result = HashSet<Int>()
+        private fun timePeriodToHashSet(start: Int, duration: Int): MutableSet<Int> {
+            val result = mutableSetOf<Int>()
             for (i in start until start + duration) {
                 result.add(i)
             }
             return result
         }
 
-        private fun timePeriodAddToHashSet(start: Int, duration: Int, set: HashSet<Int>) {
+        private fun timePeriodAddToHashSet(start: Int, duration: Int, set: MutableSet<Int>) {
             for (i in start until start + duration) {
                 set.add(i)
             }
@@ -82,7 +82,7 @@ class CourseParseResult private constructor(val courses: List<Course>, val ignor
         private fun combinedCourseTime(courseTimes: List<CourseTime>, combineLocation: Boolean): List<CourseTime> {
             if (courseTimes.size < 2) return courseTimes
 
-            val courseTimeMap = SparseArrayCompat<Pair<CourseTime, HashSet<Int>>>()
+            val courseTimeMap = SparseArrayCompat<Pair<CourseTime, MutableSet<Int>>>()
             val locationMap = SparseArrayCompat<MutableSet<String>>()
 
             for (courseTime in courseTimes) {
@@ -125,7 +125,7 @@ class CourseParseResult private constructor(val courses: List<Course>, val ignor
         private fun combineCourse(courses: List<Course>, combineTeacher: Boolean): List<Course> {
             if (courses.size < 2) return courses
 
-            val courseMap = SparseArrayCompat<Pair<Course, LinkedHashSet<CourseTime>>>()
+            val courseMap = SparseArrayCompat<Pair<Course, MutableSet<CourseTime>>>()
             val teacherMap = SparseArrayCompat<MutableSet<String>>()
 
             for (course in courses) {
@@ -133,7 +133,7 @@ class CourseParseResult private constructor(val courses: List<Course>, val ignor
                 if (hashCode in courseMap) {
                     courseMap[hashCode]?.second?.addAll(course.times)
                 } else {
-                    courseMap[hashCode] = course to LinkedHashSet(course.times)
+                    courseMap[hashCode] = course to course.times.toMutableSet()
                 }
                 if (combineTeacher) {
                     course.teacher?.let {

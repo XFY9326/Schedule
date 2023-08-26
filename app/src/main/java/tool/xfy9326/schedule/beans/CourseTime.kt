@@ -30,7 +30,14 @@ import kotlin.math.min
         onDelete = ForeignKey.CASCADE
     )],
     indices = [Index(
-        value = [DBConst.COLUMN_COURSE_ID, DBConst.COLUMN_WEEK_DAY, DBConst.COLUMN_SECTION_START, DBConst.COLUMN_SECTION_DURATION, DBConst.COLUMN_WEEK_NUM],
+        value = [
+            DBConst.COLUMN_COURSE_ID,
+            DBConst.COLUMN_WEEK_DAY,
+            DBConst.COLUMN_SECTION_START,
+            DBConst.COLUMN_SECTION_DURATION,
+            DBConst.COLUMN_WEEK_NUM,
+            DBConst.COLUMN_LOCATION
+        ],
         unique = true
     )]
 )
@@ -45,6 +52,7 @@ data class CourseTime(
     var weekNumArray: BooleanArray,
     @Embedded
     var sectionTime: SectionTime,
+    @ColumnInfo(name = DBConst.COLUMN_LOCATION)
     var location: String? = null,
 ) : Parcelable {
 
