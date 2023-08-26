@@ -17,7 +17,6 @@ import tool.xfy9326.schedule.ui.activity.ScheduleActivity
 import tool.xfy9326.schedule.ui.activity.base.AbstractActivityModule
 import tool.xfy9326.schedule.ui.dialog.UpgradeDialog
 import tool.xfy9326.schedule.utils.UpgradeUtils
-import tool.xfy9326.schedule.utils.schedule.ScheduleDataProcessor
 import tool.xfy9326.schedule.utils.view.DialogUtils
 import kotlin.system.exitProcess
 
@@ -78,13 +77,8 @@ class ScheduleLaunchModule(activity: ScheduleActivity) : AbstractActivityModule<
         }
     }
 
-    private var isPreloadReady = false
-
     override fun onInit() {
-        requireActivity().installSplashScreen().setKeepOnScreenCondition {
-            !isPreloadReady
-        }
-        preloadData()
+        requireActivity().installSplashScreen()
     }
 
     fun checkUpgrade() {
@@ -92,17 +86,6 @@ class ScheduleLaunchModule(activity: ScheduleActivity) : AbstractActivityModule<
             UpgradeUtils.checkUpgrade(requireActivity(), false,
                 onFoundUpgrade = { UpgradeDialog.showDialog(requireActivity().supportFragmentManager, it) }
             )
-        }
-    }
-
-    private fun preloadData() {
-        if (isFirstLaunch) {
-            launch {
-                ScheduleDataProcessor.preload()
-                isPreloadReady = true
-            }
-        } else {
-            isPreloadReady = true
         }
     }
 }

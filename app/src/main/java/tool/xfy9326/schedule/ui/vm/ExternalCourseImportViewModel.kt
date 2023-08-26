@@ -64,7 +64,7 @@ class ExternalCourseImportViewModel : AbstractViewModel() {
                         ?: CourseAdapterException.Error.PARSE_PAGE_ERROR.report()
 
                 is ExternalCourseImportData.Origin.JSON ->
-                    CourseImportHelper.parsePureScheduleJSON(fileContentList.first(), params.combineCourse, params.combineCourseTime)
+                    CourseImportHelper.parsePureScheduleJSON(fileContentList.first(), params.parseParams)
             }
         }
     }

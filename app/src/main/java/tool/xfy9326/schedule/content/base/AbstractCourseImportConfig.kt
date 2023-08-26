@@ -69,11 +69,11 @@ abstract class AbstractCourseImportConfig<P1 : Serializable, T1 : AbstractCourse
         )
     }
 
-    private fun createProviderInstance() = providerClass.newInstance().apply {
+    private fun createProviderInstance() = providerClass.getConstructor().newInstance().apply {
         setParams(providerParams?.deepClone()?.getOrThrow())
     }
 
-    private fun createParserInstance() = parserClass.newInstance().apply {
+    private fun createParserInstance() = parserClass.getConstructor().newInstance().apply {
         setParams(parserParams?.deepClone()?.getOrThrow())
     }
 

@@ -5,9 +5,13 @@
         <item name="android:windowLightNavigationBar" tools:ignore="NewApi">true</item>
     </style>
 
-    <style name="AppTheme.Schedule" parent="AppTheme.Base">
+    <style name="AppTheme.ImmersiveScreen" parent="AppTheme">
+        <item name="android:windowTranslucentNavigation">true</item>
+        <item name="android:windowLayoutInDisplayCutoutMode" tools:ignore="NewApi">shortEdges</item>
+    </style>
+
+    <style name="AppTheme.Schedule" parent="AppTheme.ImmersiveScreen">
         <item name="android:windowLightStatusBar">@null</item>
-        <item name="android:windowLightNavigationBar" tools:ignore="NewApi">@null</item>
     </style>
 
     <style name="AppTheme.LaunchScreen.Base" parent="Theme.SplashScreen">
@@ -44,14 +48,23 @@
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
         <item name="snackbarStyle">@style/AppTheme.SnackBar</item>
+        <item name="dialogCornerRadius">6dp</item>
         <item name="android:dialogTheme">@style/AppTheme.MaterialDialog</item>
         <item name="dialogTheme">@style/AppTheme.MaterialDialog</item>
-        <item name="android:datePickerDialogTheme">@style/AppTheme.DateTimePickerDialog</item>
-        <item name="android:timePickerDialogTheme">@style/AppTheme.DateTimePickerDialog</item>
+        <item name="alertDialogTheme">@style/AppTheme.MaterialDialog</item>
+        <item name="android:alertDialogTheme">@style/AppTheme.MaterialDialog</item>
+        <item name="android:datePickerDialogTheme">@style/AppTheme.MaterialRoundCornerDialog</item>
+        <item name="android:timePickerDialogTheme">@style/AppTheme.MaterialRoundCornerDialog</item>
         <item name="sliderStyle">@style/AppTheme.AnimateSlider</item>
         <item name="materialAlertDialogTheme">@style/AppTheme.MaterialDialog</item>
         <item name="android:forceDarkAllowed" tools:ignore="NewApi">false</item>
         <item name="collapsingToolbarLayoutStyle">@style/AppTheme.CollapsingToolbarLayout</item>
+    </style>
+
+    <style name="AppTheme.Settings" parent="AppTheme.ImmersiveScreen">
+        <item name="android:textColorPrimary">@color/primary_text_color_selector</item>
+        <item name="android:textColorSecondary">@color/secondary_text_color_selector</item>
+        <item name="android:textColorTertiary">@color/secondary_text_color_selector</item>
     </style>
 
     <style name="AppTheme.ActivityAnimation" parent="@android:style/Animation.Activity">
@@ -98,7 +111,6 @@
     </style>
 
     <style name="AppTheme.MaterialDialog" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
-        <item name="android:windowBackground">@drawable/background_dialog</item>
         <item name="materialAlertDialogTitlePanelStyle">@style/AppTheme.MaterialDialogTitle</item>
     </style>
 
@@ -116,12 +128,16 @@
         <item name="android:layout_marginBottom">5dp</item>
     </style>
 
-    <style name="AppTheme.DateTimePickerDialog" parent="ThemeOverlay.MaterialComponents.Dialog">
+    <style name="AppTheme.MaterialRoundCornerDialog" parent="ThemeOverlay.MaterialComponents.Dialog">
         <item name="android:windowBackground">@drawable/background_dialog</item>
     </style>
 
     <style name="AppTheme.TransparentBottomSheetDialog" parent="Theme.Design.Light.BottomSheetDialog">
         <item name="android:backgroundDimAmount">0.2</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
         <item name="bottomSheetStyle">@style/AppTheme.TransparentBottomSheetStyle</item>
     </style>
 

@@ -150,8 +150,7 @@
                     android:id="@+id/editText_courseLocation"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="text"
-                    android:singleLine="true"
+                    android:inputType="textMultiLine"
                     android:textSize="14sp" />
 
             </com.google.android.material.textfield.TextInputLayout>

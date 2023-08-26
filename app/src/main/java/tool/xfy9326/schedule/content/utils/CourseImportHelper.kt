@@ -67,7 +67,7 @@ object CourseImportHelper {
     }
 
     // 解析Pure课程表JSON文件
-    fun parsePureScheduleJSON(data: String, combineCourse: Boolean, combineCourseTime: Boolean): ScheduleImportContent {
+    fun parsePureScheduleJSON(data: String, courseParseParams: CourseParseResult.Params): ScheduleImportContent {
         val json = Json { ignoreUnknownKeys = true }
         val scheduleData = try {
             json.decodeFromString<ScheduleImportJSON>(data)
@@ -102,7 +102,7 @@ object CourseImportHelper {
 
         return ScheduleImportContent(
             scheduleTimes,
-            builder.build(combineCourse, combineCourseTime),
+            builder.build(courseParseParams),
             CourseAdapterUtils.simpleTermFix(scheduleData.termStart, scheduleData.termEnd)
         )
     }

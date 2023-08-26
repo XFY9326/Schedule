@@ -7,10 +7,12 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.addCallback
+import androidx.core.view.WindowCompat
 import com.google.android.material.snackbar.Snackbar
 import com.jaredrummler.android.colorpicker.ColorPickerDialogListener
 import io.github.xfy9326.atools.core.hideKeyboard
 import io.github.xfy9326.atools.livedata.observeEvent
+import io.github.xfy9326.atools.livedata.observeNotify
 import io.github.xfy9326.atools.ui.getText
 import io.github.xfy9326.atools.ui.resume
 import io.github.xfy9326.atools.ui.setOnSingleClickListener
@@ -19,6 +21,7 @@ import tool.xfy9326.schedule.beans.Course
 import tool.xfy9326.schedule.beans.CourseTime
 import tool.xfy9326.schedule.beans.EditError.Companion.getText
 import tool.xfy9326.schedule.databinding.ActivityCourseEditBinding
+import tool.xfy9326.schedule.kt.consumeSystemBarInsets
 import tool.xfy9326.schedule.kt.showSnackBar
 import tool.xfy9326.schedule.ui.activity.base.ViewModelActivity
 import tool.xfy9326.schedule.ui.adapter.CourseTimeAdapter
@@ -39,6 +42,7 @@ class CourseEditActivity : ViewModelActivity<CourseEditViewModel, ActivityCourse
     private lateinit var courseTimeAdapter: CourseTimeAdapter
 
     override fun onContentViewPreload(savedInstanceState: Bundle?, viewModel: CourseEditViewModel) {
+        WindowCompat.setDecorFitsSystemWindows(window, false)
         onBackPressedDispatcher.addCallback(this, true, this::onBackPressed)
     }
 
@@ -59,6 +63,13 @@ class CourseEditActivity : ViewModelActivity<CourseEditViewModel, ActivityCourse
     override fun onBindLiveData(viewBinding: ActivityCourseEditBinding, viewModel: CourseEditViewModel) {
         viewModel.courseData.observe(this, ::applyCourseToView)
         viewModel.courseSaveComplete.observeEvent(this, observer = ::onCourseSaved)
+        viewModel.courseSaveEmptyWeekNum.observeNotify(this) {
+            Snackbar.make(requireViewBinding().layoutCourseEdit, R.string.save_empty_week_num_course_time, Snackbar.LENGTH_LONG)
+                .setActionTextColor(Color.RED)
+                .setAction(android.R.string.ok) {
+                    viewModel.saveCourse(currentEditScheduleId, false)
+                }.show()
+        }
         viewModel.courseSaveFailed.observeEvent(this) {
             viewBinding.layoutCourseEdit.showSnackBar(it.getText(this))
         }
@@ -93,6 +104,7 @@ class CourseEditActivity : ViewModelActivity<CourseEditViewModel, ActivityCourse
             DialogUtils.showColorPickerDialog(this, R.string.course_color_edit, viewModel.editCourse.color)
         }
         CourseTimeEditDialog.setCourseTimeEditListener(supportFragmentManager, this, ::onCourseTimeAddOrUpdate)
+        viewBinding.layoutCourseEditContent.consumeSystemBarInsets(bottom = true)
     }
 
     override fun onColorSelected(dialogId: Int, color: Int) {
@@ -168,8 +180,8 @@ class CourseEditActivity : ViewModelActivity<CourseEditViewModel, ActivityCourse
 
     private fun updateTextData() {
         requireViewModel().apply {
-            editCourse.name = requireViewBinding().editTextCourseName.text?.toString().orEmpty()
-            editCourse.teacher = requireViewBinding().editTextCourseTeacherName.text.getText()
+            editCourse.name = requireViewBinding().editTextCourseName.text?.toString()?.trim().orEmpty()
+            editCourse.teacher = requireViewBinding().editTextCourseTeacherName.text.getText()?.trim()
         }
     }
 

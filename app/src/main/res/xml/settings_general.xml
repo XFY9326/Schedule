@@ -41,13 +41,6 @@
         app:title="@string/others">
 
         <androidx.preference.CheckBoxPreference
-            app:defaultValue="false"
-            app:icon="@drawable/ic_exit_24"
-            app:key="exitAppDirectly"
-            app:summary="@string/exit_app_directly_sum"
-            app:title="@string/exit_app_directly" />
-
-        <androidx.preference.CheckBoxPreference
             app:defaultValue="true"
             app:icon="@drawable/ic_image_24"
             app:key="drawWaterMarkOnScheduleImage"

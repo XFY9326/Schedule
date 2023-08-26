@@ -2,6 +2,13 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/menu_scheduleAlert"
+        android:icon="@drawable/ic_alert_24"
+        android:title="@string/schedule_alert"
+        android:visible="false"
+        app:iconTint="@color/red"
+        app:showAsAction="always" />
+    <item
         android:id="@+id/menu_scheduleShare"
         android:icon="@drawable/ic_share_24"
         android:title="@string/share_schedule"

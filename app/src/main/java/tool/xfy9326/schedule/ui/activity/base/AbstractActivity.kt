@@ -25,6 +25,7 @@ abstract class AbstractActivity : AppCompatActivity() {
                 window?.setWindowAnimations(R.style.AppTheme_ActivityAnimation)
             }
         }
+        if (validLaunch) onActivityCreate(savedInstanceState)
         super.onCreate(savedInstanceState)
         if (validLaunch) {
             onActivityInit(savedInstanceState)
@@ -38,6 +39,8 @@ abstract class AbstractActivity : AppCompatActivity() {
     protected open fun onLaunchInvalid() = finish()
 
     protected open fun onActivityInit(savedInstanceState: Bundle?) {}
+
+    protected open fun onActivityCreate(savedInstanceState: Bundle?) {}
 
     @CallSuper
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

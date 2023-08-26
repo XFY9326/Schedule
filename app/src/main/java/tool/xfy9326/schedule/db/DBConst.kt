@@ -17,6 +17,7 @@ object DBConst {
     const val COLUMN_SECTION_START = "classStartTime"
     const val COLUMN_SECTION_DURATION = "classDuration"
     const val COLUMN_WEEK_NUM = "weekNum"
+    const val COLUMN_LOCATION = "location"
     const val COLUMN_SYNC_ID = "syncId"
 
     const val LIKE_MORE = "%"

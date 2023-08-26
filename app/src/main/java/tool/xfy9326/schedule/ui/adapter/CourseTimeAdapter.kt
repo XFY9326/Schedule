@@ -1,7 +1,9 @@
 package tool.xfy9326.schedule.ui.adapter
 
+import android.graphics.Typeface
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import io.github.xfy9326.atools.ui.getColorCompat
 import io.github.xfy9326.atools.ui.getStringArray
 import io.github.xfy9326.atools.ui.setOnSingleClickListener
 import tool.xfy9326.schedule.R
@@ -25,12 +27,17 @@ class CourseTimeAdapter : ListViewBindingAdapter<CourseTime, ItemCourseTimeBindi
             weekDayStrArr = holder.viewContext.getStringArray(R.array.weekday)
         }
         val weekNumText = element.getWeeksDescriptionText(holder.viewContext)
-        holder.viewBinding.textViewCourseWeekNum.text =
-            if (weekNumText.isEmpty()) {
+        holder.viewBinding.textViewCourseWeekNum.apply {
+            text = if (weekNumText.isEmpty()) {
+                typeface = Typeface.DEFAULT_BOLD
+                setTextColor(holder.viewContext.getColorCompat(R.color.red))
                 holder.viewContext.getString(R.string.course_detail_week_num_simple, holder.viewContext.getString(R.string.undefined))
             } else {
+                typeface = Typeface.DEFAULT
+                setTextColor(holder.viewContext.getColorCompat(R.color.theme_color_secondary_text))
                 holder.viewContext.getString(R.string.course_detail_week_num, weekNumText)
             }
+        }
         holder.viewBinding.textViewCourseSectionTime.text =
             holder.viewContext.getString(
                 R.string.course_detail_section_time_simple,

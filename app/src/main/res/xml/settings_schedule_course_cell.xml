@@ -11,12 +11,14 @@
 
         <androidx.preference.CheckBoxPreference
             app:defaultValue="true"
+            app:disableDependentsState="true"
             app:iconSpaceReserved="false"
             app:key="courseCellAutoHeight"
             app:summary="@string/schedule_course_cell_auto_height_sum"
             app:title="@string/schedule_course_cell_auto_height" />
 
         <androidx.preference.Preference
+            app:dependency="courseCellAutoHeight"
             app:iconSpaceReserved="false"
             app:key="@string/pref_schedule_course_cell_specific_height"
             app:persistent="false"
@@ -58,12 +60,14 @@
 
         <androidx.preference.CheckBoxPreference
             app:defaultValue="true"
+            app:disableDependentsState="true"
             app:iconSpaceReserved="false"
             app:key="courseCellAutoTextLength"
             app:summary="@string/schedule_course_cell_auto_text_length_sum"
             app:title="@string/schedule_course_cell_auto_text_length" />
 
         <androidx.preference.Preference
+            app:dependency="courseCellAutoTextLength"
             app:iconSpaceReserved="false"
             app:key="@string/pref_schedule_course_cell_text_length"
             app:persistent="false"
@@ -72,12 +76,14 @@
 
         <androidx.preference.CheckBoxPreference
             app:defaultValue="true"
+            app:disableDependentsState="true"
             app:iconSpaceReserved="false"
             app:key="courseCellShowAllCourseText"
             app:summary="@string/schedule_course_cell_all_course_text_sum"
             app:title="@string/schedule_course_cell_all_course_text" />
 
         <androidx.preference.Preference
+            app:dependency="courseCellShowAllCourseText"
             app:iconSpaceReserved="false"
             app:key="@string/pref_schedule_course_cell_course_text_length"
             app:persistent="false"

@@ -15,6 +15,7 @@ import kotlinx.coroutines.launch
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.data.ScheduleDataStore
 import tool.xfy9326.schedule.databinding.DialogScheduleControlPanelBinding
+import tool.xfy9326.schedule.kt.consumeBottomInsets
 import tool.xfy9326.schedule.kt.setSystemBarAppearance
 
 class ScheduleControlPanel : BottomSheetDialogFragment() {
@@ -45,15 +46,6 @@ class ScheduleControlPanel : BottomSheetDialogFragment() {
         }
     }
 
-    override fun onStart() {
-        super.onStart()
-        requireDialog().window?.apply {
-            lifecycleScope.launch {
-                setSystemBarAppearance(ScheduleDataStore.scheduleSystemBarAppearanceFlow.first())
-            }
-        }
-    }
-
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val currentShowWeekNum = requireArguments().getInt(ARGUMENT_CURRENT_SHOW_WEEK_NUM)
         val nowWeekNum = requireArguments().getInt(ARGUMENT_NOW_WEEK_NUM)
@@ -78,6 +70,16 @@ class ScheduleControlPanel : BottomSheetDialogFragment() {
 
             behavior.state = BottomSheetBehavior.STATE_EXPANDED
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        requireDialog().window?.apply {
+            lifecycleScope.launch {
+                setSystemBarAppearance(ScheduleDataStore.scheduleSystemBarAppearanceFlow.first())
+            }
+        }
+        consumeBottomInsets()
     }
 
     private fun changeShowWeekNum(value: Float) {

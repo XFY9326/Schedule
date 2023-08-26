@@ -64,7 +64,7 @@ class ExternalCourseProcessorProcessor(environment: SymbolProcessorEnvironment) 
             .addParameter(TARGET_FUNCTION_GET_PROCESSOR_PARAM, STRING)
             .addStatement(
                 """
-                    return $TARGET_PROPERTY_PROCESSOR_CLASSES[$TARGET_FUNCTION_GET_PROCESSOR_PARAM]?.java?.newInstance()
+                    return $TARGET_PROPERTY_PROCESSOR_CLASSES[$TARGET_FUNCTION_GET_PROCESSOR_PARAM]?.java?.getConstructor()?.newInstance()
                 """.trimIndent()
             )
             .returns(ABSTRACT_EXTERNAL_PROCESSOR.copy(nullable = true))

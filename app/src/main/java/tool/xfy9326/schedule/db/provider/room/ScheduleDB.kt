@@ -1,5 +1,6 @@
 package tool.xfy9326.schedule.db.provider.room
 
+import androidx.room.AutoMigration
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
@@ -16,6 +17,9 @@ import tool.xfy9326.schedule.db.utils.DBTypeConverter
 @Database(
     entities = [Schedule::class, Course::class, CourseTime::class, ScheduleSync::class],
     version = ScheduleDBProvider.DB_VERSION,
+    autoMigrations = [
+        AutoMigration(from = 1, to = 2)
+    ],
     exportSchema = true
 )
 abstract class ScheduleDB : RoomDatabase() {

@@ -2,12 +2,14 @@ package tool.xfy9326.schedule.ui.activity.module
 
 import android.view.HapticFeedbackConstants
 import android.view.MenuItem
+import androidx.activity.addCallback
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
 import com.google.android.material.navigation.NavigationView
 import io.github.xfy9326.atools.core.startActivity
 import io.github.xfy9326.atools.livedata.observeEvent
 import io.github.xfy9326.atools.ui.getColorCompat
+import io.github.xfy9326.atools.ui.resume
 import io.github.xfy9326.atools.ui.setOnSingleClickListener
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -35,13 +37,6 @@ class ScheduleNavigationModule(
         get() = actionBarDrawerToggle
 
     override fun onInit() {
-        requireViewModel().exitAppDirectly.observeEvent(requireActivity()) {
-            if (it) {
-                requireActivity().finish()
-            } else {
-                requireActivity().moveTaskToBack(false)
-            }
-        }
         requireViewModel().openCourseManageActivity.observeEvent(requireActivity()) {
             requireActivity().startActivity<CourseManageActivity> {
                 putExtra(CourseManageActivity.EXTRA_SCHEDULE_ID, it)
@@ -82,14 +77,6 @@ class ScheduleNavigationModule(
         return true
     }
 
-    fun onBackPressed() {
-        if (requireViewBinding().drawerSchedule.isDrawerOpen(GravityCompat.START)) {
-            requireViewBinding().drawerSchedule.closeDrawers()
-        } else {
-            requireViewModel().exitAppDirectly()
-        }
-    }
-
     private fun setupDrawer(viewBinding: ActivityScheduleBinding, viewModel: ScheduleViewModel) {
         viewBinding.navSchedule.apply {
             setNavigationItemSelectedListener(requireActivity())
@@ -113,5 +100,12 @@ class ScheduleNavigationModule(
                 syncState()
                 viewBinding.drawerSchedule.addDrawerListener(this)
             }
+        requireActivity().onBackPressedDispatcher.addCallback(requireActivity()) {
+            if (viewBinding.drawerSchedule.isDrawerVisible(GravityCompat.START)) {
+                viewBinding.drawerSchedule.closeDrawer(GravityCompat.START)
+            } else {
+                resume(requireActivity().onBackPressedDispatcher)
+            }
+        }
     }
 }

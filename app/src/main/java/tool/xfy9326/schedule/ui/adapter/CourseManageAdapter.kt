@@ -3,11 +3,15 @@ package tool.xfy9326.schedule.ui.adapter
 import android.content.Context
 import android.content.res.ColorStateList
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
+import io.github.xfy9326.atools.ui.getColorCompat
 import io.github.xfy9326.atools.ui.setOnSingleClickListener
+import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.Course
+import tool.xfy9326.schedule.beans.Course.Companion.hasEmptyWeekNumCourseTime
 import tool.xfy9326.schedule.databinding.ItemCourseBinding
 import tool.xfy9326.schedule.ui.view.recyclerview.AdvancedDividerItemDecoration
 import tool.xfy9326.schedule.ui.view.recyclerview.BaseDifferItemCallBack
@@ -26,11 +30,21 @@ class CourseManageAdapter : SwipeListViewBindingAdapter<Course, ItemCourseBindin
         ItemCourseBinding.inflate(layoutInflater, parent, false)
 
     override fun onBindViewHolder(viewContext: Context, binding: ItemCourseBinding, position: Int, element: Course) {
+        val hasEmptyWeekNum = element.hasEmptyWeekNumCourseTime()
         binding.textViewCourseName.apply {
             isSelected = true
             text = element.name
+            setTextColor(context.getColorCompat(if (hasEmptyWeekNum) R.color.red else R.color.theme_color_primary_text))
         }
-        binding.imageViewCourseColor.imageTintList = ColorStateList.valueOf(element.color)
+        if (hasEmptyWeekNum) {
+            binding.imageViewCourseAlert.imageTintList = ColorStateList.valueOf(element.color)
+            binding.imageViewCourseAlert.visibility = View.VISIBLE
+            binding.imageViewCourseColor.visibility = View.GONE
+        } else {
+            binding.imageViewCourseColor.imageTintList = ColorStateList.valueOf(element.color)
+            binding.imageViewCourseColor.visibility = View.VISIBLE
+            binding.imageViewCourseAlert.visibility = View.GONE
+        }
         binding.layoutCourseItem.setOnSingleClickListener {
             onCourseEditListener?.invoke(element)
         }
@@ -53,6 +67,6 @@ class CourseManageAdapter : SwipeListViewBindingAdapter<Course, ItemCourseBindin
             oldItem.courseId == newItem.courseId
 
         override fun areContentsTheSame(oldItem: Course, newItem: Course): Boolean =
-            oldItem.name == newItem.name && oldItem.color == newItem.color
+            oldItem.name == newItem.name && oldItem.color == newItem.color && oldItem.hasEmptyWeekNumCourseTime() == newItem.hasEmptyWeekNumCourseTime()
     }
 }

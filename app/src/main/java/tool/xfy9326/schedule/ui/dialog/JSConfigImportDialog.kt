@@ -23,8 +23,14 @@ class JSConfigImportDialog : AppCompatDialogFragment() {
 
         private const val EXTRA_URL = "EXTRA_URL"
 
-        fun showDialog(fragmentManager: FragmentManager) {
-            JSConfigImportDialog().show(fragmentManager, DIALOG_TAG)
+        fun showDialog(fragmentManager: FragmentManager, url: String? = null) {
+            JSConfigImportDialog().apply {
+                if (url != null) {
+                    arguments = bundleOf(
+                        EXTRA_URL to url
+                    )
+                }
+            }.show(fragmentManager, DIALOG_TAG)
         }
 
         fun setOnJSConfigImportListener(
@@ -45,6 +51,10 @@ class JSConfigImportDialog : AppCompatDialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val binding = DialogEditTextBinding.inflate(layoutInflater)
+        arguments?.getString(EXTRA_URL)?.let {
+            binding.editTextDialogText.setText(it)
+            arguments?.remove(EXTRA_URL)
+        }
 
         return MaterialAlertDialogBuilder(requireContext()).apply {
             setTitle(R.string.add_course_import)

@@ -7,6 +7,7 @@ import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import tool.xfy9326.schedule.content.base.ICourseImportConfig
+import tool.xfy9326.schedule.content.utils.CourseParseResult
 import tool.xfy9326.schedule.content.utils.JSConfigException
 import tool.xfy9326.schedule.content.utils.JSConfigException.Companion.make
 import tool.xfy9326.schedule.content.utils.JSConfigException.Companion.report
@@ -17,8 +18,8 @@ import java.util.UUID
 @Serializable
 data class JSConfig(
     private var uuid: String,
-    val config: Int = CONFIG,
-    val version: Int = VERSION,
+    val config: Int = CONFIG_VERSION,
+    val version: Int = DEFAULT_VERSION,
     override val schoolName: String,
     override val authorName: String,
     override val systemName: String,
@@ -32,11 +33,13 @@ data class JSConfig(
     val requireNetwork: Boolean = false,
     val combineCourse: Boolean = false,
     val combineCourseTime: Boolean = false,
+    val combineCourseTeacher: Boolean = false,
+    val combineCourseTimeLocation: Boolean = false,
     val enableAsyncEnvironment: Boolean = true
 ) : Parcelable, ICourseImportConfig {
     companion object {
-        private const val CONFIG = 2
-        private const val VERSION = 1
+        private const val CONFIG_VERSION = 3
+        private const val DEFAULT_VERSION = 1
 
         const val TYPE_AI_SCHEDULE = "AiSchedule"
         const val TYPE_PURE_SCHEDULE = "PureSchedule"
@@ -51,7 +54,7 @@ data class JSConfig(
     }
 
     init {
-        if (CONFIG < config) {
+        if (CONFIG_VERSION < config) {
             JSConfigException.Error.INCOMPATIBLE_VERSION_ERROR.make()
         }
     }
@@ -81,8 +84,12 @@ data class JSConfig(
         jsType = jsType,
         initUrl = initPageUrl,
         requireNetwork = requireNetwork,
-        combineCourse = combineCourse,
-        combineCourseTime = combineCourseTime,
+        parseParams = CourseParseResult.Params(
+            combineCourse = combineCourse,
+            combineCourseTime = combineCourseTime,
+            combineCourseTeacher = combineCourseTeacher,
+            combineCourseTimeLocation = combineCourseTimeLocation,
+        ),
         asyncEnvironment = enableAsyncEnvironment
     )
 }

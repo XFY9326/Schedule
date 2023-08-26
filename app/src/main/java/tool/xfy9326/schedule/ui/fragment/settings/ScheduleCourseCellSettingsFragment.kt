@@ -96,8 +96,7 @@ class ScheduleCourseCellSettingsFragment : AbstractSettingsFragment() {
         for (bundle in numberTextEditArray) {
             viewLifecycleOwner.lifecycleScope.launch {
                 bundle.dataStoreFlow.collect {
-                    findPreference<Preference>(bundle.prefKeyRes)?.summary =
-                        getString(bundle.prefSumRes, it)
+                    findPreference<Preference>(bundle.prefKeyRes)?.summary = getString(bundle.prefSumRes, it)
                 }
             }
         }

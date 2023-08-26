@@ -38,7 +38,7 @@
         android:id="@+id/fab_addCourseImport"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="40dp"
+        android:layout_marginEnd="@dimen/fab_margin_end"
         android:clickable="true"
         android:contentDescription="@string/add_course_import"
         android:focusable="true"
@@ -54,6 +54,7 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/layout_courseImportContent"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="5dp"

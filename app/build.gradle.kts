@@ -1,5 +1,3 @@
-@file:Suppress("UnstableApiUsage")
-
 import com.android.build.gradle.AppExtension
 
 plugins {
@@ -12,12 +10,12 @@ plugins {
 
 object ProjectConfig {
     const val name = "PureSchedule"
-    const val compileSdk = 33
-    const val targetSdk = 33
+    const val compileSdk = 34
+    const val targetSdk = 34
     const val minSdk = 23
     const val applicationId = "tool.xfy9326.schedule"
-    const val versionCode = 39
-    const val versionName = "1.4.10"
+    const val versionCode = 40
+    const val versionName = "1.5.0"
 }
 
 android {
@@ -131,7 +129,7 @@ dependencies {
     ksp(project(path = ":AnnotationKSP"))
 
     // ATools
-    val atoolsVersion = "0.0.25"
+    val atoolsVersion = "0.0.26"
     implementation("io.github.xfy9326.atools:atools-io:$atoolsVersion")
     implementation("io.github.xfy9326.atools:atools-ui:$atoolsVersion")
     implementation("io.github.xfy9326.atools:atools-crash:$atoolsVersion")

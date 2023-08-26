@@ -40,6 +40,10 @@ class CourseDetailDialog : AppCompatDialogFragment() {
 
     private lateinit var courseDetailAdapter: CourseDetailAdapter
 
+    override fun getTheme(): Int {
+        return R.style.AppTheme_MaterialRoundCornerDialog
+    }
+
     override fun onSaveInstanceState(outState: Bundle) {
         outState.putBoolean(EXTRA_VIEW_LOAD_MODE, courseDetailAdapter.isExpanded)
         super.onSaveInstanceState(outState)

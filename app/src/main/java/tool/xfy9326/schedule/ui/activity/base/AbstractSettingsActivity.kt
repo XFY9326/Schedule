@@ -2,6 +2,7 @@ package tool.xfy9326.schedule.ui.activity.base
 
 import android.os.Bundle
 import android.view.MenuItem
+import androidx.core.view.WindowCompat
 import androidx.fragment.app.commit
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
@@ -18,6 +19,10 @@ abstract class AbstractSettingsActivity : ViewBindingActivity<ActivityFragmentCo
     }
 
     protected abstract fun onCreateMainSettingsFragment(): AbstractSettingsFragment
+
+    override fun onContentViewPreload(savedInstanceState: Bundle?) {
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+    }
 
     override fun onCreateViewBinding() = ActivityFragmentContainerBinding.inflate(layoutInflater)
 

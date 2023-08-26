@@ -21,6 +21,9 @@ class OnlineCourseImportViewModel : AbstractViewModel() {
     private var jsPrepareJob: Job? = null
     private var jsAddJob: Job? = null
 
+    // Set by OnlineCourseImportActivity.onContentViewPreload
+    var pendingExternalCourseImportUrl: String? = null
+
     val courseImportConfigs = configManager.courseImportConfigs
     val preparedJSConfig = configManager.preparedJSConfig
     val jsConfigPrepareProgress = configManager.jsConfigPrepareProgress
@@ -31,6 +34,7 @@ class OnlineCourseImportViewModel : AbstractViewModel() {
 
     val onlineImportAttention = MutableNotifyLiveData()
     val launchJSConfig = MutableEventLiveData<Pair<JSConfig, Boolean>>()
+    val externalUrlCourseImport = MutableEventLiveData<String>()
 
     override fun onViewInitialized(firstInitialize: Boolean) {
         tryShowOnlineImportAttention()
@@ -38,14 +42,37 @@ class OnlineCourseImportViewModel : AbstractViewModel() {
 
     private fun tryShowOnlineImportAttention() {
         viewModelScope.launch(Dispatchers.IO) {
-            if (!AppDataStore.readOnlineImportAttentionFlow.first()) onlineImportAttention.postNotify()
+            val hasRead = AppDataStore.readOnlineImportAttentionFlow.first()
+            val enableFunction = AppSettingsDataStore.enableOnlineCourseImportFlow.first()
+            if (!hasRead || !enableFunction) {
+                if (hasRead) {
+                    AppDataStore.setReadOnlineImportAttention(false)
+                    AppDataStore.setAgreeCourseImportPolicy(false)
+                }
+                onlineImportAttention.postNotify()
+            } else {
+                checkExternalUrlCourseImport()
+            }
+        }
+    }
+
+    fun checkExternalUrlCourseImport() {
+        pendingExternalCourseImportUrl?.let {
+            externalUrlCourseImport.postEvent(it)
         }
     }
 
     fun hasReadOnlineImportAttention() {
         viewModelScope.launch(Dispatchers.IO) {
             AppDataStore.setReadOnlineImportAttention(true)
+            AppSettingsDataStore.setEnableOnlineCourseImportFlow(true)
         }
+    }
+
+    suspend fun disableOnlineImport() {
+        AppDataStore.setReadOnlineImportAttention(false)
+        AppDataStore.setAgreeCourseImportPolicy(false)
+        AppSettingsDataStore.setEnableOnlineCourseImportFlow(false)
     }
 
     fun launchJSConfig(jsConfig: JSConfig) {

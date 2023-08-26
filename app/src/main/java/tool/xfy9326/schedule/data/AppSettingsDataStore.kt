@@ -13,7 +13,6 @@ import tool.xfy9326.schedule.data.base.AbstractDataStore
 
 object AppSettingsDataStore : AbstractDataStore("Settings") {
     val nightModeType by stringPrefKey()
-    private val exitAppDirectly by booleanPrefKey()
     private val keepWebProviderCache by booleanPrefKey()
     private val debugLogsMaxStoreAmount by intPrefKey()
     private val handleException by booleanPrefKey()
@@ -72,8 +71,6 @@ object AppSettingsDataStore : AbstractDataStore("Settings") {
     val keepWebProviderCacheFlow = keepWebProviderCache.readAsFlow(false)
 
     val nightModeTypeFlow = nightModeType.readEnumAsFlow(NightMode.FOLLOW_SYSTEM)
-
-    val exitAppDirectlyFlow = exitAppDirectly.readAsFlow(false)
 
     val debugLogsMaxStoreAmountFlow = debugLogsMaxStoreAmount.readAsFlow(5)
 

@@ -1,6 +1,8 @@
 package tool.xfy9326.schedule.ui.activity
 
 import android.graphics.Color
+import android.os.Bundle
+import androidx.core.view.WindowCompat
 import com.google.android.material.snackbar.Snackbar
 import io.github.xfy9326.atools.core.startActivity
 import io.github.xfy9326.atools.livedata.observeNotify
@@ -8,6 +10,7 @@ import io.github.xfy9326.atools.ui.setOnSingleClickListener
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.Course
 import tool.xfy9326.schedule.databinding.ActivityCourseManageBinding
+import tool.xfy9326.schedule.kt.consumeSystemBarInsets
 import tool.xfy9326.schedule.kt.showSnackBar
 import tool.xfy9326.schedule.ui.activity.base.ViewModelActivity
 import tool.xfy9326.schedule.ui.adapter.CourseManageAdapter
@@ -23,6 +26,10 @@ class CourseManageActivity : ViewModelActivity<CourseManageViewModel, ActivityCo
 
     private var currentEditCourseScheduleId by Delegates.notNull<Long>()
     private lateinit var courseManageAdapter: CourseManageAdapter
+
+    override fun onContentViewPreload(savedInstanceState: Bundle?, viewModel: CourseManageViewModel) {
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+    }
 
     override fun onCreateViewBinding() = ActivityCourseManageBinding.inflate(layoutInflater)
 
@@ -55,6 +62,8 @@ class CourseManageActivity : ViewModelActivity<CourseManageViewModel, ActivityCo
                 putExtra(CourseEditActivity.INTENT_EXTRA_SCHEDULE_ID, currentEditCourseScheduleId)
             }
         }
+        viewBinding.layoutCourseAppBar.consumeSystemBarInsets(top = true)
+        viewBinding.layoutCourseManageContent.consumeSystemBarInsets(bottom = true)
     }
 
     private fun onCourseEdit(course: Course) {

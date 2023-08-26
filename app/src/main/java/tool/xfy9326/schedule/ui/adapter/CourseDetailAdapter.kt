@@ -19,6 +19,7 @@ import tool.xfy9326.schedule.databinding.ItemCourseDetailTimeExpandBinding
 import tool.xfy9326.schedule.ui.view.recyclerview.AdvancedDividerItemDecoration
 import tool.xfy9326.schedule.ui.view.recyclerview.BaseViewBindingAdapter
 import tool.xfy9326.schedule.ui.viewholder.ViewBindingViewHolder
+import tool.xfy9326.schedule.utils.NEW_LINE
 
 class CourseDetailAdapter(
     courseTimes: List<CourseTime>,
@@ -121,6 +122,9 @@ class CourseDetailAdapter(
             val location = courseTime.location
             if (location == null) {
                 holder.viewBinding.textViewCourseLocation.isVisible = false
+            } else if (NEW_LINE in location) {
+                holder.viewBinding.textViewCourseLocation.text =
+                    holder.viewContext.getString(R.string.course_detail_location_multiline, courseTime.location)
             } else {
                 holder.viewBinding.textViewCourseLocation.text = holder.viewContext.getString(R.string.course_detail_location, courseTime.location)
             }

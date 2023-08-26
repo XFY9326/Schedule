@@ -6,7 +6,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import io.github.xfy9326.atools.coroutines.withTryLock
 import io.github.xfy9326.atools.livedata.MutableEventLiveData
+import io.github.xfy9326.atools.livedata.MutableNotifyLiveData
 import io.github.xfy9326.atools.livedata.postEvent
+import io.github.xfy9326.atools.livedata.postNotify
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
@@ -37,6 +39,7 @@ class ScheduleViewModel : AbstractViewModel() {
     val weekNumInfo = ScheduleDataProcessor.weekNumInfoFlow.asDistinctLiveData()
     val scheduleBuildData = ScheduleDataProcessor.scheduleViewDataFlow.asDistinctLiveData()
     val scheduleBackground = ScheduleDataProcessor.scheduleBackgroundFlow.asDistinctLiveData()
+    val scheduleAlert = ScheduleDataProcessor.scheduleAlertFlow.asDistinctLiveData()
 
     val nowDay = MutableLiveData<Day>()
     val scrollToWeek = MutableEventLiveData<Int>()
@@ -44,10 +47,10 @@ class ScheduleViewModel : AbstractViewModel() {
     val showScheduleControlPanel = MutableEventLiveData<Pair<Int, Int>>()
     val showCourseDetailDialog = MutableEventLiveData<CourseDetail>()
     val openCourseManageActivity = MutableEventLiveData<Long>()
-    val exitAppDirectly = MutableEventLiveData<Boolean>()
     val toolBarTintColor = ScheduleDataStore.toolBarTintColorFlow.asDistinctLiveData()
     val scheduleSystemBarAppearance = ScheduleDataStore.scheduleSystemBarAppearanceFlow.asDistinctLiveData()
 
+    val scheduleAlertDialog = MutableNotifyLiveData()
     val scheduleShared = MutableEventLiveData<Uri?>()
     val scheduleImageSaved = MutableEventLiveData<Uri?>()
     val selectScheduleForExportingICS = MutableEventLiveData<List<Schedule.Min>>()
@@ -73,6 +76,14 @@ class ScheduleViewModel : AbstractViewModel() {
         nowDay.value = CalendarUtils.getDay()
     }
 
+    fun showScheduleAlertDialog() {
+        viewModelScope.launch(Dispatchers.IO) {
+            if (ScheduleDataProcessor.scheduleAlertFlow.first()) {
+                scheduleAlertDialog.postNotify()
+            }
+        }
+    }
+
     fun scrollToCurrentWeekNum() {
         viewModelScope.launch(Dispatchers.IO) {
             scrollToWeek.postEvent(ScheduleDataProcessor.weekNumFlow.first())
@@ -94,12 +105,6 @@ class ScheduleViewModel : AbstractViewModel() {
     fun notifyShowWeekChanged(weekNum: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             showWeekChanged.postEvent(weekNum to WeekNumType.create(weekNum, ScheduleDataProcessor.weekNumFlow.first()))
-        }
-    }
-
-    fun exitAppDirectly() {
-        viewModelScope.launch(Dispatchers.IO) {
-            exitAppDirectly.postEvent(AppSettingsDataStore.exitAppDirectlyFlow.first())
         }
     }
 

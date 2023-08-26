@@ -9,7 +9,7 @@ abstract class AbstractExternalCourseProcessor<T1 : AbstractCourseProvider<*>, T
     private val configClass: KClass<C>
 ) {
     private val configInstance: CourseImportInstance<T1, T2> by lazy {
-        configClass.java.newInstance().getInstance()
+        configClass.java.getConstructor().newInstance().getInstance()
     }
     val adapterInfo: IAdapterInfo
         get() = object : IAdapterInfo {

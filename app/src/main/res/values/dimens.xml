@@ -20,4 +20,5 @@
     <dimen name="water_mark_text_size">14dp</dimen>
     <dimen name="water_mark_text_padding">10dp</dimen>
     <dimen name="app_widget_background_radius">15dp</dimen>
+    <dimen name="fab_margin_end">40dp</dimen>
 </resources>

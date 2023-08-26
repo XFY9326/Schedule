@@ -46,7 +46,7 @@ object AppDataStore : AbstractDataStore("App") {
 
     suspend fun hasShownCalendarSyncAttention() = shownCalendarSyncAttention.readAsShownOnce()
 
-    suspend fun setAgreeCourseImportPolicy() = agreeCourseImportPolicy.saveData(true)
+    suspend fun setAgreeCourseImportPolicy(agree: Boolean) = agreeCourseImportPolicy.saveData(agree)
 
     suspend fun setAcceptEULAVersion(data: Int) = acceptEULAVersion.saveData(data)
 

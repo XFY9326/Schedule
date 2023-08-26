@@ -4,6 +4,8 @@
     <color name="theme_color_primary_dark">#0269A2</color>
     <color name="theme_color_primary_text">#FFFFFF</color>
     <color name="theme_color_secondary_text">#C7C7C7</color>
+    <color name="theme_color_primary_text_disabled">#656565</color>
+    <color name="theme_color_secondary_text_disabled">#505050</color>
     <color name="course_time_cell_text">#E0F2F1</color>
     <color name="schedule_tool_bar_tint">#FFFFFF</color>
 

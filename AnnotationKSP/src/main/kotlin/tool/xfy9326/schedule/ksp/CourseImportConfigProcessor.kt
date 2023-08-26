@@ -54,7 +54,7 @@ class CourseImportConfigProcessor(environment: SymbolProcessorEnvironment) :
                 """
                     return %M(%M) {
                         $TARGET_PROPERTY_CONFIG_CLASSES.map {
-                            it.java.newInstance()
+                            it.java.getConstructor().newInstance()
                         }
                     }
                 """.trimIndent(), KOTLIN_COROUTINES_WITH_CONTEXT, KOTLIN_COROUTINES_DISPATCHERS_IO

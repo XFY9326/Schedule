@@ -69,7 +69,7 @@ class SCUJCCCourseParser : WebCourseParser<Nothing>() {
             }
         }
 
-        return builder.build(combineCourse = true, combineCourseTime = true)
+        return builder.build(CourseParseResult.Params(combineCourse = true, combineCourseTime = true))
     }
 
     private fun parseCourseOption0(builder: CourseParseResult.Builder, data: Element) {
