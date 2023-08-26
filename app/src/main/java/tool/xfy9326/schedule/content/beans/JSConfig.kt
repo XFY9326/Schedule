@@ -18,8 +18,8 @@ import java.util.UUID
 @Serializable
 data class JSConfig(
     private var uuid: String,
-    val config: Int = CONFIG,
-    val version: Int = VERSION,
+    val config: Int = CONFIG_VERSION,
+    val version: Int = DEFAULT_VERSION,
     override val schoolName: String,
     override val authorName: String,
     override val systemName: String,
@@ -38,8 +38,8 @@ data class JSConfig(
     val enableAsyncEnvironment: Boolean = true
 ) : Parcelable, ICourseImportConfig {
     companion object {
-        private const val CONFIG = 3
-        private const val VERSION = 1
+        private const val CONFIG_VERSION = 3
+        private const val DEFAULT_VERSION = 1
 
         const val TYPE_AI_SCHEDULE = "AiSchedule"
         const val TYPE_PURE_SCHEDULE = "PureSchedule"
@@ -54,7 +54,7 @@ data class JSConfig(
     }
 
     init {
-        if (CONFIG < config) {
+        if (CONFIG_VERSION < config) {
             JSConfigException.Error.INCOMPATIBLE_VERSION_ERROR.make()
         }
     }
