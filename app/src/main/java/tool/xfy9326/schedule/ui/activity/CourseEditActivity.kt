@@ -11,6 +11,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.jaredrummler.android.colorpicker.ColorPickerDialogListener
 import io.github.xfy9326.atools.core.hideKeyboard
 import io.github.xfy9326.atools.livedata.observeEvent
+import io.github.xfy9326.atools.livedata.observeNotify
 import io.github.xfy9326.atools.ui.getText
 import io.github.xfy9326.atools.ui.resume
 import io.github.xfy9326.atools.ui.setOnSingleClickListener
@@ -59,6 +60,13 @@ class CourseEditActivity : ViewModelActivity<CourseEditViewModel, ActivityCourse
     override fun onBindLiveData(viewBinding: ActivityCourseEditBinding, viewModel: CourseEditViewModel) {
         viewModel.courseData.observe(this, ::applyCourseToView)
         viewModel.courseSaveComplete.observeEvent(this, observer = ::onCourseSaved)
+        viewModel.courseSaveEmptyWeekNum.observeNotify(this) {
+            Snackbar.make(requireViewBinding().layoutCourseEdit, R.string.save_empty_week_num_course_time, Snackbar.LENGTH_LONG)
+                .setActionTextColor(Color.RED)
+                .setAction(android.R.string.ok) {
+                    viewModel.saveCourse(currentEditScheduleId, false)
+                }.show()
+        }
         viewModel.courseSaveFailed.observeEvent(this) {
             viewBinding.layoutCourseEdit.showSnackBar(it.getText(this))
         }

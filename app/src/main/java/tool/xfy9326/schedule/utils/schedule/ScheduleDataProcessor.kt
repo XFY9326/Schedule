@@ -4,6 +4,7 @@ import io.github.xfy9326.atools.coroutines.combine
 import io.github.xfy9326.atools.coroutines.combineTransform
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
+import tool.xfy9326.schedule.beans.Course.Companion.hasEmptyWeekNumCourseTime
 import tool.xfy9326.schedule.beans.Schedule
 import tool.xfy9326.schedule.beans.ScheduleBuildBundle
 import tool.xfy9326.schedule.data.AppDataStore
@@ -48,6 +49,10 @@ object ScheduleDataProcessor {
     val weekNumFlow = weekNumInfoFlow.map {
         it.first
     }.preload()
+
+    val scheduleAlertFlow = currentScheduleCourseDataFlow.map {
+        it.second.any { c -> c.hasEmptyWeekNumCourseTime() }
+    }
 
     val scheduleViewDataFlow = currentScheduleCourseDataFlow.combine(ScheduleDataStore.scheduleStylesFlow) { data, styles ->
         ScheduleBuildBundle(data.first, data.second, styles)

@@ -30,6 +30,17 @@ object DialogUtils {
         }.show(lifecycleOwner)
     }
 
+    fun showEmptyWeekNumCourseAlertDialog(context: Context, lifecycleOwner: LifecycleOwner, onConfirm: () -> Unit) {
+        MaterialAlertDialogBuilder(context).apply {
+            setTitle(R.string.has_empty_week_num_course)
+            setMessage(R.string.has_empty_week_num_course_msg)
+            setNegativeButton(R.string.do_it_later, null)
+            setPositiveButton(R.string.go_now) { _, _ ->
+                onConfirm()
+            }
+        }.show(lifecycleOwner)
+    }
+
     fun showOnlineImportAttentionDialog(
         activity: AppCompatActivity,
         isStaticAttention: Boolean,

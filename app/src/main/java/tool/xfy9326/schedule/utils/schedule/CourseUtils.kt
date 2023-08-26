@@ -61,6 +61,7 @@ object CourseUtils {
                             }
                             val cellWeekNumDiff = weekNum - cell.fromWeekNum
                             if (
+                                fromWeekNum != 0 && cell.fromWeekNum == 0 ||
                                 (weekNumDiff > 0 && cellWeekNumDiff > 0 && weekNumDiff < cellWeekNumDiff) ||
                                 (weekNumDiff > 0 && cellWeekNumDiff <= 0) ||
                                 (weekNumDiff <= 0 && cellWeekNumDiff <= 0 && weekNumDiff > cellWeekNumDiff)

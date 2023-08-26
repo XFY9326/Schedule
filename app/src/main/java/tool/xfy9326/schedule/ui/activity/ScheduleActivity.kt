@@ -9,6 +9,7 @@ import android.view.MenuItem
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.navigation.NavigationView
 import io.github.xfy9326.atools.livedata.observeEvent
+import io.github.xfy9326.atools.livedata.observeNotify
 import io.github.xfy9326.atools.ui.getColorCompat
 import io.github.xfy9326.atools.ui.setIconTint
 import io.github.xfy9326.atools.ui.setOnSingleClickListener
@@ -30,6 +31,7 @@ import tool.xfy9326.schedule.ui.adapter.ScheduleViewPagerAdapter
 import tool.xfy9326.schedule.ui.dialog.CourseDetailDialog
 import tool.xfy9326.schedule.ui.dialog.ScheduleControlPanel
 import tool.xfy9326.schedule.ui.vm.ScheduleViewModel
+import tool.xfy9326.schedule.utils.view.DialogUtils
 import tool.xfy9326.schedule.utils.view.NightModeViewUtils
 
 class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBinding>(), NavigationView.OnNavigationItemSelectedListener {
@@ -62,6 +64,14 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
     }
 
     override fun onBindLiveData(viewBinding: ActivityScheduleBinding, viewModel: ScheduleViewModel) {
+        viewModel.scheduleAlert.observe(this) {
+            invalidateOptionsMenu()
+        }
+        viewModel.scheduleAlertDialog.observeNotify(this) {
+            DialogUtils.showEmptyWeekNumCourseAlertDialog(this, this) {
+                requireViewModel().openCurrentScheduleCourseManageActivity()
+            }
+        }
         viewModel.weekNumInfo.observe(this) {
             setupViewPager(it.first, it.second)
             refreshToolBarTime(it.first)
@@ -110,8 +120,11 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_schedule, menu)
-        requireViewModel().toolBarTintColor.value?.let {
-            menu.setIconTint(it)
+        requireViewModel().apply {
+            toolBarTintColor.value?.let {
+                menu.setIconTint(it)
+            }
+            menu.findItem(R.id.menu_scheduleAlert)?.isVisible = scheduleAlert.value ?: false
         }
         return super.onCreateOptionsMenu(menu)
     }
@@ -120,6 +133,7 @@ class ScheduleActivity : ViewModelActivity<ScheduleViewModel, ActivityScheduleBi
         when (item.itemId) {
             R.id.menu_scheduleControlPanel -> requireViewModel().showScheduleControlPanel()
             R.id.menu_scheduleShare -> scheduleShareModule.shareSchedule(getCurrentShowWeekNum())
+            R.id.menu_scheduleAlert -> requireViewModel().showScheduleAlertDialog()
         }
         return super.onOptionsItemSelected(item)
     }

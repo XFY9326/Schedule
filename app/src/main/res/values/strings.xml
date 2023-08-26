@@ -124,8 +124,8 @@
     <string name="course_import_success_attention_edit_schedule_highlight">\u3000\u3000是否立即前往课表编辑页面？\n</string>
     <string name="course_import_success_attention">\u3000\u3000您可能需要\"%1$s\"，当然您也可以稍后在\"课表管理\"页面选择导入的课表进行编辑。\n\u3000\u3000若要启用导入的课表，请在\"课表管理\"页面长按需要使用的课表以切换到该课表。</string>
     <string name="course_import_success_attention_necessary_highlight">手动调整课表的学期开始与结束的时间以正确显示当前周数</string>
-    <string name="edit_schedule_now">立即前往</string>
-    <string name="edit_schedule_later">稍后再说</string>
+    <string name="go_now">立即前往</string>
+    <string name="do_it_later">稍后再说</string>
     <string name="import_course_to_current_schedule_msg">导入课程到当前课表后，所有此课表下原有的所有课程都将会被覆盖，请慎重操作！</string>
     <string name="importing_courses">正在导入课程中</string>
     <string name="importing_courses_msg">您是否想取消导入课程？</string>
@@ -133,7 +133,7 @@
     <string name="new_schedule_name_title">新课表名称</string>
     <string name="import_course_has_conflict">导入的课程存在时间冲突！</string>
     <string name="import_course_has_conflict_msg">\u3000\u3000导入的课程中存在上课时间冲突的问题，该部分课程时间的上课周数已经被设置为空，您可以稍后手动解决问题。\n</string>
-    <string name="import_course_has_conflict_msg_highlight">\u3000\u3000请注意检查课表导入数据是否正确，在此情况下部分课程可能会不显示或者一直显示为[非本周]。</string>
+    <string name="import_course_has_conflict_msg_highlight">\u3000\u3000请注意在\"课程管理\"中检查课表导入数据是否正确，在此情况下部分课程可能会不显示或者一直显示为[非本周]。</string>
     <string name="refresh">刷新</string>
     <string name="import_course_from_browser">从浏览器导入课程</string>
     <string name="import_course_from_browser_msg">登录并打开显示课程的网页，点击导入按钮导入课程</string>
@@ -209,6 +209,10 @@
     <string name="schedule_background_fade_anim_sum">关闭后加载课表背景将不会使用动画效果</string>
     <string name="share_image">分享图片</string>
     <string name="share_schedule">分享课表</string>
+    <string name="schedule_alert">课表警告</string>
+    <string name="has_empty_week_num_course">存在未设定周数的课程！</string>
+    <string name="has_empty_week_num_course_msg">\u3000\u3000当前课表存在未设定周数的课程，这可能导致部分课程不显示或者一直显示为[非本周]的问题。\n\u3000\u3000请尽快前往\"课程管理\"界面为未设定周数的课程指定周数信息！</string>
+    <string name="save_empty_week_num_course_time">是否保存未设定周数的课程时间？</string>
     <string name="generate_share_schedule_failed">课表图片生成失败！</string>
     <string name="generate_save_schedule_success">课表图片已成功保存到相册！</string>
     <string name="generate_save_schedule_failed">课表图片保存失败！</string>

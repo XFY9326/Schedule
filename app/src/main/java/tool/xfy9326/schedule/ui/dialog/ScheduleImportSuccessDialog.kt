@@ -71,10 +71,10 @@ class ScheduleImportSuccessDialog : AppCompatDialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?) = MaterialAlertDialogBuilder(requireContext()).apply {
         setTitle(R.string.course_import_success_title)
         setMessage(getImportSuccessMsg(requireContext(), true))
-        setPositiveButton(R.string.edit_schedule_now) { _, _ ->
+        setPositiveButton(R.string.go_now) { _, _ ->
             setFragmentResult(DIALOG_TAG, bundleOf(EXTRA_SCHEDULE_ID to requireArguments().getLong(EXTRA_SCHEDULE_ID)))
         }
-        setNegativeButton(R.string.edit_schedule_later) { _, _ ->
+        setNegativeButton(R.string.do_it_later) { _, _ ->
             setFragmentResult(DIALOG_TAG, Bundle.EMPTY)
         }
     }.create()
