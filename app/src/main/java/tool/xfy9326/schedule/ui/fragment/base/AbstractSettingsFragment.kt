@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.PreferenceDataStore
 import androidx.preference.PreferenceFragmentCompat
 import androidx.recyclerview.widget.RecyclerView
-import tool.xfy9326.schedule.kt.applyBottomSystemBarInsets
+import tool.xfy9326.schedule.kt.consumeSystemBarInsets
 import tool.xfy9326.schedule.kt.getDefaultBackgroundColor
 import tool.xfy9326.schedule.ui.activity.SettingsActivity
 import tool.xfy9326.schedule.ui.activity.base.AbstractSettingsActivity
@@ -41,7 +41,7 @@ abstract class AbstractSettingsFragment : PreferenceFragmentCompat() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         requireSettingsViewModel()?.let(::onBindLiveDataFromSettingsViewMode)
-        view.findViewById<RecyclerView>(androidx.preference.R.id.recycler_view)?.applyBottomSystemBarInsets()
+        view.findViewById<RecyclerView>(androidx.preference.R.id.recycler_view)?.consumeSystemBarInsets(bottom = true)
     }
 
     override fun onStart() {

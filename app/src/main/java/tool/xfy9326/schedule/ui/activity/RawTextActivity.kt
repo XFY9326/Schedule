@@ -9,7 +9,7 @@ import androidx.core.view.WindowCompat
 import io.github.xfy9326.atools.core.startActivity
 import io.github.xfy9326.atools.livedata.observeEvent
 import tool.xfy9326.schedule.databinding.ActivityRawTextBinding
-import tool.xfy9326.schedule.kt.applyBottomSystemBarInsets
+import tool.xfy9326.schedule.kt.consumeSystemBarInsets
 import tool.xfy9326.schedule.ui.activity.base.ViewModelActivity
 import tool.xfy9326.schedule.ui.vm.RawTextViewModel
 
@@ -52,6 +52,6 @@ class RawTextActivity : ViewModelActivity<RawTextViewModel, ActivityRawTextBindi
     }
 
     override fun onInitView(viewBinding: ActivityRawTextBinding, viewModel: RawTextViewModel) {
-        viewBinding.textViewContent.applyBottomSystemBarInsets()
+        viewBinding.textViewContent.consumeSystemBarInsets(bottom = true)
     }
 }

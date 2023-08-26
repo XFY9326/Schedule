@@ -10,7 +10,7 @@ import io.github.xfy9326.atools.ui.setOnSingleClickListener
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.Course
 import tool.xfy9326.schedule.databinding.ActivityCourseManageBinding
-import tool.xfy9326.schedule.kt.applyBottomSystemBarInsets
+import tool.xfy9326.schedule.kt.consumeSystemBarInsets
 import tool.xfy9326.schedule.kt.showSnackBar
 import tool.xfy9326.schedule.ui.activity.base.ViewModelActivity
 import tool.xfy9326.schedule.ui.adapter.CourseManageAdapter
@@ -62,7 +62,8 @@ class CourseManageActivity : ViewModelActivity<CourseManageViewModel, ActivityCo
                 putExtra(CourseEditActivity.INTENT_EXTRA_SCHEDULE_ID, currentEditCourseScheduleId)
             }
         }
-        viewBinding.recyclerViewCourseManageList.applyBottomSystemBarInsets()
+        viewBinding.layoutCourseAppBar.consumeSystemBarInsets(top = true)
+        viewBinding.layoutCourseManageContent.consumeSystemBarInsets(bottom = true)
     }
 
     private fun onCourseEdit(course: Course) {

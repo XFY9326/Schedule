@@ -25,7 +25,7 @@ import tool.xfy9326.schedule.content.base.NetworkCourseParser
 import tool.xfy9326.schedule.content.base.NetworkCourseProvider
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
 import tool.xfy9326.schedule.databinding.ActivityNetworkCourseProviderBinding
-import tool.xfy9326.schedule.kt.applyBottomSystemBarInsets
+import tool.xfy9326.schedule.kt.consumeSystemBarInsets
 import tool.xfy9326.schedule.kt.showSnackBar
 import tool.xfy9326.schedule.ui.activity.base.CourseProviderActivity
 import tool.xfy9326.schedule.ui.vm.NetworkCourseProviderViewModel
@@ -106,7 +106,7 @@ class NetworkCourseProviderActivity :
                 }
             }
         }
-        viewBinding.layoutNetworkCourseProviderContent.applyBottomSystemBarInsets()
+        viewBinding.layoutNetworkCourseProviderContent.consumeSystemBarInsets(bottom = true)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

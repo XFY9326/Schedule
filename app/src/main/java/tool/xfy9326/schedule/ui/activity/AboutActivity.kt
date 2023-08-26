@@ -6,7 +6,7 @@ import io.github.xfy9326.atools.ui.setOnSingleClickListener
 import tool.xfy9326.schedule.BuildConfig
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.databinding.ActivityAboutBinding
-import tool.xfy9326.schedule.kt.applyBottomSystemBarInsets
+import tool.xfy9326.schedule.kt.consumeSystemBarInsets
 import tool.xfy9326.schedule.ui.activity.base.ViewBindingActivity
 
 class AboutActivity : ViewBindingActivity<ActivityAboutBinding>() {
@@ -31,6 +31,6 @@ class AboutActivity : ViewBindingActivity<ActivityAboutBinding>() {
         viewBinding.layoutOpenSourceLicense.setOnSingleClickListener {
             RawTextActivity.launch(this, R.string.open_source_license, R.raw.license)
         }
-        viewBinding.layoutAboutContent.applyBottomSystemBarInsets()
+        viewBinding.layoutAboutContent.consumeSystemBarInsets(bottom = true)
     }
 }

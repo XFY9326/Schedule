@@ -5,11 +5,12 @@
         <item name="android:windowLightNavigationBar" tools:ignore="NewApi">true</item>
     </style>
 
-    <style name="AppTheme.ImmersiveNavigation" parent="AppTheme">
-        <item name="android:windowLightNavigationBar" tools:ignore="NewApi">@null</item>
+    <style name="AppTheme.ImmersiveScreen" parent="AppTheme">
+        <item name="android:windowTranslucentNavigation">true</item>
+        <item name="android:windowLayoutInDisplayCutoutMode" tools:ignore="NewApi">shortEdges</item>
     </style>
 
-    <style name="AppTheme.Schedule" parent="AppTheme.ImmersiveNavigation">
+    <style name="AppTheme.Schedule" parent="AppTheme.ImmersiveScreen">
         <item name="android:windowLightStatusBar">@null</item>
     </style>
 
@@ -60,7 +61,7 @@
         <item name="collapsingToolbarLayoutStyle">@style/AppTheme.CollapsingToolbarLayout</item>
     </style>
 
-    <style name="AppTheme.Settings" parent="AppTheme.ImmersiveNavigation">
+    <style name="AppTheme.Settings" parent="AppTheme.ImmersiveScreen">
         <item name="android:textColorPrimary">@color/primary_text_color_selector</item>
         <item name="android:textColorSecondary">@color/secondary_text_color_selector</item>
         <item name="android:textColorTertiary">@color/secondary_text_color_selector</item>

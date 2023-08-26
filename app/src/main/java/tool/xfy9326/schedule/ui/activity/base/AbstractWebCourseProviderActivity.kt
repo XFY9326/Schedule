@@ -1,8 +1,10 @@
 package tool.xfy9326.schedule.ui.activity.base
 
+import android.os.Bundle
 import android.view.MenuItem
 import androidx.annotation.CallSuper
 import androidx.core.os.bundleOf
+import androidx.core.view.WindowCompat
 import androidx.fragment.app.commitNow
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.content.base.AbstractCourseParser
@@ -21,6 +23,11 @@ abstract class AbstractWebCourseProviderActivity<I, P1 : AbstractCourseProvider<
         get() = iFragmentContact
 
     override val exitIfImportSuccess = false
+
+    @CallSuper
+    override fun onContentViewPreload(savedInstanceState: Bundle?, viewModel: M) {
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+    }
 
     final override fun onCreateViewBinding() = ActivityFragmentContainerBinding.inflate(layoutInflater)
 

@@ -9,6 +9,7 @@ import android.os.Handler
 import android.os.Looper
 import android.view.PixelCopy
 import android.view.View
+import android.view.ViewGroup
 import android.view.Window
 import androidx.annotation.ColorInt
 import androidx.annotation.RequiresApi
@@ -17,6 +18,12 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.drawToBitmap
+import androidx.core.view.marginBottom
+import androidx.core.view.marginLeft
+import androidx.core.view.marginRight
+import androidx.core.view.marginTop
+import androidx.core.view.updateLayoutParams
+import androidx.core.view.updateMargins
 import androidx.core.view.updatePadding
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.asLiveData
@@ -66,9 +73,26 @@ fun Window.setSystemBarAppearance(systemBarAppearance: SystemBarAppearance) {
     }
 }
 
-fun View.applyBottomSystemBarInsets() {
+fun View.consumeSystemBarInsets(top: Boolean = false, bottom: Boolean = false, margin: Boolean = false, keepOld: Boolean = false) {
     ViewCompat.setOnApplyWindowInsetsListener(this) { v, insets ->
-        v.updatePadding(bottom = insets.getInsets(WindowInsetsCompat.Type.systemBars()).bottom)
+        val systemInsets = insets.getInsets(WindowInsetsCompat.Type.systemBars().or(WindowInsetsCompat.Type.displayCutout()))
+        if (margin) {
+            v.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                updateMargins(
+                    left = (if (keepOld) v.marginLeft else 0) + systemInsets.left,
+                    right = (if (keepOld) v.marginRight else 0) + systemInsets.right,
+                    top = if (top) (if (keepOld) v.marginTop else 0) + systemInsets.top else v.marginTop,
+                    bottom = if (bottom) (if (keepOld) v.marginBottom else 0) + systemInsets.bottom else v.marginBottom
+                )
+            }
+        } else {
+            v.updatePadding(
+                left = (if (keepOld) v.paddingLeft else 0) + systemInsets.left,
+                right = (if (keepOld) v.paddingRight else 0) + systemInsets.right,
+                top = if (top) (if (keepOld) v.paddingTop else 0) + systemInsets.top else v.paddingTop,
+                bottom = if (bottom) (if (keepOld) v.paddingBottom else 0) + systemInsets.bottom else v.paddingBottom
+            )
+        }
         WindowInsetsCompat.CONSUMED
     }
 }

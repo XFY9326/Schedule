@@ -35,7 +35,7 @@
         android:layout_width="180dp"
         android:layout_height="@dimen/bottom_button_height"
         android:layout_gravity="bottom|center"
-        android:alpha="0.8"
+        android:alpha="0.75"
         android:background="@drawable/background_bottom_button"
         android:elevation="5dp"
         android:src="@drawable/ic_from_bottom_24" />

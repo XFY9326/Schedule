@@ -7,7 +7,11 @@ import android.view.animation.AnimationUtils
 import android.webkit.*
 import androidx.activity.addCallback
 import androidx.core.view.MenuProvider
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
+import androidx.core.view.updateLayoutParams
+import androidx.core.view.updatePadding
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.withStateAtLeast
@@ -136,6 +140,15 @@ class WebCourseProviderFragment : ViewBindingFragment<FragmentWebCourseProviderB
 
         viewBinding.buttonWebCourseProviderPanel.setOnClickListener {
             showBottomPanel()
+        }
+        ViewCompat.setOnApplyWindowInsetsListener(viewBinding.buttonWebCourseProviderPanel) { v, insets ->
+            val bottomInsets = insets.getInsets(WindowInsetsCompat.Type.systemBars()).bottom
+            val defaultHeight = resources.getDimensionPixelSize(R.dimen.bottom_button_height)
+            v.updateLayoutParams {
+                height = defaultHeight + bottomInsets
+            }
+            v.updatePadding(bottom = bottomInsets)
+            WindowInsetsCompat.CONSUMED
         }
 
         WebCourseProviderBottomPanel.setBottomPanelActionListener(childFragmentManager, viewLifecycleOwner,

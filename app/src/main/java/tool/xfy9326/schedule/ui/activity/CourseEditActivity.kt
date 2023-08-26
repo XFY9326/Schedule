@@ -21,7 +21,7 @@ import tool.xfy9326.schedule.beans.Course
 import tool.xfy9326.schedule.beans.CourseTime
 import tool.xfy9326.schedule.beans.EditError.Companion.getText
 import tool.xfy9326.schedule.databinding.ActivityCourseEditBinding
-import tool.xfy9326.schedule.kt.applyBottomSystemBarInsets
+import tool.xfy9326.schedule.kt.consumeSystemBarInsets
 import tool.xfy9326.schedule.kt.showSnackBar
 import tool.xfy9326.schedule.ui.activity.base.ViewModelActivity
 import tool.xfy9326.schedule.ui.adapter.CourseTimeAdapter
@@ -104,7 +104,7 @@ class CourseEditActivity : ViewModelActivity<CourseEditViewModel, ActivityCourse
             DialogUtils.showColorPickerDialog(this, R.string.course_color_edit, viewModel.editCourse.color)
         }
         CourseTimeEditDialog.setCourseTimeEditListener(supportFragmentManager, this, ::onCourseTimeAddOrUpdate)
-        viewBinding.layoutCourseEditContent.applyBottomSystemBarInsets()
+        viewBinding.layoutCourseEditContent.consumeSystemBarInsets(bottom = true)
     }
 
     override fun onColorSelected(dialogId: Int, color: Int) {

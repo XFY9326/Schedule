@@ -21,7 +21,7 @@ import tool.xfy9326.schedule.content.beans.JSConfig
 import tool.xfy9326.schedule.content.utils.BaseCourseImportConfig
 import tool.xfy9326.schedule.data.AppDataStore
 import tool.xfy9326.schedule.databinding.ActivityOnlineCourseImportBinding
-import tool.xfy9326.schedule.kt.applyBottomSystemBarInsets
+import tool.xfy9326.schedule.kt.consumeSystemBarInsets
 import tool.xfy9326.schedule.kt.showSnackBar
 import tool.xfy9326.schedule.tools.MIMEConst
 import tool.xfy9326.schedule.ui.activity.base.CourseProviderActivity
@@ -165,7 +165,8 @@ class OnlineCourseImportActivity : ViewModelActivity<OnlineCourseImportViewModel
                 selectJSConfig.launch(MIMEConst.MIME_APPLICATION_JSON)
             }
         )
-        viewBinding.recyclerViewCourseImportList.applyBottomSystemBarInsets()
+        viewBinding.layoutCourseImportBar.consumeSystemBarInsets(top = true)
+        viewBinding.layoutCourseImportContent.consumeSystemBarInsets(bottom = true)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

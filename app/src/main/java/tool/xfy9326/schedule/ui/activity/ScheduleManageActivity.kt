@@ -8,7 +8,7 @@ import io.github.xfy9326.atools.ui.setOnSingleClickListener
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.ScheduleWrapper
 import tool.xfy9326.schedule.databinding.ActivityScheduleManageBinding
-import tool.xfy9326.schedule.kt.applyBottomSystemBarInsets
+import tool.xfy9326.schedule.kt.consumeSystemBarInsets
 import tool.xfy9326.schedule.kt.showSnackBar
 import tool.xfy9326.schedule.ui.activity.base.ViewModelActivity
 import tool.xfy9326.schedule.ui.adapter.ScheduleManageAdapter
@@ -50,7 +50,8 @@ class ScheduleManageActivity : ViewModelActivity<ScheduleManageViewModel, Activi
         viewBinding.fabAddSchedule.setOnSingleClickListener {
             startActivity<ScheduleEditActivity>()
         }
-        viewBinding.recyclerViewScheduleManageList.applyBottomSystemBarInsets()
+        viewBinding.layoutScheduleAppBar.consumeSystemBarInsets(top = true)
+        viewBinding.layoutScheduleManageContent.consumeSystemBarInsets(bottom = true)
     }
 
     private fun onScheduleOperate(scheduleWrapper: ScheduleWrapper, operation: ScheduleManageAdapter.ScheduleOperation) {
