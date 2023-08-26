@@ -14,7 +14,6 @@ import androidx.appcompat.widget.AppCompatImageButton
 import androidx.core.animation.doOnEnd
 import androidx.core.graphics.drawable.toDrawable
 import androidx.core.os.bundleOf
-import androidx.core.view.drawToBitmap
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import io.github.xfy9326.atools.io.utils.tryRecycle
@@ -29,6 +28,7 @@ import tool.xfy9326.schedule.beans.NightMode.Companion.modeInt
 import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.databinding.ActivityScheduleBinding
 import tool.xfy9326.schedule.databinding.LayoutNavHeaderBinding
+import tool.xfy9326.schedule.kt.drawToBitmap
 import tool.xfy9326.schedule.kt.getDefaultBackgroundColor
 import tool.xfy9326.schedule.ui.vm.ScheduleViewModel
 import tool.xfy9326.schedule.utils.isUsingNightMode
@@ -106,7 +106,7 @@ object NightModeViewUtils {
             val isUsingNightMode = activity.isUsingNightMode()
             prepareAnimateNightModeChanged(rootView, nightModeButton, !isUsingNightMode, activity.intent)
             val mask = try {
-                activity.window.decorView.drawToBitmap()
+                activity.window.drawToBitmap()
             } catch (e: Exception) {
                 e.printStackTrace()
                 Bitmap.createBitmap(activity.window.decorView.measuredWidth, activity.window.decorView.measuredHeight, Bitmap.Config.ALPHA_8)

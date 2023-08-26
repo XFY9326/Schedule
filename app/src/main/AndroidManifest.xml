@@ -53,16 +53,19 @@
 
         <activity
             android:name=".ui.activity.ScheduleManageActivity"
-            android:label="@string/schedule_manage" />
+            android:label="@string/schedule_manage"
+            android:theme="@style/AppTheme.ImmersiveNavigation" />
 
         <activity
             android:name=".ui.activity.ScheduleEditActivity"
-            android:label="@string/schedule_edit" />
+            android:label="@string/schedule_edit"
+            android:theme="@style/AppTheme.ImmersiveNavigation" />
 
         <activity
             android:name=".ui.activity.OnlineCourseImportActivity"
             android:exported="true"
-            android:label="@string/online_course_import">
+            android:label="@string/online_course_import"
+            android:theme="@style/AppTheme.ImmersiveNavigation">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -94,15 +97,21 @@
 
         <activity
             android:name=".ui.activity.CourseManageActivity"
-            android:label="@string/course_manage" />
+            android:label="@string/course_manage"
+            android:theme="@style/AppTheme.ImmersiveNavigation" />
 
         <activity
             android:name=".ui.activity.CourseEditActivity"
-            android:label="@string/course_edit" />
+            android:label="@string/course_edit"
+            android:theme="@style/AppTheme.ImmersiveNavigation" />
 
-        <activity android:name=".ui.activity.NetworkCourseProviderActivity" />
+        <activity
+            android:name=".ui.activity.NetworkCourseProviderActivity"
+            android:theme="@style/AppTheme.ImmersiveNavigation" />
 
-        <activity android:name=".ui.activity.RawTextActivity" />
+        <activity
+            android:name=".ui.activity.RawTextActivity"
+            android:theme="@style/AppTheme.ImmersiveNavigation" />
 
         <activity
             android:name=".ui.activity.WebCourseProviderActivity"
@@ -119,7 +128,8 @@
 
         <activity
             android:name=".ui.activity.AboutActivity"
-            android:label="@string/about" />
+            android:label="@string/about"
+            android:theme="@style/AppTheme.ImmersiveNavigation" />
 
         <receiver
             android:name=".receiver.DownloadCompleteReceiver"

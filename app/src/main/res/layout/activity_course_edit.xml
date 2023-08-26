@@ -5,181 +5,186 @@
     android:id="@+id/layout_courseEdit"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
     tools:context=".ui.activity.CourseEditActivity"
     tools:keep="@layout/activity_course_edit">
 
-    <include
-        android:id="@+id/toolBar_courseEdit"
-        layout="@layout/layout_toolbar_general" />
-
-    <androidx.core.widget.NestedScrollView
+    <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="?attr/actionBarSize"
-        android:clipChildren="false"
-        android:fillViewport="true"
-        android:fitsSystemWindows="true">
+        android:orientation="vertical">
 
-        <androidx.coordinatorlayout.widget.CoordinatorLayout
+        <include
+            android:id="@+id/toolBar_courseEdit"
+            layout="@layout/layout_toolbar_general" />
+
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:clipChildren="false"
-            android:clipToPadding="false">
+            android:fillViewport="true">
 
-            <androidx.appcompat.widget.LinearLayoutCompat
+            <androidx.coordinatorlayout.widget.CoordinatorLayout
+                android:id="@+id/layout_courseEditContent"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginStart="5dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginEnd="5dp"
+                android:layout_height="wrap_content"
                 android:clipChildren="false"
-                android:clipToPadding="false"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:orientation="vertical"
-                android:padding="5dp">
-
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/cardView_courseBaseInfo"
-                    style="@style/AppTheme.CardView.SelectableItemBackground"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:clipChildren="false"
-                    android:clipToPadding="false">
-
-                    <androidx.appcompat.widget.LinearLayoutCompat
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="10dp"
-                        android:clipChildren="false"
-                        android:clipToPadding="false"
-                        android:orientation="vertical"
-                        android:paddingBottom="20dp">
-
-                        <androidx.appcompat.widget.LinearLayoutCompat
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="5dp"
-                            android:clipChildren="false"
-                            android:gravity="center_vertical">
-
-                            <com.google.android.material.textview.MaterialTextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:text="@string/base_info"
-                                android:textColor="@color/theme_color_primary_text"
-                                android:textSize="17sp"
-                                android:textStyle="bold" />
-
-                            <androidx.appcompat.widget.AppCompatImageButton
-                                android:id="@+id/button_courseColorEdit"
-                                style="@style/AppTheme.SelectableItemBackgroundBorderless"
-                                android:layout_width="25dp"
-                                android:layout_height="25dp"
-                                android:layout_marginStart="10dp"
-                                android:layout_marginEnd="10dp"
-                                android:background="@android:color/transparent"
-                                android:src="@drawable/shape_circle_20" />
-
-                        </androidx.appcompat.widget.LinearLayoutCompat>
-
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
-                            android:hint="@string/course_name">
-
-                            <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/editText_courseName"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:inputType="text"
-                                android:singleLine="true"
-                                android:textSize="13sp" />
-
-                        </com.google.android.material.textfield.TextInputLayout>
-
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/teacher_name">
-
-                            <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/editText_courseTeacherName"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:inputType="text"
-                                android:singleLine="true"
-                                android:textSize="13sp" />
-
-                        </com.google.android.material.textfield.TextInputLayout>
-
-                    </androidx.appcompat.widget.LinearLayoutCompat>
-
-                </com.google.android.material.card.MaterialCardView>
+                android:clipToPadding="false">
 
                 <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginTop="15dp"
-                    android:orientation="vertical">
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:clipChildren="false"
+                    android:clipToPadding="false"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:orientation="vertical"
+                    android:padding="5dp">
 
-                    <com.google.android.material.textview.MaterialTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:text="@string/course_detail"
-                        android:textColor="@color/theme_color_primary_text"
-                        android:textSize="17sp"
-                        android:textStyle="bold" />
-
-                    <FrameLayout
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/cardView_courseBaseInfo"
+                        style="@style/AppTheme.CardView.SelectableItemBackground"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginTop="5dp"
-                        android:animateLayoutChanges="true"
+                        android:layout_height="wrap_content"
                         android:clipChildren="false"
                         android:clipToPadding="false">
 
-                        <tool.xfy9326.schedule.ui.view.recyclerview.AdvancedRecyclerView
-                            android:id="@+id/recyclerView_courseTimeList"
+                        <androidx.appcompat.widget.LinearLayoutCompat
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="10dp"
                             android:clipChildren="false"
                             android:clipToPadding="false"
-                            android:overScrollMode="never"
-                            app:empty_view="@id/view_listEmpty"
-                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                            tools:listitem="@layout/item_course_time" />
+                            android:orientation="vertical"
+                            android:paddingBottom="20dp">
 
-                        <include
-                            android:id="@+id/view_listEmpty"
-                            layout="@layout/layout_list_empty"
-                            android:visibility="gone" />
+                            <androidx.appcompat.widget.LinearLayoutCompat
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="5dp"
+                                android:clipChildren="false"
+                                android:gravity="center_vertical">
 
-                    </FrameLayout>
+                                <com.google.android.material.textview.MaterialTextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:text="@string/base_info"
+                                    android:textColor="@color/theme_color_primary_text"
+                                    android:textSize="17sp"
+                                    android:textStyle="bold" />
+
+                                <androidx.appcompat.widget.AppCompatImageButton
+                                    android:id="@+id/button_courseColorEdit"
+                                    style="@style/AppTheme.SelectableItemBackgroundBorderless"
+                                    android:layout_width="25dp"
+                                    android:layout_height="25dp"
+                                    android:layout_marginStart="10dp"
+                                    android:layout_marginEnd="10dp"
+                                    android:background="@android:color/transparent"
+                                    android:src="@drawable/shape_circle_20" />
+
+                            </androidx.appcompat.widget.LinearLayoutCompat>
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp"
+                                android:hint="@string/course_name">
+
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/editText_courseName"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:inputType="text"
+                                    android:singleLine="true"
+                                    android:textSize="13sp" />
+
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="@string/teacher_name">
+
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/editText_courseTeacherName"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:inputType="text"
+                                    android:singleLine="true"
+                                    android:textSize="13sp" />
+
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                        </androidx.appcompat.widget.LinearLayoutCompat>
+
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <androidx.appcompat.widget.LinearLayoutCompat
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="15dp"
+                        android:orientation="vertical">
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:text="@string/course_detail"
+                            android:textColor="@color/theme_color_primary_text"
+                            android:textSize="17sp"
+                            android:textStyle="bold" />
+
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginTop="5dp"
+                            android:animateLayoutChanges="true"
+                            android:clipChildren="false"
+                            android:clipToPadding="false">
+
+                            <tool.xfy9326.schedule.ui.view.recyclerview.AdvancedRecyclerView
+                                android:id="@+id/recyclerView_courseTimeList"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:clipChildren="false"
+                                android:clipToPadding="false"
+                                android:overScrollMode="never"
+                                app:empty_view="@id/view_listEmpty"
+                                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                                tools:listitem="@layout/item_course_time" />
+
+                            <include
+                                android:id="@+id/view_listEmpty"
+                                layout="@layout/layout_list_empty"
+                                android:visibility="gone" />
+
+                        </FrameLayout>
+
+                    </androidx.appcompat.widget.LinearLayoutCompat>
 
                 </androidx.appcompat.widget.LinearLayoutCompat>
 
-            </androidx.appcompat.widget.LinearLayoutCompat>
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/fab_addCourseTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="50dp"
+                    android:clickable="true"
+                    android:contentDescription="@string/add_course_time"
+                    android:focusable="true"
+                    app:elevation="4dp"
+                    app:layout_anchor="@id/cardView_courseBaseInfo"
+                    app:layout_anchorGravity="bottom|end"
+                    app:srcCompat="@drawable/ic_plus_24" />
 
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/fab_addCourseTime"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="50dp"
-                android:clickable="true"
-                android:contentDescription="@string/add_course_time"
-                android:focusable="true"
-                app:elevation="4dp"
-                app:layout_anchor="@id/cardView_courseBaseInfo"
-                app:layout_anchorGravity="bottom|end"
-                app:srcCompat="@drawable/ic_plus_24" />
+            </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+        </androidx.core.widget.NestedScrollView>
 
-    </androidx.core.widget.NestedScrollView>
+    </androidx.appcompat.widget.LinearLayoutCompat>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

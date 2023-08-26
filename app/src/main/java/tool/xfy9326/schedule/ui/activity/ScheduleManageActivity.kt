@@ -1,11 +1,14 @@
 package tool.xfy9326.schedule.ui.activity
 
+import android.os.Bundle
+import androidx.core.view.WindowCompat
 import io.github.xfy9326.atools.core.startActivity
 import io.github.xfy9326.atools.livedata.observeNotify
 import io.github.xfy9326.atools.ui.setOnSingleClickListener
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.ScheduleWrapper
 import tool.xfy9326.schedule.databinding.ActivityScheduleManageBinding
+import tool.xfy9326.schedule.kt.applyBottomSystemBarInsets
 import tool.xfy9326.schedule.kt.showSnackBar
 import tool.xfy9326.schedule.ui.activity.base.ViewModelActivity
 import tool.xfy9326.schedule.ui.adapter.ScheduleManageAdapter
@@ -18,6 +21,10 @@ class ScheduleManageActivity : ViewModelActivity<ScheduleManageViewModel, Activi
     override val vmClass = ScheduleManageViewModel::class
 
     private lateinit var scheduleManageAdapter: ScheduleManageAdapter
+
+    override fun onContentViewPreload(savedInstanceState: Bundle?, viewModel: ScheduleManageViewModel) {
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+    }
 
     override fun onCreateViewBinding() = ActivityScheduleManageBinding.inflate(layoutInflater)
 
@@ -43,6 +50,7 @@ class ScheduleManageActivity : ViewModelActivity<ScheduleManageViewModel, Activi
         viewBinding.fabAddSchedule.setOnSingleClickListener {
             startActivity<ScheduleEditActivity>()
         }
+        viewBinding.recyclerViewScheduleManageList.applyBottomSystemBarInsets()
     }
 
     private fun onScheduleOperate(scheduleWrapper: ScheduleWrapper, operation: ScheduleManageAdapter.ScheduleOperation) {

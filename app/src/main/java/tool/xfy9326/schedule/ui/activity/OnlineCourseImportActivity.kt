@@ -5,6 +5,7 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.StringRes
+import androidx.core.view.WindowCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -20,6 +21,7 @@ import tool.xfy9326.schedule.content.beans.JSConfig
 import tool.xfy9326.schedule.content.utils.BaseCourseImportConfig
 import tool.xfy9326.schedule.data.AppDataStore
 import tool.xfy9326.schedule.databinding.ActivityOnlineCourseImportBinding
+import tool.xfy9326.schedule.kt.applyBottomSystemBarInsets
 import tool.xfy9326.schedule.kt.showSnackBar
 import tool.xfy9326.schedule.tools.MIMEConst
 import tool.xfy9326.schedule.ui.activity.base.CourseProviderActivity
@@ -49,6 +51,7 @@ class OnlineCourseImportActivity : ViewModelActivity<OnlineCourseImportViewModel
     override val vmClass = OnlineCourseImportViewModel::class
 
     override fun onContentViewPreload(savedInstanceState: Bundle?, viewModel: OnlineCourseImportViewModel) {
+        WindowCompat.setDecorFitsSystemWindows(window, false)
         if (savedInstanceState == null) viewModel.pendingExternalCourseImportUrl = AppUriUtils.tryParseJSCourseImport(intent?.data)
     }
 
@@ -162,6 +165,7 @@ class OnlineCourseImportActivity : ViewModelActivity<OnlineCourseImportViewModel
                 selectJSConfig.launch(MIMEConst.MIME_APPLICATION_JSON)
             }
         )
+        viewBinding.recyclerViewCourseImportList.applyBottomSystemBarInsets()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

@@ -7,6 +7,7 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.addCallback
+import androidx.core.view.WindowCompat
 import com.google.android.material.snackbar.Snackbar
 import com.jaredrummler.android.colorpicker.ColorPickerDialogListener
 import io.github.xfy9326.atools.core.hideKeyboard
@@ -20,6 +21,7 @@ import tool.xfy9326.schedule.beans.Course
 import tool.xfy9326.schedule.beans.CourseTime
 import tool.xfy9326.schedule.beans.EditError.Companion.getText
 import tool.xfy9326.schedule.databinding.ActivityCourseEditBinding
+import tool.xfy9326.schedule.kt.applyBottomSystemBarInsets
 import tool.xfy9326.schedule.kt.showSnackBar
 import tool.xfy9326.schedule.ui.activity.base.ViewModelActivity
 import tool.xfy9326.schedule.ui.adapter.CourseTimeAdapter
@@ -40,6 +42,7 @@ class CourseEditActivity : ViewModelActivity<CourseEditViewModel, ActivityCourse
     private lateinit var courseTimeAdapter: CourseTimeAdapter
 
     override fun onContentViewPreload(savedInstanceState: Bundle?, viewModel: CourseEditViewModel) {
+        WindowCompat.setDecorFitsSystemWindows(window, false)
         onBackPressedDispatcher.addCallback(this, true, this::onBackPressed)
     }
 
@@ -101,6 +104,7 @@ class CourseEditActivity : ViewModelActivity<CourseEditViewModel, ActivityCourse
             DialogUtils.showColorPickerDialog(this, R.string.course_color_edit, viewModel.editCourse.color)
         }
         CourseTimeEditDialog.setCourseTimeEditListener(supportFragmentManager, this, ::onCourseTimeAddOrUpdate)
+        viewBinding.layoutCourseEditContent.applyBottomSystemBarInsets()
     }
 
     override fun onColorSelected(dialogId: Int, color: Int) {

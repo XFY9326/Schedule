@@ -6,21 +6,20 @@
     android:layout_height="match_parent"
     tools:keep="@layout/activity_fragment_container">
 
-    <include
-        android:id="@+id/toolBar_fragmentContainer"
-        layout="@layout/layout_toolbar_general" />
-
-    <FrameLayout
+    <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="?attr/actionBarSize"
-        android:fitsSystemWindows="true">
+        android:orientation="vertical">
+
+        <include
+            android:id="@+id/toolBar_fragmentContainer"
+            layout="@layout/layout_toolbar_general" />
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/fragmentContainer"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
-    </FrameLayout>
+    </androidx.appcompat.widget.LinearLayoutCompat>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

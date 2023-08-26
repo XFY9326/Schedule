@@ -2,6 +2,8 @@ package tool.xfy9326.schedule.ui.activity.module
 
 import android.view.ViewGroup
 import androidx.core.graphics.Insets
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updateLayoutParams
 import androidx.core.view.updateMargins
@@ -14,8 +16,9 @@ import tool.xfy9326.schedule.ui.vm.ScheduleViewModel
 class ScheduleInsetsModule(activity: ScheduleActivity) :
     AbstractViewModelActivityModule<ScheduleViewModel, ActivityScheduleBinding, ScheduleActivity>(activity) {
     override fun onInit() {
-        requireActivity().window.decorView.setOnApplyWindowInsetsListener { _, insets ->
-            val systemBarInset = WindowInsetsCompat.toWindowInsetsCompat(insets).getInsets(WindowInsetsCompat.Type.systemBars())
+        WindowCompat.setDecorFitsSystemWindows(requireActivity().window, false)
+        ViewCompat.setOnApplyWindowInsetsListener(requireActivity().window.decorView) { _, insets ->
+            val systemBarInset = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             requireViewBinding().layoutScheduleContent.apply {
                 if (layoutParams == null || layoutParams !is ViewGroup.MarginLayoutParams) {
                     updatePadding(top = systemBarInset.top)
@@ -25,10 +28,9 @@ class ScheduleInsetsModule(activity: ScheduleActivity) :
                     }
                 }
             }
-            WindowInsetsCompat.Builder(WindowInsetsCompat.toWindowInsetsCompat(insets))
+            WindowInsetsCompat.Builder(insets)
                 .setInsets(WindowInsetsCompat.Type.systemBars(), Insets.of(systemBarInset.left, 0, systemBarInset.right, 0))
                 .build()
-                .toWindowInsets() ?: error("WindowInsets API requires API 20!")
         }
     }
 }

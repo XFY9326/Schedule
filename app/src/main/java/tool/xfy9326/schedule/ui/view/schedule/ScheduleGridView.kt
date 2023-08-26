@@ -7,6 +7,7 @@ import android.view.RoundedCorner
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.Px
+import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.children
 import tool.xfy9326.schedule.beans.CourseCell
@@ -89,10 +90,7 @@ class ScheduleGridView constructor(
             child.measure(courseColumnWidthSpec, courseColumnHeightSpec)
         }
 
-        val bottomInset =
-            rootWindowInsets?.let {
-                WindowInsetsCompat.toWindowInsetsCompat(it).getInsets(WindowInsetsCompat.Type.systemBars()).bottom
-            } ?: 0
+        val bottomPadding = ViewCompat.getRootWindowInsets(this)?.getInsets(WindowInsetsCompat.Type.systemBars())?.bottom ?: 0
 
         val actualHeight =
             if (styles.cornerScreenMargin) {
@@ -106,9 +104,9 @@ class ScheduleGridView constructor(
                 } else {
                     predefine.gridBottomCornerScreenMargin
                 }
-                rowHeight * rowAmount + max(screenCornerMargin, bottomInset)
+                rowHeight * rowAmount + max(screenCornerMargin, bottomPadding)
             } else {
-                rowHeight * rowAmount + bottomInset
+                rowHeight * rowAmount + bottomPadding
             }
         val actualHeightSpec = MeasureSpec.makeMeasureSpec(actualHeight, MeasureSpec.EXACTLY)
 

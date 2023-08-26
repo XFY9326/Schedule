@@ -10,6 +10,7 @@ import android.widget.Spinner
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.addCallback
 import androidx.annotation.StringRes
+import androidx.core.view.WindowCompat
 import androidx.core.view.isVisible
 import coil.load
 import io.github.xfy9326.atools.ui.getText
@@ -24,6 +25,7 @@ import tool.xfy9326.schedule.content.base.NetworkCourseParser
 import tool.xfy9326.schedule.content.base.NetworkCourseProvider
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
 import tool.xfy9326.schedule.databinding.ActivityNetworkCourseProviderBinding
+import tool.xfy9326.schedule.kt.applyBottomSystemBarInsets
 import tool.xfy9326.schedule.kt.showSnackBar
 import tool.xfy9326.schedule.ui.activity.base.CourseProviderActivity
 import tool.xfy9326.schedule.ui.vm.NetworkCourseProviderViewModel
@@ -39,6 +41,7 @@ class NetworkCourseProviderActivity :
     override val vmClass = NetworkCourseProviderViewModel::class
 
     override fun onContentViewPreload(savedInstanceState: Bundle?, viewModel: NetworkCourseProviderViewModel) {
+        WindowCompat.setDecorFitsSystemWindows(window, false)
         onBackPressedDispatcher.addCallback(this, true, this::onBackPressed)
     }
 
@@ -103,6 +106,7 @@ class NetworkCourseProviderActivity :
                 }
             }
         }
+        viewBinding.layoutNetworkCourseProviderContent.applyBottomSystemBarInsets()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

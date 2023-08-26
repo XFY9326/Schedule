@@ -8,6 +8,7 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.addCallback
+import androidx.core.view.WindowCompat
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.jaredrummler.android.colorpicker.ColorPickerDialogListener
@@ -22,6 +23,7 @@ import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.EditError.Companion.getText
 import tool.xfy9326.schedule.beans.Schedule
 import tool.xfy9326.schedule.databinding.ActivityScheduleEditBinding
+import tool.xfy9326.schedule.kt.applyBottomSystemBarInsets
 import tool.xfy9326.schedule.kt.showSnackBar
 import tool.xfy9326.schedule.ui.activity.base.ViewModelActivity
 import tool.xfy9326.schedule.ui.activity.module.ScheduleTermEditModule
@@ -56,6 +58,7 @@ class ScheduleEditActivity : ViewModelActivity<ScheduleEditViewModel, ActivitySc
     private lateinit var scheduleTimeAdapter: ScheduleTimeAdapter
 
     override fun onContentViewPreload(savedInstanceState: Bundle?, viewModel: ScheduleEditViewModel) {
+        WindowCompat.setDecorFitsSystemWindows(window, false)
         onBackPressedDispatcher.addCallback(this, true, this::onBackPressed)
     }
 
@@ -92,6 +95,8 @@ class ScheduleEditActivity : ViewModelActivity<ScheduleEditViewModel, ActivitySc
         viewBinding.buttonScheduleColorEdit.setOnSingleClickListener {
             DialogUtils.showColorPickerDialog(this, R.string.schedule_color_edit, viewModel.editSchedule.color)
         }
+
+        viewBinding.layoutScheduleEditContent.applyBottomSystemBarInsets()
     }
 
     override fun onColorSelected(dialogId: Int, color: Int) {
