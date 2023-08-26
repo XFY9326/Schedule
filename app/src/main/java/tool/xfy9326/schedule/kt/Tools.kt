@@ -16,6 +16,7 @@ import androidx.annotation.RequiresApi
 import androidx.annotation.StringRes
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.drawToBitmap
 import androidx.core.view.marginBottom
@@ -28,6 +29,7 @@ import androidx.core.view.updatePadding
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.distinctUntilChanged
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.snackbar.Snackbar
 import io.github.xfy9326.atools.core.relaunchApplication
 import io.github.xfy9326.atools.core.tryStartActivity
@@ -94,6 +96,22 @@ fun View.consumeSystemBarInsets(top: Boolean = false, bottom: Boolean = false, m
             )
         }
         WindowInsetsCompat.CONSUMED
+    }
+}
+
+fun BottomSheetDialogFragment.consumeBottomInsets() {
+    dialog?.window?.apply {
+        WindowCompat.setDecorFitsSystemWindows(this, false)
+        ViewCompat.setOnApplyWindowInsetsListener(decorView) { v, insets ->
+            val systemBarInset = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            val cutoutInsets = insets.getInsets(WindowInsetsCompat.Type.displayCutout())
+            v.findViewById<ViewGroup>(com.google.android.material.R.id.design_bottom_sheet)?.updatePadding(
+                bottom = systemBarInset.bottom,
+                left = systemBarInset.left + cutoutInsets.left,
+                right = systemBarInset.right + cutoutInsets.right
+            )
+            WindowInsetsCompat.CONSUMED
+        }
     }
 }
 

@@ -134,6 +134,10 @@
 
     <style name="AppTheme.TransparentBottomSheetDialog" parent="Theme.Design.Light.BottomSheetDialog">
         <item name="android:backgroundDimAmount">0.2</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
         <item name="bottomSheetStyle">@style/AppTheme.TransparentBottomSheetStyle</item>
     </style>
 

@@ -13,9 +13,7 @@
         android:layout_marginStart="5dp"
         android:layout_marginTop="5dp"
         android:layout_marginEnd="5dp"
-        android:layout_marginBottom="10dp"
-        android:translationZ="10dp"
-        app:cardElevation="10dp">
+        android:layout_marginBottom="10dp">
 
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"

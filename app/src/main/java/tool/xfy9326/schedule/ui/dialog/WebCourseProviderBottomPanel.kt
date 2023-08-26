@@ -13,6 +13,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import io.github.xfy9326.atools.ui.setOnSingleClickListener
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.databinding.DialogWebCourseProviderBottomPanelBinding
+import tool.xfy9326.schedule.kt.consumeBottomInsets
 
 class WebCourseProviderBottomPanel : BottomSheetDialogFragment() {
     companion object {
@@ -66,6 +67,11 @@ class WebCourseProviderBottomPanel : BottomSheetDialogFragment() {
 
             behavior.state = BottomSheetBehavior.STATE_EXPANDED
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        consumeBottomInsets()
     }
 
     override fun onDismiss(dialog: DialogInterface) {

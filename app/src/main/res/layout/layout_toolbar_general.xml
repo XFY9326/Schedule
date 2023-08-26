@@ -13,7 +13,6 @@
         android:id="@+id/toolBar_general"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fitsSystemWindows="true"
         app:navigationIconTint="@color/dark_icon" />
 
 </com.google.android.material.appbar.AppBarLayout>
