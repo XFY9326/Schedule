@@ -14,8 +14,8 @@ object ProjectConfig {
     const val targetSdk = 34
     const val minSdk = 23
     const val applicationId = "tool.xfy9326.schedule"
-    const val versionCode = 39
-    const val versionName = "1.4.10"
+    const val versionCode = 40
+    const val versionName = "1.5.0"
 }
 
 android {
