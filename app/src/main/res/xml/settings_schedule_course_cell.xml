@@ -90,12 +90,14 @@
             app:summary="@string/schedule_course_cell_course_text_length_sum"
             app:title="@string/schedule_course_cell_course_text_length" />
 
-        <androidx.preference.CheckBoxPreference
-            app:defaultValue="true"
+        <androidx.preference.MultiSelectListPreference
+            app:defaultValue="@array/course_cell_detail_content_value_default"
+            app:entries="@array/course_cell_detail_content"
+            app:entryValues="@array/course_cell_detail_content_values"
             app:iconSpaceReserved="false"
-            app:key="showCourseCellLocation"
-            app:summary="@string/schedule_course_cell_show_course_location_sum"
-            app:title="@string/schedule_course_cell_show_course_location" />
+            app:key="courseCellDetailContent"
+            app:summary="@string/course_cell_detail_content_sum"
+            app:title="@string/course_cell_detail_content" />
 
         <androidx.preference.CheckBoxPreference
             app:defaultValue="false"

@@ -7,6 +7,7 @@ data class CourseCell(
     val timeId: Long,
     val courseName: String,
     val courseLocation: String?,
+    val courseTeacher: String?,
     val sectionTime: SectionTime,
     @ColorInt
     val cellColor: Int,
@@ -18,7 +19,7 @@ data class CourseCell(
 
     constructor(course: Course, courseTime: CourseTime, weekNum: Int, isThisWeekCourse: Boolean) :
             this(
-                course.courseId, courseTime.timeId, course.name, courseTime.location,
+                course.courseId, courseTime.timeId, course.name, courseTime.location, course.teacher,
                 courseTime.sectionTime, course.color, weekNum, isThisWeekCourse
             )
 

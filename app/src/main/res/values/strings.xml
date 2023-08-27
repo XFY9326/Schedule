@@ -414,6 +414,7 @@
     <string name="reset_success">重置成功！</string>
     <string name="sample_course_name">课程名称示例</string>
     <string name="sample_course_location">课程地点示例</string>
+    <string name="sample_course_teacher">教师名</string>
     <string name="schedule_background_preview_attention">注意：\n由于设置中预览的课程表高度受限，因此预览的课程表背景缩放位置与大小不能完全代表最终的显示效果</string>
     <string name="schedule_preview_ratio">课表预览比例</string>
     <string name="external_course_import">外部课程导入</string>
@@ -451,8 +452,10 @@
     <string name="schedule_course_cell_all_course_text_sum">优先满足所有文字最大长度的限制</string>
     <string name="schedule_course_cell_course_text_length">课程名称最大显示长度</string>
     <string name="schedule_course_cell_course_text_length_sum">当前长度：%1$d个字符</string>
-    <string name="schedule_course_cell_show_course_location">显示上课地点</string>
-    <string name="schedule_course_cell_show_course_location_sum">若不存在上课地点则默认不会显示</string>
+    <string name="course_cell_detail_content_location">上课地点</string>
+    <string name="course_cell_detail_content_teacher">教师名称</string>
+    <string name="course_cell_detail_content">课程格的详细信息展示</string>
+    <string name="course_cell_detail_content_sum">在课程格中显示上课地点，教师名称</string>
     <string name="schedule_course_cell_text_no_change_line">课程名称与上课地点文字不换行</string>
     <string name="schedule_course_cell_text_no_change_line_sum">课程名称后不换行显示上课地点</string>
     <string name="schedule_course_cell_padding">课程格间距</string>
@@ -550,8 +553,7 @@
     <string name="course_color_description">课程颜色</string>
 
     <string name="month_date_simple" translatable="false">%1$d/%2$d</string>
-    <string name="course_cell_text" translatable="false">%1$s\n\n@%2$s</string>
-    <string name="course_cell_text_no_change_line" translatable="false">%1$s@%2$s</string>
+    <string name="course_cell_location" translatable="false">\@%1$s</string>
     <string name="adapter_author" translatable="false">\@%1$s</string>
     <string name="ellipsis" translatable="false">...</string>
 

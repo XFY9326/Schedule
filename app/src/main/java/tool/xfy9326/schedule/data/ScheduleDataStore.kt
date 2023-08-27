@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOn
 import tool.xfy9326.schedule.R
+import tool.xfy9326.schedule.beans.CourseCellDetailContent
 import tool.xfy9326.schedule.beans.ImageScaleType
 import tool.xfy9326.schedule.beans.NotThisWeekCourseShowStyle
 import tool.xfy9326.schedule.beans.ScheduleStyles
@@ -44,7 +45,7 @@ object ScheduleDataStore : AbstractDataStore("ScheduleSettings") {
     private val enableScheduleGridScroll by booleanPrefKey()
     private val notThisWeekCourseCellAlpha by intPrefKey()
     private val courseCellTextNoChangeLine by booleanPrefKey()
-    private val showCourseCellLocation by booleanPrefKey()
+    private val courseCellDetailContent by stringSetPrefKey()
 
     val courseCellVerticalPadding by intPrefKey()
     val courseCellHorizontalPadding by intPrefKey()
@@ -100,9 +101,10 @@ object ScheduleDataStore : AbstractDataStore("ScheduleSettings") {
             courseCellTextLength = if (it[courseCellAutoTextLength] == false) getCourseCellTextLengthFromPref(it) else null,
             courseCellTextNoChangeLine = it[courseCellTextNoChangeLine] ?: false,
             courseCellCourseTextLength = if (it[courseCellShowAllCourseText] == false) getCourseCellCourseTextLengthFromPref(it) else null,
-            showCourseCellLocation = it[showCourseCellLocation] ?: true,
             courseCellVerticalPadding = getCourseCellVerticalPaddingFromPref(it),
             courseCellHorizontalPadding = getCourseCellHorizontalPaddingFromPref(it),
+            courseCellDetailContent = it[courseCellDetailContent]?.let { value -> tryEnumSetValueOf(value) }
+                ?: setOf(CourseCellDetailContent.LOCATION)
         )
     }.distinctUntilChanged()
 

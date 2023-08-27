@@ -122,11 +122,23 @@ class ScheduleCourseCellView(
 
     private fun generateCourseCellShowText(courseCell: CourseCell) =
         courseCell.courseName.appendEllipsisStyle(styles.courseCellCourseTextLength).let {
-            if (courseCell.courseLocation == null || !styles.showCourseCellLocation) {
+            if (styles.courseCellDetailContent.isEmpty()) {
                 it
             } else {
-                val resId = if (styles.courseCellTextNoChangeLine) R.string.course_cell_text_no_change_line else R.string.course_cell_text
-                context.getString(resId, it, courseCell.courseLocation)
+                buildString(it.length) {
+                    append(it)
+                    if (CourseCellDetailContent.LOCATION in styles.courseCellDetailContent && courseCell.courseLocation != null) {
+                        if (!styles.courseCellTextNoChangeLine) {
+                            appendLine()
+                            appendLine()
+                        }
+                        append(context.getString(R.string.course_cell_location, courseCell.courseLocation))
+                    }
+                    if (CourseCellDetailContent.TEACHER in styles.courseCellDetailContent && courseCell.courseTeacher != null) {
+                        appendLine()
+                        appendLine(courseCell.courseTeacher)
+                    }
+                }
             }
         }.appendEllipsisStyle(styles.courseCellTextLength).let {
             if (!courseCell.isThisWeekCourse && NotThisWeekCourseShowStyle.SHOW_NOT_THIS_WEEK_TEXT in styles.notThisWeekCourseShowStyle) {
