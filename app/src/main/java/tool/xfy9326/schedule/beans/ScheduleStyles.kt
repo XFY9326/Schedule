@@ -35,6 +35,7 @@ data class ScheduleStyles(
     @Px
     val courseCellHorizontalPadding: Int,
     val courseCellDetailContent: Set<CourseCellDetailContent>,
+    val courseCellFullScreenSameHeight: Boolean
 ) {
     val scheduleViewAlpha = viewAlpha / 100f
 

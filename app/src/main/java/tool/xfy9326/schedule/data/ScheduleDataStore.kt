@@ -46,6 +46,7 @@ object ScheduleDataStore : AbstractDataStore("ScheduleSettings") {
     private val notThisWeekCourseCellAlpha by intPrefKey()
     private val courseCellTextNoChangeLine by booleanPrefKey()
     private val courseCellDetailContent by stringSetPrefKey()
+    private val courseCellFullScreenSameHeight by booleanPrefKey()
 
     val courseCellVerticalPadding by intPrefKey()
     val courseCellHorizontalPadding by intPrefKey()
@@ -104,7 +105,8 @@ object ScheduleDataStore : AbstractDataStore("ScheduleSettings") {
             courseCellVerticalPadding = getCourseCellVerticalPaddingFromPref(it),
             courseCellHorizontalPadding = getCourseCellHorizontalPaddingFromPref(it),
             courseCellDetailContent = it[courseCellDetailContent]?.let { value -> tryEnumSetValueOf(value) }
-                ?: setOf(CourseCellDetailContent.LOCATION)
+                ?: setOf(CourseCellDetailContent.LOCATION),
+            courseCellFullScreenSameHeight = if (it[courseCellAutoHeight] == false) it[courseCellFullScreenSameHeight] ?: false else false
         )
     }.distinctUntilChanged()
 

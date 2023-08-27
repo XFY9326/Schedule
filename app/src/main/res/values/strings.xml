@@ -438,6 +438,8 @@
     <string name="schedule_course_cell_height">课程格高度</string>
     <string name="schedule_course_cell_auto_height">自动设置课程格高度</string>
     <string name="schedule_course_cell_auto_height_sum">将会根据文字大小与长度自动平均设置高度</string>
+    <string name="schedule_course_cell_full_screen_same_height">使用相同的课程格高度填充满整个屏幕</string>
+    <string name="schedule_course_cell_full_screen_same_height_sum">在屏幕高度不足时可能会出现显示错误的问题\n注：由于高度限制，预览界面并不代表最终显示效果</string>
     <string name="schedule_course_cell_specific_height">单节课程的课程格高度（行高）</string>
     <string name="schedule_course_cell_specific_height_sum">当前高度：%1$ddp</string>
     <string name="schedule_course_cell_specific_height_hint">高度(dp) [%1$d, %2$d]</string>

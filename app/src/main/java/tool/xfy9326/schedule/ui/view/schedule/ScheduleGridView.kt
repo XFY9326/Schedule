@@ -63,20 +63,22 @@ class ScheduleGridView constructor(
         val courseColumnWidthSpec = MeasureSpec.makeMeasureSpec(courseColumnWidth, MeasureSpec.EXACTLY)
 
         val styleCourseCellHeight = styles.rowHeight
-        rowHeight = if (styleCourseCellHeight != null) {
+        rowHeight = if (styleCourseCellHeight != null && !styles.courseCellFullScreenSameHeight) {
             styleCourseCellHeight
         } else {
             var tempRowHeight = MeasureSpec.getSize(heightMeasureSpec) / rowAmount
 
-            for (child in children) {
-                child as IScheduleCell
+            if (!styles.courseCellFullScreenSameHeight) {
+                for (child in children) {
+                    child as IScheduleCell
 
-                tempRowHeight = if (child.getColumn() == 0) {
-                    child.measure(timeColumnWidthSpec, unspecifiedHeightSpec)
-                    max(child.measuredHeight, tempRowHeight)
-                } else {
-                    child.measure(courseColumnWidthSpec, unspecifiedHeightSpec)
-                    max(ceil(child.measuredHeight * 1f / child.getRowSpan()).toInt(), tempRowHeight)
+                    tempRowHeight = if (child.getColumn() == 0) {
+                        child.measure(timeColumnWidthSpec, unspecifiedHeightSpec)
+                        max(child.measuredHeight, tempRowHeight)
+                    } else {
+                        child.measure(courseColumnWidthSpec, unspecifiedHeightSpec)
+                        max(ceil(child.measuredHeight * 1f / child.getRowSpan()).toInt(), tempRowHeight)
+                    }
                 }
             }
 
