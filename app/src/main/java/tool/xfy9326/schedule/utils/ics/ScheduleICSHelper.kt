@@ -3,7 +3,7 @@ package tool.xfy9326.schedule.utils.ics
 import android.content.Context
 import android.net.Uri
 import io.github.xfy9326.atools.io.IOManager
-import io.github.xfy9326.atools.io.serialization.json.writeJSONAsync
+import io.github.xfy9326.atools.io.okio.writeTextAsync
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.Course
 import tool.xfy9326.schedule.beans.Course.Companion.iterateAll
@@ -31,7 +31,7 @@ class ScheduleICSHelper constructor(schedule: Schedule, private val courses: Lis
             courses.iterateAll { course, courseTime ->
                 createCourseTimeVEvent(iCal, course, courseTime)
             }
-            return uri.writeJSONAsync(iCal.build()).isSuccess
+            return uri.writeTextAsync(iCal.build()).isSuccess
         } catch (e: Exception) {
             e.printStackTrace()
         }
