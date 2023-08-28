@@ -111,9 +111,9 @@
         <androidx.preference.CheckBoxPreference
             app:defaultValue="false"
             app:iconSpaceReserved="false"
-            app:key="courseCellTextNoChangeLine"
-            app:summary="@string/schedule_course_cell_text_no_change_line_sum"
-            app:title="@string/schedule_course_cell_text_no_change_line" />
+            app:key="courseCellTextNoNewLine"
+            app:summary="@string/schedule_course_cell_text_no_new_line_sum"
+            app:title="@string/schedule_course_cell_text_no_new_line" />
 
     </androidx.preference.PreferenceCategory>
 

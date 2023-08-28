@@ -28,7 +28,7 @@ data class ScheduleStyles(
     @Dp
     private val courseCellHeight: Int?, // null -> auto
     val courseCellTextLength: Int?, // null -> auto,
-    val courseCellTextNoChangeLine: Boolean,
+    val courseCellTextNoNewLine: Boolean,
     val courseCellCourseTextLength: Int?, // null -> auto,
     @Px
     val courseCellVerticalPadding: Int,

@@ -458,8 +458,8 @@
     <string name="course_cell_detail_content_teacher">教师名称</string>
     <string name="course_cell_detail_content">课程格的详细信息展示</string>
     <string name="course_cell_detail_content_sum">在课程格中显示上课地点，教师名称</string>
-    <string name="schedule_course_cell_text_no_change_line">课程名称与上课地点文字不换行</string>
-    <string name="schedule_course_cell_text_no_change_line_sum">课程名称后不换行显示上课地点</string>
+    <string name="schedule_course_cell_text_no_new_line">课程详细信息显示不空行</string>
+    <string name="schedule_course_cell_text_no_new_line_sum">课程名称与课程详细信息之间不空行</string>
     <string name="schedule_course_cell_padding">课程格间距</string>
     <string name="schedule_course_cell_horizontal_padding">课程格横向间距（左右）</string>
     <string name="schedule_course_cell_vertical_padding">课程格纵向间距（上下）</string>

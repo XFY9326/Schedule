@@ -44,7 +44,7 @@ object ScheduleDataStore : AbstractDataStore("ScheduleSettings") {
     private val verticalCourseCellText by booleanPrefKey()
     private val enableScheduleGridScroll by booleanPrefKey()
     private val notThisWeekCourseCellAlpha by intPrefKey()
-    private val courseCellTextNoChangeLine by booleanPrefKey()
+    private val courseCellTextNoNewLine by booleanPrefKey()
     private val courseCellDetailContent by stringSetPrefKey()
     private val courseCellFullScreenSameHeight by booleanPrefKey()
 
@@ -100,7 +100,7 @@ object ScheduleDataStore : AbstractDataStore("ScheduleSettings") {
                 ?: IOManager.resources.getInteger(R.integer.default_schedule_not_this_week_course_alpha),
             courseCellHeight = if (it[courseCellAutoHeight] == false) getCourseCellHeightFromPref(it) else null,
             courseCellTextLength = if (it[courseCellAutoTextLength] == false) getCourseCellTextLengthFromPref(it) else null,
-            courseCellTextNoChangeLine = it[courseCellTextNoChangeLine] ?: false,
+            courseCellTextNoNewLine = it[courseCellTextNoNewLine] ?: false,
             courseCellCourseTextLength = if (it[courseCellShowAllCourseText] == false) getCourseCellCourseTextLengthFromPref(it) else null,
             courseCellVerticalPadding = getCourseCellVerticalPaddingFromPref(it),
             courseCellHorizontalPadding = getCourseCellHorizontalPaddingFromPref(it),
