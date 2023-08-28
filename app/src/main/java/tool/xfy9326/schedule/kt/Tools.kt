@@ -12,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import androidx.annotation.ColorInt
+import androidx.annotation.IntRange
 import androidx.annotation.RequiresApi
 import androidx.annotation.StringRes
 import androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -148,3 +149,12 @@ fun CoordinatorLayout.showSnackBar(str: String, showLong: Boolean = false) =
     Snackbar.make(this, str, if (showLong) Snackbar.LENGTH_LONG else Snackbar.LENGTH_SHORT).show()
 
 fun <T> Flow<T>.asDistinctLiveData(): LiveData<T> = asLiveData().distinctUntilChanged()
+
+fun CharSequence.asStringBuilder(@IntRange(from = 0) moreCapacity: Int? = null): StringBuilder =
+    if (moreCapacity == null) {
+        StringBuilder(this)
+    } else if (moreCapacity >= 0) {
+        StringBuilder(length + moreCapacity).also { it.append(this) }
+    } else {
+        error("Capacity '$moreCapacity' must >= 0!")
+    }
