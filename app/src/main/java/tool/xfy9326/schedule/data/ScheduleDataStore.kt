@@ -47,6 +47,7 @@ object ScheduleDataStore : AbstractDataStore("ScheduleSettings") {
     private val courseCellTextNoNewLine by booleanPrefKey()
     private val courseCellDetailContent by stringSetPrefKey()
     private val courseCellFullScreenSameHeight by booleanPrefKey()
+    private val courseCellFullScreenWithBottomInsets by booleanPrefKey()
 
     val courseCellVerticalPadding by intPrefKey()
     val courseCellHorizontalPadding by intPrefKey()
@@ -80,6 +81,12 @@ object ScheduleDataStore : AbstractDataStore("ScheduleSettings") {
 
     suspend fun readScheduleTextSize(textType: ScheduleText) = read { ScheduleText.TextSize.create(it, textType) }.first()
 
+    private fun Preferences.getCourseCellFullScreenSameHeight() =
+        if (this[courseCellAutoHeight] == false) this[courseCellFullScreenSameHeight] ?: false else false
+
+    private fun Preferences.courseCellFullScreenWithBottomInsets() =
+        if (getCourseCellFullScreenSameHeight()) this[courseCellFullScreenWithBottomInsets] ?: false else false
+
     val scheduleStylesFlow = read {
         ScheduleStyles(
             viewAlpha = it[scheduleViewAlpha] ?: 100,
@@ -106,9 +113,14 @@ object ScheduleDataStore : AbstractDataStore("ScheduleSettings") {
             courseCellHorizontalPadding = getCourseCellHorizontalPaddingFromPref(it),
             courseCellDetailContent = it[courseCellDetailContent]?.let { value -> tryEnumSetValueOf(value) }
                 ?: setOf(CourseCellDetailContent.LOCATION),
-            courseCellFullScreenSameHeight = if (it[courseCellAutoHeight] == false) it[courseCellFullScreenSameHeight] ?: false else false
+            courseCellFullScreenSameHeight = it.getCourseCellFullScreenSameHeight(),
+            courseCellFullScreenWithBottomInsets = it.courseCellFullScreenWithBottomInsets()
         )
     }.distinctUntilChanged()
+
+    val courseCellAutoLengthFlow = read { it[courseCellAutoHeight] ?: true }
+
+    val courseCellFullScreenSameHeightFlow = read { it.getCourseCellFullScreenSameHeight() }
 
     val courseCellHeightFlow = read { getCourseCellHeightFromPref(it) }
 

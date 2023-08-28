@@ -20,14 +20,21 @@
         <androidx.preference.CheckBoxPreference
             app:defaultValue="false"
             app:dependency="courseCellAutoHeight"
-            app:disableDependentsState="true"
             app:iconSpaceReserved="false"
             app:key="courseCellFullScreenSameHeight"
             app:summary="@string/schedule_course_cell_full_screen_same_height_sum"
             app:title="@string/schedule_course_cell_full_screen_same_height" />
 
-        <androidx.preference.Preference
+        <androidx.preference.CheckBoxPreference
+            app:defaultValue="false"
             app:dependency="courseCellFullScreenSameHeight"
+            app:iconSpaceReserved="false"
+            app:key="courseCellFullScreenWithBottomInsets"
+            app:summary="@string/schedule_course_cell_full_screen_bottom_insets_sum"
+            app:title="@string/schedule_course_cell_full_screen_bottom_insets" />
+
+        <!-- Dependencies set in code [ScheduleCourseCellSettingsFragment.setupCourseCellHeightPrefDependencies] -->
+        <androidx.preference.Preference
             app:iconSpaceReserved="false"
             app:key="@string/pref_schedule_course_cell_specific_height"
             app:persistent="false"

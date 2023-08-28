@@ -347,7 +347,6 @@
     <string name="no_new_update">您已经在使用最新版本！</string>
     <string name="update_check_failed">更新检测失败！</string>
     <string name="directly_download_failed">直接下载失败！\n正在跳转浏览器！</string>
-    <string name="app_update_settings">应用更新设置</string>
     <string name="use_browser_download_upgrade_file">默认使用浏览器下载更新文件</string>
     <string name="use_browser_download_upgrade_file_sum">避免直接下载更新文件时出现错误</string>
     <string name="online_course_import_sum">在线课表与课程导入相关的设定</string>
@@ -437,9 +436,11 @@
     <string name="schedule_course_cell_attention">注意：\n自定义课程格高度将可能会影响文字显示效果\n建议通过调整文字大小或显示长度来影响课程格高度</string>
     <string name="schedule_course_cell_height">课程格高度</string>
     <string name="schedule_course_cell_auto_height">自动设置课程格高度</string>
-    <string name="schedule_course_cell_auto_height_sum">将会根据文字大小与长度自动平均设置高度</string>
-    <string name="schedule_course_cell_full_screen_same_height">使用相同的课程格高度填充满整个屏幕</string>
-    <string name="schedule_course_cell_full_screen_same_height_sum">在屏幕高度不足时可能会出现显示错误的问题\n注：由于高度限制，预览界面并不代表最终显示效果</string>
+    <string name="schedule_course_cell_auto_height_sum">根据文字大小与长度自动平均设置高度</string>
+    <string name="schedule_course_cell_full_screen_same_height">使用相同的课程格高度填充屏幕</string>
+    <string name="schedule_course_cell_full_screen_same_height_sum">在屏幕高度不足时可能会出现显示错误\n注：预览界面并不代表最终显示效果</string>
+    <string name="schedule_course_cell_full_screen_bottom_insets">相同课程格高度填充屏幕时避免滑动</string>
+    <string name="schedule_course_cell_full_screen_bottom_insets_sum">为底部圆角适配和导航栏的显示预留空间</string>
     <string name="schedule_course_cell_specific_height">单节课程的课程格高度（行高）</string>
     <string name="schedule_course_cell_specific_height_sum">当前高度：%1$ddp</string>
     <string name="schedule_course_cell_specific_height_hint">高度(dp) [%1$d, %2$d]</string>

@@ -2,17 +2,15 @@ package tool.xfy9326.schedule.ui.view.schedule
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.os.Build
-import android.view.RoundedCorner
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.Px
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.children
 import tool.xfy9326.schedule.beans.CourseCell
 import tool.xfy9326.schedule.beans.SchedulePredefine
 import tool.xfy9326.schedule.beans.ScheduleStyles
+import tool.xfy9326.schedule.kt.getBottomScreenCornerMargin
+import tool.xfy9326.schedule.kt.getSystemBarBottomInsets
 import kotlin.math.ceil
 import kotlin.math.max
 
@@ -58,15 +56,29 @@ class ScheduleGridView constructor(
         return timeColumnWidth
     }
 
+    private fun getBottomPadding(): Int =
+        if (styles.cornerScreenMargin) {
+            max(getBottomScreenCornerMargin() ?: predefine.gridBottomCornerScreenMargin, getSystemBarBottomInsets())
+        } else {
+            getSystemBarBottomInsets()
+        }
+
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         val timeColumnWidthSpec = MeasureSpec.makeMeasureSpec(timeColumnWidth, MeasureSpec.EXACTLY)
         val courseColumnWidthSpec = MeasureSpec.makeMeasureSpec(courseColumnWidth, MeasureSpec.EXACTLY)
+
+        val bottomPadding = getBottomPadding()
 
         val styleCourseCellHeight = styles.rowHeight
         rowHeight = if (styleCourseCellHeight != null && !styles.courseCellFullScreenSameHeight) {
             styleCourseCellHeight
         } else {
-            var tempRowHeight = MeasureSpec.getSize(heightMeasureSpec) / rowAmount
+            val layoutHeight = if (styles.courseCellFullScreenSameHeight && styles.courseCellFullScreenWithBottomInsets) {
+                (MeasureSpec.getSize(heightMeasureSpec) - bottomPadding).coerceAtLeast(0)
+            } else {
+                MeasureSpec.getSize(heightMeasureSpec)
+            }
+            var tempRowHeight = layoutHeight / rowAmount
 
             if (!styles.courseCellFullScreenSameHeight) {
                 for (child in children) {
@@ -92,24 +104,7 @@ class ScheduleGridView constructor(
             child.measure(courseColumnWidthSpec, courseColumnHeightSpec)
         }
 
-        val bottomPadding = ViewCompat.getRootWindowInsets(this)?.getInsets(WindowInsetsCompat.Type.systemBars())?.bottom ?: 0
-
-        val actualHeight =
-            if (styles.cornerScreenMargin) {
-                val screenCornerMargin = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                    val bottomLeftCorner = rootWindowInsets.getRoundedCorner(RoundedCorner.POSITION_BOTTOM_LEFT)
-                    val bottomRightCorner = rootWindowInsets.getRoundedCorner(RoundedCorner.POSITION_BOTTOM_RIGHT)
-                    max(
-                        bottomLeftCorner?.radius ?: predefine.gridBottomCornerScreenMargin,
-                        bottomRightCorner?.radius ?: predefine.gridBottomCornerScreenMargin
-                    )
-                } else {
-                    predefine.gridBottomCornerScreenMargin
-                }
-                rowHeight * rowAmount + max(screenCornerMargin, bottomPadding)
-            } else {
-                rowHeight * rowAmount + bottomPadding
-            }
+        val actualHeight = rowHeight * rowAmount + bottomPadding
         val actualHeightSpec = MeasureSpec.makeMeasureSpec(actualHeight, MeasureSpec.EXACTLY)
 
         super.onMeasure(widthMeasureSpec, actualHeightSpec)

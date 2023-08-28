@@ -25,7 +25,7 @@
 
     <androidx.preference.PreferenceCategory
         app:iconSpaceReserved="false"
-        app:title="@string/app_update_settings">
+        app:title="@string/others">
 
         <androidx.preference.CheckBoxPreference
             app:defaultValue="false"
@@ -33,12 +33,6 @@
             app:key="useBrowserDownloadUpgradeFile"
             app:summary="@string/use_browser_download_upgrade_file_sum"
             app:title="@string/use_browser_download_upgrade_file" />
-
-    </androidx.preference.PreferenceCategory>
-
-    <androidx.preference.PreferenceCategory
-        app:iconSpaceReserved="false"
-        app:title="@string/others">
 
         <androidx.preference.CheckBoxPreference
             app:defaultValue="true"
