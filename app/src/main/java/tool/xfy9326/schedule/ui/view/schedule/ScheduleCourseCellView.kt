@@ -17,6 +17,7 @@ import io.github.xfy9326.atools.ui.setOnSingleClickListener
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.*
 import tool.xfy9326.schedule.beans.WeekDay.Companion.orderedValue
+import tool.xfy9326.schedule.kt.asStringBuilder
 import tool.xfy9326.schedule.tools.MaterialColorHelper
 import tool.xfy9326.schedule.utils.NEW_LINE
 import tool.xfy9326.schedule.utils.view.ViewUtils
@@ -56,6 +57,9 @@ class ScheduleCourseCellView(
         } else {
             courseCell.sectionTime.weekDay.orderedValue(weekStart) - 1
         }
+    }
+    private val ellipsisText by lazy {
+        context.getString(R.string.ellipsis)
     }
     private var cellClickListener: ((CourseCell) -> Unit)? = null
 
@@ -120,15 +124,20 @@ class ScheduleCourseCellView(
             }
         }
 
-    private fun generateCourseCellShowText(courseCell: CourseCell) =
-        courseCell.courseName.appendEllipsisStyle(styles.courseCellCourseTextLength).let {
-            if (courseCell.courseLocation == null || !styles.showCourseCellLocation) {
-                it
-            } else {
-                val resId = if (styles.courseCellTextNoChangeLine) R.string.course_cell_text_no_change_line else R.string.course_cell_text
-                context.getString(resId, it, courseCell.courseLocation)
+    private fun generateCourseCellShowText(courseCell: CourseCell): CharSequence =
+        courseCell.courseName.asStringBuilder().appendEllipsisStyle(styles.courseCellCourseTextLength).apply {
+            if (styles.courseCellDetailContent.isNotEmpty()) {
+                if (CourseCellDetailContent.LOCATION in styles.courseCellDetailContent && courseCell.courseLocation != null) {
+                    appendLine()
+                    if (!styles.courseCellTextNoNewLine) appendLine()
+                    append(context.getString(R.string.course_cell_location, courseCell.courseLocation))
+                }
+                if (CourseCellDetailContent.TEACHER in styles.courseCellDetailContent && courseCell.courseTeacher != null) {
+                    appendLine()
+                    append(courseCell.courseTeacher)
+                }
             }
-        }.appendEllipsisStyle(styles.courseCellTextLength).let {
+        }.appendEllipsisStyle(styles.courseCellTextLength).toString().let {
             if (!courseCell.isThisWeekCourse && NotThisWeekCourseShowStyle.SHOW_NOT_THIS_WEEK_TEXT in styles.notThisWeekCourseShowStyle) {
                 val notThisWeekText = context.getString(R.string.not_this_week) + NEW_LINE
                 SpannableStringBuilder().apply {
@@ -140,9 +149,11 @@ class ScheduleCourseCellView(
             }
         }
 
-    private fun String.appendEllipsisStyle(textLength: Int?) =
+    private fun StringBuilder.appendEllipsisStyle(textLength: Int?): StringBuilder =
         if (textLength != null && length > textLength) {
-            substring(0, textLength) + context.getString(R.string.ellipsis)
+            setLength(textLength)
+            append(ellipsisText)
+            this
         } else {
             this
         }

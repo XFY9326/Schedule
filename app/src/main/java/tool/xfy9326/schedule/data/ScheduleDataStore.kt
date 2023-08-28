@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOn
 import tool.xfy9326.schedule.R
+import tool.xfy9326.schedule.beans.CourseCellDetailContent
 import tool.xfy9326.schedule.beans.ImageScaleType
 import tool.xfy9326.schedule.beans.NotThisWeekCourseShowStyle
 import tool.xfy9326.schedule.beans.ScheduleStyles
@@ -43,8 +44,10 @@ object ScheduleDataStore : AbstractDataStore("ScheduleSettings") {
     private val verticalCourseCellText by booleanPrefKey()
     private val enableScheduleGridScroll by booleanPrefKey()
     private val notThisWeekCourseCellAlpha by intPrefKey()
-    private val courseCellTextNoChangeLine by booleanPrefKey()
-    private val showCourseCellLocation by booleanPrefKey()
+    private val courseCellTextNoNewLine by booleanPrefKey()
+    private val courseCellDetailContent by stringSetPrefKey()
+    private val courseCellFullScreenSameHeight by booleanPrefKey()
+    private val courseCellFullScreenWithBottomInsets by booleanPrefKey()
 
     val courseCellVerticalPadding by intPrefKey()
     val courseCellHorizontalPadding by intPrefKey()
@@ -78,6 +81,12 @@ object ScheduleDataStore : AbstractDataStore("ScheduleSettings") {
 
     suspend fun readScheduleTextSize(textType: ScheduleText) = read { ScheduleText.TextSize.create(it, textType) }.first()
 
+    private fun Preferences.getCourseCellFullScreenSameHeight() =
+        if (this[courseCellAutoHeight] == false) this[courseCellFullScreenSameHeight] ?: false else false
+
+    private fun Preferences.courseCellFullScreenWithBottomInsets() =
+        if (getCourseCellFullScreenSameHeight()) this[courseCellFullScreenWithBottomInsets] ?: false else false
+
     val scheduleStylesFlow = read {
         ScheduleStyles(
             viewAlpha = it[scheduleViewAlpha] ?: 100,
@@ -98,13 +107,20 @@ object ScheduleDataStore : AbstractDataStore("ScheduleSettings") {
                 ?: IOManager.resources.getInteger(R.integer.default_schedule_not_this_week_course_alpha),
             courseCellHeight = if (it[courseCellAutoHeight] == false) getCourseCellHeightFromPref(it) else null,
             courseCellTextLength = if (it[courseCellAutoTextLength] == false) getCourseCellTextLengthFromPref(it) else null,
-            courseCellTextNoChangeLine = it[courseCellTextNoChangeLine] ?: false,
+            courseCellTextNoNewLine = it[courseCellTextNoNewLine] ?: false,
             courseCellCourseTextLength = if (it[courseCellShowAllCourseText] == false) getCourseCellCourseTextLengthFromPref(it) else null,
-            showCourseCellLocation = it[showCourseCellLocation] ?: true,
             courseCellVerticalPadding = getCourseCellVerticalPaddingFromPref(it),
             courseCellHorizontalPadding = getCourseCellHorizontalPaddingFromPref(it),
+            courseCellDetailContent = it[courseCellDetailContent]?.let { value -> tryEnumSetValueOf(value) }
+                ?: setOf(CourseCellDetailContent.LOCATION),
+            courseCellFullScreenSameHeight = it.getCourseCellFullScreenSameHeight(),
+            courseCellFullScreenWithBottomInsets = it.courseCellFullScreenWithBottomInsets()
         )
     }.distinctUntilChanged()
+
+    val courseCellAutoLengthFlow = read { it[courseCellAutoHeight] ?: true }
+
+    val courseCellFullScreenSameHeightFlow = read { it.getCourseCellFullScreenSameHeight() }
 
     val courseCellHeightFlow = read { getCourseCellHeightFromPref(it) }
 

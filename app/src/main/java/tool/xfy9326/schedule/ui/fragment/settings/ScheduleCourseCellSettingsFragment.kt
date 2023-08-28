@@ -90,6 +90,7 @@ class ScheduleCourseCellSettingsFragment : AbstractSettingsFragment() {
                 }
             }
         }
+
     }
 
     override fun onBindLiveDataFromSettingsViewMode(viewModel: SettingsViewModel) {
@@ -99,6 +100,14 @@ class ScheduleCourseCellSettingsFragment : AbstractSettingsFragment() {
                     findPreference<Preference>(bundle.prefKeyRes)?.summary = getString(bundle.prefSumRes, it)
                 }
             }
+        }
+        setupCourseCellHeightPrefDependencies(viewModel)
+    }
+
+    private fun setupCourseCellHeightPrefDependencies(viewModel: SettingsViewModel) {
+        val courseCellHeightPref = findPreference<Preference>(R.string.pref_schedule_course_cell_specific_height)
+        viewModel.isCustomCourseCellHeightEnabled.observe(viewLifecycleOwner) {
+            courseCellHeightPref?.isEnabled = it
         }
     }
 

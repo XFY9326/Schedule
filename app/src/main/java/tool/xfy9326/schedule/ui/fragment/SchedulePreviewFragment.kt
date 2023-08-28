@@ -88,7 +88,7 @@ class SchedulePreviewFragment : Fragment() {
 
     private suspend fun updateScheduleView(view: View) = withContext(Dispatchers.Main.immediate) {
         requireView().findViewWithTag<ViewGroup>(TAG_LAYOUT_CONTENT_CONTAINER)?.apply {
-            val scheduleView = findViewWithTag<View>(TAG_SCHEDULE_VIEW)
+            val scheduleView: View? = findViewWithTag(TAG_SCHEDULE_VIEW)
             if (view != scheduleView) {
                 if (scheduleView != null) removeView(scheduleView)
                 addView(view.also { it.tag = TAG_SCHEDULE_VIEW })

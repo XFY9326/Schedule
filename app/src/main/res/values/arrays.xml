@@ -63,6 +63,21 @@
         <item>USE_TRANSPARENT_BACKGROUND</item>
     </string-array>
 
+    <!-- CourseCellDetailContent -->
+    <string-array name="course_cell_detail_content">
+        <item>@string/course_cell_detail_content_location</item>
+        <item>@string/course_cell_detail_content_teacher</item>
+    </string-array>
+
+    <string-array name="course_cell_detail_content_values">
+        <item>LOCATION</item>
+        <item>TEACHER</item>
+    </string-array>
+
+    <string-array name="course_cell_detail_content_value_default">
+        <item>LOCATION</item>
+    </string-array>
+
     <!-- SystemBarAppearance -->
     <string-array name="system_bar_appearance">
         <item>@string/system_bar_follow_theme</item>
