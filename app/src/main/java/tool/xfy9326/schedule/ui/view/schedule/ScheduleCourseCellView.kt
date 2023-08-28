@@ -19,7 +19,6 @@ import tool.xfy9326.schedule.beans.*
 import tool.xfy9326.schedule.beans.WeekDay.Companion.orderedValue
 import tool.xfy9326.schedule.kt.asStringBuilder
 import tool.xfy9326.schedule.tools.MaterialColorHelper
-import tool.xfy9326.schedule.utils.NEW_LINE
 import tool.xfy9326.schedule.utils.view.ViewUtils
 import kotlin.math.floor
 
@@ -57,9 +56,6 @@ class ScheduleCourseCellView(
         } else {
             courseCell.sectionTime.weekDay.orderedValue(weekStart) - 1
         }
-    }
-    private val ellipsisText by lazy {
-        context.getString(R.string.ellipsis)
     }
     private var cellClickListener: ((CourseCell) -> Unit)? = null
 
@@ -139,9 +135,9 @@ class ScheduleCourseCellView(
             }
         }.appendEllipsisStyle(styles.courseCellTextLength).toString().let {
             if (!courseCell.isThisWeekCourse && NotThisWeekCourseShowStyle.SHOW_NOT_THIS_WEEK_TEXT in styles.notThisWeekCourseShowStyle) {
-                val notThisWeekText = context.getString(R.string.not_this_week) + NEW_LINE
                 SpannableStringBuilder().apply {
-                    append(notThisWeekText, StyleSpan(Typeface.BOLD), Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+                    append(context.getString(R.string.not_this_week), StyleSpan(Typeface.BOLD), Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+                    appendLine()
                     append(it)
                 }
             } else {
@@ -152,7 +148,7 @@ class ScheduleCourseCellView(
     private fun StringBuilder.appendEllipsisStyle(textLength: Int?): StringBuilder =
         if (textLength != null && length > textLength) {
             setLength(textLength)
-            append(ellipsisText)
+            append(context.getString(R.string.ellipsis))
             this
         } else {
             this
