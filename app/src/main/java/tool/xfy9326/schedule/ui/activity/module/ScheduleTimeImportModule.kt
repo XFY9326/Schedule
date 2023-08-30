@@ -20,7 +20,7 @@ class ScheduleTimeImportModule(activity: ScheduleEditActivity) :
     }
 
     override fun onInit() {
-        requireViewBinding().buttonScheduleTimeImport.setOnSingleClickListener {
+        requireViewBinding().layoutScheduleTimeEdit.buttonScheduleTimeImport.setOnSingleClickListener {
             requireViewModel().loadAllSchedules()
         }
         requireViewModel().loadAllSchedules.observeEvent(requireActivity()) {

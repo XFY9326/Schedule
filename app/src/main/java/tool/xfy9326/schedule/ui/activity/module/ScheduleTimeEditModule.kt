@@ -28,23 +28,25 @@ class ScheduleTimeEditModule(activity: ScheduleEditActivity) :
     override fun onInit() {
         scheduleTimeAdapter.setOnScheduleTimeEditListener(::selectScheduleTime)
 
-        requireViewBinding().checkBoxScheduleTimeCourseTimeSame.isChecked = requireViewModel().scheduleTimeCourseTimeSame
-        requireViewBinding().sliderScheduleCourseCostTime.value = requireViewModel().courseCostTime.toFloat()
-        requireViewBinding().sliderScheduleBreakCostTime.value = requireViewModel().breakCostTime.toFloat()
+        val viewBinding = requireViewBinding().layoutScheduleTimeEdit
 
-        requireViewBinding().sliderScheduleCourseCostTime.setOnSlideValueSetListener {
+        viewBinding.checkBoxScheduleTimeCourseTimeSame.isChecked = requireViewModel().scheduleTimeCourseTimeSame
+        viewBinding.sliderScheduleCourseCostTime.value = requireViewModel().courseCostTime.toFloat()
+        viewBinding.sliderScheduleBreakCostTime.value = requireViewModel().breakCostTime.toFloat()
+
+        viewBinding.sliderScheduleCourseCostTime.setOnSlideValueSetListener {
             updateCourseCostTime(it.toInt(), false)
         }
-        requireViewBinding().sliderScheduleBreakCostTime.setOnSlideValueSetListener {
+        viewBinding.sliderScheduleBreakCostTime.setOnSlideValueSetListener {
             updateBreakCostTime(it.toInt(), false)
         }
-        requireViewBinding().sliderScheduleTimeNum.setOnSlideValueSetListener {
+        viewBinding.sliderScheduleTimeNum.setOnSlideValueSetListener {
             updateCourseNum(it.toInt(), false)
         }
-        requireViewBinding().layoutScheduleTimeCourseTimeSame.setOnSingleClickListener {
-            requireViewBinding().checkBoxScheduleTimeCourseTimeSame.toggle()
+        viewBinding.layoutScheduleTimeCourseTimeSame.setOnSingleClickListener {
+            viewBinding.checkBoxScheduleTimeCourseTimeSame.toggle()
         }
-        requireViewBinding().checkBoxScheduleTimeCourseTimeSame.setOnCheckedChangeListener { _, isChecked ->
+        viewBinding.checkBoxScheduleTimeCourseTimeSame.setOnCheckedChangeListener { _, isChecked ->
             requireViewModel().scheduleTimeCourseTimeSame = isChecked
         }
 
@@ -117,7 +119,7 @@ class ScheduleTimeEditModule(activity: ScheduleEditActivity) :
             requireViewModel().courseCostTime = minute
             scheduleTimeAdapter.notifyDataSetChanged()
         }
-        requireViewBinding().textViewScheduleCourseCostTime.text = requireActivity().getString(R.string.minute, minute)
+        requireViewBinding().layoutScheduleTimeEdit.textViewScheduleCourseCostTime.text = requireActivity().getString(R.string.minute, minute)
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -137,7 +139,7 @@ class ScheduleTimeEditModule(activity: ScheduleEditActivity) :
             requireViewModel().breakCostTime = minute
             scheduleTimeAdapter.notifyDataSetChanged()
         }
-        requireViewBinding().textViewScheduleBreakCostTime.text = requireActivity().getString(R.string.minute, minute)
+        requireViewBinding().layoutScheduleTimeEdit.textViewScheduleBreakCostTime.text = requireActivity().getString(R.string.minute, minute)
     }
 
     fun updateCourseNum(num: Int, viewInit: Boolean) {
@@ -159,10 +161,10 @@ class ScheduleTimeEditModule(activity: ScheduleEditActivity) :
                 requireViewModel().editSchedule.times = it
                 scheduleTimeAdapter.submitList(it)
             }
-            requireViewBinding().textViewScheduleTimeNum.text =
+            requireViewBinding().layoutScheduleTimeEdit.textViewScheduleTimeNum.text =
                 requireActivity().getString(R.string.course_num, requireViewModel().editSchedule.times.size)
         } else {
-            requireViewBinding().textViewScheduleTimeNum.text = requireActivity().getString(R.string.course_num, num)
+            requireViewBinding().layoutScheduleTimeEdit.textViewScheduleTimeNum.text = requireActivity().getString(R.string.course_num, num)
         }
     }
 
