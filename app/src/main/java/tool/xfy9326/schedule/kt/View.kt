@@ -25,8 +25,8 @@ fun View.getSystemBarBottomInsets(): Int =
 
 fun View.getBottomScreenCornerMargin(): Int? {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-        val bottomLeftCorner = rootWindowInsets.getRoundedCorner(RoundedCorner.POSITION_BOTTOM_LEFT) ?: return null
-        val bottomRightCorner = rootWindowInsets.getRoundedCorner(RoundedCorner.POSITION_BOTTOM_RIGHT) ?: return null
+        val bottomLeftCorner = rootWindowInsets?.getRoundedCorner(RoundedCorner.POSITION_BOTTOM_LEFT) ?: return null
+        val bottomRightCorner = rootWindowInsets?.getRoundedCorner(RoundedCorner.POSITION_BOTTOM_RIGHT) ?: return null
         return max(bottomLeftCorner.radius, bottomRightCorner.radius)
     } else {
         return null

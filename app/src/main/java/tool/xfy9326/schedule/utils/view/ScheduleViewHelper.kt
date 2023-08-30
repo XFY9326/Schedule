@@ -120,7 +120,7 @@ object ScheduleViewHelper {
             scheduleGridView.addScheduleCell(viewDeferred.await())
         }
 
-        val scheduleView = ScheduleView(context, viewData.styles, columnAmount, scheduleHeaderViewDeferred.await(), scheduleGridView)
+        val scheduleView = ScheduleView(context, viewData.styles, columnAmount, scheduleHeaderViewDeferred.await(), scheduleGridView, noScroll)
         if (listener != null) scheduleView.setOnCourseClickListener(listener)
 
         return@withContext if (viewData.styles.enableScheduleGridScroll || noScroll) {
@@ -132,7 +132,7 @@ object ScheduleViewHelper {
         }
     }
 
-    suspend fun generateScheduleImageByWeekNum(scheduleId: Long, weekNum: Int, @Px targetWidth: Int, waterMark: Boolean) =
+    suspend fun generateScheduleImageByWeekNum(scheduleId: Long, weekNum: Int, @Px targetWidth: Int, @Px suggestHeight: Int, waterMark: Boolean) =
         withContext(Dispatchers.Default) {
             val schedule = ScheduleDBProvider.db.scheduleDAO.getSchedule(scheduleId).firstOrNull() ?: return@withContext null
             val courses = ScheduleDBProvider.db.scheduleDAO.getScheduleCourses(scheduleId).first()
@@ -148,7 +148,13 @@ object ScheduleViewHelper {
             val scheduleView = buildScheduleView(AppContext, viewData, noScroll = true)
 
             val widthSpec = View.MeasureSpec.makeMeasureSpec(targetWidth, View.MeasureSpec.AT_MOST)
-            val heightSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
+            // styles.courseCellFullScreenSameHeight 需要具体高度计算每一个Cell大小，要分开判断
+            val heightSpec = if (suggestHeight == 0 && !styles.courseCellFullScreenSameHeight) {
+                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
+            } else {
+                View.MeasureSpec.makeMeasureSpec(suggestHeight, View.MeasureSpec.AT_MOST)
+            }
+
             scheduleView.measure(widthSpec, heightSpec)
             scheduleView.layout(0, 0, scheduleView.measuredWidth, scheduleView.measuredHeight)
             scheduleView.requestLayout()

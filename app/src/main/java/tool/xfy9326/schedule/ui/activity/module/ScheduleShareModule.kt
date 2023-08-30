@@ -1,5 +1,6 @@
 package tool.xfy9326.schedule.ui.activity.module
 
+import androidx.annotation.Px
 import io.github.xfy9326.atools.livedata.observeEvent
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.databinding.ActivityScheduleBinding
@@ -28,14 +29,18 @@ class ScheduleShareModule(activity: ScheduleActivity) :
                 ViewUtils.showScheduleImageSaveSnackBar(requireViewBinding().layoutSchedule, it)
             }
         }
-        ScheduleImageDialog.setScheduleImageListener(requireActivity(), requireActivity().supportFragmentManager, ::generateScheduleImage)
+        ScheduleImageDialog.setScheduleImageListener(requireActivity(), requireActivity().supportFragmentManager) { saveImage, weekNum ->
+            val panel = requireViewBinding().viewPagerSchedulePanel
+            generateScheduleImage(saveImage, weekNum, panel.measuredWidth, panel.measuredHeight)
+        }
     }
 
     fun shareSchedule(weekNum: Int) {
         ScheduleImageDialog.showDialog(requireActivity().supportFragmentManager, weekNum)
     }
 
-    private fun generateScheduleImage(saveImage: Boolean, weekNum: Int) {
-        requireViewModel().shareScheduleImage(saveImage, weekNum, requireActivity().resources.displayMetrics.widthPixels)
+    private fun generateScheduleImage(saveImage: Boolean, weekNum: Int, @Px viewWidth: Int, @Px viewHeight: Int) {
+        val targetWidth = if(viewWidth == 0) requireActivity().resources.displayMetrics.widthPixels else viewWidth
+        requireViewModel().shareScheduleImage(saveImage, weekNum, targetWidth, viewHeight)
     }
 }
