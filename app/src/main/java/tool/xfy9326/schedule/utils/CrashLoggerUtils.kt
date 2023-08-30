@@ -8,8 +8,6 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.io.PathManager
-import tool.xfy9326.schedule.kt.appErrorRelaunch
-import tool.xfy9326.schedule.kt.crashRelaunch
 
 object CrashLoggerUtils {
     private const val CRASH_RELAUNCH_PERIOD_MILLS = 5000L

@@ -6,8 +6,8 @@ import androidx.preference.MultiSelectListPreference
 import androidx.preference.PreferenceDataStore
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.data.ScheduleDataStore
-import tool.xfy9326.schedule.kt.showSnackBar
 import tool.xfy9326.schedule.ui.fragment.base.AbstractSettingsFragment
+import tool.xfy9326.schedule.utils.showSnackBar
 
 class ScheduleNotThisWeekSettingsFragment : AbstractSettingsFragment() {
     override val titleName: Int = R.string.schedule_not_this_week_style

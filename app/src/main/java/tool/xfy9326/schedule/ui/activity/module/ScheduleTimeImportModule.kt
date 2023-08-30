@@ -4,11 +4,11 @@ import io.github.xfy9326.atools.livedata.observeEvent
 import io.github.xfy9326.atools.ui.setOnSingleClickListener
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.databinding.ActivityScheduleEditBinding
-import tool.xfy9326.schedule.kt.showSnackBar
 import tool.xfy9326.schedule.ui.activity.ScheduleEditActivity
 import tool.xfy9326.schedule.ui.activity.base.AbstractViewModelActivityModule
 import tool.xfy9326.schedule.ui.adapter.ScheduleTimeAdapter
 import tool.xfy9326.schedule.ui.vm.ScheduleEditViewModel
+import tool.xfy9326.schedule.utils.showSnackBar
 import tool.xfy9326.schedule.utils.view.DialogUtils
 
 class ScheduleTimeImportModule(activity: ScheduleEditActivity) :

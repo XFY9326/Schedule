@@ -5,13 +5,13 @@ import io.github.xfy9326.atools.livedata.observeEvent
 import io.github.xfy9326.atools.ui.setOnSingleClickListener
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.databinding.ActivityAppErrorBinding
-import tool.xfy9326.schedule.kt.showSnackBar
 import tool.xfy9326.schedule.ui.activity.base.ViewModelActivity
 import tool.xfy9326.schedule.ui.dialog.CrashViewDialog
 import tool.xfy9326.schedule.ui.dialog.UpgradeDialog
 import tool.xfy9326.schedule.ui.vm.AppErrorViewModel
 import tool.xfy9326.schedule.utils.IntentUtils
 import tool.xfy9326.schedule.utils.UpgradeUtils
+import tool.xfy9326.schedule.utils.showSnackBar
 import java.io.File
 
 class AppErrorActivity : ViewModelActivity<AppErrorViewModel, ActivityAppErrorBinding>() {

@@ -5,12 +5,12 @@ import io.github.xfy9326.atools.ui.setOnSingleClickListener
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.ScheduleTime
 import tool.xfy9326.schedule.databinding.ActivityScheduleEditBinding
-import tool.xfy9326.schedule.kt.showSnackBar
 import tool.xfy9326.schedule.ui.activity.ScheduleEditActivity
 import tool.xfy9326.schedule.ui.activity.base.AbstractViewModelActivityModule
 import tool.xfy9326.schedule.ui.adapter.ScheduleTimeAdapter
 import tool.xfy9326.schedule.ui.dialog.TimePickerDialog
 import tool.xfy9326.schedule.ui.vm.ScheduleEditViewModel
+import tool.xfy9326.schedule.utils.showSnackBar
 
 class ScheduleTimeEditModule(activity: ScheduleEditActivity) :
     AbstractViewModelActivityModule<ScheduleEditViewModel, ActivityScheduleEditBinding, ScheduleEditActivity>(activity) {

@@ -12,7 +12,6 @@ import io.github.xfy9326.atools.io.utils.ImageMimeType
 import tool.xfy9326.schedule.BuildConfig
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.io.utils.getUriByFileProvider
-import tool.xfy9326.schedule.kt.tryStartActivity
 import tool.xfy9326.schedule.tools.MIMEConst
 import java.io.File
 import java.util.Date

@@ -25,10 +25,10 @@ import tool.xfy9326.schedule.data.ScheduleDataStore
 import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
 import tool.xfy9326.schedule.io.PathManager
 import tool.xfy9326.schedule.io.utils.ImageUtils
-import tool.xfy9326.schedule.kt.asDistinctLiveData
 import tool.xfy9326.schedule.tools.DisposableValue
 import tool.xfy9326.schedule.ui.vm.base.AbstractViewModel
 import tool.xfy9326.schedule.utils.BackupUtils
+import tool.xfy9326.schedule.utils.asDistinctLiveData
 import tool.xfy9326.schedule.utils.schedule.ScheduleDataProcessor
 import tool.xfy9326.schedule.utils.schedule.ScheduleSyncHelper
 import java.io.File

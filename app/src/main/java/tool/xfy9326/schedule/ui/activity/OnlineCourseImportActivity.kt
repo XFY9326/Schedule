@@ -21,8 +21,6 @@ import tool.xfy9326.schedule.content.beans.JSConfig
 import tool.xfy9326.schedule.content.utils.BaseCourseImportConfig
 import tool.xfy9326.schedule.data.AppDataStore
 import tool.xfy9326.schedule.databinding.ActivityOnlineCourseImportBinding
-import tool.xfy9326.schedule.kt.consumeSystemBarInsets
-import tool.xfy9326.schedule.kt.showSnackBar
 import tool.xfy9326.schedule.tools.MIMEConst
 import tool.xfy9326.schedule.ui.activity.base.CourseProviderActivity
 import tool.xfy9326.schedule.ui.activity.base.ViewModelActivity
@@ -34,7 +32,9 @@ import tool.xfy9326.schedule.ui.view.recyclerview.AdvancedDividerItemDecoration
 import tool.xfy9326.schedule.ui.vm.OnlineCourseImportViewModel
 import tool.xfy9326.schedule.utils.AppUriUtils
 import tool.xfy9326.schedule.utils.IntentUtils
+import tool.xfy9326.schedule.utils.consumeSystemBarInsets
 import tool.xfy9326.schedule.utils.schedule.CourseImportUtils
+import tool.xfy9326.schedule.utils.showSnackBar
 import tool.xfy9326.schedule.utils.view.DialogUtils
 import tool.xfy9326.schedule.utils.view.ViewUtils
 

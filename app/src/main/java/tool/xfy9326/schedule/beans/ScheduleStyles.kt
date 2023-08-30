@@ -8,8 +8,8 @@ import io.github.xfy9326.atools.ui.dpToPx
 import io.github.xfy9326.atools.ui.getColorCompat
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.annotation.Dp
-import tool.xfy9326.schedule.kt.getBottomScreenCornerMargin
-import tool.xfy9326.schedule.kt.getSystemBarBottomInsets
+import tool.xfy9326.schedule.utils.getBottomScreenCornerMargin
+import tool.xfy9326.schedule.utils.getSystemBarBottomInsets
 import kotlin.math.max
 
 data class ScheduleStyles(

@@ -6,11 +6,11 @@ import kotlinx.coroutines.launch
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.data.AppDataStore
 import tool.xfy9326.schedule.databinding.ActivityScheduleBinding
-import tool.xfy9326.schedule.kt.showSnackBar
 import tool.xfy9326.schedule.ui.activity.ScheduleActivity
 import tool.xfy9326.schedule.ui.activity.base.AbstractViewModelActivityModule
 import tool.xfy9326.schedule.ui.vm.ScheduleViewModel
 import tool.xfy9326.schedule.utils.PermissionUtils
+import tool.xfy9326.schedule.utils.showSnackBar
 import tool.xfy9326.schedule.utils.view.DialogUtils
 
 class CalendarSyncModule(activity: ScheduleActivity) :

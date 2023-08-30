@@ -23,8 +23,6 @@ import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.EditError.Companion.getText
 import tool.xfy9326.schedule.beans.Schedule
 import tool.xfy9326.schedule.databinding.ActivityScheduleEditBinding
-import tool.xfy9326.schedule.kt.consumeSystemBarInsets
-import tool.xfy9326.schedule.kt.showSnackBar
 import tool.xfy9326.schedule.ui.activity.base.ViewModelActivity
 import tool.xfy9326.schedule.ui.activity.module.ScheduleTermEditModule
 import tool.xfy9326.schedule.ui.activity.module.ScheduleTimeEditModule
@@ -32,6 +30,8 @@ import tool.xfy9326.schedule.ui.activity.module.ScheduleTimeImportModule
 import tool.xfy9326.schedule.ui.activity.module.ScheduleWeekStartModule
 import tool.xfy9326.schedule.ui.adapter.ScheduleTimeAdapter
 import tool.xfy9326.schedule.ui.vm.ScheduleEditViewModel
+import tool.xfy9326.schedule.utils.consumeSystemBarInsets
+import tool.xfy9326.schedule.utils.showSnackBar
 import tool.xfy9326.schedule.utils.view.DialogUtils
 
 class ScheduleEditActivity : ViewModelActivity<ScheduleEditViewModel, ActivityScheduleEditBinding>(), ColorPickerDialogListener {

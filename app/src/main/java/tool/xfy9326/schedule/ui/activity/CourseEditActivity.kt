@@ -21,12 +21,12 @@ import tool.xfy9326.schedule.beans.Course
 import tool.xfy9326.schedule.beans.CourseTime
 import tool.xfy9326.schedule.beans.EditError.Companion.getText
 import tool.xfy9326.schedule.databinding.ActivityCourseEditBinding
-import tool.xfy9326.schedule.kt.consumeSystemBarInsets
-import tool.xfy9326.schedule.kt.showSnackBar
 import tool.xfy9326.schedule.ui.activity.base.ViewModelActivity
 import tool.xfy9326.schedule.ui.adapter.CourseTimeAdapter
 import tool.xfy9326.schedule.ui.dialog.CourseTimeEditDialog
 import tool.xfy9326.schedule.ui.vm.CourseEditViewModel
+import tool.xfy9326.schedule.utils.consumeSystemBarInsets
+import tool.xfy9326.schedule.utils.showSnackBar
 import tool.xfy9326.schedule.utils.view.DialogUtils
 import kotlin.properties.Delegates
 

@@ -15,7 +15,7 @@ import kotlinx.coroutines.launch
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.data.ScheduleDataStore
 import tool.xfy9326.schedule.databinding.DialogScheduleImageBinding
-import tool.xfy9326.schedule.kt.setSystemBarAppearance
+import tool.xfy9326.schedule.utils.setSystemBarAppearance
 
 class ScheduleImageDialog : AppCompatDialogFragment() {
     companion object {

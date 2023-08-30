@@ -17,8 +17,8 @@ import io.github.xfy9326.atools.ui.setOnSingleClickListener
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.*
 import tool.xfy9326.schedule.beans.WeekDay.Companion.orderedValue
-import tool.xfy9326.schedule.kt.asStringBuilder
 import tool.xfy9326.schedule.tools.MaterialColorHelper
+import tool.xfy9326.schedule.utils.asStringBuilder
 import tool.xfy9326.schedule.utils.view.ViewUtils
 import kotlin.math.floor
 

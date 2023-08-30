@@ -13,7 +13,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import io.github.xfy9326.atools.ui.setOnSingleClickListener
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.databinding.DialogWebCourseProviderBottomPanelBinding
-import tool.xfy9326.schedule.kt.consumeBottomInsets
+import tool.xfy9326.schedule.utils.consumeBottomInsets
 
 class WebCourseProviderBottomPanel : BottomSheetDialogFragment() {
     companion object {

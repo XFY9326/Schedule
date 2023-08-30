@@ -26,10 +26,10 @@ import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.data.ScheduleDataStore
 import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
 import tool.xfy9326.schedule.io.utils.ImageUtils
-import tool.xfy9326.schedule.kt.asDistinctLiveData
 import tool.xfy9326.schedule.tools.DisposableValue
 import tool.xfy9326.schedule.ui.vm.base.AbstractViewModel
 import tool.xfy9326.schedule.utils.CalendarUtils
+import tool.xfy9326.schedule.utils.asDistinctLiveData
 import tool.xfy9326.schedule.utils.ics.ScheduleICSHelper
 import tool.xfy9326.schedule.utils.schedule.ScheduleDataProcessor
 import tool.xfy9326.schedule.utils.schedule.ScheduleSyncHelper

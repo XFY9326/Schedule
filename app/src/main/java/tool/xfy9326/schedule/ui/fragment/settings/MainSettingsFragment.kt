@@ -3,14 +3,14 @@ package tool.xfy9326.schedule.ui.fragment.settings
 import android.os.Bundle
 import io.github.xfy9326.atools.core.startActivity
 import tool.xfy9326.schedule.R
-import tool.xfy9326.schedule.kt.bindPrefFragment
-import tool.xfy9326.schedule.kt.setOnPrefClickListener
-import tool.xfy9326.schedule.kt.showSnackBar
 import tool.xfy9326.schedule.ui.activity.AboutActivity
 import tool.xfy9326.schedule.ui.dialog.UpgradeDialog
 import tool.xfy9326.schedule.ui.fragment.base.AbstractSettingsFragment
 import tool.xfy9326.schedule.utils.IntentUtils
 import tool.xfy9326.schedule.utils.UpgradeUtils
+import tool.xfy9326.schedule.utils.bindPrefFragment
+import tool.xfy9326.schedule.utils.setOnPrefClickListener
+import tool.xfy9326.schedule.utils.showSnackBar
 
 class MainSettingsFragment : AbstractSettingsFragment() {
     override val preferenceResId: Int = R.xml.settings_main

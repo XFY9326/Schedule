@@ -359,7 +359,7 @@
     <string name="has_read">已阅读</string>
     <string name="disable_function">停用</string>
     <string name="lock_schedule_header_scroll">滑动时锁定课程表首行</string>
-    <string name="lock_schedule_header_scroll_sum">关闭后将会连带课表首行日期整体滑动</string>
+    <string name="lock_schedule_header_scroll_sum">关闭后将会连带课表首行日期整体滑动\n注：由于预览窗口受限无法展示锁定效果</string>
     <string name="draw_water_mark_on_schedule_image">分享课表时添加水印</string>
     <string name="allow_import_incomplete_schedule">允许跳过部分无法导入的课程</string>
     <string name="allow_import_incomplete_schedule_sum">可能会导致导入的课表不完整\n注：部分课程解析可能不允许忽略错误</string>
@@ -414,7 +414,7 @@
     <string name="sample_course_name">课程名称示例</string>
     <string name="sample_course_location">课程地点示例</string>
     <string name="sample_course_teacher">教师名</string>
-    <string name="schedule_background_preview_attention">注意：\n由于设置中预览的课程表高度受限，因此预览的课程表背景缩放位置与大小不能完全代表最终的显示效果</string>
+    <string name="schedule_background_preview_attention">注意：\n由于设置中预览的课程表高度受限，因此预览的课程表背景是可滚动且不含沉浸顶栏的高度（预览界面仅供参考）。</string>
     <string name="schedule_preview_ratio">课表预览比例</string>
     <string name="external_course_import">外部课程导入</string>
     <string name="external_course_import_params_incomplete">启动参数有缺失！</string>
@@ -438,7 +438,7 @@
     <string name="schedule_course_cell_auto_height">自动设置课程格高度</string>
     <string name="schedule_course_cell_auto_height_sum">根据文字大小与长度自动平均设置高度</string>
     <string name="schedule_course_cell_full_screen_same_height">使用相同的课程格高度填充屏幕</string>
-    <string name="schedule_course_cell_full_screen_same_height_sum">在屏幕高度不足时可能会出现显示错误\n注：预览界面并不代表最终显示效果</string>
+    <string name="schedule_course_cell_full_screen_same_height_sum">在屏幕高度不足时可能会出现显示错误</string>
     <string name="schedule_course_cell_full_screen_bottom_insets">相同课程格高度填充屏幕时避免滑动</string>
     <string name="schedule_course_cell_full_screen_bottom_insets_sum">为底部圆角适配和导航栏的显示预留空间</string>
     <string name="schedule_course_cell_specific_height">单节课程的课程格高度（行高）</string>
@@ -466,6 +466,8 @@
     <string name="schedule_course_cell_vertical_padding">课程格纵向间距（上下）</string>
     <string name="schedule_course_cell_padding_sum">当前间距：%1$dpx</string>
     <string name="schedule_course_cell_padding_hint">间距(px) [%1$d, %2$d]</string>
+    <string name="schedule_preview_is_land">横屏预览模式</string>
+    <string name="schedule_preview_is_portrait">竖屏预览模式</string>
 
     <string name="js_config_read_failed">配置文件读取错误！</string>
     <string name="js_config_invalid">导入的配置文件不合法！</string>

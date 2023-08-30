@@ -8,8 +8,8 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import tool.xfy9326.schedule.data.AppDataStore
 import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
-import tool.xfy9326.schedule.kt.asDistinctLiveData
 import tool.xfy9326.schedule.ui.vm.base.AbstractViewModel
+import tool.xfy9326.schedule.utils.asDistinctLiveData
 
 class ScheduleManageViewModel : AbstractViewModel() {
     companion object {

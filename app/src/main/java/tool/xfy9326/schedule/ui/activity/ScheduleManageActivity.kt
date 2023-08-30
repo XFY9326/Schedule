@@ -8,14 +8,14 @@ import io.github.xfy9326.atools.ui.setOnSingleClickListener
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.ScheduleWrapper
 import tool.xfy9326.schedule.databinding.ActivityScheduleManageBinding
-import tool.xfy9326.schedule.kt.consumeSystemBarInsets
-import tool.xfy9326.schedule.kt.showSnackBar
 import tool.xfy9326.schedule.ui.activity.base.ViewModelActivity
 import tool.xfy9326.schedule.ui.adapter.ScheduleManageAdapter
 import tool.xfy9326.schedule.ui.adapter.ScheduleManageAdapter.ScheduleOperation.COURSE_EDIT
 import tool.xfy9326.schedule.ui.adapter.ScheduleManageAdapter.ScheduleOperation.EDIT
 import tool.xfy9326.schedule.ui.adapter.ScheduleManageAdapter.ScheduleOperation.SET_AS_CURRENT
 import tool.xfy9326.schedule.ui.vm.ScheduleManageViewModel
+import tool.xfy9326.schedule.utils.consumeSystemBarInsets
+import tool.xfy9326.schedule.utils.showSnackBar
 
 class ScheduleManageActivity : ViewModelActivity<ScheduleManageViewModel, ActivityScheduleManageBinding>() {
     override val vmClass = ScheduleManageViewModel::class

@@ -6,8 +6,8 @@ import io.github.xfy9326.atools.ui.setOnSingleClickListener
 import tool.xfy9326.schedule.BuildConfig
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.databinding.ActivityAboutBinding
-import tool.xfy9326.schedule.kt.consumeSystemBarInsets
 import tool.xfy9326.schedule.ui.activity.base.ViewBindingActivity
+import tool.xfy9326.schedule.utils.consumeSystemBarInsets
 
 class AboutActivity : ViewBindingActivity<ActivityAboutBinding>() {
 

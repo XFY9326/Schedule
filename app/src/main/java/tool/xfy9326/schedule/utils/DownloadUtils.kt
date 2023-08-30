@@ -7,7 +7,6 @@ import android.os.Environment
 import androidx.core.content.getSystemService
 import androidx.core.net.toUri
 import io.github.xfy9326.atools.core.openUrlInBrowser
-import tool.xfy9326.schedule.kt.PROJECT_ID
 import java.io.File
 
 object DownloadUtils {

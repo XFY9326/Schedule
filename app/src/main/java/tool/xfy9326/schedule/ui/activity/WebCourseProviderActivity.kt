@@ -8,12 +8,12 @@ import tool.xfy9326.schedule.beans.WebPageContent
 import tool.xfy9326.schedule.content.base.WebCourseParser
 import tool.xfy9326.schedule.content.base.WebCourseProvider
 import tool.xfy9326.schedule.databinding.ActivityFragmentContainerBinding
-import tool.xfy9326.schedule.kt.showSnackBar
 import tool.xfy9326.schedule.ui.activity.base.AbstractWebCourseProviderActivity
 import tool.xfy9326.schedule.ui.dialog.FullScreenLoadingDialog
 import tool.xfy9326.schedule.ui.vm.WebCourseProviderViewModel
 import tool.xfy9326.schedule.utils.JSBridge
 import tool.xfy9326.schedule.utils.schedule.ScheduleImportManager
+import tool.xfy9326.schedule.utils.showSnackBar
 import tool.xfy9326.schedule.utils.view.DialogUtils
 
 class WebCourseProviderActivity :

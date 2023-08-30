@@ -11,12 +11,12 @@ import io.github.xfy9326.atools.ui.show
 import kotlinx.coroutines.launch
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.data.AppSettingsDataStore
-import tool.xfy9326.schedule.kt.setOnPrefClickListener
-import tool.xfy9326.schedule.kt.showSnackBar
 import tool.xfy9326.schedule.ui.dialog.MultiItemSelectDialog
 import tool.xfy9326.schedule.ui.fragment.base.AbstractSettingsFragment
 import tool.xfy9326.schedule.ui.vm.SettingsViewModel
 import tool.xfy9326.schedule.utils.PermissionUtils
+import tool.xfy9326.schedule.utils.setOnPrefClickListener
+import tool.xfy9326.schedule.utils.showSnackBar
 
 class CalendarSyncSettingsFragment : AbstractSettingsFragment() {
     companion object {

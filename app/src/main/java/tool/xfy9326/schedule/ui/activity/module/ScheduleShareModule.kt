@@ -4,12 +4,12 @@ import androidx.annotation.Px
 import io.github.xfy9326.atools.livedata.observeEvent
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.databinding.ActivityScheduleBinding
-import tool.xfy9326.schedule.kt.showSnackBar
 import tool.xfy9326.schedule.ui.activity.ScheduleActivity
 import tool.xfy9326.schedule.ui.activity.base.AbstractViewModelActivityModule
 import tool.xfy9326.schedule.ui.dialog.ScheduleImageDialog
 import tool.xfy9326.schedule.ui.vm.ScheduleViewModel
 import tool.xfy9326.schedule.utils.IntentUtils
+import tool.xfy9326.schedule.utils.showSnackBar
 import tool.xfy9326.schedule.utils.view.ViewUtils
 
 class ScheduleShareModule(activity: ScheduleActivity) :
@@ -40,7 +40,7 @@ class ScheduleShareModule(activity: ScheduleActivity) :
     }
 
     private fun generateScheduleImage(saveImage: Boolean, weekNum: Int, @Px viewWidth: Int, @Px viewHeight: Int) {
-        val targetWidth = if(viewWidth == 0) requireActivity().resources.displayMetrics.widthPixels else viewWidth
+        val targetWidth = if (viewWidth == 0) requireActivity().resources.displayMetrics.widthPixels else viewWidth
         requireViewModel().shareScheduleImage(saveImage, weekNum, targetWidth, viewHeight)
     }
 }

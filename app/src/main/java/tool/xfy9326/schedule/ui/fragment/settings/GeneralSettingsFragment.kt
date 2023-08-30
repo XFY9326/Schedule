@@ -13,9 +13,9 @@ import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.NightMode
 import tool.xfy9326.schedule.beans.NightMode.Companion.modeInt
 import tool.xfy9326.schedule.data.AppSettingsDataStore
-import tool.xfy9326.schedule.kt.setOnPrefClickListener
-import tool.xfy9326.schedule.kt.showSnackBar
 import tool.xfy9326.schedule.ui.fragment.base.AbstractSettingsFragment
+import tool.xfy9326.schedule.utils.setOnPrefClickListener
+import tool.xfy9326.schedule.utils.showSnackBar
 
 class GeneralSettingsFragment : AbstractSettingsFragment() {
     override val titleName: Int = R.string.general_settings

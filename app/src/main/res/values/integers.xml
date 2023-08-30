@@ -24,7 +24,7 @@
     <integer name="default_schedule_not_this_week_course_alpha">50</integer>
     <integer name="default_schedule_background_image_quality">60</integer>
     <integer name="default_schedule_background_image_alpha">100</integer>
-    <integer name="default_schedule_course_cell_height">40</integer>
+    <integer name="default_schedule_course_cell_height">60</integer>
     <integer name="default_schedule_course_cell_text_length">15</integer>
     <integer name="default_schedule_course_cell_course_text_length">10</integer>
     <integer name="default_schedule_course_cell_vertical_padding">4</integer>

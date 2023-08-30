@@ -23,9 +23,9 @@ import tool.xfy9326.schedule.beans.ScheduleSync
 import tool.xfy9326.schedule.beans.SectionTime.Companion.description
 import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
-import tool.xfy9326.schedule.kt.PROJECT_ID
 import tool.xfy9326.schedule.tools.NumberPattern
 import tool.xfy9326.schedule.utils.NEW_LINE
+import tool.xfy9326.schedule.utils.PROJECT_ID
 import tool.xfy9326.schedule.utils.ics.ScheduleICSWriter
 import java.util.Date
 import java.util.TimeZone

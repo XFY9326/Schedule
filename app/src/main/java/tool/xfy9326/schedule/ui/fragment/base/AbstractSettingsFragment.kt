@@ -11,11 +11,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.PreferenceDataStore
 import androidx.preference.PreferenceFragmentCompat
 import androidx.recyclerview.widget.RecyclerView
-import tool.xfy9326.schedule.kt.consumeSystemBarInsets
-import tool.xfy9326.schedule.kt.getDefaultBackgroundColor
 import tool.xfy9326.schedule.ui.activity.SettingsActivity
 import tool.xfy9326.schedule.ui.activity.base.AbstractSettingsActivity
 import tool.xfy9326.schedule.ui.vm.SettingsViewModel
+import tool.xfy9326.schedule.utils.consumeSystemBarInsets
+import tool.xfy9326.schedule.utils.getDefaultBackgroundColor
 
 abstract class AbstractSettingsFragment : PreferenceFragmentCompat() {
     protected abstract val preferenceResId: Int
