@@ -93,7 +93,7 @@ class ScheduleCourseCellSettingsFragment : AbstractSettingsFragment() {
 
     }
 
-    override fun onBindLiveDataFromSettingsViewMode(viewModel: SettingsViewModel) {
+    override fun onBindLiveDataFromSettingsViewModel(viewModel: SettingsViewModel) {
         for (bundle in numberTextEditArray) {
             viewLifecycleOwner.lifecycleScope.launch {
                 bundle.dataStoreFlow.collect {

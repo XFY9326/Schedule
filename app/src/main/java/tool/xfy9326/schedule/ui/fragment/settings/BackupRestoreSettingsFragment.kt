@@ -10,10 +10,10 @@ import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.BatchResult
 import tool.xfy9326.schedule.tools.MIMEConst
 import tool.xfy9326.schedule.ui.dialog.ImportCourseConflictDialog
-import tool.xfy9326.schedule.ui.dialog.MultiItemSelectDialog
 import tool.xfy9326.schedule.ui.fragment.base.AbstractSettingsFragment
 import tool.xfy9326.schedule.ui.vm.SettingsViewModel
 import tool.xfy9326.schedule.utils.BackupUtils
+import tool.xfy9326.schedule.utils.schedule.ScheduleBackupHelper
 import tool.xfy9326.schedule.utils.setOnPrefClickListener
 import tool.xfy9326.schedule.utils.showSnackBar
 
@@ -25,12 +25,7 @@ class BackupRestoreSettingsFragment : AbstractSettingsFragment() {
     override val titleName: Int = R.string.backup_and_restore
     override val preferenceResId: Int = R.xml.settings_backup_restore
     private val backupSchedule = registerForActivityResult(ActivityResultContracts.CreateDocument(MIMEConst.MIME_APPLICATION_JSON)) {
-        if (it != null) {
-            requireSettingsViewModel()?.backupScheduleToUri(it)
-        } else {
-            requireSettingsViewModel()?.waitBackupScheduleId?.consume()
-            requireRootLayout()?.showSnackBar(R.string.output_file_cancel)
-        }
+        requireSettingsViewModel()?.scheduleBackup?.backupToUri(it)
     }
     private val restoreSchedule = registerForActivityResult(ActivityResultContracts.GetContent()) {
         if (it != null) {
@@ -40,37 +35,25 @@ class BackupRestoreSettingsFragment : AbstractSettingsFragment() {
 
     override fun onPrefInit(savedInstanceState: Bundle?) {
         setOnPrefClickListener(R.string.pref_backup_schedule) {
-            requireSettingsViewModel()?.getScheduleBackupList()
+            requireSettingsViewModel()?.scheduleBackup?.requestBackupScheduleList()
         }
         setOnPrefClickListener(R.string.pref_restore_schedule) {
             restoreSchedule.launch(MIMEConst.MIME_APPLICATION_JSON)
         }
     }
 
-    override fun onBindLiveDataFromSettingsViewMode(viewModel: SettingsViewModel) {
-        viewModel.scheduleBackupList.observeEvent(viewLifecycleOwner) {
-            MultiItemSelectDialog.showDialog(
-                childFragmentManager,
-                null,
-                getString(R.string.backup_schedule_choose),
-                showArr = it.map { min ->
-                    min.name
-                }.toTypedArray(),
-                idArr = it.map { min ->
-                    min.scheduleId
-                }.toLongArray(),
-                selectedArr = BooleanArray(it.size) { true }
-            )
-        }
-        viewModel.backupScheduleToUriResult.observeEvent(viewLifecycleOwner) {
-            requireRootLayout()?.showSnackBar(
-                if (it) {
-                    R.string.output_file_success
-                } else {
-                    R.string.output_file_failed
-                }
-            )
-        }
+    override fun onBindLiveDataFromSettingsViewModel(viewModel: SettingsViewModel) {
+        viewModel.scheduleBackup.setupBackupView(
+            context = requireContext(),
+            lifecycleOwner = this,
+            fragmentManager = childFragmentManager,
+            onBackupLaunch = {
+                backupSchedule.launch(BackupUtils.createBackupFileName(requireContext()))
+            },
+            onBackupStatus = {
+                requireRootLayout()?.showSnackBar(ScheduleBackupHelper.getResultMsgId(it))
+            }
+        )
         viewModel.restoreScheduleFromUriResult.observeEvent(viewLifecycleOwner) {
             if (it.second) {
                 ImportCourseConflictDialog.showDialog(
@@ -86,17 +69,7 @@ class BackupRestoreSettingsFragment : AbstractSettingsFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        MultiItemSelectDialog.setOnMultiItemSelectedListener(childFragmentManager, viewLifecycleOwner) { _, idArr, selectedArr ->
-            val idList = idArr.filterIndexed { i, _ ->
-                selectedArr[i]
-            }
-            if (idList.isEmpty()) {
-                requireRootLayout()?.showSnackBar(R.string.schedule_choose_empty)
-            } else {
-                requireSettingsViewModel()?.waitBackupScheduleId?.write(idList)
-                backupSchedule.launch(BackupUtils.createBackupFileName(requireContext()))
-            }
-        }
+
         ImportCourseConflictDialog.setOnReadImportCourseConflictListener(childFragmentManager, viewLifecycleOwner) {
             it?.getParcelableCompat<BatchResult>(EXTRA_BATCH_RESULT)?.let(::showRestoreResult)
         }

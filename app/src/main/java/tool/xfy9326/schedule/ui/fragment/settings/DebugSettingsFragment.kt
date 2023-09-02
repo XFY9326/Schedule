@@ -61,7 +61,7 @@ class DebugSettingsFragment : AbstractSettingsFragment() {
         }
     }
 
-    override fun onBindLiveDataFromSettingsViewMode(viewModel: SettingsViewModel) {
+    override fun onBindLiveDataFromSettingsViewModel(viewModel: SettingsViewModel) {
         viewModel.allDebugLogs.observeEvent(viewLifecycleOwner) {
             when (it.first) {
                 TAG_READ_DEBUG_LOGS -> showDebugLogsSelectDialog(it.second, R.string.read_debug_logs) { log ->

@@ -76,7 +76,7 @@ class CalendarSyncSettingsFragment : AbstractSettingsFragment() {
         }
     }
 
-    override fun onBindLiveDataFromSettingsViewMode(viewModel: SettingsViewModel) {
+    override fun onBindLiveDataFromSettingsViewModel(viewModel: SettingsViewModel) {
         viewModel.syncToCalendarStatus.observeEvent(viewLifecycleOwner) {
             if (it.success) {
                 if (it.failedAmount == 0) {

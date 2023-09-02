@@ -20,6 +20,7 @@
         android:fillViewport="true">
 
         <FrameLayout
+            android:id="@+id/layout_externalCourseImportContent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 

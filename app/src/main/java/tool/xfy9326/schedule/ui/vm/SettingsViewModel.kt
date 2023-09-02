@@ -29,6 +29,7 @@ import tool.xfy9326.schedule.tools.DisposableValue
 import tool.xfy9326.schedule.ui.vm.base.AbstractViewModel
 import tool.xfy9326.schedule.utils.BackupUtils
 import tool.xfy9326.schedule.utils.asDistinctLiveData
+import tool.xfy9326.schedule.utils.schedule.ScheduleBackupHelper
 import tool.xfy9326.schedule.utils.schedule.ScheduleDataProcessor
 import tool.xfy9326.schedule.utils.schedule.ScheduleSyncHelper
 import java.io.File
@@ -63,31 +64,13 @@ class SettingsViewModel : AbstractViewModel() {
     val allDebugLogs by lazy { MutableEventLiveData<Pair<String, List<File>>>() }
     val showDebugLog by lazy { MutableEventLiveData<String>() }
     val outputLogFileToUriResult by lazy { MutableEventLiveData<Boolean>() }
-    val backupScheduleToUriResult by lazy { MutableEventLiveData<Boolean>() }
+
     val restoreScheduleFromUriResult by lazy { MutableEventLiveData<Pair<BatchResult, Boolean>>() }
     val syncToCalendarStatus by lazy { MutableEventLiveData<BatchResult>() }
     val scheduleSyncEdit by lazy { MutableEventLiveData<Pair<String, List<Pair<Schedule.Min, ScheduleSync>>>>() }
-    val scheduleBackupList by lazy { MutableEventLiveData<List<Schedule.Min>>() }
 
     val waitCreateLogFileName by lazy { DisposableValue<File>() }
-    val waitBackupScheduleId by lazy { DisposableValue<List<Long>>() }
-
-    fun getScheduleBackupList() {
-        viewModelScope.launch(Dispatchers.IO) {
-            scheduleBackupList.postEvent(ScheduleDBProvider.db.scheduleDAO.getScheduleMin().first())
-        }
-    }
-
-    fun backupScheduleToUri(outputUri: Uri) {
-        viewModelScope.launch(Dispatchers.Default) {
-            val idList = waitBackupScheduleId.read()
-            if (idList != null) {
-                backupScheduleToUriResult.postEvent(BackupUtils.backupSchedules(outputUri, idList))
-            } else {
-                backupScheduleToUriResult.postEvent(false)
-            }
-        }
-    }
+    val scheduleBackup by lazy { ScheduleBackupHelper(viewModelScope) }
 
     fun restoreScheduleFromUri(outputUri: Uri) {
         viewModelScope.launch(Dispatchers.Default) {
