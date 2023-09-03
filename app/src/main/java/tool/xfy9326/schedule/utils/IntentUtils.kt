@@ -17,8 +17,8 @@ import java.io.File
 import java.util.Date
 
 object IntentUtils {
-    private val WIKI_URL = "https://github.com/XFY9326/Schedule/wiki".toUri()
-    private val FEEDBACK_URL = "https://github.com/XFY9326/Schedule/issues".toUri()
+    private val WIKI_URL = "https://xfy9326.gitee.io/schedule/docs/课程适配/".toUri()
+    private val FEEDBACK_URL = "https://gitee.com/XFY9326/Schedule/issues".toUri()
 
     fun openWikiUrl(context: Context) {
         context.openUrlInBrowser(WIKI_URL)
