@@ -8,10 +8,12 @@ import io.github.xfy9326.atools.livedata.setEvent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import tool.xfy9326.schedule.ui.vm.base.AbstractViewModel
+import tool.xfy9326.schedule.utils.schedule.ScheduleBackupHelper
 import java.io.File
 
 class AppErrorViewModel : AbstractViewModel() {
     val crashLog = MutableEventLiveData<String?>()
+    val scheduleBackup = ScheduleBackupHelper(viewModelScope)
 
     fun loadCrashLogDetail(crashLogFilePath: String?) {
         if (crashLogFilePath == null) {

@@ -53,19 +53,17 @@
 
         <activity
             android:name=".ui.activity.ScheduleManageActivity"
-            android:label="@string/schedule_manage"
-            android:theme="@style/AppTheme.ImmersiveScreen" />
+            android:label="@string/schedule_manage" />
 
         <activity
             android:name=".ui.activity.ScheduleEditActivity"
-            android:label="@string/schedule_edit"
-            android:theme="@style/AppTheme.ImmersiveScreen" />
+            android:label="@string/schedule_edit" />
 
         <activity
             android:name=".ui.activity.OnlineCourseImportActivity"
             android:exported="true"
             android:label="@string/online_course_import"
-            android:theme="@style/AppTheme.ImmersiveScreen">
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -83,6 +81,7 @@
             android:name=".ui.activity.ExternalCourseImportActivity"
             android:exported="true"
             android:label="@string/external_course_import"
+            android:launchMode="singleInstance"
             android:theme="@style/AppTheme.LaunchScreen">
             <intent-filter>
                 <action android:name="${BaseApplicationId}.action.EXTERNAL_COURSE_IMPORT" />
@@ -97,31 +96,25 @@
 
         <activity
             android:name=".ui.activity.CourseManageActivity"
-            android:label="@string/course_manage"
-            android:theme="@style/AppTheme.ImmersiveScreen" />
+            android:label="@string/course_manage" />
 
         <activity
             android:name=".ui.activity.CourseEditActivity"
-            android:label="@string/course_edit"
-            android:theme="@style/AppTheme.ImmersiveScreen" />
+            android:label="@string/course_edit" />
 
-        <activity
-            android:name=".ui.activity.NetworkCourseProviderActivity"
-            android:theme="@style/AppTheme.ImmersiveScreen" />
+        <activity android:name=".ui.activity.NetworkCourseProviderActivity" />
 
-        <activity
-            android:name=".ui.activity.RawTextActivity"
-            android:theme="@style/AppTheme.ImmersiveScreen" />
+        <activity android:name=".ui.activity.RawTextActivity" />
+
+        <activity android:name=".ui.activity.WebActivity" />
 
         <activity
             android:name=".ui.activity.WebCourseProviderActivity"
-            android:label="@string/web_page_import_course"
-            android:theme="@style/AppTheme.ImmersiveScreen" />
+            android:label="@string/web_page_import_course" />
 
         <activity
             android:name=".ui.activity.JSCourseProviderActivity"
-            android:label="@string/web_page_js_import_course"
-            android:theme="@style/AppTheme.ImmersiveScreen" />
+            android:label="@string/web_page_js_import_course" />
 
         <activity
             android:name=".ui.activity.SettingsActivity"
@@ -130,8 +123,7 @@
 
         <activity
             android:name=".ui.activity.AboutActivity"
-            android:label="@string/about"
-            android:theme="@style/AppTheme.ImmersiveScreen" />
+            android:label="@string/about" />
 
         <receiver
             android:name=".receiver.DownloadCompleteReceiver"

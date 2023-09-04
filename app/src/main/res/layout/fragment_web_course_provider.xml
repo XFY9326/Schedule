@@ -21,12 +21,19 @@
             android:progressDrawable="@drawable/background_progress_bar"
             tools:ignore="UnusedAttribute" />
 
-        <WebView
-            android:id="@+id/webView_webCourseProvider"
+        <FrameLayout
+            android:id="@+id/layout_webCourseProvider"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
-            android:overScrollMode="never" />
+            android:layout_weight="1">
+
+            <WebView
+                android:id="@+id/webView_webCourseProvider"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:overScrollMode="never" />
+
+        </FrameLayout>
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 

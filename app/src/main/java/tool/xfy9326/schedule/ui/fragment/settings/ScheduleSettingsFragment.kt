@@ -5,8 +5,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceDataStore
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.data.ScheduleDataStore
-import tool.xfy9326.schedule.kt.bindPrefFragment
 import tool.xfy9326.schedule.ui.fragment.base.AbstractSettingsFragment
+import tool.xfy9326.schedule.utils.bindPrefFragment
 
 class ScheduleSettingsFragment : AbstractSettingsFragment() {
     override val titleName: Int = R.string.schedule_settings

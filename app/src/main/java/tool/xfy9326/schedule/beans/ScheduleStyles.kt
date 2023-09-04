@@ -1,12 +1,16 @@
 package tool.xfy9326.schedule.beans
 
 import android.content.Context
+import android.view.View
 import androidx.annotation.ColorInt
 import androidx.annotation.Px
 import io.github.xfy9326.atools.ui.dpToPx
 import io.github.xfy9326.atools.ui.getColorCompat
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.annotation.Dp
+import tool.xfy9326.schedule.utils.getBottomScreenCornerMargin
+import tool.xfy9326.schedule.utils.getSystemBarBottomInsets
+import kotlin.math.max
 
 data class ScheduleStyles(
     private val viewAlpha: Int,
@@ -48,4 +52,11 @@ data class ScheduleStyles(
     fun getTimeTextColor(context: Context) = timeTextColor ?: context.getColorCompat(R.color.course_time_cell_text)
 
     fun getHighlightShowTodayCellColor(context: Context) = highlightShowTodayCellColor ?: context.getColorCompat(R.color.course_time_today_highlight)
+
+    fun getBottomSpaceHeight(view: View, defaultBottomCornerSize: Int): Int =
+        if (cornerScreenMargin) {
+            max(view.getBottomScreenCornerMargin() ?: defaultBottomCornerSize, view.getSystemBarBottomInsets())
+        } else {
+            view.getSystemBarBottomInsets()
+        }
 }

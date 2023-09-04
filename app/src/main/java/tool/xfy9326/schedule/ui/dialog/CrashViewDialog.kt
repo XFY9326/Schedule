@@ -17,8 +17,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.databinding.DialogCrashViewBinding
-import tool.xfy9326.schedule.kt.PROJECT_ID
 import tool.xfy9326.schedule.tools.MIMEConst
+import tool.xfy9326.schedule.utils.PROJECT_ID
 import tool.xfy9326.schedule.utils.setWindowPercent
 
 class CrashViewDialog : AppCompatDialogFragment() {

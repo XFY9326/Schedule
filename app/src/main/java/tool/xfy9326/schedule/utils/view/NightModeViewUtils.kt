@@ -28,9 +28,9 @@ import tool.xfy9326.schedule.beans.NightMode.Companion.modeInt
 import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.databinding.ActivityScheduleBinding
 import tool.xfy9326.schedule.databinding.LayoutNavHeaderBinding
-import tool.xfy9326.schedule.kt.drawToBitmap
-import tool.xfy9326.schedule.kt.getDefaultBackgroundColor
 import tool.xfy9326.schedule.ui.vm.ScheduleViewModel
+import tool.xfy9326.schedule.utils.drawToBitmap
+import tool.xfy9326.schedule.utils.getDefaultBackgroundColor
 import tool.xfy9326.schedule.utils.isUsingNightMode
 import kotlin.math.max
 import kotlin.math.sqrt

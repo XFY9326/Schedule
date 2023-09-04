@@ -11,11 +11,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.PreferenceDataStore
 import androidx.preference.PreferenceFragmentCompat
 import androidx.recyclerview.widget.RecyclerView
-import tool.xfy9326.schedule.kt.consumeSystemBarInsets
-import tool.xfy9326.schedule.kt.getDefaultBackgroundColor
 import tool.xfy9326.schedule.ui.activity.SettingsActivity
 import tool.xfy9326.schedule.ui.activity.base.AbstractSettingsActivity
 import tool.xfy9326.schedule.ui.vm.SettingsViewModel
+import tool.xfy9326.schedule.utils.consumeSystemBarInsets
+import tool.xfy9326.schedule.utils.getDefaultBackgroundColor
 
 abstract class AbstractSettingsFragment : PreferenceFragmentCompat() {
     protected abstract val preferenceResId: Int
@@ -40,7 +40,7 @@ abstract class AbstractSettingsFragment : PreferenceFragmentCompat() {
     @CallSuper
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        requireSettingsViewModel()?.let(::onBindLiveDataFromSettingsViewMode)
+        requireSettingsViewModel()?.let(::onBindLiveDataFromSettingsViewModel)
         view.findViewById<RecyclerView>(androidx.preference.R.id.recycler_view)?.consumeSystemBarInsets(bottom = true)
     }
 
@@ -54,7 +54,7 @@ abstract class AbstractSettingsFragment : PreferenceFragmentCompat() {
     @SuppressLint("RestrictedApi")
     override fun getCallbackFragment() = parentFragment
 
-    protected open fun onBindLiveDataFromSettingsViewMode(viewModel: SettingsViewModel) {}
+    protected open fun onBindLiveDataFromSettingsViewModel(viewModel: SettingsViewModel) {}
 
     protected open fun onPrefInit(savedInstanceState: Bundle?) {}
 

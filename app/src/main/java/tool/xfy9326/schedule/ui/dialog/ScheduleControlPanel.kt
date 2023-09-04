@@ -15,8 +15,8 @@ import kotlinx.coroutines.launch
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.data.ScheduleDataStore
 import tool.xfy9326.schedule.databinding.DialogScheduleControlPanelBinding
-import tool.xfy9326.schedule.kt.consumeBottomInsets
-import tool.xfy9326.schedule.kt.setSystemBarAppearance
+import tool.xfy9326.schedule.utils.consumeBottomInsets
+import tool.xfy9326.schedule.utils.setSystemBarAppearance
 
 class ScheduleControlPanel : BottomSheetDialogFragment() {
     companion object {

@@ -9,8 +9,6 @@ import androidx.core.view.children
 import tool.xfy9326.schedule.beans.CourseCell
 import tool.xfy9326.schedule.beans.SchedulePredefine
 import tool.xfy9326.schedule.beans.ScheduleStyles
-import tool.xfy9326.schedule.kt.getBottomScreenCornerMargin
-import tool.xfy9326.schedule.kt.getSystemBarBottomInsets
 import kotlin.math.ceil
 import kotlin.math.max
 
@@ -56,18 +54,11 @@ class ScheduleGridView constructor(
         return timeColumnWidth
     }
 
-    private fun getBottomPadding(): Int =
-        if (styles.cornerScreenMargin) {
-            max(getBottomScreenCornerMargin() ?: predefine.gridBottomCornerScreenMargin, getSystemBarBottomInsets())
-        } else {
-            getSystemBarBottomInsets()
-        }
-
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         val timeColumnWidthSpec = MeasureSpec.makeMeasureSpec(timeColumnWidth, MeasureSpec.EXACTLY)
         val courseColumnWidthSpec = MeasureSpec.makeMeasureSpec(courseColumnWidth, MeasureSpec.EXACTLY)
 
-        val bottomPadding = getBottomPadding()
+        val bottomPadding = styles.getBottomSpaceHeight(this, predefine.gridBottomCornerScreenMargin)
 
         val styleCourseCellHeight = styles.rowHeight
         rowHeight = if (styleCourseCellHeight != null && !styles.courseCellFullScreenSameHeight) {

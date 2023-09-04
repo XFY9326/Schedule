@@ -10,11 +10,11 @@ import io.github.xfy9326.atools.ui.setOnSingleClickListener
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.Course
 import tool.xfy9326.schedule.databinding.ActivityCourseManageBinding
-import tool.xfy9326.schedule.kt.consumeSystemBarInsets
-import tool.xfy9326.schedule.kt.showSnackBar
 import tool.xfy9326.schedule.ui.activity.base.ViewModelActivity
 import tool.xfy9326.schedule.ui.adapter.CourseManageAdapter
 import tool.xfy9326.schedule.ui.vm.CourseManageViewModel
+import tool.xfy9326.schedule.utils.consumeSystemBarInsets
+import tool.xfy9326.schedule.utils.showSnackBar
 import kotlin.properties.Delegates
 
 class CourseManageActivity : ViewModelActivity<CourseManageViewModel, ActivityCourseManageBinding>() {

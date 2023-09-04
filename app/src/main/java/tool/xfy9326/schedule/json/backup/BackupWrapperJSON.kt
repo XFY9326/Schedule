@@ -1,7 +1,7 @@
 package tool.xfy9326.schedule.json.backup
 
 import kotlinx.serialization.Serializable
-import tool.xfy9326.schedule.kt.PROJECT_ID
+import tool.xfy9326.schedule.utils.PROJECT_ID
 
 @Serializable
 data class BackupWrapperJSON(

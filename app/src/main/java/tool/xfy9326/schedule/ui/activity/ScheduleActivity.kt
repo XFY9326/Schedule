@@ -18,7 +18,6 @@ import tool.xfy9326.schedule.beans.Day
 import tool.xfy9326.schedule.beans.WeekNumType
 import tool.xfy9326.schedule.beans.WeekNumType.Companion.getText
 import tool.xfy9326.schedule.databinding.ActivityScheduleBinding
-import tool.xfy9326.schedule.kt.setSystemBarAppearance
 import tool.xfy9326.schedule.ui.activity.base.ViewModelActivity
 import tool.xfy9326.schedule.ui.activity.module.CalendarSyncModule
 import tool.xfy9326.schedule.ui.activity.module.ICSExportModule
@@ -31,6 +30,7 @@ import tool.xfy9326.schedule.ui.adapter.ScheduleViewPagerAdapter
 import tool.xfy9326.schedule.ui.dialog.CourseDetailDialog
 import tool.xfy9326.schedule.ui.dialog.ScheduleControlPanel
 import tool.xfy9326.schedule.ui.vm.ScheduleViewModel
+import tool.xfy9326.schedule.utils.setSystemBarAppearance
 import tool.xfy9326.schedule.utils.view.DialogUtils
 import tool.xfy9326.schedule.utils.view.NightModeViewUtils
 

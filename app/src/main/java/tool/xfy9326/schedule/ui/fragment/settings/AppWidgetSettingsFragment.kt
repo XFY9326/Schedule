@@ -8,10 +8,10 @@ import androidx.preference.PreferenceCategory
 import io.github.xfy9326.atools.core.ScheduleExactAlarmPermissionContract
 import io.github.xfy9326.atools.core.canScheduleNextAlarm
 import tool.xfy9326.schedule.R
-import tool.xfy9326.schedule.kt.findPreference
-import tool.xfy9326.schedule.kt.setOnPrefClickListener
 import tool.xfy9326.schedule.ui.fragment.base.AbstractSettingsFragment
 import tool.xfy9326.schedule.utils.IntentUtils
+import tool.xfy9326.schedule.utils.findPreference
+import tool.xfy9326.schedule.utils.setOnPrefClickListener
 
 class AppWidgetSettingsFragment : AbstractSettingsFragment() {
     override val titleName: Int = R.string.app_widget_settings

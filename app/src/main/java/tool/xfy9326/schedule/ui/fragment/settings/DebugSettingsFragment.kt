@@ -10,13 +10,13 @@ import io.github.xfy9326.atools.livedata.observeEvent
 import io.github.xfy9326.atools.ui.show
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.data.AppSettingsDataStore
-import tool.xfy9326.schedule.kt.setOnPrefClickListener
-import tool.xfy9326.schedule.kt.showSnackBar
 import tool.xfy9326.schedule.tools.MIMEConst
 import tool.xfy9326.schedule.ui.dialog.CrashViewDialog
 import tool.xfy9326.schedule.ui.fragment.base.AbstractSettingsFragment
 import tool.xfy9326.schedule.ui.vm.SettingsViewModel
 import tool.xfy9326.schedule.utils.IntentUtils
+import tool.xfy9326.schedule.utils.setOnPrefClickListener
+import tool.xfy9326.schedule.utils.showSnackBar
 import java.io.File
 
 class DebugSettingsFragment : AbstractSettingsFragment() {
@@ -61,7 +61,7 @@ class DebugSettingsFragment : AbstractSettingsFragment() {
         }
     }
 
-    override fun onBindLiveDataFromSettingsViewMode(viewModel: SettingsViewModel) {
+    override fun onBindLiveDataFromSettingsViewModel(viewModel: SettingsViewModel) {
         viewModel.allDebugLogs.observeEvent(viewLifecycleOwner) {
             when (it.first) {
                 TAG_READ_DEBUG_LOGS -> showDebugLogsSelectDialog(it.second, R.string.read_debug_logs) { log ->

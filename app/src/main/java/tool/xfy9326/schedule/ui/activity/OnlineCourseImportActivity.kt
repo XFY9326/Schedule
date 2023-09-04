@@ -1,5 +1,6 @@
 package tool.xfy9326.schedule.ui.activity
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -21,8 +22,6 @@ import tool.xfy9326.schedule.content.beans.JSConfig
 import tool.xfy9326.schedule.content.utils.BaseCourseImportConfig
 import tool.xfy9326.schedule.data.AppDataStore
 import tool.xfy9326.schedule.databinding.ActivityOnlineCourseImportBinding
-import tool.xfy9326.schedule.kt.consumeSystemBarInsets
-import tool.xfy9326.schedule.kt.showSnackBar
 import tool.xfy9326.schedule.tools.MIMEConst
 import tool.xfy9326.schedule.ui.activity.base.CourseProviderActivity
 import tool.xfy9326.schedule.ui.activity.base.ViewModelActivity
@@ -34,7 +33,9 @@ import tool.xfy9326.schedule.ui.view.recyclerview.AdvancedDividerItemDecoration
 import tool.xfy9326.schedule.ui.vm.OnlineCourseImportViewModel
 import tool.xfy9326.schedule.utils.AppUriUtils
 import tool.xfy9326.schedule.utils.IntentUtils
+import tool.xfy9326.schedule.utils.consumeSystemBarInsets
 import tool.xfy9326.schedule.utils.schedule.CourseImportUtils
+import tool.xfy9326.schedule.utils.showSnackBar
 import tool.xfy9326.schedule.utils.view.DialogUtils
 import tool.xfy9326.schedule.utils.view.ViewUtils
 
@@ -53,6 +54,14 @@ class OnlineCourseImportActivity : ViewModelActivity<OnlineCourseImportViewModel
     override fun onContentViewPreload(savedInstanceState: Bundle?, viewModel: OnlineCourseImportViewModel) {
         WindowCompat.setDecorFitsSystemWindows(window, false)
         if (savedInstanceState == null) viewModel.pendingExternalCourseImportUrl = AppUriUtils.tryParseJSCourseImport(intent?.data)
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        requireViewModel().apply {
+            pendingExternalCourseImportUrl = AppUriUtils.tryParseJSCourseImport(intent?.data)
+            tryShowOnlineImportAttention()
+        }
+        super.onNewIntent(intent)
     }
 
     override fun onCreateViewBinding() = ActivityOnlineCourseImportBinding.inflate(layoutInflater)
@@ -115,6 +124,8 @@ class OnlineCourseImportActivity : ViewModelActivity<OnlineCourseImportViewModel
         viewModel.externalUrlCourseImport.observeEvent(this, javaClass.simpleName) {
             checkAddCourseImportPolicy {
                 JSConfigImportDialog.showDialog(supportFragmentManager, it)
+                intent?.data = null
+                viewModel.pendingExternalCourseImportUrl = null
             }
         }
     }

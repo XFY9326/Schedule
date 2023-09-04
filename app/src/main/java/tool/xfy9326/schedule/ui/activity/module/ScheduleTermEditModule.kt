@@ -35,12 +35,20 @@ class ScheduleTermEditModule(activity: ScheduleEditActivity) :
             )
         }
 
+        requireViewBinding().textViewScheduleStartDate.setOnSingleClickListener {
+            requireViewModel().selectScheduleDate(true, requireViewModel().editSchedule.startDate)
+        }
         requireViewBinding().buttonScheduleStartDateEdit.setOnSingleClickListener {
             requireViewModel().selectScheduleDate(true, requireViewModel().editSchedule.startDate)
+        }
+
+        requireViewBinding().textViewScheduleEndDate.setOnSingleClickListener {
+            requireViewModel().selectScheduleDate(false, requireViewModel().editSchedule.endDate)
         }
         requireViewBinding().buttonScheduleEndDateEdit.setOnSingleClickListener {
             requireViewModel().selectScheduleDate(false, requireViewModel().editSchedule.endDate)
         }
+
         requireViewBinding().layoutScheduleWeekNum.setOnSingleClickListener {
             showMaxWeekNumEditDialog()
         }

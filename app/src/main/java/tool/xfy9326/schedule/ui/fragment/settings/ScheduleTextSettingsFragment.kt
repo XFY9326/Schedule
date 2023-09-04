@@ -9,10 +9,10 @@ import kotlinx.coroutines.launch
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.ScheduleText
 import tool.xfy9326.schedule.data.ScheduleDataStore
-import tool.xfy9326.schedule.kt.setOnPrefClickListener
-import tool.xfy9326.schedule.kt.showSnackBar
 import tool.xfy9326.schedule.ui.dialog.ScheduleTextSizeEditDialog
 import tool.xfy9326.schedule.ui.fragment.base.AbstractSettingsFragment
+import tool.xfy9326.schedule.utils.setOnPrefClickListener
+import tool.xfy9326.schedule.utils.showSnackBar
 
 class ScheduleTextSettingsFragment : AbstractSettingsFragment() {
     override val titleName: Int = R.string.schedule_text

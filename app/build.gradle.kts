@@ -14,8 +14,8 @@ object ProjectConfig {
     const val targetSdk = 34
     const val minSdk = 23
     const val applicationId = "tool.xfy9326.schedule"
-    const val versionCode = 41
-    const val versionName = "1.5.1"
+    const val versionCode = 42
+    const val versionName = "1.5.2"
 }
 
 android {
@@ -82,6 +82,7 @@ android {
             initWith(getByName("release"))
             matchingFallbacks += "release"
 
+            versionNameSuffix = "-b"
             buildConfigField("boolean", "IS_BETA", "true")
 
             isMinifyEnabled = true

@@ -19,12 +19,13 @@ import androidx.preference.PreferenceFragmentCompat
 import io.github.xfy9326.atools.livedata.postEvent
 import io.github.xfy9326.atools.ui.getRealScreenSize
 import io.github.xfy9326.atools.ui.resume
+import io.github.xfy9326.atools.ui.showToast
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.databinding.FragmentScheduleSettingsBinding
-import tool.xfy9326.schedule.kt.getDefaultBackgroundColor
 import tool.xfy9326.schedule.ui.fragment.SchedulePreviewFragment
 import tool.xfy9326.schedule.ui.fragment.base.ViewBindingFragment
 import tool.xfy9326.schedule.ui.vm.SettingsViewModel
+import tool.xfy9326.schedule.utils.getDefaultBackgroundColor
 import tool.xfy9326.schedule.utils.view.ViewUtils
 import kotlin.properties.Delegates
 
@@ -84,6 +85,7 @@ class ScheduleBaseSettingsFragment : ViewBindingFragment<FragmentScheduleSetting
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 if (menuItem.itemId == R.id.menu_schedulePreviewRatio) {
                     isCurrentPreviewLandMode = !isCurrentPreviewLandMode
+                    requireContext().showToast(if (isCurrentPreviewLandMode) R.string.schedule_preview_is_land else R.string.schedule_preview_is_portrait)
                     viewModel.schedulePreviewPreviewWidth.postEvent(isCurrentPreviewLandMode)
                     return true
                 }

@@ -16,6 +16,7 @@ class ScheduleView(
     private val columnAmount: Int,
     private val scheduleHeaderView: ScheduleHeaderView,
     private val scheduleGridView: ScheduleGridView,
+    forceNoScroll: Boolean = false,
 ) : LinearLayoutCompat(context) {
 
     init {
@@ -26,7 +27,7 @@ class ScheduleView(
             addViewPreventLayout(this)
         }
 
-        if (scheduleStyles.enableScheduleGridScroll) {
+        if (!forceNoScroll && scheduleStyles.enableScheduleGridScroll) {
             layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
             addViewPreventLayout(
                 ScheduleScrollView(context).apply {

@@ -13,11 +13,11 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.data.ScheduleDataStore
-import tool.xfy9326.schedule.kt.findPreference
-import tool.xfy9326.schedule.kt.setOnPrefClickListener
 import tool.xfy9326.schedule.ui.dialog.NumberEditDialog
 import tool.xfy9326.schedule.ui.fragment.base.AbstractSettingsFragment
 import tool.xfy9326.schedule.ui.vm.SettingsViewModel
+import tool.xfy9326.schedule.utils.findPreference
+import tool.xfy9326.schedule.utils.setOnPrefClickListener
 
 class ScheduleCourseCellSettingsFragment : AbstractSettingsFragment() {
     override val titleName: Int = R.string.schedule_course_cell_settings
@@ -93,7 +93,7 @@ class ScheduleCourseCellSettingsFragment : AbstractSettingsFragment() {
 
     }
 
-    override fun onBindLiveDataFromSettingsViewMode(viewModel: SettingsViewModel) {
+    override fun onBindLiveDataFromSettingsViewModel(viewModel: SettingsViewModel) {
         for (bundle in numberTextEditArray) {
             viewLifecycleOwner.lifecycleScope.launch {
                 bundle.dataStoreFlow.collect {

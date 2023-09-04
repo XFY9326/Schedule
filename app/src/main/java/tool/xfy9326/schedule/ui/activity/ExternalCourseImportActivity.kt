@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.addCallback
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.core.view.WindowCompat
 import androidx.core.view.isVisible
 import io.github.xfy9326.atools.core.getLaunchAppIntent
 import io.github.xfy9326.atools.livedata.observeEvent
@@ -19,6 +20,7 @@ import tool.xfy9326.schedule.ui.dialog.ImportCourseConflictDialog
 import tool.xfy9326.schedule.ui.dialog.ScheduleImportSuccessDialog
 import tool.xfy9326.schedule.ui.dialog.StrictImportModeWarningDialog
 import tool.xfy9326.schedule.ui.vm.ExternalCourseImportViewModel
+import tool.xfy9326.schedule.utils.consumeSystemBarInsets
 import tool.xfy9326.schedule.utils.schedule.ExternalCourseImportUtils
 import tool.xfy9326.schedule.utils.schedule.ScheduleImportManager
 import tool.xfy9326.schedule.utils.view.DialogUtils
@@ -44,11 +46,13 @@ class ExternalCourseImportActivity : ViewBindingActivity<ActivityExternalCourseI
     }
 
     override fun onContentViewPreload(savedInstanceState: Bundle?) {
+        WindowCompat.setDecorFitsSystemWindows(window, false)
         onBackPressedDispatcher.addCallback(this, true, this::onBackPressed)
     }
 
     override fun onInitView(viewBinding: ActivityExternalCourseImportBinding) {
         setSupportActionBar(viewBinding.toolBarExternalCourse.toolBarGeneral)
+        viewBinding.layoutExternalCourseImportContent.consumeSystemBarInsets(bottom = true)
 
         viewModel.providerError.observeEvent(this, javaClass.simpleName) {
             onCourseImportFailed()

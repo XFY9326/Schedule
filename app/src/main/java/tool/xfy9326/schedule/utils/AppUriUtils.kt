@@ -16,6 +16,9 @@ object AppUriUtils {
         host.equals(HOST_COURSE_IMPORT, true)
     }
 
+    fun isJSCourseImportUri(data: Uri): Boolean =
+        data.parseScheme()?.parseCourseImport() != null
+
     fun tryParseJSCourseImport(data: Uri?): String? =
         data?.parseScheme()?.parseCourseImport()?.takeIf {
             it.pathSegments.let { p -> p.size == 1 && p.first().equals(PATH_JS_CONFIG, true) }

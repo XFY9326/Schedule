@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
-import androidx.core.net.toUri
 import io.github.xfy9326.atools.base.asArray
 import io.github.xfy9326.atools.core.openUrlInBrowser
 import io.github.xfy9326.atools.core.packageUri
@@ -12,21 +11,17 @@ import io.github.xfy9326.atools.io.utils.ImageMimeType
 import tool.xfy9326.schedule.BuildConfig
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.io.utils.getUriByFileProvider
-import tool.xfy9326.schedule.kt.tryStartActivity
 import tool.xfy9326.schedule.tools.MIMEConst
 import java.io.File
 import java.util.Date
 
 object IntentUtils {
-    private val WIKI_URL = "https://github.com/XFY9326/Schedule/wiki".toUri()
-    private val FEEDBACK_URL = "https://github.com/XFY9326/Schedule/issues".toUri()
-
     fun openWikiUrl(context: Context) {
-        context.openUrlInBrowser(WIKI_URL)
+        context.openUrlInBrowser(AppUrl.WIKI_URL)
     }
 
     fun openFeedbackUrl(context: Context) {
-        context.openUrlInBrowser(FEEDBACK_URL)
+        context.openUrlInBrowser(AppUrl.FEEDBACK_URL)
     }
 
     fun seeImage(context: Context, uri: Uri) {

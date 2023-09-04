@@ -11,8 +11,8 @@ import kotlinx.coroutines.launch
 import tool.xfy9326.schedule.beans.Course
 import tool.xfy9326.schedule.beans.Course.Companion.hasEmptyWeekNumCourseTime
 import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
-import tool.xfy9326.schedule.kt.asDistinctLiveData
 import tool.xfy9326.schedule.ui.vm.base.AbstractViewModel
+import tool.xfy9326.schedule.utils.asDistinctLiveData
 
 class CourseManageViewModel : AbstractViewModel() {
     private var hasCourseInit: Boolean = false

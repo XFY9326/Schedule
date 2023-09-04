@@ -25,11 +25,11 @@ import tool.xfy9326.schedule.content.base.NetworkCourseParser
 import tool.xfy9326.schedule.content.base.NetworkCourseProvider
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
 import tool.xfy9326.schedule.databinding.ActivityNetworkCourseProviderBinding
-import tool.xfy9326.schedule.kt.consumeSystemBarInsets
-import tool.xfy9326.schedule.kt.showSnackBar
 import tool.xfy9326.schedule.ui.activity.base.CourseProviderActivity
 import tool.xfy9326.schedule.ui.vm.NetworkCourseProviderViewModel
+import tool.xfy9326.schedule.utils.consumeSystemBarInsets
 import tool.xfy9326.schedule.utils.schedule.ScheduleImportManager
+import tool.xfy9326.schedule.utils.showSnackBar
 import tool.xfy9326.schedule.utils.view.DialogUtils
 import tool.xfy9326.schedule.utils.view.ViewUtils
 
@@ -106,17 +106,18 @@ class NetworkCourseProviderActivity :
                 }
             }
         }
+        viewBinding.toolBarLoginCourseProvider.toolBarGeneral.consumeSystemBarInsets()
         viewBinding.layoutNetworkCourseProviderContent.consumeSystemBarInsets(bottom = true)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.menu_network_course_provider, menu)
+        menuInflater.inflate(R.menu.menu_webview, menu)
         return super.onCreateOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.menu_networkCourseProviderRefresh -> {
+            R.id.menu_webViewRefresh -> {
                 if (!requireViewModel().isImportingCourses) {
                     withImportOption {
                         setLoadingView(isLoading = true, isError = false)

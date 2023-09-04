@@ -30,7 +30,6 @@ import tool.xfy9326.schedule.beans.SectionTime
 import tool.xfy9326.schedule.beans.WeekDay
 import tool.xfy9326.schedule.data.ScheduleDataStore
 import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
-import tool.xfy9326.schedule.kt.getDefaultBackgroundColor
 import tool.xfy9326.schedule.tools.MaterialColorHelper
 import tool.xfy9326.schedule.ui.view.schedule.IScheduleCell
 import tool.xfy9326.schedule.ui.view.schedule.ScheduleCourseCellView
@@ -40,6 +39,7 @@ import tool.xfy9326.schedule.ui.view.schedule.ScheduleScrollView
 import tool.xfy9326.schedule.ui.view.schedule.ScheduleTimeCellView
 import tool.xfy9326.schedule.ui.view.schedule.ScheduleView
 import tool.xfy9326.schedule.utils.CalendarUtils
+import tool.xfy9326.schedule.utils.getDefaultBackgroundColor
 import tool.xfy9326.schedule.utils.schedule.CourseTimeUtils
 import tool.xfy9326.schedule.utils.schedule.CourseUtils
 import java.util.Date
@@ -69,12 +69,15 @@ object ScheduleViewHelper {
         val sampleTeacher = IOManager.resources.getString(R.string.sample_course_teacher)
         listOf(
             CourseCell(0, 0, sampleName, sampleLocation, sampleTeacher, SectionTime(WeekDay.MONDAY, 1, 2), colors[0], 1, true),
-            CourseCell(0, 1, sampleName, null, null, SectionTime(WeekDay.MONDAY, 5, 2), colors[2], 1, false),
-            CourseCell(0, 2, sampleName, sampleLocation, sampleTeacher, SectionTime(WeekDay.TUESDAY, 5, 4), colors[4], 1, true),
+            CourseCell(0, 1, sampleName, null, null, SectionTime(WeekDay.MONDAY, 3, 2), colors[2], 1, false),
+            CourseCell(0, 2, sampleName, sampleLocation, sampleTeacher, SectionTime(WeekDay.TUESDAY, 4, 4), colors[4], 1, true),
             CourseCell(0, 3, sampleName, sampleLocation, null, SectionTime(WeekDay.WEDNESDAY, 2, 2), colors[6], 1, true),
             CourseCell(1, 4, sampleName, null, sampleTeacher, SectionTime(WeekDay.WEDNESDAY, 5, 2), colors[8], 1, false),
             CourseCell(1, 5, sampleName, null, sampleTeacher, SectionTime(WeekDay.FRIDAY, 4, 3), colors[10], 1, false),
             CourseCell(1, 6, sampleName, sampleLocation, null, SectionTime(WeekDay.FRIDAY, 8, 2), colors[12], 1, true),
+            CourseCell(2, 7, sampleName, null, null, SectionTime(WeekDay.THURSDAY, 8, 2), colors[1], 1, true),
+            CourseCell(2, 8, sampleName, sampleLocation, sampleTeacher, SectionTime(WeekDay.THURSDAY, 6, 2), colors[3], 1, false),
+            CourseCell(2, 9, sampleName, sampleLocation, null, SectionTime(WeekDay.TUESDAY, 9, 2), colors[5], 1, true),
         )
     }
 
@@ -120,7 +123,7 @@ object ScheduleViewHelper {
             scheduleGridView.addScheduleCell(viewDeferred.await())
         }
 
-        val scheduleView = ScheduleView(context, viewData.styles, columnAmount, scheduleHeaderViewDeferred.await(), scheduleGridView)
+        val scheduleView = ScheduleView(context, viewData.styles, columnAmount, scheduleHeaderViewDeferred.await(), scheduleGridView, noScroll)
         if (listener != null) scheduleView.setOnCourseClickListener(listener)
 
         return@withContext if (viewData.styles.enableScheduleGridScroll || noScroll) {
@@ -132,7 +135,7 @@ object ScheduleViewHelper {
         }
     }
 
-    suspend fun generateScheduleImageByWeekNum(scheduleId: Long, weekNum: Int, @Px targetWidth: Int, waterMark: Boolean) =
+    suspend fun generateScheduleImageByWeekNum(scheduleId: Long, weekNum: Int, @Px targetWidth: Int, @Px suggestHeight: Int, waterMark: Boolean) =
         withContext(Dispatchers.Default) {
             val schedule = ScheduleDBProvider.db.scheduleDAO.getSchedule(scheduleId).firstOrNull() ?: return@withContext null
             val courses = ScheduleDBProvider.db.scheduleDAO.getScheduleCourses(scheduleId).first()
@@ -148,7 +151,13 @@ object ScheduleViewHelper {
             val scheduleView = buildScheduleView(AppContext, viewData, noScroll = true)
 
             val widthSpec = View.MeasureSpec.makeMeasureSpec(targetWidth, View.MeasureSpec.AT_MOST)
-            val heightSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
+            // styles.courseCellFullScreenSameHeight 需要具体高度计算每一个Cell大小，要分开判断
+            val heightSpec = if (suggestHeight == 0 && !styles.courseCellFullScreenSameHeight) {
+                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
+            } else {
+                View.MeasureSpec.makeMeasureSpec(suggestHeight, View.MeasureSpec.AT_MOST)
+            }
+
             scheduleView.measure(widthSpec, heightSpec)
             scheduleView.layout(0, 0, scheduleView.measuredWidth, scheduleView.measuredHeight)
             scheduleView.requestLayout()

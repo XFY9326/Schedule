@@ -1,7 +1,11 @@
 package tool.xfy9326.schedule.utils
 
+import androidx.annotation.IntRange
+import tool.xfy9326.schedule.BuildConfig
 import kotlin.math.max
 import kotlin.math.min
+
+const val PROJECT_ID = BuildConfig.PROJECT_NAME
 
 const val NEW_LINE = "\n"
 
@@ -63,3 +67,12 @@ fun String.deserializeToBooleanArray(): BooleanArray {
         this[p] == '1'
     }
 }
+
+fun CharSequence.asStringBuilder(@IntRange(from = 0) moreCapacity: Int? = null): StringBuilder =
+    if (moreCapacity == null) {
+        StringBuilder(this)
+    } else if (moreCapacity >= 0) {
+        StringBuilder(length + moreCapacity).also { it.append(this) }
+    } else {
+        error("Capacity '$moreCapacity' must >= 0!")
+    }

@@ -9,11 +9,11 @@ import io.github.xfy9326.atools.io.utils.ImageMimeType
 import io.github.xfy9326.atools.livedata.observeEvent
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.data.ScheduleDataStore
-import tool.xfy9326.schedule.kt.setOnPrefClickListener
-import tool.xfy9326.schedule.kt.showSnackBar
 import tool.xfy9326.schedule.ui.dialog.FullScreenLoadingDialog
 import tool.xfy9326.schedule.ui.fragment.base.AbstractSettingsFragment
 import tool.xfy9326.schedule.ui.vm.SettingsViewModel
+import tool.xfy9326.schedule.utils.setOnPrefClickListener
+import tool.xfy9326.schedule.utils.showSnackBar
 
 class ScheduleBackgroundSettingsFragment : AbstractSettingsFragment() {
     private val loadingDialogController by lazy { FullScreenLoadingDialog.Controller.newInstance(viewLifecycleOwner, childFragmentManager) }
@@ -34,7 +34,7 @@ class ScheduleBackgroundSettingsFragment : AbstractSettingsFragment() {
         }
     }
 
-    override fun onBindLiveDataFromSettingsViewMode(viewModel: SettingsViewModel) {
+    override fun onBindLiveDataFromSettingsViewModel(viewModel: SettingsViewModel) {
         viewModel.importScheduleImage.observeEvent(viewLifecycleOwner) {
             loadingDialogController.hide()
             requireRootLayout()?.showSnackBar(if (it) R.string.schedule_background_set_success else R.string.schedule_background_set_failed)

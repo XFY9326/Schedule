@@ -2,6 +2,7 @@ package tool.xfy9326.schedule.ui.vm
 
 import android.graphics.Bitmap
 import android.net.Uri
+import androidx.annotation.Px
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import io.github.xfy9326.atools.coroutines.withTryLock
@@ -25,10 +26,10 @@ import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.data.ScheduleDataStore
 import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
 import tool.xfy9326.schedule.io.utils.ImageUtils
-import tool.xfy9326.schedule.kt.asDistinctLiveData
 import tool.xfy9326.schedule.tools.DisposableValue
 import tool.xfy9326.schedule.ui.vm.base.AbstractViewModel
 import tool.xfy9326.schedule.utils.CalendarUtils
+import tool.xfy9326.schedule.utils.asDistinctLiveData
 import tool.xfy9326.schedule.utils.ics.ScheduleICSHelper
 import tool.xfy9326.schedule.utils.schedule.ScheduleDataProcessor
 import tool.xfy9326.schedule.utils.schedule.ScheduleSyncHelper
@@ -137,12 +138,12 @@ class ScheduleViewModel : AbstractViewModel() {
         }
     }
 
-    fun shareScheduleImage(saveImage: Boolean, weekNum: Int, targetWidth: Int) {
+    fun shareScheduleImage(saveImage: Boolean, weekNum: Int, @Px targetWidth: Int, @Px suggestHeight: Int) {
         viewModelScope.launch(Dispatchers.Default) {
             scheduleSharedMutex.withTryLock {
                 val scheduleId = AppDataStore.currentScheduleIdFlow.first()
                 val waterMark = AppSettingsDataStore.drawWaterMarkOnScheduleImageFlow.first()
-                val bitmap = ScheduleViewHelper.generateScheduleImageByWeekNum(scheduleId, weekNum, targetWidth, waterMark)
+                val bitmap = ScheduleViewHelper.generateScheduleImageByWeekNum(scheduleId, weekNum, targetWidth, suggestHeight, waterMark)
                 if (bitmap != null) {
                     if (saveImage) {
                         val uri = ImageUtils.outputImageToAlbum(bitmap)

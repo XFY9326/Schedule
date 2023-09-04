@@ -23,8 +23,6 @@ import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.EditError.Companion.getText
 import tool.xfy9326.schedule.beans.Schedule
 import tool.xfy9326.schedule.databinding.ActivityScheduleEditBinding
-import tool.xfy9326.schedule.kt.consumeSystemBarInsets
-import tool.xfy9326.schedule.kt.showSnackBar
 import tool.xfy9326.schedule.ui.activity.base.ViewModelActivity
 import tool.xfy9326.schedule.ui.activity.module.ScheduleTermEditModule
 import tool.xfy9326.schedule.ui.activity.module.ScheduleTimeEditModule
@@ -32,6 +30,8 @@ import tool.xfy9326.schedule.ui.activity.module.ScheduleTimeImportModule
 import tool.xfy9326.schedule.ui.activity.module.ScheduleWeekStartModule
 import tool.xfy9326.schedule.ui.adapter.ScheduleTimeAdapter
 import tool.xfy9326.schedule.ui.vm.ScheduleEditViewModel
+import tool.xfy9326.schedule.utils.consumeSystemBarInsets
+import tool.xfy9326.schedule.utils.showSnackBar
 import tool.xfy9326.schedule.utils.view.DialogUtils
 
 class ScheduleEditActivity : ViewModelActivity<ScheduleEditViewModel, ActivityScheduleEditBinding>(), ColorPickerDialogListener {
@@ -69,7 +69,7 @@ class ScheduleEditActivity : ViewModelActivity<ScheduleEditViewModel, ActivitySc
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         scheduleTimeAdapter = ScheduleTimeAdapter()
-        viewBinding.recyclerViewScheduleTimeList.adapter = scheduleTimeAdapter
+        viewBinding.layoutScheduleTimeEdit.recyclerViewScheduleTimeList.adapter = scheduleTimeAdapter
         scheduleTimeImportModule.bindScheduleTimeAdapter(scheduleTimeAdapter)
         scheduleTimeEditModule.bindScheduleTimeAdapter(scheduleTimeAdapter)
 
@@ -90,7 +90,7 @@ class ScheduleEditActivity : ViewModelActivity<ScheduleEditViewModel, ActivitySc
     }
 
     override fun onInitView(viewBinding: ActivityScheduleEditBinding, viewModel: ScheduleEditViewModel) {
-        viewBinding.recyclerViewScheduleTimeList.itemAnimator = null
+        viewBinding.layoutScheduleTimeEdit.recyclerViewScheduleTimeList.itemAnimator = null
 
         viewBinding.buttonScheduleColorEdit.setOnSingleClickListener {
             DialogUtils.showColorPickerDialog(this, R.string.schedule_color_edit, viewModel.editSchedule.color)
@@ -173,7 +173,7 @@ class ScheduleEditActivity : ViewModelActivity<ScheduleEditViewModel, ActivitySc
             scheduleTimeAdapter.submitList(schedule.times)
 
             editTextScheduleName.setText(schedule.name)
-            sliderScheduleTimeNum.value = schedule.times.size.toFloat()
+            requireViewBinding().layoutScheduleTimeEdit.sliderScheduleTimeNum.value = schedule.times.size.toFloat()
             scheduleWeekStartModule.updateWeekStartText(schedule.weekStart)
 
             scheduleTermEditModule.updateScheduleDate(true, schedule.startDate, false)
