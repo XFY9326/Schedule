@@ -1,3 +1,5 @@
+const LATEST_APK_URL = "https://update.xfy9326.top/Schedule/LatestDownload";
+
 function showToast(text, color) {
     Toastify({
         text: text,
@@ -28,5 +30,20 @@ function onLoadClipBoard() {
 
 function onImportJSAdapter(config) {
     window.location.href = "pusc://course_import/js_config?src=" + config;
-    showToast("跳转中", "#3cb371");
+    showToast("尝试跳转中", "#3cb371");
 }
+
+async function getLatestAPKVersionInfo() {
+    let content = await fetch(LATEST_APK_URL).then((r) => r.json());
+    return content.versionName + " (" + content.versionCode + ")";
+}
+
+async function downloadLatestAPK() {
+    let content = await fetch(LATEST_APK_URL).then((r) => r.json());
+    window.open(content.url);
+}
+
+(async function () {
+    const info = document.getElementById("latestVersionInfo");
+    if (info) info.innerText = await getLatestAPKVersionInfo();
+})();
