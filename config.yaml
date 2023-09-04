@@ -1,0 +1,86 @@
+baseURL: /Schedule/
+
+title: Pure课程表
+
+theme: PaperMod
+
+languageCode: zh
+DefaultContentLanguage: zh
+
+enableEmoji: true
+hasCJKLanguage: true
+enableRobotsTXT: true
+enableInlineShortcodes: true
+disablePathToLower: true
+
+buildDrafts: false
+buildFuture: false
+buildExpired: false
+
+assets:
+  disableHLJS: true
+
+disableKinds:
+  - taxonomy
+
+menu:
+  main:
+    - identifier: intro
+      name: 简介
+      url: /简介/
+      weight: 600
+    - identifier: js_course_import
+      name: 适配导入
+      url: /适配导入/
+      weight: 700
+    - identifier: docs
+      name: 文档
+      url: /docs/
+      weight: 800
+    - identifier: questions
+      name: 常见问题
+      url: /常见问题/
+      weight: 900
+    - identifier: search
+      name: 搜索
+      url: /search/
+      weight: 1000
+
+params:
+  comments: false
+  ShowCodeCopyButtons: true
+  ShowReadingTime: true
+  ShowWordCount: true
+  UseHugoToc: true
+  showtoc: true
+  tocopen: true
+  profileMode:
+    enabled: true
+    title: Pure课程表
+    subtitle: 简单纯粹的开源安卓课程表App
+    imageUrl: img/logo.png
+    imageTitle: Logo
+    imageWidth: 120
+    imageHeight: 120
+    buttons:
+      - name: 所有版本
+        url: https://xfy9326.coding.net/public-artifacts/Schedule/release/packages
+      - name: 应用市场
+        url: https://coolapk.com/apk/tool.xfy9326.schedule
+  socialIcons:
+    - name: "gitee"
+      url: https://gitee.com/XFY9326/Schedule
+    - name: "github"
+      url: https://github.com/XFY9326/Schedule
+
+
+outputs:
+  home:
+    - HTML
+    - JSON
+
+markup:
+  highlight:
+    style: github-dark
+    guessSyntax: true
+    tabWidth: 4

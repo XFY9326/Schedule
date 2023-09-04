@@ -1,0 +1,19 @@
+:root {
+	--hljs-bg: #272b33;
+}
+
+.dark {
+	--hljs-bg: #272b33;
+}
+
+.post-content code {
+	line-height: 1.9;
+}
+
+.post-content pre,
+code {
+	border-radius: var(--radius);
+	font-family: "JetBrains Mono";
+	font-weight: 400;
+	font-style: normal;
+}

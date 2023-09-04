@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="{{ site.Language }}" dir="{{ .Language.LanguageDirection | default "auto" }}">
+
+<head>
+    {{- partial "head.html" . }}
+</head>
+
+<body class="
+{{- if (or (ne .Kind `page` ) (eq .Layout `archives`) (eq .Layout `search`)) -}}
+{{- print "list" -}}
+{{- end -}}
+{{- if eq site.Params.defaultTheme `dark` -}}
+{{- print " dark" }}
+{{- end -}}
+" id="top">
+    {{- partialCached "header.html" . .Page -}}
+    <main class="main">
+        {{- block "main" . }}{{ end }}
+    </main>
+    {{ partialCached "footer.html" . .Layout .Kind (.Param "hideFooter") (.Param "ShowCodeCopyButtons") -}}
+
+<script type="text/javascript">
+(function () {
+    const hideElements = function(e) {
+        if(typeof e !== "undefined") {
+            for (let i = 0; i < e.length; i++) {
+                e[i].style.display = "none";
+            }
+        }
+    };
+
+    let userAgent = navigator.userAgent.toString();
+    if (userAgent.includes("PureSchedule-AppInternal")) {
+        let headerElements = document.querySelectorAll(".header");
+        hideElements(headerElements);
+        let postHeaderElements = document.querySelectorAll(".post-header");
+        hideElements(postHeaderElements);
+        let footerElements = document.querySelectorAll(".footer");
+        hideElements(footerElements);
+        let appHiddenElements = document.querySelectorAll(".app-hidden");
+        hideElements(appHiddenElements);
+    }
+})();
+</script>
+</body>
+
+</html>

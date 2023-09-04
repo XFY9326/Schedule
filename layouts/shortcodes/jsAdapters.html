@@ -1,0 +1,19 @@
+{{ $data := .Get "data" }}
+{{ $json := index .Site.Data $data }}
+<div id="js_adapters">
+    <ul>
+        {{ range $row := $json }}
+        <li style="margin-bottom: 0.8em;">
+            <p>学校: {{ $row.school }}</p>
+            <p style="font-size: 0.9em; margin-top: 0.2em;">作者: {{ $row.author }}</p>
+            <div style="font-size: 0.9em; margin-top: 0.6em;">
+                <a href="{{ $row.config }}" class="app-hidden" style="margin: 0 1em;" target="_blank" referrerpolicy="no-referrer">配置文件</a>
+                <button type="button" class="button-simple" style="margin: 0 1em;" onclick="onImportJSAdapter('{{ $row.config }}');">
+                    一键导入
+                </button>
+                <button type="button" class="button-simple copy-element" data-clipboard-text="{{ $row.config }}" style="margin: 0 1em;">复制链接</button>
+            </div>
+        </li>
+        {{ end }}
+    </ul>
+</div>

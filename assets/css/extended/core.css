@@ -1,0 +1,7 @@
+.copy-element {
+    cursor: pointer;
+}
+
+.app-hidden {
+    color: var(--primary);
+}
