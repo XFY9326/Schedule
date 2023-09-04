@@ -14,6 +14,7 @@ import tool.xfy9326.schedule.databinding.ActivityFragmentContainerBinding
 import tool.xfy9326.schedule.ui.fragment.WebCourseProviderFragment
 import tool.xfy9326.schedule.ui.fragment.base.IWebCourseProvider
 import tool.xfy9326.schedule.ui.vm.base.AbstractWebCourseProviderViewModel
+import tool.xfy9326.schedule.utils.consumeSystemBarInsets
 import tool.xfy9326.schedule.utils.view.ViewUtils
 
 abstract class AbstractWebCourseProviderActivity<I, P1 : AbstractCourseProvider<*>, P2 : AbstractCourseParser<*>, M : AbstractWebCourseProviderViewModel<I, P1, P2>> :
@@ -51,6 +52,7 @@ abstract class AbstractWebCourseProviderActivity<I, P1 : AbstractCourseProvider<
                 replace(R.id.fragmentContainer, this@apply)
             }
         }
+        viewBinding.toolBarFragmentContainer.toolBarGeneral.consumeSystemBarInsets()
     }
 
     @CallSuper

@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
-import androidx.core.net.toUri
 import io.github.xfy9326.atools.base.asArray
 import io.github.xfy9326.atools.core.openUrlInBrowser
 import io.github.xfy9326.atools.core.packageUri
@@ -17,15 +16,12 @@ import java.io.File
 import java.util.Date
 
 object IntentUtils {
-    private val WIKI_URL = "https://xfy9326.gitee.io/schedule/docs/课程适配/".toUri()
-    private val FEEDBACK_URL = "https://gitee.com/XFY9326/Schedule/issues".toUri()
-
     fun openWikiUrl(context: Context) {
-        context.openUrlInBrowser(WIKI_URL)
+        context.openUrlInBrowser(AppUrl.WIKI_URL)
     }
 
     fun openFeedbackUrl(context: Context) {
-        context.openUrlInBrowser(FEEDBACK_URL)
+        context.openUrlInBrowser(AppUrl.FEEDBACK_URL)
     }
 
     fun seeImage(context: Context, uri: Uri) {

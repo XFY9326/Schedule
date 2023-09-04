@@ -29,6 +29,7 @@ import tool.xfy9326.schedule.ui.dialog.WebCourseProviderBottomPanel
 import tool.xfy9326.schedule.ui.fragment.base.IWebCourseProvider
 import tool.xfy9326.schedule.ui.fragment.base.ViewBindingFragment
 import tool.xfy9326.schedule.utils.JSBridge
+import tool.xfy9326.schedule.utils.consumeSystemBarInsets
 import java.lang.ref.WeakReference
 
 class WebCourseProviderFragment : ViewBindingFragment<FragmentWebCourseProviderBinding>(), IWebCourseProvider.IFragmentContact {
@@ -138,6 +139,8 @@ class WebCourseProviderFragment : ViewBindingFragment<FragmentWebCourseProviderB
             bindLifeCycle(this@WebCourseProviderFragment)
         }
 
+        viewBinding.layoutWebCourseProvider.consumeSystemBarInsets()
+
         viewBinding.buttonWebCourseProviderPanel.setOnClickListener {
             showBottomPanel()
         }
@@ -201,11 +204,11 @@ class WebCourseProviderFragment : ViewBindingFragment<FragmentWebCourseProviderB
     private fun addMenuInActivity() {
         requireActivity().addMenuProvider(object : MenuProvider {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-                menuInflater.inflate(R.menu.menu_web_course_provider, menu)
+                menuInflater.inflate(R.menu.menu_webview, menu)
             }
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-                if (menuItem.itemId == R.id.menu_webCourseProviderRefresh) {
+                if (menuItem.itemId == R.id.menu_webViewRefresh) {
                     requireViewBinding().webViewWebCourseProvider.reload()
                     return true
                 }

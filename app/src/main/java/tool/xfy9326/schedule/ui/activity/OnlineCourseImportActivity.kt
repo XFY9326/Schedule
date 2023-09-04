@@ -1,5 +1,6 @@
 package tool.xfy9326.schedule.ui.activity
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -53,6 +54,14 @@ class OnlineCourseImportActivity : ViewModelActivity<OnlineCourseImportViewModel
     override fun onContentViewPreload(savedInstanceState: Bundle?, viewModel: OnlineCourseImportViewModel) {
         WindowCompat.setDecorFitsSystemWindows(window, false)
         if (savedInstanceState == null) viewModel.pendingExternalCourseImportUrl = AppUriUtils.tryParseJSCourseImport(intent?.data)
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        requireViewModel().apply {
+            pendingExternalCourseImportUrl = AppUriUtils.tryParseJSCourseImport(intent?.data)
+            tryShowOnlineImportAttention()
+        }
+        super.onNewIntent(intent)
     }
 
     override fun onCreateViewBinding() = ActivityOnlineCourseImportBinding.inflate(layoutInflater)
@@ -115,6 +124,8 @@ class OnlineCourseImportActivity : ViewModelActivity<OnlineCourseImportViewModel
         viewModel.externalUrlCourseImport.observeEvent(this, javaClass.simpleName) {
             checkAddCourseImportPolicy {
                 JSConfigImportDialog.showDialog(supportFragmentManager, it)
+                intent?.data = null
+                viewModel.pendingExternalCourseImportUrl = null
             }
         }
     }

@@ -40,7 +40,7 @@ class OnlineCourseImportViewModel : AbstractViewModel() {
         tryShowOnlineImportAttention()
     }
 
-    private fun tryShowOnlineImportAttention() {
+    fun tryShowOnlineImportAttention() {
         viewModelScope.launch(Dispatchers.IO) {
             val hasRead = AppDataStore.readOnlineImportAttentionFlow.first()
             val enableFunction = AppSettingsDataStore.enableOnlineCourseImportFlow.first()

@@ -369,11 +369,12 @@
     <string name="swipe_to_delete_js_import">Tips：标有[JS]的选项可以侧滑删除</string>
     <string name="add_course_import">添加课程导入选项</string>
     <string name="add">添加</string>
-    <string name="from_file">从文件中选择</string>
+    <string name="from_file">选择文件</string>
     <string name="url_invalid">错误的Url格式！</string>
     <string name="add_course_import_attention_title">添加课程导入须知</string>
     <string name="add_course_import_attention">\u3000\u3000本APP支持自定义的方式快速添加需要的课程解析器，但是由于该功能依赖于JS并且来自未经审核的第三方，因此可能会造成安全问题。\n\u3000\u3000目前支持Pure课程表自有的JS接口与小爱课表JS接口，您可以快速定义或接入课程解析方式。\n\u3000\u3000请在了解以上风险并愿意承担由于导入JS导致的一切问题的基础上，再使用自定义课程解析功能！</string>
     <string name="agree_policy">我同意并愿意承担风险</string>
+    <string name="online_js_config_list">在线列表</string>
     <string name="course_import_config_url_hint">JS课程解析配置文件Url</string>
     <string name="add_course_import_wiki">适配文档</string>
     <string name="js_confirm_title">来自网页的消息</string>

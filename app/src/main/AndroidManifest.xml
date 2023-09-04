@@ -62,7 +62,8 @@
         <activity
             android:name=".ui.activity.OnlineCourseImportActivity"
             android:exported="true"
-            android:label="@string/online_course_import">
+            android:label="@string/online_course_import"
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -80,6 +81,7 @@
             android:name=".ui.activity.ExternalCourseImportActivity"
             android:exported="true"
             android:label="@string/external_course_import"
+            android:launchMode="singleInstance"
             android:theme="@style/AppTheme.LaunchScreen">
             <intent-filter>
                 <action android:name="${BaseApplicationId}.action.EXTERNAL_COURSE_IMPORT" />
@@ -103,6 +105,8 @@
         <activity android:name=".ui.activity.NetworkCourseProviderActivity" />
 
         <activity android:name=".ui.activity.RawTextActivity" />
+
+        <activity android:name=".ui.activity.WebActivity" />
 
         <activity
             android:name=".ui.activity.WebCourseProviderActivity"
