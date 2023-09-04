@@ -77,7 +77,7 @@
 {{- end }}
 
 {{- /* Custom Core js */}}
-{{- $core_js := slice (resources.Get "js/core.js") | resources.Concat "assets/js/core.js" }}
+{{- $core_js := slice (resources.Get "js/core.js") | resources.Concat "assets/js/core.js" | fingerprint }}
 <script defer src="{{ $core_js.RelPermalink }}"></script>
 
 {{- /* ClipBoard.js */}}
