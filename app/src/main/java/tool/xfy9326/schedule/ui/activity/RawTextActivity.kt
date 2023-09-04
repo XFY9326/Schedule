@@ -52,6 +52,6 @@ class RawTextActivity : ViewModelActivity<RawTextViewModel, ActivityRawTextBindi
     }
 
     override fun onInitView(viewBinding: ActivityRawTextBinding, viewModel: RawTextViewModel) {
-        viewBinding.textViewContent.consumeSystemBarInsets(bottom = true)
+        viewBinding.layoutTextContent.consumeSystemBarInsets(bottom = true)
     }
 }
