@@ -40,6 +40,7 @@ android {
         packaging {
             resources.excludes.addAll(
                 arrayOf(
+                    "kotlin-tooling-metadata.json",
                     "META-INF/*.version",
                     "META-INF/CHANGES",
                     "META-INF/README.md",
@@ -147,7 +148,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
 
     // AndroidX
-    implementation("androidx.core:core-ktx:1.10.1")
+    implementation("androidx.core:core-ktx:1.12.0")
 
     implementation("androidx.core:core-splashscreen:1.0.1")
 
@@ -155,17 +156,19 @@ dependencies {
     implementation("androidx.appcompat:appcompat:$appCompatVersion")
     implementation("androidx.appcompat:appcompat-resources:$appCompatVersion")
 
-    implementation("androidx.activity:activity-ktx:1.7.2")
+    implementation("androidx.activity:activity-ktx:1.8.0")
     implementation("androidx.fragment:fragment-ktx:1.6.1")
 
     implementation("androidx.drawerlayout:drawerlayout:1.2.0")
+    implementation("androidx.recyclerview:recyclerview:1.3.1")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+    implementation("androidx.coordinatorlayout:coordinatorlayout:1.2.0")
 
     implementation("androidx.preference:preference-ktx:1.2.1")
     implementation("androidx.datastore:datastore-preferences:1.0.0")
 
     // LifeCycle, ViewModel, LiveData
-    val lifeCycleVersion = "2.6.1"
+    val lifeCycleVersion = "2.6.2"
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:$lifeCycleVersion")
     implementation("androidx.lifecycle:lifecycle-common-java8:$lifeCycleVersion")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifeCycleVersion")
@@ -178,7 +181,7 @@ dependencies {
     testImplementation("androidx.room:room-testing:$roomVersion")
 
     // Material Design
-    implementation("com.google.android.material:material:1.9.0")
+    implementation("com.google.android.material:material:1.10.0")
 
     // Coil
     implementation("io.coil-kt:coil:2.4.0")
@@ -187,7 +190,7 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.11.0")
 
     // Ktor
-    val ktorVersion = "2.3.3"
+    val ktorVersion = "2.3.5"
     implementation("io.ktor:ktor-client-okhttp:$ktorVersion")
     implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
     implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
