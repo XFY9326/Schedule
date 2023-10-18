@@ -6,6 +6,7 @@ import android.content.res.Configuration
 import android.os.Bundle
 import androidx.annotation.ColorInt
 import androidx.annotation.Px
+import androidx.core.content.res.use
 import io.github.xfy9326.atools.core.relaunchApplication
 import io.github.xfy9326.atools.core.tryStartActivity
 import io.github.xfy9326.atools.ui.getColorCompat
@@ -19,12 +20,8 @@ fun Context.isUsingNightMode(mode: Int = resources.configuration.uiMode) =
 
 @ColorInt
 fun Context.getBackgroundColor(@ColorInt default: Int): Int {
-    theme.obtainStyledAttributes(IntArray(1) {
-        android.R.attr.colorBackground
-    }).let { array ->
-        return array.getColor(0, default).also {
-            array.recycle()
-        }
+    theme.obtainStyledAttributes(intArrayOf(android.R.attr.colorBackground)).use {
+        return it.getColor(0, default)
     }
 }
 

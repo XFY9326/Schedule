@@ -26,10 +26,10 @@ class ScheduleTimeAdapter : ListViewBindingAdapter<ScheduleTime, ItemScheduleTim
             textViewScheduleTimeStart.text = element.startTimeStr
             textViewScheduleTimeEnd.text = element.endTimeStr
             textViewScheduleTimeStart.setOnSingleClickListener {
-                onScheduleTimeEditListener?.invoke(holder.adapterPosition, element.startHour, element.startMinute, true)
+                onScheduleTimeEditListener?.invoke(holder.bindingAdapterPosition, element.startHour, element.startMinute, true)
             }
             textViewScheduleTimeEnd.setOnSingleClickListener {
-                onScheduleTimeEditListener?.invoke(holder.adapterPosition, element.endHour, element.endMinute, false)
+                onScheduleTimeEditListener?.invoke(holder.bindingAdapterPosition, element.endHour, element.endMinute, false)
             }
         }
     }

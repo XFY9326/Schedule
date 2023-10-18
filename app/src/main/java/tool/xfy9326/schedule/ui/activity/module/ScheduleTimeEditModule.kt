@@ -1,10 +1,13 @@
 package tool.xfy9326.schedule.ui.activity.module
 
 import android.annotation.SuppressLint
+import androidx.recyclerview.widget.ListAdapter
 import io.github.xfy9326.atools.ui.setOnSingleClickListener
 import tool.xfy9326.schedule.R
+import tool.xfy9326.schedule.beans.Schedule
 import tool.xfy9326.schedule.beans.ScheduleTime
 import tool.xfy9326.schedule.databinding.ActivityScheduleEditBinding
+import tool.xfy9326.schedule.databinding.LayoutScheduleTimeBinding
 import tool.xfy9326.schedule.ui.activity.ScheduleEditActivity
 import tool.xfy9326.schedule.ui.activity.base.AbstractViewModelActivityModule
 import tool.xfy9326.schedule.ui.adapter.ScheduleTimeAdapter
@@ -20,28 +23,28 @@ class ScheduleTimeEditModule(activity: ScheduleEditActivity) :
     }
 
     private lateinit var scheduleTimeAdapter: ScheduleTimeAdapter
-
-    fun bindScheduleTimeAdapter(scheduleTimeAdapter: ScheduleTimeAdapter) {
-        this.scheduleTimeAdapter = scheduleTimeAdapter
-    }
+    val listAdapter: ListAdapter<ScheduleTime, *>
+        get() = scheduleTimeAdapter
 
     override fun onInit() {
-        scheduleTimeAdapter.setOnScheduleTimeEditListener(::selectScheduleTime)
-
         val viewBinding = requireViewBinding().layoutScheduleTimeEdit
+
+        scheduleTimeAdapter = ScheduleTimeAdapter()
+        scheduleTimeAdapter.setOnScheduleTimeEditListener(::selectScheduleTime)
+        viewBinding.recyclerViewScheduleTimeList.adapter = scheduleTimeAdapter
 
         viewBinding.checkBoxScheduleTimeCourseTimeSame.isChecked = requireViewModel().scheduleTimeCourseTimeSame
         viewBinding.sliderScheduleCourseCostTime.value = requireViewModel().courseCostTime.toFloat()
         viewBinding.sliderScheduleBreakCostTime.value = requireViewModel().breakCostTime.toFloat()
 
         viewBinding.sliderScheduleCourseCostTime.setOnSlideValueSetListener {
-            updateCourseCostTime(it.toInt(), false)
+            updateCourseCostTime(viewBinding, it.toInt(), false)
         }
         viewBinding.sliderScheduleBreakCostTime.setOnSlideValueSetListener {
-            updateBreakCostTime(it.toInt(), false)
+            updateBreakCostTime(viewBinding, it.toInt(), false)
         }
         viewBinding.sliderScheduleTimeNum.setOnSlideValueSetListener {
-            updateCourseNum(it.toInt(), false)
+            updateCourseNum(viewBinding, it.toInt(), false)
         }
         viewBinding.layoutScheduleTimeCourseTimeSame.setOnSingleClickListener {
             viewBinding.checkBoxScheduleTimeCourseTimeSame.toggle()
@@ -50,60 +53,69 @@ class ScheduleTimeEditModule(activity: ScheduleEditActivity) :
             requireViewModel().scheduleTimeCourseTimeSame = isChecked
         }
 
-        TimePickerDialog.setOnTimeSetListener(requireActivity().supportFragmentManager, requireActivity()) { tag, hourOfDay, minute ->
-            onTimeSet(tag, hourOfDay, minute)
-        }
+        TimePickerDialog.setOnTimeSetListener(requireActivity().supportFragmentManager, requireActivity(), ::onTimeSet)
     }
 
     private fun onTimeSet(tag: String?, hourOfDay: Int, minute: Int) {
-        if (tag != null) {
-            if (tag.startsWith(TAG_SCHEDULE_TIME_START_PREFIX)) {
-                tag.substringAfter(TAG_SCHEDULE_TIME_START_PREFIX).toIntOrNull()?.let { i ->
-                    requireViewModel().apply {
-                        val times = editSchedule.times
-                        if (scheduleTimeCourseTimeSame) {
-                            val courseCostTime = courseCostTime
-                            val breakCostTime = breakCostTime
-                            var last: ScheduleTime? = null
-                            for (j in i until times.size) {
-                                if (last != null) {
-                                    last.endTimeMove(breakCostTime).let {
-                                        times[j].startHour = it.first
-                                        times[j].startMinute = it.second
-                                    }
-                                } else {
-                                    times[i].startHour = hourOfDay
-                                    times[i].startMinute = minute
-                                }
-                                last?.endTimeMove(breakCostTime)?.let {
-                                    times[j].startHour = it.first
-                                    times[j].startMinute = it.second
-                                }
-                                times[j].setDuration(courseCostTime)
-                                last = times[j]
-                            }
-                            scheduleTimeAdapter.notifyItemRangeChanged(i, times.size - i)
-                        } else {
-                            times[i].startHour = hourOfDay
-                            times[i].startMinute = minute
-                            scheduleTimeAdapter.notifyItemChanged(i)
-                        }
-                    }
-                }
-            } else if (tag.startsWith(TAG_SCHEDULE_TIME_END_PREFIX)) {
-                tag.substringAfter(TAG_SCHEDULE_TIME_END_PREFIX).toIntOrNull()?.let { i ->
-                    requireViewModel().editSchedule.times[i].apply {
-                        endHour = hourOfDay
-                        endMinute = minute
+        if (tag == null) return
+        if (tag.startsWith(TAG_SCHEDULE_TIME_START_PREFIX)) {
+            tag.substringAfter(TAG_SCHEDULE_TIME_START_PREFIX).toIntOrNull()?.let { i ->
+                requireViewModel().apply {
+                    val times = editSchedule.times
+                    if (scheduleTimeCourseTimeSame) {
+                        updateStartTime(this, i, hourOfDay, minute)
+                        scheduleTimeAdapter.notifyItemRangeChanged(i, times.size - i)
+                    } else {
+                        times[i].startHour = hourOfDay
+                        times[i].startMinute = minute
                         scheduleTimeAdapter.notifyItemChanged(i)
                     }
+                }
+            }
+        } else if (tag.startsWith(TAG_SCHEDULE_TIME_END_PREFIX)) {
+            tag.substringAfter(TAG_SCHEDULE_TIME_END_PREFIX).toIntOrNull()?.let { i ->
+                requireViewModel().editSchedule.times[i].apply {
+                    endHour = hourOfDay
+                    endMinute = minute
+                    scheduleTimeAdapter.notifyItemChanged(i)
                 }
             }
         }
     }
 
+    private fun updateStartTime(viewModel: ScheduleEditViewModel, index: Int, hourOfDay: Int, minute: Int) {
+        val times = viewModel.editSchedule.times
+        val courseCostTime = viewModel.courseCostTime
+        val breakCostTime = viewModel.breakCostTime
+        var last: ScheduleTime? = null
+        for (j in index until times.size) {
+            last?.endTimeMove(breakCostTime)?.let {
+                times[j].startHour = it.first
+                times[j].startMinute = it.second
+            } ?: {
+                times[index].startHour = hourOfDay
+                times[index].startMinute = minute
+            }
+            last?.endTimeMove(breakCostTime)?.let {
+                times[j].startHour = it.first
+                times[j].startMinute = it.second
+            }
+            times[j].setDuration(courseCostTime)
+            last = times[j]
+        }
+    }
+
+    fun initUpdateAll(schedule: Schedule) {
+        val viewBinding = requireViewBinding().layoutScheduleTimeEdit
+        requireViewModel().apply {
+            updateCourseCostTime(viewBinding, courseCostTime, true)
+            updateBreakCostTime(viewBinding, breakCostTime, true)
+            updateCourseNum(viewBinding, schedule.times.size, true)
+        }
+    }
+
     @SuppressLint("NotifyDataSetChanged")
-    fun updateCourseCostTime(minute: Int, viewInit: Boolean) {
+    private fun updateCourseCostTime(viewBinding: LayoutScheduleTimeBinding, minute: Int, viewInit: Boolean) {
         if (!viewInit) {
             val breakCostTime = requireViewModel().breakCostTime
             val times = requireViewModel().editSchedule.times
@@ -119,11 +131,11 @@ class ScheduleTimeEditModule(activity: ScheduleEditActivity) :
             requireViewModel().courseCostTime = minute
             scheduleTimeAdapter.notifyDataSetChanged()
         }
-        requireViewBinding().layoutScheduleTimeEdit.textViewScheduleCourseCostTime.text = requireActivity().getString(R.string.minute, minute)
+        viewBinding.textViewScheduleCourseCostTime.text = requireActivity().getString(R.string.minute, minute)
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun updateBreakCostTime(minute: Int, viewInit: Boolean) {
+    private fun updateBreakCostTime(viewBinding: LayoutScheduleTimeBinding, minute: Int, viewInit: Boolean) {
         if (!viewInit) {
             val courseCostTime = requireViewModel().courseCostTime
             val times = requireViewModel().editSchedule.times
@@ -139,10 +151,10 @@ class ScheduleTimeEditModule(activity: ScheduleEditActivity) :
             requireViewModel().breakCostTime = minute
             scheduleTimeAdapter.notifyDataSetChanged()
         }
-        requireViewBinding().layoutScheduleTimeEdit.textViewScheduleBreakCostTime.text = requireActivity().getString(R.string.minute, minute)
+        viewBinding.textViewScheduleBreakCostTime.text = requireActivity().getString(R.string.minute, minute)
     }
 
-    fun updateCourseNum(num: Int, viewInit: Boolean) {
+    private fun updateCourseNum(viewBinding: LayoutScheduleTimeBinding, num: Int, viewInit: Boolean) {
         if (!viewInit) {
             val courseCostTime = requireViewModel().courseCostTime
             val breakCostTime = requireViewModel().breakCostTime
@@ -161,10 +173,10 @@ class ScheduleTimeEditModule(activity: ScheduleEditActivity) :
                 requireViewModel().editSchedule.times = it
                 scheduleTimeAdapter.submitList(it)
             }
-            requireViewBinding().layoutScheduleTimeEdit.textViewScheduleTimeNum.text =
+            viewBinding.textViewScheduleTimeNum.text =
                 requireActivity().getString(R.string.course_num, requireViewModel().editSchedule.times.size)
         } else {
-            requireViewBinding().layoutScheduleTimeEdit.textViewScheduleTimeNum.text = requireActivity().getString(R.string.course_num, num)
+            viewBinding.textViewScheduleTimeNum.text = requireActivity().getString(R.string.course_num, num)
         }
     }
 

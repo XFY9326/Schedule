@@ -1,21 +1,22 @@
 package tool.xfy9326.schedule.ui.activity.module
 
+import androidx.recyclerview.widget.ListAdapter
 import io.github.xfy9326.atools.livedata.observeEvent
 import io.github.xfy9326.atools.ui.setOnSingleClickListener
 import tool.xfy9326.schedule.R
+import tool.xfy9326.schedule.beans.ScheduleTime
 import tool.xfy9326.schedule.databinding.ActivityScheduleEditBinding
 import tool.xfy9326.schedule.ui.activity.ScheduleEditActivity
 import tool.xfy9326.schedule.ui.activity.base.AbstractViewModelActivityModule
-import tool.xfy9326.schedule.ui.adapter.ScheduleTimeAdapter
 import tool.xfy9326.schedule.ui.vm.ScheduleEditViewModel
 import tool.xfy9326.schedule.utils.showSnackBar
 import tool.xfy9326.schedule.utils.view.DialogUtils
 
 class ScheduleTimeImportModule(activity: ScheduleEditActivity) :
     AbstractViewModelActivityModule<ScheduleEditViewModel, ActivityScheduleEditBinding, ScheduleEditActivity>(activity) {
-    private lateinit var scheduleTimeAdapter: ScheduleTimeAdapter
+    private lateinit var scheduleTimeAdapter: ListAdapter<ScheduleTime, *>
 
-    fun bindScheduleTimeAdapter(scheduleTimeAdapter: ScheduleTimeAdapter) {
+    fun bindScheduleTimeAdapter(scheduleTimeAdapter: ListAdapter<ScheduleTime, *>) {
         this.scheduleTimeAdapter = scheduleTimeAdapter
     }
 
