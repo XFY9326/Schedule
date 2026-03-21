@@ -1,12 +1,13 @@
 package tool.xfy9326.schedule.ui.activity.module
 
+import androidx.recyclerview.widget.ListAdapter
 import tool.xfy9326.schedule.R
+import tool.xfy9326.schedule.beans.ScheduleTime
 import tool.xfy9326.schedule.databinding.ActivityScheduleEditBinding
 import tool.xfy9326.schedule.tools.livedata.observeEvent
 import tool.xfy9326.schedule.tools.ui.setOnSingleClickListener
 import tool.xfy9326.schedule.ui.activity.ScheduleEditActivity
 import tool.xfy9326.schedule.ui.activity.base.AbstractViewModelActivityModule
-import tool.xfy9326.schedule.ui.adapter.ScheduleTimeAdapter
 import tool.xfy9326.schedule.ui.vm.ScheduleEditViewModel
 import tool.xfy9326.schedule.utils.showSnackBar
 import tool.xfy9326.schedule.utils.view.DialogUtils

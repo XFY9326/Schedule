@@ -1,9 +1,12 @@
 package tool.xfy9326.schedule.ui.activity.module
 
 import android.annotation.SuppressLint
+import androidx.recyclerview.widget.ListAdapter
 import tool.xfy9326.schedule.R
+import tool.xfy9326.schedule.beans.Schedule
 import tool.xfy9326.schedule.beans.ScheduleTime
 import tool.xfy9326.schedule.databinding.ActivityScheduleEditBinding
+import tool.xfy9326.schedule.databinding.LayoutScheduleTimeBinding
 import tool.xfy9326.schedule.tools.ui.setOnSingleClickListener
 import tool.xfy9326.schedule.ui.activity.ScheduleEditActivity
 import tool.xfy9326.schedule.ui.activity.base.AbstractViewModelActivityModule
