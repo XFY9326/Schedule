@@ -20,12 +20,8 @@ fun Context.isUsingNightMode(mode: Int = resources.configuration.uiMode) =
 
 @ColorInt
 fun Context.getBackgroundColor(@ColorInt default: Int): Int {
-    theme.obtainStyledAttributes(IntArray(1) {
-        android.R.attr.colorBackground
-    }).let { array ->
-        return array.getColor(0, default).also {
-            array.recycle()
-        }
+    theme.obtainStyledAttributes(intArrayOf(android.R.attr.colorBackground)).use {
+        return it.getColor(0, default)
     }
 }
 

@@ -2,6 +2,7 @@
 
 package tool.xfy9326.schedule.ui.view.recyclerview
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.util.AttributeSet
 import android.view.MotionEvent
@@ -16,7 +17,7 @@ import kotlin.math.abs
 class AdvancedRecyclerView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
-    defStyleAttr: Int = androidx.recyclerview.R.attr.recyclerViewStyle,
+    @SuppressLint("PrivateResource") defStyleAttr: Int = androidx.recyclerview.R.attr.recyclerViewStyle,
 ) : RecyclerView(context, attrs, defStyleAttr) {
     init {
         setAttrs(context, attrs)

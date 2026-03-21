@@ -1,3 +1,5 @@
+@file:Suppress("UNUSED_VARIABLE")
+
 package tool.xfy9326.schedule
 
 import androidx.test.ext.junit.runners.AndroidJUnit4

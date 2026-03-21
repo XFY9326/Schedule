@@ -28,7 +28,6 @@ import tool.xfy9326.schedule.ui.activity.module.ScheduleTermEditModule
 import tool.xfy9326.schedule.ui.activity.module.ScheduleTimeEditModule
 import tool.xfy9326.schedule.ui.activity.module.ScheduleTimeImportModule
 import tool.xfy9326.schedule.ui.activity.module.ScheduleWeekStartModule
-import tool.xfy9326.schedule.ui.adapter.ScheduleTimeAdapter
 import tool.xfy9326.schedule.ui.vm.ScheduleEditViewModel
 import tool.xfy9326.schedule.utils.consumeSystemBarInsets
 import tool.xfy9326.schedule.utils.showSnackBar
@@ -55,8 +54,6 @@ class ScheduleEditActivity : ViewModelActivity<ScheduleEditViewModel, ActivitySc
     private val scheduleTimeEditModule = ScheduleTimeEditModule(this)
     private val scheduleWeekStartModule = ScheduleWeekStartModule(this)
 
-    private lateinit var scheduleTimeAdapter: ScheduleTimeAdapter
-
     override fun onContentViewPreload(savedInstanceState: Bundle?, viewModel: ScheduleEditViewModel) {
         WindowCompat.setDecorFitsSystemWindows(window, false)
         onBackPressedDispatcher.addCallback(this, true, this::onBackPressed)
@@ -67,12 +64,6 @@ class ScheduleEditActivity : ViewModelActivity<ScheduleEditViewModel, ActivitySc
     override fun onPrepare(viewBinding: ActivityScheduleEditBinding, viewModel: ScheduleEditViewModel) {
         setSupportActionBar(viewBinding.toolBarScheduleEdit.toolBarGeneral)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
-        scheduleTimeAdapter = ScheduleTimeAdapter()
-        viewBinding.layoutScheduleTimeEdit.recyclerViewScheduleTimeList.adapter = scheduleTimeAdapter
-        scheduleTimeImportModule.bindScheduleTimeAdapter(scheduleTimeAdapter)
-        scheduleTimeEditModule.bindScheduleTimeAdapter(scheduleTimeAdapter)
-
         viewModel.requestDBScheduleData(intent.getLongExtra(INTENT_EXTRA_SCHEDULE_ID, 0))
     }
 
@@ -83,8 +74,11 @@ class ScheduleEditActivity : ViewModelActivity<ScheduleEditViewModel, ActivitySc
             viewBinding.layoutScheduleEdit.showSnackBar(it.getText(this))
         }
 
-        scheduleTimeImportModule.init()
         scheduleTimeEditModule.init()
+
+        scheduleTimeImportModule.bindScheduleTimeAdapter(scheduleTimeEditModule.listAdapter)
+
+        scheduleTimeImportModule.init()
         scheduleTermEditModule.init()
         scheduleWeekStartModule.init()
     }
@@ -170,7 +164,7 @@ class ScheduleEditActivity : ViewModelActivity<ScheduleEditViewModel, ActivitySc
 
     private fun applyScheduleToView(schedule: Schedule) {
         requireViewBinding().apply {
-            scheduleTimeAdapter.submitList(schedule.times)
+            scheduleTimeEditModule.listAdapter.submitList(schedule.times)
 
             editTextScheduleName.setText(schedule.name)
             requireViewBinding().layoutScheduleTimeEdit.sliderScheduleTimeNum.value = schedule.times.size.toFloat()
@@ -180,11 +174,7 @@ class ScheduleEditActivity : ViewModelActivity<ScheduleEditViewModel, ActivitySc
             scheduleTermEditModule.updateScheduleDate(false, schedule.endDate, false)
             updateScheduleColor(schedule.color)
 
-            requireViewModel().apply {
-                scheduleTimeEditModule.updateCourseCostTime(courseCostTime, true)
-                scheduleTimeEditModule.updateBreakCostTime(breakCostTime, true)
-                scheduleTimeEditModule.updateCourseNum(schedule.times.size, true)
-            }
+            scheduleTimeEditModule.initUpdateAll(schedule)
         }
     }
 

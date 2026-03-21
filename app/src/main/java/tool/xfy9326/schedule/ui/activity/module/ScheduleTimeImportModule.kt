@@ -13,9 +13,9 @@ import tool.xfy9326.schedule.utils.view.DialogUtils
 
 class ScheduleTimeImportModule(activity: ScheduleEditActivity) :
     AbstractViewModelActivityModule<ScheduleEditViewModel, ActivityScheduleEditBinding, ScheduleEditActivity>(activity) {
-    private lateinit var scheduleTimeAdapter: ScheduleTimeAdapter
+    private lateinit var scheduleTimeAdapter: ListAdapter<ScheduleTime, *>
 
-    fun bindScheduleTimeAdapter(scheduleTimeAdapter: ScheduleTimeAdapter) {
+    fun bindScheduleTimeAdapter(scheduleTimeAdapter: ListAdapter<ScheduleTime, *>) {
         this.scheduleTimeAdapter = scheduleTimeAdapter
     }
 
