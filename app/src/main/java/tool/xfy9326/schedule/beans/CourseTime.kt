@@ -15,7 +15,7 @@ import tool.xfy9326.schedule.beans.SectionTime.Companion.intersect
 import tool.xfy9326.schedule.beans.WeekDay.Companion.orderedValue
 import tool.xfy9326.schedule.content.utils.hasCourse
 import tool.xfy9326.schedule.db.DBConst
-import tool.xfy9326.schedule.tools.NumberPattern
+import tool.xfy9326.schedule.tools.others.NumberPattern
 import tool.xfy9326.schedule.utils.schedule.WeekNumPattern.getWeeksDescriptionText
 import kotlin.math.max
 import kotlin.math.min

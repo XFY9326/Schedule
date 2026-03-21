@@ -1,6 +1,5 @@
 package tool.xfy9326.schedule.content.utils
 
-import io.github.xfy9326.atools.base.nullIfBlank
 import kotlinx.serialization.json.Json
 import tool.xfy9326.schedule.beans.Course
 import tool.xfy9326.schedule.beans.CourseTime
@@ -15,6 +14,7 @@ import tool.xfy9326.schedule.content.base.WebCourseParser
 import tool.xfy9326.schedule.content.base.WebCourseProvider
 import tool.xfy9326.schedule.content.utils.CourseAdapterException.Companion.report
 import tool.xfy9326.schedule.json.parser.pure.ScheduleImportJSON
+import tool.xfy9326.schedule.tools.base.nullIfBlank
 
 object CourseImportHelper {
 

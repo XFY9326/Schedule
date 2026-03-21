@@ -4,20 +4,19 @@ import android.os.Bundle
 import android.view.HapticFeedbackConstants
 import android.view.Window
 import androidx.appcompat.app.AppCompatDialogFragment
-import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.LifecycleOwner
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import io.github.xfy9326.atools.core.getParcelableCompat
-import io.github.xfy9326.atools.core.hideKeyboard
-import io.github.xfy9326.atools.ui.getStringArray
-import io.github.xfy9326.atools.ui.getText
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.CourseTime
 import tool.xfy9326.schedule.beans.SectionTime.Companion.end
 import tool.xfy9326.schedule.beans.WeekDay
 import tool.xfy9326.schedule.databinding.DialogCourseTimeEditBinding
+import tool.xfy9326.schedule.tools.core.getParcelableCompat
+import tool.xfy9326.schedule.tools.core.hideKeyboard
+import tool.xfy9326.schedule.tools.ui.getStringArray
+import tool.xfy9326.schedule.tools.ui.getText
 import tool.xfy9326.schedule.utils.schedule.CourseUtils
 import tool.xfy9326.schedule.utils.setWindowPercent
 import kotlin.properties.Delegates
@@ -35,12 +34,12 @@ class CourseTimeEditDialog : AppCompatDialogFragment() {
 
         fun showDialog(fragmentManager: FragmentManager, editBundle: EditBundle) {
             CourseTimeEditDialog().apply {
-                arguments = bundleOf(
-                    EXTRA_MAX_WEEK_NUM to editBundle.maxWeekNum,
-                    EXTRA_MAX_COURSE_NUM to editBundle.maxCourseNum,
-                    EXTRA_COURSE_TIME to editBundle.courseTime,
-                    EXTRA_EDIT_POSITION to (editBundle.editPosition ?: -1)
-                )
+                arguments = Bundle().apply {
+                    putInt(EXTRA_MAX_WEEK_NUM, editBundle.maxWeekNum)
+                    putInt(EXTRA_MAX_COURSE_NUM, editBundle.maxCourseNum)
+                    putParcelable(EXTRA_COURSE_TIME, editBundle.courseTime)
+                    putInt(EXTRA_EDIT_POSITION, editBundle.editPosition ?: -1)
+                }
             }.show(fragmentManager, DIALOG_TAG)
         }
 
@@ -106,13 +105,13 @@ class CourseTimeEditDialog : AppCompatDialogFragment() {
                 }
                 updateEditData()
                 val position = requireArguments().getInt(EXTRA_EDIT_POSITION, -1)
-                val outputBundle = if (position < 0) {
-                    bundleOf(EXTRA_COURSE_TIME to editCourseTime)
-                } else {
-                    bundleOf(
-                        EXTRA_COURSE_TIME to editCourseTime,
-                        EXTRA_EDIT_POSITION to position
-                    )
+                val outputBundle = Bundle().apply {
+                    if (position < 0) {
+                        putParcelable(EXTRA_COURSE_TIME, editCourseTime)
+                    } else {
+                        putInt(EXTRA_EDIT_POSITION, position)
+                        putParcelable(EXTRA_COURSE_TIME, editCourseTime)
+                    }
                 }
                 setFragmentResult(DIALOG_TAG, outputBundle)
             }

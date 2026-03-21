@@ -121,17 +121,17 @@ class ScheduleCourseCellSettingsFragment : AbstractSettingsFragment() {
     }
 
     class NumberTextEditBundle(
-        @StringRes
+        @param:StringRes
         val prefKeyRes: Int,
-        @StringRes
+        @param:StringRes
         val prefSumRes: Int,
-        @IntegerRes
+        @param:IntegerRes
         val minRes: Int,
-        @IntegerRes
+        @param:IntegerRes
         val maxRes: Int,
         val dataStoreKey: Preferences.Key<Int>,
         val dataStoreFlow: Flow<Int>,
-        @StringRes
+        @param:StringRes
         val editHintRes: Int,
     )
 }

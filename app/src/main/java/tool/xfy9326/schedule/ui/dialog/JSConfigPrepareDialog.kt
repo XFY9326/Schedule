@@ -5,14 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatDialogFragment
-import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.activityViewModels
-import io.github.xfy9326.atools.core.getParcelableCompat
-import io.github.xfy9326.atools.core.showToast
-import io.github.xfy9326.atools.livedata.observeEvent
-import io.github.xfy9326.atools.ui.showToast
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.content.CourseImportConfigManager
 import tool.xfy9326.schedule.content.CourseImportConfigManager.Type.CHECK_UPDATE
@@ -24,6 +19,10 @@ import tool.xfy9326.schedule.content.CourseImportConfigManager.Type.PREPARE_PROV
 import tool.xfy9326.schedule.content.beans.JSConfig
 import tool.xfy9326.schedule.content.utils.JSConfigException
 import tool.xfy9326.schedule.databinding.DialogJsConfigPrepareBinding
+import tool.xfy9326.schedule.tools.core.getParcelableCompat
+import tool.xfy9326.schedule.tools.core.showToast
+import tool.xfy9326.schedule.tools.livedata.observeEvent
+import tool.xfy9326.schedule.tools.ui.showToast
 import tool.xfy9326.schedule.ui.vm.OnlineCourseImportViewModel
 import tool.xfy9326.schedule.utils.setWindowPercent
 
@@ -37,9 +36,9 @@ class JSConfigPrepareDialog : AppCompatDialogFragment() {
 
         fun showDialog(fragmentManager: FragmentManager, jsConfig: JSConfig) {
             JSConfigPrepareDialog().apply {
-                arguments = bundleOf(
-                    EXTRA_JS_CONFIG to jsConfig
-                )
+                arguments = Bundle().apply {
+                    putParcelable(EXTRA_JS_CONFIG, jsConfig)
+                }
             }.show(fragmentManager, DIALOG_TAG)
         }
 

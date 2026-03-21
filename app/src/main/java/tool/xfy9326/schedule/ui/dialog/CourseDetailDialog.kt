@@ -5,20 +5,19 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatDialogFragment
-import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
-import io.github.xfy9326.atools.core.getParcelableCompat
-import io.github.xfy9326.atools.core.startActivity
-import io.github.xfy9326.atools.ui.getColorCompat
-import io.github.xfy9326.atools.ui.getStringArray
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.Course
 import tool.xfy9326.schedule.beans.CourseDetail
 import tool.xfy9326.schedule.beans.CourseTime
 import tool.xfy9326.schedule.beans.ScheduleTime
 import tool.xfy9326.schedule.databinding.DialogCourseDetailBinding
-import tool.xfy9326.schedule.tools.MaterialColorHelper
+import tool.xfy9326.schedule.tools.core.getParcelableCompat
+import tool.xfy9326.schedule.tools.core.startActivity
+import tool.xfy9326.schedule.tools.others.MaterialColorHelper
+import tool.xfy9326.schedule.tools.ui.getColorCompat
+import tool.xfy9326.schedule.tools.ui.getStringArray
 import tool.xfy9326.schedule.ui.activity.CourseEditActivity
 import tool.xfy9326.schedule.ui.adapter.CourseDetailAdapter
 import tool.xfy9326.schedule.utils.setWindowPercent
@@ -31,9 +30,9 @@ class CourseDetailDialog : AppCompatDialogFragment() {
 
         fun showDialog(fragmentManager: FragmentManager, courseDetail: CourseDetail) {
             CourseDetailDialog().apply {
-                arguments = bundleOf(
-                    ARGUMENT_COURSE_DETAIL to courseDetail
-                )
+                arguments = Bundle().apply {
+                    putParcelable(ARGUMENT_COURSE_DETAIL, courseDetail)
+                }
             }.show(fragmentManager, null)
         }
     }

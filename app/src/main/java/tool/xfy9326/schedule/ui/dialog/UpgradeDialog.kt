@@ -8,16 +8,10 @@ import android.view.View
 import android.widget.Button
 import androidx.appcompat.app.AppCompatDialogFragment
 import androidx.appcompat.widget.PopupMenu
-import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import io.github.xfy9326.atools.core.PackageInstallPermissionContract
-import io.github.xfy9326.atools.core.canInstallPackage
-import io.github.xfy9326.atools.core.getParcelableCompat
-import io.github.xfy9326.atools.ui.show
-import io.github.xfy9326.atools.ui.showToast
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import tool.xfy9326.schedule.BuildConfig
@@ -27,7 +21,12 @@ import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.databinding.DialogUpgradeBinding
 import tool.xfy9326.schedule.json.upgrade.DownloadSource
 import tool.xfy9326.schedule.json.upgrade.UpdateInfo
-import tool.xfy9326.schedule.tools.MIMEConst
+import tool.xfy9326.schedule.tools.core.PackageInstallPermissionContract
+import tool.xfy9326.schedule.tools.core.canInstallPackage
+import tool.xfy9326.schedule.tools.core.getParcelableCompat
+import tool.xfy9326.schedule.tools.others.MIMEConst
+import tool.xfy9326.schedule.tools.ui.show
+import tool.xfy9326.schedule.tools.ui.showToast
 import tool.xfy9326.schedule.utils.DownloadUtils
 import tool.xfy9326.schedule.utils.PROJECT_ID
 import tool.xfy9326.schedule.utils.setWindowPercent
@@ -44,9 +43,9 @@ class UpgradeDialog : AppCompatDialogFragment() {
             if (fragmentManager.findFragmentByTag(UPDATE_FRAGMENT_TAG) == null) {
                 try {
                     UpgradeDialog().apply {
-                        arguments = bundleOf(
-                            UPDATE_INFO to updateInfo
-                        )
+                        arguments = Bundle().apply {
+                            putParcelable(UPDATE_INFO, updateInfo)
+                        }
                     }.show(fragmentManager, UPDATE_FRAGMENT_TAG)
                 } catch (e: Exception) {
                     e.printStackTrace()

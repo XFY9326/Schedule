@@ -5,12 +5,12 @@ import android.net.Uri
 import androidx.activity.ComponentActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import io.github.xfy9326.atools.base.asList
-import io.github.xfy9326.atools.ui.getItemUris
-import io.github.xfy9326.atools.ui.showGlobalToast
 import tool.xfy9326.schedule.BuildConfig
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.content.beans.ExternalCourseImportData
+import tool.xfy9326.schedule.tools.base.asList
+import tool.xfy9326.schedule.tools.ui.getItemUris
+import tool.xfy9326.schedule.tools.ui.showGlobalToast
 import tool.xfy9326.schedule.ui.vm.ExternalCourseImportViewModel
 
 object ExternalCourseImportUtils {

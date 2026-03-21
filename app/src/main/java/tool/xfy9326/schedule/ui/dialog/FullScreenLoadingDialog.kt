@@ -9,7 +9,6 @@ import android.view.Window
 import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatDialogFragment
 import androidx.appcompat.widget.LinearLayoutCompat
-import androidx.core.os.bundleOf
 import androidx.core.view.updateMargins
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
@@ -19,12 +18,12 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.transition.Fade
 import com.google.android.material.button.MaterialButton
-import io.github.xfy9326.atools.ui.getDrawableCompat
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import tool.xfy9326.schedule.R
+import tool.xfy9326.schedule.tools.ui.getDrawableCompat
 import java.lang.ref.WeakReference
 
 class FullScreenLoadingDialog : AppCompatDialogFragment() {
@@ -147,9 +146,9 @@ class FullScreenLoadingDialog : AppCompatDialogFragment() {
         private fun showDialog(fragmentManager: FragmentManager, showCancel: Boolean) {
             if (fragmentManager.findFragmentByTag(FRAGMENT_TAG) != null) return
             FullScreenLoadingDialog().apply {
-                arguments = bundleOf(
-                    EXTRA_SHOW_CANCEL_BUTTON to showCancel
-                )
+                arguments = Bundle().apply {
+                    putBoolean(EXTRA_SHOW_CANCEL_BUTTON, showCancel)
+                }
             }.show(fragmentManager, FRAGMENT_TAG)
         }
 

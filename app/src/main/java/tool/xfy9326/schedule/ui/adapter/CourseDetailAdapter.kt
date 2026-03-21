@@ -7,7 +7,6 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
-import io.github.xfy9326.atools.ui.getDrawableCompat
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.CourseTime
 import tool.xfy9326.schedule.beans.CourseTime.Companion.getWeeksDescriptionText
@@ -16,6 +15,7 @@ import tool.xfy9326.schedule.beans.SectionTime.Companion.description
 import tool.xfy9326.schedule.beans.SectionTime.Companion.scheduleTimeDescription
 import tool.xfy9326.schedule.databinding.ItemCourseDetailTimeBinding
 import tool.xfy9326.schedule.databinding.ItemCourseDetailTimeExpandBinding
+import tool.xfy9326.schedule.tools.ui.getDrawableCompat
 import tool.xfy9326.schedule.ui.view.recyclerview.AdvancedDividerItemDecoration
 import tool.xfy9326.schedule.ui.view.recyclerview.BaseViewBindingAdapter
 import tool.xfy9326.schedule.ui.viewholder.ViewBindingViewHolder

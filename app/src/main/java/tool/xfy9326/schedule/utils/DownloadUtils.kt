@@ -2,11 +2,10 @@ package tool.xfy9326.schedule.utils
 
 import android.app.DownloadManager
 import android.content.Context
-import android.net.Uri
 import android.os.Environment
 import androidx.core.content.getSystemService
 import androidx.core.net.toUri
-import io.github.xfy9326.atools.core.openUrlInBrowser
+import tool.xfy9326.schedule.tools.core.openUrlInBrowser
 import java.io.File
 
 object DownloadUtils {
@@ -22,7 +21,7 @@ object DownloadUtils {
     ): Long? {
         val subPath = DOWNLOAD_SUB_DIR + File.separator + fileName
         try {
-            return context.applicationContext.getSystemService<DownloadManager>()?.enqueue(DownloadManager.Request(Uri.parse(url)).apply {
+            return context.applicationContext.getSystemService<DownloadManager>()?.enqueue(DownloadManager.Request(url.toUri()).apply {
                 setTitle(title)
                 setDescription(description)
                 setMimeType(mimeType)

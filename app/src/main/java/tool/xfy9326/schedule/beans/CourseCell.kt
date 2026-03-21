@@ -9,9 +9,9 @@ data class CourseCell(
     val courseLocation: String?,
     val courseTeacher: String?,
     val sectionTime: SectionTime,
-    @ColorInt
+    @param:ColorInt
     val cellColor: Int,
-    // This course cell data may comes from different weeks if it's not this week's course.
+    // This course cell data may come from different weeks if it's not this week's course.
     // If and only if isThisWeekCourse is true, fromWeekNum equals to this week's week number.
     val fromWeekNum: Int,
     val isThisWeekCourse: Boolean,

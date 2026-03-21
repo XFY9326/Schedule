@@ -5,18 +5,17 @@ import android.content.DialogInterface
 import android.os.Bundle
 import android.webkit.URLUtil
 import androidx.appcompat.app.AppCompatDialogFragment
-import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.LifecycleOwner
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import io.github.xfy9326.atools.core.startActivity
-import io.github.xfy9326.atools.ui.getText
-import io.github.xfy9326.atools.ui.setOnSingleClickListener
-import io.github.xfy9326.atools.ui.showToast
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.databinding.DialogJsConfigImportBinding
+import tool.xfy9326.schedule.tools.core.startActivity
+import tool.xfy9326.schedule.tools.ui.getText
+import tool.xfy9326.schedule.tools.ui.setOnSingleClickListener
+import tool.xfy9326.schedule.tools.ui.showToast
 import tool.xfy9326.schedule.ui.activity.WebActivity
 import tool.xfy9326.schedule.utils.AppUrl
 
@@ -30,9 +29,9 @@ class JSConfigImportDialog : AppCompatDialogFragment() {
             (fragmentManager.findFragmentByTag(DIALOG_TAG) as? DialogFragment)?.dismissAllowingStateLoss()
             JSConfigImportDialog().apply {
                 if (url != null) {
-                    arguments = bundleOf(
-                        EXTRA_URL to url
-                    )
+                    arguments = Bundle().apply {
+                        putString(EXTRA_URL, url)
+                    }
                 }
             }.show(fragmentManager, DIALOG_TAG)
         }
@@ -80,7 +79,12 @@ class JSConfigImportDialog : AppCompatDialogFragment() {
                 dialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener {
                     val inputUrl = binding.editTextJsConfigUrl.text.getText()?.trim()
                     if (inputUrl != null && URLUtil.isValidUrl(inputUrl)) {
-                        setFragmentResult(DIALOG_TAG, bundleOf(EXTRA_URL to inputUrl))
+                        setFragmentResult(
+                            requestKey = DIALOG_TAG,
+                            result = Bundle().apply {
+                                putString(EXTRA_URL, inputUrl)
+                            }
+                        )
                         dismiss()
                     } else {
                         requireContext().showToast(R.string.url_invalid)

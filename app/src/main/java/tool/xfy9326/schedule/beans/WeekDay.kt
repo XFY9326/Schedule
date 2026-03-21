@@ -54,22 +54,22 @@ enum class WeekDay : Parcelable {
         fun Calendar.getWeekDay() = valueOfCalWeekDay(get(Calendar.DAY_OF_WEEK))
 
         fun valueOfCalWeekDay(calWeekDay: Int) =
-            values().find {
+            entries.find {
                 it.calWeekDay == calWeekDay
             } ?: error("Calendar week day value error! Must be one of Calendar week day values!")
 
-        fun from(ordinal: Int) = values()[ordinal]
+        fun from(ordinal: Int) = entries[ordinal]
 
         fun of(value: Int): WeekDay {
             if (value !in 1..7) {
                 error("Week day num must in 1..7")
             }
-            return values()[value - 1]
+            return entries[value - 1]
         }
 
         fun valueOfShortName(str: String) =
             str.uppercase(Locale.getDefault()).let { shortName ->
-                values().find {
+                entries.find {
                     it.shortName == shortName
                 } ?: error("Value error!")
             }

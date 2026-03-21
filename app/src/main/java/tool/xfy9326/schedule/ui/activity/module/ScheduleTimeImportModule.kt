@@ -1,9 +1,9 @@
 package tool.xfy9326.schedule.ui.activity.module
 
-import io.github.xfy9326.atools.livedata.observeEvent
-import io.github.xfy9326.atools.ui.setOnSingleClickListener
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.databinding.ActivityScheduleEditBinding
+import tool.xfy9326.schedule.tools.livedata.observeEvent
+import tool.xfy9326.schedule.tools.ui.setOnSingleClickListener
 import tool.xfy9326.schedule.ui.activity.ScheduleEditActivity
 import tool.xfy9326.schedule.ui.activity.base.AbstractViewModelActivityModule
 import tool.xfy9326.schedule.ui.adapter.ScheduleTimeAdapter

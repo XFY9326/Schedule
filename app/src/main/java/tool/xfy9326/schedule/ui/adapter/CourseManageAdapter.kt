@@ -7,12 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
-import io.github.xfy9326.atools.ui.getColorCompat
-import io.github.xfy9326.atools.ui.setOnSingleClickListener
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.Course
 import tool.xfy9326.schedule.beans.Course.Companion.hasEmptyWeekNumCourseTime
 import tool.xfy9326.schedule.databinding.ItemCourseBinding
+import tool.xfy9326.schedule.tools.ui.getColorCompat
+import tool.xfy9326.schedule.tools.ui.setOnSingleClickListener
 import tool.xfy9326.schedule.ui.view.recyclerview.AdvancedDividerItemDecoration
 import tool.xfy9326.schedule.ui.view.recyclerview.BaseDifferItemCallBack
 import tool.xfy9326.schedule.ui.view.recyclerview.SwipeListViewBindingAdapter

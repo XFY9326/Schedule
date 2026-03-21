@@ -2,10 +2,10 @@ package tool.xfy9326.schedule.beans
 
 import android.content.Context
 import android.os.Parcelable
-import io.github.xfy9326.atools.base.nullIfBlank
 import kotlinx.parcelize.Parcelize
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.ScheduleTime.Companion.startTimeStr
+import tool.xfy9326.schedule.tools.base.nullIfBlank
 
 @Parcelize
 data class NextCourseInfo(
@@ -31,13 +31,21 @@ data class NextCourseInfo(
     )
 
     fun getSingleLineCourseTimeDescription(context: Context) =
-        if (courseTeacher == null && courseLocation == null) {
-            null
-        } else if (courseTeacher == null) {
-            courseLocation
-        } else if (courseLocation == null) {
-            courseTeacher
-        } else {
-            context.getString(R.string.next_course_description, courseTeacher, courseLocation)
+        when {
+            courseTeacher == null && courseLocation == null -> {
+                null
+            }
+
+            courseTeacher == null -> {
+                courseLocation
+            }
+
+            courseLocation == null -> {
+                courseTeacher
+            }
+
+            else -> {
+                context.getString(R.string.next_course_description, courseTeacher, courseLocation)
+            }
         }.nullIfBlank()
 }

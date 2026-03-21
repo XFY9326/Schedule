@@ -1,20 +1,20 @@
 package tool.xfy9326.schedule.data
 
-import io.github.xfy9326.atools.datastore.preference.booleanPrefKey
-import io.github.xfy9326.atools.datastore.preference.intPrefKey
-import io.github.xfy9326.atools.datastore.preference.longPrefKey
 import tool.xfy9326.schedule.data.base.AbstractDataStore
 import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
+import tool.xfy9326.schedule.tools.datastore.preference.key.booleanKey
+import tool.xfy9326.schedule.tools.datastore.preference.key.intKey
+import tool.xfy9326.schedule.tools.datastore.preference.key.longKey
 
 object AppDataStore : AbstractDataStore("App") {
-    private val currentScheduleId by longPrefKey()
-    private val acceptEULAVersion by intPrefKey()
-    private val shownCalendarSyncAttention by booleanPrefKey()
-    private val agreeCourseImportPolicy by booleanPrefKey()
-    private val ignoreUpdateVersionCode by intPrefKey()
-    private val readOnlineImportAttention by booleanPrefKey()
-    private val apkUpdateDownloadId by longPrefKey()
-    private val ignorePackageInstallPermission by booleanPrefKey()
+    private val currentScheduleId by longKey()
+    private val acceptEULAVersion by intKey()
+    private val shownCalendarSyncAttention by booleanKey()
+    private val agreeCourseImportPolicy by booleanKey()
+    private val ignoreUpdateVersionCode by intKey()
+    private val readOnlineImportAttention by booleanKey()
+    private val apkUpdateDownloadId by longKey()
+    private val ignorePackageInstallPermission by booleanKey()
 
     val currentScheduleIdFlow = currentScheduleId.readAndInitAsFlow {
         ScheduleDBProvider.db.scheduleDAO.tryInitDefaultSchedule()

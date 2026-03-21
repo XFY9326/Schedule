@@ -1,13 +1,10 @@
 package tool.xfy9326.schedule.ui.activity.base
 
 import android.content.Context
+import android.os.Bundle
 import androidx.annotation.CallSuper
-import androidx.core.os.bundleOf
 import androidx.lifecycle.lifecycleScope
 import androidx.viewbinding.ViewBinding
-import io.github.xfy9326.atools.core.getSerializableExtraCompat
-import io.github.xfy9326.atools.core.startActivity
-import io.github.xfy9326.atools.livedata.observeEvent
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import tool.xfy9326.schedule.beans.ScheduleImportRequestParams
@@ -17,6 +14,9 @@ import tool.xfy9326.schedule.content.utils.BaseCourseImportConfig
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
 import tool.xfy9326.schedule.content.utils.CourseAdapterException.Companion.strictModeOnly
 import tool.xfy9326.schedule.data.AppDataStore
+import tool.xfy9326.schedule.tools.core.getSerializableExtraCompat
+import tool.xfy9326.schedule.tools.core.startActivity
+import tool.xfy9326.schedule.tools.livedata.observeEvent
 import tool.xfy9326.schedule.ui.activity.ScheduleEditActivity
 import tool.xfy9326.schedule.ui.dialog.ImportCourseConflictDialog
 import tool.xfy9326.schedule.ui.dialog.ScheduleImportSuccessDialog
@@ -102,9 +102,9 @@ abstract class CourseProviderActivity<I, P1 : AbstractCourseProvider<*>, P2 : Ab
         if (editScheduleId != null) {
             if (result == ScheduleImportManager.ImportResult.SUCCESS_WITH_IGNORABLE_CONFLICTS) {
                 ImportCourseConflictDialog.showDialog(
-                    supportFragmentManager, bundleOf(
-                        EXTRA_EDIT_SCHEDULE_ID to editScheduleId
-                    )
+                    supportFragmentManager, Bundle().apply {
+                        putLong(EXTRA_EDIT_SCHEDULE_ID, editScheduleId)
+                    }
                 )
             } else if (result == ScheduleImportManager.ImportResult.SUCCESS) {
                 ScheduleImportSuccessDialog.showDialog(supportFragmentManager, editScheduleId)

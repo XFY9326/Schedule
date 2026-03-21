@@ -5,9 +5,9 @@ import android.os.Bundle
 import androidx.annotation.RequiresApi
 import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
-import io.github.xfy9326.atools.core.ScheduleExactAlarmPermissionContract
-import io.github.xfy9326.atools.core.canScheduleNextAlarm
 import tool.xfy9326.schedule.R
+import tool.xfy9326.schedule.tools.core.ScheduleExactAlarmPermissionContract
+import tool.xfy9326.schedule.tools.core.canScheduleNextAlarm
 import tool.xfy9326.schedule.ui.fragment.base.AbstractSettingsFragment
 import tool.xfy9326.schedule.utils.IntentUtils
 import tool.xfy9326.schedule.utils.findPreference

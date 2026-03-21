@@ -1,9 +1,9 @@
 package tool.xfy9326.schedule.ui.activity.module
 
 import androidx.annotation.Px
-import io.github.xfy9326.atools.livedata.observeEvent
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.databinding.ActivityScheduleBinding
+import tool.xfy9326.schedule.tools.livedata.observeEvent
 import tool.xfy9326.schedule.ui.activity.ScheduleActivity
 import tool.xfy9326.schedule.ui.activity.base.AbstractViewModelActivityModule
 import tool.xfy9326.schedule.ui.dialog.ScheduleImageDialog

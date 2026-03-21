@@ -6,9 +6,9 @@ import android.view.View
 import androidx.annotation.RawRes
 import androidx.annotation.StringRes
 import androidx.core.view.WindowCompat
-import io.github.xfy9326.atools.core.startActivity
-import io.github.xfy9326.atools.livedata.observeEvent
 import tool.xfy9326.schedule.databinding.ActivityRawTextBinding
+import tool.xfy9326.schedule.tools.core.startActivity
+import tool.xfy9326.schedule.tools.livedata.observeEvent
 import tool.xfy9326.schedule.ui.activity.base.ViewModelActivity
 import tool.xfy9326.schedule.ui.vm.RawTextViewModel
 import tool.xfy9326.schedule.utils.consumeSystemBarInsets

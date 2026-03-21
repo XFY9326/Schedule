@@ -13,8 +13,8 @@ import android.view.animation.ScaleAnimation
 import androidx.core.animation.addListener
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import io.github.xfy9326.atools.ui.dpToPx
-import io.github.xfy9326.atools.ui.tryStartAnimation
+import tool.xfy9326.schedule.tools.ui.dpToPx
+import tool.xfy9326.schedule.tools.ui.tryStartAnimation
 import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.math.abs
 import kotlin.math.max
@@ -23,12 +23,12 @@ import kotlin.math.sqrt
 class SwipeItemCallback : ItemTouchHelper.Callback() {
     companion object {
         private val foregroundSwipeCorner = 10f.dpToPx()
-        private const val foregroundCornerDuration = 150L
-        private const val backgroundCircularRevealDuration = 400L
-        private const val swipeIconDuration = 100L
-        private const val swipeIconScaleTo = 1.2f
-        private const val swipeThreshold = 0.3f
-        private const val swipeVelocityThreshold = 0.8f
+        private const val FOREGROUND_CORNER_DURATION = 150L
+        private const val BACKGROUND_CIRCULAR_REVEAL_DURATION = 400L
+        private const val SWIPE_ICON_DURATION = 100L
+        private const val SWIPE_ICON_SCALE_TO = 1.2f
+        private const val SWIPE_THRESHOLD = 0.3f
+        private const val SWIPE_VELOCITY_THRESHOLD = 0.8f
     }
 
     private var listener: ((Int) -> Unit)? = null
@@ -50,17 +50,17 @@ class SwipeItemCallback : ItemTouchHelper.Callback() {
         }
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-        if (viewHolder is SwipeItemViewHolder<*>) listener?.invoke(viewHolder.adapterPosition)
+        if (viewHolder is SwipeItemViewHolder<*>) listener?.invoke(viewHolder.bindingAdapterPosition)
     }
 
     override fun getSwipeThreshold(viewHolder: RecyclerView.ViewHolder): Float =
         if (viewHolder is SwipeItemViewHolder<*>) {
-            swipeThreshold
+            SWIPE_THRESHOLD
         } else {
             super.getSwipeThreshold(viewHolder)
         }
 
-    override fun getSwipeVelocityThreshold(defaultValue: Float): Float = swipeVelocityThreshold
+    override fun getSwipeVelocityThreshold(defaultValue: Float): Float = SWIPE_VELOCITY_THRESHOLD
 
     override fun onChildDraw(
         c: Canvas,
@@ -157,7 +157,7 @@ class SwipeItemCallback : ItemTouchHelper.Callback() {
     private fun animateForegroundCorner(viewHolder: SwipeItemViewHolder<*>, from: Float, to: Float) {
         (viewHolder.foregroundSwipeView.background as? GradientDrawable)?.let { icon ->
             ValueAnimator.ofFloat(from, to).apply {
-                duration = foregroundCornerDuration
+                duration = FOREGROUND_CORNER_DURATION
                 addUpdateListener {
                     val value = it.animatedValue as Float
                     icon.mutate()
@@ -174,8 +174,8 @@ class SwipeItemCallback : ItemTouchHelper.Callback() {
     }
 
     private fun animateSwipeIcon(viewHolder: SwipeItemViewHolder<*>) {
-        ScaleAnimation(1f, swipeIconScaleTo, 1f, swipeIconScaleTo, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f).apply {
-            duration = swipeIconDuration
+        ScaleAnimation(1f, SWIPE_ICON_SCALE_TO, 1f, SWIPE_ICON_SCALE_TO, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f).apply {
+            duration = SWIPE_ICON_DURATION
             repeatCount = 1
             repeatMode = Animation.REVERSE
             viewHolder.swipeIconView.startAnimation(this)
@@ -203,7 +203,7 @@ class SwipeItemCallback : ItemTouchHelper.Callback() {
         circularRevealAnimation = ViewAnimationUtils.createCircularReveal(
             viewHolder.backgroundSwipeView, iconX.toInt(), iconY.toInt(), startRadius, finalRadius
         ).apply {
-            duration = backgroundCircularRevealDuration
+            duration = BACKGROUND_CIRCULAR_REVEAL_DURATION
             addListener(
                 onStart = {
                     if (showSwipeBackground) viewHolder.backgroundSwipeView.visibility = View.VISIBLE

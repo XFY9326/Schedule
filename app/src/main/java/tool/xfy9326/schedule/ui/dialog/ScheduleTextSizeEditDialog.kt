@@ -1,19 +1,18 @@
 package tool.xfy9326.schedule.ui.dialog
 
 import android.os.Bundle
-import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.LifecycleOwner
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import io.github.xfy9326.atools.core.getParcelableCompat
-import io.github.xfy9326.atools.core.getSerializableCompat
-import io.github.xfy9326.atools.ui.setOnSingleClickListener
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.ScheduleText
 import tool.xfy9326.schedule.databinding.DialogScheduleTextSizeEditBinding
+import tool.xfy9326.schedule.tools.core.getParcelableCompat
+import tool.xfy9326.schedule.tools.core.getSerializableCompat
+import tool.xfy9326.schedule.tools.ui.setOnSingleClickListener
 
 class ScheduleTextSizeEditDialog : BottomSheetDialogFragment() {
     companion object {
@@ -25,11 +24,11 @@ class ScheduleTextSizeEditDialog : BottomSheetDialogFragment() {
 
         fun showDialog(fragmentManager: FragmentManager, title: String, scheduleText: ScheduleText, textSize: ScheduleText.TextSize) {
             ScheduleTextSizeEditDialog().apply {
-                arguments = bundleOf(
-                    EXTRA_TEXT_EDIT_TITLE to title,
-                    EXTRA_TEXT_TYPE to scheduleText,
-                    EXTRA_TEXT_SIZE to textSize
-                )
+                arguments = Bundle().apply {
+                    putString(EXTRA_TEXT_EDIT_TITLE, title)
+                    putSerializable(EXTRA_TEXT_TYPE, scheduleText)
+                    putParcelable(EXTRA_TEXT_SIZE, textSize)
+                }
             }.show(fragmentManager, TAG_DIALOG)
         }
 
@@ -81,10 +80,11 @@ class ScheduleTextSizeEditDialog : BottomSheetDialogFragment() {
 
     private fun reportResult(value: Int) {
         setFragmentResult(
-            TAG_DIALOG, bundleOf(
-                EXTRA_TEXT_TYPE to textType,
-                EXTRA_TEXT_SIZE_VALUE to value
-            )
+            requestKey = TAG_DIALOG,
+            result = Bundle().apply {
+                putSerializable(EXTRA_TEXT_TYPE, textType)
+                putInt(EXTRA_TEXT_SIZE_VALUE, value)
+            }
         )
     }
 }

@@ -4,17 +4,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatDialogFragment
-import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
-import io.github.xfy9326.atools.ui.setOnSingleClickListener
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.data.ScheduleDataStore
 import tool.xfy9326.schedule.databinding.DialogScheduleImageBinding
+import tool.xfy9326.schedule.tools.ui.setOnSingleClickListener
 import tool.xfy9326.schedule.utils.setSystemBarAppearance
 
 class ScheduleImageDialog : AppCompatDialogFragment() {
@@ -27,9 +26,9 @@ class ScheduleImageDialog : AppCompatDialogFragment() {
             if (fragmentManager.findFragmentByTag(DIALOG_TAG) != null) return
 
             ScheduleImageDialog().apply {
-                arguments = bundleOf(
-                    EXTRA_WEEK_NUM to weekNum
-                )
+                arguments = Bundle().apply {
+                    putInt(EXTRA_WEEK_NUM, weekNum)
+                }
             }.show(fragmentManager, DIALOG_TAG)
         }
 
@@ -68,10 +67,11 @@ class ScheduleImageDialog : AppCompatDialogFragment() {
 
     private fun reportResult(saveImage: Boolean) {
         setFragmentResult(
-            DIALOG_TAG, bundleOf(
-                EXTRA_WEEK_NUM to requireArguments().getInt(EXTRA_WEEK_NUM),
-                EXTRA_SAVE_IMAGE to saveImage
-            )
+            requestKey = DIALOG_TAG,
+            result = Bundle().apply {
+                putInt(EXTRA_WEEK_NUM, requireArguments().getInt(EXTRA_WEEK_NUM))
+                putBoolean(EXTRA_SAVE_IMAGE, saveImage)
+            }
         )
     }
 }

@@ -1,4 +1,4 @@
-package tool.xfy9326.schedule.tools
+package tool.xfy9326.schedule.tools.others
 
 import androidx.annotation.FloatRange
 import androidx.core.graphics.ColorUtils

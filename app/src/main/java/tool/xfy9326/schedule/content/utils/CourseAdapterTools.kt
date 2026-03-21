@@ -3,8 +3,8 @@
 package tool.xfy9326.schedule.content.utils
 
 import androidx.annotation.IntRange
-import io.ktor.client.*
-import io.ktor.client.plugins.*
+import io.ktor.client.HttpClient
+import io.ktor.client.plugins.ResponseException
 import org.jsoup.nodes.Element
 import tool.xfy9326.schedule.content.base.AbstractCourseImportConfig
 

@@ -3,16 +3,15 @@ package tool.xfy9326.schedule.ui.dialog
 import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
-import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.LifecycleOwner
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import io.github.xfy9326.atools.ui.setOnSingleClickListener
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.databinding.DialogWebCourseProviderBottomPanelBinding
+import tool.xfy9326.schedule.tools.ui.setOnSingleClickListener
 import tool.xfy9326.schedule.utils.consumeBottomInsets
 
 class WebCourseProviderBottomPanel : BottomSheetDialogFragment() {
@@ -24,9 +23,9 @@ class WebCourseProviderBottomPanel : BottomSheetDialogFragment() {
 
         fun showDialog(fragmentManager: FragmentManager, authorName: String) {
             WebCourseProviderBottomPanel().apply {
-                arguments = bundleOf(
-                    EXTRA_AUTHOR_NAME to authorName
-                )
+                arguments = Bundle().apply {
+                    putString(EXTRA_AUTHOR_NAME, authorName)
+                }
             }.show(fragmentManager, DIALOG_TAG)
         }
 
@@ -80,6 +79,11 @@ class WebCourseProviderBottomPanel : BottomSheetDialogFragment() {
     }
 
     private fun reportResult(isCurrentSchedule: Boolean? = null) {
-        setFragmentResult(DIALOG_TAG, if (isCurrentSchedule == null) Bundle.EMPTY else bundleOf(EXTRA_IS_CURRENT_SCHEDULE to isCurrentSchedule))
+        setFragmentResult(
+            requestKey = DIALOG_TAG,
+            result = if (isCurrentSchedule == null) Bundle.EMPTY else Bundle().apply {
+                putBoolean(EXTRA_IS_CURRENT_SCHEDULE, isCurrentSchedule)
+            }
+        )
     }
 }

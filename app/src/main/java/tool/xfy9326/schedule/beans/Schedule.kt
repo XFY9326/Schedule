@@ -8,7 +8,7 @@ import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import kotlinx.parcelize.Parcelize
 import tool.xfy9326.schedule.db.DBConst
-import tool.xfy9326.schedule.tools.MaterialColorHelper
+import tool.xfy9326.schedule.tools.others.MaterialColorHelper
 import java.util.Date
 
 @Entity(
@@ -23,7 +23,7 @@ data class Schedule(
     var endDate: Date,
     @ColumnInfo(name = DBConst.COLUMN_SCHEDULE_TIMES)
     var times: List<ScheduleTime>,
-    @ColorInt
+    @param:ColorInt
     var color: Int,
     var weekStart: WeekDay,
 ) {

@@ -2,12 +2,12 @@ package tool.xfy9326.schedule.ui.activity
 
 import android.webkit.JavascriptInterface
 import android.webkit.WebView
-import io.github.xfy9326.atools.livedata.observeEvent
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.WebPageContent
 import tool.xfy9326.schedule.content.base.WebCourseParser
 import tool.xfy9326.schedule.content.base.WebCourseProvider
 import tool.xfy9326.schedule.databinding.ActivityFragmentContainerBinding
+import tool.xfy9326.schedule.tools.livedata.observeEvent
 import tool.xfy9326.schedule.ui.activity.base.AbstractWebCourseProviderActivity
 import tool.xfy9326.schedule.ui.dialog.FullScreenLoadingDialog
 import tool.xfy9326.schedule.ui.vm.WebCourseProviderViewModel

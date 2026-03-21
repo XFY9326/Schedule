@@ -4,11 +4,6 @@ import android.content.Context
 import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import io.github.xfy9326.atools.io.okio.source
-import io.github.xfy9326.atools.io.okio.useBuffer
-import io.github.xfy9326.atools.livedata.EventLiveData
-import io.github.xfy9326.atools.livedata.MutableEventLiveData
-import io.github.xfy9326.atools.livedata.postEvent
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.okhttp.OkHttp
 import io.ktor.client.plugins.BrowserUserAgent
@@ -35,6 +30,11 @@ import tool.xfy9326.schedule.content.utils.JSConfigException
 import tool.xfy9326.schedule.content.utils.JSConfigException.Companion.make
 import tool.xfy9326.schedule.content.utils.JSConfigException.Companion.report
 import tool.xfy9326.schedule.io.JSFileManager
+import tool.xfy9326.schedule.tools.io.okio.source
+import tool.xfy9326.schedule.tools.io.okio.useBuffer
+import tool.xfy9326.schedule.tools.livedata.EventLiveData
+import tool.xfy9326.schedule.tools.livedata.MutableEventLiveData
+import tool.xfy9326.schedule.tools.livedata.postEvent
 import kotlin.coroutines.CoroutineContext
 
 class CourseImportConfigManager(scope: CoroutineScope) : CoroutineScope by scope {

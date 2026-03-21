@@ -5,11 +5,10 @@ import android.app.Dialog
 import android.os.Bundle
 import android.widget.DatePicker
 import androidx.appcompat.app.AppCompatDialogFragment
-import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.LifecycleOwner
-import io.github.xfy9326.atools.core.getSerializableCompat
+import tool.xfy9326.schedule.tools.core.getSerializableCompat
 import tool.xfy9326.schedule.utils.CalendarUtils
 import java.util.Calendar
 import java.util.Date
@@ -24,11 +23,11 @@ class DatePickerDialog : AppCompatDialogFragment(), DatePickerDialog.OnDateSetLi
 
         fun showDialog(fragmentManager: FragmentManager, tag: String?, date: Date, calWeekStart: Int) {
             DatePickerDialog().apply {
-                arguments = bundleOf(
-                    EXTRA_TAG to tag,
-                    EXTRA_WEEK_START to calWeekStart,
-                    EXTRA_DATE to date
-                )
+                arguments = Bundle().apply {
+                    putString(EXTRA_TAG, tag)
+                    putInt(EXTRA_WEEK_START, calWeekStart)
+                    putSerializable(EXTRA_DATE, date)
+                }
             }.show(fragmentManager, tag)
         }
 
@@ -63,10 +62,11 @@ class DatePickerDialog : AppCompatDialogFragment(), DatePickerDialog.OnDateSetLi
 
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
         setFragmentResult(
-            DIALOG_TAG, bundleOf(
-                EXTRA_TAG to requireArguments().getString(EXTRA_TAG),
-                EXTRA_DATE to getDate(year, month, dayOfMonth)
-            )
+            requestKey = DIALOG_TAG,
+            result = Bundle().apply {
+                putString(EXTRA_TAG, requireArguments().getString(EXTRA_TAG))
+                putSerializable(EXTRA_DATE, getDate(year, month, dayOfMonth))
+            }
         )
     }
 }

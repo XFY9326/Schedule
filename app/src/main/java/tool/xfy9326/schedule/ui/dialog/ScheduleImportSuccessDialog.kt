@@ -8,13 +8,12 @@ import android.text.SpannableString
 import android.text.style.StyleSpan
 import android.text.style.TypefaceSpan
 import androidx.appcompat.app.AppCompatDialogFragment
-import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.LifecycleOwner
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import io.github.xfy9326.atools.base.EMPTY
 import tool.xfy9326.schedule.R
+import tool.xfy9326.schedule.tools.base.EMPTY
 
 class ScheduleImportSuccessDialog : AppCompatDialogFragment() {
     companion object {
@@ -23,9 +22,9 @@ class ScheduleImportSuccessDialog : AppCompatDialogFragment() {
 
         fun showDialog(fragmentManager: FragmentManager, scheduleId: Long) {
             ScheduleImportSuccessDialog().apply {
-                arguments = bundleOf(
-                    EXTRA_SCHEDULE_ID to scheduleId
-                )
+                arguments = Bundle().apply {
+                    putLong(EXTRA_SCHEDULE_ID, scheduleId)
+                }
             }.show(fragmentManager, DIALOG_TAG)
         }
 
@@ -72,7 +71,12 @@ class ScheduleImportSuccessDialog : AppCompatDialogFragment() {
         setTitle(R.string.course_import_success_title)
         setMessage(getImportSuccessMsg(requireContext(), true))
         setPositiveButton(R.string.go_now) { _, _ ->
-            setFragmentResult(DIALOG_TAG, bundleOf(EXTRA_SCHEDULE_ID to requireArguments().getLong(EXTRA_SCHEDULE_ID)))
+            setFragmentResult(
+                requestKey = DIALOG_TAG,
+                result = Bundle().apply {
+                    putLong(EXTRA_SCHEDULE_ID, requireArguments().getLong(EXTRA_SCHEDULE_ID))
+                }
+            )
         }
         setNegativeButton(R.string.do_it_later) { _, _ ->
             setFragmentResult(DIALOG_TAG, Bundle.EMPTY)

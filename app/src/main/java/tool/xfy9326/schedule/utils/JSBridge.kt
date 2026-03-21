@@ -1,9 +1,9 @@
 package tool.xfy9326.schedule.utils
 
 import androidx.annotation.Keep
-import io.github.xfy9326.atools.base.EMPTY
 import kotlinx.serialization.Serializable
 import tool.xfy9326.schedule.content.js.JSCourseProvider
+import tool.xfy9326.schedule.tools.base.EMPTY
 
 object JSBridge {
     private const val FUN_HEAD_PREFIX = "PureSchedule_"

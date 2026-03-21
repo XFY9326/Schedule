@@ -1,8 +1,8 @@
 package tool.xfy9326.schedule.ui.fragment.settings
 
 import android.os.Bundle
-import io.github.xfy9326.atools.core.startActivity
 import tool.xfy9326.schedule.R
+import tool.xfy9326.schedule.tools.core.startActivity
 import tool.xfy9326.schedule.ui.activity.AboutActivity
 import tool.xfy9326.schedule.ui.dialog.UpgradeDialog
 import tool.xfy9326.schedule.ui.fragment.base.AbstractSettingsFragment
@@ -31,7 +31,8 @@ class MainSettingsFragment : AbstractSettingsFragment() {
             IntentUtils.openFeedbackUrl(requireContext())
         }
         setOnPrefClickListener(R.string.pref_check_upgrade) {
-            UpgradeUtils.checkUpgrade(this, true,
+            UpgradeUtils.checkUpgrade(
+                this, true,
                 onFailed = { requireRootLayout()?.showSnackBar(R.string.update_check_failed) },
                 onNoUpgrade = { requireRootLayout()?.showSnackBar(R.string.no_new_update) },
                 onFoundUpgrade = { UpgradeDialog.showDialog(childFragmentManager, it) }

@@ -7,17 +7,14 @@ import android.graphics.Rect
 import android.view.View
 import androidx.annotation.Px
 import androidx.core.graphics.applyCanvas
-import io.github.xfy9326.atools.core.AppContext
-import io.github.xfy9326.atools.io.IOManager
-import io.github.xfy9326.atools.ui.getColorCompat
-import io.github.xfy9326.atools.ui.textBaselineHeight
+import androidx.core.graphics.createBitmap
 import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.supervisorScope
 import kotlinx.coroutines.withContext
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.CourseCell
@@ -30,7 +27,11 @@ import tool.xfy9326.schedule.beans.SectionTime
 import tool.xfy9326.schedule.beans.WeekDay
 import tool.xfy9326.schedule.data.ScheduleDataStore
 import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
-import tool.xfy9326.schedule.tools.MaterialColorHelper
+import tool.xfy9326.schedule.tools.core.AppContext
+import tool.xfy9326.schedule.tools.io.IOManager
+import tool.xfy9326.schedule.tools.others.MaterialColorHelper
+import tool.xfy9326.schedule.tools.ui.getColorCompat
+import tool.xfy9326.schedule.tools.ui.textBaselineHeight
 import tool.xfy9326.schedule.ui.view.schedule.IScheduleCell
 import tool.xfy9326.schedule.ui.view.schedule.ScheduleCourseCellView
 import tool.xfy9326.schedule.ui.view.schedule.ScheduleGridView
@@ -86,51 +87,53 @@ object ScheduleViewHelper {
         viewData: ScheduleViewData,
         listener: ((CourseCell) -> Unit)? = null,
         noScroll: Boolean = false,
-    ): View = withContext(Dispatchers.Default + SupervisorJob() + CoroutineName("schedule-view-builder-${viewData.weekNum}")) {
-        val schedulePredefine = SchedulePredefine.content
-        val showWeekend = viewData.styles.forceShowWeekendColumn || viewData.hasWeekendCourse
+    ): View = withContext(Dispatchers.Default + CoroutineName("schedule-view-builder-${viewData.weekNum}")) {
+        supervisorScope {
+            val schedulePredefine = SchedulePredefine.content
+            val showWeekend = viewData.styles.forceShowWeekendColumn || viewData.hasWeekendCourse
 
-        val cellsDeferred = ArrayList<Deferred<IScheduleCell>>(viewData.times.size + viewData.cells.size)
+            val cellsDeferred = ArrayList<Deferred<IScheduleCell>>(viewData.times.size + viewData.cells.size)
 
-        for ((i, time) in viewData.times.withIndex()) {
-            cellsDeferred.add(async { ScheduleTimeCellView(context, i, time, schedulePredefine, viewData.styles) })
-        }
-
-        for (cell in viewData.cells) {
-            if (cell.isThisWeekCourse || viewData.styles.showNotThisWeekCourse) {
-                cellsDeferred.add(async {
-                    ScheduleCourseCellView(
-                        context,
-                        showWeekend,
-                        cell,
-                        schedulePredefine,
-                        viewData.styles,
-                        viewData.weekStart
-                    )
-                })
+            for ((i, time) in viewData.times.withIndex()) {
+                cellsDeferred.add(async { ScheduleTimeCellView(context, i, time, schedulePredefine, viewData.styles) })
             }
-        }
 
-        val scheduleHeaderViewDeferred = async {
-            val days = CourseTimeUtils.getDayInWeek(viewData.weekNum, viewData.startDate, viewData.weekStart, showWeekend)
-            ScheduleHeaderView(context, days, schedulePredefine, viewData.styles)
-        }
+            for (cell in viewData.cells) {
+                if (cell.isThisWeekCourse || viewData.styles.showNotThisWeekCourse) {
+                    cellsDeferred.add(async {
+                        ScheduleCourseCellView(
+                            context,
+                            showWeekend,
+                            cell,
+                            schedulePredefine,
+                            viewData.styles,
+                            viewData.weekStart
+                        )
+                    })
+                }
+            }
 
-        val columnAmount = if (showWeekend) MAX_SCHEDULE_COLUMN_COUNT else MIN_SCHEDULE_COLUMN_COUNT
-        val scheduleGridView = ScheduleGridView(context, columnAmount, viewData.rowAmount, schedulePredefine, viewData.styles)
+            val scheduleHeaderViewDeferred = async {
+                val days = CourseTimeUtils.getDayInWeek(viewData.weekNum, viewData.startDate, viewData.weekStart, showWeekend)
+                ScheduleHeaderView(context, days, schedulePredefine, viewData.styles)
+            }
 
-        for (viewDeferred in cellsDeferred) {
-            scheduleGridView.addScheduleCell(viewDeferred.await())
-        }
+            val columnAmount = if (showWeekend) MAX_SCHEDULE_COLUMN_COUNT else MIN_SCHEDULE_COLUMN_COUNT
+            val scheduleGridView = ScheduleGridView(context, columnAmount, viewData.rowAmount, schedulePredefine, viewData.styles)
 
-        val scheduleView = ScheduleView(context, viewData.styles, columnAmount, scheduleHeaderViewDeferred.await(), scheduleGridView, noScroll)
-        if (listener != null) scheduleView.setOnCourseClickListener(listener)
+            for (viewDeferred in cellsDeferred) {
+                scheduleGridView.addScheduleCell(viewDeferred.await())
+            }
 
-        return@withContext if (viewData.styles.enableScheduleGridScroll || noScroll) {
-            scheduleView
-        } else {
-            ScheduleScrollView(context).apply {
-                addInnerView(scheduleView)
+            val scheduleView = ScheduleView(context, viewData.styles, columnAmount, scheduleHeaderViewDeferred.await(), scheduleGridView, noScroll)
+            if (listener != null) scheduleView.setOnCourseClickListener(listener)
+
+            if (viewData.styles.enableScheduleGridScroll || noScroll) {
+                scheduleView
+            } else {
+                ScheduleScrollView(context).apply {
+                    addInnerView(scheduleView)
+                }
             }
         }
     }
@@ -162,7 +165,7 @@ object ScheduleViewHelper {
             scheduleView.layout(0, 0, scheduleView.measuredWidth, scheduleView.measuredHeight)
             scheduleView.requestLayout()
 
-            return@withContext Bitmap.createBitmap(scheduleView.measuredWidth, scheduleView.measuredHeight, Bitmap.Config.ARGB_8888).applyCanvas {
+            return@withContext createBitmap(scheduleView.measuredWidth, scheduleView.measuredHeight).applyCanvas {
                 drawColor(backgroundColor)
                 scheduleView.draw(this)
             }.apply {

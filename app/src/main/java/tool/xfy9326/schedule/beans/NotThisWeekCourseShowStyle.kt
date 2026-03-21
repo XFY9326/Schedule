@@ -5,6 +5,6 @@ enum class NotThisWeekCourseShowStyle {
     USE_TRANSPARENT_BACKGROUND;
 
     companion object {
-        val valueSet by lazy { values().toSet() }
+        val valueSet by lazy { entries.toSet() }
     }
 }

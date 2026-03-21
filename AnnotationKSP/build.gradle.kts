@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 plugins {
     kotlin("jvm")
 }
@@ -7,17 +9,16 @@ java {
     targetCompatibility = JavaVersion.VERSION_17
 }
 
-tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17.toString()
-        freeCompilerArgs = freeCompilerArgs + listOf(
+kotlin {
+    compilerOptions {
+        jvmTarget.set(JvmTarget.JVM_17)
+        freeCompilerArgs.add(
             "-opt-in=com.google.devtools.ksp.KspExperimental"
         )
     }
 }
-
 dependencies {
     implementation(project(path = ":Annotation"))
-    implementation("com.squareup:kotlinpoet-ksp:1.14.2")
-    implementation("com.google.devtools.ksp:symbol-processing-api:1.9.10-1.0.13")
+    implementation("com.squareup:kotlinpoet-ksp:2.2.0")
+    implementation("com.google.devtools.ksp:symbol-processing-api:2.3.6")
 }

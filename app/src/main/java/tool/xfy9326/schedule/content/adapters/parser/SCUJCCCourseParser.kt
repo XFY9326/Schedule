@@ -1,15 +1,19 @@
 package tool.xfy9326.schedule.content.adapters.parser
 
-import io.github.xfy9326.atools.base.EMPTY
-import io.github.xfy9326.atools.base.nullIfBlank
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
-import tool.xfy9326.schedule.beans.*
+import tool.xfy9326.schedule.beans.Course
+import tool.xfy9326.schedule.beans.CourseTime
+import tool.xfy9326.schedule.beans.ScheduleTime
+import tool.xfy9326.schedule.beans.WebPageContent
+import tool.xfy9326.schedule.beans.WeekDay
 import tool.xfy9326.schedule.content.base.WebCourseParser
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
 import tool.xfy9326.schedule.content.utils.CourseAdapterException.Companion.report
 import tool.xfy9326.schedule.content.utils.CourseAdapterUtils
 import tool.xfy9326.schedule.content.utils.CourseParseResult
+import tool.xfy9326.schedule.tools.base.EMPTY
+import tool.xfy9326.schedule.tools.base.nullIfBlank
 
 class SCUJCCCourseParser : WebCourseParser<Nothing>() {
     companion object {

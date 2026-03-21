@@ -1,11 +1,16 @@
 package tool.xfy9326.schedule.content.adapters.provider
 
-import io.github.xfy9326.atools.base.toHex
-import io.ktor.client.*
-import io.ktor.client.request.*
-import io.ktor.client.request.forms.*
-import io.ktor.client.statement.*
-import io.ktor.http.*
+import io.ktor.client.HttpClient
+import io.ktor.client.request.forms.submitForm
+import io.ktor.client.request.get
+import io.ktor.client.request.header
+import io.ktor.client.statement.bodyAsText
+import io.ktor.client.statement.request
+import io.ktor.http.HttpHeaders
+import io.ktor.http.Parameters
+import io.ktor.http.Url
+import io.ktor.http.parametersOf
+import io.ktor.http.plus
 import org.jsoup.Jsoup
 import tool.xfy9326.schedule.content.base.LoginCourseProvider
 import tool.xfy9326.schedule.content.beans.LoginPageInfo
@@ -14,6 +19,7 @@ import tool.xfy9326.schedule.content.utils.CourseAdapterException.Companion.repo
 import tool.xfy9326.schedule.content.utils.CourseAdapterUtils
 import tool.xfy9326.schedule.content.utils.runResponseCatching
 import tool.xfy9326.schedule.content.utils.selectSingle
+import tool.xfy9326.schedule.tools.base.toHex
 import java.math.BigInteger
 import java.security.KeyFactory
 import java.security.interfaces.RSAPublicKey

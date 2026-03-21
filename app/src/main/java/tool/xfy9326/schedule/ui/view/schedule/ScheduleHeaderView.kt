@@ -7,25 +7,25 @@ import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.AbsoluteSizeSpan
 import android.view.Gravity
-import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.Px
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.view.children
+import androidx.core.view.isNotEmpty
 import androidx.core.view.setPadding
-import io.github.xfy9326.atools.ui.getStringArray
-import io.github.xfy9326.atools.ui.spToPx
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.Day
 import tool.xfy9326.schedule.beans.SchedulePredefine
 import tool.xfy9326.schedule.beans.ScheduleStyles
 import tool.xfy9326.schedule.beans.ScheduleText
+import tool.xfy9326.schedule.tools.ui.getStringArray
+import tool.xfy9326.schedule.tools.ui.spToPx
 import tool.xfy9326.schedule.utils.NEW_LINE
 import tool.xfy9326.schedule.utils.view.ViewUtils
 import kotlin.math.max
 
 @SuppressLint("ViewConstructor")
-class ScheduleHeaderView constructor(
+class ScheduleHeaderView(
     context: Context,
     private val days: Array<Day>,
     private val predefine: SchedulePredefine,
@@ -68,7 +68,7 @@ class ScheduleHeaderView constructor(
             typeface = Typeface.defaultFromStyle(Typeface.BOLD)
 
             gravity = Gravity.CENTER
-            textAlignment = View.TEXT_ALIGNMENT_GRAVITY
+            textAlignment = TEXT_ALIGNMENT_GRAVITY
 
             layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
         }
@@ -80,7 +80,7 @@ class ScheduleHeaderView constructor(
             typeface = Typeface.defaultFromStyle(Typeface.BOLD)
 
             gravity = Gravity.CENTER
-            textAlignment = View.TEXT_ALIGNMENT_GRAVITY
+            textAlignment = TEXT_ALIGNMENT_GRAVITY
 
             setPadding(predefine.courseCellTextPadding / 2)
 
@@ -142,7 +142,7 @@ class ScheduleHeaderView constructor(
     }
 
     override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
-        if (childCount > 0) {
+        if (isNotEmpty()) {
             val height = b - t
             val leftToRight = layoutDirection == LAYOUT_DIRECTION_LTR
 

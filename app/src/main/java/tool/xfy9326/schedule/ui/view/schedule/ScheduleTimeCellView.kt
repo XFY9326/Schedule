@@ -42,7 +42,7 @@ class ScheduleTimeCellView(
         )
         isHorizontalScrollBarEnabled = false
         isVerticalScrollBarEnabled = false
-        layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        layoutParams = ViewGroup.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
 
         initView()
     }
@@ -59,7 +59,7 @@ class ScheduleTimeCellView(
                 setTextColor(timeTextColor)
                 setPadding(0, predefine.timeCellVerticalPadding, 0, predefine.timeCellVerticalPadding)
 
-                textAlignment = View.TEXT_ALIGNMENT_INHERIT
+                textAlignment = TEXT_ALIGNMENT_INHERIT
                 gravity = Gravity.CENTER
 
                 layoutParams = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
@@ -78,10 +78,10 @@ class ScheduleTimeCellView(
                     setTextColor(timeTextColor)
                     setPadding(0, predefine.timeCellTimeDivideTopMargin, 0, 0)
 
-                    textAlignment = View.TEXT_ALIGNMENT_INHERIT
+                    textAlignment = TEXT_ALIGNMENT_INHERIT
                     gravity = Gravity.CENTER
 
-                    layoutParams = LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply {
+                    layoutParams = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT).apply {
                         setMargins(0, predefine.timeCellTimeDivideTopMargin, 0, 0)
                     }
 

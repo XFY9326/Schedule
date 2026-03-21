@@ -12,11 +12,8 @@ import androidx.activity.addCallback
 import androidx.annotation.StringRes
 import androidx.core.view.WindowCompat
 import androidx.core.view.isVisible
-import coil.load
-import io.github.xfy9326.atools.ui.getText
-import io.github.xfy9326.atools.ui.resume
-import io.github.xfy9326.atools.ui.setAllEnable
-import io.github.xfy9326.atools.ui.setOnSingleClickListener
+import coil3.load
+import coil3.request.error
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.NetworkCourseImportParams
 import tool.xfy9326.schedule.beans.NetworkProviderParams
@@ -25,6 +22,10 @@ import tool.xfy9326.schedule.content.base.NetworkCourseParser
 import tool.xfy9326.schedule.content.base.NetworkCourseProvider
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
 import tool.xfy9326.schedule.databinding.ActivityNetworkCourseProviderBinding
+import tool.xfy9326.schedule.tools.ui.getText
+import tool.xfy9326.schedule.tools.ui.resume
+import tool.xfy9326.schedule.tools.ui.setAllEnable
+import tool.xfy9326.schedule.tools.ui.setOnSingleClickListener
 import tool.xfy9326.schedule.ui.activity.base.CourseProviderActivity
 import tool.xfy9326.schedule.ui.vm.NetworkCourseProviderViewModel
 import tool.xfy9326.schedule.utils.consumeSystemBarInsets

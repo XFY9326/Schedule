@@ -3,7 +3,6 @@ package tool.xfy9326.schedule.content.adapters.provider
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Base64
-import io.github.xfy9326.atools.base.EMPTY
 import org.json.JSONArray
 import org.json.JSONObject
 import org.jsoup.Connection
@@ -14,6 +13,7 @@ import tool.xfy9326.schedule.content.beans.LoginPageInfo
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
 import tool.xfy9326.schedule.content.utils.CourseAdapterException.Companion.report
 import tool.xfy9326.schedule.content.utils.selectSingle
+import tool.xfy9326.schedule.tools.base.EMPTY
 
 class AHSTUCourseProvider : LoginCourseProvider<Nothing>() {
     companion object {

@@ -5,10 +5,10 @@ import android.content.Context
 import android.content.pm.PackageManager
 import androidx.activity.result.ActivityResultLauncher
 import androidx.core.content.ContextCompat
-import io.github.xfy9326.atools.coroutines.withTryLock
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.withContext
+import tool.xfy9326.schedule.tools.coroutines.withTryLock
 
 
 object PermissionUtils {

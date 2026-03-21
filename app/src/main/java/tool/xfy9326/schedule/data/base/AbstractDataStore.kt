@@ -7,14 +7,19 @@ import androidx.datastore.preferences.core.MutablePreferences
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.preferencesDataStore
-import io.github.xfy9326.atools.base.tryEnumSetValueOf
-import io.github.xfy9326.atools.base.tryEnumValueOf
-import io.github.xfy9326.atools.core.AppContext
-import io.github.xfy9326.atools.datastore.preference.adapter.DataStorePreferenceAdapter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.shareIn
+import tool.xfy9326.schedule.tools.base.tryEnumSetValueOf
+import tool.xfy9326.schedule.tools.base.tryEnumValueOf
+import tool.xfy9326.schedule.tools.core.AppContext
+import tool.xfy9326.schedule.tools.datastore.preference.adapter.DataStorePreferenceAdapter
 
 abstract class AbstractDataStore(val name: String) {
     private val Context.dataStore by preferencesDataStore(name)

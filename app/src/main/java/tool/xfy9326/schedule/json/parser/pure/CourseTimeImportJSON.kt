@@ -11,9 +11,9 @@ data class CourseTimeImportJSON(
     val weekNum: List<Int> = emptyList(),
     @Serializable(WeekDayIntSerializer::class)
     val weekDay: WeekDay,
-    @IntRange(from = 1)
+    @param:IntRange(from = 1)
     val start: Int? = null,
-    @IntRange(from = 1)
+    @param:IntRange(from = 1)
     val duration: Int? = null,
     // From 1
     val sections: List<Int>? = null,

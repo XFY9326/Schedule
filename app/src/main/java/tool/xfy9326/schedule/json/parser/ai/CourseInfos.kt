@@ -1,5 +1,3 @@
-@file:Suppress("SpellCheckingInspection")
-
 package tool.xfy9326.schedule.json.parser.ai
 
 import kotlinx.serialization.Serializable

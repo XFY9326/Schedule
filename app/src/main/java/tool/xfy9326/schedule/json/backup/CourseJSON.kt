@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 data class CourseJSON(
     val name: String,
     val teacher: String? = null,
-    @ColorInt
+    @param:ColorInt
     val color: Int,
     val times: List<CourseTimeJSON>,
 ) {

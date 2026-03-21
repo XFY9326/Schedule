@@ -2,27 +2,27 @@ package tool.xfy9326.schedule.beans
 
 import androidx.annotation.ColorInt
 import androidx.annotation.Px
-import io.github.xfy9326.atools.core.AppContext
-import io.github.xfy9326.atools.io.IOManager
-import io.github.xfy9326.atools.ui.getColorCompat
 import tool.xfy9326.schedule.R
+import tool.xfy9326.schedule.tools.core.AppContext
+import tool.xfy9326.schedule.tools.io.IOManager
+import tool.xfy9326.schedule.tools.ui.getColorCompat
 
 class SchedulePredefine private constructor(
-    @Px
+    @param:Px
     val timeCellVerticalPadding: Int,
-    @Px
+    @param:Px
     val timeCellTimeDivideTopMargin: Int,
-    @Px
+    @param:Px
     val gridBottomCornerScreenMargin: Int,
-    @Px
+    @param:Px
     val courseCellBackgroundRadius: Float,
-    @Px
+    @param:Px
     val courseCellTextPadding: Int,
-    @ColorInt
+    @param:ColorInt
     val courseCellTextColorLight: Int,
-    @ColorInt
+    @param:ColorInt
     val courseCellTextColorDark: Int,
-    @ColorInt
+    @param:ColorInt
     val courseCellRippleColor: Int,
 ) {
     companion object {

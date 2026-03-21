@@ -1,6 +1,5 @@
 package tool.xfy9326.schedule.content.adapters.processor
 
-import io.github.xfy9326.atools.base.asArray
 import tool.xfy9326.schedule.annotation.ExternalCourseProcessor
 import tool.xfy9326.schedule.beans.ScheduleImportContent
 import tool.xfy9326.schedule.beans.WebPageContent
@@ -10,6 +9,7 @@ import tool.xfy9326.schedule.content.adapters.provider.SCUJCCCourseProvider
 import tool.xfy9326.schedule.content.base.AbstractExternalCourseProcessor
 import tool.xfy9326.schedule.content.beans.ExternalCourseImportData
 import tool.xfy9326.schedule.content.utils.CourseImportHelper
+import tool.xfy9326.schedule.tools.base.asArray
 
 @ExternalCourseProcessor(SCUJCCExternalProcessor.PROCESSOR_NAME)
 class SCUJCCExternalProcessor :

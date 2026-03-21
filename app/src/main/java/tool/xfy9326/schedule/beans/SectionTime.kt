@@ -12,10 +12,10 @@ import tool.xfy9326.schedule.db.DBConst
 data class SectionTime(
     @ColumnInfo(name = DBConst.COLUMN_WEEK_DAY)
     var weekDay: WeekDay,
-    @IntRange(from = 1)
+    @param:IntRange(from = 1)
     @ColumnInfo(name = DBConst.COLUMN_SECTION_START)
     var start: Int,
-    @IntRange(from = 1)
+    @param:IntRange(from = 1)
     @ColumnInfo(name = DBConst.COLUMN_SECTION_DURATION)
     var duration: Int,
 ) : Parcelable {

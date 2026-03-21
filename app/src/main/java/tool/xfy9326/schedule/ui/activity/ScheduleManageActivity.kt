@@ -2,12 +2,12 @@ package tool.xfy9326.schedule.ui.activity
 
 import android.os.Bundle
 import androidx.core.view.WindowCompat
-import io.github.xfy9326.atools.core.startActivity
-import io.github.xfy9326.atools.livedata.observeNotify
-import io.github.xfy9326.atools.ui.setOnSingleClickListener
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.ScheduleWrapper
 import tool.xfy9326.schedule.databinding.ActivityScheduleManageBinding
+import tool.xfy9326.schedule.tools.core.startActivity
+import tool.xfy9326.schedule.tools.livedata.observeNotify
+import tool.xfy9326.schedule.tools.ui.setOnSingleClickListener
 import tool.xfy9326.schedule.ui.activity.base.ViewModelActivity
 import tool.xfy9326.schedule.ui.adapter.ScheduleManageAdapter
 import tool.xfy9326.schedule.ui.adapter.ScheduleManageAdapter.ScheduleOperation.COURSE_EDIT

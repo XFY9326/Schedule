@@ -1,7 +1,8 @@
 package tool.xfy9326.schedule.ui.activity.module
 
 import android.widget.ImageView
-import coil.load
+import coil3.load
+import coil3.request.crossfade
 import tool.xfy9326.schedule.beans.ImageScaleType
 import tool.xfy9326.schedule.data.ScheduleDataStore
 import tool.xfy9326.schedule.databinding.ActivityScheduleBinding

@@ -4,8 +4,6 @@ package tool.xfy9326.schedule.ui.vm.base
 
 import androidx.annotation.CallSuper
 import androidx.lifecycle.viewModelScope
-import io.github.xfy9326.atools.livedata.MutableEventLiveData
-import io.github.xfy9326.atools.livedata.postEvent
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -17,6 +15,8 @@ import tool.xfy9326.schedule.content.base.AbstractCourseProvider
 import tool.xfy9326.schedule.content.beans.CourseImportInstance
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
 import tool.xfy9326.schedule.content.utils.CourseAdapterException.Companion.make
+import tool.xfy9326.schedule.tools.livedata.MutableEventLiveData
+import tool.xfy9326.schedule.tools.livedata.postEvent
 import tool.xfy9326.schedule.utils.schedule.ScheduleImportManager
 
 abstract class CourseProviderViewModel<I, T1 : AbstractCourseProvider<*>, T2 : AbstractCourseParser<*>> : AbstractViewModel() {

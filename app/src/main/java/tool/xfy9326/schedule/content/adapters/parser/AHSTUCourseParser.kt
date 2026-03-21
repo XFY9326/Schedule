@@ -1,7 +1,5 @@
 package tool.xfy9326.schedule.content.adapters.parser
 
-import io.github.xfy9326.atools.base.EMPTY
-import io.github.xfy9326.atools.base.cast
 import org.json.JSONObject
 import tool.xfy9326.schedule.beans.Course
 import tool.xfy9326.schedule.beans.CourseTime
@@ -9,6 +7,8 @@ import tool.xfy9326.schedule.beans.ScheduleTime
 import tool.xfy9326.schedule.beans.WeekDay
 import tool.xfy9326.schedule.content.base.NetworkCourseParser
 import tool.xfy9326.schedule.content.utils.CourseParseResult
+import tool.xfy9326.schedule.tools.base.EMPTY
+import tool.xfy9326.schedule.tools.base.cast
 
 class AHSTUCourseParser : NetworkCourseParser<Nothing>() {
     @Suppress("RegExpRedundantEscape")

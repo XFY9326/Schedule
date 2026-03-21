@@ -18,9 +18,6 @@ import androidx.core.app.AlarmManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 import androidx.core.graphics.drawable.toBitmap
-import io.github.xfy9326.atools.core.AppContext
-import io.github.xfy9326.atools.core.canScheduleNextAlarm
-import io.github.xfy9326.atools.core.getLaunchAppIntent
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
@@ -30,6 +27,9 @@ import kotlinx.coroutines.sync.withLock
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.NextCourse
 import tool.xfy9326.schedule.beans.NextCourseInfo
+import tool.xfy9326.schedule.tools.core.AppContext
+import tool.xfy9326.schedule.tools.core.canScheduleNextAlarm
+import tool.xfy9326.schedule.tools.core.getLaunchAppIntent
 import tool.xfy9326.schedule.utils.schedule.NextCourseUtils
 import tool.xfy9326.schedule.utils.schedule.ScheduleDataProcessor
 import tool.xfy9326.schedule.widget.NextCourseWidget

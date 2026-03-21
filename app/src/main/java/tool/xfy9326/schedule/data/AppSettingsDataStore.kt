@@ -1,36 +1,36 @@
 package tool.xfy9326.schedule.data
 
-import io.github.xfy9326.atools.datastore.preference.booleanPrefKey
-import io.github.xfy9326.atools.datastore.preference.intPrefKey
-import io.github.xfy9326.atools.datastore.preference.stringPrefKey
-import io.github.xfy9326.atools.datastore.preference.stringSetPrefKey
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import tool.xfy9326.schedule.beans.CalendarEventDescription
 import tool.xfy9326.schedule.beans.NightMode
 import tool.xfy9326.schedule.beans.ScheduleSync
 import tool.xfy9326.schedule.data.base.AbstractDataStore
+import tool.xfy9326.schedule.tools.datastore.preference.key.booleanKey
+import tool.xfy9326.schedule.tools.datastore.preference.key.intKey
+import tool.xfy9326.schedule.tools.datastore.preference.key.stringKey
+import tool.xfy9326.schedule.tools.datastore.preference.key.stringSetKey
 
 object AppSettingsDataStore : AbstractDataStore("Settings") {
-    val nightModeType by stringPrefKey()
-    private val keepWebProviderCache by booleanPrefKey()
-    private val debugLogsMaxStoreAmount by intPrefKey()
-    private val handleException by booleanPrefKey()
-    private val calendarSyncScheduleDefault by booleanPrefKey()
-    private val calendarSyncScheduleEditableDefault by booleanPrefKey()
-    private val calendarSyncScheduleDefaultVisibleDefault by booleanPrefKey()
-    private val calendarSyncAddReminderDefault by booleanPrefKey()
-    private val calendarSyncReminderMinutes by intPrefKey()
-    private val calendarEventDescriptions by stringSetPrefKey()
-    private val customActivityTransitionAnimation by booleanPrefKey()
-    private val useBrowserDownloadUpgradeFile by booleanPrefKey()
-    private val allowImportEmptySchedule by booleanPrefKey()
-    private val allowImportIncompleteSchedule by booleanPrefKey()
-    private val drawWaterMarkOnScheduleImage by booleanPrefKey()
-    private val enableWebCourseProviderConsoleDebug by booleanPrefKey()
-    private val autoSwitchToNewImportSchedule by booleanPrefKey()
-    val jsCourseImportEnableNetwork by booleanPrefKey()
-    val enableOnlineCourseImport by booleanPrefKey()
+    val nightModeType by stringKey()
+    private val keepWebProviderCache by booleanKey()
+    private val debugLogsMaxStoreAmount by intKey()
+    private val handleException by booleanKey()
+    private val calendarSyncScheduleDefault by booleanKey()
+    private val calendarSyncScheduleEditableDefault by booleanKey()
+    private val calendarSyncScheduleDefaultVisibleDefault by booleanKey()
+    private val calendarSyncAddReminderDefault by booleanKey()
+    private val calendarSyncReminderMinutes by intKey()
+    private val calendarEventDescriptions by stringSetKey()
+    private val customActivityTransitionAnimation by booleanKey()
+    private val useBrowserDownloadUpgradeFile by booleanKey()
+    private val allowImportEmptySchedule by booleanKey()
+    private val allowImportIncompleteSchedule by booleanKey()
+    private val drawWaterMarkOnScheduleImage by booleanKey()
+    private val enableWebCourseProviderConsoleDebug by booleanKey()
+    private val autoSwitchToNewImportSchedule by booleanKey()
+    val jsCourseImportEnableNetwork by booleanKey()
+    val enableOnlineCourseImport by booleanKey()
 
     suspend fun setNightModeType(nightMode: NightMode) = nightModeType.saveData(nightMode.name)
 

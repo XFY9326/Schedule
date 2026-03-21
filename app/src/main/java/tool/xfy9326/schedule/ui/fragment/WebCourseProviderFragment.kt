@@ -2,9 +2,20 @@ package tool.xfy9326.schedule.ui.fragment
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import android.view.animation.AnimationUtils
-import android.webkit.*
+import android.webkit.ConsoleMessage
+import android.webkit.JsResult
+import android.webkit.WebChromeClient
+import android.webkit.WebResourceRequest
+import android.webkit.WebSettings
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import androidx.activity.addCallback
 import androidx.core.view.MenuProvider
 import androidx.core.view.ViewCompat
@@ -16,8 +27,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.withStateAtLeast
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import io.github.xfy9326.atools.core.showToast
-import io.github.xfy9326.atools.ui.*
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -25,6 +34,12 @@ import tool.xfy9326.schedule.BuildConfig
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.databinding.FragmentWebCourseProviderBinding
+import tool.xfy9326.schedule.tools.core.showToast
+import tool.xfy9326.schedule.tools.ui.bindLifeCycle
+import tool.xfy9326.schedule.tools.ui.clearAll
+import tool.xfy9326.schedule.tools.ui.requireOwner
+import tool.xfy9326.schedule.tools.ui.resume
+import tool.xfy9326.schedule.tools.ui.show
 import tool.xfy9326.schedule.ui.dialog.WebCourseProviderBottomPanel
 import tool.xfy9326.schedule.ui.fragment.base.IWebCourseProvider
 import tool.xfy9326.schedule.ui.fragment.base.ViewBindingFragment
@@ -154,7 +169,8 @@ class WebCourseProviderFragment : ViewBindingFragment<FragmentWebCourseProviderB
             WindowInsetsCompat.CONSUMED
         }
 
-        WebCourseProviderBottomPanel.setBottomPanelActionListener(childFragmentManager, viewLifecycleOwner,
+        WebCourseProviderBottomPanel.setBottomPanelActionListener(
+            childFragmentManager, viewLifecycleOwner,
             onDismiss = {
                 lifecycleScope.launch {
                     withStateAtLeast(Lifecycle.State.STARTED) {

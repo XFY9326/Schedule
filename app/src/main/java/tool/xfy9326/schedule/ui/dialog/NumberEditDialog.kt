@@ -6,17 +6,16 @@ import android.os.Bundle
 import android.text.InputFilter
 import android.text.InputType
 import androidx.appcompat.app.AppCompatDialogFragment
-import androidx.core.os.bundleOf
 import androidx.core.view.updatePadding
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.LifecycleOwner
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import io.github.xfy9326.atools.core.showToast
-import io.github.xfy9326.atools.ui.getText
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.databinding.DialogEditTextBinding
+import tool.xfy9326.schedule.tools.core.showToast
+import tool.xfy9326.schedule.tools.ui.getText
 import kotlin.properties.Delegates
 
 class NumberEditDialog : AppCompatDialogFragment() {
@@ -41,14 +40,14 @@ class NumberEditDialog : AppCompatDialogFragment() {
             editHint: String,
         ) {
             NumberEditDialog().apply {
-                arguments = bundleOf(
-                    EXTRA_TAG to tag,
-                    EXTRA_NUMBER to number,
-                    EXTRA_MIN_NUMBER to minNumber,
-                    EXTRA_MAX_NUMBER to maxNumber,
-                    EXTRA_TITLE to title,
-                    EXTRA_EDIT_HINT to editHint
-                )
+                arguments = Bundle().apply {
+                    putString(EXTRA_TAG, tag)
+                    putInt(EXTRA_NUMBER, number)
+                    putInt(EXTRA_MIN_NUMBER, minNumber)
+                    putInt(EXTRA_MAX_NUMBER, maxNumber)
+                    putString(EXTRA_TITLE, title)
+                    putString(EXTRA_EDIT_HINT, editHint)
+                }
             }.show(fragmentManager, tag)
         }
 
@@ -107,10 +106,10 @@ class NumberEditDialog : AppCompatDialogFragment() {
                         if (number != requireArguments().getInt(EXTRA_NUMBER)) {
                             setFragmentResult(
                                 DIALOG_TAG,
-                                bundleOf(
-                                    EXTRA_TAG to requireArguments().getString(EXTRA_TAG),
-                                    EXTRA_NUMBER to number
-                                )
+                                Bundle().apply {
+                                    putString(EXTRA_TAG, requireArguments().getString(EXTRA_TAG))
+                                    putInt(EXTRA_NUMBER, number)
+                                }
                             )
                         }
                         dismiss()

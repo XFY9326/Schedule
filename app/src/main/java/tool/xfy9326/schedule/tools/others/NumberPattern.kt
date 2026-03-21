@@ -1,12 +1,7 @@
-package tool.xfy9326.schedule.tools
+package tool.xfy9326.schedule.tools.others
 
-import io.github.xfy9326.atools.base.asArray
 import tool.xfy9326.schedule.beans.TimePeriod
-import tool.xfy9326.schedule.tools.NumberPattern.PatternType.EMPTY
-import tool.xfy9326.schedule.tools.NumberPattern.PatternType.MESSY
-import tool.xfy9326.schedule.tools.NumberPattern.PatternType.SERIAL
-import tool.xfy9326.schedule.tools.NumberPattern.PatternType.SINGLE
-import tool.xfy9326.schedule.tools.NumberPattern.PatternType.SPACED
+import tool.xfy9326.schedule.tools.base.asArray
 
 class NumberPattern(boolArray: BooleanArray) {
     enum class PatternType {
@@ -124,7 +119,7 @@ class NumberPattern(boolArray: BooleanArray) {
                 interval = -1
                 amount = -1
                 timePeriodArray = parseTimePeriodArray(boolArray)
-                MESSY
+                PatternType.MESSY
             }
 
             !metFirst -> {
@@ -133,7 +128,7 @@ class NumberPattern(boolArray: BooleanArray) {
                 interval = -1
                 amount = 0
                 timePeriodArray = emptyArray()
-                EMPTY
+                PatternType.EMPTY
             }
 
             startIndex == endIndex && !setInterval -> {
@@ -142,7 +137,7 @@ class NumberPattern(boolArray: BooleanArray) {
                 interval = -1
                 amount = 1
                 timePeriodArray = TimePeriod(start).asArray()
-                SINGLE
+                PatternType.SINGLE
             }
 
             indexInterval == 1 -> {
@@ -151,7 +146,7 @@ class NumberPattern(boolArray: BooleanArray) {
                 interval = 1
                 amount = endIndex - startIndex + 1
                 timePeriodArray = TimePeriod(start, end).asArray()
-                SERIAL
+                PatternType.SERIAL
             }
 
             else -> {
@@ -160,7 +155,7 @@ class NumberPattern(boolArray: BooleanArray) {
                 interval = indexInterval
                 amount = ((endIndex - startIndex) / indexInterval) + 1
                 timePeriodArray = parseSpacedTimePeriodArray(amount, start, interval)
-                SPACED
+                PatternType.SPACED
             }
         }
     }

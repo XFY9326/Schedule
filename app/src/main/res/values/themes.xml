@@ -20,7 +20,7 @@
     <style name="AppTheme.LaunchScreen.Base" parent="Theme.SplashScreen">
         <item name="postSplashScreenTheme">@style/AppTheme</item>
         <item name="windowSplashScreenBackground">@color/launch_screen_windows_background</item>
-        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_logo</item>
+        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_round</item>
     </style>
 
     <style name="AppTheme.LaunchScreen" parent="AppTheme.LaunchScreen.Base">

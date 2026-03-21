@@ -1,6 +1,5 @@
 package tool.xfy9326.schedule.content.js
 
-import io.github.xfy9326.atools.base.nullIfBlank
 import kotlinx.serialization.json.Json
 import tool.xfy9326.schedule.beans.Course
 import tool.xfy9326.schedule.beans.ScheduleImportContent
@@ -16,6 +15,7 @@ import tool.xfy9326.schedule.content.utils.CourseImportHelper
 import tool.xfy9326.schedule.content.utils.CourseParseResult
 import tool.xfy9326.schedule.content.utils.toBooleanArray
 import tool.xfy9326.schedule.json.parser.ai.AiScheduleResult
+import tool.xfy9326.schedule.tools.base.nullIfBlank
 
 class JSCourseParser : AbstractCourseParser<JSParams>() {
 

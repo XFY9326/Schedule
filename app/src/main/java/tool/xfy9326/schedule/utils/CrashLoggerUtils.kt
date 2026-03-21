@@ -1,13 +1,13 @@
 package tool.xfy9326.schedule.utils
 
 import android.content.Context
-import io.github.xfy9326.atools.core.AppContext
-import io.github.xfy9326.atools.crash.CrashLogger
-import io.github.xfy9326.atools.crash.CrashLoggerStrategy
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.io.PathManager
+import tool.xfy9326.schedule.tools.core.AppContext
+import tool.xfy9326.schedule.tools.crash.CrashLogger
+import tool.xfy9326.schedule.tools.crash.CrashLoggerStrategy
 
 object CrashLoggerUtils {
     private const val CRASH_RELAUNCH_PERIOD_MILLS = 5000L

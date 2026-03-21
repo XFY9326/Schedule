@@ -6,12 +6,12 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
-import io.github.xfy9326.atools.ui.setOnSingleClickListener
 import tool.xfy9326.schedule.content.base.ICourseImportConfig
 import tool.xfy9326.schedule.content.beans.JSConfig
 import tool.xfy9326.schedule.content.utils.BaseCourseImportConfig
 import tool.xfy9326.schedule.databinding.ItemCourseImportBinding
 import tool.xfy9326.schedule.databinding.LayoutSwipeItemBinding
+import tool.xfy9326.schedule.tools.ui.setOnSingleClickListener
 import tool.xfy9326.schedule.ui.view.recyclerview.ListViewBindingAdapter
 import tool.xfy9326.schedule.ui.view.recyclerview.SwipeItemCallback
 import tool.xfy9326.schedule.ui.view.recyclerview.SwipeItemViewHolder

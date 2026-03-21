@@ -3,7 +3,6 @@ package tool.xfy9326.schedule.utils
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.withStarted
-import io.github.xfy9326.atools.coroutines.withTryLock
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.engine.okhttp.OkHttp
@@ -22,30 +21,17 @@ import tool.xfy9326.schedule.BuildConfig
 import tool.xfy9326.schedule.data.AppDataStore
 import tool.xfy9326.schedule.json.upgrade.UpdateIndex
 import tool.xfy9326.schedule.json.upgrade.UpdateInfo
-import java.net.ConnectException
+import tool.xfy9326.schedule.tools.base.EMPTY
+import tool.xfy9326.schedule.tools.coroutines.withTryLock
 
 object UpgradeUtils {
     private const val CURRENT_VERSION = BuildConfig.VERSION_CODE
-    private const val IS_BETA = BuildConfig.IS_BETA
-
-    private const val UPDATE_PRODUCT = "Schedule"
-    private const val UPDATE_LATEST = "Latest"
-    private const val UPDATE_INDEX = "Index"
-
-    private val UPDATE_SERVERS = arrayOf(
-        "https://update.xfy9326.top",
-        "https://cdn.jsdelivr.net/gh/XFY9326/Updates@master",
-        "https://xfy9326.gitee.io/updates",
-        "https://xfy9326.github.io/Updates"
-    )
 
     private val UPDATE_CHECK_MUTEX = Mutex()
 
-    private fun getLatestCheckUrl(server: String): String =
-        "$server/$UPDATE_PRODUCT/$UPDATE_LATEST"
+    private fun getLatestCheckUrl(): String = EMPTY
 
-    private fun getIndexUrl(server: String): String =
-        "$server/$UPDATE_PRODUCT/$UPDATE_INDEX"
+    private fun getIndexUrl(): String = EMPTY
 
     fun checkUpgrade(
         lifecycleOwner: LifecycleOwner,
@@ -54,6 +40,12 @@ object UpgradeUtils {
         onNoUpgrade: (() -> Unit)? = null,
         onFoundUpgrade: ((UpdateInfo) -> Unit)? = null,
     ) {
+        @Suppress("KotlinConstantConditions")
+        if (!BuildConfig.ENABLE_UPDATE_CHECK) {
+            onNoUpgrade?.invoke()
+            return
+        }
+
         lifecycleOwner.lifecycleScope.launch(Dispatchers.Default) {
             UPDATE_CHECK_MUTEX.withTryLock {
                 requestUpgrade(forcedCheck).let {
@@ -88,14 +80,14 @@ object UpgradeUtils {
 
     private suspend fun validateIgnoreUpdate(forcedCheck: Boolean, latest: UpdateInfo): Boolean {
         if (latest.forceUpdate) return false
-        if (forcedCheck || !IS_BETA && latest.versionCode > AppDataStore.ignoreUpdateVersionCodeFlow.first()) return false
+        if (forcedCheck || latest.versionCode > AppDataStore.ignoreUpdateVersionCodeFlow.first()) return false
         return true
     }
 
     private suspend fun getUpdateData(currentVersionCode: Int): UpdateInfo? = withContext(Dispatchers.IO) {
         getDefaultClient().use {
             val latest = getLatestVersion(it)
-            if (latest.versionCode > currentVersionCode || IS_BETA && latest.versionCode == currentVersionCode) {
+            if (latest.versionCode > currentVersionCode) {
                 val index = getIndex(it)
                 val forceUpdate = validateForceUpdate(currentVersionCode, latest, index)
                 return@withContext latest.copy(forceUpdate = forceUpdate)
@@ -115,25 +107,11 @@ object UpgradeUtils {
     }
 
     private suspend fun getLatestVersion(client: HttpClient): UpdateInfo {
-        UPDATE_SERVERS.map { getLatestCheckUrl(it) }.forEach {
-            runCatching {
-                client.get(it).body<UpdateInfo>()
-            }.onSuccess {
-                return it
-            }
-        }
-        throw ConnectException("Unable to connect any server!")
+        return client.get(getLatestCheckUrl()).body<UpdateInfo>()
     }
 
     private suspend fun getIndex(client: HttpClient): List<UpdateIndex> {
-        UPDATE_SERVERS.map { getIndexUrl(it) }.forEach {
-            runCatching {
-                client.get(it).body<List<UpdateIndex>>()
-            }.onSuccess {
-                return it
-            }
-        }
-        throw ConnectException("Unable to connect any server!")
+        return client.get(getIndexUrl()).body<List<UpdateIndex>>()
     }
 
     private fun getDefaultClient() = HttpClient(OkHttp) {

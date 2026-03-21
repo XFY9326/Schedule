@@ -2,7 +2,7 @@ package tool.xfy9326.schedule.db.provider
 
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import io.github.xfy9326.atools.core.AppContext
+import tool.xfy9326.schedule.tools.core.AppContext
 import kotlin.reflect.KClass
 
 abstract class AbstractDBProvider<T : RoomDatabase>(private val dbClass: KClass<T>) {

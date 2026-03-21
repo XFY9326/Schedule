@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.Px
 import androidx.core.view.children
+import androidx.core.view.isNotEmpty
 import tool.xfy9326.schedule.beans.CourseCell
 import tool.xfy9326.schedule.beans.SchedulePredefine
 import tool.xfy9326.schedule.beans.ScheduleStyles
@@ -13,7 +14,7 @@ import kotlin.math.ceil
 import kotlin.math.max
 
 @SuppressLint("ViewConstructor")
-class ScheduleGridView constructor(
+class ScheduleGridView(
     context: Context,
     private val columnAmount: Int,
     private val rowAmount: Int,
@@ -102,7 +103,7 @@ class ScheduleGridView constructor(
     }
 
     override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
-        if (childCount > 0) {
+        if (isNotEmpty()) {
             val leftToRight = layoutDirection == LAYOUT_DIRECTION_LTR
 
             for (child in children) {

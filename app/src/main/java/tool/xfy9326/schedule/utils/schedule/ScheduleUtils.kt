@@ -1,6 +1,5 @@
 package tool.xfy9326.schedule.utils.schedule
 
-import io.github.xfy9326.atools.io.IOManager
 import kotlinx.coroutines.flow.first
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.Course
@@ -14,6 +13,7 @@ import tool.xfy9326.schedule.beans.WeekDay
 import tool.xfy9326.schedule.data.AppDataStore
 import tool.xfy9326.schedule.data.ScheduleDataStore
 import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
+import tool.xfy9326.schedule.tools.io.IOManager
 import tool.xfy9326.schedule.utils.CalendarUtils
 import java.util.Calendar
 import java.util.Date

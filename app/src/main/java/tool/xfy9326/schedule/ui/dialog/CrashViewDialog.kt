@@ -5,19 +5,18 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatDialogFragment
-import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import io.github.xfy9326.atools.io.okio.writeText
-import io.github.xfy9326.atools.ui.showGlobalToast
-import io.github.xfy9326.atools.ui.showToast
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.databinding.DialogCrashViewBinding
-import tool.xfy9326.schedule.tools.MIMEConst
+import tool.xfy9326.schedule.tools.io.okio.writeText
+import tool.xfy9326.schedule.tools.others.MIMEConst
+import tool.xfy9326.schedule.tools.ui.showGlobalToast
+import tool.xfy9326.schedule.tools.ui.showToast
 import tool.xfy9326.schedule.utils.PROJECT_ID
 import tool.xfy9326.schedule.utils.setWindowPercent
 
@@ -32,10 +31,10 @@ class CrashViewDialog : AppCompatDialogFragment() {
 
         fun showDialog(fragmentManager: FragmentManager, crashLog: String, outputCrashLog: Boolean = true) {
             CrashViewDialog().apply {
-                arguments = bundleOf(
-                    ARGUMENT_CRASH_LOG to crashLog,
-                    ARGUMENT_OUTPUT_CRASH_LOG to outputCrashLog
-                )
+                arguments = Bundle().apply {
+                    putString(ARGUMENT_CRASH_LOG, crashLog)
+                    putBoolean(ARGUMENT_OUTPUT_CRASH_LOG, outputCrashLog)
+                }
             }.show(fragmentManager, null)
         }
     }

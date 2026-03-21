@@ -5,10 +5,10 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceDataStore
-import io.github.xfy9326.atools.io.utils.ImageMimeType
-import io.github.xfy9326.atools.livedata.observeEvent
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.data.ScheduleDataStore
+import tool.xfy9326.schedule.tools.io.utils.ImageMimeType
+import tool.xfy9326.schedule.tools.livedata.observeEvent
 import tool.xfy9326.schedule.ui.dialog.FullScreenLoadingDialog
 import tool.xfy9326.schedule.ui.fragment.base.AbstractSettingsFragment
 import tool.xfy9326.schedule.ui.vm.SettingsViewModel

@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.Px
 import androidx.core.view.children
+import androidx.core.view.isNotEmpty
 import kotlin.math.ceil
 import kotlin.math.min
 import kotlin.math.roundToInt
@@ -33,7 +34,7 @@ open class AutoSquareLayout @JvmOverloads constructor(context: Context, attrs: A
     protected open fun onMeasureColumnAmount(suggestColumnAmount: Int): Int = suggestColumnAmount
 
     final override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        if (childViewSize > 0 && childCount > 0) {
+        if (childViewSize > 0 && isNotEmpty()) {
             val childMinSize = childViewSize + childViewMinMargin * 2
 
             val viewMeasuredWidth: Int
@@ -77,7 +78,7 @@ open class AutoSquareLayout @JvmOverloads constructor(context: Context, attrs: A
     final override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
         if (changed) {
             val width = r - l
-            if (width > 0 && childCount > 0) {
+            if (width > 0 && isNotEmpty()) {
                 val xCenterOffset = ((1f * width / columnAmount - childViewSize) / 2f).roundToInt()
                 val leftToRight = layoutDirection == LAYOUT_DIRECTION_LTR
                 var childLeft = getCellStartX(leftToRight, width) + getCellXOffset(true, leftToRight, xCenterOffset)

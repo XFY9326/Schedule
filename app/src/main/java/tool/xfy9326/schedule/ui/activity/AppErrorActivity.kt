@@ -3,12 +3,12 @@ package tool.xfy9326.schedule.ui.activity
 import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.WindowCompat
-import io.github.xfy9326.atools.livedata.observeEvent
-import io.github.xfy9326.atools.ui.getColorCompat
-import io.github.xfy9326.atools.ui.setOnSingleClickListener
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.databinding.ActivityAppErrorBinding
-import tool.xfy9326.schedule.tools.MIMEConst
+import tool.xfy9326.schedule.tools.livedata.observeEvent
+import tool.xfy9326.schedule.tools.others.MIMEConst
+import tool.xfy9326.schedule.tools.ui.getColorCompat
+import tool.xfy9326.schedule.tools.ui.setOnSingleClickListener
 import tool.xfy9326.schedule.ui.activity.base.ViewModelActivity
 import tool.xfy9326.schedule.ui.dialog.CrashViewDialog
 import tool.xfy9326.schedule.ui.dialog.UpgradeDialog
@@ -64,7 +64,8 @@ class AppErrorActivity : ViewModelActivity<AppErrorViewModel, ActivityAppErrorBi
             }
         )
         viewBinding.cardViewAppErrorCheckUpdate.setOnSingleClickListener {
-            UpgradeUtils.checkUpgrade(this, true,
+            UpgradeUtils.checkUpgrade(
+                this, true,
                 onFailed = { viewBinding.layoutAppError.showSnackBar(R.string.update_check_failed) },
                 onNoUpgrade = { viewBinding.layoutAppError.showSnackBar(R.string.no_new_update) },
                 onFoundUpgrade = { UpgradeDialog.showDialog(supportFragmentManager, it) }

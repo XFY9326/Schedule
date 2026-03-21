@@ -10,7 +10,7 @@ import androidx.room.PrimaryKey
 import kotlinx.parcelize.Parcelize
 import tool.xfy9326.schedule.content.utils.arrangeWeekNum
 import tool.xfy9326.schedule.db.DBConst
-import tool.xfy9326.schedule.tools.MaterialColorHelper
+import tool.xfy9326.schedule.tools.others.MaterialColorHelper
 
 @Entity(
     tableName = DBConst.TABLE_COURSE,
@@ -31,7 +31,7 @@ data class Course(
     var scheduleId: Long,
     var name: String,
     var teacher: String?,
-    @ColorInt
+    @param:ColorInt
     var color: Int,
     @Ignore
     var times: List<CourseTime>,

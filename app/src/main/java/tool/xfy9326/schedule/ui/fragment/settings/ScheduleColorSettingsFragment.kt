@@ -4,11 +4,11 @@ import android.os.Bundle
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceDataStore
 import com.jaredrummler.android.colorpicker.ColorPreferenceCompat
-import io.github.xfy9326.atools.datastore.preference.adapter.DataStorePreferenceAdapter
-import io.github.xfy9326.atools.ui.getColorCompat
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.data.ScheduleDataStore
-import tool.xfy9326.schedule.tools.MaterialColorHelper
+import tool.xfy9326.schedule.tools.datastore.preference.adapter.DataStorePreferenceAdapter
+import tool.xfy9326.schedule.tools.others.MaterialColorHelper
+import tool.xfy9326.schedule.tools.ui.getColorCompat
 import tool.xfy9326.schedule.ui.fragment.base.AbstractSettingsFragment
 
 class ScheduleColorSettingsFragment : AbstractSettingsFragment() {

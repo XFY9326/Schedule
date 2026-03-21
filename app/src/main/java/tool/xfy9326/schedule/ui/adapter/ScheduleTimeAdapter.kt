@@ -2,12 +2,12 @@ package tool.xfy9326.schedule.ui.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import io.github.xfy9326.atools.ui.setOnSingleClickListener
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.ScheduleTime
 import tool.xfy9326.schedule.beans.ScheduleTime.Companion.endTimeStr
 import tool.xfy9326.schedule.beans.ScheduleTime.Companion.startTimeStr
 import tool.xfy9326.schedule.databinding.ItemScheduleTimeBinding
+import tool.xfy9326.schedule.tools.ui.setOnSingleClickListener
 import tool.xfy9326.schedule.ui.view.recyclerview.ListViewBindingAdapter
 import tool.xfy9326.schedule.ui.viewholder.ViewBindingViewHolder
 
@@ -26,10 +26,10 @@ class ScheduleTimeAdapter : ListViewBindingAdapter<ScheduleTime, ItemScheduleTim
             textViewScheduleTimeStart.text = element.startTimeStr
             textViewScheduleTimeEnd.text = element.endTimeStr
             textViewScheduleTimeStart.setOnSingleClickListener {
-                onScheduleTimeEditListener?.invoke(holder.adapterPosition, element.startHour, element.startMinute, true)
+                onScheduleTimeEditListener?.invoke(holder.bindingAdapterPosition, element.startHour, element.startMinute, true)
             }
             textViewScheduleTimeEnd.setOnSingleClickListener {
-                onScheduleTimeEditListener?.invoke(holder.adapterPosition, element.endHour, element.endMinute, false)
+                onScheduleTimeEditListener?.invoke(holder.bindingAdapterPosition, element.endHour, element.endMinute, false)
             }
         }
     }

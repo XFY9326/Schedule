@@ -3,14 +3,14 @@ package tool.xfy9326.schedule.ui.adapter
 import android.graphics.Typeface
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import io.github.xfy9326.atools.ui.getColorCompat
-import io.github.xfy9326.atools.ui.getStringArray
-import io.github.xfy9326.atools.ui.setOnSingleClickListener
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.CourseTime
 import tool.xfy9326.schedule.beans.CourseTime.Companion.getWeeksDescriptionText
 import tool.xfy9326.schedule.beans.SectionTime.Companion.description
 import tool.xfy9326.schedule.databinding.ItemCourseTimeBinding
+import tool.xfy9326.schedule.tools.ui.getColorCompat
+import tool.xfy9326.schedule.tools.ui.getStringArray
+import tool.xfy9326.schedule.tools.ui.setOnSingleClickListener
 import tool.xfy9326.schedule.ui.view.recyclerview.ListViewBindingAdapter
 import tool.xfy9326.schedule.ui.viewholder.ViewBindingViewHolder
 
@@ -50,10 +50,10 @@ class CourseTimeAdapter : ListViewBindingAdapter<CourseTime, ItemCourseTimeBindi
                 element.location ?: holder.viewContext.getString(R.string.undefined)
             )
         holder.viewBinding.cardViewCourseTime.setOnSingleClickListener {
-            onCourseTimeEditListener?.invoke(holder.adapterPosition, element)
+            onCourseTimeEditListener?.invoke(holder.bindingAdapterPosition, element)
         }
         holder.viewBinding.buttonDeleteCourseTime.setOnSingleClickListener {
-            onCourseTimeDeleteListener?.invoke(holder.adapterPosition, element)
+            onCourseTimeDeleteListener?.invoke(holder.bindingAdapterPosition, element)
         }
     }
 

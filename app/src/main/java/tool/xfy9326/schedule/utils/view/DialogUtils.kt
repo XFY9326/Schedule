@@ -8,13 +8,13 @@ import androidx.lifecycle.LifecycleOwner
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputLayout
 import com.jaredrummler.android.colorpicker.ColorPickerDialog
-import io.github.xfy9326.atools.ui.getText
-import io.github.xfy9326.atools.ui.show
-import io.github.xfy9326.atools.ui.showToast
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.Schedule
 import tool.xfy9326.schedule.databinding.DialogEditTextBinding
-import tool.xfy9326.schedule.tools.MaterialColorHelper
+import tool.xfy9326.schedule.tools.others.MaterialColorHelper
+import tool.xfy9326.schedule.tools.ui.getText
+import tool.xfy9326.schedule.tools.ui.show
+import tool.xfy9326.schedule.tools.ui.showToast
 import tool.xfy9326.schedule.ui.activity.RawTextActivity
 import tool.xfy9326.schedule.utils.NEW_LINE
 

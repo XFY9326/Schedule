@@ -2,10 +2,10 @@ package tool.xfy9326.schedule.ui.activity
 
 import android.os.Bundle
 import androidx.core.view.WindowCompat
-import io.github.xfy9326.atools.ui.setOnSingleClickListener
 import tool.xfy9326.schedule.BuildConfig
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.databinding.ActivityAboutBinding
+import tool.xfy9326.schedule.tools.ui.setOnSingleClickListener
 import tool.xfy9326.schedule.ui.activity.base.ViewBindingActivity
 import tool.xfy9326.schedule.utils.consumeSystemBarInsets
 

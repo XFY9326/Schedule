@@ -1,5 +1,3 @@
-@file:Suppress("SpellCheckingInspection")
-
 package tool.xfy9326.schedule.content.adapters.config
 
 import tool.xfy9326.schedule.R

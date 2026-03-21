@@ -17,11 +17,11 @@ import androidx.core.view.WindowCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.withStateAtLeast
-import io.github.xfy9326.atools.core.startActivity
-import io.github.xfy9326.atools.ui.bindLifeCycle
 import kotlinx.coroutines.launch
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.databinding.ActivityWebBinding
+import tool.xfy9326.schedule.tools.core.startActivity
+import tool.xfy9326.schedule.tools.ui.bindLifeCycle
 import tool.xfy9326.schedule.ui.activity.base.ViewBindingActivity
 import tool.xfy9326.schedule.utils.AppUriUtils
 import tool.xfy9326.schedule.utils.consumeSystemBarInsets

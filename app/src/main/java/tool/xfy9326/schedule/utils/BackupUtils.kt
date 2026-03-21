@@ -2,8 +2,6 @@ package tool.xfy9326.schedule.utils
 
 import android.content.Context
 import android.net.Uri
-import io.github.xfy9326.atools.io.serialization.json.readJSONAsync
-import io.github.xfy9326.atools.io.serialization.json.writeJSONAsync
 import kotlinx.coroutines.flow.first
 import kotlinx.serialization.json.Json
 import tool.xfy9326.schedule.R
@@ -18,6 +16,8 @@ import tool.xfy9326.schedule.json.backup.BackupWrapperJSON
 import tool.xfy9326.schedule.json.backup.CourseJSON
 import tool.xfy9326.schedule.json.backup.CourseTimeJSON
 import tool.xfy9326.schedule.json.backup.ScheduleJSON
+import tool.xfy9326.schedule.tools.io.serialization.json.readJSONAsync
+import tool.xfy9326.schedule.tools.io.serialization.json.writeJSONAsync
 import tool.xfy9326.schedule.utils.schedule.CourseUtils
 import tool.xfy9326.schedule.utils.schedule.ScheduleUtils
 

@@ -2,23 +2,23 @@ package tool.xfy9326.schedule.utils.ics
 
 import android.content.Context
 import android.net.Uri
-import io.github.xfy9326.atools.io.IOManager
-import io.github.xfy9326.atools.io.okio.writeTextAsync
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.Course
 import tool.xfy9326.schedule.beans.Course.Companion.iterateAll
 import tool.xfy9326.schedule.beans.CourseTime
 import tool.xfy9326.schedule.beans.Schedule
 import tool.xfy9326.schedule.beans.ScheduleCalculateTimes
-import tool.xfy9326.schedule.tools.NumberPattern.PatternType.EMPTY
-import tool.xfy9326.schedule.tools.NumberPattern.PatternType.MESSY
-import tool.xfy9326.schedule.tools.NumberPattern.PatternType.SERIAL
-import tool.xfy9326.schedule.tools.NumberPattern.PatternType.SINGLE
-import tool.xfy9326.schedule.tools.NumberPattern.PatternType.SPACED
+import tool.xfy9326.schedule.tools.io.IOManager
+import tool.xfy9326.schedule.tools.io.okio.writeTextAsync
+import tool.xfy9326.schedule.tools.others.NumberPattern.PatternType.EMPTY
+import tool.xfy9326.schedule.tools.others.NumberPattern.PatternType.MESSY
+import tool.xfy9326.schedule.tools.others.NumberPattern.PatternType.SERIAL
+import tool.xfy9326.schedule.tools.others.NumberPattern.PatternType.SINGLE
+import tool.xfy9326.schedule.tools.others.NumberPattern.PatternType.SPACED
 import tool.xfy9326.schedule.utils.schedule.CourseTimeUtils
 import tool.xfy9326.schedule.utils.schedule.WeekNumPattern
 
-class ScheduleICSHelper constructor(schedule: Schedule, private val courses: List<Course>) {
+class ScheduleICSHelper(schedule: Schedule, private val courses: List<Course>) {
     companion object {
         fun createICSFileName(context: Context, scheduleName: String) = "${context.getString(R.string.app_name)}-$scheduleName.ics"
     }

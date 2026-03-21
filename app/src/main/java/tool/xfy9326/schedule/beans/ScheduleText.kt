@@ -5,13 +5,13 @@ package tool.xfy9326.schedule.beans
 import android.os.Parcelable
 import androidx.annotation.IntegerRes
 import androidx.datastore.preferences.core.Preferences
-import io.github.xfy9326.atools.io.IOManager
 import kotlinx.parcelize.Parcelize
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.annotation.Sp
 import tool.xfy9326.schedule.data.ScheduleDataStore
+import tool.xfy9326.schedule.tools.io.IOManager
 
-enum class ScheduleText(val prefKey: Preferences.Key<Int>, @IntegerRes private val defaultTextSize: Int) {
+enum class ScheduleText(val prefKey: Preferences.Key<Int>, @param:IntegerRes private val defaultTextSize: Int) {
     COURSE_TEXT(ScheduleDataStore.courseTextSize, R.integer.schedule_course_default_text_size),
     SCHEDULE_TIME_TEXT(ScheduleDataStore.scheduleTimeTextSize, R.integer.schedule_time_default_text_size),
     SCHEDULE_NUMBER_TEXT(ScheduleDataStore.scheduleNumberTextSize, R.integer.schedule_number_default_text_size),
@@ -38,7 +38,7 @@ enum class ScheduleText(val prefKey: Preferences.Key<Int>, @IntegerRes private v
 
             fun create(pref: Preferences, textType: ScheduleText? = null): TextSize {
                 return if (textType == null) {
-                    val values = values()
+                    val values = entries.toTypedArray()
                     val sizeMap = HashMap<ScheduleText, Int>(values.size).apply {
                         for (value in values) {
                             this[value] = value.getTextSize(pref)

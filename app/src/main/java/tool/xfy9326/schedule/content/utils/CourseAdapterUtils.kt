@@ -2,21 +2,27 @@
 
 package tool.xfy9326.schedule.content.utils
 
-import io.github.xfy9326.atools.base.isEven
-import io.github.xfy9326.atools.base.isOdd
-import io.ktor.client.*
-import io.ktor.client.engine.okhttp.*
-import io.ktor.client.plugins.*
-import io.ktor.client.plugins.contentnegotiation.*
-import io.ktor.client.plugins.cookies.*
-import io.ktor.serialization.kotlinx.json.*
+import io.ktor.client.HttpClient
+import io.ktor.client.engine.okhttp.OkHttp
+import io.ktor.client.engine.okhttp.OkHttpConfig
+import io.ktor.client.plugins.BrowserUserAgent
+import io.ktor.client.plugins.HttpRedirect
+import io.ktor.client.plugins.HttpRequestRetry
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.plugins.cookies.AcceptAllCookiesStorage
+import io.ktor.client.plugins.cookies.CookiesStorage
+import io.ktor.client.plugins.cookies.HttpCookies
+import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 import tool.xfy9326.schedule.beans.CourseTime
 import tool.xfy9326.schedule.beans.TimePeriod
 import tool.xfy9326.schedule.beans.WeekDay
+import tool.xfy9326.schedule.tools.base.isEven
+import tool.xfy9326.schedule.tools.base.isOdd
 import tool.xfy9326.schedule.utils.minAndMax
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.Locale
 
 object CourseAdapterUtils {
 
@@ -153,7 +159,7 @@ object CourseAdapterUtils {
      */
     fun parseIntCollectionPeriod(arr: Collection<Int>): List<TimePeriod> {
         if (arr.isEmpty()) return emptyList()
-        val sortedArr = (if (arr is Set<Int>) arr else arr.toSet()).toList().sorted()
+        val sortedArr = (arr as? Set<Int> ?: arr.toSet()).toList().sorted()
         if (sortedArr.isNotEmpty()) {
             val result = ArrayList<TimePeriod>()
             var start = 0

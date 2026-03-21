@@ -2,10 +2,6 @@ package tool.xfy9326.schedule.ui.vm
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import io.github.xfy9326.atools.livedata.MutableEventLiveData
-import io.github.xfy9326.atools.livedata.MutableNotifyLiveData
-import io.github.xfy9326.atools.livedata.postEvent
-import io.github.xfy9326.atools.livedata.postNotify
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
@@ -17,6 +13,10 @@ import tool.xfy9326.schedule.beans.CourseTime
 import tool.xfy9326.schedule.beans.EditError
 import tool.xfy9326.schedule.beans.Schedule
 import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
+import tool.xfy9326.schedule.tools.livedata.MutableEventLiveData
+import tool.xfy9326.schedule.tools.livedata.MutableNotifyLiveData
+import tool.xfy9326.schedule.tools.livedata.postEvent
+import tool.xfy9326.schedule.tools.livedata.postNotify
 import tool.xfy9326.schedule.ui.dialog.CourseTimeEditDialog
 import tool.xfy9326.schedule.ui.vm.base.AbstractViewModel
 import tool.xfy9326.schedule.utils.schedule.CourseTimeUtils

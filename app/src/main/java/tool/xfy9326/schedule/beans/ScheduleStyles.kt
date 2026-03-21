@@ -4,10 +4,10 @@ import android.content.Context
 import android.view.View
 import androidx.annotation.ColorInt
 import androidx.annotation.Px
-import io.github.xfy9326.atools.ui.dpToPx
-import io.github.xfy9326.atools.ui.getColorCompat
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.annotation.Dp
+import tool.xfy9326.schedule.tools.ui.dpToPx
+import tool.xfy9326.schedule.tools.ui.getColorCompat
 import tool.xfy9326.schedule.utils.getBottomScreenCornerMargin
 import tool.xfy9326.schedule.utils.getSystemBarBottomInsets
 import kotlin.math.max
@@ -16,11 +16,11 @@ data class ScheduleStyles(
     private val viewAlpha: Int,
     val forceShowWeekendColumn: Boolean,
     val showNotThisWeekCourse: Boolean,
-    @ColorInt
+    @param:ColorInt
     private val timeTextColor: Int?, // null -> default
     val cornerScreenMargin: Boolean,
     val highlightShowTodayCell: Boolean,
-    @ColorInt
+    @param:ColorInt
     private val highlightShowTodayCellColor: Int?, // null -> default
     val showScheduleTimes: Boolean,
     val horizontalCourseCellText: Boolean,
@@ -34,9 +34,9 @@ data class ScheduleStyles(
     val courseCellTextLength: Int?, // null -> auto,
     val courseCellTextNoNewLine: Boolean,
     val courseCellCourseTextLength: Int?, // null -> auto,
-    @Px
+    @param:Px
     val courseCellVerticalPadding: Int,
-    @Px
+    @param:Px
     val courseCellHorizontalPadding: Int,
     val courseCellDetailContent: Set<CourseCellDetailContent>,
     val courseCellFullScreenSameHeight: Boolean,

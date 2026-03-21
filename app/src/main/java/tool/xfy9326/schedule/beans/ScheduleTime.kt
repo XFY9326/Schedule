@@ -8,13 +8,13 @@ import java.util.Calendar
 
 @Parcelize
 data class ScheduleTime(
-    @IntRange(from = 0, to = 23)
+    @param:IntRange(from = 0, to = 23)
     var startHour: Int,
-    @IntRange(from = 0, to = 59)
+    @param:IntRange(from = 0, to = 59)
     var startMinute: Int,
-    @IntRange(from = 0, to = 23)
+    @param:IntRange(from = 0, to = 23)
     var endHour: Int,
-    @IntRange(from = 0, to = 59)
+    @param:IntRange(from = 0, to = 59)
     var endMinute: Int,
 ) : Parcelable {
     companion object {

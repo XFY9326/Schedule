@@ -3,7 +3,7 @@ package tool.xfy9326.schedule.json.parser.pure
 import kotlinx.serialization.Serializable
 import tool.xfy9326.schedule.json.ScheduleTimeJSON
 import tool.xfy9326.schedule.json.serializer.DateFormatStringSerializer
-import java.util.*
+import java.util.Date
 
 @Serializable
 data class ScheduleImportJSON(

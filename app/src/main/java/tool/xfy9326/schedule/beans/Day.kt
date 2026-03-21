@@ -5,9 +5,9 @@ import tool.xfy9326.schedule.utils.CalendarUtils
 import java.util.Calendar
 
 data class Day(
-    @IntRange(from = 1, to = 12)
+    @param:IntRange(from = 1, to = 12)
     val month: Int,
-    @IntRange(from = 1, to = 31)
+    @param:IntRange(from = 1, to = 31)
     val day: Int,
     val weekDay: WeekDay,
 ) {

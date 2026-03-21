@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Rect
 import android.graphics.drawable.Drawable
+import androidx.core.graphics.withSave
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -42,60 +43,60 @@ class AdvancedDividerItemDecoration(context: Context, private var orientation: I
     }
 
     private fun drawVertical(canvas: Canvas, parent: RecyclerView, drawable: Drawable) {
-        canvas.save()
-        val left: Int
-        val right: Int
-        if (parent.clipToPadding) {
-            left = parent.paddingLeft
-            right = parent.width - parent.paddingRight
-            canvas.clipRect(left, parent.paddingTop, right, parent.height - parent.paddingBottom)
-        } else {
-            left = 0
-            right = parent.width
-        }
+        canvas.withSave {
+            val left: Int
+            val right: Int
+            if (parent.clipToPadding) {
+                left = parent.paddingLeft
+                right = parent.width - parent.paddingRight
+                canvas.clipRect(left, parent.paddingTop, right, parent.height - parent.paddingBottom)
+            } else {
+                left = 0
+                right = parent.width
+            }
 
-        val listener = drawDividerListener
-        val childCount = parent.childCount
-        val layoutManager = parent.layoutManager!!
-        for (i in 0 until childCount) {
-            val child = parent.getChildAt(i)
-            if (listener != null && !listener(parent.getChildAdapterPosition(child), layoutManager.itemCount)) continue
+            val listener = drawDividerListener
+            val childCount = parent.childCount
+            val layoutManager = parent.layoutManager!!
+            for (i in 0 until childCount) {
+                val child = parent.getChildAt(i)
+                if (listener != null && !listener(parent.getChildAdapterPosition(child), layoutManager.itemCount)) continue
 
-            parent.getDecoratedBoundsWithMargins(child, mBounds)
-            val bottom = mBounds.bottom + child.translationY.roundToInt()
-            val top = bottom - drawable.intrinsicHeight
-            drawable.setBounds(left + horizonMargins, top, right - horizonMargins, bottom)
-            drawable.draw(canvas)
+                parent.getDecoratedBoundsWithMargins(child, mBounds)
+                val bottom = mBounds.bottom + child.translationY.roundToInt()
+                val top = bottom - drawable.intrinsicHeight
+                drawable.setBounds(left + horizonMargins, top, right - horizonMargins, bottom)
+                drawable.draw(canvas)
+            }
         }
-        canvas.restore()
     }
 
     private fun drawHorizontal(canvas: Canvas, parent: RecyclerView, drawable: Drawable) {
-        canvas.save()
-        val top: Int
-        val bottom: Int
-        if (parent.clipToPadding) {
-            top = parent.paddingTop
-            bottom = parent.height - parent.paddingBottom
-            canvas.clipRect(parent.paddingLeft, top, parent.width - parent.paddingRight, bottom)
-        } else {
-            top = 0
-            bottom = parent.height
-        }
+        canvas.withSave {
+            val top: Int
+            val bottom: Int
+            if (parent.clipToPadding) {
+                top = parent.paddingTop
+                bottom = parent.height - parent.paddingBottom
+                canvas.clipRect(parent.paddingLeft, top, parent.width - parent.paddingRight, bottom)
+            } else {
+                top = 0
+                bottom = parent.height
+            }
 
-        val listener = drawDividerListener
-        val childCount = parent.childCount
-        val layoutManager = parent.layoutManager!!
-        for (i in 0 until childCount) {
-            val child = parent.getChildAt(i)
-            if (listener != null && !listener(parent.getChildAdapterPosition(child), layoutManager.itemCount)) continue
+            val listener = drawDividerListener
+            val childCount = parent.childCount
+            val layoutManager = parent.layoutManager!!
+            for (i in 0 until childCount) {
+                val child = parent.getChildAt(i)
+                if (listener != null && !listener(parent.getChildAdapterPosition(child), layoutManager.itemCount)) continue
 
-            layoutManager.getDecoratedBoundsWithMargins(child, mBounds)
-            val right = mBounds.right + child.translationX.roundToInt()
-            val left = right - drawable.intrinsicWidth
-            drawable.setBounds(left, top + horizonMargins, right, bottom - horizonMargins)
-            drawable.draw(canvas)
+                layoutManager.getDecoratedBoundsWithMargins(child, mBounds)
+                val right = mBounds.right + child.translationX.roundToInt()
+                val left = right - drawable.intrinsicWidth
+                drawable.setBounds(left, top + horizonMargins, right, bottom - horizonMargins)
+                drawable.draw(canvas)
+            }
         }
-        canvas.restore()
     }
 }

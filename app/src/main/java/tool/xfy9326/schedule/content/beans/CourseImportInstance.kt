@@ -3,7 +3,7 @@ package tool.xfy9326.schedule.content.beans
 import tool.xfy9326.schedule.content.base.AbstractCourseParser
 import tool.xfy9326.schedule.content.base.AbstractCourseProvider
 
-class CourseImportInstance<P1 : AbstractCourseProvider<*>, P2 : AbstractCourseParser<*>> constructor(
+class CourseImportInstance<P1 : AbstractCourseProvider<*>, P2 : AbstractCourseParser<*>>(
     val schoolName: String,
     val authorName: String,
     val systemName: String,

@@ -3,12 +3,11 @@ package tool.xfy9326.schedule.ui.fragment.settings
 import android.os.Bundle
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.os.bundleOf
-import io.github.xfy9326.atools.core.getParcelableCompat
-import io.github.xfy9326.atools.livedata.observeEvent
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.BatchResult
-import tool.xfy9326.schedule.tools.MIMEConst
+import tool.xfy9326.schedule.tools.core.getParcelableCompat
+import tool.xfy9326.schedule.tools.livedata.observeEvent
+import tool.xfy9326.schedule.tools.others.MIMEConst
 import tool.xfy9326.schedule.ui.dialog.ImportCourseConflictDialog
 import tool.xfy9326.schedule.ui.fragment.base.AbstractSettingsFragment
 import tool.xfy9326.schedule.ui.vm.SettingsViewModel
@@ -57,9 +56,10 @@ class BackupRestoreSettingsFragment : AbstractSettingsFragment() {
         viewModel.restoreScheduleFromUriResult.observeEvent(viewLifecycleOwner) {
             if (it.second) {
                 ImportCourseConflictDialog.showDialog(
-                    childFragmentManager, bundleOf(
-                        EXTRA_BATCH_RESULT to it.first
-                    )
+                    fragmentManager = childFragmentManager,
+                    value = Bundle().apply {
+                        putParcelable(EXTRA_BATCH_RESULT, it.first)
+                    }
                 )
             } else {
                 showRestoreResult(it.first)

@@ -2,15 +2,15 @@ package tool.xfy9326.schedule.ui.vm
 
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.viewModelScope
-import io.github.xfy9326.atools.livedata.MutableNotifyLiveData
-import io.github.xfy9326.atools.livedata.addAsSource
-import io.github.xfy9326.atools.livedata.postNotify
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import tool.xfy9326.schedule.beans.Course
 import tool.xfy9326.schedule.beans.Course.Companion.hasEmptyWeekNumCourseTime
 import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
+import tool.xfy9326.schedule.tools.livedata.MutableNotifyLiveData
+import tool.xfy9326.schedule.tools.livedata.addAsSource
+import tool.xfy9326.schedule.tools.livedata.postNotify
 import tool.xfy9326.schedule.ui.vm.base.AbstractViewModel
 import tool.xfy9326.schedule.utils.asDistinctLiveData
 

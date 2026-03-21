@@ -23,7 +23,7 @@ class CircleNumberButton @JvmOverloads constructor(
     init {
         elevation = resources.getDimension(R.dimen.circle_number_button_elevation)
         gravity = Gravity.CENTER
-        textAlignment = View.TEXT_ALIGNMENT_CENTER
+        textAlignment = TEXT_ALIGNMENT_CENTER
         setBackgroundResource(R.drawable.background_circle_number_button)
         setTextColor(Color.WHITE)
         setOnClickListener(this)

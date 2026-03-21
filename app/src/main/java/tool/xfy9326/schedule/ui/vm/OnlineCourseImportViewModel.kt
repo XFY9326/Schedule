@@ -2,10 +2,6 @@ package tool.xfy9326.schedule.ui.vm
 
 import android.net.Uri
 import androidx.lifecycle.viewModelScope
-import io.github.xfy9326.atools.livedata.MutableEventLiveData
-import io.github.xfy9326.atools.livedata.MutableNotifyLiveData
-import io.github.xfy9326.atools.livedata.postEvent
-import io.github.xfy9326.atools.livedata.postNotify
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.first
@@ -14,6 +10,10 @@ import tool.xfy9326.schedule.content.CourseImportConfigManager
 import tool.xfy9326.schedule.content.beans.JSConfig
 import tool.xfy9326.schedule.data.AppDataStore
 import tool.xfy9326.schedule.data.AppSettingsDataStore
+import tool.xfy9326.schedule.tools.livedata.MutableEventLiveData
+import tool.xfy9326.schedule.tools.livedata.MutableNotifyLiveData
+import tool.xfy9326.schedule.tools.livedata.postEvent
+import tool.xfy9326.schedule.tools.livedata.postNotify
 import tool.xfy9326.schedule.ui.vm.base.AbstractViewModel
 
 class OnlineCourseImportViewModel : AbstractViewModel() {

@@ -1,16 +1,16 @@
 package tool.xfy9326.schedule.utils.schedule
 
 import android.content.Context
-import io.github.xfy9326.atools.base.isEven
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.CourseTime
 import tool.xfy9326.schedule.beans.ScheduleCalculateTimes
 import tool.xfy9326.schedule.beans.WeekDay.Companion.orderedValue
-import tool.xfy9326.schedule.tools.NumberPattern
-import tool.xfy9326.schedule.tools.NumberPattern.PatternType.EMPTY
-import tool.xfy9326.schedule.tools.NumberPattern.PatternType.SERIAL
-import tool.xfy9326.schedule.tools.NumberPattern.PatternType.SINGLE
-import tool.xfy9326.schedule.tools.NumberPattern.PatternType.SPACED
+import tool.xfy9326.schedule.tools.base.isEven
+import tool.xfy9326.schedule.tools.others.NumberPattern
+import tool.xfy9326.schedule.tools.others.NumberPattern.PatternType.EMPTY
+import tool.xfy9326.schedule.tools.others.NumberPattern.PatternType.SERIAL
+import tool.xfy9326.schedule.tools.others.NumberPattern.PatternType.SINGLE
+import tool.xfy9326.schedule.tools.others.NumberPattern.PatternType.SPACED
 import tool.xfy9326.schedule.utils.CalendarUtils
 
 object WeekNumPattern {
@@ -33,11 +33,11 @@ object WeekNumPattern {
     }
 
     fun NumberPattern.getWeeksDescriptionText(context: Context) =
-        when {
-            type == EMPTY -> ""
-            type == SINGLE -> (start + 1).toString()
-            type == SERIAL -> "${start + 1}-${end + 1}"
-            type == SPACED && interval == 2 -> context.getString(
+        when (type) {
+            EMPTY -> ""
+            SINGLE -> (start + 1).toString()
+            SERIAL -> "${start + 1}-${end + 1}"
+            SPACED if interval == 2 -> context.getString(
                 // Index count from 0
                 if (start.isEven()) {
                     R.string.odd_week_description

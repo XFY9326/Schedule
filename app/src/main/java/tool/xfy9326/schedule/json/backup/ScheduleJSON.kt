@@ -6,13 +6,13 @@ import tool.xfy9326.schedule.beans.WeekDay
 import tool.xfy9326.schedule.json.ScheduleTimeJSON
 import tool.xfy9326.schedule.json.serializer.DateLongSerializer
 import tool.xfy9326.schedule.json.serializer.WeekDayShortNameSerializer
-import java.util.*
+import java.util.Date
 
 @Serializable
 data class ScheduleJSON(
     val name: String,
     val times: List<ScheduleTimeJSON>,
-    @ColorInt
+    @param:ColorInt
     val color: Int,
     @Serializable(WeekDayShortNameSerializer::class)
     val weekStart: WeekDay,

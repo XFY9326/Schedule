@@ -1,14 +1,13 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 plugins {
-    id("com.android.application") version "8.1.1" apply false
-    id("com.android.library") version "8.1.1" apply false
-    kotlin("android") version "1.9.10" apply false
-    kotlin("jvm") version "1.9.10" apply false
-    kotlin("plugin.serialization") version "1.9.10" apply false
-    id("com.google.devtools.ksp") version "1.9.10-1.0.13" apply false
+    id("com.android.application") version "9.0.1" apply false
+    id("com.android.library") version "9.0.1" apply false
+    kotlin("jvm") version "2.3.20" apply false
+    kotlin("plugin.serialization") version "2.3.20" apply false
+    id("com.google.devtools.ksp") version "2.3.6" apply false
 }
 
 tasks.register<Delete>("clean") {
-    delete(rootProject.buildDir)
+    delete(layout.buildDirectory)
 }

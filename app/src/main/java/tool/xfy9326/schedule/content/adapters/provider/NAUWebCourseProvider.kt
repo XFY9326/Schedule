@@ -1,8 +1,8 @@
 package tool.xfy9326.schedule.content.adapters.provider
 
-import io.github.xfy9326.atools.base.asArray
 import tool.xfy9326.schedule.content.base.WebCourseProvider
 import tool.xfy9326.schedule.content.beans.WebPageInfo
+import tool.xfy9326.schedule.tools.base.asArray
 
 class NAUWebCourseProvider : WebCourseProvider<Nothing>() {
     companion object {

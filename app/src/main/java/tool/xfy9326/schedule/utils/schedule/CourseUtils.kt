@@ -1,6 +1,5 @@
 package tool.xfy9326.schedule.utils.schedule
 
-import io.github.xfy9326.atools.io.IOManager
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.Course
 import tool.xfy9326.schedule.beans.Course.Companion.iterateAll
@@ -20,7 +19,8 @@ import tool.xfy9326.schedule.beans.WeekDay.Companion.isWeekend
 import tool.xfy9326.schedule.content.utils.CourseAdapterException
 import tool.xfy9326.schedule.content.utils.CourseAdapterException.Companion.report
 import tool.xfy9326.schedule.content.utils.arrangeWeekNum
-import tool.xfy9326.schedule.tools.MaterialColorHelper
+import tool.xfy9326.schedule.tools.io.IOManager
+import tool.xfy9326.schedule.tools.others.MaterialColorHelper
 import tool.xfy9326.schedule.utils.CalendarUtils
 import tool.xfy9326.schedule.utils.forEachTwo
 import java.util.TreeSet
@@ -127,11 +127,12 @@ object CourseUtils {
         Course(0, scheduleId, IOManager.resources.getString(R.string.new_course), null, MaterialColorHelper.random(), listOf(createNewCourseTime()))
 
     fun createNewCourseTime(maxWeekNum: Int = 0) =
-        CourseTime(if (maxWeekNum <= 0) {
-            BooleanArray(0)
-        } else {
-            BooleanArray(maxWeekNum) { false }
-        }, WeekDay.MONDAY, 1, 1, null)
+        CourseTime(
+            if (maxWeekNum <= 0) {
+                BooleanArray(0)
+            } else {
+                BooleanArray(maxWeekNum) { false }
+            }, WeekDay.MONDAY, 1, 1, null)
 
     fun validateCourse(course: Course, otherCourses: List<Course>): EditError? {
         if (course.name.isBlank() || course.name.isEmpty()) {

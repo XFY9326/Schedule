@@ -3,14 +3,15 @@ package tool.xfy9326.schedule.utils
 import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
+import android.os.Build
 import android.os.Bundle
 import androidx.annotation.ColorInt
 import androidx.annotation.Px
-import io.github.xfy9326.atools.core.relaunchApplication
-import io.github.xfy9326.atools.core.tryStartActivity
-import io.github.xfy9326.atools.ui.getColorCompat
-import io.github.xfy9326.atools.ui.showToast
 import tool.xfy9326.schedule.R
+import tool.xfy9326.schedule.tools.core.relaunchApplication
+import tool.xfy9326.schedule.tools.core.tryStartActivity
+import tool.xfy9326.schedule.tools.ui.getColorCompat
+import tool.xfy9326.schedule.tools.ui.showToast
 import tool.xfy9326.schedule.ui.activity.module.ScheduleLaunchModule
 
 
@@ -51,6 +52,12 @@ fun Context.getDefaultBackgroundColor() = getBackgroundColor(getColorCompat(R.co
 
 @Px
 fun Context.getActionBarSize(): Int =
-    theme.obtainStyledAttributes(intArrayOf(android.R.attr.actionBarSize)).use {
-        it.getDimension(0, 0f).toInt()
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        theme.obtainStyledAttributes(intArrayOf(android.R.attr.actionBarSize)).use {
+            it.getDimension(0, 0f).toInt()
+        }
+    } else {
+        theme.obtainStyledAttributes(intArrayOf(android.R.attr.actionBarSize)).compatUse {
+            it.getDimension(0, 0f).toInt()
+        }
     }

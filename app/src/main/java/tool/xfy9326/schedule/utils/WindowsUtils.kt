@@ -7,12 +7,13 @@ import android.os.Looper
 import android.view.PixelCopy
 import android.view.Window
 import androidx.annotation.RequiresApi
+import androidx.core.graphics.createBitmap
 import androidx.core.view.drawToBitmap
-import io.github.xfy9326.atools.ui.setLightSystemBar
+import kotlinx.coroutines.suspendCancellableCoroutine
 import tool.xfy9326.schedule.beans.SystemBarAppearance
+import tool.xfy9326.schedule.tools.ui.setLightSystemBar
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
-import kotlin.coroutines.suspendCoroutine
 
 fun Window.setSystemBarAppearance(systemBarAppearance: SystemBarAppearance) {
     when (systemBarAppearance) {
@@ -23,8 +24,8 @@ fun Window.setSystemBarAppearance(systemBarAppearance: SystemBarAppearance) {
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
-suspend fun Window.pixelCopy(config: Bitmap.Config) = suspendCoroutine {
-    val bitmap = Bitmap.createBitmap(decorView.width, decorView.height, config)
+suspend fun Window.pixelCopy(config: Bitmap.Config) = suspendCancellableCoroutine {
+    val bitmap = createBitmap(decorView.width, decorView.height, config)
     PixelCopy.request(this, bitmap, { status ->
         if (status == PixelCopy.SUCCESS) {
             it.resume(bitmap)

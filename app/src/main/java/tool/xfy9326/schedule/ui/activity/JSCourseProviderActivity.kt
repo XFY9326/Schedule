@@ -3,7 +3,6 @@ package tool.xfy9326.schedule.ui.activity
 import android.webkit.JavascriptInterface
 import android.webkit.WebView
 import androidx.lifecycle.lifecycleScope
-import io.github.xfy9326.atools.livedata.observeEvent
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -13,6 +12,7 @@ import tool.xfy9326.schedule.content.js.JSCourseParser
 import tool.xfy9326.schedule.content.js.JSCourseProvider
 import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.databinding.ActivityFragmentContainerBinding
+import tool.xfy9326.schedule.tools.livedata.observeEvent
 import tool.xfy9326.schedule.ui.activity.base.AbstractWebCourseProviderActivity
 import tool.xfy9326.schedule.ui.dialog.FullScreenLoadingDialog
 import tool.xfy9326.schedule.ui.vm.JSCourseProviderViewModel

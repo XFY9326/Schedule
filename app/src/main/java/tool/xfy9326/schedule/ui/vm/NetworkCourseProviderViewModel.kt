@@ -2,7 +2,6 @@ package tool.xfy9326.schedule.ui.vm
 
 import android.graphics.Bitmap
 import androidx.lifecycle.MutableLiveData
-import io.github.xfy9326.atools.io.utils.tryRecycle
 import kotlinx.coroutines.sync.Mutex
 import tool.xfy9326.schedule.beans.NetworkCourseImportParams
 import tool.xfy9326.schedule.beans.NetworkProviderParams
@@ -11,6 +10,7 @@ import tool.xfy9326.schedule.content.base.LoginCourseProvider
 import tool.xfy9326.schedule.content.base.NetworkCourseParser
 import tool.xfy9326.schedule.content.base.NetworkCourseProvider
 import tool.xfy9326.schedule.content.utils.CourseImportHelper
+import tool.xfy9326.schedule.tools.io.utils.tryRecycle
 import tool.xfy9326.schedule.ui.vm.base.CourseProviderViewModel
 
 class NetworkCourseProviderViewModel : CourseProviderViewModel<NetworkCourseImportParams, NetworkCourseProvider<*>, NetworkCourseParser<*>>() {
@@ -46,7 +46,8 @@ class NetworkCourseProviderViewModel : CourseProviderViewModel<NetworkCourseImpo
     }
 
     fun refreshLoginPageInfo(importOption: Int = 0): Boolean =
-        providerFunctionRunner(loginPageInfoLock,
+        providerFunctionRunner(
+            loginPageInfoLock,
             onRun = {
                 refreshProviderParams(importOption, it)
             },
@@ -74,7 +75,8 @@ class NetworkCourseProviderViewModel : CourseProviderViewModel<NetworkCourseImpo
     }
 
     fun refreshCaptcha(importOption: Int) {
-        providerFunctionRunner(loginPageInfoLock,
+        providerFunctionRunner(
+            loginPageInfoLock,
             onRun = {
                 getCaptchaImage(importOption, it)
             },

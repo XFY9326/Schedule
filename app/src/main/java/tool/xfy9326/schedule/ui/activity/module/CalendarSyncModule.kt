@@ -1,11 +1,11 @@
 package tool.xfy9326.schedule.ui.activity.module
 
 import androidx.activity.result.contract.ActivityResultContracts
-import io.github.xfy9326.atools.livedata.observeEvent
 import kotlinx.coroutines.launch
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.data.AppDataStore
 import tool.xfy9326.schedule.databinding.ActivityScheduleBinding
+import tool.xfy9326.schedule.tools.livedata.observeEvent
 import tool.xfy9326.schedule.ui.activity.ScheduleActivity
 import tool.xfy9326.schedule.ui.activity.base.AbstractViewModelActivityModule
 import tool.xfy9326.schedule.ui.vm.ScheduleViewModel

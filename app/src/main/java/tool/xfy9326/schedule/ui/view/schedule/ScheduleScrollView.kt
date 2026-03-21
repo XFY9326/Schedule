@@ -13,7 +13,7 @@ class ScheduleScrollView @JvmOverloads constructor(context: Context, attrs: Attr
         overScrollMode = OVER_SCROLL_NEVER
         isVerticalScrollBarEnabled = false
         isHorizontalScrollBarEnabled = false
-        layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+        layoutParams = ViewGroup.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
     }
 
     fun addInnerView(innerView: View) {

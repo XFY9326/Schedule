@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.annotation.CallSuper
 import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
-import io.github.xfy9326.atools.ui.removeSelf
+import tool.xfy9326.schedule.tools.ui.removeSelf
 
 abstract class ViewBindingFragment<V : ViewBinding> : Fragment() {
     private var viewBinding: V? = null

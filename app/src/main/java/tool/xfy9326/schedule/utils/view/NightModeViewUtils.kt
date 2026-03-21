@@ -3,6 +3,7 @@ package tool.xfy9326.schedule.utils.view
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
+import android.os.Bundle
 import android.view.View
 import android.view.ViewAnimationUtils
 import android.view.animation.AccelerateInterpolator
@@ -12,13 +13,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.AppCompatImageButton
 import androidx.core.animation.doOnEnd
+import androidx.core.graphics.createBitmap
 import androidx.core.graphics.drawable.toDrawable
-import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
-import io.github.xfy9326.atools.io.utils.tryRecycle
-import io.github.xfy9326.atools.ui.setListener
-import io.github.xfy9326.atools.ui.showToast
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -28,6 +26,9 @@ import tool.xfy9326.schedule.beans.NightMode.Companion.modeInt
 import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.databinding.ActivityScheduleBinding
 import tool.xfy9326.schedule.databinding.LayoutNavHeaderBinding
+import tool.xfy9326.schedule.tools.io.utils.tryRecycle
+import tool.xfy9326.schedule.tools.ui.setListener
+import tool.xfy9326.schedule.tools.ui.showToast
 import tool.xfy9326.schedule.ui.vm.ScheduleViewModel
 import tool.xfy9326.schedule.utils.drawToBitmap
 import tool.xfy9326.schedule.utils.getDefaultBackgroundColor
@@ -109,7 +110,7 @@ object NightModeViewUtils {
                 activity.window.drawToBitmap()
             } catch (e: Exception) {
                 e.printStackTrace()
-                Bitmap.createBitmap(activity.window.decorView.measuredWidth, activity.window.decorView.measuredHeight, Bitmap.Config.ALPHA_8)
+                createBitmap(activity.window.decorView.measuredWidth, activity.window.decorView.measuredHeight, Bitmap.Config.ALPHA_8)
             }
             onSaveSurface(mask)
 
@@ -142,12 +143,13 @@ object NightModeViewUtils {
             )
 
         intent.putExtra(
-            EXTRA_ANIMATE_NIGHT_MODE_CHANGED_BUNDLE, bundleOf(
-                EXTRA_START_X to startX,
-                EXTRA_START_Y to startY,
-                EXTRA_FINAL_RADIUS to finalRadius,
-                EXTRA_SET_NIGHT_MODE to setNightMode
-            )
+            EXTRA_ANIMATE_NIGHT_MODE_CHANGED_BUNDLE,
+            Bundle().apply {
+                putFloat(EXTRA_START_X, startX)
+                putFloat(EXTRA_START_Y, startY)
+                putFloat(EXTRA_FINAL_RADIUS, finalRadius)
+                putBoolean(EXTRA_SET_NIGHT_MODE, setNightMode)
+            }
         )
     }
 

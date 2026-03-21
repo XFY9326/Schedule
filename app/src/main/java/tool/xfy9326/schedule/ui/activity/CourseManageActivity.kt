@@ -4,12 +4,12 @@ import android.graphics.Color
 import android.os.Bundle
 import androidx.core.view.WindowCompat
 import com.google.android.material.snackbar.Snackbar
-import io.github.xfy9326.atools.core.startActivity
-import io.github.xfy9326.atools.livedata.observeNotify
-import io.github.xfy9326.atools.ui.setOnSingleClickListener
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.Course
 import tool.xfy9326.schedule.databinding.ActivityCourseManageBinding
+import tool.xfy9326.schedule.tools.core.startActivity
+import tool.xfy9326.schedule.tools.livedata.observeNotify
+import tool.xfy9326.schedule.tools.ui.setOnSingleClickListener
 import tool.xfy9326.schedule.ui.activity.base.ViewModelActivity
 import tool.xfy9326.schedule.ui.adapter.CourseManageAdapter
 import tool.xfy9326.schedule.ui.vm.CourseManageViewModel

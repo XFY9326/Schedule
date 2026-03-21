@@ -10,10 +10,6 @@ import androidx.core.view.WindowCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import io.github.xfy9326.atools.livedata.observeEvent
-import io.github.xfy9326.atools.livedata.observeNotify
-import io.github.xfy9326.atools.ui.setOnSingleClickListener
-import io.github.xfy9326.atools.ui.show
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import tool.xfy9326.schedule.R
@@ -22,7 +18,11 @@ import tool.xfy9326.schedule.content.beans.JSConfig
 import tool.xfy9326.schedule.content.utils.BaseCourseImportConfig
 import tool.xfy9326.schedule.data.AppDataStore
 import tool.xfy9326.schedule.databinding.ActivityOnlineCourseImportBinding
-import tool.xfy9326.schedule.tools.MIMEConst
+import tool.xfy9326.schedule.tools.livedata.observeEvent
+import tool.xfy9326.schedule.tools.livedata.observeNotify
+import tool.xfy9326.schedule.tools.others.MIMEConst
+import tool.xfy9326.schedule.tools.ui.setOnSingleClickListener
+import tool.xfy9326.schedule.tools.ui.show
 import tool.xfy9326.schedule.ui.activity.base.CourseProviderActivity
 import tool.xfy9326.schedule.ui.activity.base.ViewModelActivity
 import tool.xfy9326.schedule.ui.adapter.CourseImportAdapter
@@ -56,9 +56,9 @@ class OnlineCourseImportActivity : ViewModelActivity<OnlineCourseImportViewModel
         if (savedInstanceState == null) viewModel.pendingExternalCourseImportUrl = AppUriUtils.tryParseJSCourseImport(intent?.data)
     }
 
-    override fun onNewIntent(intent: Intent?) {
+    override fun onNewIntent(intent: Intent) {
         requireViewModel().apply {
-            pendingExternalCourseImportUrl = AppUriUtils.tryParseJSCourseImport(intent?.data)
+            pendingExternalCourseImportUrl = AppUriUtils.tryParseJSCourseImport(intent.data)
             tryShowOnlineImportAttention()
         }
         super.onNewIntent(intent)
@@ -73,7 +73,8 @@ class OnlineCourseImportActivity : ViewModelActivity<OnlineCourseImportViewModel
 
     override fun onBindLiveData(viewBinding: ActivityOnlineCourseImportBinding, viewModel: OnlineCourseImportViewModel) {
         viewModel.onlineImportAttention.observeNotify(this) {
-            DialogUtils.showOnlineImportAttentionDialog(this, true,
+            DialogUtils.showOnlineImportAttentionDialog(
+                this, true,
                 onPositive = {
                     requireViewModel().hasReadOnlineImportAttention()
                     requireViewModel().checkExternalUrlCourseImport()
@@ -167,7 +168,8 @@ class OnlineCourseImportActivity : ViewModelActivity<OnlineCourseImportViewModel
             viewModel.cancelJSConfigAdd()
             true
         }
-        JSConfigImportDialog.setOnJSConfigImportListener(supportFragmentManager, this,
+        JSConfigImportDialog.setOnJSConfigImportListener(
+            supportFragmentManager, this,
             onUrlImport = {
                 loadingController.show()
                 requireViewModel().addJSConfig(it)
@@ -187,7 +189,8 @@ class OnlineCourseImportActivity : ViewModelActivity<OnlineCourseImportViewModel
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.menu_onlineCourseImportAttention) {
-            DialogUtils.showOnlineImportAttentionDialog(this, false,
+            DialogUtils.showOnlineImportAttentionDialog(
+                this, false,
                 onNeutral = {
                     IntentUtils.openWikiUrl(this)
                 })
@@ -219,7 +222,8 @@ class OnlineCourseImportActivity : ViewModelActivity<OnlineCourseImportViewModel
     }
 
     private fun openCourseImportActivity(config: BaseCourseImportConfig) {
-        CourseImportUtils.getCourseImportMethod(config,
+        CourseImportUtils.getCourseImportMethod(
+            config,
             onInterfaceProviderError = {
                 showAttention(R.string.interface_provider_error)
             },

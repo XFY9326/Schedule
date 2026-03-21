@@ -8,16 +8,21 @@ import android.text.SpannableStringBuilder
 import android.text.TextUtils
 import android.text.style.StyleSpan
 import android.view.Gravity
-import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.core.view.setPadding
-import io.github.xfy9326.atools.ui.setOnSingleClickListener
 import tool.xfy9326.schedule.R
-import tool.xfy9326.schedule.beans.*
+import tool.xfy9326.schedule.beans.CourseCell
+import tool.xfy9326.schedule.beans.CourseCellDetailContent
+import tool.xfy9326.schedule.beans.NotThisWeekCourseShowStyle
+import tool.xfy9326.schedule.beans.SchedulePredefine
+import tool.xfy9326.schedule.beans.ScheduleStyles
+import tool.xfy9326.schedule.beans.ScheduleText
+import tool.xfy9326.schedule.beans.WeekDay
 import tool.xfy9326.schedule.beans.WeekDay.Companion.orderedValue
-import tool.xfy9326.schedule.tools.MaterialColorHelper
+import tool.xfy9326.schedule.tools.others.MaterialColorHelper
+import tool.xfy9326.schedule.tools.ui.setOnSingleClickListener
 import tool.xfy9326.schedule.utils.asStringBuilder
 import tool.xfy9326.schedule.utils.view.ViewUtils
 import kotlin.math.floor
@@ -42,7 +47,7 @@ class ScheduleCourseCellView(
         )
         isHorizontalScrollBarEnabled = false
         isVerticalScrollBarEnabled = false
-        layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        layoutParams = ViewGroup.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
 
         initView().let {
             it.layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
@@ -90,16 +95,16 @@ class ScheduleCourseCellView(
             }
 
             if (styles.horizontalCourseCellText && styles.verticalCourseCellText) {
-                textAlignment = View.TEXT_ALIGNMENT_INHERIT
+                textAlignment = TEXT_ALIGNMENT_INHERIT
                 gravity = Gravity.CENTER
             } else if (styles.verticalCourseCellText) {
-                textAlignment = View.TEXT_ALIGNMENT_VIEW_START
+                textAlignment = TEXT_ALIGNMENT_VIEW_START
                 gravity = Gravity.CENTER_VERTICAL
             } else if (styles.horizontalCourseCellText) {
-                textAlignment = View.TEXT_ALIGNMENT_INHERIT
+                textAlignment = TEXT_ALIGNMENT_INHERIT
                 gravity = Gravity.CENTER_HORIZONTAL
             } else {
-                textAlignment = View.TEXT_ALIGNMENT_VIEW_START
+                textAlignment = TEXT_ALIGNMENT_VIEW_START
             }
 
             if (styles.rowHeight != null && styles.courseCellTextLength == null) {

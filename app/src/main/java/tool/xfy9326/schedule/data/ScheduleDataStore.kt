@@ -1,13 +1,6 @@
 package tool.xfy9326.schedule.data
 
 import androidx.datastore.preferences.core.Preferences
-import io.github.xfy9326.atools.base.tryEnumSetValueOf
-import io.github.xfy9326.atools.base.tryEnumValueOf
-import io.github.xfy9326.atools.datastore.preference.booleanPrefKey
-import io.github.xfy9326.atools.datastore.preference.intPrefKey
-import io.github.xfy9326.atools.datastore.preference.stringPrefKey
-import io.github.xfy9326.atools.datastore.preference.stringSetPrefKey
-import io.github.xfy9326.atools.io.IOManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
@@ -22,58 +15,65 @@ import tool.xfy9326.schedule.beans.SystemBarAppearance
 import tool.xfy9326.schedule.beans.WeekDay
 import tool.xfy9326.schedule.data.base.AbstractDataStore
 import tool.xfy9326.schedule.io.FileManager
+import tool.xfy9326.schedule.tools.base.tryEnumSetValueOf
+import tool.xfy9326.schedule.tools.base.tryEnumValueOf
+import tool.xfy9326.schedule.tools.datastore.preference.key.booleanKey
+import tool.xfy9326.schedule.tools.datastore.preference.key.intKey
+import tool.xfy9326.schedule.tools.datastore.preference.key.stringKey
+import tool.xfy9326.schedule.tools.datastore.preference.key.stringSetKey
+import tool.xfy9326.schedule.tools.io.IOManager
 import java.io.File
 
 object ScheduleDataStore : AbstractDataStore("ScheduleSettings") {
-    private val defaultFirstDayOfWeek by stringPrefKey()
-    private val scheduleViewAlpha by intPrefKey()
-    private val forceShowWeekendColumn by booleanPrefKey()
-    private val showNotThisWeekCourse by booleanPrefKey()
-    private val customScheduleTextColor by booleanPrefKey()
-    private val cornerScreenMargin by booleanPrefKey()
-    private val highlightShowTodayCell by booleanPrefKey()
-    private val scheduleBackgroundImage by stringPrefKey()
-    private val scheduleBackgroundImageQuality by intPrefKey()
-    private val scheduleBackgroundImageAlpha by intPrefKey()
-    private val enableScheduleBackground by booleanPrefKey()
-    private val scheduleBackgroundScaleType by stringPrefKey()
-    private val scheduleSystemBarAppearance by stringPrefKey()
-    private val scheduleBackgroundUseAnim by booleanPrefKey()
-    private val showScheduleTimes by booleanPrefKey()
-    private val horizontalCourseCellText by booleanPrefKey()
-    private val verticalCourseCellText by booleanPrefKey()
-    private val enableScheduleGridScroll by booleanPrefKey()
-    private val notThisWeekCourseCellAlpha by intPrefKey()
-    private val courseCellTextNoNewLine by booleanPrefKey()
-    private val courseCellDetailContent by stringSetPrefKey()
-    private val courseCellFullScreenSameHeight by booleanPrefKey()
-    private val courseCellFullScreenWithBottomInsets by booleanPrefKey()
+    private val defaultFirstDayOfWeek by stringKey()
+    private val scheduleViewAlpha by intKey()
+    private val forceShowWeekendColumn by booleanKey()
+    private val showNotThisWeekCourse by booleanKey()
+    private val customScheduleTextColor by booleanKey()
+    private val cornerScreenMargin by booleanKey()
+    private val highlightShowTodayCell by booleanKey()
+    private val scheduleBackgroundImage by stringKey()
+    private val scheduleBackgroundImageQuality by intKey()
+    private val scheduleBackgroundImageAlpha by intKey()
+    private val enableScheduleBackground by booleanKey()
+    private val scheduleBackgroundScaleType by stringKey()
+    private val scheduleSystemBarAppearance by stringKey()
+    private val scheduleBackgroundUseAnim by booleanKey()
+    private val showScheduleTimes by booleanKey()
+    private val horizontalCourseCellText by booleanKey()
+    private val verticalCourseCellText by booleanKey()
+    private val enableScheduleGridScroll by booleanKey()
+    private val notThisWeekCourseCellAlpha by intKey()
+    private val courseCellTextNoNewLine by booleanKey()
+    private val courseCellDetailContent by stringSetKey()
+    private val courseCellFullScreenSameHeight by booleanKey()
+    private val courseCellFullScreenWithBottomInsets by booleanKey()
 
-    val courseCellVerticalPadding by intPrefKey()
-    val courseCellHorizontalPadding by intPrefKey()
+    val courseCellVerticalPadding by intKey()
+    val courseCellHorizontalPadding by intKey()
 
-    val timeTextColor by intPrefKey()
-    val toolBarTintColor by intPrefKey()
-    val highlightShowTodayCellColor by intPrefKey()
-    val notThisWeekCourseShowStyle by stringSetPrefKey()
+    val timeTextColor by intKey()
+    val toolBarTintColor by intKey()
+    val highlightShowTodayCellColor by intKey()
+    val notThisWeekCourseShowStyle by stringSetKey()
 
-    private val courseCellAutoHeight by booleanPrefKey()
-    val courseCellHeight by intPrefKey()
-    private val courseCellAutoTextLength by booleanPrefKey()
-    val courseCellTextLength by intPrefKey()
-    private val courseCellShowAllCourseText by booleanPrefKey()
-    val courseCellCourseTextLength by intPrefKey()
+    private val courseCellAutoHeight by booleanKey()
+    val courseCellHeight by intKey()
+    private val courseCellAutoTextLength by booleanKey()
+    val courseCellTextLength by intKey()
+    private val courseCellShowAllCourseText by booleanKey()
+    val courseCellCourseTextLength by intKey()
 
-    val courseTextSize by intPrefKey()
-    val scheduleTimeTextSize by intPrefKey()
-    val scheduleNumberTextSize by intPrefKey()
-    val headerMonthTextSize by intPrefKey()
-    val headerMonthDateTextSize by intPrefKey()
-    val headerWeekDayTextSize by intPrefKey()
+    val courseTextSize by intKey()
+    val scheduleTimeTextSize by intKey()
+    val scheduleNumberTextSize by intKey()
+    val headerMonthTextSize by intKey()
+    val headerMonthDateTextSize by intKey()
+    val headerWeekDayTextSize by intKey()
 
     suspend fun resetScheduleTextSize() {
         edit {
-            for (value in ScheduleText.values()) {
+            for (value in ScheduleText.entries) {
                 it.remove(value.prefKey)
             }
         }

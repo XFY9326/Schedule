@@ -4,14 +4,14 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
-import io.github.xfy9326.atools.core.startActivity
-import io.github.xfy9326.atools.ui.showToast
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.data.AppDataStore
+import tool.xfy9326.schedule.tools.core.startActivity
+import tool.xfy9326.schedule.tools.ui.showToast
 import tool.xfy9326.schedule.ui.activity.AppErrorActivity
 import tool.xfy9326.schedule.ui.activity.ScheduleActivity
 import tool.xfy9326.schedule.ui.activity.base.AbstractActivityModule
@@ -83,7 +83,8 @@ class ScheduleLaunchModule(activity: ScheduleActivity) : AbstractActivityModule<
 
     fun checkUpgrade() {
         if (isFirstLaunch) {
-            UpgradeUtils.checkUpgrade(requireActivity(), false,
+            UpgradeUtils.checkUpgrade(
+                requireActivity(), false,
                 onFoundUpgrade = { UpgradeDialog.showDialog(requireActivity().supportFragmentManager, it) }
             )
         }
