@@ -75,6 +75,14 @@
             app:title="@string/show_schedule_times" />
 
         <androidx.preference.CheckBoxPreference
+            app:defaultValue="false"
+            app:iconSpaceReserved="false"
+            app:key="showScheduleCornerWeekNum"
+            app:summaryOff="@string/show_ween_num_in_corner_sum_disabled"
+            app:summaryOn="@string/show_ween_num_in_corner_sum_enabled"
+            app:title="@string/show_ween_num_in_corner" />
+
+        <androidx.preference.CheckBoxPreference
             app:defaultValue="true"
             app:disableDependentsState="true"
             app:iconSpaceReserved="false"

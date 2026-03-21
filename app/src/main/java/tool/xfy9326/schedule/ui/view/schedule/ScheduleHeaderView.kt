@@ -27,6 +27,7 @@ import kotlin.math.max
 @SuppressLint("ViewConstructor")
 class ScheduleHeaderView(
     context: Context,
+    private val weekNum: Int,
     private val days: Array<Day>,
     private val predefine: SchedulePredefine,
     private val styles: ScheduleStyles,
@@ -43,7 +44,7 @@ class ScheduleHeaderView(
 
     init {
         alpha = styles.scheduleViewAlpha
-        buildMonthView(days[0].month, styles).also {
+        buildCornerView(styles).also {
             addViewInLayout(it, -1, it.layoutParams, true)
         }
         repeat(days.size) { i ->
@@ -60,10 +61,14 @@ class ScheduleHeaderView(
         this.xRecords = xRecords
     }
 
-    private fun buildMonthView(month: Int, styles: ScheduleStyles) =
+    private fun buildCornerView(styles: ScheduleStyles) =
         AppCompatTextView(context).apply {
-            text = context.getString(R.string.month, month)
-            textSize = styles.textSize[ScheduleText.HEADER_MONTH_TEXT]
+            text = if (styles.showScheduleCornerWeekNum) {
+                weekNum.toString()
+            } else {
+                context.getString(R.string.month, days.first().month)
+            }
+            textSize = styles.textSize[ScheduleText.HEADER_CORNER_TEXT]
             setTextColor(styles.getTimeTextColor(context))
             typeface = Typeface.defaultFromStyle(Typeface.BOLD)
 

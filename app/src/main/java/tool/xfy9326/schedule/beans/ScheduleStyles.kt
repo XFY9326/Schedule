@@ -23,6 +23,7 @@ data class ScheduleStyles(
     @param:ColorInt
     private val highlightShowTodayCellColor: Int?, // null -> default
     val showScheduleTimes: Boolean,
+    val showScheduleCornerWeekNum: Boolean,
     val horizontalCourseCellText: Boolean,
     val verticalCourseCellText: Boolean,
     val notThisWeekCourseShowStyle: Set<NotThisWeekCourseShowStyle>,

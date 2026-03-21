@@ -225,6 +225,9 @@
     <string name="empty_schedule_list">没有可选的课表！</string>
     <string name="show_schedule_times">显示课程时间</string>
     <string name="show_schedule_times_sum">在课程时间列里显示课程时间</string>
+    <string name="show_ween_num_in_corner">在表头角落展示周数</string>
+    <string name="show_ween_num_in_corner_sum_enabled">当前展示内容：周数</string>
+    <string name="show_ween_num_in_corner_sum_disabled">当前展示内容：月份</string>
     <string name="horizontal_course_cell_text">水平居中课程格文字</string>
     <string name="horizontal_course_cell_text_sum">横向居中显示课程格内的文字</string>
     <string name="vertical_course_cell_text">竖直居中课程格文字</string>
@@ -404,8 +407,8 @@
     <string name="schedule_time_text_size_sum">调整课表上下课时间的文字大小</string>
     <string name="schedule_number_text_size">课程节次文字大小</string>
     <string name="schedule_number_text_size_sum">调整课程节数序号的文字大小</string>
-    <string name="schedule_header_month_text_size">课表表头月份文字大小</string>
-    <string name="schedule_header_month_text_size_sum">调整顶部月份的文字大小</string>
+    <string name="schedule_header_corner_text_size">课表表头角落文字大小</string>
+    <string name="schedule_header_corner_text_size_sum">调整顶部角落的文字大小</string>
     <string name="schedule_header_month_date_text_size">课表表头日期文字大小</string>
     <string name="schedule_header_month_date_text_size_sum">调整每列顶部日期的文字大小</string>
     <string name="schedule_header_weekday_text_size">课表表头星期文字大小</string>

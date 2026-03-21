@@ -40,6 +40,7 @@ object ScheduleDataStore : AbstractDataStore("ScheduleSettings") {
     private val scheduleSystemBarAppearance by stringKey()
     private val scheduleBackgroundUseAnim by booleanKey()
     private val showScheduleTimes by booleanKey()
+    private val showScheduleCornerWeekNum by booleanKey()
     private val horizontalCourseCellText by booleanKey()
     private val verticalCourseCellText by booleanKey()
     private val enableScheduleGridScroll by booleanKey()
@@ -67,7 +68,7 @@ object ScheduleDataStore : AbstractDataStore("ScheduleSettings") {
     val courseTextSize by intKey()
     val scheduleTimeTextSize by intKey()
     val scheduleNumberTextSize by intKey()
-    val headerMonthTextSize by intKey()
+    val headerCornerTextSize by intKey()
     val headerMonthDateTextSize by intKey()
     val headerWeekDayTextSize by intKey()
 
@@ -97,6 +98,7 @@ object ScheduleDataStore : AbstractDataStore("ScheduleSettings") {
             highlightShowTodayCell = it[highlightShowTodayCell] ?: true,
             highlightShowTodayCellColor = if (it[customScheduleTextColor] == true) it[highlightShowTodayCellColor] else null,
             showScheduleTimes = it[showScheduleTimes] ?: true,
+            showScheduleCornerWeekNum = it[showScheduleCornerWeekNum] ?: false,
             horizontalCourseCellText = it[horizontalCourseCellText] ?: false,
             verticalCourseCellText = it[verticalCourseCellText] ?: false,
             notThisWeekCourseShowStyle = it[notThisWeekCourseShowStyle]?.let { value -> tryEnumSetValueOf(value) }

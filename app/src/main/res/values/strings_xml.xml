@@ -32,7 +32,7 @@
     <string name="pref_schedule_course_text_size" translatable="false">ScheduleCourseTextSize</string>
     <string name="pref_schedule_time_text_size" translatable="false">ScheduleTimeTextSize</string>
     <string name="pref_schedule_number_text_size" translatable="false">ScheduleNumberTextSize</string>
-    <string name="pref_schedule_header_month_text_size" translatable="false">HeaderMonthTextSize</string>
+    <string name="pref_schedule_header_corner_text_size" translatable="false">HeaderCornerTextSize</string>
     <string name="pref_schedule_header_month_date_text_size" translatable="false">HeaderMonthDateTextSize</string>
     <string name="pref_schedule_header_weekday_text_size" translatable="false">HeaderWeekdayTextSize</string>
     <string name="pref_schedule_text_size_reset" translatable="false">ScheduleTextSizeReset</string>

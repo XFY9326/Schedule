@@ -23,7 +23,7 @@ class ScheduleTextSettingsFragment : AbstractSettingsFragment() {
         bindScheduleTextSizeDialog(R.string.pref_schedule_course_text_size, ScheduleText.COURSE_TEXT)
         bindScheduleTextSizeDialog(R.string.pref_schedule_time_text_size, ScheduleText.SCHEDULE_TIME_TEXT)
         bindScheduleTextSizeDialog(R.string.pref_schedule_number_text_size, ScheduleText.SCHEDULE_NUMBER_TEXT)
-        bindScheduleTextSizeDialog(R.string.pref_schedule_header_month_text_size, ScheduleText.HEADER_MONTH_TEXT)
+        bindScheduleTextSizeDialog(R.string.pref_schedule_header_corner_text_size, ScheduleText.HEADER_CORNER_TEXT)
         bindScheduleTextSizeDialog(R.string.pref_schedule_header_month_date_text_size, ScheduleText.HEADER_MONTH_DATE_TEXT)
         bindScheduleTextSizeDialog(R.string.pref_schedule_header_weekday_text_size, ScheduleText.HEADER_WEEKDAY_TEXT)
         setOnPrefClickListener(R.string.pref_schedule_text_size_reset) {

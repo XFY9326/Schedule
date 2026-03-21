@@ -15,7 +15,7 @@ enum class ScheduleText(val prefKey: Preferences.Key<Int>, @param:IntegerRes pri
     COURSE_TEXT(ScheduleDataStore.courseTextSize, R.integer.schedule_course_default_text_size),
     SCHEDULE_TIME_TEXT(ScheduleDataStore.scheduleTimeTextSize, R.integer.schedule_time_default_text_size),
     SCHEDULE_NUMBER_TEXT(ScheduleDataStore.scheduleNumberTextSize, R.integer.schedule_number_default_text_size),
-    HEADER_MONTH_TEXT(ScheduleDataStore.headerMonthTextSize, R.integer.schedule_header_month_default_text_size),
+    HEADER_CORNER_TEXT(ScheduleDataStore.headerCornerTextSize, R.integer.schedule_header_corner_default_text_size),
     HEADER_MONTH_DATE_TEXT(ScheduleDataStore.headerMonthDateTextSize, R.integer.schedule_header_month_date_default_text_size),
     HEADER_WEEKDAY_TEXT(ScheduleDataStore.headerWeekDayTextSize, R.integer.schedule_header_weekday_default_text_size);
 

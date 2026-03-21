@@ -115,7 +115,7 @@ object ScheduleViewHelper {
 
             val scheduleHeaderViewDeferred = async {
                 val days = CourseTimeUtils.getDayInWeek(viewData.weekNum, viewData.startDate, viewData.weekStart, showWeekend)
-                ScheduleHeaderView(context, days, schedulePredefine, viewData.styles)
+                ScheduleHeaderView(context, viewData.weekNum, days, schedulePredefine, viewData.styles)
             }
 
             val columnAmount = if (showWeekend) MAX_SCHEDULE_COLUMN_COUNT else MIN_SCHEDULE_COLUMN_COUNT

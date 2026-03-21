@@ -48,10 +48,10 @@
 
         <androidx.preference.Preference
             app:iconSpaceReserved="false"
-            app:key="@string/pref_schedule_header_month_text_size"
+            app:key="@string/pref_schedule_header_corner_text_size"
             app:persistent="false"
-            app:summary="@string/schedule_header_month_text_size_sum"
-            app:title="@string/schedule_header_month_text_size" />
+            app:summary="@string/schedule_header_corner_text_size_sum"
+            app:title="@string/schedule_header_corner_text_size" />
 
         <androidx.preference.Preference
             app:iconSpaceReserved="false"
