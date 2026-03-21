@@ -2,7 +2,6 @@ package tool.xfy9326.schedule.ui.dialog
 
 import android.app.Dialog
 import android.os.Bundle
-import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.LifecycleOwner
@@ -31,11 +30,11 @@ class ScheduleControlPanel : BottomSheetDialogFragment() {
             if (fragmentManager.findFragmentByTag(DIALOG_TAG) != null) return
 
             ScheduleControlPanel().apply {
-                arguments = bundleOf(
-                    ARGUMENT_CURRENT_SHOW_WEEK_NUM to currentShowWeekNum,
-                    ARGUMENT_NOW_WEEK_NUM to nowWeekNum,
-                    ARGUMENT_MAX_WEEK_NUM to maxWeekNum,
-                )
+                arguments = Bundle().apply {
+                    putInt(ARGUMENT_CURRENT_SHOW_WEEK_NUM, currentShowWeekNum)
+                    putInt(ARGUMENT_NOW_WEEK_NUM, nowWeekNum)
+                    putInt(ARGUMENT_MAX_WEEK_NUM, maxWeekNum)
+                }
             }.show(fragmentManager, DIALOG_TAG)
         }
 
@@ -84,9 +83,10 @@ class ScheduleControlPanel : BottomSheetDialogFragment() {
 
     private fun changeShowWeekNum(value: Float) {
         setFragmentResult(
-            DIALOG_TAG, bundleOf(
-                EXTRA_SCROLL_TO_WEEK to value.toInt()
-            )
+            requestKey = DIALOG_TAG,
+            result = Bundle().apply {
+                putInt(EXTRA_SCROLL_TO_WEEK, value.toInt())
+            }
         )
     }
 }

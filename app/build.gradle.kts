@@ -17,8 +17,8 @@ android {
         applicationId = "tool.xfy9326.schedule"
         minSdk = 23
         targetSdk = 36
-        versionCode = 42
-        versionName = "1.5.2"
+        versionCode = 43
+        versionName = "1.5.3"
 
         buildConfigField("String", "BASE_APPLICATION_ID", "\"${applicationId.orEmpty()}\"")
         buildConfigField("String", "PROJECT_NAME", "\"${projectName}\"")
@@ -35,18 +35,20 @@ android {
             resources.excludes.addAll(
                 arrayOf(
                     "META-INF/*.version",
+                    "META-INF/**/license",
+                    "META-INF/**/license.txt",
+                    "META-INF/**/LICENSE",
+                    "META-INF/**/LICENSE.txt",
+                    "META-INF/**/notice",
+                    "META-INF/**/notice.txt",
+                    "META-INF/**/NOTICE",
+                    "META-INF/**/NOTICE.txt",
                     "META-INF/CHANGES",
                     "META-INF/README.md",
-                    "okhttp3/internal/publicsuffix/NOTICE",
                     "META-INF/DEPENDENCIES",
-                    "META-INF/LICENSE",
-                    "META-INF/LICENSE.txt",
-                    "META-INF/license.txt",
-                    "META-INF/NOTICE",
-                    "META-INF/NOTICE.txt",
-                    "META-INF/notice.txt",
                     "META-INF/ASL2.0",
-                    "META-INF/INDEX.LIST"
+                    "META-INF/INDEX.LIST",
+                    "META-INF/native-image/**/*"
                 )
             )
         }

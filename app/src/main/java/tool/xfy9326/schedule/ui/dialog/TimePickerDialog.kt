@@ -4,7 +4,6 @@ import android.app.TimePickerDialog
 import android.os.Bundle
 import android.widget.TimePicker
 import androidx.appcompat.app.AppCompatDialogFragment
-import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.LifecycleOwner
@@ -20,12 +19,12 @@ class TimePickerDialog : AppCompatDialogFragment(), TimePickerDialog.OnTimeSetLi
 
         fun showDialog(fragmentManager: FragmentManager, tag: String?, hour: Int, minute: Int, is24HourView: Boolean) {
             TimePickerDialog().apply {
-                arguments = bundleOf(
-                    EXTRA_TAG to tag,
-                    EXTRA_HOUR to hour,
-                    EXTRA_MINUTE to minute,
-                    EXTRA_IS_24_HOUR_VIEW to is24HourView
-                )
+                arguments = Bundle().apply {
+                    putString(EXTRA_TAG, tag)
+                    putInt(EXTRA_HOUR, hour)
+                    putInt(EXTRA_MINUTE, minute)
+                    putBoolean(EXTRA_IS_24_HOUR_VIEW, is24HourView)
+                }
             }.show(fragmentManager, tag)
         }
 
@@ -51,11 +50,12 @@ class TimePickerDialog : AppCompatDialogFragment(), TimePickerDialog.OnTimeSetLi
 
     override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
         setFragmentResult(
-            DIALOG_TAG, bundleOf(
-                EXTRA_TAG to requireArguments().getString(EXTRA_TAG),
-                EXTRA_HOUR to hourOfDay,
-                EXTRA_MINUTE to minute
-            )
+            requestKey = DIALOG_TAG,
+            result = Bundle().apply {
+                putString(EXTRA_TAG, requireArguments().getString(EXTRA_TAG))
+                putInt(EXTRA_HOUR, hourOfDay)
+                putInt(EXTRA_MINUTE, minute)
+            }
         )
     }
 }

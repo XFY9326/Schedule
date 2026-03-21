@@ -2,7 +2,6 @@ package tool.xfy9326.schedule.ui.dialog
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatDialogFragment
-import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import tool.xfy9326.schedule.R
@@ -15,10 +14,10 @@ class StrictImportModeWarningDialog : AppCompatDialogFragment() {
 
         fun showDialog(fragmentManager: FragmentManager, errorText: String, errorLog: String?) {
             StrictImportModeWarningDialog().apply {
-                arguments = bundleOf(
-                    EXTRA_ERROR_TEXT to errorText,
-                    EXTRA_ERROR_LOG to errorLog
-                )
+                arguments = Bundle().apply {
+                    putString(EXTRA_ERROR_TEXT, errorText)
+                    putString(EXTRA_ERROR_LOG, errorLog)
+                }
             }.show(fragmentManager, DIALOG_TAG)
         }
     }

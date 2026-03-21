@@ -2,7 +2,6 @@ package tool.xfy9326.schedule.ui.dialog
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatDialogFragment
-import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.LifecycleOwner
@@ -28,13 +27,13 @@ class MultiItemSelectDialog : AppCompatDialogFragment() {
         ) {
             require(showArr.size == selectedArr.size && showArr.size == idArr.size)
             MultiItemSelectDialog().apply {
-                arguments = bundleOf(
-                    EXTRA_TAG to tag,
-                    EXTRA_TITLE to title,
-                    EXTRA_SHOW_ARR to showArr,
-                    EXTRA_ID_ARR to idArr,
-                    EXTRA_SELECTED_ARR to selectedArr
-                )
+                arguments = Bundle().apply {
+                    putString(EXTRA_TAG, tag)
+                    putString(EXTRA_TITLE, title)
+                    putStringArray(EXTRA_SHOW_ARR, showArr)
+                    putLongArray(EXTRA_ID_ARR, idArr)
+                    putBooleanArray(EXTRA_SELECTED_ARR, selectedArr)
+                }
             }.show(fragmentManager, tag)
         }
 
@@ -70,11 +69,12 @@ class MultiItemSelectDialog : AppCompatDialogFragment() {
             setNegativeButton(android.R.string.cancel, null)
             setPositiveButton(android.R.string.ok) { _, _ ->
                 setFragmentResult(
-                    DIALOG_TAG, bundleOf(
-                        EXTRA_TAG to requireArguments().getString(EXTRA_TAG),
-                        EXTRA_ID_ARR to idArr,
-                        EXTRA_SELECTED_ARR to selectedArr
-                    )
+                    requestKey = DIALOG_TAG,
+                    result = Bundle().apply {
+                        putString(EXTRA_TAG, requireArguments().getString(EXTRA_TAG))
+                        putLongArray(EXTRA_ID_ARR, idArr)
+                        putBooleanArray(EXTRA_SELECTED_ARR, selectedArr)
+                    }
                 )
             }
         }.create()

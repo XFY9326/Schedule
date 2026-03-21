@@ -3,7 +3,6 @@ package tool.xfy9326.schedule.ui.activity.base
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.annotation.CallSuper
-import androidx.core.os.bundleOf
 import androidx.core.view.WindowCompat
 import androidx.fragment.app.commitNow
 import tool.xfy9326.schedule.R
@@ -44,10 +43,10 @@ abstract class AbstractWebCourseProviderActivity<I, P1 : AbstractCourseProvider<
     override fun onInitView(viewBinding: ActivityFragmentContainerBinding, viewModel: M) {
         super.onInitView(viewBinding, viewModel)
         iFragmentContact = WebCourseProviderFragment().apply {
-            arguments = bundleOf(
-                WebCourseProviderFragment.EXTRA_INIT_PAGE_URL to viewModel.initPageUrl,
-                WebCourseProviderFragment.EXTRA_AUTHOR_NAME to viewModel.authorName
-            )
+            arguments = Bundle().apply {
+                putString(WebCourseProviderFragment.EXTRA_INIT_PAGE_URL, viewModel.initPageUrl)
+                putString(WebCourseProviderFragment.EXTRA_AUTHOR_NAME, viewModel.authorName)
+            }
             supportFragmentManager.commitNow {
                 replace(R.id.fragmentContainer, this@apply)
             }

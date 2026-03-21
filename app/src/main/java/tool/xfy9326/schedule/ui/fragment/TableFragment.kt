@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import androidx.core.os.bundleOf
 import androidx.core.view.children
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -28,9 +27,9 @@ class TableFragment : Fragment(), Observer<ScheduleBuildBundle> {
         private const val ARGUMENT_WEEK_NUM = "ARGUMENT_WEEK_NUM"
 
         fun create(weekNum: Int) = TableFragment().apply {
-            arguments = bundleOf(
-                ARGUMENT_WEEK_NUM to weekNum
-            )
+            arguments = Bundle().apply {
+                putInt(ARGUMENT_WEEK_NUM, weekNum)
+            }
         }
     }
 
