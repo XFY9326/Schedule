@@ -17,14 +17,12 @@ fun WebView.bindLifeCycle(lifecycleOwner: LifecycleOwner) {
         }
 
         override fun onDestroy(owner: LifecycleOwner) {
-            try {
+            runCatching {
                 removeSelf()
                 stopLoading()
                 settings.javaScriptEnabled = false
                 removeAllViews()
                 destroy()
-            } catch (e: Exception) {
-                // Ignore
             }
             lifecycleOwner.lifecycle.removeObserver(this)
         }

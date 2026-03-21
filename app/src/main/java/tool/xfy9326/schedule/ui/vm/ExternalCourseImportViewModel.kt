@@ -55,6 +55,7 @@ class ExternalCourseImportViewModel : AbstractViewModel() {
                 try {
                     it.readText()
                 } catch (e: Exception) {
+                    e.printStackTrace()
                     CourseAdapterException.Error.PARSE_PAGE_ERROR.report(msg = "Failed to read $it")
                 }
             }

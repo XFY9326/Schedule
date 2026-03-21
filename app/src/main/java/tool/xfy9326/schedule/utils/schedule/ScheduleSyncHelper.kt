@@ -8,7 +8,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.withContext
-import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.BatchResult
 import tool.xfy9326.schedule.beans.CalendarEventDescription
 import tool.xfy9326.schedule.beans.Course
@@ -17,14 +16,13 @@ import tool.xfy9326.schedule.beans.CourseTime
 import tool.xfy9326.schedule.beans.Schedule
 import tool.xfy9326.schedule.beans.ScheduleCalculateTimes
 import tool.xfy9326.schedule.beans.ScheduleSync
-import tool.xfy9326.schedule.beans.SectionTime.Companion.description
 import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.db.provider.ScheduleDBProvider
 import tool.xfy9326.schedule.tools.base.asArray
 import tool.xfy9326.schedule.tools.coroutines.withTryLock
 import tool.xfy9326.schedule.tools.io.IOManager
 import tool.xfy9326.schedule.tools.others.NumberPattern
-import tool.xfy9326.schedule.utils.NEW_LINE
+import tool.xfy9326.schedule.utils.CalendarEventUtils
 import tool.xfy9326.schedule.utils.PROJECT_ID
 import tool.xfy9326.schedule.utils.ics.ScheduleICSWriter
 import java.util.Date
@@ -252,21 +250,12 @@ object ScheduleSyncHelper {
             put(CalendarContract.Events.TITLE, course.name)
             put(CalendarContract.Events.EVENT_TIMEZONE, TIMEZONE_ID)
             put(CalendarContract.Events.EVENT_COLOR, course.color)
-            val descriptionLines = mutableListOf<String>()
-            if (CalendarEventDescription.SECTIONS in eventDescriptions) {
-                descriptionLines.add(IOManager.resources.getString(R.string.ics_description_sections, courseTime.sectionTime.description))
-            }
-            course.teacher?.takeIf { CalendarEventDescription.TEACHER in eventDescriptions }?.let {
-                descriptionLines.add(IOManager.resources.getString(R.string.ics_description_teacher, it))
-            }
             courseTime.location?.let {
                 put(CalendarContract.Events.EVENT_LOCATION, it)
-                if (CalendarEventDescription.LOCATION in eventDescriptions) {
-                    descriptionLines.add(IOManager.resources.getString(R.string.ics_description_location, it))
-                }
             }
-            if (descriptionLines.isNotEmpty()) {
-                put(CalendarContract.Events.DESCRIPTION, descriptionLines.joinToString(NEW_LINE))
+            val description = CalendarEventUtils.getEventDescription(course, courseTime, eventDescriptions)
+            if (description != null) {
+                put(CalendarContract.Events.DESCRIPTION, description)
             }
         }
     }

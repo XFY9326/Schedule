@@ -2,19 +2,22 @@ package tool.xfy9326.schedule.utils.ics
 
 import android.content.Context
 import android.net.Uri
+import kotlinx.coroutines.flow.first
 import tool.xfy9326.schedule.R
+import tool.xfy9326.schedule.beans.CalendarEventDescription
 import tool.xfy9326.schedule.beans.Course
 import tool.xfy9326.schedule.beans.Course.Companion.iterateAll
 import tool.xfy9326.schedule.beans.CourseTime
 import tool.xfy9326.schedule.beans.Schedule
 import tool.xfy9326.schedule.beans.ScheduleCalculateTimes
-import tool.xfy9326.schedule.tools.io.IOManager
+import tool.xfy9326.schedule.data.AppSettingsDataStore
 import tool.xfy9326.schedule.tools.io.okio.writeTextAsync
 import tool.xfy9326.schedule.tools.others.NumberPattern.PatternType.EMPTY
 import tool.xfy9326.schedule.tools.others.NumberPattern.PatternType.MESSY
 import tool.xfy9326.schedule.tools.others.NumberPattern.PatternType.SERIAL
 import tool.xfy9326.schedule.tools.others.NumberPattern.PatternType.SINGLE
 import tool.xfy9326.schedule.tools.others.NumberPattern.PatternType.SPACED
+import tool.xfy9326.schedule.utils.CalendarEventUtils
 import tool.xfy9326.schedule.utils.schedule.CourseTimeUtils
 import tool.xfy9326.schedule.utils.schedule.WeekNumPattern
 
@@ -26,10 +29,11 @@ class ScheduleICSHelper(schedule: Schedule, private val courses: List<Course>) {
     private val scheduleCalculateTimes = ScheduleCalculateTimes(schedule)
 
     suspend fun dumpICS(uri: Uri): Boolean {
+        val eventDescriptions = AppSettingsDataStore.calendarEventDescriptionsFlow.first()
         try {
             val iCal = ScheduleICSWriter()
             courses.iterateAll { course, courseTime ->
-                createCourseTimeVEvent(iCal, course, courseTime)
+                createCourseTimeVEvent(iCal, course, courseTime, eventDescriptions)
             }
             return uri.writeTextAsync(iCal.build()).isSuccess
         } catch (e: Exception) {
@@ -38,12 +42,23 @@ class ScheduleICSHelper(schedule: Schedule, private val courses: List<Course>) {
         return false
     }
 
-    private fun createCourseTimeVEvent(iCal: ScheduleICSWriter, course: Course, courseTime: CourseTime) {
+    private fun createCourseTimeVEvent(
+        iCal: ScheduleICSWriter,
+        course: Course,
+        courseTime: CourseTime,
+        eventDescriptions: Set<CalendarEventDescription>
+    ) {
         val weekNumPattern = WeekNumPattern.parsePattern(courseTime, scheduleCalculateTimes)
         when (weekNumPattern.type) {
             SINGLE -> {
                 CourseTimeUtils.getRealSectionTime(scheduleCalculateTimes, weekNumPattern.start + 1, courseTime.sectionTime).let { time ->
-                    iCal.addEvent(time.first, time.second, course.name, courseTime.location, getEventDescription(course))
+                    iCal.addEvent(
+                        startDate = time.first,
+                        endDate = time.second,
+                        summary = course.name,
+                        location = courseTime.location,
+                        description = CalendarEventUtils.getEventDescription(course, courseTime, eventDescriptions)
+                    )
                 }
             }
 
@@ -56,7 +71,14 @@ class ScheduleICSHelper(schedule: Schedule, private val courses: List<Course>) {
                             courseTime.sectionTime.weekDay,
                             scheduleCalculateTimes.weekStart
                         )
-                        iCal.addEvent(time.first, time.second, course.name, courseTime.location, getEventDescription(course), rrule)
+                        iCal.addEvent(
+                            startDate = time.first,
+                            endDate = time.second,
+                            summary = course.name,
+                            location = courseTime.location,
+                            description = CalendarEventUtils.getEventDescription(course, courseTime, eventDescriptions),
+                            rrule = rrule
+                        )
                     }
             }
 
@@ -69,7 +91,14 @@ class ScheduleICSHelper(schedule: Schedule, private val courses: List<Course>) {
                             } else {
                                 null
                             }
-                        iCal.addEvent(time.first, time.second, course.name, courseTime.location, getEventDescription(course), rrule)
+                        iCal.addEvent(
+                            startDate = time.first,
+                            endDate = time.second,
+                            summary = course.name,
+                            location = courseTime.location,
+                            description = CalendarEventUtils.getEventDescription(course, courseTime, eventDescriptions),
+                            rrule = rrule
+                        )
                     }
                 }
             }
@@ -77,11 +106,4 @@ class ScheduleICSHelper(schedule: Schedule, private val courses: List<Course>) {
             EMPTY -> Unit
         }
     }
-
-    private fun getEventDescription(course: Course) =
-        if (course.teacher == null) {
-            null
-        } else {
-            IOManager.resources.getString(R.string.ics_description_teacher, course.teacher)
-        }
 }

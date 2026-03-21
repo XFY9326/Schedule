@@ -17,10 +17,8 @@ fun Bitmap.CompressFormat.isWEBP() =
             (this == Bitmap.CompressFormat.WEBP_LOSSY || this == Bitmap.CompressFormat.WEBP_LOSSLESS)
 
 fun Bitmap.tryRecycle() {
-    try {
+    runCatching {
         if (!isRecycled) recycle()
-    } catch (e: Exception) {
-        // Ignore
     }
 }
 

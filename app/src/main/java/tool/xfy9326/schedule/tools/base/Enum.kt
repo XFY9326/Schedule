@@ -1,11 +1,9 @@
 package tool.xfy9326.schedule.tools.base
 
 inline fun <reified E : Enum<E>> tryEnumValueOf(name: String): E? {
-    return try {
+    return runCatching {
         enumValueOf<E>(name)
-    } catch (e: Exception) {
-        null
-    }
+    }.getOrNull()
 }
 
 inline fun <reified E : Enum<E>> tryEnumSetValueOf(names: Set<String>): Set<E> {

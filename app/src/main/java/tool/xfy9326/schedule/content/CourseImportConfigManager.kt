@@ -204,7 +204,7 @@ class CourseImportConfigManager(scope: CoroutineScope) : CoroutineScope by scope
         configLock.withLock {
             try {
                 block(this)
-            } catch (e: CancellationException) {
+            } catch (_: CancellationException) {
                 // Ignore
             } catch (e: JSConfigException) {
                 operationError.postEvent(e)

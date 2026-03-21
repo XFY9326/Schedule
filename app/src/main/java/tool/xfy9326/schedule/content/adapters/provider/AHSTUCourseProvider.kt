@@ -6,7 +6,6 @@ import android.util.Base64
 import org.json.JSONArray
 import org.json.JSONObject
 import org.jsoup.Connection
-import org.jsoup.HttpStatusException
 import org.jsoup.Jsoup
 import tool.xfy9326.schedule.content.base.LoginCourseProvider
 import tool.xfy9326.schedule.content.beans.LoginPageInfo
@@ -66,6 +65,7 @@ class AHSTUCourseProvider : LoginCourseProvider<Nothing>() {
             }
         } catch (e: Exception) {
             getImportOptFail = true
+            e.printStackTrace()
             CourseAdapterException.Error.IMPORT_OPTION_GET_ERROR.report()
         }
         return tpr.toTypedArray()
@@ -113,12 +113,10 @@ class AHSTUCourseProvider : LoginCourseProvider<Nothing>() {
     }
 
     private fun logout() {
-        try {
+        runCatching {
             Jsoup.connect(SSO_LOGOUT_URL)
                 .cookies(cookieMap)
                 .execute()
-        } catch (e: HttpStatusException) {
-            // Ignore
         }
     }
 
