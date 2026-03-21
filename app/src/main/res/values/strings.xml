@@ -469,6 +469,9 @@
     <string name="schedule_course_cell_padding_hint">间距(px) [%1$d, %2$d]</string>
     <string name="schedule_preview_is_land">横屏预览模式</string>
     <string name="schedule_preview_is_portrait">竖屏预览模式</string>
+    <string name="course_week_num_edit_title">上课周数</string>
+    <string name="course_time_edit_title">上课时间</string>
+    <string name="course_time_edit_others_title">其他信息</string>
 
     <string name="js_config_read_failed">配置文件读取错误！</string>
     <string name="js_config_invalid">导入的配置文件不合法！</string>

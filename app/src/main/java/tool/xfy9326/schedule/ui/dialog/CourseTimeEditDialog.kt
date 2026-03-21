@@ -2,12 +2,12 @@ package tool.xfy9326.schedule.ui.dialog
 
 import android.os.Bundle
 import android.view.HapticFeedbackConstants
-import android.view.Window
-import androidx.appcompat.app.AppCompatDialogFragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.LifecycleOwner
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import tool.xfy9326.schedule.R
 import tool.xfy9326.schedule.beans.CourseTime
 import tool.xfy9326.schedule.beans.SectionTime.Companion.end
@@ -17,11 +17,12 @@ import tool.xfy9326.schedule.tools.core.getParcelableCompat
 import tool.xfy9326.schedule.tools.core.hideKeyboard
 import tool.xfy9326.schedule.tools.ui.getStringArray
 import tool.xfy9326.schedule.tools.ui.getText
+import tool.xfy9326.schedule.tools.ui.setOnSingleClickListener
+import tool.xfy9326.schedule.utils.consumeBottomInsets
 import tool.xfy9326.schedule.utils.schedule.CourseUtils
-import tool.xfy9326.schedule.utils.setWindowPercent
 import kotlin.properties.Delegates
 
-class CourseTimeEditDialog : AppCompatDialogFragment() {
+class CourseTimeEditDialog : BottomSheetDialogFragment() {
     companion object {
         private val DIALOG_TAG = CourseTimeEditDialog::class.java.simpleName
 
@@ -29,8 +30,6 @@ class CourseTimeEditDialog : AppCompatDialogFragment() {
         private const val EXTRA_COURSE_TIME = "EXTRA_COURSE_TIME"
         private const val EXTRA_MAX_WEEK_NUM = "EXTRA_MAX_WEEK_NUM"
         private const val EXTRA_MAX_COURSE_NUM = "EXTRA_MAX_COURSE_NUM"
-
-        private const val WINDOW_WIDTH_PERCENT = 1.0
 
         fun showDialog(fragmentManager: FragmentManager, editBundle: EditBundle) {
             CourseTimeEditDialog().apply {
@@ -87,9 +86,8 @@ class CourseTimeEditDialog : AppCompatDialogFragment() {
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?) =
-        MaterialAlertDialogBuilder(requireContext()).apply {
-            setTitle(R.string.course_time_edit)
-            setView(DialogCourseTimeEditBinding.inflate(layoutInflater).apply {
+        BottomSheetDialog(requireContext(), R.style.AppTheme_TransparentBottomSheetDialog).apply {
+            setContentView(DialogCourseTimeEditBinding.inflate(layoutInflater).apply {
                 viewBinding = this
 
                 viewWeekNumEdit.setWeekNum(editCourseTime.weekNumArray, maxWeekNum)
@@ -97,36 +95,37 @@ class CourseTimeEditDialog : AppCompatDialogFragment() {
                 buildWeekNumModeButton(this)
                 buildCourseTimeWheel(this)
                 editTextCourseLocation.setText(editCourseTime.location.orEmpty())
-            }.root)
 
-            setPositiveButton(android.R.string.ok) { _, _ ->
-                viewBinding?.apply {
-                    requireContext().hideKeyboard(root.windowToken)
-                }
-                updateEditData()
-                val position = requireArguments().getInt(EXTRA_EDIT_POSITION, -1)
-                val outputBundle = Bundle().apply {
-                    if (position < 0) {
-                        putParcelable(EXTRA_COURSE_TIME, editCourseTime)
-                    } else {
-                        putInt(EXTRA_EDIT_POSITION, position)
-                        putParcelable(EXTRA_COURSE_TIME, editCourseTime)
+                buttonConfirm.setOnSingleClickListener {
+                    viewBinding?.apply {
+                        requireContext().hideKeyboard(root.windowToken)
                     }
+                    updateEditData()
+                    val position = requireArguments().getInt(EXTRA_EDIT_POSITION, -1)
+                    val outputBundle = Bundle().apply {
+                        if (position < 0) {
+                            putParcelable(EXTRA_COURSE_TIME, editCourseTime)
+                        } else {
+                            putInt(EXTRA_EDIT_POSITION, position)
+                            putParcelable(EXTRA_COURSE_TIME, editCourseTime)
+                        }
+                    }
+                    setFragmentResult(DIALOG_TAG, outputBundle)
+                    dismiss()
                 }
-                setFragmentResult(DIALOG_TAG, outputBundle)
-            }
-            setNegativeButton(android.R.string.cancel) { _, _ ->
-                viewBinding?.apply {
-                    requireContext().hideKeyboard(root.windowToken)
+                buttonCancel.setOnSingleClickListener {
+                    viewBinding?.apply {
+                        requireContext().hideKeyboard(root.windowToken)
+                    }
+                    dismiss()
                 }
-            }
-        }.create().also { dialog ->
-            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+            }.root)
+            behavior.state = BottomSheetBehavior.STATE_EXPANDED
         }
 
     override fun onStart() {
         super.onStart()
-        requireDialog().setWindowPercent(WINDOW_WIDTH_PERCENT)
+        consumeBottomInsets()
     }
 
     private fun updateEditData() {

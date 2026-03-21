@@ -18,7 +18,7 @@
             android:max="100"
             android:min="0"
             android:progress="0"
-            android:progressDrawable="@drawable/background_progress_bar"
+            android:progressDrawable="@drawable/bg_progress_bar"
             tools:ignore="UnusedAttribute" />
 
         <FrameLayout
@@ -43,7 +43,7 @@
         android:layout_height="@dimen/bottom_button_height"
         android:layout_gravity="bottom|center"
         android:alpha="0.75"
-        android:background="@drawable/background_bottom_button"
+        android:background="@drawable/bg_bottom_button"
         android:elevation="5dp"
         android:src="@drawable/ic_from_bottom_24" />
 

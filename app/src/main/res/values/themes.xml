@@ -126,7 +126,7 @@
     </style>
 
     <style name="AppTheme.MaterialRoundCornerDialog" parent="ThemeOverlay.MaterialComponents.Dialog">
-        <item name="android:windowBackground">@drawable/background_dialog</item>
+        <item name="android:windowBackground">@drawable/bg_dialog</item>
     </style>
 
     <style name="AppTheme.TransparentBottomSheetDialog" parent="Theme.Design.Light.BottomSheetDialog">
@@ -139,7 +139,7 @@
     </style>
 
     <style name="AppTheme.TransparentBottomSheetStyle" parent="Widget.Design.BottomSheet.Modal">
-        <item name="android:background">@android:color/transparent</item>
+        <item name="android:background">@null</item>
     </style>
 
     <style name="AppTheme.AnimateSlider" parent="Widget.MaterialComponents.Slider">
@@ -170,7 +170,7 @@
         <item name="android:elevation">1dp</item>
         <item name="android:layout_margin">1dp</item>
         <item name="android:layout_gravity">center</item>
-        <item name="android:background">@drawable/background_app_widget</item>
+        <item name="android:background">@drawable/bg_app_widget</item>
         <item name="android:clickable">true</item>
         <item name="android:focusable">true</item>
         <item name="android:foreground">?android:attr/selectableItemBackground</item>

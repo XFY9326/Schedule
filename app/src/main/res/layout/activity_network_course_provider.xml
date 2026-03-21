@@ -57,7 +57,7 @@
                             android:layout_width="130dp"
                             android:layout_height="130dp"
                             android:indeterminate="true"
-                            android:indeterminateDrawable="@drawable/background_progress_bar_circle_small" />
+                            android:indeterminateDrawable="@drawable/bg_progress_bar_circle_small" />
 
                         <androidx.appcompat.widget.AppCompatImageView
                             android:id="@+id/imageView_courseImportLoadError"

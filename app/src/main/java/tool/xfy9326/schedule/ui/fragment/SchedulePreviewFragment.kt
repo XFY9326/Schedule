@@ -54,7 +54,7 @@ class SchedulePreviewFragment : Fragment() {
 
                     FrameLayout(requireContext()).apply {
                         tag = TAG_LAYOUT_CONTENT_CONTAINER
-                        background = requireContext().getDrawableCompat(R.drawable.background_schedule_preview)
+                        background = requireContext().getDrawableCompat(R.drawable.bg_schedule_preview)
 
                         addView(
                             AppCompatImageView(requireContext()).also { it.tag = TAG_SCHEDULE_BACKGROUND_IMAGE },

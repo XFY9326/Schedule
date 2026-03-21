@@ -174,7 +174,7 @@
                     android:layout_height="200dp"
                     android:layout_gravity="center"
                     android:indeterminate="true"
-                    android:indeterminateDrawable="@drawable/background_progress_bar_circle"
+                    android:indeterminateDrawable="@drawable/bg_progress_bar_circle"
                     android:padding="20dp"
                     android:visibility="gone" />
 
