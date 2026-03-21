@@ -16,16 +16,22 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.firstOrNull
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.shareIn
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
 open class DataStorePreferenceAdapter(private val dataStore: DataStore<Preferences>, scope: CoroutineScope) : PreferenceDataStore(),
     CoroutineScope by CoroutineScope(scope.coroutineContext + SupervisorJob() + Dispatchers.IO) {
-    protected val dsData = dataStore.data.shareIn(scope, SharingStarted.Eagerly, 1)
+    private val prefsState: StateFlow<Preferences> = runBlocking(Dispatchers.IO) {
+        val initial = dataStore.data.first()
+        dataStore.data.stateIn(
+            scope = this@DataStorePreferenceAdapter,
+            started = SharingStarted.Eagerly,
+            initialValue = initial
+        )
+    }
 
     protected open fun <T> putData(key: Preferences.Key<T>, value: T?) {
         launch {
@@ -36,15 +42,11 @@ open class DataStorePreferenceAdapter(private val dataStore: DataStore<Preferenc
     }
 
     protected open fun <T> readNullableData(key: Preferences.Key<T>, defValue: T?): T? {
-        return runBlocking(coroutineContext) {
-            dsData.map { it[key] ?: defValue }.firstOrNull()
-        }
+        return prefsState.value[key] ?: defValue
     }
 
     protected open fun <T> readNonNullData(key: Preferences.Key<T>, defValue: T): T {
-        return runBlocking(coroutineContext) {
-            dsData.map { it[key] ?: defValue }.first()
-        }
+        return prefsState.value[key] ?: defValue
     }
 
     override fun putString(key: String, value: String?) = putData(stringPreferencesKey(key), value)
